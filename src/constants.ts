@@ -3,9 +3,9 @@ export const API_PRODUCTION_BASE_URL = 'https://api-livetakeoff.herokuapp.com/';
 
 export const API_DEV_BASE_URL = 'http://127.0.0.1:9000/';
 
-export const DEV_SERVER_BASE_URL = 'http://localhost:3000/#/login';
+export const DEV_SERVER_BASE_URL = 'http://localhost:3000/login';
 
-export const PRODUCTION_SERVER_BASE_URL = 'TBD/#/login';
+export const PRODUCTION_SERVER_BASE_URL = 'TBD/login';
 
 
 export const STANDARD_DROPDOWN_STYLES = { 

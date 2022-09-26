@@ -33,7 +33,7 @@ axios.interceptors.response.use(null, (error) => {
     // unauthorized
     if (error.response.status === 401 && !config.url.includes('token')) {
         window.location = "/login";
-    }
+    } 
 
     const expectedError = 
         error.response &&

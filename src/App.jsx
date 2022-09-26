@@ -17,7 +17,7 @@ import './App.css';
 
 const Redirect = () => {
   useEffect(() => {
-    window.location = '/#/login';
+    window.location = '/login';
   }, []); 
 
   return <h5>Redirecting...</h5>

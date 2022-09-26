@@ -10,7 +10,7 @@ const Layout = () => {
             <div style={{ marginTop: '50px' }}></div>
             <div className="flex pr-8">
                 <div className="w-full">
-                    <div className="mt-3" style={{ marginLeft: '200px' }}>
+                    <div className="mt-3">
                         <Outlet />
                     </div>
                 </div>
