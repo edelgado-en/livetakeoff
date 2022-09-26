@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react";
-import { TrashIcon, CloudDownloadIcon } from "@heroicons/react/outline";
+import { TrashIcon, CloudDownloadIcon, ChevronRightIcon } from "@heroicons/react/outline";
 import Pagination from "react-js-pagination";
 import Select from 'react-select';
 import { STANDARD_DROPDOWN_STYLES, PAGE_SIZE_OPTIONS } from '../../../constants';
@@ -18,7 +18,7 @@ const REPORT_STATUS_OPTIONS = [
 
 const jobs = [
   { id: 1,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
+    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N334JE',
     aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
     estimatedETD: '09/08/2022 18:10:00',
     completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
@@ -35,8 +35,8 @@ const jobs = [
     specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
   },
   { id: 2,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
+    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N123AA',
+    aircraftType: 'Lear 35', airport: 'FLL', fbo: 'Sheltair Aviation', estimatedETA: '09/05/2022 15:00:00',
     estimatedETD: '09/08/2022 18:10:00',
     completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
     retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
@@ -52,8 +52,8 @@ const jobs = [
     specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
   },
   { id: 3,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
+    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N123BB',
+    aircraftType: 'Citation CJ3', airport: 'OPF', fbo: 'Signature Flight Support', estimatedETA: '09/05/2022 15:00:00',
     estimatedETD: '09/08/2022 18:10:00',
     completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
     retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
@@ -249,24 +249,66 @@ const TestReports = () => {
     };
 
     return (
-      <div className="xl:px-16 px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-600">Jobs</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all the jobs assigned to you.
-          </p>
+      <div className="xl:px-16 px-4 m-auto max-w-7xl">
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto">
+            <h1 className="text-xl font-semibold text-gray-600">Jobs</h1>
+            <p className="mt-2 text-sm text-gray-700">
+              Total: 10
+            </p>
+          </div>
+          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <button
+              type="button"
+              className="inline-flex mr-4 items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              Add Job
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+            >
+              Assign Job
+            </button>
+          </div>
         </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
-          >
-            Add Job
-          </button>
+        <div className="overflow-hidden bg-white shadow sm:rounded-md mt-8">
+          <ul role="list" className="divide-y divide-gray-200">
+            {jobs.map((job) => (
+              <li key={job.id}>
+                <a href="#" className="block hover:bg-gray-50">
+                  <div className="flex items-center px-4 py-4 sm:px-6">
+                    <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                      <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
+                        <div>
+                          <div className="">
+                            <span className="font-medium text-red-600 text-sm">{job.tailNumber}</span>
+                            <span className="ml-2 text-sm text-gray-500">{job.aircraftType}</span>
+                          </div>
+                          <div className="mt-2 text-xs text-gray-500 mb-1">
+                            {job.airport} - {job.fbo}
+                          </div>
+                        </div>
+                        <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
+                            <p className="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800">
+                              {job.status}
+                            </p>
+                            <div className="text-xs text-gray-500 mt-2">
+                              Complete by {job.completeBy}
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="ml-5 flex-shrink-0">
+                      <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </div>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-      <div className="mt-8 flex flex-col">
+      {/* <div className="mt-8 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <table className="min-w-full divide-y divide-gray-300">
@@ -366,7 +408,7 @@ const TestReports = () => {
             </table>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
     )
   }
