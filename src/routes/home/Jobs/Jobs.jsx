@@ -276,7 +276,7 @@ const TestReports = () => {
           <ul role="list" className="divide-y divide-gray-200">
             {jobs.map((job) => (
               <li key={job.id}>
-                <a href="#" className="block hover:bg-gray-50">
+                <Link to={`/jobs/${job.id}/details`} className="block hover:bg-gray-50">
                   <div className="flex items-center px-4 py-4 sm:px-6">
                     <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                       <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
@@ -303,7 +303,7 @@ const TestReports = () => {
                       <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                     </div>
                   </div>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

@@ -2,7 +2,11 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 
-import TestReports from './routes/home/TestReports/TestReports';
+import Jobs from './routes/home/Jobs/Jobs';
+import JobDetails from './routes/job/JobDetails';
+import JobInfo from './routes/job/JobInfo';
+import JobEdit from './routes/job/JobEdit';
+import JobPhotos from './routes/job/JobPhotos';
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
@@ -49,7 +53,14 @@ const  App = () => {
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/" element={<Layout />}>
-                    <Route index element={<TestReports />}/>
+                    <Route index element={<Jobs />}/>
+                    <Route path="jobs" element={<Jobs />}/>
+                    <Route path="jobs/:jobId" element={<JobDetails />}>
+                      <Route index element={<JobInfo />} />
+                      <Route index path="details" element={<JobInfo />} />
+                      <Route index path="edit" element={<JobEdit />} />
+                      <Route index path="photos" element={<JobPhotos />} />
+                    </Route>
                     <Route path="*" element={<NotFound />} />
                 </Route>
               </Route>
