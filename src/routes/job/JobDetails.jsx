@@ -43,16 +43,16 @@ const JobDetails = () => {
                                     'px-2 py-2 font-medium text-sm rounded-md'
                                 )}
                                 >
-                                    Info
+                                    Details
                                 </Link>
                                 <Link
-                                    to="edit"
+                                    to="comments"
                                     className={classNames(
-                                    location.pathname.includes("edit")? 'bg-red-100 text-red-700' : 'text-red-500 hover:text-red-700',
+                                    location.pathname.includes("comments")? 'bg-red-100 text-red-700' : 'text-red-500 hover:text-red-700',
                                     'px-2 py-2 font-medium text-sm rounded-md'
                                 )}
                                 >
-                                    Edit
+                                    Comments
                                 </Link>
                                 <Link
                                     to="photos"

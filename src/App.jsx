@@ -5,7 +5,7 @@ import { Routes, Route, Outlet } from 'react-router-dom';
 import Jobs from './routes/home/Jobs/Jobs';
 import JobDetails from './routes/job/JobDetails';
 import JobInfo from './routes/job/JobInfo';
-import JobEdit from './routes/job/JobEdit';
+import JobComments from './routes/job/JobComments';
 import JobPhotos from './routes/job/JobPhotos';
 
 import NotFound from './routes/notfound/NotFound'
@@ -58,7 +58,7 @@ const  App = () => {
                     <Route path="jobs/:jobId" element={<JobDetails />}>
                       <Route index element={<JobInfo />} />
                       <Route index path="details" element={<JobInfo />} />
-                      <Route index path="edit" element={<JobEdit />} />
+                      <Route index path="comments" element={<JobComments />} />
                       <Route index path="photos" element={<JobPhotos />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
