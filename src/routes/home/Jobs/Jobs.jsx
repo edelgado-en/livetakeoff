@@ -191,8 +191,8 @@ const jobs = [
 ]
 
 const TestReports = () => {
-  const [testReports, setTestReports] = useState([]);
-  const [totalTestReports, setTotalTestReports] = useState(0);
+  const [jobs, setJobs] = useState([]);
+  const [totalJobs, setTotalJobs] = useState(0);
   const [description, setDescription] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(REPORT_STATUS_OPTIONS[0]);
   const [selectedPageSize, setSelectedPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
@@ -214,18 +214,15 @@ const TestReports = () => {
   const fetchReports = async () => {
 
     try {
-       const { data } = await api.testApi();
+       const { data } = await api.getJobs();
 
       console.log(data);
 
-      //const response = await api.testSendEmail();
-      //console.log(response)
-
-      setTestReports(data.results);
-      setTotalTestReports(data.count)
+      setJobs(data.results);
+      setTotalJobs(data.count)
 
     } catch (e) {
-      setTestReports([])
+      setJobs([])
     }
   }
 
@@ -258,7 +255,7 @@ const TestReports = () => {
           <div className="sm:flex-auto">
             <h1 className="text-xl font-semibold text-gray-600">Jobs</h1>
             <p className="mt-2 text-sm text-gray-700">
-              Total: 10
+              Total: {jobs.length}
             </p>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -276,6 +273,13 @@ const TestReports = () => {
             </button>
           </div>
         </div>
+
+        {jobs.length === 0 && (
+            <div className="text-sm text-gray-500 mt-20 m-auto w-11/12 text-center">
+              No jobs found.
+            </div>
+          )}
+
         <div className="overflow-hidden bg-white shadow sm:rounded-md mt-8">
           <ul role="list" className="divide-y divide-gray-200">
             {jobs.map((job) => (
@@ -287,15 +291,21 @@ const TestReports = () => {
                         <div>
                           <div className="">
                             <span className="font-medium text-red-600 text-sm">{job.tailNumber}</span>
-                            <span className="ml-2 text-sm text-gray-500">{job.aircraftType}</span>
+                            <span className="ml-2 text-sm text-gray-500">{job.aircraftType.name}</span>
                           </div>
                           <div className="mt-2 text-xs text-gray-500 mb-1">
-                            {job.airport} - {job.fbo}
+                            {job.airport.initials} - {job.fbo.name}
                           </div>
                         </div>
                         <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
                             <p className="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800">
-                              {job.status}
+                              {job.status === 'A' && 'Assigned'}
+                              {job.status === 'U' && 'Submitted'}
+                              {job.status === 'W' && 'WIP'}
+                              {job.status === 'C' && 'Complete'}
+                              {job.status === 'T' && 'Cancelled'}
+                              {job.status === 'R' && 'Review'}
+                              {job.status === 'I' && 'Invoiced'}
                             </p>
                             <div className="text-xs text-gray-500 mt-2">
                               Complete by {job.completeBy}
