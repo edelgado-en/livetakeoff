@@ -217,6 +217,10 @@ const TestReports = () => {
        const { data } = await api.testApi();
 
       console.log(data);
+
+      //const response = await api.testSendEmail();
+      //console.log(response)
+
       setTestReports(data.results);
       setTotalTestReports(data.count)
 

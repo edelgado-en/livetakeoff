@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import api from '../../services/httpService'
-import { setApiAccessToken } from '../../localstorage';
+import { setApiAccessToken, setUserInfo } from '../../localstorage';
 
 const Login = () => {
     const [ loading, setLoading ] = useState(false);
@@ -32,10 +32,9 @@ const Login = () => {
 
             setApiAccessToken(data.access)
 
-            //const response = await api.get('api/users/me');
+            const response = await api.get('api/users/me');
             
-            //TODO: save this in the redux store
-            //console.log(response.data)
+            setUserInfo(response.data)
 
             setLoading(false);
 

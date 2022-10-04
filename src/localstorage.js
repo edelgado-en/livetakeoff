@@ -1,5 +1,6 @@
 
  const ACCESS_TOKEN = 'api.livetakeoff.access.token';
+ const USER_INFO = 'user.info';
 
  export const loadApiAccessToken = () => {
     try {
@@ -40,5 +41,27 @@ export const setApiAccessToken = (accessToken) => {
         localStorage.setItem(ACCESS_TOKEN, accessToken);
     } catch (e) {
         throw e;
+    }
+}
+
+export const setUserInfo = (userInfo) => {
+    try {
+        localStorage.setItem(USER_INFO, JSON.stringify(userInfo));
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const getUserInfo = () => {
+    try {
+        const userInfo = localStorage.getItem(USER_INFO);
+
+        if (userInfo === null) {
+            return undefined;
+        }
+
+        return JSON.parse(userInfo);
+    } catch (e) {
+        return undefined;
     }
 }

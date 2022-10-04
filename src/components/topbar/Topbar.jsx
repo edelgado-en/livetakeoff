@@ -4,6 +4,8 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from './livetakeoff-logo.png';
 import { useNavigate } from 'react-router-dom';
 
+import { getUserInfo } from '../../localstorage'
+
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Jobs', href: '#', current: false },
@@ -91,7 +93,7 @@ const Topbar = () => {
                       <span className="sr-only">Open user menu</span>
                       <div className="w-12 text-center">
                           <div className="w-10" style={{ lineHeight: '36px',borderRadius: '50%', fontSize: '15px', background: 'white', color: 'black' }}>
-                            ED
+                            {getUserInfo().initials}
                           </div>
                       </div>
                     </Menu.Button>
