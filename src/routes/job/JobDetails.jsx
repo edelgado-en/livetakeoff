@@ -2,7 +2,6 @@
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/outline";
 
-
 const tabs = [
     { name: 'Info', href: '#', current: false },
     { name: 'Edit', href: '#', current: false },

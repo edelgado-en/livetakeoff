@@ -1,23 +1,8 @@
 
-const fields = [
-    { name: 'Status', value: 'Assigned' },
-    { name: 'Customer', value: 'Jet Edge' },
-    { name: 'Tail Number', value: 'N334JE' },
-    { name: 'Aircraft Type', value: 'Lear 35' },
-    { name: 'FBO', value: 'Jet Aviation' },
-    { name: 'Airport', value: 'FLL' },
-    { name: 'Request Date', value: 'Sept 14 9:07 AM' },
-    { name: 'Complete by', value: 'Sept 16 9:07 AM' },
-    { name: 'Estimated ETA', value: 'Sept 15 9:07 AM' },
-    { name: 'Estimated ETD', value: 'Sept 16 9:07 AM' },
-]
+import { useEffect, useState } from "react"
+import { Link, useParams, Outlet, useLocation } from "react-router-dom";
+import * as api from './apiService'
 
-const services = [
-    { id: 1, name: 'Leather shampoo' },
-    { id: 2, name: 'Exterior detailing (Full wet or dry wash)' },
-    { id: 3, name: 'Exterior Takeoff Ready (Quick Turn)' },
-    { id: 4, name: 'Interior detailing' },
-]
 
 const assignees = [
     { id: 1, name: 'Wilson Lizarazo'},
@@ -25,6 +10,27 @@ const assignees = [
 ]
 
 const JobInfo = () => {
+    const { jobId } = useParams();
+    const [jobDetails, setJobDetails] = useState({})
+
+    useEffect(() => {
+        getJobDetails()
+    }, [])
+
+    const getJobDetails = async () => {
+
+        try {
+            const { data } = await api.getJobDetails(jobId)
+
+            console.log(data);
+
+            setJobDetails(data);
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return (
         <div>
             <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -37,36 +43,131 @@ const JobInfo = () => {
                 </button>
                 </div>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                {fields.map((field) => (
-                    <div key={field.id} className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-500">{field.name}</dt>
-                    <dd className="mt-1 text-sm text-gray-900">{field.value}</dd>
+                     <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Purchase Order</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.purchase_order}</dd>
                     </div>
-                ))}
-                <div className="sm:col-span-2">
-                    <dt className="text-sm font-medium text-gray-500">Special Instructions</dt>
-                    <dd
-                    className="mt-1 max-w-prose space-y-5 text-sm text-gray-900"
-                    
-                    >
-                    Must leave the WU certificate of completion before leaving the airplane
-                    </dd>
-                </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Status</dt>
+                        <dd className="mt-1 text-sm text-gray-900">
+                              {jobDetails.status === 'A' && 'Assigned'}
+                              {jobDetails.status === 'U' && 'Submitted'}
+                              {jobDetails.status === 'W' && 'WIP'}
+                              {jobDetails.status === 'C' && 'Complete'}
+                              {jobDetails.status === 'T' && 'Cancelled'}
+                              {jobDetails.status === 'R' && 'Review'}
+                              {jobDetails.status === 'I' && 'Invoiced'}
+                        </dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Customer</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.customer?.name}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Tail Number</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.tailNumber}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Aircraft Type</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.aircraftType?.name}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">FBO</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.fbo?.name}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Airport</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.airport?.name}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Request Date</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.requestDate}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Complete By</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.completeBy}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Estimated ETA</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETA}</dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Estimated ETD</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD}</dd>
+                    </div>
+                    <div className="sm:col-span-2">
+                        <dt className="text-sm font-medium text-gray-500">Special Instructions</dt>
+                        <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                            {jobDetails.special_instructions}
+                        </dd>
+                    </div>
                 </dl>
-                <div className="mx-auto mt-8 max-w-5xl pb-12">
+                <div className="mx-auto mt-8 max-w-5xl pb-8">
                     <h2 className="text-sm font-medium text-gray-500">Services</h2>
                     <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        {services.map((service) => (
+                        {jobDetails.service_assignments?.map((service) => (
+                            <div
+                                key={service.id}
+                                className="relative flex items-center space-x-3 rounded-lg
+                                        border border-gray-300 bg-white px-6 py-5 shadow-sm
+                                        hover:border-gray-400">
+                                <div className="min-w-0 flex-1">
+                                    <div className="focus:outline-none">
+                                        <div className="grid grid-cols-3 text-sm pb-2">
+                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
+                                            <div className="text-right">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center rounded border
+                                                             border-gray-300 bg-white px-2.5 py-1.5 text-xs
+                                                               font-medium text-gray-700 shadow-sm hover:bg-gray-50
+                                                               focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                    Complete
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        {service.checklist_actions?.map((action) => (
+                                            <div key={action.id} className="text-sm text-gray-500 py-1 pl-6">{action.name}</div>
+                                        ))}
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="mx-auto max-w-5xl pb-12">
+                    <h2 className="text-sm font-medium text-gray-500">Retainer Services</h2>
+                    <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {jobDetails.retainer_service_assignments?.map((service) => (
                         <div
                             key={service.id}
-                            className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-pink-500 focus-within:ring-offset-2 hover:border-gray-400"
-                        >
+                            className="relative flex items-center space-x-3 rounded-lg
+                                       border border-gray-300 bg-white px-6 py-5 shadow-sm
+                                     hover:border-gray-400">
                             <div className="min-w-0 flex-1">
-                            <div className="focus:outline-none">
-                                <span className="absolute inset-0" aria-hidden="true" />
-                                <p className="text-sm font-medium text-gray-900">{service.name}</p>
+                                <div className="">
+                                    <div className="grid grid-cols-3 text-sm pb-2">
+                                        <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
+                                        <div className="text-right">
+                                            <button
+                                                type="button"
+                                                className="inline-flex items-center rounded border
+                                                            border-gray-300 bg-white px-2.5 py-1.5 text-xs
+                                                            font-medium text-gray-700 shadow-sm hover:bg-gray-50
+                                                            focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                Complete
+                                            </button>
+                                        </div>
+                                    </div>
+                                        
+                                    {service.checklist_actions?.map((action) => (
+                                            <div key={action.id} className="text-sm text-gray-500 py-1 pl-6">{action.name}</div>
+                                    ))}
+                                </div>
                             </div>
-                            </div>
+                            
                         </div>
                         ))}
                     </div>

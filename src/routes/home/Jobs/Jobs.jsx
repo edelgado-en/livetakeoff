@@ -253,13 +253,13 @@ const TestReports = () => {
       <div className="xl:px-16 px-4 m-auto max-w-7xl">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-xl font-semibold text-gray-600">Jobs</h1>
+            <h1 className="text-xl font-semibold text-gray-600">Jobs Queue</h1>
             <p className="mt-2 text-sm text-gray-700">
               Total: {jobs.length}
             </p>
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <button
+            {/* <button
               type="button"
               className="inline-flex mr-4 items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
@@ -270,7 +270,7 @@ const TestReports = () => {
               className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
             >
               Assign Job
-            </button>
+            </button> */}
           </div>
         </div>
 
