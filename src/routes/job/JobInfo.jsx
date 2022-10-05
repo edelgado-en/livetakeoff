@@ -98,6 +98,8 @@ const JobInfo = () => {
                     <div className="sm:col-span-2">
                         <dt className="text-sm font-medium text-gray-500">Special Instructions</dt>
                         <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                            {jobDetails.special_instructions?.length === 0 && 'None'}
+
                             {jobDetails.special_instructions}
                         </dd>
                     </div>
@@ -140,35 +142,39 @@ const JobInfo = () => {
                 <div className="mx-auto max-w-5xl pb-12">
                     <h2 className="text-sm font-medium text-gray-500">Retainer Services</h2>
                     <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {jobDetails.retainer_service_assignments?.length === 0 &&
+                            <div className="text-sm text-gray-500">None</div>
+                        }
+                        
                         {jobDetails.retainer_service_assignments?.map((service) => (
-                        <div
-                            key={service.id}
-                            className="relative flex items-center space-x-3 rounded-lg
-                                       border border-gray-300 bg-white px-6 py-5 shadow-sm
-                                     hover:border-gray-400">
-                            <div className="min-w-0 flex-1">
-                                <div className="">
-                                    <div className="grid grid-cols-3 text-sm pb-2">
-                                        <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
-                                        <div className="text-right">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded border
-                                                            border-gray-300 bg-white px-2.5 py-1.5 text-xs
-                                                            font-medium text-gray-700 shadow-sm hover:bg-gray-50
-                                                            focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                                Complete
-                                            </button>
+                            <div
+                                key={service.id}
+                                className="relative flex items-center space-x-3 rounded-lg
+                                        border border-gray-300 bg-white px-6 py-5 shadow-sm
+                                        hover:border-gray-400">
+                                <div className="min-w-0 flex-1">
+                                    <div className="">
+                                        <div className="grid grid-cols-3 text-sm pb-2">
+                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
+                                            <div className="text-right">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center rounded border
+                                                                border-gray-300 bg-white px-2.5 py-1.5 text-xs
+                                                                font-medium text-gray-700 shadow-sm hover:bg-gray-50
+                                                                focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                    Complete
+                                                </button>
+                                            </div>
                                         </div>
+                                            
+                                        {service.checklist_actions?.map((action) => (
+                                                <div key={action.id} className="text-sm text-gray-500 py-1 pl-6">{action.name}</div>
+                                        ))}
                                     </div>
-                                        
-                                    {service.checklist_actions?.map((action) => (
-                                            <div key={action.id} className="text-sm text-gray-500 py-1 pl-6">{action.name}</div>
-                                    ))}
                                 </div>
+                                
                             </div>
-                            
-                        </div>
                         ))}
                     </div>
                 </div>
