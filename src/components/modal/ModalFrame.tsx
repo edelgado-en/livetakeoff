@@ -31,8 +31,7 @@ const ModalFrame = ({ isModalOpen, cancelButtonRef, children } : IProps) => {
           </Transition.Child>
   
           <div className="fixed z-10 inset-0 overflow-y-auto">
-            {/* We are adding ml-28 to account for the sidebar's width */}
-            <div className="flex items-end sm:items-center justify-center min-h-full p-4 text-center sm:p-0 ml-32">
+            <div className="flex items-end sm:items-center justify-center p-4 text-center sm:p-0 mt-40 ">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-100"
@@ -42,12 +41,9 @@ const ModalFrame = ({ isModalOpen, cancelButtonRef, children } : IProps) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative bg-white rounded-lg px-4 pt-5 pb-4 text-left
-                                        overflow-y-hidden shadow-xl transform transition-all
-                                        max-w-4xl w-full p-6"
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
                              >
                               
-                  {/* style={{ marginBottom: '15%' }} */}
                   {children}
                 
                 </Dialog.Panel>

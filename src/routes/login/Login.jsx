@@ -15,7 +15,6 @@ const Login = () => {
 
     useEffect(() => {
       localStorage.clear();
-
     }, [])
 
     const onSubmit = handleSubmit((data) => {
@@ -57,10 +56,6 @@ const Login = () => {
             />
             <h2 className="mt-6 text-center text-2xl font-semibold tracking-tight text-gray-500">Sign in to your account</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <a href="#" className=" text-blue-600 hover:text-blue-500">
-              sign up
-            </a>
           </p>
           </div>
   
@@ -115,15 +110,15 @@ const Login = () => {
                     {loading ? 'sigining in...' : 'Sign in'}
                   </button>
                 </div>
-                <div className="relative flex flex-col justify-center text-sm">
+                {/* <div className="relative flex flex-col justify-center text-sm">
                   <div className="bg-white px-2 text-gray-500 text-center text-sm">
                     Forgot your Password? 
                   </div>
                   <div className="bg-white px-2 text-gray-500 text-center text-xs mt-1">
-                    no worries <a href="https://iam.ford.com/IdentityManagement/aspx/groups/AllGroups.aspx" className="underline text-blue-500 mr-1" target="_blank">click here</a>
+                    no worries <a href="" className="underline text-blue-500 mr-1" target="_blank">click here</a>
                      to reset your password.
                   </div>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>

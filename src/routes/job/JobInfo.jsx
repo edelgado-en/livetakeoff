@@ -1,9 +1,11 @@
 
 import { useEffect, useState } from "react"
-import { Link, useParams, Outlet, useLocation } from "react-router-dom";
+import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import { toast } from 'react-toastify';
 import * as api from './apiService'
+
+import JobCompleteModal from './JobCompleteModal'
 
 const assignees = [
     { id: 1, name: 'Wilson Lizarazo'},
@@ -14,10 +16,21 @@ const JobInfo = () => {
     const { jobId } = useParams();
     const [jobDetails, setJobDetails] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
+    const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         getJobDetails()
     }, [])
+
+    const handleToggleJobCompleteModal = () => {
+
+        //Maybe the job details should already return total_photos and total_assignees
+        //so that you don't have to fetch it here
+
+        setCompleteJobModalOpen(!isCompleteJobModalOpen)
+    }
 
     const getJobDetails = async () => {
 
@@ -57,7 +70,13 @@ const JobInfo = () => {
 
             setJobDetails(updatedJobDetails)
 
-            toast.success('Job updated successfully')
+            setCompleteJobModalOpen(false)
+
+            toast.error('Job updated!')
+
+            if (status === 'C') {
+                navigate('/jobs')
+            }
 
         } catch (e) {
             // TODO: send toast
@@ -79,7 +98,7 @@ const JobInfo = () => {
 
             setJobDetails(updatedJobDetails);
 
-            toast.success('Service Completed!')
+            toast.error('Service Completed!')
 
         } catch (e) {
             console.log(e)
@@ -100,7 +119,7 @@ const JobInfo = () => {
 
             setJobDetails(updatedJobDetails);
 
-            toast.success('Service Completed!')
+            toast.error('Service Completed!')
 
         } catch (e) {
             console.log(e)
@@ -129,7 +148,8 @@ const JobInfo = () => {
                         {jobDetails.status === 'W' && 
                             <button
                                 type="button"
-                                onClick={() => updateJobStatus('C')}
+                                /* onClick={() => updateJobStatus('C')} */
+                                onClick={() => handleToggleJobCompleteModal()}
                                 className="inline-flex items-center justify-center rounded-md
                                         border border-transparent bg-red-600 px-4 py-2 text-sm
                                         font-medium text-white shadow-sm hover:bg-red-700
@@ -230,7 +250,7 @@ const JobInfo = () => {
 
                                                     {service.status === 'C' && (
                                                         <div className="flex-shrink-0 flex justify-end">
-                                                            <CheckCircleIcon className="h-6 w-6 text-green-400" />
+                                                            <CheckCircleIcon className="h-6 w-6 text-red-400" />
                                                         </div>
                                                     )}
 
@@ -279,7 +299,7 @@ const JobInfo = () => {
 
                                                     {service.status === 'C' && (
                                                         <div className="flex-shrink-0 flex justify-end">
-                                                            <CheckCircleIcon className="h-6 w-6 text-green-400" />
+                                                            <CheckCircleIcon className="h-6 w-6 text-red-400" />
                                                         </div>
                                                     )}
                                                 </div>
@@ -297,6 +317,13 @@ const JobInfo = () => {
                     </div>
                 </div>
             }
+
+            {isCompleteJobModalOpen && <JobCompleteModal
+                                            isOpen={isCompleteJobModalOpen}
+                                            jobDetails={jobDetails}
+                                            handleClose={handleToggleJobCompleteModal}
+                                            updateJobStatus={updateJobStatus} />}
+
         </div>
     )
 }
