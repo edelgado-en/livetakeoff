@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "react"
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
+import { toast } from 'react-toastify';
 import * as api from './apiService'
-
 
 const assignees = [
     { id: 1, name: 'Wilson Lizarazo'},
@@ -27,6 +27,26 @@ const JobInfo = () => {
             setJobDetails(data);
 
         } catch (e) {
+            // TODO: send toast
+            console.log(e)
+        }
+    }
+
+    const updateJobStatus = (status) => {
+        try {
+            api.updateJobStatus(jobId, status)
+
+            const updatedJobDetails = {
+                ...jobDetails,
+                status
+            }
+
+            setJobDetails(updatedJobDetails)
+
+            toast.success('Job updated successfully')
+
+        } catch (e) {
+            // TODO: send toast
             console.log(e)
         }
     }
@@ -35,12 +55,30 @@ const JobInfo = () => {
         <div>
             <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
                 <div className="mt-8 mb-8">
-                <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
-                    >
-                    Accept Job
-                </button>
+                {jobDetails.status === 'S' && 
+                    <button
+                        type="button"
+                        onClick={() => updateJobStatus('W')}
+                        className="inline-flex items-center justify-center rounded-md
+                                   border border-transparent bg-red-600 px-4 py-2 text-sm
+                                   font-medium text-white shadow-sm hover:bg-red-700
+                                   focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
+                        Accept Job
+                    </button>
+                }
+
+                {jobDetails.status === 'W' && 
+                    <button
+                        type="button"
+                        onClick={() => updateJobStatus('C')}
+                        className="inline-flex items-center justify-center rounded-md
+                                   border border-transparent bg-red-600 px-4 py-2 text-sm
+                                   font-medium text-white shadow-sm hover:bg-red-700
+                                   focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
+                        Complete Job
+                    </button>
+                }
+                
                 </div>
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                      <div className="sm:col-span-1">
@@ -50,9 +88,10 @@ const JobInfo = () => {
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Status</dt>
                         <dd className="mt-1 text-sm text-gray-900">
-                              {jobDetails.status === 'A' && 'Assigned'}
+                              {jobDetails.status === 'A' && 'Accepted'}
+                              {jobDetails.status === 'S' && 'Assigned'}
                               {jobDetails.status === 'U' && 'Submitted'}
-                              {jobDetails.status === 'W' && 'WIP'}
+                              {jobDetails.status === 'W' && 'Work In Progress'}
                               {jobDetails.status === 'C' && 'Complete'}
                               {jobDetails.status === 'T' && 'Cancelled'}
                               {jobDetails.status === 'R' && 'Review'}
@@ -118,14 +157,17 @@ const JobInfo = () => {
                                         <div className="grid grid-cols-3 text-sm pb-2">
                                             <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
                                             <div className="text-right">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex items-center rounded border
-                                                             border-gray-300 bg-white px-2.5 py-1.5 text-xs
-                                                               font-medium text-gray-700 shadow-sm hover:bg-gray-50
-                                                               focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                                    Complete
-                                                </button>
+                                                {jobDetails.status === 'W' && (
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center rounded border
+                                                                    border-gray-300 bg-white px-2.5 py-1.5 text-xs
+                                                                    font-medium text-gray-700 shadow-sm hover:bg-gray-50
+                                                                    focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                        Complete
+                                                    </button>
+                                                )}
+
                                             </div>
                                         </div>
                                         
@@ -157,14 +199,16 @@ const JobInfo = () => {
                                         <div className="grid grid-cols-3 text-sm pb-2">
                                             <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
                                             <div className="text-right">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex items-center rounded border
+                                                {jobDetails.status === 'W' && (
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center rounded border
                                                                 border-gray-300 bg-white px-2.5 py-1.5 text-xs
                                                                 font-medium text-gray-700 shadow-sm hover:bg-gray-50
                                                                 focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                                    Complete
-                                                </button>
+                                                        Complete
+                                                    </button>    
+                                                )}
                                             </div>
                                         </div>
                                             
