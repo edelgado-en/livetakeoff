@@ -7,3 +7,11 @@ export const getJobDetails = (id: number) => {
 export const updateJobStatus = (id: number, status: string) => {
     return httpService.patch(`/api/jobs/${id}/`, { status });
 }
+
+export const completeServiceAssignment = (id: number) => {
+    return httpService.patch(`/api/jobs/services/${id}/`, { status: 'C' })
+}
+
+export const completeRetainerServiceAssignment = (id: number) => {
+    return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
+}

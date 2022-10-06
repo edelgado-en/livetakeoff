@@ -16,184 +16,10 @@ const REPORT_STATUS_OPTIONS = [
     { value: 'T', label: 'TBD' }
 ]
 
-const jobs = [
-  { id: 1,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N334JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 2,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N123AA',
-    aircraftType: 'Lear 35', airport: 'FLL', fbo: 'Sheltair Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 3,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N123BB',
-    aircraftType: 'Citation CJ3', airport: 'OPF', fbo: 'Signature Flight Support', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 4,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 5,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 6,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 7,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 8,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 9,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  { id: 10,
-    customer: 'BLUE SKY', requestDate: '09/05/2022 14:30:00', tailNumber: 'N310JE',
-    aircraftType: 'Hawker 850', airport: 'PBI', fbo: 'Jet Aviation', estimatedETA: '09/05/2022 15:00:00',
-    estimatedETD: '09/08/2022 18:10:00',
-    completeBy: '09/07/2022 18:00:00', services: [{ id: 1, name: 'Basic interior'}],
-    retainerServices: [{ id:1, name: 'Exterior detailing (Full wet or dry wash)'}],
-    status: 'Assigned', assignment: [{ id:1, name: 'Wilson Lizarazo' }],
-    comments: 'Please pay extra attention to the carpet',
-    photos: [
-      { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 4, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' },
-      { id: 5, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg' }
-    ],
-    specialInstructions: 'Must leave the WU certificate of completion before leaving the airplane'
-  },
-  
-]
 
 const TestReports = () => {
   const [jobs, setJobs] = useState([]);
   const [totalJobs, setTotalJobs] = useState(0);
-  const [description, setDescription] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(REPORT_STATUS_OPTIONS[0]);
   const [selectedPageSize, setSelectedPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -291,10 +117,10 @@ const TestReports = () => {
                         <div>
                           <div className="">
                             <span className="font-medium text-red-600 text-sm">{job.tailNumber}</span>
-                            <span className="ml-2 text-sm text-gray-500">{job.aircraftType.name}</span>
+                            <span className="ml-2 text-sm text-gray-500">{job.purchase_order}</span>
                           </div>
                           <div className="mt-2 text-xs text-gray-500 mb-1">
-                            {job.airport.initials} - {job.fbo.name}
+                            {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
                           </div>
                         </div>
                         <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
