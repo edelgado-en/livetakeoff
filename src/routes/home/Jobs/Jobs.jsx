@@ -127,7 +127,7 @@ const TestReports = () => {
                               {job.status === 'S' && 'Assigned'}
                               {job.status === 'U' && 'Submitted'}
                               {job.status === 'W' && 'Work In Progress'}
-                              {job.status === 'C' && 'Complete'}
+                              {job.status === 'C' && 'Completed'}
                               {job.status === 'T' && 'Cancelled'}
                               {job.status === 'R' && 'Review'}
                               {job.status === 'I' && 'Invoiced'}

@@ -71,28 +71,32 @@ const JobPhotos = () => {
                     </button>
                 </div>
             </div>
-            <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1  gap-14 mt-8">
+            {/* grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1  gap-14 mt-8 */}
+            <div className="">
                 <div>
-                    <div className="text-gray-500 text-sm mb-4 font-semibold">Interior</div>
-                    <ul className="-my-5 divide-y divide-gray-200">
+                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">Interior</div>
+                    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
                         {interiorPhotos.length === 0 && <div className="text-gray-500 text-sm">None</div>}
 
                         {interiorPhotos.map((photo, index) => (
-                            <li key={index} className="py-4">
-                                <div className="flex items-center space-x-4">
+                            <div key={index} className="py-4">
                                     <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewer(index) }>
-                                        <img className="h-48 w-48 rounded-lg" src={photo} alt="" />
+                                        <img className="h-60 w-72 rounded-lg" src={photo} alt="" />
+                                    </div>
+                                    <div className="flex text-gray-500 text-sm pt-2">
+                                        <CloudDownloadIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
+                                        <TrashIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
+                                        <span className="text-gray-500 text-xs">29m ago</span>
                                     </div>
 
                                     {/* YOU HAVE TO APPEND /fl_attachment/  between upload/ and /v1 */}
                                     {/* find the index of /upload/ and then append fl_attachment then append the rest */}
                                     {/* https://stackoverflow.com/questions/4313841/insert-a-string-at-a-specific-index */}
-                                    <a href="https://res.cloudinary.com/datidxeqm/image/upload/fl_attachment/v1/media/images/409cf4bd-acff-4bf5-9f6b-fa8fa3ce74da_m1zxjb">
+                                    {/* <a href="https://res.cloudinary.com/datidxeqm/image/upload/fl_attachment/v1/media/images/409cf4bd-acff-4bf5-9f6b-fa8fa3ce74da_m1zxjb">
                                         <div className="bg-red-100 text-red-700 p-2 rounded-lg hover:bg-red-200">
                                             <CloudDownloadIcon className="flex-shrink-0 h-4 w-4" />
                                         </div>
                                     </a>
-                                    
                                     <div className="flex justify-end">
                                         <div className="text-xs leading-5 font-semibold bg-slate-400/10
                                                                         p-2 text-slate-500
@@ -100,41 +104,46 @@ const JobPhotos = () => {
                                                                         dark:highlight-white/5 rounded-lg cursor-pointer">
                                             <TrashIcon className="flex-shrink-0 h-4 w-4"/>
                                         </div>
-                                    </div>
-                                </div>
-                            </li>
+                                    </div> */}
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
                 <div>
-                    <div className="text-gray-500 text-sm mb-4 font-semibold">Exterior</div>
-                     <ul className="-my-5 divide-y divide-gray-200">
+                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">Exterior</div>
+                    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
                         {exteriorPhotos.length === 0 && <div className="text-gray-500 text-sm">None</div>}
 
                         {exteriorPhotos.map((photo, index) => (
-                            <li key={index} className="py-4">
-                                <div className="flex items-center space-x-4">
-                                    <div className="flex-shrink-0 cursor-pointer">
-                                        <img className="h-48 w-48 rounded-lg" src={photo} alt="" />
+                            <div key={index} className="py-4">
+                                    <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewer(index) }>
+                                        <img className="h-60 w-72 rounded-lg" src={photo} alt="" />
+                                    </div>
+                                    <div className="flex text-gray-500 text-sm pt-2">
+                                        <CloudDownloadIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
+                                        <TrashIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
+                                        <span className="text-gray-500 text-xs">29m ago</span>
                                     </div>
 
-                                    <a href="https://res.cloudinary.com/datidxeqm/image/upload/fl_attachment/v1/media/images/409cf4bd-acff-4bf5-9f6b-fa8fa3ce74da_m1zxjb">
+                                    {/* YOU HAVE TO APPEND /fl_attachment/  between upload/ and /v1 */}
+                                    {/* find the index of /upload/ and then append fl_attachment then append the rest */}
+                                    {/* https://stackoverflow.com/questions/4313841/insert-a-string-at-a-specific-index */}
+                                    {/* <a href="https://res.cloudinary.com/datidxeqm/image/upload/fl_attachment/v1/media/images/409cf4bd-acff-4bf5-9f6b-fa8fa3ce74da_m1zxjb">
                                         <div className="bg-red-100 text-red-700 p-2 rounded-lg hover:bg-red-200">
                                             <CloudDownloadIcon className="flex-shrink-0 h-4 w-4" />
                                         </div>
                                     </a>
-                                    <div>
+                                    <div className="flex justify-end">
                                         <div className="text-xs leading-5 font-semibold bg-slate-400/10
                                                                         p-2 text-slate-500
-                                                                        flex items-center space-x-2 hover:bg-slate-400/20
-                                                                        dark:highlight-white/5">
-                                            <TrashIcon className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
+                                                                        hover:bg-slate-400/20
+                                                                        dark:highlight-white/5 rounded-lg cursor-pointer">
+                                            <TrashIcon className="flex-shrink-0 h-4 w-4"/>
                                         </div>
-                                    </div>
-                                </div>
-                            </li>
+                                    </div> */}
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             </div>
 
