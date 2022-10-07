@@ -73,7 +73,6 @@ const JobPhotoListing = () => {
                                         <TrashIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
                                         <span className="text-gray-500 text-xs">29m ago</span>
                                     </div>
-
                                     {/* YOU HAVE TO APPEND /fl_attachment/  between upload/ and /v1 */}
                                     {/* find the index of /upload/ and then append fl_attachment then append the rest */}
                                     {/* https://stackoverflow.com/questions/4313841/insert-a-string-at-a-specific-index */}
