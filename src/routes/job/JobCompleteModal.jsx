@@ -29,12 +29,18 @@ const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) 
                         Completing a job will complete all services associated with it. You won't have access
                         to the job after it is completed.
                       </p>
-                      <p className="text-sm text-gray-500 py-3">
-                        There are no uploaded photos for this job.
-                      </p>
-                      <p className="text-sm text-gray-500 py-3">
-                        There are other project managers assigned to this job.
-                      </p>
+
+                      {jobDetails.total_photos === 0 && (
+                        <p className="text-sm text-gray-500 py-3">
+                            There are no uploaded photos for this job.
+                        </p>
+                      )}
+
+                      {jobDetails.total_assignees > 0 && (
+                        <p className="text-sm text-gray-500 py-3">
+                            There are other project managers assigned to this job.
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>

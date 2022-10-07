@@ -25,10 +25,6 @@ const JobInfo = () => {
     }, [])
 
     const handleToggleJobCompleteModal = () => {
-
-        //Maybe the job details should already return total_photos and total_assignees
-        //so that you don't have to fetch it here
-
         setCompleteJobModalOpen(!isCompleteJobModalOpen)
     }
 
