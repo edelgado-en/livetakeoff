@@ -7,6 +7,8 @@ import JobDetails from './routes/job/JobDetails';
 import JobInfo from './routes/job/JobInfo';
 import JobComments from './routes/job/JobComments';
 import JobPhotos from './routes/job/JobPhotos';
+import JobPhotoListing from './routes/job/JobPhotoListing';
+import JobPhotoUpload from './routes/job/JobPhotoUpload';
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
@@ -58,8 +60,11 @@ const  App = () => {
                     <Route path="jobs/:jobId" element={<JobDetails />}>
                       <Route index element={<JobInfo />} />
                       <Route index path="details" element={<JobInfo />} />
-                      <Route index path="comments" element={<JobComments />} />
-                      <Route index path="photos" element={<JobPhotos />} />
+                      <Route path="comments" element={<JobComments />} />
+                      <Route path="photos" element={<JobPhotos />}>
+                          <Route index path="listing" element={<JobPhotoListing />} />
+                          <Route path="upload" element={<JobPhotoUpload />} />
+                      </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
                 </Route>

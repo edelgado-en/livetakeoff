@@ -54,7 +54,7 @@ const JobDetails = () => {
                                     Comments
                                 </Link>
                                 <Link
-                                    to="photos"
+                                    to="photos/listing"
                                     className={classNames(
                                     location.pathname.includes("photos")? 'bg-red-100 text-red-700' : 'text-red-500 hover:text-red-700',
                                     'px-2 py-2 font-medium text-sm rounded-md'
