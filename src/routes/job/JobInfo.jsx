@@ -158,7 +158,7 @@ const JobInfo = () => {
                     <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Purchase Order</dt>
-                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.purchase_order}</dd>
+                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.purchase_order ? jobDetails.purchase_order : 'None'}</dd>
                         </div>
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Status</dt>
@@ -203,11 +203,11 @@ const JobInfo = () => {
                         </div>
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Estimated ETA</dt>
-                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETA}</dd>
+                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETA ? jobDetails.estimatedETA : 'None'}</dd>
                         </div>
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Estimated ETD</dt>
-                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD}</dd>
+                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'None'}</dd>
                         </div>
                         <div className="sm:col-span-2">
                             <dt className="text-sm font-medium text-gray-500">Special Instructions</dt>
@@ -221,6 +221,10 @@ const JobInfo = () => {
                     <div className="mx-auto mt-8 max-w-5xl pb-8">
                         <h2 className="text-sm font-medium text-gray-500">Services</h2>
                         <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            {jobDetails.service_assignments?.length === 0 &&
+                                <div className="text-sm text-gray-500">None</div>
+                            }
+
                             {jobDetails.service_assignments?.map((service) => (
                                 <div
                                     key={service.id}
