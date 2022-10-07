@@ -5,13 +5,6 @@ import ImageViewer from 'react-simple-image-viewer'
 
 import * as api from './apiService'
 
-const images = [
-    'http://placeimg.com/1200/800/nature',
-    'http://placeimg.com/800/1200/nature',
-    'http://placeimg.com/1920/1080/nature',
-    'http://placeimg.com/1500/500/nature',
-  ];
-
 const JobPhotos = () => {
     const [currentImage, setCurrentImage] = useState(0);
     const [interiorPhotos, setInteriorPhotos] = useState([])
@@ -60,7 +53,7 @@ const JobPhotos = () => {
         <div className="mt-8">
             <div className="grid grid-cols-2 mb-4">
                 <div className="text-gray-500 text-sm">
-                    <div className="relative top-3">Total: {interiorPhotos.length + exteriorPhotos.length}</div>
+                    <div className="relative top-3">Total Photos: {interiorPhotos.length + exteriorPhotos.length}</div>
                 </div>
                 <div className="text-right">
                     <button
@@ -71,10 +64,15 @@ const JobPhotos = () => {
                     </button>
                 </div>
             </div>
-            {/* grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1  gap-14 mt-8 */}
             <div className="">
                 <div>
-                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">Interior</div>
+                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">
+                        Interior
+                        {interiorPhotos.length > 0 &&
+                            <span class="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
+                                          rounded-full text-xs font-medium md:inline-block">{interiorPhotos.length}</span>
+                        }
+                    </div>
                     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
                         {interiorPhotos.length === 0 && <div className="text-gray-500 text-sm">None</div>}
 
@@ -110,7 +108,13 @@ const JobPhotos = () => {
                     </div>
                 </div>
                 <div>
-                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">Exterior</div>
+                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">
+                        Exterior
+                        {exteriorPhotos.length > 0 &&
+                            <span class="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
+                                          rounded-full text-xs font-medium md:inline-block">{exteriorPhotos.length}</span>
+                        }
+                    </div>
                     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
                         {exteriorPhotos.length === 0 && <div className="text-gray-500 text-sm">None</div>}
 
