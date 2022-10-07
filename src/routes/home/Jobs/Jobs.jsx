@@ -42,8 +42,6 @@ const TestReports = () => {
     try {
        const { data } = await api.getJobs();
 
-      console.log(data);
-
       setJobs(data.results);
       setTotalJobs(data.count)
 

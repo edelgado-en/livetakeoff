@@ -1,7 +1,11 @@
 
+import { useEffect, useState } from "react";
+
 import { TrashIcon, CloudDownloadIcon } from "@heroicons/react/outline";
 
-const photos = [
+import * as api from './apiService'
+
+/* const photos = [
     { id: 1, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg', size: '3.5MB' },
     { id: 2, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg', size: '3.5MB' },
     { id: 3, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg', size: '3.5MB' },
@@ -16,14 +20,35 @@ const photos = [
     { id: 12, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg', size: '3.5MB' },
     { id: 13, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg', size: '3.5MB' },
     { id: 14, url: 'https://res.cloudinary.com/datidxeqm/image/upload/v1655812995/npcjg9zhd7j4kdfbbpce.jpg', size: '3.5MB' },
-]
+] */
 
 const JobPhotos = () => {
+    const [photos, setPhotos] = useState([])
+
+    useEffect(() => {
+        getPhotos()
+    }, [])
+
+    const getPhotos = async () => {
+        try {
+            const { data } = await api.getJobPhotos(1)
+
+            // build the object here to separate interior and exterior photos
+            // and then you can have interior on the left and exterior on the right
+            // on mobile they would just stack on top of each other
+
+            setPhotos(data.results)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className="mt-8">
-            <div className="grid grid-cols-2 mb-4">
+            <div className="grid grid-cols-2 mb-4 max-w-3xl m-auto">
                 <div className="text-gray-500 text-sm">
-                    <div className="relative top-3">Total: 14</div>
+                    <div className="relative top-3">Total: {photos.length}</div>
                 </div>
                 <div className="text-right">
                     <button
@@ -34,16 +59,15 @@ const JobPhotos = () => {
                     </button>
                 </div>
             </div>
-            <ul className="-my-5 divide-y divide-gray-200">
+            <ul className="-my-5 divide-y divide-gray-200 mt-4 max-w-3xl m-auto">
                 {photos.map((photo) => (
                     <li key={photo.id} className="py-4">
                         <div className="flex items-center space-x-4">
                             <div className="flex-shrink-0">
-                                <img className="h-28 w-28" src={photo.url} alt="" />
+                                <img className="h-28 w-28" src={photo.image} alt="" />
                             </div>
                             <div className="min-w-0 flex-1">
-                                <p className="truncate text-xs text-gray-500">{photo.url}</p>
-                                <p className="truncate text-xs text-gray-500">{photo.size}</p>
+                                <p className="truncate text-xs text-gray-500">{photo.name}</p>
                             </div>
                             <div>
                                 <div to="/jobs" className="text-xs leading-5 font-semibold bg-slate-400/10

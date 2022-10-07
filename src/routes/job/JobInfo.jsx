@@ -33,9 +33,11 @@ const JobInfo = () => {
         try {
             const { data } = await api.getJobDetails(jobId)
 
-            console.log(data);
-
             setJobDetails(data);
+
+            const response = await api.getJobPhotos(1)
+
+            console.log(response.data)
 
         } catch (error) {
             if (error.response?.status === 403) {

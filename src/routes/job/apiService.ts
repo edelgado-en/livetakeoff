@@ -15,3 +15,7 @@ export const completeServiceAssignment = (id: number) => {
 export const completeRetainerServiceAssignment = (id: number) => {
     return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
 }
+
+export const getJobPhotos = (jobId: number) => {
+    return httpService.get(`/api/job-photos/${jobId}/`)
+}
