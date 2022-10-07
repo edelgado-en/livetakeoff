@@ -124,11 +124,11 @@ const TestReports = () => {
                           </div>
                         </div>
                         <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
-                            <p className="inline-flex px-2 text-xs font-semibold leading-5">
+                            <p className="inline-flex text-xs font-semibold leading-5">
                               {job.status === 'A' && 'Accepted'}
                               {job.status === 'S' && 'Assigned'}
                               {job.status === 'U' && 'Submitted'}
-                              {job.status === 'W' && 'WIP'}
+                              {job.status === 'W' && 'Work In Progress'}
                               {job.status === 'C' && 'Complete'}
                               {job.status === 'T' && 'Cancelled'}
                               {job.status === 'R' && 'Review'}
