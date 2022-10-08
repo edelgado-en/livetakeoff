@@ -6,6 +6,8 @@ import Pagination from "react-js-pagination";
 import Select from 'react-select';
 import { STANDARD_DROPDOWN_STYLES, PAGE_SIZE_OPTIONS } from '../../../constants';
 
+import Loader from "../../../components/loader/Loader";
+
 import * as api from './apiService'
 
 const REPORT_STATUS_OPTIONS = [
@@ -19,6 +21,7 @@ const REPORT_STATUS_OPTIONS = [
 
 const TestReports = () => {
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [totalJobs, setTotalJobs] = useState(0);
   const [selectedStatus, setSelectedStatus] = useState(REPORT_STATUS_OPTIONS[0]);
   const [selectedPageSize, setSelectedPageSize] = useState(PAGE_SIZE_OPTIONS[0]);
@@ -38,16 +41,19 @@ const TestReports = () => {
   }, [selectedStatus, currentPage, selectedPageSize])
 
   const fetchReports = async () => {
-
+    setLoading(true)
+    
     try {
-       const { data } = await api.getJobs();
+        const { data } = await api.getJobs();
 
-      setJobs(data.results);
-      setTotalJobs(data.count)
+        setJobs(data.results);
+        setTotalJobs(data.count)
 
     } catch (e) {
       setJobs([])
     }
+
+    setLoading(false)
   }
 
   const handleStatusChange = (selectedStatus) => {
@@ -78,9 +84,11 @@ const TestReports = () => {
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-xl font-semibold text-gray-600">Jobs Queue</h1>
-            <p className="mt-2 text-sm text-gray-700">
-              Total: {jobs.length}
-            </p>
+            {!loading && (
+              <p className="mt-2 text-sm text-gray-700">
+                Total: {jobs.length}
+              </p>
+            )}
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             {/* <button
@@ -98,7 +106,9 @@ const TestReports = () => {
           </div>
         </div>
 
-        {jobs.length === 0 && (
+        {loading && <Loader />}  
+
+        {!loading && jobs.length === 0 && (
             <div className="text-sm text-gray-500 mt-20 m-auto w-11/12 text-center">
               No jobs found.
             </div>
@@ -147,107 +157,7 @@ const TestReports = () => {
             ))}
           </ul>
         </div>
-      {/* <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-xs  text-gray-500 sm:pl-6 md:pl-0"
-                  >
-                    Id
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Customer
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs text-gray-500">
-                    Request Date
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Tail Number
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Aircraft Type
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Airport
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    FBO
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Estimated ETA
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Estimated ETD
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Complete By
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Services
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Retainer Services
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Status
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Assignment
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Comments
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Photos
-                  </th>
-                  <th scope="col" className="py-3.5 px-3 text-left text-xs  text-gray-500">
-                    Special Instructions
-                  </th>
-                  
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {jobs.map((job) => (
-                  <tr key={job.id}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-6 md:pl-0">
-                      {job.id}
-                    </td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.customer}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.requestDate}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.tailNumber}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.aircraftType}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.airport}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.fbo}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.estimatedETA}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.estimatedETD}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.completeBy}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">services here</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">retainer services here</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.status}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">assignments here</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.comments}</td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">
-                      <div className="flex flex-inline gap-x-2">
-                          {job.photos.map((photo) => (
-                            <div key={photo.id} className="h-10 w-10 flex-shrink-0">
-                              <img className="h-10 w-10" src={photo.url} alt="" />
-                            </div>
-                          ))}
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap py-4 px-3 text-xs text-gray-500">{job.specialInstructions}</td>
 
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div> */}
     </div>
     )
   }

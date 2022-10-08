@@ -5,6 +5,7 @@ import { CheckCircleIcon } from "@heroicons/react/outline";
 import { toast } from 'react-toastify';
 import * as api from './apiService'
 
+import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
 
 const assignees = [
@@ -14,6 +15,7 @@ const assignees = [
 
 const JobInfo = () => {
     const { jobId } = useParams();
+    const [loading, setLoading] = useState(false)
     const [jobDetails, setJobDetails] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
@@ -29,23 +31,25 @@ const JobInfo = () => {
     }
 
     const getJobDetails = async () => {
+        setLoading(true)
 
         try {
             const { data } = await api.getJobDetails(jobId)
 
             setJobDetails(data);
 
-            const response = await api.getJobPhotos(1)
-
-            console.log(response.data)
+            setLoading(false)
 
         } catch (error) {
+            setLoading(false)
+            
             if (error.response?.status === 403) {
                 setErrorMessage('You do not have permission to view this job.')
             } else {
                 setErrorMessage('Unable to load job details.')
             }
         }
+
     }
 
     // it could W(Work In Progress) or C(completed)
