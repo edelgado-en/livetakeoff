@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import ImageUploading from 'react-images-uploading';
 import Loader from "../../components/loader/Loader";
+import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 const JobPhotoUpload = () => {
     const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const JobPhotoUpload = () => {
     };
 
     return (
-        <>
+        <AnimatedPage>
         <div className="mt-8">
             <ImageUploading
                 multiple
@@ -198,7 +199,7 @@ const JobPhotoUpload = () => {
             )}
             </ImageUploading>
         </div>
-        </>
+        </AnimatedPage>
     )
 }
 

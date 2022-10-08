@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { TrashIcon, CloudDownloadIcon } from "@heroicons/react/outline";
 import ImageViewer from 'react-simple-image-viewer'
 import Loader from "../../components/loader/Loader";
+import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import * as api from './apiService'
 
@@ -63,7 +64,7 @@ const JobPhotoListing = () => {
     }
 
     return (
-        <>
+        <AnimatedPage>
             {loading && <Loader />}
 
             {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
@@ -145,7 +146,7 @@ const JobPhotoListing = () => {
                 />
             )}
             
-        </>
+        </AnimatedPage>
     )
 }
 

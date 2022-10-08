@@ -7,6 +7,7 @@ import * as api from './apiService'
 
 import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
+import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 const assignees = [
     { id: 1, name: 'Wilson Lizarazo'},
@@ -129,7 +130,7 @@ const JobInfo = () => {
     }
 
     return (
-        <div>
+        <AnimatedPage>
             {loading && <Loader />}
             
             {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
@@ -332,7 +333,7 @@ const JobInfo = () => {
                                             handleClose={handleToggleJobCompleteModal}
                                             updateJobStatus={updateJobStatus} />}
 
-        </div>
+        </AnimatedPage>
     )
 }
 

@@ -1,4 +1,6 @@
 
+import AnimatedPage from "../../components/animatedPage/AnimatedPage";
+
 const comments = [
     {
       id: 1,
@@ -44,6 +46,7 @@ const JobComments = () => {
     }
 
     return (
+      <AnimatedPage>
         <div className="p-3 mt-8">
                 <div className="flex flex-row">
                     <div className="flex-1">
@@ -113,6 +116,7 @@ const JobComments = () => {
                   </div>
                 </div>
             </div>
+      </AnimatedPage>
     )
 }
 

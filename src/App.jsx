@@ -1,6 +1,7 @@
 
 import { useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 
 import Jobs from './routes/home/Jobs/Jobs';
 import JobDetails from './routes/job/JobDetails';
@@ -42,6 +43,8 @@ const Fallback = () => {
 }
 
 const  App = () => {
+  const location = useLocation()
+
   return (
     <>
       <Suspense fallback={<Fallback />}>
@@ -49,27 +52,28 @@ const  App = () => {
          {/* You need to have a wrapper here with a content and a footer for the footer to be sticky */}
          <div className="flex flex-col min-h-screen">
           <div className="flex-grow">
-            <Routes>
+            <AnimatePresence exitBeforeEnter>
+              <Routes key={location.pathname} location={location}>
+                <Route path="/login" element={<Login />} />
 
-              <Route path="/login" element={<Login />} />
-
-              <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<Jobs />}/>
-                    <Route path="jobs" element={<Jobs />}/>
-                    <Route path="jobs/:jobId" element={<JobDetails />}>
-                      <Route index element={<JobInfo />} />
-                      <Route index path="details" element={<JobInfo />} />
-                      <Route path="comments" element={<JobComments />} />
-                      <Route path="photos" element={<JobPhotos />}>
-                          <Route index path="listing" element={<JobPhotoListing />} />
-                          <Route path="upload" element={<JobPhotoUpload />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/" element={<Layout />}>
+                      <Route index element={<Jobs />}/>
+                      <Route path="jobs" element={<Jobs />}/>
+                      <Route path="jobs/:jobId" element={<JobDetails />}>
+                        <Route index element={<JobInfo />} />
+                        <Route index path="details" element={<JobInfo />} />
+                        <Route path="comments" element={<JobComments />} />
+                        <Route path="photos" element={<JobPhotos />}>
+                            <Route index path="listing" element={<JobPhotoListing />} />
+                            <Route path="upload" element={<JobPhotoUpload />} />
+                        </Route>
                       </Route>
-                    </Route>
-                    <Route path="*" element={<NotFound />} />
+                      <Route path="*" element={<NotFound />} />
+                  </Route>
                 </Route>
-              </Route>
-            </Routes>
+              </Routes>
+            </AnimatePresence>
           </div> 
         </div>
       </Suspense>
