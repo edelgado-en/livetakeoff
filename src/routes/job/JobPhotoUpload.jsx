@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import ImageUploading from 'react-images-uploading';
+import Loader from "../../components/loader/Loader";
 
 const JobPhotoUpload = () => {
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null)
     const [interiorImages, setInteriorImages] = useState([]);
     const [exteriorImages, setExteriorImages] = useState([]);
     const maxNumberInterior = 20;
@@ -98,7 +101,7 @@ const JobPhotoUpload = () => {
                                     <img className="h-60 w-72 rounded-lg" src={image['data_url']} alt="" />
                                 </div>
                                 <div className="flex text-gray-500 text-sm pt-2">
-                                    <PencilIcon onClick={() => onImageUpdate(index)} className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
+                                    <PencilIcon onClick={() => onImageUpdate(index)} className="flex-shrink-0 h-4 w-4 mr-3 cursor-pointer" />
                                     <TrashIcon onClick={() => onImageRemove(index)} className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
                                 </div>
                             </div>

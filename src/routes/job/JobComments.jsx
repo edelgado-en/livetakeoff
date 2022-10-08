@@ -50,7 +50,7 @@ const JobComments = () => {
                         <div className="leading-6 font-medium text-gray-600">Comments</div>
                     </div>
                 </div>
-                <div className="my-4 px-4">
+                <div className="my-4">
                     <div className="mt-8 flex flex-col" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                     <ul className="space-y-8">
                         {comments.map((comment) => (
@@ -84,14 +84,7 @@ const JobComments = () => {
                     </div>
                     <div className="bg-gray-50 px-4 py-6 sm:px-6">
                     <div className="flex space-x-3">
-                      <div className="flex-shrink-0">
-                        <div className="w-12 text-center">
-                            <div className="w-10" style={{ lineHeight: '36px', borderRadius: '50%',
-                                                        fontSize: '15px', background: '#959aa1', color: '#fff' }}>
-                                ED
-                            </div>
-                        </div>
-                      </div>
+                     
                       <div className="min-w-0 flex-1">
                           <div>
                             <textarea
@@ -112,7 +105,7 @@ const JobComments = () => {
                                         text-white shadow-sm hover:bg-red-700 focus:outline-none
                                          focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                             >
-                              Comment
+                              Post
                             </button>
                           </div>
                       </div>

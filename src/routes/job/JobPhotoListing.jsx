@@ -2,11 +2,14 @@
 import { useEffect, useState } from "react";
 import { TrashIcon, CloudDownloadIcon } from "@heroicons/react/outline";
 import ImageViewer from 'react-simple-image-viewer'
+import Loader from "../../components/loader/Loader";
 
 import * as api from './apiService'
 
 const JobPhotoListing = () => {
     const [currentImage, setCurrentImage] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null)
     const [interiorPhotos, setInteriorPhotos] = useState([])
     const [exteriorPhotos, setExteriorPhotos] = useState([])
     const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -26,6 +29,8 @@ const JobPhotoListing = () => {
       };
 
     const getPhotos = async () => {
+        setLoading(true)
+
         try {
             const { data } = await api.getJobPhotos(1)
 
@@ -44,14 +49,27 @@ const JobPhotoListing = () => {
             setInteriorPhotos(interior_photos)
             setExteriorPhotos(exterior_photos)
 
+            setLoading(false)
+
         } catch (error) {
-            console.log(error)
+            setLoading(false)
+            
+            if (error.response?.status === 403) {
+                setErrorMessage('You do not have permission to view this job.')
+            } else {
+                setErrorMessage('Unable to load job photos.')
+            }
         }
     }
 
     return (
         <>
-            <div className="">
+            {loading && <Loader />}
+
+            {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
+
+            {!loading && errorMessage == null && (
+                <div className="">
                 <div>
                     <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">
                         Interior
@@ -114,6 +132,8 @@ const JobPhotoListing = () => {
                     </div>
                 </div>
             </div>
+            )}
+            
 
             {isViewerOpen && (
                 <ImageViewer

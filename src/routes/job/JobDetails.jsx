@@ -1,6 +1,6 @@
 
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
-import { ArrowLeftIcon } from "@heroicons/react/outline";
+import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, ChatIcon } from "@heroicons/react/outline";
 
 const tabs = [
     { name: 'Info', href: '#', current: false },
@@ -42,6 +42,7 @@ const JobDetails = () => {
                                     'px-2 py-2 font-medium text-sm rounded-md'
                                 )}
                                 >
+{/*                                     <ClipboardCheckIcon className="h-6 w-6 cursor-pointer"/> */}
                                     Details
                                 </Link>
                                 <Link
@@ -52,6 +53,7 @@ const JobDetails = () => {
                                 )}
                                 >
                                     Comments
+{/*                                     <ChatIcon className="h-6 w-6" /> */}
                                 </Link>
                                 <Link
                                     to="photos/listing"
@@ -61,6 +63,7 @@ const JobDetails = () => {
                                 )}
                                 >
                                     Photos
+                                    {/* <PhotographIcon className="h-6 w-6"/> */}
                                 </Link>
                             </nav>
                         </div>

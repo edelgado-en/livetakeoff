@@ -1,10 +1,6 @@
 
-import { useEffect, useState } from "react";
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 import { TrashIcon, CloudDownloadIcon, ViewListIcon } from "@heroicons/react/outline";
-import ImageViewer from 'react-simple-image-viewer'
-
-import * as api from './apiService'
 
 const JobPhotos = () => {
 
