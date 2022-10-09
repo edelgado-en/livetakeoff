@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom'
 import { TrashIcon, CloudDownloadIcon } from "@heroicons/react/outline";
 import ImageViewer from 'react-simple-image-viewer'
 import Loader from "../../components/loader/Loader";
@@ -14,6 +15,8 @@ const JobPhotoListing = () => {
     const [interiorPhotos, setInteriorPhotos] = useState([])
     const [exteriorPhotos, setExteriorPhotos] = useState([])
     const [isViewerOpen, setIsViewerOpen] = useState(false);
+
+    const { jobId } = useParams();
 
     useEffect(() => {
         getPhotos()
@@ -33,10 +36,12 @@ const JobPhotoListing = () => {
         setLoading(true)
 
         try {
-            const { data } = await api.getJobPhotos(1)
+            const { data } = await api.getJobPhotos(jobId)
 
             const interior_photos = []
             const exterior_photos = []
+
+            console.log(data)
 
             data.results.forEach(entry => {
                 if (entry.interior) {
@@ -75,12 +80,12 @@ const JobPhotoListing = () => {
                     <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">
                         Interior
                         {interiorPhotos.length > 0 &&
-                            <span class="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
+                            <span className="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
                                           rounded-full text-xs font-medium md:inline-block">{interiorPhotos.length}</span>
                         }
                     </div>
                     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
-                        {interiorPhotos.length === 0 && <div className="text-gray-500 text-sm">None</div>}
+                        {interiorPhotos.length === 0 && <div className="text-gray-500 text-sm">No photos uploaded</div>}
 
                         {interiorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
@@ -105,12 +110,12 @@ const JobPhotoListing = () => {
                     <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">
                         Exterior
                         {exteriorPhotos.length > 0 &&
-                            <span class="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
+                            <span className="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
                                           rounded-full text-xs font-medium md:inline-block">{exteriorPhotos.length}</span>
                         }
                     </div>
                     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
-                        {exteriorPhotos.length === 0 && <div className="text-gray-500 text-sm">None</div>}
+                        {exteriorPhotos.length === 0 && <div className="text-gray-500 text-sm">No photos uploaded</div>}
 
                         {exteriorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">

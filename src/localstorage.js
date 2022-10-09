@@ -57,11 +57,11 @@ export const getUserInfo = () => {
         const userInfo = localStorage.getItem(USER_INFO);
 
         if (userInfo === null) {
-            return undefined;
+            return {};
         }
 
         return JSON.parse(userInfo);
     } catch (e) {
-        return undefined;
+        return {};
     }
 }

@@ -52,7 +52,7 @@ const  App = () => {
          {/* You need to have a wrapper here with a content and a footer for the footer to be sticky */}
          <div className="flex flex-col min-h-screen">
           <div className="flex-grow">
-            <AnimatePresence exitBeforeEnter>
+            <AnimatePresence mode='wait'>
               <Routes key={location.pathname} location={location}>
                 <Route path="/login" element={<Login />} />
 

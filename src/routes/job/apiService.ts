@@ -19,3 +19,11 @@ export const completeRetainerServiceAssignment = (id: number) => {
 export const getJobPhotos = (jobId: number) => {
     return httpService.get(`/api/job-photos/${jobId}/`)
 }
+
+export const uploadPhotos = (jobId: number, formData: any) => {
+    return httpService.post(`/api/job-photos/upload/${jobId}/`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+}
