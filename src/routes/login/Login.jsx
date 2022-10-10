@@ -31,10 +31,6 @@ const Login = () => {
 
             setApiAccessToken(data.access)
 
-            const response = await api.get('api/users/me');
-            
-            setUserInfo(response.data)
-
             setLoading(false);
 
             navigate('/');

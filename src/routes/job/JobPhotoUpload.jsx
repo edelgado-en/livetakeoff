@@ -4,11 +4,8 @@ import { TrashIcon, PencilIcon, CheckCircleIcon } from "@heroicons/react/outline
 import ImageUploading from 'react-images-uploading';
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
-
 import { useNavigate } from "react-router-dom";
-
 import * as api from './apiService'
-
 import { toast } from "react-toastify";
 
 const JobPhotoUpload = () => {

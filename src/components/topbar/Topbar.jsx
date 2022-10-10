@@ -1,10 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from './livetakeoff-logo.png';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 
-import { getUserInfo } from '../../localstorage'
+import * as api from '../../routes/userProfile/apiService';
 
 const navigation = [
   { name: 'Jobs', href: 'jobs', current: true },
@@ -27,8 +28,19 @@ const Bars3Icon = () => {
 
 const Topbar = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState({})
+  const dispatch = useAppDispatch();
 
-  /* TODO: add a useEffect and fetch the user information so that when user refreshes the screen we make a call to userendpoint */
+  useEffect(() => {
+    fetchUser()
+
+  }, [])
+
+  const fetchUser = async () => {
+    const { data } = await api.getUsetDetails();
+
+    setUser(data)
+  }
 
   const handleLogout = () => {
     localStorage.clear();
@@ -93,15 +105,15 @@ const Topbar = () => {
                     <Menu.Button className="flex rounded-full bg-red-600 text-sm focus:outline-none">
                       <span className="sr-only">Open user menu</span>
                       <div className="w-12 text-center">
-                          {getUserInfo().avatar ? 
+                          {user.avatar ? 
                             <img
                             className="h-10 w-10 rounded-full"
-                            src={getUserInfo().avatar}
+                            src={user.avatar}
                             alt=""
                           />
                             :
                             <div className="w-10" style={{ lineHeight: '36px',borderRadius: '50%', fontSize: '15px', background: 'white', color: 'black' }}>
-                              {getUserInfo().initials}
+                              {user.initials}
                             </div>
                           }
                       </div>
