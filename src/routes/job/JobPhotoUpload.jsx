@@ -138,7 +138,7 @@ const JobPhotoUpload = () => {
                 <div className="mt-8">
                     <ImageUploading
                         multiple
-                        acceptType={['jpg', 'gif', 'png']}
+                        acceptType={['jpg', 'gif', 'png', 'jpeg']}
                         value={interiorImages}
                         onChange={onChangeInterior}
                         maxNumber={maxNumberInterior}
@@ -155,7 +155,7 @@ const JobPhotoUpload = () => {
                         }) => (
                         <>
                             <div className="flex max-w-lg justify-center rounded-md border-2 border-dashed
-                                border-gray-300 px-6 pt-5 pb-6 m-auto">
+                                border-gray-300 px-6 pt-5 pb-6 m-auto" {...dragProps}>
                                 <div className="space-y-1 text-center">
                                     <svg
                                     className="mx-auto h-12 w-12 text-gray-400"
@@ -172,7 +172,7 @@ const JobPhotoUpload = () => {
                                     />
                                     </svg>
                                     <div className="font-semibold">INTERIOR</div>
-                                    <div className="flex text-sm text-gray-600" onClick={onImageUpload} {...dragProps}>
+                                    <div className="flex text-sm text-gray-600" onClick={onImageUpload} >
                                         <label
                                             htmlFor="file-upload"
                                             className="relative cursor-pointer rounded-md bg-white font-medium text-red-600
@@ -279,7 +279,7 @@ const JobPhotoUpload = () => {
                 <div className="mt-20">
                     <ImageUploading
                         multiple
-                        acceptType={['jpg', 'gif', 'png']}
+                        acceptType={['jpg', 'gif', 'png', 'jpeg']}
                         value={exteriorImages}
                         onChange={onChangeExterior}
                         maxNumber={maxNumberExterior}
@@ -296,7 +296,7 @@ const JobPhotoUpload = () => {
                         }) => (
                         <>
                             <div className="flex max-w-lg justify-center rounded-md border-2 border-dashed
-                                border-gray-300 px-6 pt-5 pb-6 m-auto">
+                                border-gray-300 px-6 pt-5 pb-6 m-auto" {...dragProps}>
                                 <div className="space-y-1 text-center">
                                     <svg
                                     className="mx-auto h-12 w-12 text-gray-400"
@@ -313,7 +313,7 @@ const JobPhotoUpload = () => {
                                     />
                                     </svg>
                                     <div className="font-semibold">EXTERIOR</div>
-                                    <div className="flex text-sm text-gray-600" onClick={onImageUpload} {...dragProps}>
+                                    <div className="flex text-sm text-gray-600" onClick={onImageUpload}>
                                         <label
                                             htmlFor="file-upload"
                                             className="relative cursor-pointer rounded-md bg-white font-medium text-red-600
