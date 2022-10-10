@@ -10,10 +10,12 @@ import JobComments from './routes/job/JobComments';
 import JobPhotos from './routes/job/JobPhotos';
 import JobPhotoListing from './routes/job/JobPhotoListing';
 import JobPhotoUpload from './routes/job/JobPhotoUpload';
+import UserProfile from './routes/userProfile/UserProfile'
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
 import Layout from './layout/Layout';
+
 
 import { isUserAuthenticated } from './localstorage';
 
@@ -60,6 +62,7 @@ const  App = () => {
                   <Route path="/" element={<Layout />}>
                       <Route index element={<Jobs />}/>
                       <Route path="jobs" element={<Jobs />}/>
+                      <Route path="profile" element={<UserProfile />} />
                       <Route path="jobs/:jobId" element={<JobDetails />}>
                         <Route index element={<JobInfo />} />
                         <Route index path="details" element={<JobInfo />} />
