@@ -161,6 +161,7 @@ const UserProfile = () => {
                           <div className="ml-5 rounded-md shadow-sm">
                             <ImageUploading
                                 value={images}
+                                acceptType={['jpg', 'gif', 'png', 'jpeg']}
                                 onChange={updateAvatar}
                                 maxNumber={1}
                                 dataURLKey="data_url">
@@ -173,7 +174,8 @@ const UserProfile = () => {
                                                      focus-within:ring-sky-500 focus-within:ring-offset-2 hover:bg-gray-50">
                                         <label
                                             htmlFor="mobile-user-photo"
-                                            className="pointer-events-none relative text-sm font-medium leading-4 text-gray-700"
+                                            className="pointer-events-none relative text-sm font-medium
+                                                      leading-4 text-gray-700"
                                         >
                                             <span>Change</span>
                                             <span className="sr-only"> user photo</span>
@@ -189,6 +191,7 @@ const UserProfile = () => {
                       <div className="relative hidden overflow-hidden rounded-full lg:block">
                         <ImageUploading
                             value={images}
+                            acceptType={['jpg', 'gif', 'png', 'jpeg']}
                             onChange={updateAvatar}
                             maxNumber={1}
                             dataURLKey="data_url">
