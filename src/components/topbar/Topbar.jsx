@@ -92,9 +92,17 @@ const Topbar = () => {
                     <Menu.Button className="flex rounded-full bg-red-600 text-sm focus:outline-none">
                       <span className="sr-only">Open user menu</span>
                       <div className="w-12 text-center">
-                          <div className="w-10" style={{ lineHeight: '36px',borderRadius: '50%', fontSize: '15px', background: 'white', color: 'black' }}>
-                            {getUserInfo().initials}
-                          </div>
+                          {getUserInfo().avatar ? 
+                            <img
+                            className="h-10 w-10 rounded-full"
+                            src={getUserInfo().avatar}
+                            alt=""
+                          />
+                            :
+                            <div className="w-10" style={{ lineHeight: '36px',borderRadius: '50%', fontSize: '15px', background: 'white', color: 'black' }}>
+                              {getUserInfo().initials}
+                            </div>
+                          }
                       </div>
                     </Menu.Button>
                   </div>
