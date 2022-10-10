@@ -138,6 +138,7 @@ const JobPhotoUpload = () => {
                 <div className="mt-8">
                     <ImageUploading
                         multiple
+                        acceptType={['jpg', 'gif', 'png']}
                         value={interiorImages}
                         onChange={onChangeInterior}
                         maxNumber={maxNumberInterior}
@@ -150,6 +151,7 @@ const JobPhotoUpload = () => {
                             onImageRemove,
                             isDragging,
                             dragProps,
+                            errors
                         }) => (
                         <>
                             <div className="flex max-w-lg justify-center rounded-md border-2 border-dashed
@@ -184,6 +186,12 @@ const JobPhotoUpload = () => {
                                     <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                 </div>
                             </div>
+
+                            {errors && <div className="text-gray-500 mt-6 m-auto text-center text-sm">
+                                {errors.maxNumber && <span>You can only upload up to 20 photos</span>}
+                                {errors.acceptType && <span>Your selected file type is not allow</span>}
+                                </div>
+                            }
 
                             {interiorLoading && (
                                 <>
@@ -271,6 +279,7 @@ const JobPhotoUpload = () => {
                 <div className="mt-20">
                     <ImageUploading
                         multiple
+                        acceptType={['jpg', 'gif', 'png']}
                         value={exteriorImages}
                         onChange={onChangeExterior}
                         maxNumber={maxNumberExterior}
@@ -283,6 +292,7 @@ const JobPhotoUpload = () => {
                             onImageRemove,
                             isDragging,
                             dragProps,
+                            errors
                         }) => (
                         <>
                             <div className="flex max-w-lg justify-center rounded-md border-2 border-dashed
@@ -317,6 +327,12 @@ const JobPhotoUpload = () => {
                                     <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                 </div>
                             </div>
+                            
+                            {errors && <div className="text-gray-500 mt-6 m-auto text-center text-sm">
+                                {errors.maxNumber && <span>You can only upload up to 20 photos</span>}
+                                {errors.acceptType && <span>Your selected file type is not allow</span>}
+                                </div>
+                            }
 
                             {exteriorLoading && (
                                 <>
