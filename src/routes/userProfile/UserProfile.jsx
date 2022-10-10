@@ -146,26 +146,42 @@ const UserProfile = () => {
                         <div className="flex items-center">
                           <div
                             className="inline-block h-12 w-12 flex-shrink-0 overflow-hidden rounded-full"
-                            aria-hidden="true"
-                          >
-                            <img className="h-full w-full rounded-full" src={user.avatar} alt="" />
+                            aria-hidden="true">
+                            {user.avatar ? 
+                                <img className="h-full w-full rounded-full" src={user.avatar} alt="" />
+                                :
+                                <div className="h-10 w-10" style={{ borderRadius: '50%',
+                                                fontSize: '20px', background: '#959aa1', color: 'white' }}>
+                                    <div className="relative" style={{ top: '10%', left: '32%' }}>
+                                        {user.initials}
+                                    </div>
+                                </div>
+                            }
                           </div>
                           <div className="ml-5 rounded-md shadow-sm">
-                            <div className="group relative flex items-center justify-center rounded-md border border-gray-300 py-2 px-3 focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 hover:bg-gray-50">
-                              <label
-                                htmlFor="mobile-user-photo"
-                                className="pointer-events-none relative text-sm font-medium leading-4 text-gray-700"
-                              >
-                                <span>Change</span>
-                                <span className="sr-only"> user photo</span>
-                              </label>
-                              <input
-                                id="mobile-user-photo"
-                                name="user-photo"
-                                type="file"
-                                className="absolute h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
-                              />
-                            </div>
+                            <ImageUploading
+                                value={images}
+                                onChange={updateAvatar}
+                                maxNumber={1}
+                                dataURLKey="data_url">
+                                {({
+                                onImageUpload,
+                                }) => (
+                                    <div onClick={onImageUpload} 
+                                        className="group relative flex items-center justify-center
+                                                    rounded-md border border-gray-300 py-2 px-3 focus-within:ring-2
+                                                     focus-within:ring-sky-500 focus-within:ring-offset-2 hover:bg-gray-50">
+                                        <label
+                                            htmlFor="mobile-user-photo"
+                                            className="pointer-events-none relative text-sm font-medium leading-4 text-gray-700"
+                                        >
+                                            <span>Change</span>
+                                            <span className="sr-only"> user photo</span>
+                                        </label>
+                                    </div>
+                                )}
+                            </ImageUploading>
+                            
                           </div>
                         </div>
                       </div>
@@ -180,7 +196,16 @@ const UserProfile = () => {
                             onImageUpload,
                             }) => (
                                 <div onClick={onImageUpload}>
-                                    <img className="relative h-40 w-40 rounded-full" src={user.avatar} alt="" />
+                                    {user.avatar ? 
+                                        <img className="relative h-40 w-40 rounded-full" src={user.avatar} alt="" />
+                                        :
+                                        <div className="h-40 w-40" style={{ borderRadius: '50%',
+                                                fontSize: '45px', background: '#959aa1', color: 'white' }}>
+                                            <div className="relative" style={{ top: '27%', left: '38%' }}>
+                                                {user.initials}
+                                            </div>
+                                        </div>
+                                    }
                                     <label
                                         htmlFor="desktop-user-photo"
                                         className="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"

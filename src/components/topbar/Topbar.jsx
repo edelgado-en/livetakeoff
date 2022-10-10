@@ -4,8 +4,7 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from './livetakeoff-logo.png';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-
-import * as api from '../../routes/userProfile/apiService';
+import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
 
 const navigation = [
   { name: 'Jobs', href: 'jobs', current: true },
@@ -28,19 +27,15 @@ const Bars3Icon = () => {
 
 const Topbar = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({})
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectUser)
 
   useEffect(() => {
-    fetchUser()
+
+    dispatch(fetchUser());
 
   }, [])
 
-  const fetchUser = async () => {
-    const { data } = await api.getUsetDetails();
-
-    setUser(data)
-  }
 
   const handleLogout = () => {
     localStorage.clear();
@@ -105,15 +100,15 @@ const Topbar = () => {
                     <Menu.Button className="flex rounded-full bg-red-600 text-sm focus:outline-none">
                       <span className="sr-only">Open user menu</span>
                       <div className="w-12 text-center">
-                          {user.avatar ? 
+                          {currentUser.avatar ? 
                             <img
                             className="h-10 w-10 rounded-full"
-                            src={user.avatar}
+                            src={currentUser.avatar}
                             alt=""
                           />
                             :
                             <div className="w-10" style={{ lineHeight: '36px',borderRadius: '50%', fontSize: '15px', background: 'white', color: 'black' }}>
-                              {user.initials}
+                              {currentUser.initials}
                             </div>
                           }
                       </div>
