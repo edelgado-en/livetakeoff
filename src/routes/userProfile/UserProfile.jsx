@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { KeyIcon, UserCircleIcon } from "@heroicons/react/outline"
+import { KeyIcon, UserCircleIcon, ViewBoardsIcon } from "@heroicons/react/outline"
 import { Disclosure, Menu, Switch, Transition } from '@headlessui/react'
 
 import { getUserInfo } from "../../localstorage"
@@ -9,6 +9,7 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage"
 const subNavigation = [
     { name: 'Profile', href: '#', icon: UserCircleIcon, current: true },
     { name: 'Password', href: '#', icon: KeyIcon, current: false },
+    { name: 'Work History', href: '#', icon: ViewBoardsIcon, current: false },
   ]
 
 const user = {
