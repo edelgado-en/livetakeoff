@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
@@ -10,7 +11,6 @@ const notificationMethods = [
   { id: 'email', title: 'No' },
   { id: 'sms', title: 'Yes' },
 ]
-
 
 const JobComments = () => {
     const { jobId } = useParams();
@@ -35,7 +35,11 @@ const JobComments = () => {
 
       const { data } = await api.createJobComment(jobId, request);
 
-      console.log(data)
+      const updatedComments = [...comments, data]
+
+      setComments(updatedComments)
+
+      toast.error('Comment Added!')
 
     }
 
@@ -56,7 +60,7 @@ const JobComments = () => {
                     </div>
                 </div>
                 <div className="my-4">
-                    <div className="mt-8 flex flex-col pr-1" style={{ maxHeight: '450px', overflowY: 'auto' }}>
+                    <div className="mt-8 flex flex-col pr-1 pb-8" style={{ maxHeight: '450px', overflowY: 'auto' }}>
                     <ul className="space-y-8">
                         {comments.map((comment) => (
                           <li key={comment.id}>
@@ -68,7 +72,7 @@ const JobComments = () => {
                                       :
                                       <div className="w-10" style={{ lineHeight: '36px', borderRadius: '50%',
                                                                 fontSize: '15px', background: '#959aa1', color: '#fff' }}>
-                                        {comment.author.username.slice(0,2)}
+                                        {comment.author.username.slice(0,2).toUpperCase()}
                                     </div>
                                     }
                                 </div>
