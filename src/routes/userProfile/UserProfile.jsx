@@ -5,6 +5,7 @@ import ImageUploading from 'react-images-uploading';
 
 import AnimatedPage from "../../components/animatedPage/AnimatedPage"
 import { toast } from "react-toastify"
+import { useForm } from "react-hook-form";
 
 import * as api from './apiService'
 
@@ -18,6 +19,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
+
 const UserProfile = () => {
     const [user, setUser] = useState({})
     const [availableToHire, setAvailableToHire] = useState(true)
@@ -25,14 +27,28 @@ const UserProfile = () => {
     const [receiveWhatsappNotifications, setReceiveWhatsappNotifications] = useState(false)
     const [images, setImages] = useState([]);
 
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+
     useEffect(() => {
         getUserDetails()
     }, [])
+
+    useEffect(() => {
+        reset(user)
+    }, [user])
+
+    const isValidEmail = () =>
+    // eslint-disable-next-line no-useless-escape
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        user.email
+    );
 
     const getUserDetails = async () => {
         const { data } = await api.getUsetDetails();
 
         setUser(data);
+        //reset(data)
     }
 
 
@@ -54,6 +70,25 @@ const UserProfile = () => {
         } catch (error) {
             toast.error('Unable to update avatar')
         } 
+    }
+
+    const onSubmit = handleSubmit((data) => {
+        const request = {
+            username: data.username,
+            about: data.about,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email
+        }
+
+        handleUpdateUser(request)
+
+    })
+
+    const handleUpdateUser = async (data) => {
+        await api.updateUser(data)
+
+        toast.error('Profile updated!');
     }
 
     return (
@@ -90,8 +125,8 @@ const UserProfile = () => {
                   ))}
                 </nav>
               </aside>
-              {/* ADD VALIDATION, MAX LENGTH, MIN HEIGHT, MAX HEIGHT, MANDATORY FIELDS, ETC */}
-              <form className="divide-y divide-gray-200 lg:col-span-9" action="#" method="POST">
+
+              <form className="divide-y divide-gray-200 lg:col-span-9" onSubmit={onSubmit}>
                 
                 <div className="py-6 px-4 sm:p-6 lg:pb-8">
                   <div>
@@ -113,10 +148,11 @@ const UserProfile = () => {
                             name="username"
                             id="username"
                             autoComplete="username"
+                            {...register('username', { required: 'Username is required' })}
                             className="block w-full min-w-0 flex-grow rounded-none rounded-r-md border-gray-300 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            defaultValue={user.username}
                           />
                         </div>
+                          { errors.username && <p className="text-red-500 text-xs mt-1">{errors.username.message}</p> }
                       </div>
 
                       <div>
@@ -128,8 +164,9 @@ const UserProfile = () => {
                             id="about"
                             name="about"
                             rows={3}
+                            maxLength={200}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            value={user.about}
+                            {...register('about')}
                           />
                         </div>
                         <p className="mt-2 text-sm text-gray-500">
@@ -231,12 +268,13 @@ const UserProfile = () => {
                       </label>
                       <input
                         type="text"
-                        value={user.first_name}
                         name="first-name"
                         id="first-name"
+                        {...register('first_name', { required: 'First name is required' })}
                         className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3
                                    shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
                       />
+                      { errors.first_name && <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p> }
                     </div>
 
                     <div className="col-span-12 sm:col-span-6">
@@ -245,12 +283,13 @@ const UserProfile = () => {
                       </label>
                       <input
                         type="text"
-                        value={user.last_name}
                         name="last-name"
                         id="last-name"
+                        {...register('last_name', { required: 'Last name is required' })}
                         className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3
                                     shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
                       />
+                      { errors.last_name && <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p> }
                     </div>
 
                     <div className="col-span-12">
@@ -259,12 +298,13 @@ const UserProfile = () => {
                       </label>
                       <input
                         type="email"
-                        value={user.email}
                         name="url"
                         id="url"
+                        {...register('email', { required: 'Email is required', validate: isValidEmail })}
                         className="mt-1 block w-full rounded-md border border-gray-300
                                    py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
                       />
+                      { errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p> }
                     </div>
                   </div>
                 </div>
@@ -368,8 +408,8 @@ const UserProfile = () => {
                     <button
                       type="submit"
                       className="ml-5 inline-flex justify-center rounded-md border
-                                 border-transparent bg-red-700 py-2 px-4 text-sm
-                                 font-medium text-white shadow-sm hover:bg-red-800 focus:outline-none focus:ring-2
+                                 border-transparent bg-red-600 py-2 px-4 text-sm
+                                 font-medium text-white  hover:bg-red-800 focus:outline-none focus:ring-2
                                 focus:ring-red-500 focus:ring-offset-2"
                     >
                       Save

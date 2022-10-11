@@ -11,3 +11,7 @@ export const uploadUserAvatar = (formData: any) => {
         }
     })
 }
+
+export const updateUser = (data: any) => {
+    return httpService.patch('/api/users/me', data);
+}
