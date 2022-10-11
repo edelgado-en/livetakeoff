@@ -1,7 +1,8 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import ReactTimeAgo from 'react-time-ago'
 
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
@@ -14,6 +15,7 @@ const notificationMethods = [
 
 const JobComments = () => {
     const { jobId } = useParams();
+    const bottomRef = useRef(null);
     const [comment, setComment] = useState('') 
     const [comments, setComments] = useState([]) 
 
@@ -21,6 +23,11 @@ const JobComments = () => {
       getComments()
 
     }, [])
+
+    useEffect(() => {
+      bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+
+    }, [comments])
 
     const getComments = async () => {
       const { data } = await api.getJobComments(jobId);
@@ -61,7 +68,7 @@ const JobComments = () => {
                 </div>
                 <div className="my-4">
                     <div className="mt-8 flex flex-col pr-1 pb-8" style={{ maxHeight: '450px', overflowY: 'auto' }}>
-                    <ul className="space-y-8">
+                      <ul className="space-y-8">
                         {comments.map((comment) => (
                           <li key={comment.id}>
                             <div className="flex space-x-3">
@@ -87,13 +94,16 @@ const JobComments = () => {
                                   <p>{comment.comment}</p>
                                 </div>
                                 <div className="mt-2 space-x-2 text-sm">
-                                  <span className="font-medium text-gray-500">{comment.created}</span>{' '}
+                                  <span className="font-medium text-gray-500">
+                                    <ReactTimeAgo date={new Date(comment.created)} locale="en-US" timeStyle="twitter" />
+                                  </span>
                                 </div>
                               </div>
                             </div>
                           </li>
                         ))}
                       </ul>
+                      <div ref={bottomRef} />
                     </div>
                     <div className="bg-gray-50 px-2 py-6 xs:px-2">
                       <div className="flex space-x-3">
