@@ -45,6 +45,7 @@ const JobComments = () => {
       const updatedComments = [...comments, data]
 
       setComments(updatedComments)
+      setComment('')
 
       toast.error('Comment Added!')
 
