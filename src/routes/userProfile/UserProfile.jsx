@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { KeyIcon, UserCircleIcon, ViewBoardsIcon } from "@heroicons/react/outline"
 import { Disclosure, Menu, Switch, Transition } from '@headlessui/react'
 import ImageUploading from 'react-images-uploading';
+import { useNavigate } from "react-router-dom";
 
 import AnimatedPage from "../../components/animatedPage/AnimatedPage"
 import { toast } from "react-toastify"
@@ -22,6 +23,8 @@ const UserProfile = () => {
     const [receiveWhatsappNotifications, setReceiveWhatsappNotifications] = useState(false)
     const [images, setImages] = useState([]);
 
+    const navigate = useNavigate()
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
 
@@ -37,7 +40,6 @@ const UserProfile = () => {
         const { data } = await api.getUsetDetails();
 
         setUser(data);
-        //reset(data)
     }
 
 
@@ -47,14 +49,11 @@ const UserProfile = () => {
         formData.append("avatar", imageList[0].file);
 
         try {
-            const { data } = await api.uploadUserAvatar(formData);
+            await api.uploadUserAvatar(formData);
 
-            const updatedUser = {
-                ...user,
-                avatar: data.avatar
-            }
+            handleSubmit(onSubmit)();
 
-            setUser(updatedUser)
+            navigate(0)
 
         } catch (error) {
             toast.error('Unable to update avatar')

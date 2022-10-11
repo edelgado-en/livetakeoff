@@ -51,10 +51,6 @@ const JobComments = () => {
 
     }
 
-    const handleStatusChange = (status) => {
-        console.log(status)
-    }
-
     const handleCommentChange = (event) => [
         setComment(event.target.value)
     ]
