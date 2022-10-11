@@ -104,10 +104,27 @@ const UserProfile = () => {
                     id="username"
                     autoComplete="username"
                     {...register('username', { required: 'Username is required' })}
-                    className="block w-full min-w-0 flex-grow rounded-none rounded-r-md border-gray-300 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                    className="block w-full min-w-0 flex-grow rounded-none rounded-r-md border-gray-300
+                             focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                     />
                 </div>
                     { errors.username && <p className="text-red-500 text-xs mt-1">{errors.username.message}</p> }
+                </div>
+
+                <div>
+                    <label htmlFor="accessLevel" className="block text-sm font-medium text-gray-700">
+                        Access Level
+                    </label>
+                    <div className="mt-1 flex rounded-md">
+                        <input
+                        type="text"
+                        name="accessLevel"
+                        readOnly
+                        className="block w-full min-w-0 flex-grow rounded-md border-gray-300 bg-gray-50 text-gray-500
+                                        sm:text-sm focus:border-gray-300 focus:ring-gray-500"
+                        defaultValue={user.access_level_label}
+                        />
+                    </div>
                 </div>
 
                 <div>

@@ -66,37 +66,6 @@ const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) 
                   </button>
                 </div>
             </div>
-            {/* <div className="p-3">
-                <div className="flex flex-row">
-                    <div className="flex-1">
-                        <div className="leading-6 font-medium text-gray-600">Label Change</div>
-                        <div className="text-gray-500 text-xs mt-1">RELEASE_TRAIN_221PI5.2.S5.1</div>
-                    </div>
-                    
-                </div>
-                <div className="mt-6">
-                    <div className="mt-3 flex items-center justify-end">
-                        <button
-                            onClick={handleClose}
-                            className="inline-flex justify-center rounded-md border
-                                        border-gray-300 bg-white px-4 py-2 text-sm
-                                        text-gray-500 shadow-sm hover:bg-gray-50 mr-4
-                                        focus:outline-none"
-                          >
-                          Cancel
-                        </button>
-                        <button
-                            onClick={() => updateJobStatus('C')}
-                            className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-600 px-4 py-2 text-sm
-                                    text-white shadow-sm hover:bg-red-700 focus:outline-none
-                                        focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                        >
-                            Complete Job
-                        </button>
-                    </div>
-                </div>
-            </div> */}
             
         </ModalFrame>
     )

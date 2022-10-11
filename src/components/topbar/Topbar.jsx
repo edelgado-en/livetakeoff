@@ -8,8 +8,9 @@ import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
 
 const navigation = [
   { name: 'Jobs', href: 'jobs', current: true },
-/*   { name: 'Services', href: '#', current: false },
-  { name: 'Price Listing', href: '#', current: false }, */
+  { name: 'Services', href: '#', current: false },
+  { name: 'Team', href: '#', current: false },
+  { name: 'Price Listing', href: '#', current: false }, 
 ]
 
 function classNames(...classes) {
