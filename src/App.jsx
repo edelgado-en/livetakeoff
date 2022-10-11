@@ -11,6 +11,8 @@ import JobPhotos from './routes/job/JobPhotos';
 import JobPhotoListing from './routes/job/JobPhotoListing';
 import JobPhotoUpload from './routes/job/JobPhotoUpload';
 import UserProfile from './routes/userProfile/UserProfile'
+import UserSettings from './routes/userProfile/UserSettings'
+import UserPassword from './routes/userProfile/UserPassword';
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
@@ -62,6 +64,11 @@ const  App = () => {
                   <Route path="/" element={<Layout />}>
                       <Route index element={<Jobs />}/>
                       <Route path="jobs" element={<Jobs />}/>
+                      <Route path="user-settings" element={<UserSettings />}>
+                        <Route index element={<UserProfile />}/>
+                        <Route path="profile" element={<UserProfile />}/>
+                        <Route path="password" element={<UserPassword />} />
+                      </Route>
                       <Route path="profile" element={<UserProfile />} />
                       <Route path="jobs/:jobId" element={<JobDetails />}>
                         <Route index element={<JobInfo />} />
