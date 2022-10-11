@@ -15,3 +15,7 @@ export const uploadUserAvatar = (formData: any) => {
 export const updateUser = (data: any) => {
     return httpService.patch('/api/users/me', data);
 }
+
+export const resetPassword = (data: any) => {
+    return httpService.patch('/api/users/me/reset-password', data);
+}
