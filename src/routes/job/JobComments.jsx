@@ -68,6 +68,7 @@ const JobComments = () => {
                 </div>
                 <div className="my-4">
                     <div className="mt-8 flex flex-col pr-1 pb-8" style={{ maxHeight: '450px', overflowY: 'auto' }}>
+                      {comments.length === 0 && <div className="text-gray-500 text-sm flex justify-center mt-2">No comments found.</div>}
                       <ul className="space-y-8">
                         {comments.map((comment) => (
                           <li key={comment.id}>
