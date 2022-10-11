@@ -1,53 +1,43 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
+
+import * as api from './apiService'
 
 const notificationMethods = [
   { id: 'email', title: 'No' },
   { id: 'sms', title: 'Yes' },
 ]
 
-const comments = [
-    {
-      id: 1,
-      name: 'Robeidy Ortiz',
-      initials: 'SL',
-      date: '4d ago',
-      body: 'Ducimus quas delectus ad maxime totam doloribus reiciendis ex. Tempore dolorem maiores. Similique voluptatibus tempore non ut.',
-    },
-    {
-      id: 2,
-      name: 'Yoandi Perez',
-      initials: 'GA',
-      date: '4d ago',
-      body: 'Et ut autem. Voluptatem eum dolores sint necessitatibus quos. Quis eum qui dolorem accusantium voluptas voluptatem ipsum. Quo facere iusto quia accusamus veniam id explicabo et aut.',
-    },
-    {
-      id: 3,
-      name: 'Enrique Delgado',
-      initials: 'ED',
-      date: '4d ago',
-      body: 'Expedita consequatur sit ea voluptas quo ipsam recusandae. Ab sint et voluptatem repudiandae voluptatem et eveniet. Nihil quas consequatur autem. Perferendis rerum et.',
-    },
-    {
-        id: 4,
-        name: 'Mila Delgado',
-        initials: 'TW',
-        date: '4d ago',
-        body: 'Expedita consequatur sit ea voluptas quo ipsam recusandae. Ab sint et voluptatem repudiandae voluptatem et eveniet. Nihil quas consequatur autem. Perferendis rerum et.',
-      },
-      {
-        id: 5,
-        name: 'John Smith',
-        initials: 'DV',
-        date: '4d ago',
-        body: 'Expedita consequatur sit ea voluptas quo ipsam recusandae. Ab sint et voluptatem repudiandae voluptatem et eveniet. Nihil quas consequatur autem. Perferendis rerum et.',
-      },
-  ]
 
 const JobComments = () => {
-    const [comment, setComment] = useState('')  
+    const { jobId } = useParams();
+    const [comment, setComment] = useState('') 
+    const [comments, setComments] = useState([]) 
+
+    useEffect(() => {
+      getComments()
+
+    }, [])
+
+    const getComments = async () => {
+      const { data } = await api.getJobComments(jobId);
+
+      setComments(data.results)
+    }
+
+    const createJobComment = async () => {
+      const request = {
+        comment
+      }
+
+      const { data } = await api.createJobComment(jobId, request);
+
+      console.log(data)
+
+    }
 
     const handleStatusChange = (status) => {
         console.log(status)
@@ -73,23 +63,27 @@ const JobComments = () => {
                             <div className="flex space-x-3">
                               <div className="flex-shrink-0">
                                 <div className="w-12 text-center">
-                                    <div className="w-10" style={{ lineHeight: '36px', borderRadius: '50%',
+                                   {comment.author.profile.avatar ? 
+                                     <img className="h-10 w-10 rounded-full" src={comment.author.profile.avatar } alt="" />
+                                      :
+                                      <div className="w-10" style={{ lineHeight: '36px', borderRadius: '50%',
                                                                 fontSize: '15px', background: '#959aa1', color: '#fff' }}>
-                                        {comment.initials}
+                                        {comment.author.username.slice(0,2)}
                                     </div>
+                                    }
                                 </div>
                               </div>
                               <div>
                                 <div className="text-sm">
                                   <div className="font-medium text-gray-700">
-                                    {comment.name}
+                                    {comment.author.first_name} {' '} {comment.author.last_name}
                                   </div>
                                 </div>
                                 <div className="mt-1 text-sm text-gray-700">
-                                  <p>{comment.body}</p>
+                                  <p>{comment.comment}</p>
                                 </div>
                                 <div className="mt-2 space-x-2 text-sm">
-                                  <span className="font-medium text-gray-500">{comment.date}</span>{' '}
+                                  <span className="font-medium text-gray-500">{comment.created}</span>{' '}
                                 </div>
                               </div>
                             </div>
@@ -136,6 +130,7 @@ const JobComments = () => {
                               </div>
                               <button
                                 type="submit"
+                                onClick={() => createJobComment()}
                                 className="inline-flex items-center justify-center rounded-md
                                           border border-transparent bg-red-600 px-2 py-1 text-sm
                                           text-white shadow-sm hover:bg-red-700 focus:outline-none

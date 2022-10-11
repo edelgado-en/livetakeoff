@@ -27,3 +27,11 @@ export const uploadPhotos = (jobId: number, formData: any) => {
         }
     })
 }
+
+export const getJobComments = (jobId: number) => {
+    return httpService.get(`/api/job-comments/${jobId}/`)
+}
+
+export const createJobComment = (jobId: number, request: any) => {
+    return httpService.post(`/api/job-comments/${jobId}/`, request)
+}
