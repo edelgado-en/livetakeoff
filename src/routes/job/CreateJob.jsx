@@ -178,11 +178,11 @@ const CreateJob = () => {
 
     return (
         <AnimatedPage>
-            <main className="mx-auto max-w-lg px-4 pt-10 pb-12 lg:pb-16">
+            <main className="mx-auto max-w-lg px-4 pb-16 lg:pb-12">
                 <form>
                     <div className="space-y-6">
                         <div>
-                            <h1 className="text-lg font-medium leading-6 text-gray-900">Create Job</h1>
+                            <h1 className="text-xl font-semibold text-gray-600">Create Job</h1>
                             <p className="mt-1 text-sm text-gray-500">
                                 Let’s get started by filling in the information below to create a new job.
                             </p>
@@ -445,6 +445,9 @@ const CreateJob = () => {
                                 timeInputLabel="Time:"
                                 dateFormat="MM/dd/yyyy h:mm aa"
                                 showTimeInput
+                                onKeyDown={(e) => {
+                                    e.preventDefault();
+                                 }}
                             />
                         </div>
 
@@ -458,6 +461,9 @@ const CreateJob = () => {
                                 timeInputLabel="Time:"
                                 dateFormat="MM/dd/yyyy h:mm aa"
                                 showTimeInput
+                                onKeyDown={(e) => {
+                                    e.preventDefault();
+                                 }}
                             />
                         </div>
 
@@ -471,6 +477,9 @@ const CreateJob = () => {
                                 timeInputLabel="Time:"
                                 dateFormat="MM/dd/yyyy h:mm aa"
                                 showTimeInput
+                                onKeyDown={(e) => {
+                                    e.preventDefault();
+                                 }}
                             />
                         </div>
 
