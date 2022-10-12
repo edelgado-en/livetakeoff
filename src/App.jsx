@@ -63,15 +63,17 @@ const  App = () => {
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<Layout />}>
+                      <Route path="create-job" element={<CreateJob />} />
                       <Route index element={<Jobs />}/>
                       <Route path="jobs" element={<Jobs />}/>
-                      <Route path="create-job" element={<CreateJob />} />
+                     
                       <Route path="user-settings" element={<UserSettings />}>
                         <Route index element={<UserProfile />}/>
                         <Route path="profile" element={<UserProfile />}/>
                         <Route path="password" element={<UserPassword />} />
                       </Route>
-                      <Route path="profile" element={<UserProfile />} />
+
+                      
                       <Route path="jobs/:jobId" element={<JobDetails />}>
                         <Route index element={<JobInfo />} />
                         <Route index path="details" element={<JobInfo />} />
@@ -81,6 +83,7 @@ const  App = () => {
                             <Route path="upload" element={<JobPhotoUpload />} />
                         </Route>
                       </Route>
+
                       <Route path="*" element={<NotFound />} />
                   </Route>
                 </Route>

@@ -47,7 +47,7 @@ const TestReports = () => {
           </div>
           <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
-                <Link to="create-job">
+                <Link to="/create-job">
                   <button
                     type="button"
                     className="inline-flex items-center justify-center 
