@@ -33,5 +33,12 @@ export const getJobComments = (jobId: number) => {
 }
 
 export const createJobComment = (jobId: number, request: any) => {
-    return httpService.post(`/api/job-comments/${jobId}/`, request)
+    return httpService.post(`/api/job-comments/${jobId}/`, request);
 }
+
+export const deletePhotos = (jobId: number, request: any) => {
+    return httpService.post(`/api/job-photos/delete/${jobId}/`, request);
+}
+
+
+

@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 
 const JobPhotoUpload = () => {
     const navigate = useNavigate();
-
+    const [loading, setLoading] = useState(false)
     const [interiorLoading, setInteriorLoading] = useState(false);
     const [exteriorLoading, setExteriorLoading] = useState(false);
     const [interiorSuccessMessage, setInteriorSuccessMessage] = useState(null);
@@ -24,11 +24,27 @@ const JobPhotoUpload = () => {
     const { jobId } = useParams();
 
     useEffect(() => {
-        console.log(jobId);
-        //TODO fetch job and if you get 403, show permissions error
-        //TODO: ADD PERMISSION VALIDATION like in JobDetails
+        getJobDetails()
     }, [])
 
+    const getJobDetails = async () => {
+        setLoading(true)
+
+        try {
+            await api.getJobDetails(jobId)
+
+            setLoading(false)
+
+        } catch (error) {
+            setLoading(false)
+
+            if (error.response?.status === 403) {
+                setErrorMessage('You do not have permission to view this job.')
+            } else {
+                setErrorMessage('Unable to load job details.')
+            }
+        }
+    }
 
     const onChangeInterior = (imageList, addUpdateIndex) => {
         imageList.splice(maxNumberInterior)
@@ -82,7 +98,7 @@ const JobPhotoUpload = () => {
             } else {
                 setErrorMessage('Unable to upload photos at this time.')
             }
-        } 
+        }
     }
 
     const handleUploadExteriorPhotos = async () => {
@@ -126,13 +142,16 @@ const JobPhotoUpload = () => {
 
     return (
         <AnimatedPage>
+            {loading && <Loader />}
             <>
-            {errorMessage && errorMessage === 'You do not have permission to view this job.' ? 
+            {!loading && errorMessage && errorMessage === 'You do not have permission to view this job.' ? 
                 <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>
             :
             (
             <>
-                <div className="mt-8">
+            {!loading && (
+                <>
+                    <div className="mt-8">
                     <ImageUploading
                         multiple
                         acceptType={['jpg', 'gif', 'png', 'jpeg']}
@@ -415,6 +434,9 @@ const JobPhotoUpload = () => {
                     )}
                     </ImageUploading>
                 </div>
+                </>
+            )}
+                
             </>
             )}
             </>

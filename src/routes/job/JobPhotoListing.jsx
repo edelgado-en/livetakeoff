@@ -5,17 +5,24 @@ import { TrashIcon, CloudDownloadIcon } from "@heroicons/react/outline";
 import ImageViewer from 'react-simple-image-viewer'
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
+import ReactTimeAgo from 'react-time-ago'
 
 import * as api from './apiService'
+import { toast } from "react-toastify";
 
 const JobPhotoListing = () => {
-    const [currentImage, setCurrentImage] = useState(0);
+    const [currentImageInterior, setCurrentImageInterior] = useState(0);
+    const [currentImageExterior, setCurrentImageExterior] = useState(0);
+   
+    const [isViewerOpenInterior, setIsViewerOpenInterior] = useState(false);
+    const [isViewerOpenExterior, setIsViewerOpenExterior] = useState(false);
+
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null)
     const [interiorPhotos, setInteriorPhotos] = useState([])
     const [exteriorPhotos, setExteriorPhotos] = useState([])
-    const [isViewerOpen, setIsViewerOpen] = useState(false);
-
+    
+   
     const { jobId } = useParams();
 
     useEffect(() => {
@@ -23,14 +30,56 @@ const JobPhotoListing = () => {
     }, [])
 
     const openImageViewer = (index) => {
-        setCurrentImage(index);
-        setIsViewerOpen(true)
+        setCurrentImageInterior(index);
+        setIsViewerOpenInterior(true)
+    }
+
+    const openImageViewerExterior = (index) => {
+        setCurrentImageExterior(index);
+        setIsViewerOpenExterior(true)
     }
 
     const closeImageViewer = () => {
-        setCurrentImage(0);
-        setIsViewerOpen(false);
-      };
+        setCurrentImageInterior(0);
+        setIsViewerOpenInterior(false);
+    };
+
+    const closeImageViewerExterior = () => {
+        setCurrentImageExterior(0);
+        setIsViewerOpenExterior(false);
+    };
+
+    const handleDeletePhoto = async(photoId, isInterior) => {
+        const request = {
+            photos: [photoId]
+        }
+
+        try {
+            await api.deletePhotos(jobId, request)
+
+            if (isInterior) {
+                const updatedPhotos = interiorPhotos.filter(p => {
+                    return p.id !== photoId 
+                  })
+
+                setInteriorPhotos(updatedPhotos)
+            
+            } else {
+                const updatedPhotos = exteriorPhotos.filter(p => {
+                    return p.id !== photoId
+                })
+
+                setExteriorPhotos(updatedPhotos)
+            }
+
+            toast.error('Photo deleted!')
+
+        } catch (error) {
+
+        }
+
+    }
+
 
     const getPhotos = async () => {
         setLoading(true)
@@ -38,14 +87,17 @@ const JobPhotoListing = () => {
         try {
             const { data } = await api.getJobPhotos(jobId)
 
+            console.log(data)
+
             const interior_photos = []
             const exterior_photos = []
 
             data.results.forEach(entry => {
+                console.log(entry)
                 if (entry.interior) {
-                    interior_photos.push(entry.image)
+                    interior_photos.push(entry)
                 } else {
-                    exterior_photos.push(entry.image)
+                    exterior_photos.push(entry)
                 }
             });
 
@@ -82,18 +134,26 @@ const JobPhotoListing = () => {
                                           rounded-full text-xs font-medium md:inline-block">{interiorPhotos.length}</span>
                         }
                     </div>
-                    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
+                    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1 pl-9 xl:pl-1">
                         {interiorPhotos.length === 0 && <div className="text-gray-500 text-sm">No photos uploaded</div>}
 
                         {interiorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
                                     <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewer(index) }>
-                                        <img className="h-60 w-72 rounded-lg" src={photo} alt="" />
+                                        <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
                                     </div>
+                                    {/* <div className="pt-2 flex text-gray-500 text-sm">
+                                        {photo.name}
+                                    </div> */}
                                     <div className="flex text-gray-500 text-sm pt-2">
                                         <CloudDownloadIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
-                                        <TrashIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
-                                        <span className="text-gray-500 text-xs">29m ago</span>
+                                        <TrashIcon 
+                                            onClick={() => handleDeletePhoto(photo.id, true)}
+                                            className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
+                                        <span className="text-gray-500 text-sm">
+                                            <ReactTimeAgo date={new Date(photo.created_at)} locale="en-US" timeStyle="twitter" />
+                                        </span>
+                                        <span className="text-sm ml-3">{photo.name}</span>
                                     </div>
                                     {/* YOU HAVE TO APPEND /fl_attachment/  between upload/ and /v1 */}
                                     {/* find the index of /upload/ and then append fl_attachment then append the rest */}
@@ -112,18 +172,23 @@ const JobPhotoListing = () => {
                                           rounded-full text-xs font-medium md:inline-block">{exteriorPhotos.length}</span>
                         }
                     </div>
-                    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1">
+                    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1 pl-9 xl:pl-1">
                         {exteriorPhotos.length === 0 && <div className="text-gray-500 text-sm">No photos uploaded</div>}
 
                         {exteriorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
-                                    <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewer(index) }>
-                                        <img className="h-60 w-72 rounded-lg" src={photo} alt="" />
+                                    <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewerExterior(index) }>
+                                        <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
                                     </div>
                                     <div className="flex text-gray-500 text-sm pt-2">
                                         <CloudDownloadIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
-                                        <TrashIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
-                                        <span className="text-gray-500 text-xs">29m ago</span>
+                                        <TrashIcon 
+                                            onClick={() => handleDeletePhoto(photo.id, false)}
+                                            className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
+                                        <span className="text-gray-500 text-sm">
+                                            <ReactTimeAgo date={new Date(photo.created_at)} locale="en-US" timeStyle="twitter" />
+                                        </span>
+                                        <span className="text-sm ml-3 truncate w-44 text-ellipsis overflow-hidden whitespace-nowrap">{photo.name}</span>
                                     </div>
 
                                     {/* YOU HAVE TO APPEND /fl_attachment/  between upload/ and /v1 */}
@@ -139,13 +204,23 @@ const JobPhotoListing = () => {
             )}
             
 
-            {isViewerOpen && (
+            {isViewerOpenInterior && (
                 <ImageViewer
-                src={ interiorPhotos }
-                currentIndex={ currentImage }
+                src={ interiorPhotos.map(p => p.image) }
+                currentIndex={ currentImageInterior }
                 disableScroll={ false }
                 closeOnClickOutside={ true }
                 onClose={ closeImageViewer }
+                />
+            )}
+
+            {isViewerOpenExterior && (
+                <ImageViewer
+                src={ exteriorPhotos.map(p => p.image) }
+                currentIndex={ currentImageExterior }
+                disableScroll={ false }
+                closeOnClickOutside={ true }
+                onClose={ closeImageViewerExterior }
                 />
             )}
             
