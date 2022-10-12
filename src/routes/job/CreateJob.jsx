@@ -13,7 +13,7 @@ const ChevronUpDownIcon = () => {
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
-  }
+}
 
 const customers = [
     { id: 1, name: 'Aircharter Worldwide' },
@@ -90,34 +90,37 @@ const CreateJob = () => {
     const [airportSelected, setAirportSelected] = useState(airports[0])
     const [fboSelected, setFboSelected] = useState(fbos[0])
 
-    const [isOpen, setIsOpen] = useState(true);
-    const [selectedPersons, setSelectedPersons] = useState([]);
+    const [isServicesOpen, setIsServicesOpen] = useState(true);
+    const [selectedServices, setSelectedServices] = useState([]);
 
     useEffect(() => {
 
     }, [])
 
-    function isSelected(value) {
-        return selectedPersons.find((el) => el === value) ? true : false;
+    const isServiceSelected = (value) => {
+        return selectedServices.find((el) => el === value) ? true : false;
     }
     
-    function handleSelect(value) {
-    if (!isSelected(value)) {
-        const selectedPersonsUpdated = [
-        ...selectedPersons,
-        people.find((el) => el === value)
-        ];
-        setSelectedPersons(selectedPersonsUpdated);
-    } else {
-        handleDeselect(value);
-    }
-    setIsOpen(true);
+    const handleSelectService = (value) => {
+        if (!isServiceSelected(value)) {
+            const selectedPersonsUpdated = [
+                ...selectedServices,
+                people.find((el) => el === value)
+            ]
+            
+            setSelectedServices(selectedPersonsUpdated);
+        
+        } else {
+            handleDeselectService(value);
+        }
+
+        setIsServicesOpen(true);
     }
     
-    function handleDeselect(value) {
-    const selectedPersonsUpdated = selectedPersons.filter((el) => el !== value);
-    setSelectedPersons(selectedPersonsUpdated);
-    setIsOpen(true);
+    const handleDeselectService = (value) => {
+        const selectedServicesUpdated = selectedServices.filter((el) => el !== value);
+        setSelectedServices(selectedServicesUpdated);
+        setIsServicesOpen(true);
     }
 
 
@@ -218,9 +221,9 @@ const CreateJob = () => {
             <Listbox
                     as="div"
                     className="space-y-1"
-                    value={selectedPersons}
-                    onChange={(value) => handleSelect(value)}
-                    open={isOpen}
+                    value={selectedServices}
+                    onChange={(value) => handleSelectService(value)}
+                    open={isServicesOpen}
                     >
                 {() => (
             <>
@@ -233,13 +236,13 @@ const CreateJob = () => {
                     className="cursor-default relative w-full rounded-md border border-gray-300
                              bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue
                               focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                    onClick={() => setIsOpen(!isOpen)}
-                    open={isOpen}
+                    onClick={() => setIsServicesOpen(!isServicesOpen)}
+                    open={isServicesOpen}
                   >
                     <span className="block truncate">
-                      {selectedPersons.length < 1
+                      {selectedServices.length < 1
                         ? "Select services"
-                        : `Selected services (${selectedPersons.length})`}
+                        : `Selected services (${selectedServices.length})`}
                     </span>
                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                       <svg
@@ -261,7 +264,7 @@ const CreateJob = () => {
 
                 <Transition
                   unmount={false}
-                  show={isOpen}
+                  show={isServicesOpen}
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
@@ -273,7 +276,7 @@ const CreateJob = () => {
                                overflow-auto focus:outline-none sm:text-sm sm:leading-5"
                   >
                     {people.map((person) => {
-                      const selected = isSelected(person);
+                      const selected = isServiceSelected(person);
                       return (
                         <Listbox.Option key={person} value={person}>
                           {({ active }) => (
