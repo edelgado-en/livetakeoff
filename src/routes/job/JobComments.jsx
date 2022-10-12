@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ReactTimeAgo from 'react-time-ago'
-
+import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import * as api from './apiService'
@@ -18,6 +18,7 @@ const JobComments = () => {
     const bottomRef = useRef(null);
     const [comment, setComment] = useState('') 
     const [comments, setComments] = useState([]) 
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
       getComments()
@@ -30,9 +31,19 @@ const JobComments = () => {
     }, [comments])
 
     const getComments = async () => {
-      const { data } = await api.getJobComments(jobId);
+      setLoading(true)
 
-      setComments(data.results)
+      try {
+        const { data } = await api.getJobComments(jobId);
+        
+        setComments(data.results)
+
+      } catch (error) {
+
+      }
+
+      setLoading(false)
+
     }
 
     const createJobComment = async () => {
@@ -57,7 +68,10 @@ const JobComments = () => {
 
     return (
       <AnimatedPage>
-        <div className="mt-8">
+        {loading && <Loader />}
+
+        {!loading && (
+            <div className="mt-8">
                 <div className="flex flex-row">
                     <div className="flex-1">
                         <div className="leading-6 font-medium text-gray-600">Comments</div>
@@ -72,8 +86,8 @@ const JobComments = () => {
                             <div className="flex space-x-3">
                               <div className="flex-shrink-0">
                                 <div className="w-12 text-center">
-                                   {comment.author.profile.avatar ? 
-                                     <img className="h-10 w-10 rounded-full" src={comment.author.profile.avatar } alt="" />
+                                  {comment.author.profile.avatar ? 
+                                    <img className="h-10 w-10 rounded-full" src={comment.author.profile.avatar } alt="" />
                                       :
                                       <div className="w-10" style={{ lineHeight: '36px', borderRadius: '50%',
                                                                 fontSize: '15px', background: '#959aa1', color: '#fff' }}>
@@ -158,6 +172,8 @@ const JobComments = () => {
                     </div>
                 </div>
             </div>
+        )}
+
       </AnimatedPage>
     )
 }
