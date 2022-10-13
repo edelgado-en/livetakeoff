@@ -87,8 +87,6 @@ const JobPhotoListing = () => {
         try {
             const { data } = await api.getJobPhotos(jobId)
 
-            console.log(data)
-
             const interior_photos = []
             const exterior_photos = []
 

@@ -76,7 +76,7 @@ const JobAssignments = () => {
 
     return (
         <AnimatedPage>
-             <main className="mx-auto max-w-lg px-4 pb-16 lg:pb-12">
+             <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl">
                 <div>
                     <h1 className="text-xl font-semibold text-gray-600">Job Assignment</h1>
                     <p className="mt-1 text-sm text-gray-500">
@@ -84,7 +84,7 @@ const JobAssignments = () => {
                         managers to specific services.
                     </p>
                 </div>
-                <div className="mt-8">
+                <div className="mt-8 max-w-sm">
                     <Listbox value={selected} onChange={setSelected}>
                     {({ open }) => (
                         <>
@@ -177,8 +177,12 @@ const JobAssignments = () => {
                     </Listbox>
                 </div>
                 <div className="mt-10">
-                    <div className="text-sm font-medium text-gray-700 mb-2">Services</div>
-                    <div className="mt-1 grid grid-cols-1 gap-6">
+                    <div className="text-sm font-medium text-gray-700 mb-2">
+                        Services
+                        <span className="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
+                                          rounded-full text-xs font-medium md:inline-block">{services.length}</span>
+                    </div>
+                    <div className="mt-1 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                         {services.length === 0 &&
                             <div className="text-sm text-gray-500">None</div>
                         }
@@ -321,7 +325,7 @@ const JobAssignments = () => {
                         ))}
                     </div>
                 </div>
-                <div className="flex flex-col py-4 pb-20 gap-4 mt-8">
+                <div className="flex flex-col xl:flex-row-reverse justify-end py-4 pb-20 gap-4 mt-8 max-w-md m-auto">
                     <Link to="/jobs" className="w-full">
                         <button
                             type="button"
