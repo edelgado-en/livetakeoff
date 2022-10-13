@@ -53,7 +53,9 @@ const Topbar = () => {
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-red-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2
+                                            text-white hover:bg-red-700 hover:text-white focus:outline-none
+                                              focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XIcon className="block h-6 w-6" aria-hidden="true" />
@@ -63,7 +65,8 @@ const Topbar = () => {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
-                <Link to="jobs" className="flex flex-shrink-0 items-center rounded-full p-2 bg-white">
+                <Link to="jobs" 
+                      className="flex flex-shrink-0 items-center rounded-full p-2 bg-white">
                    <img
                     className="block h-8 w-auto lg:hidden"
                     src={logo}
@@ -157,18 +160,18 @@ const Topbar = () => {
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
               {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium text-white'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
+                <Link key={item.name}
+                     to={item.href}>
+                  <Disclosure.Button
+                    className={classNames(
+                      item.current ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                      'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                    )}
+                    aria-current={item.current ? 'page' : undefined}
+                  >
+                      {item.name}
+                  </Disclosure.Button>
+                </Link>
               ))}
             </div>
           </Disclosure.Panel>
