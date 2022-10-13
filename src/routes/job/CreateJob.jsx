@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from "react"
 import Loader from "../../components/loader/Loader"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Listbox, Transition } from '@headlessui/react'
 import { PlusIcon, CheckIcon } from "@heroicons/react/outline"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -115,10 +115,23 @@ const CreateJob = () => {
     const [estimatedDepartureDate, setEstimatedDepartureDate] = useState();
     const [completeByDate, setCompleteByDate] = useState();
 
+    const navigate = useNavigate();
 
     useEffect(() => {
 
     }, [])
+
+    const continueWithAssignment = () => {
+        //create job
+
+        navigate('/assignments')
+    }
+
+    const handleCreateJob = () => {
+        //creat job
+
+        navigate('/jobs');
+    }
 
     const handleEstimatedArrivalDateChange = (date, event) => {
         console.log(date);
@@ -743,7 +756,8 @@ const CreateJob = () => {
 
                         <div className="flex flex-col py-4 pb-20 gap-4">
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={() => continueWithAssignment()}
                                 className="inline-flex justify-center rounded-md
                                         border border-transparent bg-red-600 py-2 px-4
                                         text-sm font-medium text-white shadow-sm hover:bg-red-600
@@ -751,7 +765,7 @@ const CreateJob = () => {
                                 Continue with Assignment
                             </button>
                             <button
-                                type="submit"
+                                type="button"
                                 className="inline-flex justify-center rounded-md
                                         border border-transparent bg-red-600 py-2 px-4
                                         text-sm font-medium text-white shadow-sm hover:bg-red-600

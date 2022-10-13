@@ -14,6 +14,7 @@ import UserProfile from './routes/userProfile/UserProfile';
 import UserSettings from './routes/userProfile/UserSettings';
 import UserPassword from './routes/userProfile/UserPassword';
 import CreateJob from './routes/job/CreateJob';
+import JobAssignments from './routes/job/JobAssignments';
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
@@ -63,16 +64,16 @@ const  App = () => {
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<Layout />}>
-                      <Route path="create-job" element={<CreateJob />} />
                       <Route index element={<Jobs />}/>
                       <Route path="jobs" element={<Jobs />}/>
-                     
+                      <Route path="create-job" element={<CreateJob />} />
+                      <Route path="assignments" element={<JobAssignments />} />
+
                       <Route path="user-settings" element={<UserSettings />}>
                         <Route index element={<UserProfile />}/>
                         <Route path="profile" element={<UserProfile />}/>
                         <Route path="password" element={<UserPassword />} />
                       </Route>
-
                       
                       <Route path="jobs/:jobId" element={<JobDetails />}>
                         <Route index element={<JobInfo />} />
