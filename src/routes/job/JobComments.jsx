@@ -25,10 +25,10 @@ const JobComments = () => {
 
     }, [])
 
-    useEffect(() => {
+/*     useEffect(() => {
       bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-
-    }, [comments])
+      This is annoying
+    }, [comments]) */
 
     const getComments = async () => {
       setLoading(true)
@@ -125,7 +125,6 @@ const JobComments = () => {
                                 id="comment"
                                 name="comment"
                                 rows={2}
-                                autoFocus
                                 value={comment}
                                 onChange={handleCommentChange}
                                 className="block w-full rounded-md border-gray-300 shadow-sm
