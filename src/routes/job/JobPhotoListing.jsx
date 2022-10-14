@@ -93,7 +93,6 @@ const JobPhotoListing = () => {
             const exterior_photos = []
 
             data.results.forEach(entry => {
-                console.log(entry)
                 if (entry.interior) {
                     interior_photos.push(entry)
                 } else {

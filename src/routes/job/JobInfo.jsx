@@ -9,10 +9,9 @@ import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
-const assignees = [
-    { id: 1, name: 'Wilson Lizarazo'},
-    { id: 2, name: 'Belkis Grinan'},
-]
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../../routes/userProfile/userSlice";
+
 
 const JobInfo = () => {
     const { jobId } = useParams();
@@ -20,7 +19,7 @@ const JobInfo = () => {
     const [jobDetails, setJobDetails] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
-
+    const currentUser = useAppSelector(selectUser)
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -82,8 +81,6 @@ const JobInfo = () => {
             }
 
         } catch (e) {
-            // TODO: send toast
-            console.log(e)
         }
     }
 
@@ -104,7 +101,7 @@ const JobInfo = () => {
             toast.error('Service Completed!')
 
         } catch (e) {
-            console.log(e)
+        
         }
     }
 
@@ -125,7 +122,7 @@ const JobInfo = () => {
             toast.error('Service Completed!')
 
         } catch (e) {
-            console.log(e)
+            
         }
     }
 
@@ -187,10 +184,12 @@ const JobInfo = () => {
                             {jobDetails.status === 'I' && 'Invoiced'}
                         </dd>
                     </div>
-                    <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Customer</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.customer?.name}</dd>
-                    </div>
+                    {!currentUser.isProjectManager && !currentUser.isCustomer && (
+                        <div className="sm:col-span-1">
+                            <dt className="text-sm font-medium text-gray-500">Customer</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.customer?.name}</dd>
+                        </div>
+                    )}
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Tail Number</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.tailNumber}</dd>
