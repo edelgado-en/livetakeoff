@@ -139,7 +139,7 @@ const JobInfo = () => {
                 <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-row">
                     <div className="flex-1">
-                        <div className="leading-6 font-medium text-gray-600">Job Details</div>
+                        <div className="text-xl font-semibold text-gray-600">Job Details</div>
                     </div>
                 </div>
                 <div className="mt-4 mb-8">
