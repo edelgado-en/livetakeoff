@@ -211,7 +211,7 @@ const CreateJob = () => {
     return (
         <AnimatedPage>
             <main className="mx-auto max-w-lg px-4 pb-16 lg:pb-12">
-                <form>
+                <div>
                     <div className="space-y-6">
                         <div>
                             <h1 className="text-xl font-semibold text-gray-600">Create Job</h1>
@@ -468,8 +468,13 @@ const CreateJob = () => {
                         </div>
                         
                         <div>
-                            <label htmlFor="tailNumber" className="block text-sm  text-gray-500 mb-1">
+                            <label className="block text-sm  text-gray-500 mb-1">
                                 Estimated Arrival
+                                {estimatedArrivalDate && (
+                                    <span 
+                                        onClick={() => setEstimatedArrivalDate(null)}
+                                        className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                )}
                             </label>
                             <DatePicker
                                 selected={estimatedArrivalDate}
@@ -484,8 +489,13 @@ const CreateJob = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="tailNumber" className="block text-sm text-gray-500 mb-1">
+                            <label className="block text-sm text-gray-500 mb-1">
                                 Estimated Departure
+                                {estimatedDepartureDate && (
+                                    <span 
+                                        onClick={() => setEstimatedDepartureDate(null)}
+                                        className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                )}
                             </label>
                             <DatePicker
                                 selected={estimatedDepartureDate}
@@ -500,8 +510,13 @@ const CreateJob = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="tailNumber" className="block text-sm  text-gray-500 mb-1">
+                            <label className="block text-sm  text-gray-500 mb-1">
                                 Complete By
+                                {completeByDate && (
+                                    <span 
+                                        onClick={() => setCompleteByDate(null)}
+                                        className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                )}
                             </label>
                             <DatePicker
                                 selected={completeByDate}
@@ -702,7 +717,7 @@ const CreateJob = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="tailNumber" className="block text-sm text-gray-500">
+                            <label htmlFor="comment" className="block text-sm text-gray-500">
                                 Add a comment
                             </label>
                             <div className="mt-1">
@@ -717,6 +732,9 @@ const CreateJob = () => {
                             </div>
                         </div>
                         <div>
+                            <label className="block text-sm text-gray-500 mb-1">
+                                Customer Photo
+                            </label>
                             <ImageUploading
                                 acceptType={['jpg', 'gif', 'png', 'jpeg']}
                                 value={images}
@@ -825,7 +843,7 @@ const CreateJob = () => {
 
                         <div className="h-28"></div>
                     </div>
-                </form>
+                </div>
             </main>
         </AnimatedPage>
     )
