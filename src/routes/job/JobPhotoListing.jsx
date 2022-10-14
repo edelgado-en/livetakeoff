@@ -177,7 +177,7 @@ const JobPhotoListing = () => {
                     </div>
                 </div>
                 <div>
-                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-8">
+                    <div className="text-gray-500 text-sm mb-1 font-semibold mt-20">
                         Exterior
                         {exteriorPhotos.length > 0 &&
                             <span className="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5

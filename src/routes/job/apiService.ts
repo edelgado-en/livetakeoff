@@ -48,4 +48,12 @@ export const getJobFormInfo = () => {
     return httpService.get('/api/jobs/form-info')
 }
 
+export const createJob = (formData: any) => {
+    return httpService.post('/api/jobs/create', formData,  {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+}
+
 

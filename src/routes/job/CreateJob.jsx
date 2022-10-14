@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css"
 import * as api from './apiService'
+import { toast } from "react-toastify"
 
 const ChevronUpDownIcon = () => {
     return (
@@ -23,72 +24,20 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-/* const customers = [
-    { id: 1, name: 'Aircharter Worldwide' },
-    { id: 2, name: 'Delta Private Jets' },
-    { id: 3, name: 'Eastern Airlines' },
-    { id: 4, name: 'Executive jet Management' },
-    { id: 5, name: 'Jet Edge' },
-]
-
-const aircraftTypes = [
-    { id: 1, name: 'Citation CJ2' },
-    { id: 2, name: 'Citaion CJ3' },
-    { id: 3, name: 'Lear 35' },
-    { id: 4, name: 'Citaion 560' },
-    { id: 5, name: 'Hawker 400XP/Beechjet' },
-]
-
-const airports = [
-    { id: 1, name: 'KBCT/BCT Boca Raton Airport' },
-    { id: 2, name: 'KFLL/FLL Fort Lauderdale-Hollywood International Airport' },
-    { id: 3, name: 'KFE/FXE Fort Lauderdale Executive Airport' },
-    { id: 4, name: 'KHND/HND Henderson Executive Airport' },
-    { id: 5, name: 'KLAS/LAS Harry Reid International Airport Las Vegas' },
-]
-
-const fbos = [
-    { id: 1, name: 'Atlantic Aviation BCT' },
-    { id: 2, name: 'Atlantic Aviation FXE' },
-    { id: 3, name: 'Atlantic Aviation LAS' },
-    { id: 4, name: 'Atlantic Aviation OPF' },
-    { id: 5, name: 'Atlantic Aviation PBI' },
-] */
-
-
-/* const services = [
-    { id: 1, name: 'Exterior detail (Full wet or dry wash)' },
-    { id: 2, name: 'Basic Exterior (Exterior Takeoff Ready)' },
-    { id: 3, name: 'Basic Interior (Interior Takeoff Ready)' },
-    { id: 4, name: 'Interior Detail (Deep interior detailing with all seat cleaning, conditioning and protection)' },
-    { id: 5, name: 'Carpet Extraction' },
-    { id: 6, name: 'Electrostatic Disinfection' },
-    { id: 7, name: 'Hand/Machine Wax' },
-    { id: 8, name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down' },
-]
-
-const retainerServices = [
-    { id: 1, name: 'Exterior detail (Full wet or dry wash)' },
-    { id: 2, name: 'Basic Exterior (Exterior Takeoff Ready)' },
-    { id: 3, name: 'Basic Interior (Interior Takeoff Ready)' },
-    { id: 4, name: 'Interior Detail (Deep interior detailing with all seat cleaning, conditioning and protection)' },
-    { id: 5, name: 'Carpet Extraction' },
-    { id: 6, name: 'Electrostatic Disinfection' },
-    { id: 7, name: 'Hand/Machine Wax' },
-    { id: 8, name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down' },
-] */
-
 const CreateJob = () => {
     const [loading, setLoading] = useState(false)
     const [jobDetails, setJobDetails] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
     
+    const [tailNumber, setTailNumber] = useState('')
+    const [tailNumberErrorMessage, setTailNumberErrorMessage] = useState(null)
     const [customers, setCustomers] = useState([])
     const [aircraftTypes, setAircraftTypes] = useState([])
     const [airports, setAirports] = useState([])
     const [fbos, setFbos] = useState([])
     const [services, setServices] = useState([])
     const [retainerServices, setRetainerServices] = useState([])
+    const [servicesErrorMessage, setServicesErrorMessage] = useState(null)
 
     const [customerSelected, setCustomerSelected] = useState({})
     const [aircraftTypeSelected, setAircraftTypeSelected] = useState({})
@@ -101,9 +50,10 @@ const CreateJob = () => {
     const [isRetainerServicesOpen, setIsRetainerServicesOpen] = useState(false);
     const [selectedRetainerServices, setSelectedRetainerServices] = useState([]);
 
-    const [estimatedArrivalDate, setEstimatedArrivalDate] = useState();
-    const [estimatedDepartureDate, setEstimatedDepartureDate] = useState();
-    const [completeByDate, setCompleteByDate] = useState();
+    const [estimatedArrivalDate, setEstimatedArrivalDate] = useState(null);
+    const [estimatedDepartureDate, setEstimatedDepartureDate] = useState(null);
+    const [completeByDate, setCompleteByDate] = useState(null);
+    const [comment, setComment] = useState('');
 
     const [images, setImages] = useState([]);
 
@@ -137,6 +87,64 @@ const CreateJob = () => {
             setErrorMessage(error.message)
         }
 
+    }
+
+    const createJob = async (routeName) => {
+        setTailNumberErrorMessage(null)
+        setServicesErrorMessage(null)
+
+        if (tailNumber.length === 0) {
+            setTailNumberErrorMessage('Tail number is required')
+            return
+        }
+
+        if (selectedServices.length === 0 && selectedRetainerServices.length === 0) {
+            setServicesErrorMessage('Please select at least one service')
+            return
+        }
+
+        setLoading(true)
+
+        const selectedServiceIds = selectedServices.map(service => service.id)
+        const selectedRetainerServiceIds = selectedRetainerServices.map(service => service.id)
+
+        const formData = new FormData()
+        
+        formData.append("tail_number", tailNumber);
+        formData.append("customer_id", customerSelected.id);
+        formData.append("aircraft_type_id", aircraftTypeSelected.id);
+        formData.append("airport_id", airportSelected.id);
+        formData.append("fbo_id", fboSelected.id);
+        formData.append("estimated_arrival_date", estimatedArrivalDate);
+        formData.append("estimated_departure_date", estimatedDepartureDate);
+        formData.append("complete_by_date", completeByDate);
+        formData.append("services", selectedServiceIds);
+        formData.append("retainer_services", selectedRetainerServiceIds);
+        formData.append("comment", comment);
+
+        images.forEach(image => {
+            if (image.file.size < 10000000) { // less than 10MB
+                formData.append("image", image.file)
+            }
+        });
+        
+        try {
+            const { data } = await api.createJob(formData)
+
+            console.log(data);
+
+            setLoading(false)
+
+            if (routeName === 'jobs') {
+                navigate('/jobs')
+            } else {
+                navigate('/jobs/' + data.id + '/assignments')
+            } 
+
+        } catch (error) {
+            setLoading(false)
+            toast.error('Unable to create job')
+        }
     }
 
     const continueWithAssignment = () => {
@@ -225,7 +233,14 @@ const CreateJob = () => {
 
     return (
         <AnimatedPage>
-            {loading && <Loader />}
+            {loading && (
+                <>
+                    <Loader />
+                    {/* <div className="text-gray-500 text-sm m-auto text-center">
+                        Creating job. Please wait...
+                    </div> */}
+                </>
+            )}
 
             {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
 
@@ -247,11 +262,14 @@ const CreateJob = () => {
                             <div className="mt-1">
                                 <input
                                 type="text"
+                                value={tailNumber}
+                                onChange={(e) => setTailNumber(e.target.value)}
                                 name="tailNumber"
                                 id="tailNumber"
                                 className="block w-full rounded-md border-gray-300 shadow-sm
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                                 />
+                                {tailNumberErrorMessage && <p className="text-red-500 text-xs mt-2">{tailNumberErrorMessage}</p>}
                             </div>
                         </div>
 
@@ -642,7 +660,9 @@ const CreateJob = () => {
                                 )}
                             </Listbox>
                         </div>
-
+                       
+                        {servicesErrorMessage && <p className="text-red-500 text-xs mt-2">{servicesErrorMessage}</p>}
+                       
                         <div>
                             <Listbox
                                 as="div"
@@ -743,11 +763,12 @@ const CreateJob = () => {
                             <div className="mt-1">
                                 <textarea
                                     rows={3}
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
                                     name="comment"
                                     id="comment"
                                     className="block w-full rounded-md border-gray-300 shadow-sm
                                              focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                                    defaultValue={''}
                                     />
                             </div>
                         </div>
@@ -756,10 +777,11 @@ const CreateJob = () => {
                                 Customer Photo
                             </label>
                             <ImageUploading
+                                multiple
                                 acceptType={['jpg', 'gif', 'png', 'jpeg']}
                                 value={images}
                                 onChange={onChangePhoto}
-                                maxNumber={1}
+                                maxNumber={20}
                                 dataURLKey="data_url">
                                 {({
                                     imageList,
@@ -834,7 +856,7 @@ const CreateJob = () => {
                         <div className="flex flex-col py-4 pb-20 gap-4">
                             <button
                                 type="button"
-                                onClick={() => continueWithAssignment()}
+                                onClick={() => createJob('assignments')}
                                 className="inline-flex justify-center rounded-md
                                         border border-transparent bg-red-600 py-2 px-4
                                         text-sm font-medium text-white shadow-sm hover:bg-red-600
@@ -843,6 +865,7 @@ const CreateJob = () => {
                             </button>
                             <button
                                 type="button"
+                                onClick={() => createJob('jobs')}
                                 className="inline-flex justify-center rounded-md
                                         border border-transparent bg-red-600 py-2 px-4
                                         text-sm font-medium text-white shadow-sm hover:bg-red-600

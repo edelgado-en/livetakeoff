@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
 import Loader from "../../components/loader/Loader"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { Listbox, Transition } from '@headlessui/react'
 import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -72,11 +72,17 @@ const services = [
 ]
 
 const JobAssignments = () => {
+    const { jobId } = useParams();
     const [selected, setSelected] = useState(people[0])
+
+    useEffect(() => {
+        //fetch assignemnts for job id
+
+    }, [])
 
     return (
         <AnimatedPage>
-             <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl">
+             <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl mt-8">
                 <div>
                     <h1 className="text-xl font-semibold text-gray-600">Job Assignment</h1>
                     <p className="mt-1 text-sm text-gray-500">
