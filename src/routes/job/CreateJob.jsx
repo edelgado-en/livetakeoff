@@ -9,6 +9,7 @@ import ImageUploading from 'react-images-uploading';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css"
+import * as api from './apiService'
 
 const ChevronUpDownIcon = () => {
     return (
@@ -22,7 +23,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const customers = [
+/* const customers = [
     { id: 1, name: 'Aircharter Worldwide' },
     { id: 2, name: 'Delta Private Jets' },
     { id: 3, name: 'Eastern Airlines' },
@@ -52,30 +53,10 @@ const fbos = [
     { id: 3, name: 'Atlantic Aviation LAS' },
     { id: 4, name: 'Atlantic Aviation OPF' },
     { id: 5, name: 'Atlantic Aviation PBI' },
-]
+] */
 
-const team = [
-    {
-      name: 'Calvin Hawkins',
-      email: 'calvin.hawkins@example.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1513910367299-bce8d8a0ebf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      name: 'Bessie Richards',
-      email: 'bessie.richards@example.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      name: 'Floyd Black',
-      email: 'floyd.black@example.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  ]
 
-const services = [
+/* const services = [
     { id: 1, name: 'Exterior detail (Full wet or dry wash)' },
     { id: 2, name: 'Basic Exterior (Exterior Takeoff Ready)' },
     { id: 3, name: 'Basic Interior (Interior Takeoff Ready)' },
@@ -95,16 +76,24 @@ const retainerServices = [
     { id: 6, name: 'Electrostatic Disinfection' },
     { id: 7, name: 'Hand/Machine Wax' },
     { id: 8, name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down' },
-]
+] */
 
 const CreateJob = () => {
     const [loading, setLoading] = useState(false)
     const [jobDetails, setJobDetails] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
-    const [customerSelected, setCustomerSelected] = useState(customers[0])
-    const [aircraftTypeSelected, setAircraftTypeSelected] = useState(aircraftTypes[0])
-    const [airportSelected, setAirportSelected] = useState(airports[0])
-    const [fboSelected, setFboSelected] = useState(fbos[0])
+    
+    const [customers, setCustomers] = useState([])
+    const [aircraftTypes, setAircraftTypes] = useState([])
+    const [airports, setAirports] = useState([])
+    const [fbos, setFbos] = useState([])
+    const [services, setServices] = useState([])
+    const [retainerServices, setRetainerServices] = useState([])
+
+    const [customerSelected, setCustomerSelected] = useState({})
+    const [aircraftTypeSelected, setAircraftTypeSelected] = useState({})
+    const [airportSelected, setAirportSelected] = useState({})
+    const [fboSelected, setFboSelected] = useState({})
 
     const [isServicesOpen, setIsServicesOpen] = useState(false);
     const [selectedServices, setSelectedServices] = useState([]);
@@ -121,8 +110,34 @@ const CreateJob = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-
+        getJobInfo()
     }, [])
+
+    const getJobInfo = async () => {
+        setLoading(true)
+        
+        try {
+            const { data } = await api.getJobFormInfo()
+            setCustomers(data.customers)
+            setAircraftTypes(data.aircraft_types)
+            setAirports(data.airports)
+            setFbos(data.fbos)
+            setServices(data.services)
+            setRetainerServices(data.retainer_services)
+
+            setCustomerSelected(data.customers[0])
+            setAircraftTypeSelected(data.aircraft_types[0])
+            setAirportSelected(data.airports[0])
+            setFboSelected(data.fbos[0])
+
+            setLoading(false)
+
+        } catch (error) {
+            setLoading(false)
+            setErrorMessage(error.message)
+        }
+
+    }
 
     const continueWithAssignment = () => {
         //create job
@@ -210,7 +225,12 @@ const CreateJob = () => {
 
     return (
         <AnimatedPage>
-            <main className="mx-auto max-w-lg px-4 pb-16 lg:pb-12">
+            {loading && <Loader />}
+
+            {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
+
+            {!loading && errorMessage == null && (
+                <main className="mx-auto max-w-lg px-4 pb-16 lg:pb-12">
                 <div>
                     <div className="space-y-6">
                         <div>
@@ -845,6 +865,8 @@ const CreateJob = () => {
                     </div>
                 </div>
             </main>
+            )}
+            
         </AnimatedPage>
     )
 }

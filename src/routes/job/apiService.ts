@@ -44,5 +44,8 @@ export const getJobStats = (jobId: number) => {
     return httpService.get(`/api/jobs/stats/${jobId}/`)
 }
 
+export const getJobFormInfo = () => {
+    return httpService.get('/api/jobs/form-info')
+}
 
 
