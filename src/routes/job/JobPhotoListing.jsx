@@ -10,6 +10,8 @@ import ReactTimeAgo from 'react-time-ago'
 import * as api from './apiService'
 import { toast } from "react-toastify";
 
+import photosIcon from './photosIcon.png'
+
 const JobPhotoListing = () => {
     const [currentImageInterior, setCurrentImageInterior] = useState(0);
     const [currentImageExterior, setCurrentImageExterior] = useState(0);
@@ -132,9 +134,22 @@ const JobPhotoListing = () => {
                                           rounded-full text-xs font-medium md:inline-block">{interiorPhotos.length}</span>
                         }
                     </div>
+                    
+                    {interiorPhotos.length === 0 && (
+                            <div className="text-sm mt-10 flex flex-col items-center">
+                                 <img
+                                    className="block h-8 w-auto text-gray-200"
+                                    src={photosIcon}
+                                    alt="photos"
+                                /> 
+                                <div className="font-semibold text-gray-600 mt-4">
+                                    No photos uploaded
+                                </div>
+                                <span className="text-gray-500">Click on the plus icon to upload some photos.</span>                            
+                            </div>
+                    )}
+                    
                     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1 pl-9 xl:pl-1">
-                        {interiorPhotos.length === 0 && <div className="text-gray-500 text-sm">No photos uploaded</div>}
-
                         {interiorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
                                     <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewer(index) }>
@@ -170,9 +185,20 @@ const JobPhotoListing = () => {
                                           rounded-full text-xs font-medium md:inline-block">{exteriorPhotos.length}</span>
                         }
                     </div>
+                    {exteriorPhotos.length === 0 && (
+                            <div className="text-sm mt-10 flex flex-col items-center">
+                                 <img
+                                    className="block h-8 w-auto text-gray-200"
+                                    src={photosIcon}
+                                    alt="photos"
+                                /> 
+                                <div className="font-semibold text-gray-600 mt-4">
+                                    No photos uploaded
+                                </div>
+                                <span className="text-gray-500">Click on the plus icon to upload some photos.</span>                            
+                            </div>
+                    )}
                     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1 pl-9 xl:pl-1">
-                        {exteriorPhotos.length === 0 && <div className="text-gray-500 text-sm">No photos uploaded</div>}
-
                         {exteriorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
                                     <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewerExterior(index) }>
