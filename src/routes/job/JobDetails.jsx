@@ -1,9 +1,10 @@
 
+import { useEffect, useState } from 'react'
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, PencilIcon, UserAddIcon } from "@heroicons/react/outline";
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-
+import * as api from './apiService'
 
 const tabs = [
     { name: 'Info', href: '#', current: false },
@@ -17,7 +18,18 @@ function classNames(...classes) {
 
 const JobDetails = () => {
     const { jobId } = useParams();
-    const location = useLocation();
+    const [jobStats, setJobStats] = useState({ comments_count: 0, photos_count: 0 });
+
+    useEffect(() => {
+        getJobStats()
+
+    }, [])
+
+    const getJobStats = async () => {
+        const { data } = await api.getJobStats(jobId)
+        
+        setJobStats(data)
+    }
 
     return (
         <div className="xl:px-16 px-4 m-auto max-w-7xl">
@@ -52,14 +64,18 @@ const JobDetails = () => {
                                                strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-600">
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
                                         </svg>
-                                        <span className="text-sm text-gray-500 relative left-1" style={{ top: '2px'}}>8</span>
+                                        {jobStats.comments_count > 0 && (
+                                            <span className="text-sm text-gray-500 relative left-1" style={{ top: '2px'}}>{jobStats.comments_count}</span>
+                                        )}
                                     </div>
                                 </Link>
                                 <Link
                                     to="photos/listing">
                                     <div className="flex">
                                         <PhotographIcon className="h-6 w-6 text-gray-600"/>
-                                        <span className="text-sm text-gray-500 relative left-1" style={{ top: '2px'}}>12</span>
+                                        {jobStats.photos_count > 0 && (
+                                            <span className="text-sm text-gray-500 relative left-1" style={{ top: '2px'}}>{jobStats.photos_count}</span>
+                                        )}
                                     </div>
                                 </Link>
                                 
@@ -89,7 +105,7 @@ const JobDetails = () => {
                                         leaveFrom="transform opacity-100 scale-100"
                                         leaveTo="transform opacity-0 scale-95"
                                     >
-                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-56
+                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-40
                                                                origin-top-right rounded-md bg-white shadow-lg ring-1
                                                                 ring-black ring-opacity-5 focus:outline-none">
                                         <div className="py-1">

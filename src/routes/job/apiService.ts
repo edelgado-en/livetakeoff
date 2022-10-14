@@ -40,5 +40,9 @@ export const deletePhotos = (jobId: number, request: any) => {
     return httpService.post(`/api/job-photos/delete/${jobId}/`, request);
 }
 
+export const getJobStats = (jobId: number) => {
+    return httpService.get(`/api/jobs/stats/${jobId}/`)
+}
+
 
 
