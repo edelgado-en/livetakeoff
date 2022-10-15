@@ -57,9 +57,6 @@ const JobComments = () => {
 
       setComments(updatedComments)
       setComment('')
-
-      toast.error('Comment Added!')
-
     }
 
     const handleCommentChange = (event) => [

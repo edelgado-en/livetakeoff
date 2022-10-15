@@ -26,6 +26,7 @@ function classNames(...classes) {
 
 const CreateJob = () => {
     const [loading, setLoading] = useState(false)
+    const [createJobMessage, setCreateJobMessage] = useState(null)
     const [jobDetails, setJobDetails] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
     
@@ -108,6 +109,7 @@ const CreateJob = () => {
         }
 
         setLoading(true)
+        setCreateJobMessage('Creating job. Please wait...')
 
         const selectedServiceIds = selectedServices.map(service => service.id)
         const selectedRetainerServiceIds = selectedRetainerServices.map(service => service.id)
@@ -135,9 +137,8 @@ const CreateJob = () => {
         try {
             const { data } = await api.createJob(formData)
 
-            console.log(data);
-
             setLoading(false)
+            setCreateJobMessage(null)
 
             if (routeName === 'jobs') {
                 navigate('/jobs')
@@ -147,6 +148,7 @@ const CreateJob = () => {
 
         } catch (error) {
             setLoading(false)
+            setCreateJobMessage(null)
             toast.error('Unable to create job')
         }
     }
@@ -237,9 +239,11 @@ const CreateJob = () => {
             {loading && (
                 <>
                     <Loader />
-                    {/* <div className="text-gray-500 text-sm m-auto text-center">
-                        Creating job. Please wait...
-                    </div> */}
+                    {createJobMessage && (
+                        <div className="text-gray-500 text-sm m-auto text-center">
+                            {createJobMessage}
+                        </div>
+                    )}
                 </>
             )}
 
