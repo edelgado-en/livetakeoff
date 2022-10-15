@@ -35,7 +35,7 @@ const TestReports = () => {
   }
 
     return (
-      <div className="xl:px-16 px-4 m-auto max-w-7xl">
+      <div className="xl:px-16 px-4 m-auto max-w-5xl">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-xl font-semibold text-gray-600">Jobs Queue</h1>
