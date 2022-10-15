@@ -6,12 +6,6 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import * as api from './apiService'
 
-const tabs = [
-    { name: 'Info', href: '#', current: false },
-    { name: 'Edit', href: '#', current: false },
-    { name: 'Photos', href: '#', current: true },
-  ]
-  
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -64,20 +58,25 @@ const JobDetails = () => {
                                                strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-600">
                                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
                                         </svg>
-                                        <div className={`text-sm text-gray-500 relative left-1 w-2`}
-                                              style={{ top: '2px'}}>
-                                                {jobStats.comments_count > 0 && jobStats.comments_count}
-                                        </div>
+                                        {jobStats.comments_count > 0 && (
+                                            <div className="bg-red-500 text-white py-1 px-2 relative bottom-2 right-2
+                                                            rounded-full text-xs font-medium inline-block scale-90">
+                                                {jobStats.comments_count}
+                                            </div>
+                                        )}
                                     </div>
                                 </Link>
                                 <Link
                                     to="photos/listing">
                                     <div className="flex">
                                         <PhotographIcon className="h-6 w-6 text-gray-600"/>
-                                        <div className={`text-sm text-gray-500 relative left-1 w-2`}
-                                              style={{ top: '2px'}}>
-                                            {jobStats.photos_count > 0 && jobStats.photos_count}
-                                        </div>
+                                        {jobStats.photos_count > 0 && (
+                                            <div className="bg-gray-50 text-gray-600 py-1
+                                                             relative bottom-2 border right-2 px-2
+                                                             rounded-full text-xs font-medium inline-block scale-90">
+                                                {jobStats.photos_count}
+                                            </div>
+                                        )}
                                     </div>
                                 </Link>
                                 
