@@ -58,6 +58,8 @@ const CreateJob = () => {
     const [images, setImages] = useState([]);
 
     const [estimatedArrivalDateOpen, setEstimatedArrivalDateOpen] = useState(false)
+    const [estimatedDepartureDateOpen, setEstimatedDepartureDateOpen] = useState(false)
+    const [completeByDateOpen, setCompleteByDateOpen] = useState(false)
 
     const navigate = useNavigate();
 
@@ -153,30 +155,23 @@ const CreateJob = () => {
         setEstimatedArrivalDateOpen(!estimatedArrivalDateOpen)
     }
 
-    const continueWithAssignment = () => {
-        //create job
-
-        navigate('/assignments')
+    const handleToggleEstimatedDepartureDate = () => {
+        setEstimatedDepartureDateOpen(!estimatedDepartureDateOpen)
     }
 
-    const handleCreateJob = () => {
-        //creat job
-
-        navigate('/jobs');
+    const handleToggleCompleteByDate = () => {
+        setCompleteByDateOpen(!completeByDateOpen)
     }
 
     const handleEstimatedArrivalDateChange = (date, event) => {
-        console.log(date);
         setEstimatedArrivalDate(date);
     }
 
     const handleEstimatedDepartureDateChange = (date, event) => {
-        console.log(date);
         setEstimatedDepartureDate(date);
     }
 
     const handleCompleteByDateChange = (date, event) => {
-        console.log(date);
         setCompleteByDate(date);
     }
 
@@ -539,8 +534,6 @@ const CreateJob = () => {
                                 inline
                                 />
                             )}
-
-                            
                         </div>
 
                         <div>
@@ -552,16 +545,25 @@ const CreateJob = () => {
                                         className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
                                 )}
                             </label>
-                            <DatePicker
-                                selected={estimatedDepartureDate}
-                                onChange={(date) => handleEstimatedDepartureDateChange(date)}
-                                timeInputLabel="Time:"
-                                dateFormat="MM/dd/yyyy h:mm aa"
-                                showTimeInput
-                                onKeyDown={(e) => {
-                                    e.preventDefault();
-                                 }}
-                            />
+                            <button
+                                type="button"
+                                onClick={handleToggleEstimatedDepartureDate}
+                                className="inline-flex items-center rounded-md border
+                                           w-full h-10
+                                          border-gray-300 bg-white px-4 py-2 text-sm
+                                            text-gray-700 shadow-sm hover:bg-gray-50">
+                                {estimatedDepartureDate?.toLocaleString()}
+                            </button>
+                            {estimatedDepartureDateOpen && (
+                                <DatePicker
+                                    selected={estimatedDepartureDate}
+                                    onChange={(date) => handleEstimatedDepartureDateChange(date)}
+                                    timeInputLabel="Time:"
+                                    dateFormat="MM/dd/yyyy h:mm aa"
+                                    showTimeInput
+                                    inline
+                                />
+                            )}
                         </div>
 
                         <div>
@@ -573,16 +575,25 @@ const CreateJob = () => {
                                         className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
                                 )}
                             </label>
-                            <DatePicker
-                                selected={completeByDate}
-                                onChange={(date) => handleCompleteByDateChange(date)}
-                                timeInputLabel="Time:"
-                                dateFormat="MM/dd/yyyy h:mm aa"
-                                showTimeInput
-                                onKeyDown={(e) => {
-                                    e.preventDefault();
-                                 }}
-                            />
+                            <button
+                                type="button"
+                                onClick={handleToggleCompleteByDate}
+                                className="inline-flex items-center rounded-md border
+                                           w-full h-10
+                                          border-gray-300 bg-white px-4 py-2 text-sm
+                                            text-gray-700 shadow-sm hover:bg-gray-50">
+                                {completeByDate?.toLocaleString()}
+                            </button>
+                            {completeByDateOpen && (
+                                <DatePicker
+                                    selected={completeByDate}
+                                    onChange={(date) => handleCompleteByDateChange(date)}
+                                    timeInputLabel="Time:"
+                                    dateFormat="MM/dd/yyyy h:mm aa"
+                                    showTimeInput
+                                    inline
+                                />
+                            )}
                         </div>
 
                         <div>
