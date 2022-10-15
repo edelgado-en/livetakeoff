@@ -57,6 +57,8 @@ const CreateJob = () => {
 
     const [images, setImages] = useState([]);
 
+    const [estimatedArrivalDateOpen, setEstimatedArrivalDateOpen] = useState(false)
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -145,6 +147,10 @@ const CreateJob = () => {
             setLoading(false)
             toast.error('Unable to create job')
         }
+    }
+
+    const handleToggleEstimatedArrivalDate = () => {
+        setEstimatedArrivalDateOpen(!estimatedArrivalDateOpen)
     }
 
     const continueWithAssignment = () => {
@@ -514,16 +520,27 @@ const CreateJob = () => {
                                         className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
                                 )}
                             </label>
-                            <DatePicker
+                            <button
+                                type="button"
+                                onClick={handleToggleEstimatedArrivalDate}
+                                className="inline-flex items-center rounded-md border
+                                           w-full h-10
+                                          border-gray-300 bg-white px-4 py-2 text-sm
+                                            text-gray-700 shadow-sm hover:bg-gray-50">
+                                {estimatedArrivalDate?.toLocaleString()}
+                            </button>
+                            {estimatedArrivalDateOpen && (
+                                <DatePicker
                                 selected={estimatedArrivalDate}
                                 onChange={(date) => handleEstimatedArrivalDateChange(date)}
                                 timeInputLabel="Time:"
                                 dateFormat="MM/dd/yyyy h:mm aa"
                                 showTimeInput
-                                onKeyDown={(e) => {
-                                    e.preventDefault();
-                                 }}
-                            />
+                                inline
+                                />
+                            )}
+
+                            
                         </div>
 
                         <div>
