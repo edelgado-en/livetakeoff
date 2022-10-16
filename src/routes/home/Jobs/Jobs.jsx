@@ -133,7 +133,7 @@ const TestReports = () => {
         )}
 
         <div className="overflow-hidden bg-white shadow sm:rounded-md mt-8">
-          <ul role="list" className="divide-y divide-gray-200">
+          <ul className="divide-y divide-gray-200">
             {jobs.map((job) => (
               <li key={job.id}>
                 <Link to={`/jobs/${job.id}/details`} className="block hover:bg-gray-50">
@@ -157,7 +157,13 @@ const TestReports = () => {
                           </div>
                         </div>
                         <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
-                            <p className="inline-flex text-sm font-semibold leading-5">
+                            <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                           ${job.status === 'A' && 'bg-blue-500 '}
+                                           ${job.status === 'S' && 'bg-yellow-500 '}
+                                           ${job.status === 'U' && 'bg-indigo-500 '}
+                                           ${job.status === 'W' && 'bg-green-500 '}
+                                           ${job.status === 'R' && 'bg-purple-500 '}
+                                         `}>
                               {job.status === 'A' && 'Accepted'}
                               {job.status === 'S' && 'Assigned'}
                               {job.status === 'U' && 'Submitted'}
