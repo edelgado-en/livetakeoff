@@ -8,6 +8,33 @@ import { selectUser } from "../../userProfile/userSlice";
 import Loader from "../../../components/loader/Loader";
 import * as api from './apiService'
 
+const applicants = [
+  {
+    name: 'Dries Vincent',
+    email: 'dries.vincent@example.com',
+    imageUrl:
+      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  },
+  {
+    name: 'Lindsay Walton',
+    email: 'lindsay.walton@example.com',
+    imageUrl:
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  },
+  {
+    name: 'Courtney Henry',
+    email: 'courtney.henry@example.com',
+    imageUrl:
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  },
+  {
+    name: 'Tom Cook',
+    email: 'tom.cook@example.com',
+    imageUrl:
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+  },
+]
+
 const TestReports = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -140,6 +167,16 @@ const TestReports = () => {
                               {job.status === 'R' && 'Review'}
                               {job.status === 'I' && 'Invoiced'}
                             </p>
+                            <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">
+                              {applicants.map((applicant) => (
+                                <img
+                                  key={applicant.email}
+                                  className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                  src={applicant.imageUrl}
+                                  alt={applicant.name}
+                                />
+                              ))}
+                            </div>
                             <div className="text-sm text-gray-500 mt-2">
                               Complete by {job.completeBy ? job.completeBy : <span className="italic">pending</span>}
                             </div>
