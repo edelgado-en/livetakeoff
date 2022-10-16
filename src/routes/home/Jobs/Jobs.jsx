@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom"
 import { useEffect, useState } from "react";
 import { TrashIcon, ChevronRightIcon, PlusIcon } from "@heroicons/react/outline";
+import { UserIcon } from "@heroicons/react/solid";
 import { useAppSelector, useAppDispatch } from "../../../app/hooks";
 import { selectUser } from "../../userProfile/userSlice";
 import Loader from "../../../components/loader/Loader";
@@ -117,6 +118,13 @@ const TestReports = () => {
                             <span className="font-medium text-red-600 text-sm">{job.tailNumber}</span>
                             <span className="ml-2 text-sm text-gray-700">{job.purchase_order}</span>
                           </div>
+                          
+                          {job.customer && (
+                            <div className="text-sm text-gray-500 mt-2 flex gap-1">
+                              <UserIcon className="h-4 w-4 text-gray-400" />{job.customer.name}
+                            </div>
+                          )}
+
                           <div className="mt-2 text-sm text-gray-500 mb-1">
                             {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
                           </div>
