@@ -52,7 +52,40 @@ const TestReports = () => {
     try {
         const { data } = await api.getJobs();
 
-        setJobs(data.results);
+        const jobs = []
+        
+        data.results.forEach((job) => {
+            let uniqueUserIds = []
+            const uniqueUsers = []
+            
+            job.job_service_assignments?.forEach((assignment) => {
+              const userId = assignment.project_manager?.id 
+              if (userId != null) {
+                if (!uniqueUserIds.includes(userId)) {
+                    uniqueUserIds.push(userId)
+                    uniqueUsers.push(assignment.project_manager)
+                } 
+              }
+            })
+
+            job.job_retainer_service_assignments?.forEach((assignment) => {
+              const userId = assignment.project_manager?.id 
+              if (userId != null) {
+                if (!uniqueUserIds.includes(userId)) {
+                    uniqueUserIds.push(userId)
+                    uniqueUsers.push(assignment.project_manager)
+                } 
+              }
+            })
+
+            job.asignees = uniqueUsers;
+
+            jobs.push(job)
+        })
+
+        console.log(jobs)
+
+        setJobs(jobs);
         setTotalJobs(data.count)
 
     } catch (e) {
@@ -173,16 +206,25 @@ const TestReports = () => {
                               {job.status === 'R' && 'Review'}
                               {job.status === 'I' && 'Invoiced'}
                             </p>
-                            <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">
-                              {applicants.map((applicant) => (
-                                <img
-                                  key={applicant.email}
-                                  className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                                  src={applicant.imageUrl}
-                                  alt={applicant.name}
-                                />
-                              ))}
-                            </div>
+                            {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && job.asignees?.length > 0 && (
+                                <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">
+                                    {job.asignees?.map((asignee) => (
+                                      <>
+                                        <img
+                                          key={asignee.username}
+                                          className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                          src={asignee.profile.avatar}
+                                          alt={asignee.username}
+                                        />
+                                      </>
+                                    ))}
+                                    {job.asignees?.length === 1 && (
+                                      <div className="text-gray-500 text-sm relative top-1" style={{ marginLeft: '6px' }}>{job.asignees?.[0].username}</div>
+                                    )}
+                                </div>
+                                
+                            )}
+                            
                             <div className="text-sm text-gray-500 mt-2">
                               Complete by {job.completeBy ? job.completeBy : <span className="italic">pending</span>}
                             </div>
