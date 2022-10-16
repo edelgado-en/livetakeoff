@@ -28,7 +28,7 @@ const UserPassword = () => {
     return (
         <form className="divide-y divide-gray-200 lg:col-span-9" onSubmit={onSubmit}>
             <div className="py-6 px-4 sm:p-6 lg:pb-8">
-                <h2 className="text-lg font-medium leading-6 text-gray-900">Password</h2>
+                <h1 className="text-2xl font-medium leading-6 text-gray-900">Password</h1>
                 <p className="mt-1 max-w-2xl text-sm text-gray-500">Reset your password.</p>
                 <div className="space-y-6 pt-8 sm:space-y-5 sm:pt-10">
                     <div className="space-y-6 sm:space-y-5">

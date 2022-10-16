@@ -38,7 +38,7 @@ const TestReports = () => {
       <div className="xl:px-16 px-4 m-auto max-w-5xl">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-xl font-semibold text-gray-600">Jobs Queue</h1>
+            <h1 className="text-2xl font-semibold text-gray-600">Jobs Queue</h1>
             {!loading && jobs.length > 0 && (
               <p className="mt-2 text-sm text-gray-700">
                 Total: {jobs.length}
@@ -115,14 +115,14 @@ const TestReports = () => {
                         <div>
                           <div className="">
                             <span className="font-medium text-red-600 text-sm">{job.tailNumber}</span>
-                            <span className="ml-2 text-sm text-gray-500">{job.purchase_order}</span>
+                            <span className="ml-2 text-sm text-gray-700">{job.purchase_order}</span>
                           </div>
-                          <div className="mt-2 text-xs text-gray-500 mb-1">
+                          <div className="mt-2 text-sm text-gray-500 mb-1">
                             {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
                           </div>
                         </div>
                         <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
-                            <p className="inline-flex text-xs font-semibold leading-5">
+                            <p className="inline-flex text-sm font-semibold leading-5">
                               {job.status === 'A' && 'Accepted'}
                               {job.status === 'S' && 'Assigned'}
                               {job.status === 'U' && 'Submitted'}
@@ -132,8 +132,8 @@ const TestReports = () => {
                               {job.status === 'R' && 'Review'}
                               {job.status === 'I' && 'Invoiced'}
                             </p>
-                            <div className="text-xs text-gray-500 mt-2">
-                              Complete by {job.completeBy}
+                            <div className="text-sm text-gray-500 mt-2">
+                              Complete by {job.completeBy ? job.completeBy : <span className="italic">pending</span>}
                             </div>
                         </div>
                       </div>

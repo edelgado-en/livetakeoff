@@ -71,7 +71,7 @@ const JobComments = () => {
             <div className="mt-8">
                 <div className="flex flex-row">
                     <div className="flex-1">
-                        <div className="text-xl font-semibold text-gray-600">Comments</div>
+                        <h1 className="text-2xl font-semibold text-gray-600">Comments</h1>
                     </div>
                 </div>
                 <div className="my-4">

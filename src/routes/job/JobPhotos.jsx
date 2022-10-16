@@ -8,7 +8,7 @@ const JobPhotos = () => {
         <div className="mt-8">
             <div className="grid grid-cols-2">
                 <div className="text-gray-500">
-                    <div className="text-xl font-semibold text-gray-600 relative top-1">Photos</div>
+                    <h1 className="text-2xl font-semibold text-gray-600 relative top-1">Photos</h1>
                 </div>
                 <div className="text-right flex justify-end">
                     <Link to="listing">

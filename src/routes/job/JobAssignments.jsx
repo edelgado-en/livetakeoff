@@ -84,7 +84,7 @@ const JobAssignments = () => {
         <AnimatedPage>
              <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl mt-8">
                 <div>
-                    <h1 className="text-xl font-semibold text-gray-600">Job Assignment</h1>
+                    <h1 className="text-2xl font-semibold text-gray-600">Job Assignment</h1>
                     <p className="mt-1 text-sm text-gray-500">
                         You can assign all services to one project manager or assign specific
                         managers to specific services.
