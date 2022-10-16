@@ -173,15 +173,23 @@ const JobInfo = () => {
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Status</dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                            {jobDetails.status === 'A' && 'Accepted'}
-                            {jobDetails.status === 'S' && 'Assigned'}
-                            {jobDetails.status === 'U' && 'Submitted'}
-                            {jobDetails.status === 'W' && 'Work In Progress'}
-                            {jobDetails.status === 'C' && 'Complete'}
-                            {jobDetails.status === 'T' && 'Cancelled'}
-                            {jobDetails.status === 'R' && 'Review'}
-                            {jobDetails.status === 'I' && 'Invoiced'}
+                        <dd>
+                            <div className={`mt-1 text-sm text-white rounded-md py-1 px-2 inline-block
+                                        ${jobDetails.status === 'A' && 'bg-blue-500'}
+                                        ${jobDetails.status === 'S' && 'bg-yellow-500 '}
+                                        ${jobDetails.status === 'U' && 'bg-indigo-500 '}
+                                        ${jobDetails.status === 'W' && 'bg-green-500 '}
+                                        ${jobDetails.status === 'R' && 'bg-purple-500 '}
+                                        `} >
+                                {jobDetails.status === 'A' && 'Accepted'}
+                                {jobDetails.status === 'S' && 'Assigned'}
+                                {jobDetails.status === 'U' && 'Submitted'}
+                                {jobDetails.status === 'W' && 'Work In Progress'}
+                                {jobDetails.status === 'C' && 'Complete'}
+                                {jobDetails.status === 'T' && 'Cancelled'}
+                                {jobDetails.status === 'R' && 'Review'}
+                                {jobDetails.status === 'I' && 'Invoiced'}
+                            </div>
                         </dd>
                     </div>
                     {!currentUser.isProjectManager && !currentUser.isCustomer && (
