@@ -75,8 +75,6 @@ const UserProfile = () => {
 
     const handleUpdateUser = async (data) => {
         await api.updateUser(data)
-
-        toast.error('Profile updated!');
     }
 
     return (

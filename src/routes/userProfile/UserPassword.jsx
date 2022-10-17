@@ -18,8 +18,6 @@ const UserPassword = () => {
             
             navigate(-1);
 
-            toast.error('Password Updated!');
-
         } catch (error) {
             
         }

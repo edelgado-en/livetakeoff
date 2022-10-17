@@ -74,8 +74,6 @@ const JobInfo = () => {
 
             setCompleteJobModalOpen(false)
 
-            toast.error('Job updated!')
-
             if (status === 'C') {
                 navigate('/jobs')
             }
@@ -98,8 +96,6 @@ const JobInfo = () => {
 
             setJobDetails(updatedJobDetails);
 
-            toast.error('Service Completed!')
-
         } catch (e) {
         
         }
@@ -118,8 +114,6 @@ const JobInfo = () => {
             })}
 
             setJobDetails(updatedJobDetails);
-
-            toast.error('Service Completed!')
 
         } catch (e) {
             

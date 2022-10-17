@@ -87,8 +87,6 @@ const JobPhotoListing = () => {
                 setExteriorPhotos(updatedPhotos)
             }
 
-            toast.error('Photo deleted!')
-
         } catch (error) {
 
         }
@@ -109,9 +107,6 @@ const JobPhotoListing = () => {
 
             setCustomerPhotos(updatedPhotos)
             
-
-            toast.error('Photo deleted!')
-
         } catch (error) {
 
         }
