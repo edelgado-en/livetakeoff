@@ -7,6 +7,7 @@ import { TrashIcon } from "@heroicons/react/solid"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import AddServiceModal from './AddServiceModal';
+import DeleteServiceModal from './DeleteServiceModal'
 
 const people = [
     {
@@ -81,6 +82,9 @@ const JobAssignments = () => {
     const [services, setServices] = useState(initialServices)
 
     const [isAddServiceModalOpen, setAddServiceModalOpen] = useState(false)
+    const [isDeleteServiceModalOpen, setDeleteServiceModalOpen] = useState(false)
+
+    const [serviceToBeDeleted, setServiceToBeDeleted] = useState(null)
 
     useEffect(() => {
         //fetch assignemnts for job id
@@ -94,6 +98,13 @@ const JobAssignments = () => {
         setAddServiceModalOpen(!isAddServiceModalOpen)
     }
 
+    const handleToggleDeleteServiceModal = (service) => {
+        if (service) {
+            setServiceToBeDeleted(service)
+        }
+        setDeleteServiceModalOpen(!isDeleteServiceModalOpen)
+    }
+
     const setSelectedServiceProjectManager = (selectedPerson, serviceId) => {
 
         const updatedServices = services.map((s) => {
@@ -105,6 +116,10 @@ const JobAssignments = () => {
         })
 
         setServices(updatedServices) 
+
+    }
+
+    const deleteService = () => {
 
     }
 
@@ -269,7 +284,9 @@ const JobAssignments = () => {
                                             <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
                                             <div className="justify-end text-right">
                                                 <div className="flex justify-end">
-                                                    <TrashIcon className="h-5 w-5 text-gray-400 cursor-pointer" />
+                                                    <TrashIcon 
+                                                        onClick={() => handleToggleDeleteServiceModal(service)}
+                                                        className="h-5 w-5 text-gray-400 cursor-pointer" />
                                                 </div>
 
                                                 {service.status === 'W' && (
@@ -425,6 +442,13 @@ const JobAssignments = () => {
                                             availableServices={services}
                                             projectManagers={projectManagers}
                                              />}
+
+                {isDeleteServiceModalOpen && <DeleteServiceModal 
+                                                isOpen={isDeleteServiceModalOpen}
+                                                handleClose={handleToggleDeleteServiceModal}
+                                                deleteService={deleteService}
+                                                service={serviceToBeDeleted}
+                                            />}
 
             </main>
         </AnimatedPage>
