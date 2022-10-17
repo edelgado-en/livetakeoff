@@ -248,26 +248,26 @@ const JobAssignments = () => {
                         {services.map((service) => (
                             <div
                                 key={service.id}
-                                className="relative flex items-center space-x-3 rounded-lg
+                                className="relative flex  space-x-3 rounded-lg
                                         border border-gray-300 bg-white px-6 py-5 shadow-sm
                                         hover:border-gray-400">
                                 <div className="min-w-0 flex-1">
                                     <div className="focus:outline-none">
                                         <div className="grid grid-cols-3 text-sm pb-2">
                                             <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
-                                            <div className="flex flex-col justify-end text-right">
-                                                <div className="absolute right-4 top-5">
+                                            <div className="justify-end text-right">
+                                                <div className="flex justify-end">
                                                     <TrashIcon className="h-5 w-5 text-gray-400 cursor-pointer" />
                                                 </div>
 
                                                 {service.status === 'W' && (
-                                                    <div className="text-xs font-semibold mt-2 text-green-500">
+                                                    <div className="text-xs font-semibold  text-green-500 mt-6">
                                                         In Progress   
                                                     </div>
                                                 )}
 
                                                 {service.status === 'C' && (
-                                                    <div className="flex-shrink-0 flex justify-end">
+                                                    <div className="flex-shrink-0 flex justify-end mt-6">
                                                         <CheckCircleIcon className="h-6 w-6 text-red-400" />
                                                     </div>
                                                 )}
