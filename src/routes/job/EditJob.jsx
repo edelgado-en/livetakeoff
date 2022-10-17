@@ -148,6 +148,9 @@ const EditJob = () => {
     const updateJob = async () => {
         // TODO: add validation 
 
+        const selectedServiceIds = selectedServices.map(service => service.id)
+        const selectedRetainerServiceIds = selectedRetainerServices.map(service => service.id)
+
         const request = {
             tailNumber,
             customer: customerSelected.id,
@@ -157,8 +160,12 @@ const EditJob = () => {
             status: selectedStatus.id,
             estimatedETA: estimatedArrivalDate,
             estimatedETD: estimatedDepartureDate,
-            completeBy: completeByDate
+            completeBy: completeByDate,
+            services: selectedServiceIds,
+            retainerServices: selectedRetainerServiceIds
         }
+
+        console.log(request)
 
         try {
             await api.updateJob(jobId, request)

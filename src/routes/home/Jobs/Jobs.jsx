@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom"
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { TrashIcon, ChevronRightIcon, PlusIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/solid";
 import { useAppSelector } from "../../../app/hooks";
@@ -56,8 +56,6 @@ const JobsQueue = () => {
 
             jobs.push(job)
         })
-
-        console.log(jobs)
 
         setJobs(jobs);
         setTotalJobs(data.count)
@@ -183,14 +181,13 @@ const JobsQueue = () => {
                             {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && job.asignees?.length > 0 && (
                                 <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">
                                     {job.asignees?.map((asignee) => (
-                                      <>
+                                      <Fragment key={asignee.username}>
                                         <img
-                                          key={asignee.username}
                                           className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
                                           src={asignee.profile.avatar}
                                           alt={asignee.username}
                                         />
-                                      </>
+                                      </Fragment>
                                     ))}
                                     {job.asignees?.length === 1 && (
                                       <div className="text-gray-500 text-sm relative top-1" style={{ marginLeft: '6px' }}>{job.asignees?.[0].username}</div>
