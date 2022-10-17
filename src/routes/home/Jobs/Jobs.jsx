@@ -197,7 +197,7 @@ const JobsQueue = () => {
                             )}
                             
                             <div className="text-sm text-gray-500 mt-2">
-                              Complete by {job.completeBy ? job.completeBy : <span className="font-medium text-red-500">pending</span>}
+                              Complete by {job.completeBy ? job.completeBy : <span className="inline-flex rounded-full bg-red-100 px-2 text-xs  leading-5 text-red-800">pending</span>}
                             </div>
                         </div>
                       </div>
