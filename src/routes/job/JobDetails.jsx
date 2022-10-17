@@ -44,7 +44,7 @@ const JobDetails = () => {
                 <div className="flex-1 flex justify-end">
                     <div>
                         <div className="">
-                            <nav className="flex space-x-8" aria-label="Tabs">
+                            <nav className="flex space-x-4" aria-label="Tabs">
                                 <Link
                                     to="details">
                                      <ClipboardCheckIcon className="h-6 w-6 text-gray-600"/> 

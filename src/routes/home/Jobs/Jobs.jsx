@@ -3,39 +3,13 @@ import { Link } from "react-router-dom"
 import { useEffect, useState } from "react";
 import { TrashIcon, ChevronRightIcon, PlusIcon } from "@heroicons/react/outline";
 import { UserIcon } from "@heroicons/react/solid";
-import { useAppSelector, useAppDispatch } from "../../../app/hooks";
+import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../userProfile/userSlice";
 import Loader from "../../../components/loader/Loader";
 import * as api from './apiService'
 
-const applicants = [
-  {
-    name: 'Dries Vincent',
-    email: 'dries.vincent@example.com',
-    imageUrl:
-      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Lindsay Walton',
-    email: 'lindsay.walton@example.com',
-    imageUrl:
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Courtney Henry',
-    email: 'courtney.henry@example.com',
-    imageUrl:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    name: 'Tom Cook',
-    email: 'tom.cook@example.com',
-    imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-]
 
-const TestReports = () => {
+const JobsQueue = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalJobs, setTotalJobs] = useState(0);
@@ -226,7 +200,7 @@ const TestReports = () => {
                             )}
                             
                             <div className="text-sm text-gray-500 mt-2">
-                              Complete by {job.completeBy ? job.completeBy : <span className="italic">pending</span>}
+                              Complete by {job.completeBy ? job.completeBy : <span className="font-medium text-red-500">pending</span>}
                             </div>
                         </div>
                       </div>
@@ -246,4 +220,4 @@ const TestReports = () => {
     )
   }
 
-  export default TestReports;
+  export default JobsQueue;

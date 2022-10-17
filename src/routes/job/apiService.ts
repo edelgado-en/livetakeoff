@@ -8,6 +8,10 @@ export const updateJobStatus = (id: number, status: string) => {
     return httpService.patch(`/api/jobs/${id}/`, { status });
 }
 
+export const updateJob = (id: number, formData: any) => {
+    return httpService.patch(`/api/jobs/edit/${id}/`, formData);
+}
+
 export const completeServiceAssignment = (id: number) => {
     return httpService.patch(`/api/jobs/services/${id}/`, { status: 'C' })
 }

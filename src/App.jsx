@@ -14,6 +14,7 @@ import UserProfile from './routes/userProfile/UserProfile';
 import UserSettings from './routes/userProfile/UserSettings';
 import UserPassword from './routes/userProfile/UserPassword';
 import CreateJob from './routes/job/CreateJob';
+import EditJob from './routes/job/EditJob';
 import JobAssignments from './routes/job/JobAssignments';
 
 import NotFound from './routes/notfound/NotFound'
@@ -79,6 +80,7 @@ const  App = () => {
                         <Route index path="details" element={<JobInfo />} />
                         <Route path="comments" element={<JobComments />} />
                         <Route path="assignments" element={<JobAssignments />} />
+                        <Route path="edit" element={<EditJob />} />
                         <Route path="photos" element={<JobPhotos />}>
                             <Route index path="listing" element={<JobPhotoListing />} />
                             <Route path="upload" element={<JobPhotoUpload />} />

@@ -219,15 +219,16 @@ const JobInfo = () => {
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.requestDate}</dd>
                     </div>
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Complete By</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.completeBy}</dd>
-                    </div>
-                    <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Estimated ETA</dt>
+                        <dt className="text-sm font-medium text-gray-500">Estimated Arrival</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETA ? jobDetails.estimatedETA : 'None'}</dd>
                     </div>
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Estimated ETD</dt>
+                        <dt className="text-sm font-medium text-gray-500">Complete By</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.completeBy ? jobDetails.completeBy : 'pending'}</dd>
+                    </div>
+                    
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Estimated Departure</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'None'}</dd>
                     </div>
                     <div className="sm:col-span-2">
