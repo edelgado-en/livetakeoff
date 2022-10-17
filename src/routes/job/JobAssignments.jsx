@@ -43,7 +43,7 @@ const people = [
         'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     },
     {
-        id: 5,
+        id: 6,
         name: 'Unassign',
         availability: 'busy',
       },
@@ -61,25 +61,54 @@ const ChevronUpDownIcon = () => {
     )
 }
 
-const services = [
-    { id: 1, name: 'Exterior detail (Full wet or dry wash)', status: 'A' },
-    { id: 2, name: 'Basic Exterior (Exterior Takeoff Ready)', status: 'A' },
-    { id: 3, name: 'Basic Interior (Interior Takeoff Ready)', status: 'A' },
-    { id: 4, name: 'Interior Detail (Deep interior detailing with all seat cleaning, conditioning and protection)', status: 'A' },
-    { id: 5, name: 'Carpet Extraction', status: 'W' },
-    { id: 6, name: 'Electrostatic Disinfection', status: 'C' },
-    { id: 7, name: 'Hand/Machine Wax', status: 'C' },
-    { id: 8, name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down', status: 'C' },
+const initialServices = [
+    { id: 1, name: 'Exterior detail (Full wet or dry wash)', status: 'A', projectManagers: people, selectedProjectManager: null },
+    { id: 2, name: 'Basic Exterior (Exterior Takeoff Ready)', status: 'A', projectManagers: people, selectedProjectManager: null  },
+    { id: 3, name: 'Basic Interior (Interior Takeoff Ready)', status: 'A', projectManagers: people, selectedProjectManager: null  },
+    { id: 4, name: 'Interior Detail (Deep interior detailing with all seat cleaning, conditioning and protection)', status: 'A', projectManagers: people, selectedProjectManager: null  },
+    { id: 5, name: 'Carpet Extraction', status: 'W', projectManagers: people, selectedProjectManager: null  },
+    { id: 6, name: 'Electrostatic Disinfection', status: 'C', projectManagers: people, selectedProjectManager: null  },
+    { id: 7, name: 'Hand/Machine Wax', status: 'C', projectManagers: people, selectedProjectManager: null },
+    { id: 8, name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down', status: 'C', projectManagers: people, selectedProjectManager: null  },
 ]
 
 const JobAssignments = () => {
     const { jobId } = useParams();
-    const [selected, setSelected] = useState(people[0])
+    const [projectManagers, setProjectManagers] = useState(people)
+    const [selectedProjectManager, setSelectedProjectManager] = useState(null)
+    const [services, setServices] = useState(initialServices)
 
     useEffect(() => {
         //fetch assignemnts for job id
 
     }, [])
+
+    const setSelectedServiceProjectManager = (selectedPerson, serviceId) => {
+
+        const updatedServices = services.map((s) => {
+            if (s.id === serviceId) {
+                s = {...s, selectedProjectManager: selectedPerson}
+            }
+
+            return s
+        })
+
+        setServices(updatedServices) 
+
+    }
+
+    const setMainProjectManager = (selectedPerson) => {
+        setSelectedProjectManager(selectedPerson)
+
+        const updatedServices = services.map((s) => {
+            s = {...s, selectedProjectManager: selectedPerson}
+
+            return s
+        })
+
+        setServices(updatedServices) 
+
+    }
 
     return (
         <AnimatedPage>
@@ -92,7 +121,7 @@ const JobAssignments = () => {
                     </p>
                 </div>
                 <div className="mt-8 max-w-sm">
-                    <Listbox value={selected} onChange={setSelected}>
+                    <Listbox value={selectedProjectManager} onChange={(person) => setMainProjectManager(person)}>
                     {({ open }) => (
                         <>
                         <Listbox.Label className="block text-sm font-medium text-gray-700">Assigned to</Listbox.Label>
@@ -102,18 +131,24 @@ const JobAssignments = () => {
                                                        shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
                                                         focus:ring-sky-500 sm:text-sm">
                                 <span className="flex items-center">
-                                    <img src={selected.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                    {selected.name !== 'Unassign' && (
-                                        <span
-                                            className={classNames(
-                                                selected.availability === 'available' ? 'bg-green-400' 
-                                                    : selected.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                    {selectedProjectManager && (
+                                        <>
+                                            <img src={selectedProjectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                            {selectedProjectManager.name !== 'Unassign' && (
+                                                <span
+                                                    className={classNames(
+                                                        selectedProjectManager.availability === 'available' ? 'bg-green-400' 
+                                                            : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                        'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                    )}
+                                                />
                                             )}
-                                        />
+                                        </>
                                     )}
                                     
-                                    <span className="ml-3 block truncate">{selected.name}</span>
+                                    <span className="ml-3 block truncate">
+                                        {selectedProjectManager ? selectedProjectManager.name : 'Applies to all services'}
+                                    </span>
                                 </span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                                     <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -130,26 +165,26 @@ const JobAssignments = () => {
                             <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
                                                       rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
                                                        ring-opacity-5 focus:outline-none sm:text-sm">
-                                {people.map((person) => (
+                                {projectManagers.map((projectManager) => (
                                 <Listbox.Option
-                                    key={person.id}
+                                    key={projectManager.id}
                                     className={({ active }) =>
                                     classNames(
                                         active ? 'text-white bg-red-600' : 'text-gray-900',
                                         'relative cursor-default select-none py-2 pl-3 pr-9'
                                     )
                                     }
-                                    value={person}
+                                    value={projectManager}
                                 >
                                     {({ selected, active }) => (
                                     <>
                                         <div className="flex items-center">
-                                            <img src={person.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                            {person.name !== 'Unassign' && (
+                                            <img src={projectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                            {projectManager.name !== 'Unassign' && (
                                                 <span
                                                     className={classNames(
-                                                        person.availability === 'available' ? 'bg-green-400' 
-                                                            : person.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                        projectManager.availability === 'available' ? 'bg-green-400' 
+                                                            : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
                                                         'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
                                                     )}
                                                 />
@@ -158,7 +193,7 @@ const JobAssignments = () => {
                                             <span
                                                 className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                                             >
-                                                {person.name}
+                                                {projectManager.name}
                                             </span>
                                         </div>
 
@@ -239,9 +274,9 @@ const JobAssignments = () => {
 
                                             </div>
                                         </div>
-                                        {service.status === 'A' && (
+                                        {(service.status === 'A' || service.status === 'U') && (
                                             <div className="mt-8">
-                                                <Listbox value={selected} onChange={setSelected}>
+                                                <Listbox value={service.selectedProjectManager} onChange={(person) => setSelectedServiceProjectManager(person, service.id)}>
                                                 {({ open }) => (
                                                     <>
                                                     <Listbox.Label className="block text-sm text-gray-600">Assigned to</Listbox.Label>
@@ -251,17 +286,24 @@ const JobAssignments = () => {
                                                                                 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
                                                                                     focus:ring-sky-500 sm:text-sm">
                                                             <span className="flex items-center">
-                                                                <img src={selected.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                                {selected.name !== 'Unassign' && (
-                                                                    <span
-                                                                        className={classNames(
-                                                                            selected.availability === 'available' ? 'bg-green-400' 
-                                                                                : selected.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                                            'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                                {service.selectedProjectManager && (
+                                                                    <>
+                                                                        <img src={service.selectedProjectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                        {service.selectedProjectManager.name !== 'Unassign' && (
+                                                                            <span
+                                                                                className={classNames(
+                                                                                    service.selectedProjectManager.availability === 'available' ? 'bg-green-400' 
+                                                                                        : service.selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                                                    'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                                                )}
+                                                                            />
                                                                         )}
-                                                                    />
+                                                                    </>
                                                                 )}
-                                                                <span className="ml-3 block truncate">{selected.name}</span>
+                                                                
+                                                                <span className="ml-3 block truncate">
+                                                                    {service.selectedProjectManager ? service.selectedProjectManager.name : '------------'}
+                                                                </span>
                                                             </span>
                                                             <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                                                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -278,26 +320,26 @@ const JobAssignments = () => {
                                                         <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
                                                                                 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
                                                                                 ring-opacity-5 focus:outline-none sm:text-sm">
-                                                            {people.map((person) => (
+                                                            {service.projectManagers.map((projectManager) => (
                                                             <Listbox.Option
-                                                                key={person.id}
+                                                                key={projectManager.id}
                                                                 className={({ active }) =>
                                                                 classNames(
                                                                     active ? 'text-white bg-red-600' : 'text-gray-900',
                                                                     'relative cursor-default select-none py-2 pl-3 pr-9'
                                                                 )
                                                                 }
-                                                                value={person}
+                                                                value={projectManager}
                                                             >
                                                                 {({ selected, active }) => (
                                                                 <>
                                                                     <div className="flex items-center">
-                                                                        <img src={person.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                                        {person.name !== 'Unassign' && (
+                                                                        <img src={projectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                        {projectManager.name !== 'Unassign' && (
                                                                             <span
                                                                             className={classNames(
-                                                                                person.availability === 'available' ? 'bg-green-400' 
-                                                                                    : person.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                                                projectManager.availability === 'available' ? 'bg-green-400' 
+                                                                                    : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
                                                                                 'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
                                                                             )}
                                                                             />
@@ -306,7 +348,7 @@ const JobAssignments = () => {
                                                                         <span
                                                                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                                                                         >
-                                                                            {person.name}
+                                                                            {projectManager.name}
                                                                         </span>
                                                                     </div>
 
