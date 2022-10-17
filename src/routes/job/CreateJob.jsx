@@ -40,10 +40,10 @@ const CreateJob = () => {
     const [retainerServices, setRetainerServices] = useState([])
     const [servicesErrorMessage, setServicesErrorMessage] = useState(null)
 
-    const [customerSelected, setCustomerSelected] = useState({})
-    const [aircraftTypeSelected, setAircraftTypeSelected] = useState({})
-    const [airportSelected, setAirportSelected] = useState({})
-    const [fboSelected, setFboSelected] = useState({})
+    const [customerSelected, setCustomerSelected] = useState(null)
+    const [aircraftTypeSelected, setAircraftTypeSelected] = useState(null)
+    const [airportSelected, setAirportSelected] = useState(null)
+    const [fboSelected, setFboSelected] = useState(null)
 
     const [isServicesOpen, setIsServicesOpen] = useState(false);
     const [selectedServices, setSelectedServices] = useState([]);
@@ -80,11 +80,6 @@ const CreateJob = () => {
             setServices(data.services)
             setRetainerServices(data.retainer_services)
 
-            setCustomerSelected(data.customers[0])
-            setAircraftTypeSelected(data.aircraft_types[0])
-            setAirportSelected(data.airports[0])
-            setFboSelected(data.fbos[0])
-
             setLoading(false)
 
         } catch (error) {
@@ -108,8 +103,10 @@ const CreateJob = () => {
             return
         }
 
-        setLoading(true)
-        setCreateJobMessage('Creating job. Please wait...')
+        if (!customerSelected || !aircraftTypeSelected || !airportSelected || !fboSelected) {
+            setTailNumberErrorMessage('Missing required fields')
+            return
+        }
 
         const selectedServiceIds = selectedServices.map(service => service.id)
         const selectedRetainerServiceIds = selectedRetainerServices.map(service => service.id)
@@ -133,6 +130,9 @@ const CreateJob = () => {
                 formData.append("image", image.file)
             }
         });
+
+        setLoading(true)
+        setCreateJobMessage('Creating job. Please wait...')
         
         try {
             const { data } = await api.createJob(formData)
@@ -230,7 +230,6 @@ const CreateJob = () => {
     }
 
     const onChangePhoto = (imageList, addUpdateIndex) => {
-        console.log(imageList)
         setImages(imageList)
     }
 
@@ -288,7 +287,9 @@ const CreateJob = () => {
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm">
-                                            <span className="block truncate">{customerSelected.name}</span>
+                                            <span className="block truncate">
+                                                {customerSelected ? customerSelected.name : 'Select customer'}
+                                            </span>
                                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </span>
@@ -346,7 +347,9 @@ const CreateJob = () => {
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm">
-                                            <span className="block truncate">{aircraftTypeSelected.name}</span>
+                                            <span className="block truncate">
+                                                {aircraftTypeSelected ? aircraftTypeSelected.name: 'Select aircraft type'}
+                                            </span>
                                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </span>
@@ -404,7 +407,9 @@ const CreateJob = () => {
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm">
-                                            <span className="block truncate">{airportSelected.name}</span>
+                                            <span className="block truncate">
+                                                {airportSelected ? airportSelected.name : 'Select airport'}
+                                            </span>
                                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </span>
@@ -462,7 +467,9 @@ const CreateJob = () => {
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm">
-                                            <span className="block truncate">{fboSelected.name}</span>
+                                            <span className="block truncate">
+                                                {fboSelected ? fboSelected.name : 'Select FBO'}
+                                            </span>
                                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </span>
