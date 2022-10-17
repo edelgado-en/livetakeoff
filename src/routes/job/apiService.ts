@@ -16,6 +16,10 @@ export const completeServiceAssignment = (id: number) => {
     return httpService.patch(`/api/jobs/services/${id}/`, { status: 'C' })
 }
 
+export const getAssignmentsFormInfo = (id: number) => {
+    return httpService.get(`/api/jobs/services/${id}/`)
+}
+
 export const completeRetainerServiceAssignment = (id: number) => {
     return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
 }

@@ -9,6 +9,8 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import AddServiceModal from './AddServiceModal';
 import DeleteServiceModal from './DeleteServiceModal'
 
+import * as api from './apiService'
+
 const people = [
     {
       id: 1,
@@ -88,8 +90,14 @@ const JobAssignments = () => {
 
     useEffect(() => {
         //fetch assignemnts for job id
-
+        getFormInfo()
     }, [])
+
+    const getFormInfo = async () => {
+        const { data } = await api.getAssignmentsFormInfo(jobId)
+
+        console.log(data)
+    }
 
     const handleToggleAddServiceModal = () => {
         //TODO: make the API call here to get the available services to pass to the modal window
