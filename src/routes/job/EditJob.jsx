@@ -49,18 +49,11 @@ const EditJob = () => {
     const [fbos, setFbos] = useState([])
     const [services, setServices] = useState([])
     const [retainerServices, setRetainerServices] = useState([])
-    const [servicesErrorMessage, setServicesErrorMessage] = useState(null)
 
     const [customerSelected, setCustomerSelected] = useState({})
     const [aircraftTypeSelected, setAircraftTypeSelected] = useState({})
     const [airportSelected, setAirportSelected] = useState({})
     const [fboSelected, setFboSelected] = useState({})
-
-    const [isServicesOpen, setIsServicesOpen] = useState(false);
-    const [selectedServices, setSelectedServices] = useState([]);
-
-    const [isRetainerServicesOpen, setIsRetainerServicesOpen] = useState(false);
-    const [selectedRetainerServices, setSelectedRetainerServices] = useState([]);
 
     const [estimatedArrivalDate, setEstimatedArrivalDate] = useState(null);
     const [estimatedDepartureDate, setEstimatedDepartureDate] = useState(null);
@@ -115,28 +108,6 @@ const EditJob = () => {
                 setEstimatedDepartureDate(new Date(response.data.estimatedETD))
             }
 
-            const selectedServices = []
-            data.services.forEach(s => {
-                const service = response.data.service_assignments.find(assignment => assignment.name === s.name)
-                
-                if (service) {
-                    selectedServices.push(s)
-                }
-            })
-
-            setSelectedServices(selectedServices)
-
-            const selectedRetainerServices = []
-            data.retainer_services.forEach(s => {
-                const service = response.data.retainer_service_assignments.find(assignment => assignment.name === s.name)
-                
-                if (service) {
-                    selectedRetainerServices.push(s)
-                }
-            })
-
-            setSelectedRetainerServices(selectedRetainerServices)
-
             setLoading(false)
 
         } catch (error) {
@@ -146,10 +117,7 @@ const EditJob = () => {
     }
 
     const updateJob = async () => {
-        // TODO: add validation 
-
-        const selectedServiceIds = selectedServices.map(service => service.id)
-        const selectedRetainerServiceIds = selectedRetainerServices.map(service => service.id)
+        // TODO: add validation for tailNumber
 
         const request = {
             tailNumber,
@@ -160,9 +128,7 @@ const EditJob = () => {
             status: selectedStatus.id,
             estimatedETA: estimatedArrivalDate,
             estimatedETD: estimatedDepartureDate,
-            completeBy: completeByDate,
-            services: selectedServiceIds,
-            retainerServices: selectedRetainerServiceIds
+            completeBy: completeByDate
         }
 
         console.log(request)
@@ -170,12 +136,10 @@ const EditJob = () => {
         try {
             await api.updateJob(jobId, request)
 
-            toast.error('Job updated!')
-
             navigate(-1)
 
         } catch (e) {
-        
+            toast.error('Unable to edit job')
         }
     }
 
@@ -202,58 +166,6 @@ const EditJob = () => {
 
     const handleCompleteByDateChange = (date, event) => {
         setCompleteByDate(date);
-    }
-
-    const isServiceSelected = (value) => {
-        return selectedServices.find((el) => el === value) ? true : false;
-    }
-    
-    const handleSelectService = (value) => {
-        if (!isServiceSelected(value)) {
-            const selectedServicesUpdated = [
-                ...selectedServices,
-                services.find((el) => el === value)
-            ]
-            
-            setSelectedServices(selectedServicesUpdated);
-        
-        } else {
-            handleDeselectService(value);
-        }
-
-        setIsServicesOpen(true);
-    }
-    
-    const handleDeselectService = (value) => {
-        const selectedServicesUpdated = selectedServices.filter((el) => el !== value);
-        setSelectedServices(selectedServicesUpdated);
-        setIsServicesOpen(true);
-    }
-
-    const isRetainerServiceSelected = (value) => {
-        return selectedRetainerServices.find((el) => el === value) ? true : false;
-    }
-
-    const handleSelectRetainerService = (value) => {
-        if (!isRetainerServiceSelected(value)) {
-            const selectedRetainerServicesUpdated = [
-                ...selectedRetainerServices,
-                retainerServices.find((el) => el === value)
-            ]
-            
-            setSelectedRetainerServices(selectedRetainerServicesUpdated);
-        
-        } else {
-            handleDeselectRetainerService(value);
-        }
-
-        setIsRetainerServicesOpen(true);
-    }
-
-    const handleDeselectRetainerService = (value) => {
-        const selectedRetainerServicesUpdated = selectedRetainerServices.filter((el) => el !== value);
-        setSelectedRetainerServices(selectedRetainerServicesUpdated);
-        setIsRetainerServicesOpen(true);
     }
 
     return (
@@ -675,194 +587,6 @@ const EditJob = () => {
                                     inline
                                 />
                             )}
-                        </div>
-
-                        <div>
-                            <Listbox
-                                as="div"
-                                className="space-y-1"
-                                value={selectedServices}
-                                onChange={(value) => handleSelectService(value)}
-                                open={isServicesOpen}>
-                                {() => (
-                                <>
-                                    <Listbox.Label className="block text-sm leading-5 font-medium text-gray-700">
-                                        Services
-                                    </Listbox.Label>
-                                    <div className="relative">
-                                        <span className="inline-block w-full rounded-md shadow-sm">
-                                            <Listbox.Button
-                                                onClick={() => setIsServicesOpen(!isServicesOpen)}
-                                                open={isServicesOpen}
-                                                className="cursor-default relative w-full rounded-md border border-gray-300
-                                                        bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue
-                                                        focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                                <span className="block truncate">
-                                                    {selectedServices.length < 1
-                                                            ? "Select services"
-                                                            : `Selected services (${selectedServices.length})`}
-                                                </span>
-                                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                                    <svg
-                                                        className="h-5 w-5 text-gray-400"
-                                                        viewBox="0 0 20 20"
-                                                        fill="none"
-                                                        stroke="currentColor">
-                                                        <path
-                                                            d="M7 7l3-3 3 3m0 6l-3 3-3-3"
-                                                            strokeWidth="1.5"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        />
-                                                    </svg>
-                                                </span>
-                                            </Listbox.Button>
-                                        </span>
-                                        <Transition
-                                            unmount={false}
-                                            show={isServicesOpen}
-                                            leave="transition ease-in duration-100"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0"
-                                            className="absolute mt-1 z-50 w-full rounded-md bg-white shadow-lg">
-                                            <Listbox.Options
-                                                static
-                                                className="max-h-70 rounded-md py-1 text-base leading-6 shadow-xs
-                                                        overflow-auto focus:outline-none sm:text-sm sm:leading-5 z-50">
-                                                {services.map((service) => {
-                                                    const selected = isServiceSelected(service);
-                                                    return (
-                                                        <Listbox.Option key={service.id} value={service}>
-                                                        {({ active }) => (
-                                                            <div className={`${ active ? "text-white bg-red-600": "text-gray-900"}
-                                                                            cursor-default select-none relative py-2 pl-8 pr-4`}>
-                                                                <span className={`${selected ? "font-semibold" : "font-normal"} block truncate`}>
-                                                                    {service.name}
-                                                                </span>
-                                                                {selected && (
-                                                                    <span
-                                                                    className={`${
-                                                                        active ? "text-white" : "text-red-600"
-                                                                    } absolute inset-y-0 left-0 flex items-center pl-1.5`}>
-                                                                        <svg
-                                                                            className="h-5 w-5"
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 20 20"
-                                                                            fill="currentColor">
-                                                                            <path
-                                                                                fillRule="evenodd"
-                                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                                clipRule="evenodd"
-                                                                            />
-                                                                        </svg>
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                        </Listbox.Option>
-                                                    );
-                                                })}
-                                            </Listbox.Options>
-                                        </Transition>
-                                    </div>
-                                </>
-                                )}
-                            </Listbox>
-                        </div>
-                       
-                        {servicesErrorMessage && <p className="text-red-500 text-xs mt-2">{servicesErrorMessage}</p>}
-                       
-                        <div>
-                            <Listbox
-                                as="div"
-                                className="space-y-1"
-                                value={selectedRetainerServices}
-                                onChange={(value) => handleSelectRetainerService(value)}
-                                open={isRetainerServicesOpen}>
-                                {() => (
-                                <>
-                                    <Listbox.Label className="block text-sm leading-5 font-medium text-gray-700">
-                                        Retainer Services
-                                    </Listbox.Label>
-                                    <div className="relative">
-                                        <span className="inline-block w-full rounded-md shadow-sm">
-                                            <Listbox.Button
-                                                onClick={() => setIsRetainerServicesOpen(!isRetainerServicesOpen)}
-                                                open={isRetainerServicesOpen}
-                                                className="cursor-default relative w-full rounded-md border border-gray-300
-                                                        bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue
-                                                        focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                                <span className="block truncate">
-                                                    {selectedRetainerServices.length < 1
-                                                            ? "Select retainer services"
-                                                            : `Selected retainer services (${selectedRetainerServices.length})`}
-                                                </span>
-                                                <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                                    <svg
-                                                        className="h-5 w-5 text-gray-400"
-                                                        viewBox="0 0 20 20"
-                                                        fill="none"
-                                                        stroke="currentColor">
-                                                        <path
-                                                            d="M7 7l3-3 3 3m0 6l-3 3-3-3"
-                                                            strokeWidth="1.5"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        />
-                                                    </svg>
-                                                </span>
-                                            </Listbox.Button>
-                                        </span>
-                                        <Transition
-                                            unmount={false}
-                                            show={isRetainerServicesOpen}
-                                            leave="transition ease-in duration-100"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0"
-                                            className="absolute mt-1 w-full rounded-md bg-white shadow-lg">
-                                            <Listbox.Options
-                                                static
-                                                className="max-h-70 rounded-md py-1 text-base leading-6 shadow-xs
-                                                        overflow-auto focus:outline-none sm:text-sm sm:leading-5">
-                                                {retainerServices.map((service) => {
-                                                    const selected = isRetainerServiceSelected(service);
-                                                    return (
-                                                        <Listbox.Option key={service.id} value={service}>
-                                                        {({ active }) => (
-                                                            <div className={`${ active ? "text-white bg-red-600": "text-gray-900"}
-                                                                            cursor-default select-none relative py-2 pl-8 pr-4`}>
-                                                                <span className={`${selected ? "font-semibold" : "font-normal"} block truncate`}>
-                                                                    {service.name}
-                                                                </span>
-                                                                {selected && (
-                                                                    <span
-                                                                    className={`${
-                                                                        active ? "text-white" : "text-red-600"
-                                                                    } absolute inset-y-0 left-0 flex items-center pl-1.5`}>
-                                                                        <svg
-                                                                            className="h-5 w-5"
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            viewBox="0 0 20 20"
-                                                                            fill="currentColor">
-                                                                            <path
-                                                                                fillRule="evenodd"
-                                                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                                                clipRule="evenodd"
-                                                                            />
-                                                                        </svg>
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                        </Listbox.Option>
-                                                    );
-                                                })}
-                                            </Listbox.Options>
-                                        </Transition>
-                                    </div>
-                                </>
-                                )}
-                            </Listbox>
                         </div>
 
                         <div className="flex flex-col py-4 pb-20 gap-4">
