@@ -152,7 +152,7 @@ const JobsQueue = () => {
                           </div>
                           
                           {job.customer && (
-                            <div className="text-sm text-gray-500 mt-2 flex gap-1">
+                            <div className="text-sm text-gray-800 mt-2 flex gap-1">
                               <UserIcon className="h-4 w-4 text-gray-400" />{job.customer.name}
                             </div>
                           )}
