@@ -117,8 +117,6 @@ const EditJob = () => {
     }
 
     const updateJob = async () => {
-        // TODO: add validation for tailNumber
-
         const request = {
             tailNumber,
             customer: customerSelected.id,
@@ -130,8 +128,6 @@ const EditJob = () => {
             estimatedETD: estimatedDepartureDate,
             completeBy: completeByDate
         }
-
-        console.log(request)
 
         try {
             await api.updateJob(jobId, request)

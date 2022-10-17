@@ -197,7 +197,16 @@ const JobsQueue = () => {
                             )}
                             
                             <div className="text-sm text-gray-500 mt-2">
-                              Complete by {job.completeBy ? job.completeBy : <span className="inline-flex rounded-full bg-red-100 px-2 text-xs  leading-5 text-red-800">pending</span>}
+                              Complete by {job.completeBy ? job.completeBy
+                               : 
+                                <span
+                                  className="relative inline-flex items-center
+                                             rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                  <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                  </div>
+                                  <div className="ml-3 text-xs text-gray-700">Pending</div>
+                                </span>}
                             </div>
                         </div>
                       </div>

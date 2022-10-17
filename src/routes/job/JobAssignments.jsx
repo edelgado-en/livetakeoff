@@ -3,6 +3,7 @@ import Loader from "../../components/loader/Loader"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Listbox, Transition } from '@headlessui/react'
 import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
+import { TrashIcon } from "@heroicons/react/solid"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 const people = [
@@ -183,16 +184,32 @@ const JobAssignments = () => {
                     </Listbox>
                 </div>
                 <div className="mt-10">
-                    <div className="text-sm font-medium text-gray-700 mb-2">
-                        Services
-                        <span className="bg-gray-100 text-gray-700 hidden ml-2 py-0.5 px-2.5
-                                          rounded-full text-xs font-medium md:inline-block">{services.length}</span>
+                    <div className="text-sm font-medium text-gray-700 mb-2 flex justify-between">
+                        <div className="relative top-3">
+                            Services
+                            <span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
+                                            rounded-full text-xs font-medium md:inline-block">
+                                                {services.length}
+                            </span>
+                        </div>
+                        <div>
+                            <button
+                                type="button"
+                                className="inline-flex items-center rounded-md border border-gray-300
+                                         bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
+                                          hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                <span>Add</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="flex justify-end">
+                        
                     </div>
                     <div className="mt-1 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                         {services.length === 0 &&
                             <div className="text-sm text-gray-500">None</div>
                         }
-
                         {services.map((service) => (
                             <div
                                 key={service.id}
@@ -203,24 +220,15 @@ const JobAssignments = () => {
                                     <div className="focus:outline-none">
                                         <div className="grid grid-cols-3 text-sm pb-2">
                                             <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
-                                            <div className=" flex flex-col justify-end text-right">
-                                                {service.status === 'A' && (
-                                                    <div className="flex justify-end">
-                                                        <img src={'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                    
-                                                    </div>
-                                                )}
+                                            <div className="flex flex-col justify-end text-right">
+                                                <div className="absolute right-4 top-5">
+                                                    <TrashIcon className="h-5 w-5 text-gray-400 cursor-pointer" />
+                                                </div>
 
                                                 {service.status === 'W' && (
-                                                    <>
-                                                    <div className="flex justify-end">
-                                                        <img src={'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                    </div>
                                                     <div className="text-xs font-semibold mt-2 text-green-500">
                                                         In Progress   
                                                     </div>
-                                                    </>
-
                                                 )}
 
                                                 {service.status === 'C' && (
