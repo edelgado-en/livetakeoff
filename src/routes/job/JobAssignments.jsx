@@ -6,6 +6,8 @@ import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
 import { TrashIcon } from "@heroicons/react/solid"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
+import AddServiceModal from './AddServiceModal';
+
 const people = [
     {
       id: 1,
@@ -78,10 +80,19 @@ const JobAssignments = () => {
     const [selectedProjectManager, setSelectedProjectManager] = useState(null)
     const [services, setServices] = useState(initialServices)
 
+    const [isAddServiceModalOpen, setAddServiceModalOpen] = useState(false)
+
     useEffect(() => {
         //fetch assignemnts for job id
 
     }, [])
+
+    const handleToggleAddServiceModal = () => {
+        //TODO: make the API call here to get the available services to pass to the modal window
+        // ONLY WHEN OPENING MODAL
+
+        setAddServiceModalOpen(!isAddServiceModalOpen)
+    }
 
     const setSelectedServiceProjectManager = (selectedPerson, serviceId) => {
 
@@ -230,6 +241,7 @@ const JobAssignments = () => {
                         <div>
                             <button
                                 type="button"
+                                onClick={handleToggleAddServiceModal}
                                 className="inline-flex items-center rounded-md border border-gray-300
                                          bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
                                           hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
@@ -403,6 +415,17 @@ const JobAssignments = () => {
                         </button>  
                     </Link>
                 </div>
+
+                {/* YOU NEED TO SHOW ADDSERVICE MODAL AND DELETE SERVICE MODAL(add message that the project managers will get notified and will be unassign when the service is deleted) */}
+                
+                {/* ADD RETAINER SERVICES */}
+                {isAddServiceModalOpen && <AddServiceModal
+                                            isOpen={isAddServiceModalOpen}
+                                            handleClose={handleToggleAddServiceModal}
+                                            availableServices={services}
+                                            projectManagers={projectManagers}
+                                             />}
+
             </main>
         </AnimatedPage>
     )
