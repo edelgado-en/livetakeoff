@@ -91,6 +91,8 @@ const JobAssignments = () => {
 
     const [serviceToBeDeleted, setServiceToBeDeleted] = useState(null)
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         //fetch assignemnts for job id
         getFormInfo()
@@ -103,7 +105,6 @@ const JobAssignments = () => {
             const { data } = await api.getAssignmentsFormInfo(jobId)
 
             
-
             data.project_managers.push({
                 id: 99,
                 first_name: 'Unassign',
@@ -113,15 +114,25 @@ const JobAssignments = () => {
                     'avatar': 'https://res.cloudinary.com/datidxeqm/image/upload/v1666103235/media/profiles/unassign_fgdefu.png'
                 }
             })
-    
+            
             // append data.project_managers to each service
             const updatedServices = data.services.map((s) => {
                 s = {...s, projectManagers: data.project_managers}
-    
+
+                if (s.project_manager) {
+                    //set selected
+                    s.selectedProjectManager = s.project_manager
+
+                } else {
+                    //set selected as unassign
+                    s.selectedProjectManager = data.project_managers.find(p => p.id === 99)
+                }
+
                 return s;
             })
     
             setServices(updatedServices)
+
             //TODO: add retainer services
     
             setProjectManagers(data.project_managers)
@@ -132,6 +143,36 @@ const JobAssignments = () => {
             setLoading(false)
         }
 
+    }
+
+    const handleAssignment = () => {
+
+        const updatedServices = services.map((s) => {
+            if (s.selectedProjectManager) {
+                return {
+                    'service_name': s.service_name, 
+                    'user': s.selectedProjectManager.id
+                }
+            }
+
+            return null
+        })
+
+
+
+
+        console.log(updatedServices)
+
+        const request = {
+            'services': [
+                {'id': 1, 'user': 5},
+                {'id': 1, 'user': 5}
+            ]
+        }
+
+        //console.log(request)
+
+        // navigate('/jobs/' + jobId + '/details')
     }
 
     const handleToggleAddServiceModal = () => {
@@ -463,26 +504,24 @@ const JobAssignments = () => {
                     {/* ADD RETAINER SERVICES */}
 
                     <div className="flex flex-col xl:flex-row-reverse justify-end py-4 pb-20 gap-4 mt-8 max-w-md m-auto">
-                        <Link to="/jobs" className="w-full">
-                            <button
-                                type="button"
-                                className="nline-flex justify-center rounded-md w-full
-                                border border-transparent bg-red-600 py-2 px-4
-                                text-sm font-medium text-white shadow-sm hover:bg-red-600
-                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                Assign
-                            </button>
-                        </Link>
-                        <Link to="/jobs" className="w-full">
-                            <button
-                                type="button"
-                                className="rounded-md border border-gray-300 bg-white w-full
-                                        py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
-                                        hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                            >
-                                Cancel
-                            </button>  
-                        </Link>
+                        <button
+                            type="button"
+                            onClick={() => handleAssignment()}
+                            className="nline-flex justify-center rounded-md w-full
+                            border border-transparent bg-red-600 py-2 px-4
+                            text-sm font-medium text-white shadow-sm hover:bg-red-600
+                            focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                            Assign
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                            className="rounded-md border border-gray-300 bg-white w-full
+                                    py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        >
+                            Cancel
+                        </button>  
                     </div>                    
                     </>
                 )}
