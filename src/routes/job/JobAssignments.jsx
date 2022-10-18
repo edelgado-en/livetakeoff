@@ -79,6 +79,7 @@ const ChevronUpDownIcon = () => {
 
 const JobAssignments = () => {
     const { jobId } = useParams();
+    const [loading, setLoading] = useState(false)
     const [projectManagers, setProjectManagers] = useState([])
     const [selectedProjectManager, setSelectedProjectManager] = useState(null)
     const [services, setServices] = useState([])
@@ -96,28 +97,34 @@ const JobAssignments = () => {
     }, [])
 
     const getFormInfo = async () => {
-        const { data } = await api.getAssignmentsFormInfo(jobId)
+        setLoading(true)
 
-        data.project_managers.push({
-            id: 99,
-            first_name: 'Unassign',
-            availability: 'busy',
-        })
+        try {
+            const { data } = await api.getAssignmentsFormInfo(jobId)
 
-        // append data.project_managers to each service
-        const updatedServices = data.services.map((s) => {
-            s = {...s, projectManagers: data.project_managers}
+            data.project_managers.push({
+                id: 99,
+                first_name: 'Unassign',
+                availability: 'busy',
+            })
+    
+            // append data.project_managers to each service
+            const updatedServices = data.services.map((s) => {
+                s = {...s, projectManagers: data.project_managers}
+    
+                return s;
+            })
+    
+            setServices(updatedServices)
+            //TODO: add retainer services
+    
+            setProjectManagers(data.project_managers)
 
-            return s;
-        })
+            setLoading(false)
 
-        console.log()
-
-        setServices(updatedServices)
-        //TODO: add retainer services
-
-        
-        setProjectManagers(data.project_managers)
+        } catch (err) {
+            setLoading(false)
+        }
 
     }
 
@@ -176,296 +183,304 @@ const JobAssignments = () => {
                         managers to specific services.
                     </p>
                 </div>
-                <div className="mt-8 max-w-sm">
-                    <Listbox value={selectedProjectManager} onChange={(person) => setMainProjectManager(person)}>
-                    {({ open }) => (
-                        <>
-                        <Listbox.Label className="block text-sm font-medium text-gray-700">Assigned to</Listbox.Label>
-                        <div className="relative mt-1">
-                            <Listbox.Button className="relative w-full cursor-default rounded-md border
-                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
-                                                       shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
-                                                        focus:ring-sky-500 sm:text-sm">
-                                <span className="flex items-center">
-                                    {selectedProjectManager && (
-                                        <>
-                                            <img src={selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                            {selectedProjectManager.first_name !== 'Unassign' && (
-                                                <span
-                                                    className={classNames(
-                                                        selectedProjectManager.availability === 'available' ? 'bg-green-400' 
-                                                            : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                        'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
-                                                    )}
-                                                />
-                                            )}
-                                        </>
-                                    )}
-                                    
-                                    <span className="ml-3 block truncate">
-                                        {selectedProjectManager ? selectedProjectManager.first_name + ' ' + selectedProjectManager.last_name : 'Applies to all services'}
-                                    </span>
-                                </span>
-                                <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                    <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                </span>
-                            </Listbox.Button>
 
-                            <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
-                                                      rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
-                                                       ring-opacity-5 focus:outline-none sm:text-sm">
-                                {projectManagers.map((projectManager) => (
-                                <Listbox.Option
-                                    key={projectManager.id}
-                                    className={({ active }) =>
-                                    classNames(
-                                        active ? 'text-white bg-red-600' : 'text-gray-900',
-                                        'relative cursor-default select-none py-2 pl-3 pr-9'
-                                    )
-                                    }
-                                    value={projectManager}
-                                >
-                                    {({ selected, active }) => (
-                                    <>
-                                        <div className="flex items-center">
-                                            <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                            {projectManager.first_name !== 'Unassign' && (
-                                                <span
-                                                    className={classNames(
-                                                        projectManager.availability === 'available' ? 'bg-green-400' 
-                                                            : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                        'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
-                                                    )}
-                                                />
-                                            )}
-                                            
-                                            <span
-                                                className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
-                                            >
-                                                {projectManager.first_name + ' ' + projectManager.last_name}
-                                            </span>
-                                        </div>
+                {loading && <Loader />}  
 
-                                        {selected ? (
-                                        <span
-                                            className={classNames(
-                                            active ? 'text-white' : 'text-red-600',
-                                            'absolute inset-y-0 right-0 flex items-center pr-4'
-                                            )}
-                                        >
-                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                {!loading && (
+                    <>
+                    <div className="mt-8 max-w-sm">
+                        <Listbox value={selectedProjectManager} onChange={(person) => setMainProjectManager(person)}>
+                        {({ open }) => (
+                            <>
+                            <Listbox.Label className="block text-sm font-medium text-gray-700">Assigned to</Listbox.Label>
+                            <div className="relative mt-1">
+                                <Listbox.Button className="relative w-full cursor-default rounded-md border
+                                                        border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                        shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
+                                                            focus:ring-sky-500 sm:text-sm">
+                                    <span className="flex items-center">
+                                        {selectedProjectManager && (
+                                            <>
+                                                <img src={selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                {selectedProjectManager.first_name !== 'Unassign' && (
+                                                    <span
+                                                        className={classNames(
+                                                            selectedProjectManager.availability === 'available' ? 'bg-green-400' 
+                                                                : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                            'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                        )}
+                                                    />
+                                                )}
+                                            </>
+                                        )}
+                                        
+                                        <span className="ml-3 block truncate">
+                                            {selectedProjectManager ? selectedProjectManager.first_name + ' ' + selectedProjectManager.last_name : 'Applies to all services'}
                                         </span>
-                                        ) : null}
-                                    </>
-                                    )}
-                                </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                            </Transition>
-                        </div>
-                        </>
-                    )}
-                    </Listbox>
-                </div>
-                <div className="mt-10">
-                    <div className="text-sm font-medium text-gray-700 mb-2 flex justify-between">
-                        <div className="relative top-3">
-                            Services
-                            <span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
-                                            rounded-full text-xs font-medium md:inline-block">
-                                                {services.length}
-                            </span>
-                        </div>
-                        <div>
-                            <button
-                                type="button"
-                                onClick={handleToggleAddServiceModal}
-                                className="inline-flex items-center rounded-md border border-gray-300
-                                         bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
-                                          hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
-                                <span>Add</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div className="flex justify-end">
-                        
-                    </div>
-                    <div className="mt-1 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                        {services.length === 0 &&
-                            <div className="text-sm text-gray-500">None</div>
-                        }
-                        {services.map((service) => (
-                            <div
-                                key={service.id}
-                                className="relative flex  space-x-3 rounded-lg
-                                        border border-gray-300 bg-white px-6 py-5 shadow-sm
-                                        hover:border-gray-400">
-                                <div className="min-w-0 flex-1">
-                                    <div className="focus:outline-none">
-                                        <div className="grid grid-cols-3 text-sm pb-2">
-                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.service_name}</div>
-                                            <div className="justify-end text-right">
-                                                <div className="flex justify-end">
-                                                    <TrashIcon 
-                                                        onClick={() => handleToggleDeleteServiceModal(service)}
-                                                        className="h-5 w-5 text-gray-400 cursor-pointer" />
-                                                </div>
+                                    </span>
+                                    <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                        <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    </span>
+                                </Listbox.Button>
 
-                                                {service.status === 'W' && (
-                                                    <div className="text-xs font-semibold  text-green-500 mt-6">
-                                                        In Progress   
-                                                    </div>
+                                <Transition
+                                    show={open}
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
+                                                        rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
+                                                        ring-opacity-5 focus:outline-none sm:text-sm">
+                                    {projectManagers.map((projectManager) => (
+                                    <Listbox.Option
+                                        key={projectManager.id}
+                                        className={({ active }) =>
+                                        classNames(
+                                            active ? 'text-white bg-red-600' : 'text-gray-900',
+                                            'relative cursor-default select-none py-2 pl-3 pr-9'
+                                        )
+                                        }
+                                        value={projectManager}
+                                    >
+                                        {({ selected, active }) => (
+                                        <>
+                                            <div className="flex items-center">
+                                                <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                {projectManager.first_name !== 'Unassign' && (
+                                                    <span
+                                                        className={classNames(
+                                                            projectManager.availability === 'available' ? 'bg-green-400' 
+                                                                : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                            'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                        )}
+                                                    />
                                                 )}
-
-                                                {service.status === 'C' && (
-                                                    <div className="flex-shrink-0 flex justify-end mt-6">
-                                                        <CheckCircleIcon className="h-6 w-6 text-green-400" />
-                                                    </div>
-                                                )}
-
+                                                
+                                                <span
+                                                    className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
+                                                >
+                                                    {projectManager.first_name + ' ' + projectManager.last_name}
+                                                </span>
                                             </div>
-                                        </div>
-                                        {(service.status === 'A' || service.status === 'U') && (
-                                            <div className="mt-8">
-                                                <Listbox value={service.selectedProjectManager} onChange={(person) => setSelectedServiceProjectManager(person, service.id)}>
-                                                {({ open }) => (
-                                                    <>
-                                                    <Listbox.Label className="block text-sm text-gray-600">Assigned to</Listbox.Label>
-                                                    <div className="relative mt-1">
-                                                        <Listbox.Button className="relative w-full cursor-default rounded-md border
-                                                                                border-gray-300 bg-white py-2 pl-3 pr-10 text-left
-                                                                                shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
-                                                                                    focus:ring-sky-500 sm:text-sm">
-                                                            <span className="flex items-center">
-                                                                {service.selectedProjectManager && (
+
+                                            {selected ? (
+                                            <span
+                                                className={classNames(
+                                                active ? 'text-white' : 'text-red-600',
+                                                'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                )}
+                                            >
+                                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                            </span>
+                                            ) : null}
+                                        </>
+                                        )}
+                                    </Listbox.Option>
+                                    ))}
+                                </Listbox.Options>
+                                </Transition>
+                            </div>
+                            </>
+                        )}
+                        </Listbox>
+                    </div>
+                    <div className="mt-10">
+                        <div className="text-sm font-medium text-gray-700 mb-2 flex justify-between">
+                            <div className="relative top-3">
+                                Services
+                                <span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
+                                                rounded-full text-xs font-medium md:inline-block">
+                                                    {services.length}
+                                </span>
+                            </div>
+                            <div>
+                                <button
+                                    type="button"
+                                    onClick={handleToggleAddServiceModal}
+                                    className="inline-flex items-center rounded-md border border-gray-300
+                                            bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
+                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                    <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    <span>Add</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div className="flex justify-end">
+                            
+                        </div>
+                        <div className="mt-1 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                            {services.length === 0 &&
+                                <div className="text-sm text-gray-500">None</div>
+                            }
+                            {services.map((service) => (
+                                <div
+                                    key={service.id}
+                                    className="relative flex  space-x-3 rounded-lg
+                                            border border-gray-300 bg-white px-6 py-5 shadow-sm
+                                            hover:border-gray-400">
+                                    <div className="min-w-0 flex-1">
+                                        <div className="focus:outline-none">
+                                            <div className="grid grid-cols-3 text-sm pb-2">
+                                                <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.service_name}</div>
+                                                <div className="justify-end text-right">
+                                                    <div className="flex justify-end">
+                                                        <TrashIcon 
+                                                            onClick={() => handleToggleDeleteServiceModal(service)}
+                                                            className="h-5 w-5 text-gray-400 cursor-pointer" />
+                                                    </div>
+
+                                                    {service.status === 'W' && (
+                                                        <div className="text-xs font-semibold  text-green-500 mt-6">
+                                                            In Progress   
+                                                        </div>
+                                                    )}
+
+                                                    {service.status === 'C' && (
+                                                        <div className="flex-shrink-0 flex justify-end mt-6">
+                                                            <CheckCircleIcon className="h-6 w-6 text-green-400" />
+                                                        </div>
+                                                    )}
+
+                                                </div>
+                                            </div>
+                                            {(service.status === 'A' || service.status === 'U') && (
+                                                <div className="mt-8">
+                                                    <Listbox value={service.selectedProjectManager} onChange={(person) => setSelectedServiceProjectManager(person, service.id)}>
+                                                    {({ open }) => (
+                                                        <>
+                                                        <Listbox.Label className="block text-sm text-gray-600">Assigned to</Listbox.Label>
+                                                        <div className="relative mt-1">
+                                                            <Listbox.Button className="relative w-full cursor-default rounded-md border
+                                                                                    border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                                                    shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
+                                                                                        focus:ring-sky-500 sm:text-sm">
+                                                                <span className="flex items-center">
+                                                                    {service.selectedProjectManager && (
+                                                                        <>
+                                                                            <img src={service.selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                            {service.selectedProjectManager.name !== 'Unassign' && (
+                                                                                <span
+                                                                                    className={classNames(
+                                                                                        service.selectedProjectManager.availability === 'available' ? 'bg-green-400' 
+                                                                                            : service.selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                                                        'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                                                    )}
+                                                                                />
+                                                                            )}
+                                                                        </>
+                                                                    )}
+                                                                    
+                                                                    <span className="ml-3 block truncate">
+                                                                        {service.selectedProjectManager ? service.selectedProjectManager.first_name + ' ' + service.selectedProjectManager.last_name : '------------'}
+                                                                    </span>
+                                                                </span>
+                                                                <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                                                    <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                                </span>
+                                                            </Listbox.Button>
+
+                                                            <Transition
+                                                                show={open}
+                                                                as={Fragment}
+                                                                leave="transition ease-in duration-100"
+                                                                leaveFrom="opacity-100"
+                                                                leaveTo="opacity-0"
+                                                            >
+                                                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
+                                                                                    rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
+                                                                                    ring-opacity-5 focus:outline-none sm:text-sm">
+                                                                {service.projectManagers.map((projectManager) => (
+                                                                <Listbox.Option
+                                                                    key={projectManager.id}
+                                                                    className={({ active }) =>
+                                                                    classNames(
+                                                                        active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                        'relative cursor-default select-none py-2 pl-3 pr-9'
+                                                                    )
+                                                                    }
+                                                                    value={projectManager}
+                                                                >
+                                                                    {({ selected, active }) => (
                                                                     <>
-                                                                        <img src={service.selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                                        {service.selectedProjectManager.name !== 'Unassign' && (
-                                                                            <span
+                                                                        <div className="flex items-center">
+                                                                            <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                            {projectManager.first_name !== 'Unassign' && (
+                                                                                <span
                                                                                 className={classNames(
-                                                                                    service.selectedProjectManager.availability === 'available' ? 'bg-green-400' 
-                                                                                        : service.selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                                                    projectManager.availability === 'available' ? 'bg-green-400' 
+                                                                                        : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
                                                                                     'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
                                                                                 )}
-                                                                            />
-                                                                        )}
-                                                                    </>
-                                                                )}
-                                                                
-                                                                <span className="ml-3 block truncate">
-                                                                    {service.selectedProjectManager ? service.selectedProjectManager.first_name + ' ' + service.selectedProjectManager.last_name : '------------'}
-                                                                </span>
-                                                            </span>
-                                                            <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                                                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                                            </span>
-                                                        </Listbox.Button>
-
-                                                        <Transition
-                                                            show={open}
-                                                            as={Fragment}
-                                                            leave="transition ease-in duration-100"
-                                                            leaveFrom="opacity-100"
-                                                            leaveTo="opacity-0"
-                                                        >
-                                                        <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
-                                                                                rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
-                                                                                ring-opacity-5 focus:outline-none sm:text-sm">
-                                                            {service.projectManagers.map((projectManager) => (
-                                                            <Listbox.Option
-                                                                key={projectManager.id}
-                                                                className={({ active }) =>
-                                                                classNames(
-                                                                    active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                    'relative cursor-default select-none py-2 pl-3 pr-9'
-                                                                )
-                                                                }
-                                                                value={projectManager}
-                                                            >
-                                                                {({ selected, active }) => (
-                                                                <>
-                                                                    <div className="flex items-center">
-                                                                        <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                                        {projectManager.first_name !== 'Unassign' && (
-                                                                            <span
-                                                                            className={classNames(
-                                                                                projectManager.availability === 'available' ? 'bg-green-400' 
-                                                                                    : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                                                'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                                                />
                                                                             )}
-                                                                            />
-                                                                        )}
-                                                                        
+                                                                            
+                                                                            <span
+                                                                                className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
+                                                                            >
+                                                                                {projectManager.first_name + ' ' + projectManager.last_name }
+                                                                            </span>
+                                                                        </div>
+
+                                                                        {selected ? (
                                                                         <span
-                                                                            className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
+                                                                            className={classNames(
+                                                                            active ? 'text-white' : 'text-red-600',
+                                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                            )}
                                                                         >
-                                                                            {projectManager.first_name + ' ' + projectManager.last_name }
+                                                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
                                                                         </span>
-                                                                    </div>
-
-                                                                    {selected ? (
-                                                                    <span
-                                                                        className={classNames(
-                                                                        active ? 'text-white' : 'text-red-600',
-                                                                        'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                        )}
-                                                                    >
-                                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                                    </span>
-                                                                    ) : null}
-                                                                </>
-                                                                )}
-                                                            </Listbox.Option>
-                                                            ))}
-                                                        </Listbox.Options>
-                                                        </Transition>
-                                                    </div>
-                                                    </>
-                                                )}
-                                                </Listbox>
-                                            </div>
-                                        )}
+                                                                        ) : null}
+                                                                    </>
+                                                                    )}
+                                                                </Listbox.Option>
+                                                                ))}
+                                                            </Listbox.Options>
+                                                            </Transition>
+                                                        </div>
+                                                        </>
+                                                    )}
+                                                    </Listbox>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
+                                
                                 </div>
-                            
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
-                <div className="flex flex-col xl:flex-row-reverse justify-end py-4 pb-20 gap-4 mt-8 max-w-md m-auto">
-                    <Link to="/jobs" className="w-full">
-                        <button
-                            type="button"
-                            className="nline-flex justify-center rounded-md w-full
-                            border border-transparent bg-red-600 py-2 px-4
-                            text-sm font-medium text-white shadow-sm hover:bg-red-600
-                            focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                            Assign
-                        </button>
-                    </Link>
-                    <Link to="/jobs" className="w-full">
-                        <button
-                            type="button"
-                            className="rounded-md border border-gray-300 bg-white w-full
-                                    py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
-                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                        >
-                            Cancel
-                        </button>  
-                    </Link>
-                </div>
 
-                {/* YOU NEED TO SHOW ADDSERVICE MODAL AND DELETE SERVICE MODAL(add message that the project managers will get notified and will be unassign when the service is deleted) */}
-                
-                {/* ADD RETAINER SERVICES */}
+                    {/* ADD RETAINER SERVICES */}
+
+                    <div className="flex flex-col xl:flex-row-reverse justify-end py-4 pb-20 gap-4 mt-8 max-w-md m-auto">
+                        <Link to="/jobs" className="w-full">
+                            <button
+                                type="button"
+                                className="nline-flex justify-center rounded-md w-full
+                                border border-transparent bg-red-600 py-2 px-4
+                                text-sm font-medium text-white shadow-sm hover:bg-red-600
+                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                Assign
+                            </button>
+                        </Link>
+                        <Link to="/jobs" className="w-full">
+                            <button
+                                type="button"
+                                className="rounded-md border border-gray-300 bg-white w-full
+                                        py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                        hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            >
+                                Cancel
+                            </button>  
+                        </Link>
+                    </div>                    
+                    </>
+                )}
+
+
                 {isAddServiceModalOpen && <AddServiceModal
                                             isOpen={isAddServiceModalOpen}
                                             handleClose={handleToggleAddServiceModal}
