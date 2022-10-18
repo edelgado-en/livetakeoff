@@ -105,8 +105,6 @@ const JobAssignments = () => {
             'services': updatedServices
         }
 
-        console.log(request)
-
         //TODO: add loading
 
         try {
@@ -117,7 +115,6 @@ const JobAssignments = () => {
         } catch (error) {
 
         }
-      
     }
 
     const handleToggleAddServiceModal = () => {
@@ -130,7 +127,10 @@ const JobAssignments = () => {
     const handleToggleDeleteServiceModal = (service) => {
         if (service) {
             setServiceToBeDeleted(service)
+        } else {
+            setServiceToBeDeleted(null)
         }
+
         setDeleteServiceModalOpen(!isDeleteServiceModalOpen)
     }
 
@@ -148,7 +148,17 @@ const JobAssignments = () => {
 
     }
 
-    const deleteService = () => {
+    const deleteService = async () => {
+        await api.deleteService(serviceToBeDeleted.id)
+        
+        setDeleteServiceModalOpen(false)
+
+        const updatedServices = services.filter(s => s.id !== serviceToBeDeleted.id)
+
+        setServices(updatedServices)
+
+
+        setServiceToBeDeleted(null)
 
     }
 

@@ -24,6 +24,10 @@ export const assignServices = (id: number, request: any) => {
     return httpService.put(`/api/jobs/services/${id}/`, request)
 }
 
+export const deleteService = (id: number) => {
+    return httpService.delete(`/api/jobs/services/${id}/`)
+}
+
 export const completeRetainerServiceAssignment = (id: number) => {
     return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
 }
