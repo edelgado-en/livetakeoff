@@ -11,49 +11,6 @@ import DeleteServiceModal from './DeleteServiceModal'
 
 import * as api from './apiService'
 
-const people = [
-    {
-      id: 1,
-      name: 'Belkis Grinan',
-      availability: 'available',
-      avatar:
-        'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 2,
-      name: 'Juana Martinez',
-      availability: 'available',
-      avatar:
-        'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 3,
-      name: 'Leroy Hernandez',
-      availability: 'available_soon',
-      avatar:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80',
-    },
-    {
-      id: 4,
-      name: 'Randy Fermin',
-      availability: 'busy',
-      avatar:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 5,
-      name: 'Wilson Lizarazo',
-      availability: 'busy',
-      avatar:
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 6,
-        name: 'Unassign',
-        availability: 'busy',
-      },
-  ]
-
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -65,17 +22,6 @@ const ChevronUpDownIcon = () => {
         </svg>
     )
 }
-
-/* const initialServices = [
-    { id: 1, name: 'Exterior detail (Full wet or dry wash)', status: 'A', projectManagers: people, selectedProjectManager: null },
-    { id: 2, name: 'Basic Exterior (Exterior Takeoff Ready)', status: 'A', projectManagers: people, selectedProjectManager: null  },
-    { id: 3, name: 'Basic Interior (Interior Takeoff Ready)', status: 'A', projectManagers: people, selectedProjectManager: null  },
-    { id: 4, name: 'Interior Detail (Deep interior detailing with all seat cleaning, conditioning and protection)', status: 'A', projectManagers: people, selectedProjectManager: null  },
-    { id: 5, name: 'Carpet Extraction', status: 'W', projectManagers: people, selectedProjectManager: null  },
-    { id: 6, name: 'Electrostatic Disinfection', status: 'C', projectManagers: people, selectedProjectManager: null  },
-    { id: 7, name: 'Hand/Machine Wax', status: 'C', projectManagers: people, selectedProjectManager: null },
-    { id: 8, name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down', status: 'C', projectManagers: people, selectedProjectManager: null  },
-] */
 
 const JobAssignments = () => {
     const { jobId } = useParams();
@@ -94,7 +40,6 @@ const JobAssignments = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        //fetch assignemnts for job id
         getFormInfo()
     }, [])
 
@@ -104,9 +49,8 @@ const JobAssignments = () => {
         try {
             const { data } = await api.getAssignmentsFormInfo(jobId)
 
-            
             data.project_managers.push({
-                id: 99,
+                id: 999,
                 first_name: 'Unassign',
                 last_name: '',
                 availability: 'busy',
@@ -121,11 +65,11 @@ const JobAssignments = () => {
 
                 if (s.project_manager) {
                     //set selected
-                    s.selectedProjectManager = s.project_manager
+                    s.selectedProjectManager = data.project_managers.find(p => p.id === s.project_manager.id)
 
                 } else {
                     //set selected as unassign
-                    s.selectedProjectManager = data.project_managers.find(p => p.id === 99)
+                    s.selectedProjectManager = data.project_managers.find(p => p.id === 999)
                 }
 
                 return s;
@@ -145,34 +89,35 @@ const JobAssignments = () => {
 
     }
 
-    const handleAssignment = () => {
+    const handleAssignment = async () => {
 
         const updatedServices = services.map((s) => {
-            if (s.selectedProjectManager) {
-                return {
-                    'service_name': s.service_name, 
-                    'user': s.selectedProjectManager.id
-                }
-            }
+            const user = s.selectedProjectManager.id === 999 ? null : s.selectedProjectManager.id;
 
-            return null
+            return {
+                'assignment_id': s.id, 
+                'user_id': user
+            }
         })
 
 
-
-
-        console.log(updatedServices)
-
         const request = {
-            'services': [
-                {'id': 1, 'user': 5},
-                {'id': 1, 'user': 5}
-            ]
+            'services': updatedServices
         }
 
-        //console.log(request)
+        console.log(request)
 
-        // navigate('/jobs/' + jobId + '/details')
+        //TODO: add loading
+
+        try {
+            await api.assignServices(jobId, request);
+
+            navigate('/jobs/' + jobId + '/details')
+
+        } catch (error) {
+
+        }
+      
     }
 
     const handleToggleAddServiceModal = () => {
@@ -405,20 +350,14 @@ const JobAssignments = () => {
                                                                                     shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
                                                                                         focus:ring-sky-500 sm:text-sm">
                                                                 <span className="flex items-center">
-                                                                    {service.selectedProjectManager && (
-                                                                        <>
-                                                                            <img src={service.selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                                            {service.selectedProjectManager.name !== 'Unassign' && (
-                                                                                <span
-                                                                                    className={classNames(
-                                                                                        service.selectedProjectManager.availability === 'available' ? 'bg-green-400' 
-                                                                                            : service.selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                                                        'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
-                                                                                    )}
-                                                                                />
-                                                                            )}
-                                                                        </>
-                                                                    )}
+                                                                    <img src={service.selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                    <span
+                                                                        className={classNames(
+                                                                            service.selectedProjectManager.availability === 'available' ? 'bg-green-400' 
+                                                                                : service.selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                                            'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                                        )}
+                                                                    />
                                                                     
                                                                     <span className="ml-3 block truncate">
                                                                         {service.selectedProjectManager ? service.selectedProjectManager.first_name + ' ' + service.selectedProjectManager.last_name : '------------'}
@@ -454,15 +393,13 @@ const JobAssignments = () => {
                                                                     <>
                                                                         <div className="flex items-center">
                                                                             <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                                            {projectManager.first_name !== 'Unassign' && (
-                                                                                <span
-                                                                                className={classNames(
-                                                                                    projectManager.availability === 'available' ? 'bg-green-400' 
-                                                                                        : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                                                    'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
-                                                                                )}
-                                                                                />
+                                                                            <span
+                                                                            className={classNames(
+                                                                                projectManager.availability === 'available' ? 'bg-green-400' 
+                                                                                    : projectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                                                'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
                                                                             )}
+                                                                            />
                                                                             
                                                                             <span
                                                                                 className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}

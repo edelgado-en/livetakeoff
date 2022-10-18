@@ -20,6 +20,10 @@ export const getAssignmentsFormInfo = (id: number) => {
     return httpService.get(`/api/jobs/services/${id}/`)
 }
 
+export const assignServices = (id: number, request: any) => {
+    return httpService.put(`/api/jobs/services/${id}/`, request)
+}
+
 export const completeRetainerServiceAssignment = (id: number) => {
     return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
 }

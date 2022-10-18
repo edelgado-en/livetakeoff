@@ -43,7 +43,7 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                                                             shadow-sm focus:border-sky-500 focus:outline-none
                                                             focus:ring-1 focus:ring-sky-500 sm:text-sm">
                                     <span className="block truncate">
-                                        {selectedService ? selectedService.name : 'Select service'}
+                                        {selectedService ? selectedService.service_name : 'Select service'}
                                     </span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -69,7 +69,7 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                                                 {({ selected, active }) => (
                                                     <>
                                                         <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                            {service.name}
+                                                            {service.service_name}
                                                         </span>
                                                         {selected ? (
                                                             <span
@@ -104,21 +104,19 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                             <span className="flex items-center">
                                 {selectedProjectManager && (
                                     <>
-                                        <img src={selectedProjectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                        {selectedProjectManager.name !== 'Unassign' && (
-                                            <span
-                                                className={classNames(
-                                                    selectedProjectManager.availability === 'available' ? 'bg-green-400' 
-                                                        : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                    'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
-                                                )}
-                                            />
-                                        )}
+                                        <img src={selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                        <span
+                                            className={classNames(
+                                                selectedProjectManager.availability === 'available' ? 'bg-green-400' 
+                                                    : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                            )}
+                                        />
                                     </>
                                 )}
                                 
-                                <span className="block truncate">
-                                    {selectedProjectManager ? selectedProjectManager.name : 'Select user'}
+                                <span className="ml-3 block truncate">
+                                    {selectedProjectManager ? selectedProjectManager.first_name + ' ' + selectedProjectManager.last_name : 'Select project manager'}
                                 </span>
                             </span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -150,7 +148,7 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                                 {({ selected, active }) => (
                                 <>
                                     <div className="flex items-center">
-                                        <img src={projectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                        <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                                         {projectManager.name !== 'Unassign' && (
                                             <span
                                                 className={classNames(
@@ -164,7 +162,7 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                                         <span
                                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                                         >
-                                            {projectManager.name}
+                                            {projectManager.first_name + ' ' + projectManager.last_name}
                                         </span>
                                     </div>
 
