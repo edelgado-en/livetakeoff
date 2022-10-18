@@ -260,7 +260,10 @@ const JobInfo = () => {
                                 <div className="min-w-0 flex-1">
                                     <div className="focus:outline-none">
                                         <div className="grid grid-cols-3 text-sm pb-2">
-                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
+                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">
+                                                {service.name}
+
+                                            </div>
                                             <div className="text-right">
                                                 {service.status === 'W' && (
                                                     <button
@@ -283,6 +286,13 @@ const JobInfo = () => {
                                             </div>
                                         </div>
                                         
+                                        {!currentUser.isProjectManager && !currentUser.isCustomer && (
+                                            <div className="text-xs mb-4 relative inline-flex items-center
+                                                            rounded-full border border-gray-300 px-2 py-0.5">
+                                                {service.project_manager}
+                                            </div>
+                                        )}
+
                                         {service.checklist_actions?.map((action) => (
                                             <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
                                         ))}
@@ -330,6 +340,13 @@ const JobInfo = () => {
                                                 )}
                                             </div>
                                         </div>
+
+                                        {!currentUser.isProjectManager && !currentUser.isCustomer && (
+                                            <div className="text-xs mb-4 relative inline-flex items-center
+                                                            rounded-full border border-gray-300 px-2 py-0.5">
+                                                {service.project_manager}
+                                            </div>
+                                        )}
                                             
                                         {service.checklist_actions?.map((action) => (
                                                 <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
