@@ -254,7 +254,7 @@ const JobInfo = () => {
                         {jobDetails.service_assignments?.map((service) => (
                             <div
                                 key={service.id}
-                                className="relative flex items-center space-x-3 rounded-lg
+                                className="relative flex space-x-3 rounded-lg
                                         border border-gray-300 bg-white px-6 py-5 shadow-sm
                                         hover:border-gray-400">
                                 <div className="min-w-0 flex-1">
@@ -284,7 +284,7 @@ const JobInfo = () => {
                                         </div>
                                         
                                         {service.checklist_actions?.map((action) => (
-                                            <div key={action.id} className="text-sm text-gray-500 py-1 pl-6">{action.name}</div>
+                                            <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
                                         ))}
                                     </div>
                                 </div>
@@ -332,7 +332,7 @@ const JobInfo = () => {
                                         </div>
                                             
                                         {service.checklist_actions?.map((action) => (
-                                                <div key={action.id} className="text-sm text-gray-500 py-1 pl-6">{action.name}</div>
+                                                <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
                                         ))}
                                     </div>
                                 </div>
