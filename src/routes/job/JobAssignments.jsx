@@ -66,7 +66,7 @@ const ChevronUpDownIcon = () => {
     )
 }
 
-const initialServices = [
+/* const initialServices = [
     { id: 1, name: 'Exterior detail (Full wet or dry wash)', status: 'A', projectManagers: people, selectedProjectManager: null },
     { id: 2, name: 'Basic Exterior (Exterior Takeoff Ready)', status: 'A', projectManagers: people, selectedProjectManager: null  },
     { id: 3, name: 'Basic Interior (Interior Takeoff Ready)', status: 'A', projectManagers: people, selectedProjectManager: null  },
@@ -75,13 +75,15 @@ const initialServices = [
     { id: 6, name: 'Electrostatic Disinfection', status: 'C', projectManagers: people, selectedProjectManager: null  },
     { id: 7, name: 'Hand/Machine Wax', status: 'C', projectManagers: people, selectedProjectManager: null },
     { id: 8, name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down', status: 'C', projectManagers: people, selectedProjectManager: null  },
-]
+] */
 
 const JobAssignments = () => {
     const { jobId } = useParams();
-    const [projectManagers, setProjectManagers] = useState(people)
+    const [projectManagers, setProjectManagers] = useState([])
     const [selectedProjectManager, setSelectedProjectManager] = useState(null)
-    const [services, setServices] = useState(initialServices)
+    const [services, setServices] = useState([])
+    // TODO: need to add retainer services
+
 
     const [isAddServiceModalOpen, setAddServiceModalOpen] = useState(false)
     const [isDeleteServiceModalOpen, setDeleteServiceModalOpen] = useState(false)
@@ -96,7 +98,27 @@ const JobAssignments = () => {
     const getFormInfo = async () => {
         const { data } = await api.getAssignmentsFormInfo(jobId)
 
-        console.log(data)
+        data.project_managers.push({
+            id: 99,
+            first_name: 'Unassign',
+            availability: 'busy',
+        })
+
+        // append data.project_managers to each service
+        const updatedServices = data.services.map((s) => {
+            s = {...s, projectManagers: data.project_managers}
+
+            return s;
+        })
+
+        console.log()
+
+        setServices(updatedServices)
+        //TODO: add retainer services
+
+        
+        setProjectManagers(data.project_managers)
+
     }
 
     const handleToggleAddServiceModal = () => {
@@ -167,8 +189,8 @@ const JobAssignments = () => {
                                 <span className="flex items-center">
                                     {selectedProjectManager && (
                                         <>
-                                            <img src={selectedProjectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                            {selectedProjectManager.name !== 'Unassign' && (
+                                            <img src={selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                            {selectedProjectManager.first_name !== 'Unassign' && (
                                                 <span
                                                     className={classNames(
                                                         selectedProjectManager.availability === 'available' ? 'bg-green-400' 
@@ -181,7 +203,7 @@ const JobAssignments = () => {
                                     )}
                                     
                                     <span className="ml-3 block truncate">
-                                        {selectedProjectManager ? selectedProjectManager.name : 'Applies to all services'}
+                                        {selectedProjectManager ? selectedProjectManager.first_name + ' ' + selectedProjectManager.last_name : 'Applies to all services'}
                                     </span>
                                 </span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -213,8 +235,8 @@ const JobAssignments = () => {
                                     {({ selected, active }) => (
                                     <>
                                         <div className="flex items-center">
-                                            <img src={projectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                            {projectManager.name !== 'Unassign' && (
+                                            <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                            {projectManager.first_name !== 'Unassign' && (
                                                 <span
                                                     className={classNames(
                                                         projectManager.availability === 'available' ? 'bg-green-400' 
@@ -227,7 +249,7 @@ const JobAssignments = () => {
                                             <span
                                                 className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                                             >
-                                                {projectManager.name}
+                                                {projectManager.first_name + ' ' + projectManager.last_name}
                                             </span>
                                         </div>
 
@@ -289,7 +311,7 @@ const JobAssignments = () => {
                                 <div className="min-w-0 flex-1">
                                     <div className="focus:outline-none">
                                         <div className="grid grid-cols-3 text-sm pb-2">
-                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
+                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.service_name}</div>
                                             <div className="justify-end text-right">
                                                 <div className="flex justify-end">
                                                     <TrashIcon 
@@ -325,7 +347,7 @@ const JobAssignments = () => {
                                                             <span className="flex items-center">
                                                                 {service.selectedProjectManager && (
                                                                     <>
-                                                                        <img src={service.selectedProjectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                        <img src={service.selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                                                                         {service.selectedProjectManager.name !== 'Unassign' && (
                                                                             <span
                                                                                 className={classNames(
@@ -339,7 +361,7 @@ const JobAssignments = () => {
                                                                 )}
                                                                 
                                                                 <span className="ml-3 block truncate">
-                                                                    {service.selectedProjectManager ? service.selectedProjectManager.name : '------------'}
+                                                                    {service.selectedProjectManager ? service.selectedProjectManager.first_name + ' ' + service.selectedProjectManager.last_name : '------------'}
                                                                 </span>
                                                             </span>
                                                             <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -371,8 +393,8 @@ const JobAssignments = () => {
                                                                 {({ selected, active }) => (
                                                                 <>
                                                                     <div className="flex items-center">
-                                                                        <img src={projectManager.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                                        {projectManager.name !== 'Unassign' && (
+                                                                        <img src={projectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                        {projectManager.first_name !== 'Unassign' && (
                                                                             <span
                                                                             className={classNames(
                                                                                 projectManager.availability === 'available' ? 'bg-green-400' 
@@ -385,7 +407,7 @@ const JobAssignments = () => {
                                                                         <span
                                                                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                                                                         >
-                                                                            {projectManager.name}
+                                                                            {projectManager.first_name + ' ' + projectManager.last_name }
                                                                         </span>
                                                                     </div>
 
