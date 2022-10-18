@@ -74,7 +74,7 @@ const JobsQueue = () => {
             <h1 className="text-2xl font-semibold text-gray-600">Jobs Queue</h1>
             {!loading && jobs.length > 0 && (
               <p className="mt-2 text-sm text-gray-700">
-                Total: {jobs.length}
+                Total jobs: {jobs.length}
               </p>
             )}
           </div>

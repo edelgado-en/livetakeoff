@@ -127,7 +127,7 @@ const JobInfo = () => {
             {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
 
             {!loading && errorMessage == null && (
-                <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
+                <div className="mt-6 max-w-5xl px-2">
                 <div className="flex flex-row">
                     <div className="flex-1">
                         <h1 className="text-2xl font-semibold text-gray-600">Job Details</h1>
@@ -246,7 +246,7 @@ const JobInfo = () => {
                 </dl>
                 <div className="mx-auto mt-8 max-w-5xl pb-8">
                     <h2 className="text-sm font-medium text-gray-500">Services</h2>
-                    <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {jobDetails.service_assignments?.length === 0 &&
                             <div className="text-sm text-gray-500">None</div>
                         }
@@ -305,7 +305,7 @@ const JobInfo = () => {
                 </div>
                 <div className="mx-auto max-w-5xl pb-12">
                     <h2 className="text-sm font-medium text-gray-500">Retainer Services</h2>
-                    <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {jobDetails.retainer_service_assignments?.length === 0 &&
                             <div className="text-sm text-gray-500">None</div>
                         }
