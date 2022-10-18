@@ -157,10 +157,15 @@ const JobAssignments = () => {
 
         setServices(updatedServices)
 
-
         setServiceToBeDeleted(null)
 
     }
+
+    const handleAddService = (updatedServices) => {
+        setServices(updatedServices)
+        setAddServiceModalOpen(false)
+    }
+
 
     const setMainProjectManager = (selectedPerson) => {
         setSelectedProjectManager(selectedPerson)
@@ -360,11 +365,11 @@ const JobAssignments = () => {
                                                                                     shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
                                                                                         focus:ring-sky-500 sm:text-sm">
                                                                 <span className="flex items-center">
-                                                                    <img src={service.selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                                                    <img src={service.selectedProjectManager?.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                                                                     <span
                                                                         className={classNames(
-                                                                            service.selectedProjectManager.availability === 'available' ? 'bg-green-400' 
-                                                                                : service.selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                                            service.selectedProjectManager?.availability === 'available' ? 'bg-green-400' 
+                                                                                : service.selectedProjectManager?.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
                                                                             'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
                                                                         )}
                                                                     />
@@ -477,8 +482,10 @@ const JobAssignments = () => {
                 {isAddServiceModalOpen && <AddServiceModal
                                             isOpen={isAddServiceModalOpen}
                                             handleClose={handleToggleAddServiceModal}
-                                            availableServices={services}
+                                            existingServices={services}
                                             projectManagers={projectManagers}
+                                            handleAddService={handleAddService}
+                                            jobId={jobId}
                                              />}
 
                 {isDeleteServiceModalOpen && <DeleteServiceModal 

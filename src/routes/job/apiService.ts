@@ -28,6 +28,10 @@ export const deleteService = (id: number) => {
     return httpService.delete(`/api/jobs/services/${id}/`)
 }
 
+export const addService = (id:number, request: any) => {
+    return httpService.post(`/api/jobs/services/${id}/`, request)
+}
+
 export const completeRetainerServiceAssignment = (id: number) => {
     return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
 }
@@ -70,6 +74,10 @@ export const createJob = (formData: any) => {
             "Content-Type": "multipart/form-data"
         }
     })
+}
+
+export const getServices = () => {
+    return httpService.get('/api/services');
 }
 
 

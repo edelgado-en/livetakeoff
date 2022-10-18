@@ -3,6 +3,8 @@ import ModalFrame from '../../components/modal/ModalFrame'
 import { Dialog, Transition, Listbox } from '@headlessui/react'
 import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
 
+import * as api from './apiService'
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -15,14 +17,87 @@ const ChevronUpDownIcon = () => {
     )
 }
 
-const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, projectManagers }) => {
+const AddServiceModal = ({ isOpen, handleClose, existingServices, projectManagers, handleAddService, jobId }) => {
     const [selectedProjectManager, setSelectedProjectManager] = useState(null)
     const [selectedService, setSelectedService] = useState(null)
+    const [availableServices, setAvailableServices] = useState([])
 
     /* FETCH ALL SERVICES AND ALL RETAINER SERVICES and THEN COMPARE WITH THE SERVICES ALREADY IN THIS JOB
         TO AVOID SHOWING REPEATED SERVICES
         . THE API CALL CAN PASS THE EXISTING SERVICES TO USE NOT IN CLAUSE
     */
+
+    useEffect(() => {
+        getServices()
+    }, [])
+        
+    const getServices = async () => {
+        //set loading
+
+        try {
+            const { data } = await api.getServices()
+
+            console.log(data)
+            //filter the result to ensure you only include services
+            // that are not part of the job already
+            // if the job already has all services, then show a message saying 
+            // that you cannot add more services
+
+            setAvailableServices(data.results)
+
+        } catch (err) {
+
+        }
+
+    }
+
+
+    const addService = async () => {
+        let user = null
+
+        //TODO: add a validation user must select a service
+
+        if (selectedProjectManager) {
+            user = selectedProjectManager.id === 999 ? null : selectedProjectManager.id;
+        }
+        
+        const request = {
+            'service_id': selectedService.id,
+            'user_id': user
+        }
+
+        await api.addService(jobId, request)
+
+        const { data } = await api.getAssignmentsFormInfo(jobId)
+
+        data.project_managers.push({
+            id: 999,
+            first_name: 'Unassign',
+            last_name: '',
+            availability: 'busy',
+            profile: {
+                'avatar': 'https://res.cloudinary.com/datidxeqm/image/upload/v1666103235/media/profiles/unassign_fgdefu.png'
+            }
+        })
+        
+        const updatedServices = data.services.map((s) => {
+            s = {...s, projectManagers: data.project_managers}
+
+            if (s.project_manager) {
+                //set selected
+                s.selectedProjectManager = data.project_managers.find(p => p.id === s.project_manager.id)
+
+            } else {
+                //set selected as unassign
+                s.selectedProjectManager = data.project_managers.find(p => p.id === 999)
+            }
+
+            return s;
+        })
+
+        handleAddService(updatedServices)
+    }
+
 
     return (
         <ModalFrame isModalOpen={isOpen}>
@@ -43,7 +118,7 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                                                             shadow-sm focus:border-sky-500 focus:outline-none
                                                             focus:ring-1 focus:ring-sky-500 sm:text-sm">
                                     <span className="block truncate">
-                                        {selectedService ? selectedService.service_name : 'Select service'}
+                                        {selectedService ? selectedService.name : 'Select service'}
                                     </span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -69,7 +144,7 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                                                 {({ selected, active }) => (
                                                     <>
                                                         <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                            {service.service_name}
+                                                            {service.name}
                                                         </span>
                                                         {selected ? (
                                                             <span
@@ -104,11 +179,11 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
                             <span className="flex items-center">
                                 {selectedProjectManager && (
                                     <>
-                                        <img src={selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                                        <img src={selectedProjectManager?.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                                         <span
                                             className={classNames(
-                                                selectedProjectManager.availability === 'available' ? 'bg-green-400' 
-                                                    : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                selectedProjectManager?.availability === 'available' ? 'bg-green-400' 
+                                                    : selectedProjectManager?.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
                                                 'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
                                             )}
                                         />
@@ -191,24 +266,24 @@ const AddServiceModal = ({ isOpen, handleClose, addService, availableServices, p
             </div>
             <div className="mt-6 sm:mt-4 sm:flex sm:flex-row-reverse">
                 <button
-                type="button"
-                onClick={() => addService('C')}
-                className="inline-flex w-full justify-center rounded-md border border-transparent
+                    type="button"
+                    onClick={() => addService()}
+                    className="inline-flex w-full justify-center rounded-md border border-transparent
                             bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700
                             focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                 >
-                <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-white" aria-hidden="true" />
-                <span>Add</span>
+                    <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-white" aria-hidden="true" />
+                    <span>Add</span>
                 </button>
                 <button
-                type="button"
-                onClick={handleClose}
-                className="mt-3 inline-flex w-full justify-center rounded-md border
+                    type="button"
+                    onClick={handleClose}
+                    className="mt-3 inline-flex w-full justify-center rounded-md border
                                 border-gray-300 bg-white px-4 py-2 text-base font-medium
                                 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
                                 focus:ring-red-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
                 >
-                Cancel
+                    Cancel
                 </button>
             </div>
             
