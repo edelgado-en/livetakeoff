@@ -367,8 +367,8 @@ const JobAssignments = () => {
                                             hover:border-gray-400">
                                     <div className="min-w-0 flex-1">
                                         <div className="focus:outline-none">
-                                            <div className="grid grid-cols-3 text-sm pb-2">
-                                                <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.service_name}</div>
+                                            <div className="flex justify-between text-sm">
+                                                <div className="font-medium text-gray-900 relative top-1 flex-1 truncate overflow-hidden w-8 pr-1">{service.service_name}</div>
                                                 <div className="justify-end text-right">
                                                     {services.length > 1 && (
                                                         <div className="flex justify-end">
