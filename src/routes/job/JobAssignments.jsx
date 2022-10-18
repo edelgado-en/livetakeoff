@@ -102,10 +102,16 @@ const JobAssignments = () => {
         try {
             const { data } = await api.getAssignmentsFormInfo(jobId)
 
+            
+
             data.project_managers.push({
                 id: 99,
                 first_name: 'Unassign',
+                last_name: '',
                 availability: 'busy',
+                profile: {
+                    'avatar': 'https://res.cloudinary.com/datidxeqm/image/upload/v1666103235/media/profiles/unassign_fgdefu.png'
+                }
             })
     
             // append data.project_managers to each service
@@ -202,15 +208,13 @@ const JobAssignments = () => {
                                         {selectedProjectManager && (
                                             <>
                                                 <img src={selectedProjectManager.profile?.avatar} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
-                                                {selectedProjectManager.first_name !== 'Unassign' && (
-                                                    <span
-                                                        className={classNames(
-                                                            selectedProjectManager.availability === 'available' ? 'bg-green-400' 
-                                                                : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
-                                                            'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
-                                                        )}
-                                                    />
-                                                )}
+                                                <span
+                                                    className={classNames(
+                                                        selectedProjectManager.availability === 'available' ? 'bg-green-400' 
+                                                            : selectedProjectManager.availability === 'available_soon' ? 'bg-yellow-400':'bg-red-400',
+                                                        'inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2'
+                                                    )}
+                                                />
                                             </>
                                         )}
                                         
@@ -325,11 +329,14 @@ const JobAssignments = () => {
                                             <div className="grid grid-cols-3 text-sm pb-2">
                                                 <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.service_name}</div>
                                                 <div className="justify-end text-right">
-                                                    <div className="flex justify-end">
+                                                    {services.length > 1 && (
+                                                        <div className="flex justify-end">
                                                         <TrashIcon 
                                                             onClick={() => handleToggleDeleteServiceModal(service)}
                                                             className="h-5 w-5 text-gray-400 cursor-pointer" />
-                                                    </div>
+                                                        </div>
+                                                    )}
+                                                    
 
                                                     {service.status === 'W' && (
                                                         <div className="text-xs font-semibold  text-green-500 mt-6">
