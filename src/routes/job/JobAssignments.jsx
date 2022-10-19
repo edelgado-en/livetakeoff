@@ -353,7 +353,7 @@ const JobAssignments = () => {
 
                                                 </div>
                                             </div>
-                                            {(service.status === 'A' || service.status === 'U') && (
+                                            {(service.status === 'A' || service.status === 'U' || service.status === 'W') && (
                                                 <div className="mt-8">
                                                     <Listbox value={service.selectedProjectManager} onChange={(person) => setSelectedServiceProjectManager(person, service.id)}>
                                                     {({ open }) => (
