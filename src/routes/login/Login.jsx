@@ -1,6 +1,8 @@
 
 import { useEffect, useState } from 'react';
-import Logo from '../../components/topbar/livetakeoff-logo.png';
+//import Logo from '../../components/topbar/livetakeoff-logo.png';
+import Logo from '../../images/logo_2618936_web.png'
+
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -43,7 +45,7 @@ const Login = () => {
 
     return (
       <>
-        <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8 mt-32">
+        <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8 mt-24">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <img
               className="mx-auto h-28 w-auto"
@@ -59,7 +61,7 @@ const Login = () => {
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
               <form className="space-y-6" onSubmit={onSubmit}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="email" className="block text-sm text-gray-900">
                     Username
                   </label>
                   <div className="mt-1">
@@ -77,7 +79,7 @@ const Login = () => {
                 </div>
   
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="password" className="block text-sm text-gray-900">
                     Password
                   </label>
                   <div className="mt-1">

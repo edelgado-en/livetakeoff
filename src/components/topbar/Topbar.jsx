@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import logo from './livetakeoff-logo.png';
+import logo from '../../images/logo_2618936_web.png'
+
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
