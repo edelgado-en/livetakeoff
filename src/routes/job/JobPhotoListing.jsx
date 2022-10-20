@@ -72,9 +72,21 @@ const JobPhotoListing = () => {
         const imageBlog = await image.blob()
         const imageURL = URL.createObjectURL(imageBlog)
 
+        let label;
+        if (photo.customer_uploaded) {
+            label = '_customer_provided'
+
+        } else {
+            if (photo.interior) {
+                label = '_interior';
+            } else {
+                label = '_exterior';
+            }
+        }
+        
         const link = document.createElement('a')
         link.href = imageURL
-        link.download = photo.name
+        link.download = photo.name + label
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
