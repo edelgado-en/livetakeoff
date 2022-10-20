@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from './livetakeoff-logo.png';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
 
@@ -30,6 +30,7 @@ const Topbar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectUser)
+  const location  = useLocation();
 
   useEffect(() => {
 
@@ -85,7 +86,7 @@ const Topbar = () => {
                         key={item.name}
                         to={item.href}
                         className={classNames(
-                          item.current ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                          location.pathname.includes(item.href) ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
                           'px-3 py-2 rounded-md text-sm font-medium text-white'
                         )}
                         aria-current={item.current ? 'page' : undefined}
@@ -93,6 +94,16 @@ const Topbar = () => {
                         {item.name}
                       </Link>
                     ))}
+                    {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                      <Link 
+                        to="completed"
+                        className={classNames(
+                          location.pathname.includes("completed") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                          'px-3 py-2 rounded-md text-sm font-medium text-white'
+                        )}>
+                          Completed Jobs
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>

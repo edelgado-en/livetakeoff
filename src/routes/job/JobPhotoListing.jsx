@@ -7,6 +7,9 @@ import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import ReactTimeAgo from 'react-time-ago'
 
+import JSZip from "jszip";
+import { saveAs } from 'file-saver';
+
 import * as api from './apiService'
 import { toast } from "react-toastify";
 
@@ -63,6 +66,39 @@ const JobPhotoListing = () => {
         setCurrentImageCustomer(0);
         setIsViewerOpenCustomer(false);
     };
+
+    const downloadAllInterior = async () => {
+        //get job because you need PO, tailNumber, airport initials
+
+        const interiorImages = interiorPhotos.map(p => p.image);
+        const exteriorImages = exteriorPhotos.map(p => p.image);
+
+        var zip = new JSZip();
+        let interiorFolder = zip.folder('interior_photos');
+        let exteriorFolder = zip.folder('exterior_photos');
+
+        var count = 0;
+
+        // get job purchase order
+        var zipFilename = "Pictures.zip";  
+        interiorImages.forEach(async function (url, i) {
+            // name = job.tailNumber + '_' + job.airport.initials + '_' + datetime.today().strftime('%Y-%m-%d')
+          const filename = "fileName" + i + ".jpg"
+
+          const response = await fetch(url);
+          
+          response.blob().then(blob => {
+                interiorFolder.file(filename, blob, { binary: true });
+                count++;
+                if (count === interiorImages.length) {
+                    zip.generateAsync({ type: 'blob' }).then(function (content) {
+                      saveAs(content, zipFilename);
+                    });
+                }
+          }); 
+
+        });
+    }
 
     const handleDeletePhoto = async(photoId, isInterior) => {
         const request = {
@@ -123,7 +159,6 @@ const JobPhotoListing = () => {
             const customer_photos = []
 
             data.results.forEach(entry => {
-                console.log(entry)
                 if (entry.customer_uploaded) {
                     customer_photos.push(entry)
 
@@ -199,13 +234,23 @@ const JobPhotoListing = () => {
 
                 <div>
                     <div className="text-gray-500 text-lg mb-1 font-semibold mt-8">
-                        Interior
+                        Interior 
                         {interiorPhotos.length > 0 &&
                             <span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
                                           rounded-full text-xs font-medium md:inline-block">{interiorPhotos.length}</span>
                         }
                     </div>
+                    {interiorPhotos.length > 0 && (
+                        <div className="flex justify-end">
+                            <button 
+                                className="rounded-lg p-2 cursor-pointer border mr-3 hover:bg-gray-50 text-sm"
+                                onClick={() => downloadAllInterior()}>
+                                Download all
+                            </button>
+                        </div>
+                    )}
                     
+
                     {interiorPhotos.length === 0 && (
                             <div className="text-sm mt-10 flex flex-col items-center">
                                  <img
