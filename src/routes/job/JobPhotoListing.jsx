@@ -74,19 +74,19 @@ const JobPhotoListing = () => {
 
         let label;
         if (photo.customer_uploaded) {
-            label = '_customer_provided'
+            label = 'customer_provided_'
 
         } else {
             if (photo.interior) {
-                label = '_interior';
+                label = 'interior_';
             } else {
-                label = '_exterior';
+                label = 'exterior_';
             }
         }
         
         const link = document.createElement('a')
         link.href = imageURL
-        link.download = photo.name + label
+        link.download = label + photo.name
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -95,9 +95,9 @@ const JobPhotoListing = () => {
     const downloadAllPhotos = async () => {
         const { data } = await api.getJobBasicDetails(jobId);
 
-        const interiorImages = interiorPhotos.map(p => {return {'customer': false, 'interior': true, 'image': p.image}});
-        const exteriorImages = exteriorPhotos.map(p => {return {'customer': false, 'interior': false, 'image': p.image}});
-        const customerImages = customerPhotos.map(p => {return {'customer': true, 'image': p.image}});
+        const interiorImages = interiorPhotos.map(p => {return {'customer': false, 'interior': true, 'image': p.image, 'name': p.name}});
+        const exteriorImages = exteriorPhotos.map(p => {return {'customer': false, 'interior': false, 'image': p.image, 'name': p.name}});
+        const customerImages = customerPhotos.map(p => {return {'customer': true, 'image': p.image, 'name': p.name}});
 
         const allImages = [...customerImages, ...interiorImages, ...exteriorImages]
 
@@ -122,8 +122,7 @@ const JobPhotoListing = () => {
 
         var zipFilename = data.purchase_order + "_all_photos.zip";  
         allImages.forEach(async function (image, i) {
-          const counterLabel = i + 1
-          const filename = data.tailNumber + '_' + data.airport.initials + '_' + counterLabel
+          const filename = image.name
 
           const response = await fetch(image.image);
           
