@@ -315,7 +315,9 @@ const JobPhotoListing = () => {
                                     <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
                                 </div>
                                 <div className="flex text-gray-500 text-sm pt-2">
-                                    <CloudDownloadIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
+                                    <CloudDownloadIcon 
+                                        onClick={() => downloadPhoto(photo)}
+                                        className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
                                     <TrashIcon 
                                         onClick={() => handleDeletePhoto(photo.id, true)}
                                         className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
@@ -356,7 +358,9 @@ const JobPhotoListing = () => {
                                     <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
                                 </div>
                                 <div className="flex text-gray-500 text-sm pt-2">
-                                    <CloudDownloadIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
+                                    <CloudDownloadIcon 
+                                        onClick={() => downloadPhoto(photo)}
+                                        className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
                                     <TrashIcon 
                                         onClick={() => handleDeletePhoto(photo.id, false)}
                                         className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
