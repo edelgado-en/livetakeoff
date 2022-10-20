@@ -70,8 +70,10 @@ const JobPhotoListing = () => {
     const downloadAllInterior = async () => {
         //get job because you need PO, tailNumber, airport initials
 
-        const interiorImages = interiorPhotos.map(p => p.image);
-        const exteriorImages = exteriorPhotos.map(p => p.image);
+        const interiorImages = interiorPhotos.map(p => {return {'interior': true, 'image': p.image}});
+        const exteriorImages = exteriorPhotos.map(p => {return {'interior': false, 'image': p.image}});
+
+        const allImages = [...interiorImages, ...exteriorImages]
 
         var zip = new JSZip();
         let interiorFolder = zip.folder('interior_photos');
@@ -81,14 +83,19 @@ const JobPhotoListing = () => {
 
         // get job purchase order
         var zipFilename = "Pictures.zip";  
-        interiorImages.forEach(async function (url, i) {
+        allImages.forEach(async function (image, i) {
             // name = job.tailNumber + '_' + job.airport.initials + '_' + datetime.today().strftime('%Y-%m-%d')
-          const filename = "fileName" + i + ".jpg"
+          const filename = "fileName" + i
 
-          const response = await fetch(url);
+          const response = await fetch(image.image);
           
           response.blob().then(blob => {
-                interiorFolder.file(filename, blob, { binary: true });
+                if (image.interior) {
+                    interiorFolder.file(filename, blob, { binary: true });
+
+                } else {
+                    exteriorFolder.file(filename, blob, { binary: true });
+                }
                 count++;
                 if (count === interiorImages.length) {
                     zip.generateAsync({ type: 'blob' }).then(function (content) {
