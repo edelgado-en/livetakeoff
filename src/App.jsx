@@ -18,6 +18,8 @@ import EditJob from './routes/job/EditJob';
 import JobAssignments from './routes/job/JobAssignments';
 import CompleteList from './routes/job/CompleteList';
 
+import Customers from './routes/customers/Customers'
+
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
 import Layout from './layout/Layout';
@@ -70,6 +72,8 @@ const  App = () => {
                       <Route path="jobs" element={<Jobs />}/>
                       <Route path="create-job" element={<CreateJob />} />
                       <Route path="completed" element={<CompleteList />} />
+
+                      <Route path="customers" element={<Customers />} />
 
                       <Route path="user-settings" element={<UserSettings />}>
                         <Route index element={<UserProfile />}/>
