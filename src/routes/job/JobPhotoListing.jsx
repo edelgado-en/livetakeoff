@@ -68,7 +68,7 @@ const JobPhotoListing = () => {
     };
 
     const downloadAllPhotos = async () => {
-        //get job because you need PO, tailNumber, airport initials
+        const { data } = await api.getJobBasicDetails(jobId);
 
         const interiorImages = interiorPhotos.map(p => {return {'customer': false, 'interior': true, 'image': p.image}});
         const exteriorImages = exteriorPhotos.map(p => {return {'customer': false, 'interior': false, 'image': p.image}});
@@ -83,11 +83,10 @@ const JobPhotoListing = () => {
 
         var count = 0;
 
-        // get job purchase order
-        var zipFilename = "Pictures.zip";  
+        var zipFilename = data.purchase_order + "_all_photos.zip";  
         allImages.forEach(async function (image, i) {
-            // name = job.tailNumber + '_' + job.airport.initials + '_' + datetime.today().strftime('%Y-%m-%d')
-          const filename = "fileName" + i
+          const counterLabel = i + 1
+          const filename = data.tailNumber + '_' + data.airport.initials + '_' + counterLabel
 
           const response = await fetch(image.image);
           

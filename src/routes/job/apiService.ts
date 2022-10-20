@@ -4,6 +4,10 @@ export const getJobDetails = (id: number) => {
     return httpService.get(`/api/jobs/${id}`);
 }
 
+export const getJobBasicDetails = (id: number) => {
+    return httpService.get(`/api/jobs/basic/${id}`);
+}
+
 export const updateJobStatus = (id: number, status: string) => {
     return httpService.patch(`/api/jobs/${id}/`, { status });
 }
