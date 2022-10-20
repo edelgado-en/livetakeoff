@@ -248,16 +248,24 @@ const JobPhotoListing = () => {
                 {customerPhotos.length > 0 && (
                     <>
                     <div className="text-gray-500 text-lg mt-4 flex justify-between">
-                        <div>
+                        <div className="relative top-1">
                             <span className="font-semibold">Customer Provided</span>
                             <span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
                                           rounded-full text-xs font-medium md:inline-block">{customerPhotos.length}</span>
                         </div>
                         <div className="flex justify-end">
                             <button 
-                                className="rounded-lg p-2 cursor-pointer border hover:bg-gray-50 text-sm"
+                                className="rounded-lg p-2 cursor-pointer border hover:bg-gray-50 text-sm flex"
                                 onClick={() => downloadAllPhotos()}>
-                                Download all
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     fill="none"
+                                      viewBox="0 0 24 24"
+                                       strokeWidth={1.5}
+                                        stroke="currentColor" className="w-4 h-4 mr-1"  style={{ top: '2px'}}>
+                                  <path strokeLinecap="round"
+                                         strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                                Download
                             </button>
                         </div>
                     </div>
@@ -287,7 +295,7 @@ const JobPhotoListing = () => {
 
                 <div>
                     <div className="text-gray-500 text-lg mt-4 flex justify-between">
-                        <div className="relative top-2">
+                        <div className="relative top-1">
                             <span className="font-semibold">Interior</span> 
                             {interiorPhotos.length > 0 &&
                                 <span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
@@ -297,9 +305,17 @@ const JobPhotoListing = () => {
                         {(interiorPhotos.length > 0 || exteriorPhotos.length > 0) && customerPhotos.length === 0 && (
                             <div className="flex justify-end">
                                 <button 
-                                    className="rounded-lg p-2 cursor-pointer border hover:bg-gray-50 text-sm"
+                                    className="rounded-lg p-2 cursor-pointer border hover:bg-gray-50 text-sm flex "
                                     onClick={() => downloadAllPhotos()}>
-                                    Download all
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                     fill="none"
+                                      viewBox="0 0 24 24"
+                                       strokeWidth={1.5}
+                                        stroke="currentColor" className="w-4 h-4 mr-1 relative" style={{ top: '2px'}}>
+                                    <path strokeLinecap="round"
+                                         strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                    </svg>
+                                    Download
                                 </button>
                             </div>
                         )}
