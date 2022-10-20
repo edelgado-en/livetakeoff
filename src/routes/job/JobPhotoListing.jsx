@@ -67,6 +67,19 @@ const JobPhotoListing = () => {
         setIsViewerOpenCustomer(false);
     };
 
+    const downloadPhoto = async (photo) => {
+        const image = await fetch(photo.image)
+        const imageBlog = await image.blob()
+        const imageURL = URL.createObjectURL(imageBlog)
+
+        const link = document.createElement('a')
+        link.href = imageURL
+        link.download = photo.name
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    }
+
     const downloadAllPhotos = async () => {
         const { data } = await api.getJobBasicDetails(jobId);
 
@@ -77,9 +90,6 @@ const JobPhotoListing = () => {
         const allImages = [...customerImages, ...interiorImages, ...exteriorImages]
 
         var zip = new JSZip();
-/*         let customerProvided = zip.folder('customer_provided')
-        let interiorFolder = zip.folder('interior_photos');
-        let exteriorFolder = zip.folder('exterior_photos'); */
         let customerProvided = null;
         let interiorFolder = null;
         let exteriorFolder = null;
@@ -247,14 +257,16 @@ const JobPhotoListing = () => {
                                     <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
                                 </div>
                                 <div className="flex text-gray-500 text-sm pt-2">
-                                    <CloudDownloadIcon className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
+                                    <CloudDownloadIcon 
+                                        onClick={() => downloadPhoto(photo)}
+                                        className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer" />
                                     <TrashIcon 
                                         onClick={() => handleDeleteCustomerPhoto(photo.id, true)}
                                         className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"/>
                                     <span className="text-gray-500 text-sm">
                                         <ReactTimeAgo date={new Date(photo.created_at)} locale="en-US" timeStyle="twitter" />
                                     </span>
-                                    <span className="text-sm ml-3">{photo.name}</span>
+                                    <span className="text-sm ml-3 truncate w-44 text-ellipsis overflow-hidden whitespace-nowrap">{photo.name}</span>
                                 </div>
                             </div>
                         ))}
@@ -310,7 +322,7 @@ const JobPhotoListing = () => {
                                     <span className="text-gray-500 text-sm">
                                         <ReactTimeAgo date={new Date(photo.created_at)} locale="en-US" timeStyle="twitter" />
                                     </span>
-                                    <span className="text-sm ml-3">{photo.name}</span>
+                                    <span className="text-sm ml-3 truncate w-44 text-ellipsis overflow-hidden whitespace-nowrap">{photo.name}</span>
                                 </div>
                             </div>
                         ))}
