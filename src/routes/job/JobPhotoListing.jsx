@@ -77,9 +77,24 @@ const JobPhotoListing = () => {
         const allImages = [...customerImages, ...interiorImages, ...exteriorImages]
 
         var zip = new JSZip();
-        let customerProvided = zip.folder('customer_provided')
+/*         let customerProvided = zip.folder('customer_provided')
         let interiorFolder = zip.folder('interior_photos');
-        let exteriorFolder = zip.folder('exterior_photos');
+        let exteriorFolder = zip.folder('exterior_photos'); */
+        let customerProvided = null;
+        let interiorFolder = null;
+        let exteriorFolder = null;
+
+        if (customerImages.length > 0) {
+            customerProvided = zip.folder('customer_provided')
+        }
+
+        if (interiorImages.length > 0) {
+            interiorFolder = zip.folder('interior_photos');
+        }
+
+        if (exteriorImages.length > 0) {
+            exteriorFolder = zip.folder('exterior_photos');
+        }
 
         var count = 0;
 
