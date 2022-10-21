@@ -63,10 +63,9 @@ const Customers = () => {
   const [customerDirectory, setCustomerDirectory] = useState([])
   const [totalCustomers, setTotalCustomers] = useState(0)
   const [customerSearchName, setCustomerSearchName] = useState('')
+  const [customerDetails, setCustomerDetails] = useState(null)
+  const [firstLoad, setFirstLoad] = useState(true)
 
-  useEffect(() => {
-      searchCustomers()
-  }, [])
 
   useEffect(() => {
     //Basic throttling
@@ -89,12 +88,20 @@ const Customers = () => {
 
     try {
       
-      const { data} = await api.getCustomers(request)
+      const { data } = await api.getCustomers(request)
       
       setTotalCustomers(data.count)
       const directory = groupByFirstLetter(data.results)
       setCustomerDirectory(directory)
       setLoading(false)
+
+      if (firstLoad) {
+        setFirstLoad(false)
+        if (data.results.length > 0) {
+          getCustomerDetails(data.results[0].id)
+          //TODO: change to navigate('/customers/' + data.results[0].id + '/profile')
+        }
+      }
 
     } catch (err) {
       setLoading(false)
@@ -102,14 +109,29 @@ const Customers = () => {
   }
 
   const handleKeyDown = event => {
-    console.log(event.key);
-
     if (event.key === 'Enter') {
       event.preventDefault();
       
       searchCustomers();
     }
   };
+
+  // TODO: move this to a different component in his own route. Nested routes for profile, discounts, additional fees, and jobs
+  const getCustomerDetails = async (customerId) => {
+    setSidebarOpen(false)
+    
+    try {
+      const { data } = await api.getCustomerDetails(customerId)
+
+      console.log(data)
+
+      setCustomerDetails(data)
+
+
+    } catch (err) {
+
+    }
+  }
 
   const groupByFirstLetter = (array) => {
     let resultObj = {};
@@ -240,7 +262,7 @@ const Customers = () => {
                           </div>
                           <ul role="list" className="relative z-0 divide-y divide-gray-200">
                             {customerDirectory[letter]?.map((customer) => (
-                              <li key={customer.id}>
+                              <li key={customer.id} onClick={() => getCustomerDetails(customer.id)}>
                                 <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
                                   <div className="flex-shrink-0">
                                     <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
@@ -298,7 +320,7 @@ const Customers = () => {
                       </div>
                       <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                         <div className="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
-                          <h1 className="truncate text-2xl font-bold text-gray-900">{profile.name}</h1>
+                          <h1 className="truncate text-2xl font-bold text-gray-900">{customerDetails?.name}</h1>
                         </div>
                         <div className="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                           
@@ -306,7 +328,7 @@ const Customers = () => {
                       </div>
                     </div>
                     <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
-                      <h1 className="truncate text-2xl font-bold text-gray-900">{profile.name}</h1>
+                      <h1 className="truncate text-2xl font-bold text-gray-900">{customerDetails?.name}</h1>
                     </div>
                   </div>
                 </div>
@@ -510,7 +532,7 @@ const Customers = () => {
                     </div>
                     <ul role="list" className="relative z-0 divide-y divide-gray-200">
                       {customerDirectory[letter]?.map((customer) => (
-                        <li key={customer.id}>
+                        <li key={customer.id} onClick={() => getCustomerDetails(customer.id)}>
                           <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
                             <div className="flex-shrink-0">
                               <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
