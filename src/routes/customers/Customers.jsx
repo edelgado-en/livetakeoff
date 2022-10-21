@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition, Switch, Menu } from '@headlessui/react'
-
 import { ChevronLeftIcon } from '@heroicons/react/outline'
+
+import * as api from './apiService'
 
 const XMarkIcon = () => {
     return (
@@ -52,7 +53,7 @@ const profile = {
   },
 }
 
-const directory = {
+/* const directory = {
   A: [
     {
       id: 1,
@@ -168,21 +169,90 @@ const directory = {
         'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     },
   ],
-
-
-}
+} */
 
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Customers() {
+const Customers = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [availableToHire, setAvailableToHire] = useState(true)
   const [privateAccount, setPrivateAccount] = useState(false)
   const [allowCommenting, setAllowCommenting] = useState(true)
   const [allowMentions, setAllowMentions] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [customerDirectory, setCustomerDirectory] = useState([])
+  const [totalCustomers, setTotalCustomers] = useState(0)
+  const [customerSearchName, setCustomerSearchName] = useState('')
+
+  useEffect(() => {
+      searchCustomers()
+  }, [])
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchCustomers()
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+
+  }, [customerSearchName])
+
+  const searchCustomers = async () => {
+    setLoading(true)
+
+    const request = {
+      name: customerSearchName,
+    }
+
+    try {
+      
+      const { data} = await api.getCustomers(request)
+      
+      setTotalCustomers(data.count)
+      const directory = groupByFirstLetter(data.results)
+      setCustomerDirectory(directory)
+      setLoading(false)
+
+    } catch (err) {
+      setLoading(false)
+    }
+  }
+
+  const handleKeyDown = event => {
+    console.log(event.key);
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      
+      searchCustomers();
+    }
+  };
+
+  const groupByFirstLetter = (array) => {
+    let resultObj = {};
+    
+    for (let i = 0; i < array.length; i++) {
+      let currentWord = array[i].name;
+      let firstChar = currentWord[0].toUpperCase();
+      let innerArr = [];
+      
+      if (resultObj[firstChar] === undefined) {
+          innerArr.push(array[i]);
+          resultObj[firstChar] = innerArr
+      
+      } else {
+          resultObj[firstChar].push(array[i])
+      }
+    }
+
+    return resultObj
+  }
 
   return (
     <>
@@ -262,7 +332,7 @@ export default function Customers() {
               <nav className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden" aria-label="Breadcrumb">
                 <a href="#" className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
                   <ChevronLeftIcon className="-ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-                  <span>Directory</span>
+                  <span>Customers</span>
                 </a>
               </nav>
 
@@ -297,7 +367,7 @@ export default function Customers() {
                 </div>
 
                 {/* Tabs */}
-                <div className="mt-6 sm:mt-2 2xl:mt-5">
+                <div className="mt-0 sm:mt-0 2xl:mt-5">
                   <div className="border-b border-gray-200">
                     <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                       <nav className="-mb-px flex space-x-8" aria-label="Tabs">
@@ -340,7 +410,7 @@ export default function Customers() {
                   </dl>
                 </div>
 
-                {/* Team member list */}
+                {/* Settings list */}
                 <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
                   <div className="divide-y divide-gray-200 pt-6">
                   <div className="">
@@ -437,54 +507,75 @@ export default function Customers() {
             </main>
             <aside className="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
               <div className="px-6 pt-6 pb-4">
-                <h2 className="text-2xl font-medium text-gray-900">Customers</h2>
-                <p className="mt-1 text-sm text-gray-600">Search directory of 325 customers</p>
+                <div className="flex justify-between">
+                  <h2 className="text-2xl font-medium text-gray-900">Customers</h2>
+                  <div>
+                      <button type="button" className="flex items-center justify-center rounded-full bg-red-600 p-1
+                                                text-white hover:bg-red-700 focus:outline-none focus:ring-2
+                                                    focus:ring-red-500 focus:ring-offset-2">
+                          <svg className="h-6 w-6" x-description="Heroicon name: outline/plus"
+                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                              stroke="currentColor" aria-hidden="true">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                          </svg>
+                      </button>
+                  </div>
+                </div>
+                <p className="mt-1 text-sm text-gray-600">Search directory of {totalCustomers} customers</p>
                 <form className="mt-6 flex space-x-4" action="#">
                   <div className="min-w-0 flex-1">
                     <label htmlFor="search" className="sr-only">
                       Search
                     </label>
                     <div className="relative rounded-md shadow-sm">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                      <div 
+                        onClick={() => searchCustomers()}
+                        className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
+                        <MagnifyingGlassIcon 
+                            className="h-5 w-5 text-gray-400 cursor-pointer"
+                            aria-hidden="true" />
                       </div>
                       <input
                         type="search"
                         name="search"
                         id="search"
+                        value={customerSearchName}
+                        onChange={event => setCustomerSearchName(event.target.value)}
+                        onKeyDown={handleKeyDown}
                         className="block w-full rounded-md border-gray-300 pl-10 focus:border-sky-500
                                  focus:ring-sky-500 sm:text-sm"
-                        placeholder="Search"
+                        placeholder="Search name..."
                       />
                     </div>
                   </div>
-                  {/* <button
-                    type="submit"
-                    className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
-                  >
-                  </button> */}
                 </form>
               </div>
               {/* Directory list */}
               <nav className="min-h-0 flex-1 overflow-y-auto" aria-label="Directory">
-                {Object.keys(directory).map((letter) => (
+                {totalCustomers === 0 && (
+                  <div className="text-gray-500 text-sm flex flex-col mt-20 text-center">
+                    <p className="font-semibold">No customers found.</p>
+                    <p>You can add a customer by clicking on the plus icon.</p>
+                  </div>
+                )}
+                {Object.keys(customerDirectory)?.map((letter) => (
                   <div key={letter} className="relative">
                     <div className="sticky top-0 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500">
                       <h3>{letter}</h3>
                     </div>
                     <ul role="list" className="relative z-0 divide-y divide-gray-200">
-                      {directory[letter].map((person) => (
-                        <li key={person.id}>
+                      {customerDirectory[letter]?.map((customer) => (
+                        <li key={customer.id}>
                           <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
                             <div className="flex-shrink-0">
-                              <img className="h-10 w-10 rounded-full" src={person.imageUrl} alt="" />
+                              <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
                             </div>
                             <div className="min-w-0 flex-1">
                               <a href="#" className="focus:outline-none">
                                 {/* Extend touch target to entire panel */}
                                 <span className="absolute inset-0" aria-hidden="true" />
-                                <p className="text-sm font-medium text-gray-900">{person.name}</p>
-                                <p className="truncate text-sm text-gray-500">{person.role}</p>
+                                <p className="text-sm font-medium text-gray-900">{customer.name}</p>
+                                <p className="truncate text-sm text-gray-500">{customer.emailAddress ? customer.emailAddress : 'No email specified'}</p>
                               </a>
                             </div>
                           </div>
@@ -501,3 +592,5 @@ export default function Customers() {
     </>
   )
 }
+
+export default Customers;
