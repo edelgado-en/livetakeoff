@@ -21,18 +21,13 @@ const MagnifyingGlassIcon = () => {
     )
 }
 
-const user = {
-  name: 'Tom Cook',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
-
 const tabs = [
   { name: 'Profile', href: '#', current: true },
   { name: 'Discounts', href: '#', current: false },
   { name: 'Additional Fees', href: '#', current: false },
   { name: 'Jobs', href: '#', current: false },
 ]
+
 const profile = {
   name: 'Wheels Up',
   imageUrl:
@@ -52,124 +47,6 @@ const profile = {
     Instructions: 'The plane is locked and the key is in the lock box in the nose gear storage unit. The code is 251. Clean cupholders, sink, lav, carpet, and microwave.'
   },
 }
-
-/* const directory = {
-  A: [
-    {
-      id: 1,
-      name: 'Aircharter Worldwide',
-      role: 'aircharterworldwide@gmail.com',
-      imageUrl:
-        'https://res.cloudinary.com/datidxeqm/image/upload/v1666296592/wheelsUpLogo_dsc6uu.svg',
-    },
-    {
-      id: 2,
-      name: 'Aircraft Service Providers',
-      role: 'info@aircraftserviceproviders.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 3,
-      name: 'Aircraft Services',
-      role: 'marcosbarreirajr@hotmail.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 4,
-      name: 'AirFlight Charters',
-      role: 'bill@airflightcharters.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  ],
-  B: [
-    {
-      id: 5,
-      name: 'Banker Aviation LLC',
-      role: 'victorbori@gmail.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1501031170107-cfd33f0cbdcc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 6,
-      name: 'Banyan Air Service',
-      role: 'corrego@banyanair.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1506980595904-70325b7fdd90?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 7,
-      name: 'Barry Henson',
-      role: 'barry.ttds@gmail.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1513910367299-bce8d8a0ebf6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  ],
-  C: [
-    {
-      id: 8,
-      name: 'Captain Chas Melichar',
-      role: 'captainchas@gmail.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1517070208541-6ddc4d3efbcb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 9,
-      name: 'Captain Kurt',
-      role: 'FalconJetCaptain@gmail.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  ],
-  E: [
-    {
-      id: 10,
-      name: 'Eagle Creek Logistics LLC',
-      role: 'accounting@progressivejet.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 11,
-      name: 'Eastern Airlines, LLC',
-      role: 'Muriah.Jenkins@signatureflight.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 12,
-      name: 'EC Flights Inc',
-      role: 'matt@jmajets.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1504703395950-b89145a5425b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 13,
-      name: 'Eduardo Gomez',
-      role: 'egomez@myjetsaver.com',
-      imageUrl:
-        'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  ],
-  S: [
-    {
-      id: 14,
-      name: 'Stars de Mexico SA de CV',
-      role: 'chavacom2001@yahoo.com.mx',
-      imageUrl:
-        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-      id: 15,
-      name: 'State of Florida',
-      role: 'raymondulrich@fdle.state.fl.us',
-      imageUrl:
-        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  ],
-} */
 
 
 function classNames(...classes) {
@@ -396,7 +273,7 @@ const Customers = () => {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <div className="relative z-0 flex flex-1 overflow-hidden">
             <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last">
-              {/* Breadcrumb */}
+              {/* Mobile only */}
               <nav className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden" aria-label="Breadcrumb">
                 <div onClick={() => setSidebarOpen(true)} className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
                   <ChevronLeftIcon className="-ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -462,10 +339,10 @@ const Customers = () => {
                 {/* Description list */}
                 <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
                   <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                    {Object.keys(profile.fields).map((field) => (
+                    {Object.keys(profile?.fields).map((field) => (
                       <div key={field} className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">{field}</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{profile.fields[field]}</dd>
+                        <dd className="mt-1 text-sm text-gray-900">{profile?.fields[field]}</dd>
                       </div>
                     ))}
                     <div className="sm:col-span-2">
