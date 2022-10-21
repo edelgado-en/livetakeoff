@@ -1,7 +1,8 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition, Switch, Menu } from '@headlessui/react'
 import { ChevronLeftIcon } from '@heroicons/react/outline'
-
+import BannerPlaceholder from '../../images/banner-placeholder.svg'
+import ProfilePlaceholder from '../../images/user-placeholder.jpg'
 import * as api from './apiService'
 
 const XMarkIcon = () => {
@@ -307,14 +308,14 @@ const Customers = () => {
                 {/* Profile header */}
                 <div>
                   <div>
-                    <img className="h-32 w-full object-cover lg:h-48" src={profile.coverImageUrl} alt="" />
+                    <img className="h-32 w-full object-cover lg:h-48" src={customerDetails?.banner ? customerDetails.banner : BannerPlaceholder} alt="" />
                   </div>
                   <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                     <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                       <div className="flex">
                         <img
                           className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32 bg-white border-black"
-                          src={profile.imageUrl}
+                          src={customerDetails?.logo ? customerDetails.logo : ProfilePlaceholder}
                           alt=""
                         />
                       </div>
