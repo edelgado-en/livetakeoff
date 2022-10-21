@@ -6,7 +6,7 @@ import * as api from './apiService'
 
 const XMarkIcon = () => {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
     )
@@ -257,6 +257,7 @@ const Customers = () => {
   return (
     <>
       <div className="flex h-full -mt-8">
+        {/* Side bar for mobile */}
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 lg:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -294,7 +295,8 @@ const Customers = () => {
                     <div className="absolute top-0 right-0 -mr-12 pt-2">
                       <button
                         type="button"
-                        className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        className="ml-1 flex h-10 w-10 items-center justify-center rounded-full
+                                  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white border-white"
                         onClick={() => setSidebarOpen(false)}
                       >
                         <span className="sr-only">Close sidebar</span>
@@ -303,18 +305,84 @@ const Customers = () => {
                     </div>
                   </Transition.Child>
                   
-                  <div className="flex flex-shrink-0 border-t border-gray-200 p-4">
-                    <a href="#" className="group block flex-shrink-0">
-                      <div className="flex items-center">
-                        <div>
-                          <img className="inline-block h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
-                        </div>
-                        <div className="ml-3">
-                          <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">{user.name}</p>
-                          <p className="text-sm font-medium text-gray-500 group-hover:text-gray-700">View profile</p>
+                  <div className="flex-shrink-0 border-t border-gray-200 p-4">
+                    <div className="flex justify-between">
+                      <h2 className="text-2xl font-medium text-gray-900">Customers</h2>
+                      <div>
+                          <button type="button" className="flex items-center justify-center rounded-full bg-red-600 p-1
+                                                    text-white hover:bg-red-700 focus:outline-none focus:ring-2
+                                                        focus:ring-red-500 focus:ring-offset-2">
+                              <svg className="h-6 w-6" x-description="Heroicon name: outline/plus"
+                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                                  stroke="currentColor" aria-hidden="true">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                              </svg>
+                          </button>
+                      </div>
+                    </div>
+                    <p className="mt-1 text-sm text-gray-600">Search directory of {totalCustomers} customers</p>
+                    <form className="mt-6 flex space-x-4" action="#">
+                      <div className="min-w-0 flex-1">
+                        <label htmlFor="search" className="sr-only">
+                          Search
+                        </label>
+                        <div className="relative rounded-md shadow-sm">
+                          <div 
+                            onClick={() => searchCustomers()}
+                            className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
+                            <MagnifyingGlassIcon 
+                                className="h-5 w-5 text-gray-400 cursor-pointer"
+                                aria-hidden="true" />
+                          </div>
+                          <input
+                            type="search"
+                            name="search"
+                            id="search"
+                            value={customerSearchName}
+                            onChange={event => setCustomerSearchName(event.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className="block w-full rounded-md border-gray-300 pl-10 focus:border-sky-500
+                                    focus:ring-sky-500 sm:text-sm"
+                            placeholder="Search name..."
+                          />
                         </div>
                       </div>
-                    </a>
+                    </form>
+                    {/* Directory list */}
+                    <nav className="min-h-0 flex-1 overflow-y-auto mt-5" aria-label="Directory">
+                      {totalCustomers === 0 && (
+                        <div className="text-gray-500 text-sm flex flex-col mt-20 text-center">
+                          <p className="font-semibold">No customers found.</p>
+                          <p>You can add a customer by clicking on the plus icon.</p>
+                        </div>
+                      )}
+                      {Object.keys(customerDirectory)?.map((letter) => (
+                        <div key={letter} className="relative">
+                          <div className="sticky top-0 z-10 border-t border-b border-gray-200 bg-gray-50 px-6 py-1 text-sm font-medium text-gray-500">
+                            <h3>{letter}</h3>
+                          </div>
+                          <ul role="list" className="relative z-0 divide-y divide-gray-200">
+                            {customerDirectory[letter]?.map((customer) => (
+                              <li key={customer.id}>
+                                <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
+                                  <div className="flex-shrink-0">
+                                    <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
+                                  </div>
+                                  <div className="min-w-0 flex-1">
+                                    <a href="#" className="focus:outline-none">
+                                      {/* Extend touch target to entire panel */}
+                                      <span className="absolute inset-0" aria-hidden="true" />
+                                      <p className="text-sm font-medium text-gray-900">{customer.name}</p>
+                                      <p className="truncate text-sm text-gray-500">{customer.emailAddress ? customer.emailAddress : 'No email specified'}</p>
+                                    </a>
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </nav>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -330,10 +398,10 @@ const Customers = () => {
             <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last">
               {/* Breadcrumb */}
               <nav className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden" aria-label="Breadcrumb">
-                <a href="#" className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
+                <div onClick={() => setSidebarOpen(true)} className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
                   <ChevronLeftIcon className="-ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
                   <span>Customers</span>
-                </a>
+                </div>
               </nav>
 
               <article>
