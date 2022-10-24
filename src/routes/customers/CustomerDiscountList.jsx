@@ -23,6 +23,12 @@ const CustomerDiscountList = () => {
         setDiscounts(data)
     }
 
+    const handleDeleteDiscount = async (discountId) => {
+        await api.deleteDiscount(discountId)
+
+        getDiscounts()
+    }
+
     return (
         <AnimatedPage>
             {!loading && discounts.length === 0 && (
@@ -66,7 +72,7 @@ const CustomerDiscountList = () => {
                             </div>
                             <div className="mt-5 flex items-center text-sm text-gray-500 sm:mt-0">
                                 <PencilIcon className="flex-shrink-0 h-4 w-4 mr-6 cursor-pointer" />
-                                <TrashIcon className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
+                                <TrashIcon onClick={() => handleDeleteDiscount(discount.id)} className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
                             </div>
                             </div>
                         </div>

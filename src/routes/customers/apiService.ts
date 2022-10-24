@@ -27,3 +27,7 @@ export const getServices = () => {
 export const addDiscount = (id: number, request: any) => {
     return httpService.post(`/api/customers/discounts/${id}/`, request);
 }
+
+export const deleteDiscount = (id: number) => {
+    return httpService.delete(`/api/customers/discounts/${id}/`);
+}
