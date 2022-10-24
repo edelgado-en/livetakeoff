@@ -61,6 +61,12 @@ const CustomerAddDiscount = () => {
         //get services and airports
     }, [])
 
+    const handleSetAmount = (e) => {
+        const value = e.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+
+        setAmount(value)
+
+    }
 
     const isServiceSelected = (value) => {
         return selectedServices.find((el) => el === value) ? true : false;
@@ -441,7 +447,7 @@ const CustomerAddDiscount = () => {
                             <input
                                 type="text"
                                 value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
+                                onChange={(e) => handleSetAmount(e.target.value)}
                                 name="amount"
                                 style={{ borderLeft: '0px' }}
                                 className="block w-full rounded-r-md border-gray-300 shadow-sm
