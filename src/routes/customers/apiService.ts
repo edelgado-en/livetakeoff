@@ -15,3 +15,11 @@ export const updateCustomerSetting = (id: number, request: any) => {
 export const getCustomerDiscounts = (id: number) => {
     return httpService.get(`/api/customers/discounts/${id}`);
 }
+
+export const getAirports = () => {
+    return httpService.get(`/api/airports`);
+}
+
+export const getServices = () => {
+    return httpService.get(`/api/services`);
+}

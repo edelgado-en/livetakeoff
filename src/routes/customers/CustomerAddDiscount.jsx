@@ -12,18 +12,6 @@ const discountTypes = [
     { id: 'A', name: 'By Airport' },
 ]
 
-const initialServices = [
-    {id: 1, name: 'Carpet Extraction'},
-    {id: 2, name: 'Basic Interior'},
-    {id: 3, name: 'Basic Exterior'},
-]
-
-const initialAirports = [
-    {id: 1, name: 'Florida International'},
-    {id: 2, name: 'Las Vegas'},
-    {id: 3, name: 'Airport Three'},
-]
-
 const amountTypes = [
     { id: 'P', name: 'Percentage' },
     { id: 'F', name: 'Fixed $' },
@@ -43,11 +31,11 @@ function classNames(...classes) {
 
 const CustomerAddDiscount = () => {
     const [selectedDiscountType, setSelectedDiscountType] = useState(discountTypes[0])
-    const [services, setServices] = useState(initialServices)
+    const [services, setServices] = useState([])
     const [selectedServices, setSelectedServices] = useState([]);
     const [isServicesOpen, setIsServicesOpen] = useState(false);
 
-    const [airports, setAirports] = useState(initialAirports)
+    const [airports, setAirports] = useState([])
     const [selectedAirports, setSelectedAirports] = useState([]);
     const [isAirportsOpen, setIsAirportsOpen] = useState(false);
 
@@ -58,8 +46,19 @@ const CustomerAddDiscount = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        //get services and airports
+        getAirports()
+        getServices()
     }, [])
+
+    const getAirports = async () => {
+        const { data } = await api.getAirports()
+        setAirports(data.results)
+    }
+
+    const getServices = async () => {
+        const { data } = await api.getServices()
+        setServices(data.results)
+    }
 
     const handleSetAmount = (e) => {
         const value = e.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
