@@ -65,7 +65,24 @@ const Customers = () => {
         setFirstLoad(false)
         if (data.results.length > 0) {
           getCustomerDetails(data.results[0].id)
-          navigate('/customers/' + data.results[0].id + '/profile/details')
+          
+          //account for page refresh. Maintain current inner route
+          let afterLastSlash = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+
+          let custId = location.pathname.match(/\d+/);
+          
+          if (custId !== null) {
+            custId = custId[0]
+          
+          } else {
+            custId = data.results[0].id
+          }
+
+          if (afterLastSlash === 'customers' || afterLastSlash === 'details') {
+            afterLastSlash = 'details'
+          }
+
+          navigate('/customers/' + custId + '/profile/' + afterLastSlash)
         }
       }
 

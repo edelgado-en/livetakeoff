@@ -11,3 +11,7 @@ export const getCustomerDetails = (id: number) => {
 export const updateCustomerSetting = (id: number, request: any) => {
     return httpService.patch(`/api/customers/settings/${id}/`, request);
 }
+
+export const getCustomerDiscounts = (id: number) => {
+    return httpService.get(`/api/customers/discounts/${id}`);
+}
