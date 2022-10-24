@@ -8,7 +8,7 @@ import * as api from './apiService'
 const tabs = [
     { name: 'Profile', href: 'details', current: true },
     { name: 'Discounts', href: 'discounts', current: false },
-    { name: 'Additional Fees', href: 'fees', current: false },
+    { name: 'Fees', href: 'fees', current: false },
     { name: 'Jobs', href: 'jobs', current: false },
 ]
 
@@ -19,6 +19,7 @@ function classNames(...classes) {
 const CustomerProfile = () => {
     const { customerId } = useParams();
     const [customerDetails, setCustomerDetails] = useState(null)
+    const location  = useLocation();
 
     useEffect(() => {
         getCustomerDetails()
@@ -32,9 +33,9 @@ const CustomerProfile = () => {
             // You call getCustomerDetails when you load the CustomerDetails component
             const { data } = await api.getCustomerDetails(customerId)
     
-          console.log(data)
+            console.log(data)
     
-          setCustomerDetails(data)
+            setCustomerDetails(data)
     
         } catch (err) {
     
@@ -66,9 +67,9 @@ const CustomerProfile = () => {
                         </div>
                     </div>
                 </div>
-            <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
-                <h1 className="truncate text-2xl font-bold text-gray-900">{customerDetails?.name}</h1>
-            </div>
+                <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
+                    <h1 className="truncate text-2xl font-bold text-gray-900">{customerDetails?.name}</h1>
+                </div>
             </div>
         </div>
         <div className="mt-0 sm:mt-0 2xl:mt-5">
@@ -80,7 +81,7 @@ const CustomerProfile = () => {
                     key={tab.name}
                     to={tab.href}
                     className={classNames(
-                        tab.current
+                        location.pathname.includes(tab.href) 
                         ? 'border-red-500 text-gray-900'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
                         'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
@@ -93,9 +94,10 @@ const CustomerProfile = () => {
             </div>
             </div>
         </div>
-
-        <Outlet />
-
+        
+        <div className="overflow-x-hidden">
+            <Outlet />
+        </div>
         </>
     )
 

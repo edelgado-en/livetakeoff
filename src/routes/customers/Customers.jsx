@@ -1,11 +1,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition, Switch, Menu } from '@headlessui/react'
 import { ChevronLeftIcon } from '@heroicons/react/outline'
-import BannerPlaceholder from '../../images/banner-placeholder.svg'
-import ProfilePlaceholder from '../../images/user-placeholder.jpg'
 import * as api from './apiService'
-
-import CustomerTabs from './CustomerProfile'
 
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
 
@@ -26,54 +22,16 @@ const MagnifyingGlassIcon = () => {
     )
 }
 
-const tabs = [
-  { name: 'Profile', href: 'details', current: true },
-  { name: 'Discounts', href: 'discounts', current: false },
-  { name: 'Additional Fees', href: 'fees', current: false },
-  { name: 'Jobs', href: 'jobs', current: false },
-]
-
-const profile = {
-  name: 'Wheels Up',
-  imageUrl:
-    'https://res.cloudinary.com/datidxeqm/image/upload/v1666296592/wheelsUpLogo_dsc6uu.svg',
-  coverImageUrl:
-    'https://res.cloudinary.com/datidxeqm/image/upload/v1666296586/wheelpsUpBanner_r1rshh.jpg',
-  about: `
-  <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
-    <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
-  `,
-  fields: {
-    Phone: '(555) 123-4567',
-    Email: 'wheelsup@example.com',
-    BillingAddress: '5678 NW 104th drive Coral Springs FL 33076',
-    BillingInfo: 'All invoices must be sent also to thisemail@jetedge.com',
-    Active: 'Yes',
-    Instructions: 'The plane is locked and the key is in the lock box in the nose gear storage unit. The code is 251. Clean cupholders, sink, lav, carpet, and microwave.'
-  },
-}
-
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 const Customers = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [availableToHire, setAvailableToHire] = useState(true)
-  const [privateAccount, setPrivateAccount] = useState(false)
-  const [allowCommenting, setAllowCommenting] = useState(true)
-  const [allowMentions, setAllowMentions] = useState(true)
   const [loading, setLoading] = useState(false)
   const [customerDirectory, setCustomerDirectory] = useState([])
   const [totalCustomers, setTotalCustomers] = useState(0)
   const [customerSearchName, setCustomerSearchName] = useState('')
-  const [customerDetails, setCustomerDetails] = useState(null)
   const [firstLoad, setFirstLoad] = useState(true)
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null)
 
-
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     //Basic throttling
@@ -107,8 +65,7 @@ const Customers = () => {
         setFirstLoad(false)
         if (data.results.length > 0) {
           getCustomerDetails(data.results[0].id)
-          navigate('/customers/' + data.results[0].id + '/profile')
-          //TODO: change to navigate('/customers/' + data.results[0].id + '/profile')
+          navigate('/customers/' + data.results[0].id + '/profile/details')
         }
       }
 
@@ -127,7 +84,8 @@ const Customers = () => {
 
   const getCustomerDetails = async (customerId) => {
     setSidebarOpen(false)
-    navigate('/customers/' + customerId + '/profile')
+    const afterLastSlash = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+    navigate('/customers/' + customerId + '/profile/' + afterLastSlash)
     
   }
 
@@ -149,18 +107,6 @@ const Customers = () => {
     }
 
     return resultObj
-  }
-
-  const formatPhoneNumber = (phoneNumberString) => {
-    var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-    var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-    
-    if (match) {
-      var intlCode = (match[1] ? '+1 ' : '');
-      return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
-    }
-    
-    return null;
   }
 
   return (
@@ -315,120 +261,8 @@ const Customers = () => {
 
               <article>
 
-              <Outlet />
+                <Outlet />
                 
-                {/* Description list */}
-               {/*  <div className="mx-auto mt-6 max-w-5xl px-4 sm:px-6 lg:px-8">
-                  <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                    {Object.keys(profile?.fields).map((field) => (
-                      <div key={field} className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">{field}</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{profile?.fields[field]}</dd>
-                      </div>
-                    ))}
-                    <div className="sm:col-span-2">
-                      <dt className="text-sm font-medium text-gray-500">About</dt>
-                      <dd
-                        className="mt-1 max-w-prose space-y-5 text-sm text-gray-900"
-                        dangerouslySetInnerHTML={{ __html: profile.about }}
-                      />
-                    </div>
-                  </dl>
-                </div> */}
-
-                {/* Settings list */}
-                {/* <div className="mx-auto mt-8 max-w-5xl px-4 pb-12 sm:px-6 lg:px-8">
-                  <div className="divide-y divide-gray-200 pt-6">
-                  <div className="">
-                    <div>
-                      <h2 className="text-lg font-medium leading-6 text-gray-900">Settings</h2>
-                      <p className="mt-1 text-sm text-gray-500">
-                        Ornare eu a volutpat eget vulputate. Fringilla commodo amet.
-                      </p>
-                    </div>
-                    <ul role="list" className="mt-2 divide-y divide-gray-200">
-                      <Switch.Group as="li" className="flex items-center justify-between py-4">
-                        <div className="flex flex-col">
-                          <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
-                            Show Spending Info
-                          </Switch.Label>
-                          <Switch.Description className="text-sm text-gray-500">
-                            Nulla amet tempus sit accumsan. Aliquet turpis sed sit lacinia.
-                          </Switch.Description>
-                        </div>
-                        <Switch
-                          checked={availableToHire}
-                          onChange={setAvailableToHire}
-                          className={classNames(
-                            availableToHire ? 'bg-red-500' : 'bg-gray-200',
-                            'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                          )}
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              availableToHire ? 'translate-x-5' : 'translate-x-0',
-                              'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                            )}
-                          />
-                        </Switch>
-                      </Switch.Group>
-                      <Switch.Group as="li" className="flex items-center justify-between py-4">
-                        <div className="flex flex-col">
-                          <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
-                            Allow Cancel Job
-                          </Switch.Label>
-                          <Switch.Description className="text-sm text-gray-500">
-                            Pharetra morbi dui mi mattis tellus sollicitudin cursus pharetra.
-                          </Switch.Description>
-                        </div>
-                        <Switch
-                          checked={privateAccount}
-                          onChange={setPrivateAccount}
-                          className={classNames(
-                            privateAccount ? 'bg-red-500' : 'bg-gray-200',
-                            'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                          )}
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              privateAccount ? 'translate-x-5' : 'translate-x-0',
-                              'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                            )}
-                          />
-                        </Switch>
-                      </Switch.Group>
-                      <Switch.Group as="li" className="flex items-center justify-between py-4">
-                        <div className="flex flex-col">
-                          <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
-                            Show Job Price
-                          </Switch.Label>
-                          <Switch.Description className="text-sm text-gray-500">
-                            Integer amet, nunc hendrerit adipiscing nam. Elementum ame
-                          </Switch.Description>
-                        </div>
-                        <Switch
-                          checked={allowCommenting}
-                          onChange={setAllowCommenting}
-                          className={classNames(
-                            allowCommenting ? 'bg-red-500' : 'bg-gray-200',
-                            'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                          )}
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              allowCommenting ? 'translate-x-5' : 'translate-x-0',
-                              'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                            )}
-                          />
-                        </Switch>
-                      </Switch.Group>
-                    </ul>
-                  </div>
-                </div>
-                </div> */}
               </article>
             </main>
             <aside className="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">

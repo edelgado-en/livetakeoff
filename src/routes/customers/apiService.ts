@@ -7,3 +7,7 @@ export const getCustomers = (request: any) => {
 export const getCustomerDetails = (id: number) => {
     return httpService.get(`/api/customers/${id}`);
 }
+
+export const updateCustomerSetting = (id: number, request: any) => {
+    return httpService.patch(`/api/customers/settings/${id}/`, request);
+}
