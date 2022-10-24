@@ -35,7 +35,6 @@ const Topbar = () => {
   const location  = useLocation();
 
   useEffect(() => {
-
     dispatch(fetchUser());
 
   }, [])
