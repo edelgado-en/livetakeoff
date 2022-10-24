@@ -30,6 +30,7 @@ function classNames(...classes) {
 }
 
 const CustomerAddDiscount = () => {
+    const { customerId } = useParams();
     const [selectedDiscountType, setSelectedDiscountType] = useState(discountTypes[0])
     const [services, setServices] = useState([])
     const [selectedServices, setSelectedServices] = useState([]);
@@ -64,7 +65,19 @@ const CustomerAddDiscount = () => {
         const value = e.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
 
         setAmount(value)
+    }
 
+    const handleSave = async () => {
+        const data = {
+            type: selectedDiscountType.id,
+            is_percentage: selectedAmountType.id === 'P' ? true : false,
+            discount: amount,
+            services: selectedServices,
+            airports: selectedAirports,
+        }
+
+        await api.addDiscount(customerId, data)
+        navigate(-1)
     }
 
     const isServiceSelected = (value) => {
@@ -470,6 +483,7 @@ const CustomerAddDiscount = () => {
                     </button>
                     <button
                         type="button"
+                        onClick={() => handleSave()}
                         className="inline-flex justify-center rounded-md 
                         border border-transparent bg-red-600 py-2 px-4
                         text-sm font-medium text-white shadow-sm hover:bg-red-600

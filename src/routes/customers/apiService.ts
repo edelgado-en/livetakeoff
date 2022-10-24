@@ -23,3 +23,7 @@ export const getAirports = () => {
 export const getServices = () => {
     return httpService.get(`/api/services`);
 }
+
+export const addDiscount = (id: number, request: any) => {
+    return httpService.post(`/api/customers/discounts/${id}/`, request);
+}
