@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition, Switch, Menu } from '@headlessui/react'
 import { ChevronLeftIcon } from '@heroicons/react/outline'
+import Loader from '../../components/loader/Loader'
 import * as api from './apiService'
 
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -24,7 +25,7 @@ const MagnifyingGlassIcon = () => {
 
 const Customers = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [customerDirectory, setCustomerDirectory] = useState([])
   const [totalCustomers, setTotalCustomers] = useState(0)
   const [customerSearchName, setCustomerSearchName] = useState('')
@@ -220,9 +221,11 @@ const Customers = () => {
                         </div>
                       </div>
                     </form>
-                    {/* Directory list */}
+                    {/* Directory list Mobile */}
                     <nav className="min-h-0 flex-1 overflow-y-auto mt-5" aria-label="Directory">
-                      {totalCustomers === 0 && (
+                      {loading && <Loader /> }
+
+                      {!loading && totalCustomers === 0 && (
                         <div className="text-gray-500 text-sm flex flex-col mt-20 text-center">
                           <p className="font-semibold">No customers found.</p>
                           <p>You can add a customer by clicking on the plus icon.</p>
@@ -329,7 +332,11 @@ const Customers = () => {
               </div>
               {/* Directory list */}
               <nav className="min-h-0 flex-1 overflow-y-auto" aria-label="Directory">
-                {totalCustomers === 0 && (
+                {loading && (
+                  <Loader />
+                )}
+
+                {!loading && totalCustomers === 0 && (
                   <div className="text-gray-500 text-sm flex flex-col mt-20 text-center">
                     <p className="font-semibold">No customers found.</p>
                     <p>You can add a customer by clicking on the plus icon.</p>
