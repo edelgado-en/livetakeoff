@@ -21,6 +21,8 @@ import CompleteList from './routes/job/CompleteList';
 import Customers from './routes/customers/Customers'
 import CustomerDetails from './routes/customers/CustomerDetails';
 import CustomerDiscounts from './routes/customers/CustomerDiscounts';
+import CustomerDiscountList from './routes/customers/CustomerDiscountList';
+import CustomerAddDiscount from './routes/customers/CustomerAddDiscount';
 import CustomerFees from './routes/customers/CustomerFees';
 import CustomerJobs from './routes/customers/CustomerJobs';
 import CustomerProfile from './routes/customers/CustomerProfile';
@@ -93,7 +95,10 @@ const  App = () => {
                           <Route path=":customerId/profile" element={<CustomerProfile />}>
                               <Route index element={<CustomerDetails />} />
                               <Route path="details" element={<CustomerDetails />} />
-                              <Route path="discounts" element={<CustomerDiscounts/>} />
+                              <Route path="discounts" element={<CustomerDiscounts/>}>
+                                  <Route index element={<CustomerDiscountList />} />
+                                  <Route path="add" element={<CustomerAddDiscount />} />
+                              </Route>
                               <Route path="fees" element={<CustomerFees />} />
                               <Route path="jobs" element={<CustomerJobs />} />
                           </Route>
