@@ -11,7 +11,7 @@ const CustomerDiscounts = () => {
     return (
         <AnimatedPage>
             <div className="mx-auto mt-2 max-w-5xl px-4 sm:px-6 lg:px-8 lg:pr-52">
-                <div className="py-2 mb-4">
+                <div className="py-2">
                     <div className="flex flex-wrap items-center justify-end sm:flex-nowrap">
                         <div className="flex-shrink-0">
                             <Link to="add" className="flex items-center justify-center rounded-full bg-red-600 p-1
