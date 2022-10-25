@@ -55,3 +55,11 @@ export const deleteFee = (id: number) => {
 export const addFee = (id: number, request: any) => {
     return httpService.post(`/api/customers/fees/${id}/`, request);
 }
+
+export const getFee = (id: number) => {
+    return httpService.get(`/api/customers/fees/update/${id}/`);
+}
+
+export const updateFee = (id: number, request: any) => {
+    return httpService.patch(`/api/customers/fees/update/${id}/`, request);
+}
