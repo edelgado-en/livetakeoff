@@ -44,6 +44,8 @@ const CustomerAddDiscount = () => {
 
     const [amount, setAmount] = useState()
 
+    const [errorMessage, setErrorMessage] = useState(null)
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -68,6 +70,21 @@ const CustomerAddDiscount = () => {
     }
 
     const handleSave = async () => {
+        if (selectedDiscountType.id === 'S') {
+            if (selectedServices.length === 0) {
+                alert('Please select at least one service')
+                return
+            }
+        }
+
+        if (selectedDiscountType.id === 'A') {
+            if (selectedAirports.length === 0) {
+                alert('Please select at least one airport')
+                return
+            }
+        }
+
+
         const data = {
             type: selectedDiscountType.id,
             is_percentage: selectedAmountType.id === 'P' ? true : false,
@@ -392,6 +409,7 @@ const CustomerAddDiscount = () => {
                         )}
                     </Listbox>
                 )}
+
                 <div className="mt-5">
                     <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
                         Amount
