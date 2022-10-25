@@ -6,9 +6,9 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { useParams, useNavigate } from "react-router-dom";
 import * as api from './apiService'
 
-const discountTypes = [
+const feeTypes = [
     { id: 'G', name: 'General' },
-    { id: 'S', name: 'By Service' },
+    { id: 'F', name: 'By FBO' },
     { id: 'A', name: 'By Airport' },
 ]
 
@@ -29,12 +29,12 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const CustomerAddDiscount = () => {
+const CustomerAddFee = () => {
     const { customerId } = useParams();
-    const [selectedDiscountType, setSelectedDiscountType] = useState(discountTypes[0])
-    const [services, setServices] = useState([])
-    const [selectedServices, setSelectedServices] = useState([]);
-    const [isServicesOpen, setIsServicesOpen] = useState(false);
+    const [selectedFeeType, setSelectedFeeType] = useState(feeTypes[0])
+    const [fbos, setFbos] = useState([])
+    const [selectedFbos, setSelectedFbos] = useState([]);
+    const [isFeesOpen, setIsFeesOpen] = useState(false);
 
     const [airports, setAirports] = useState([])
     const [selectedAirports, setSelectedAirports] = useState([]);
@@ -48,7 +48,7 @@ const CustomerAddDiscount = () => {
 
     useEffect(() => {
         getAirports()
-        getServices()
+        getFbos()
     }, [])
 
     const getAirports = async () => {
@@ -56,9 +56,9 @@ const CustomerAddDiscount = () => {
         setAirports(data.results)
     }
 
-    const getServices = async () => {
-        const { data } = await api.getServices()
-        setServices(data.results)
+    const getFbos = async () => {
+        const { data } = await api.getFbos()
+        setFbos(data.results)
     }
 
     const handleSetAmount = (e) => {
@@ -68,14 +68,14 @@ const CustomerAddDiscount = () => {
     }
 
     const handleSave = async () => {
-        if (selectedDiscountType.id === 'S') {
-            if (selectedServices.length === 0) {
-                alert('Please select at least one service')
+        if (selectedFeeType.id === 'F') {
+            if (selectedFbos.length === 0) {
+                alert('Please select at least one FBO')
                 return
             }
         }
 
-        if (selectedDiscountType.id === 'A') {
+        if (selectedFeeType.id === 'A') {
             if (selectedAirports.length === 0) {
                 alert('Please select at least one airport')
                 return
@@ -84,41 +84,42 @@ const CustomerAddDiscount = () => {
 
 
         const data = {
-            type: selectedDiscountType.id,
+            type: selectedFeeType.id,
             is_percentage: selectedAmountType.id === 'P' ? true : false,
-            discount: amount,
-            services: selectedServices,
+            fee: amount,
+            fbos: selectedFbos,
             airports: selectedAirports,
         }
 
-        await api.addDiscount(customerId, data)
+        await api.addFee(customerId, data)
+        
         navigate(-1)
     }
 
-    const isServiceSelected = (value) => {
-        return selectedServices.find((el) => el === value) ? true : false;
+    const isFboSelected = (value) => {
+        return selectedFbos.find((el) => el === value) ? true : false;
     }
 
-    const handleSelectService = (value) => {
-        if (!isServiceSelected(value)) {
-            const selectedServicesUpdated = [
-                ...selectedServices,
-                services.find((el) => el === value)
+    const handleSelectFbo = (value) => {
+        if (!isFboSelected(value)) {
+            const selectedFbosUpdated = [
+                ...selectedFbos,
+                fbos.find((el) => el === value)
             ]
             
-            setSelectedServices(selectedServicesUpdated);
+            setSelectedFbos(selectedFbosUpdated);
         
         } else {
-            handleDeselectService(value);
+            handleDeselectFee(value);
         }
 
-        setIsServicesOpen(true);
+        setIsFeesOpen(true);
     }
 
-    const handleDeselectService = (value) => {
-        const selectedServicesUpdated = selectedServices.filter((el) => el !== value);
-        setSelectedServices(selectedServicesUpdated);
-        setIsServicesOpen(true);
+    const handleDeselectFee = (value) => {
+        const selectedFeesUpdated = selectedFbos.filter((el) => el !== value);
+        setSelectedFbos(selectedFeesUpdated);
+        setIsFeesOpen(true);
     }
 
     const isAirportSelected = (value) => {
@@ -150,11 +151,11 @@ const CustomerAddDiscount = () => {
     return (
         <AnimatedPage>
             <div className="mx-auto max-w-md">
-                <div className="font-medium text-md mb-4">Add new discount</div>
-                <Listbox value={selectedDiscountType} onChange={setSelectedDiscountType}>
+                <div className="font-medium text-md mb-4">Add new additional fee</div>
+                <Listbox value={selectedFeeType} onChange={setSelectedFeeType}>
                 {({ open }) => (
                     <>
-                    <Listbox.Label className="block text-sm font-medium text-gray-700">Discount Type</Listbox.Label>
+                    <Listbox.Label className="block text-sm font-medium text-gray-700">Fee Type</Listbox.Label>
                     <div className="relative mt-1">
                         <Listbox.Button className="relative w-full cursor-default rounded-md border
                                                 border-gray-300 bg-white py-2 pl-3 pr-10 text-left
@@ -162,7 +163,7 @@ const CustomerAddDiscount = () => {
                                                     focus:ring-sky-500 sm:text-sm">
                             <span className="flex items-center">
                                 <span className="block truncate">
-                                    {selectedDiscountType.name}
+                                    {selectedFeeType.name}
                                 </span>
                             </span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -180,16 +181,16 @@ const CustomerAddDiscount = () => {
                         <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
                                                 rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
                                                 ring-opacity-5 focus:outline-none sm:text-sm">
-                            {discountTypes.map((discountType) => (
+                            {feeTypes.map((feeType) => (
                             <Listbox.Option
-                                key={discountType.id}
+                                key={feeType.id}
                                 className={({ active }) =>
                                 classNames(
                                     active ? 'text-white bg-red-600' : 'text-gray-900',
                                     'relative cursor-default select-none py-2 pl-3 pr-9'
                                 )
                                 }
-                                value={discountType}
+                                value={feeType}
                             >
                                 {({ selected, active }) => (
                                 <>
@@ -197,7 +198,7 @@ const CustomerAddDiscount = () => {
                                         <span
                                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                                         >
-                                            {discountType.name}
+                                            {feeType.name}
                                         </span>
                                     </div>
 
@@ -222,30 +223,30 @@ const CustomerAddDiscount = () => {
                 )}
                 </Listbox>
                 
-                {selectedDiscountType.id === 'S' && (
+                {selectedFeeType.id === 'F' && (
                     <Listbox
                         as="div"
                         className="space-y-1 mt-5"
-                        value={selectedServices}
-                        onChange={(value) => handleSelectService(value)}
-                        open={isServicesOpen}>
+                        value={selectedFbos}
+                        onChange={(value) => handleSelectFbo(value)}
+                        open={isFeesOpen}>
                         {() => (
                         <>
                             <Listbox.Label className="block text-sm leading-5 font-medium text-gray-700">
-                                Services
+                                FBO
                             </Listbox.Label>
                             <div className="relative">
                                 <span className="inline-block w-full rounded-md shadow-sm">
                                     <Listbox.Button
-                                        onClick={() => setIsServicesOpen(!isServicesOpen)}
-                                        open={isServicesOpen}
+                                        onClick={() => setIsFeesOpen(!isFeesOpen)}
+                                        open={isFeesOpen}
                                         className="cursor-default relative w-full rounded-md border border-gray-300
                                                 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue
                                                 focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                         <span className="block truncate">
-                                            {selectedServices.length < 1
-                                                    ? "Select services"
-                                                    : `Selected services (${selectedServices.length})`}
+                                            {selectedFbos.length < 1
+                                                    ? "Select FBOs"
+                                                    : `Selected FBOs (${selectedFbos.length})`}
                                         </span>
                                         <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                             <svg
@@ -265,7 +266,7 @@ const CustomerAddDiscount = () => {
                                 </span>
                                 <Transition
                                     unmount={false}
-                                    show={isServicesOpen}
+                                    show={isFeesOpen}
                                     leave="transition ease-in duration-100"
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
@@ -274,15 +275,15 @@ const CustomerAddDiscount = () => {
                                         static
                                         className="max-h-70 rounded-md py-1 text-base leading-6 shadow-xs
                                                 overflow-auto focus:outline-none sm:text-sm sm:leading-5 z-50">
-                                        {services.map((service) => {
-                                            const selected = isServiceSelected(service);
+                                        {fbos.map((fbo) => {
+                                            const selected = isFboSelected(fbo);
                                             return (
-                                                <Listbox.Option key={service.id} value={service}>
+                                                <Listbox.Option key={fbo.id} value={fbo}>
                                                 {({ active }) => (
                                                     <div className={`${ active ? "text-white bg-red-600": "text-gray-900"}
                                                                     cursor-default select-none relative py-2 pl-8 pr-4`}>
                                                         <span className={`${selected ? "font-semibold" : "font-normal"} block truncate`}>
-                                                            {service.name}
+                                                            {fbo.name}
                                                         </span>
                                                         {selected && (
                                                             <span
@@ -315,7 +316,7 @@ const CustomerAddDiscount = () => {
                     </Listbox>
                 )}
 
-                {selectedDiscountType.id === 'A' && (
+                {selectedFeeType.id === 'A' && (
                     <Listbox
                         as="div"
                         className="space-y-1 mt-5"
@@ -504,7 +505,7 @@ const CustomerAddDiscount = () => {
                         border border-transparent bg-red-600 py-2 px-4
                         text-sm font-medium text-white shadow-sm hover:bg-red-600
                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                        Add discount
+                        Add Fee
                     </button>  
                 </div>
             </div>
@@ -515,4 +516,4 @@ const CustomerAddDiscount = () => {
 
 }
 
-export default CustomerAddDiscount;
+export default CustomerAddFee;

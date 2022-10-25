@@ -24,6 +24,10 @@ export const getServices = () => {
     return httpService.get(`/api/services`);
 }
 
+export const getFbos = () => {
+    return httpService.get(`/api/fbos`);
+}
+
 export const addDiscount = (id: number, request: any) => {
     return httpService.post(`/api/customers/discounts/${id}/`, request);
 }
@@ -38,4 +42,16 @@ export const getDiscount = (id: number) => {
 
 export const updateDiscount = (id: number, request: any) => {
     return httpService.patch(`/api/customers/discounts/update/${id}/`, request);
+}
+
+export const getCustomerFees = (id: number) => {
+    return httpService.get(`/api/customers/fees/${id}`);
+}
+
+export const deleteFee = (id: number) => {
+    return httpService.delete(`/api/customers/fees/${id}/`);
+}
+
+export const addFee = (id: number, request: any) => {
+    return httpService.post(`/api/customers/fees/${id}/`, request);
 }

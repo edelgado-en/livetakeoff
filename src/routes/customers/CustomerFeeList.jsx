@@ -1,99 +1,101 @@
 
 import { useEffect, useState } from "react";
+import Loader from "../../components/loader/Loader";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
-import DeleteDiscountModal from "./DeleteDiscountModal";
+import DeleteFeeModal from "./DeleteFeeModal";
 import * as api from './apiService'
 
-const CustomerDiscountList = () => {
+const CustomerFeeList = () => {
     const { customerId } = useParams();
-    const [discounts, setDiscounts] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [isDeleteDiscountModalOpen, setDeleteDiscountModalOpen] = useState(false)
-    const [discountToBeDeleted, setDiscountToBeDeleted] = useState(null)
+    const [fees, setFees] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [isDeleteFeeModalOpen, setDeleteFeeModalOpen] = useState(false)
+    const [feeToBeDeleted, setFeeToBeDeleted] = useState(null)
 
     useEffect(() => {
-        getDiscounts()
+        getFees()
     }, [customerId])
 
-    const getDiscounts = async () => {
-        setLoading(true)
-        const { data } = await api.getCustomerDiscounts(customerId)
+    const getFees = async () => {
+        const { data } = await api.getCustomerFees(customerId)
 
         setLoading(false)
 
-        setDiscounts(data)
+        setFees(data)
     }
 
-    const deleteDiscount = async (discount) => {
-        await api.deleteDiscount(discount.id)
+    const deleteFee = async (fee) => {
+        await api.deleteFee(fee.id)
 
-        setDeleteDiscountModalOpen(false)
+        setDeleteFeeModalOpen(false)
 
-        getDiscounts()
+        getFees()
     }
 
-    const handleToggleDeleteDiscountModal = (discount) => {
-        if (discount) {
-            setDiscountToBeDeleted(discount)
+    const handleToggleDeleteFeeModal = (fee) => {
+        if (fee) {
+            setFeeToBeDeleted(fee)
         } else {
-            setDiscountToBeDeleted(null)
+            setFeeToBeDeleted(null)
         }
 
-        setDeleteDiscountModalOpen(!isDeleteDiscountModalOpen)
+        setDeleteFeeModalOpen(!isDeleteFeeModalOpen)
     }
 
     return (
         <AnimatedPage>
-            {!loading && discounts.length === 0 && (
+            {loading && <Loader />}
+            
+            {!loading && fees.length === 0 && (
                 <div className="text-sm mt-10 flex flex-col items-center">
                     <div className="font-semibold text-gray-600 mt-4">
-                        No discounts found
+                        No additional fees found
                     </div>
-                    <p className="text-gray-500">Click on the plus icon to add a discount.</p>
+                    <p className="text-gray-500">Click on the plus icon to add an additional fee.</p>
                 </div>
             )}
 
             <div className="overflow-hidden bg-white shadow sm:rounded-md mb-20">
                 <ul role="list" className="divide-y divide-gray-200">
-                    {discounts.map((discount) => (
-                    <li key={discount.id}>
+                    {fees.map((fee) => (
+                    <li key={fee.id}>
                         <div className="block hover:bg-gray-50">
                         <div className="px-4 py-4 sm:px-6">
                             <div className="flex items-center justify-between">
                             <p className="truncate text-sm font-medium text-red-600">
-                                {discount.type === 'S' ? 'By Service' : ''}
-                                {discount.type === 'A' ? 'By Airport' : ''}
-                                {discount.type === 'G' ? 'General' : ''}
+                                {fee.type === 'S' ? 'By Service' : ''}
+                                {fee.type === 'F' ? 'By FBO' : ''}
+                                {fee.type === 'G' ? 'General' : ''}
                             </p>
                             <div className="ml-2 flex flex-shrink-0">
                                 <span className="inline-flex rounded-ful text-md font-semibold leading-5">
-                                    {!discount.is_percentage ? '$' : ''}
-                                    {discount.discount}
-                                    {discount.is_percentage ? '%' : ''}
+                                    {!fee.is_percentage ? '$' : ''}
+                                    {fee.fee}
+                                    {fee.is_percentage ? '%' : ''}
                                 </span>
                             </div>
                             </div>
                             <div className="mt-5 sm:flex sm:justify-between">
-                                {discount.type === 'G' && (
+                                {fee.type === 'G' && (
                                     <p className="text-gray-500 text-sm">Applies to every job for this customer</p>
                                 )}
                                 <div className="text-sm text-gray-500">
-                                    {discount.airports.map((airport, index) => (
+                                    {fee.airports.map((airport, index) => (
                                         <div key={index} className="mb-2">{index + 1 + '. '}{airport.name}</div>
                                     ))}
 
-                                    {discount.services.map((service, index) => (
-                                        <div key={index} className="mb-2">{index + 1 + '. '}{service.name}</div>
+                                    {fee.fbos.map((fbo, index) => (
+                                        <div key={index} className="mb-2">{index + 1 + '. '}{fbo.name}</div>
                                     ))}
                                 </div>
                                 <div className="mt-5 flex items-center text-sm text-gray-500 sm:mt-0">
-                                    <Link to={`edit/${discount.id}`}>
+                                    <Link to={`edit/${fee.id}`}>
                                         <PencilIcon 
                                             className="flex-shrink-0 h-4 w-4 mr-6 cursor-pointer" />
                                     </Link>
-                                    <TrashIcon onClick={() => handleToggleDeleteDiscountModal(discount)}
+                                    <TrashIcon onClick={() => handleToggleDeleteFeeModal(fee)}
                                         className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
                                 </div>
                             </div>
@@ -103,15 +105,15 @@ const CustomerDiscountList = () => {
                     ))}
                 </ul>
 
-                {isDeleteDiscountModalOpen && <DeleteDiscountModal 
-                                                isOpen={isDeleteDiscountModalOpen}
-                                                handleClose={handleToggleDeleteDiscountModal}
-                                                deleteDiscount={deleteDiscount}
-                                                discount={discountToBeDeleted}
+                {isDeleteFeeModalOpen && <DeleteFeeModal 
+                                                isOpen={isDeleteFeeModalOpen}
+                                                handleClose={handleToggleDeleteFeeModal}
+                                                deleteFee={deleteFee}
+                                                fee={feeToBeDeleted}
                                             />}
             </div>
         </AnimatedPage>
     )
 }
 
-export default CustomerDiscountList;
+export default CustomerFeeList;

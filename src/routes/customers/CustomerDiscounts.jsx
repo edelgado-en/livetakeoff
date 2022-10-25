@@ -1,12 +1,8 @@
 
-import { useEffect, useState } from "react";
-import { TrashIcon, PencilIcon, TagIcon } from "@heroicons/react/outline";
-import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
-import * as api from './apiService'
 
 const CustomerDiscounts = () => {
-    const { customerId } = useParams();
 
     return (
         <AnimatedPage>

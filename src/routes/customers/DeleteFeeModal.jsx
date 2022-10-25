@@ -9,7 +9,7 @@ const ExclamationTriangule = () => {
     )
 }
 
-const DeleteDiscountModal = ({ isOpen, handleClose, deleteDiscount, discount }) => {
+const DeleteFeeModal = ({ isOpen, handleClose, deleteFee, fee }) => {
 
     return (
         <ModalFrame isModalOpen={isOpen}>
@@ -20,17 +20,17 @@ const DeleteDiscountModal = ({ isOpen, handleClose, deleteDiscount, discount }) 
                   </div>
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 relative top-1 flex flex-col">
-                      Delete Discount 
+                      Delete Fee 
                       <div className="text-gray-500 text-sm mt-2">
-                        {discount.type === 'G' ? 'General' : ''}
-                        {discount.type === 'S' ? 'By Service' : ''}
-                        {discount.type === 'A' ? 'By Airport' : ''}
+                        {fee.type === 'G' ? 'General' : ''}
+                        {fee.type === 'F' ? 'By FBO' : ''}
+                        {fee.type === 'A' ? 'By Airport' : ''}
                       </div>
                     </Dialog.Title>
                     
-                    <div className="mt-4 mb-1">
+                    <div className="mt-4 mb-2">
                         <p className="text-sm text-gray-500 py-3">
-                            Prices of on-going jobs will not be affected. Discounts are applied on job creation.
+                            Prices of on-going jobs will not be affected. Fees are applied on job creation.
                         </p>
                         <p className="text-sm text-gray-500">
                             Job prices can always be updated manually on the job details page.
@@ -42,7 +42,7 @@ const DeleteDiscountModal = ({ isOpen, handleClose, deleteDiscount, discount }) 
                 <div className="mt-6 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
-                    onClick={() => deleteDiscount(discount)}
+                    onClick={() => deleteFee(fee)}
                     className="inline-flex w-full justify-center rounded-md border border-transparent
                              bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700
                               focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
@@ -66,4 +66,4 @@ const DeleteDiscountModal = ({ isOpen, handleClose, deleteDiscount, discount }) 
     )
 }
 
-export default DeleteDiscountModal;
+export default DeleteFeeModal;
