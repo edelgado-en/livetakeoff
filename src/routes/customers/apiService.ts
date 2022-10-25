@@ -31,3 +31,11 @@ export const addDiscount = (id: number, request: any) => {
 export const deleteDiscount = (id: number) => {
     return httpService.delete(`/api/customers/discounts/${id}/`);
 }
+
+export const getDiscount = (id: number) => {
+    return httpService.get(`/api/customers/discounts/update/${id}/`);
+}
+
+export const updateDiscount = (id: number, request: any) => {
+    return httpService.patch(`/api/customers/discounts/update/${id}/`, request);
+}

@@ -23,6 +23,7 @@ import CustomerDetails from './routes/customers/CustomerDetails';
 import CustomerDiscounts from './routes/customers/CustomerDiscounts';
 import CustomerDiscountList from './routes/customers/CustomerDiscountList';
 import CustomerAddDiscount from './routes/customers/CustomerAddDiscount';
+import CustomerEditDiscount from './routes/customers/CustomerEditDiscount';
 import CustomerFees from './routes/customers/CustomerFees';
 import CustomerJobs from './routes/customers/CustomerJobs';
 import CustomerProfile from './routes/customers/CustomerProfile';
@@ -98,6 +99,7 @@ const  App = () => {
                               <Route path="discounts" element={<CustomerDiscounts/>}>
                                   <Route index element={<CustomerDiscountList />} />
                                   <Route path="add" element={<CustomerAddDiscount />} />
+                                  <Route path="edit/:discountId" element={<CustomerEditDiscount />} />
                               </Route>
                               <Route path="fees" element={<CustomerFees />} />
                               <Route path="jobs" element={<CustomerJobs />} />

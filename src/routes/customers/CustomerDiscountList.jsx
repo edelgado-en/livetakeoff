@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import DeleteDiscountModal from "./DeleteDiscountModal";
@@ -89,9 +89,12 @@ const CustomerDiscountList = () => {
                                     ))}
                                 </div>
                                 <div className="mt-5 flex items-center text-sm text-gray-500 sm:mt-0">
-                                    <PencilIcon className="flex-shrink-0 h-4 w-4 mr-6 cursor-pointer" />
+                                    <Link to={`edit/${discount.id}`}>
+                                        <PencilIcon 
+                                            className="flex-shrink-0 h-4 w-4 mr-6 cursor-pointer" />
+                                    </Link>
                                     <TrashIcon onClick={() => handleToggleDeleteDiscountModal(discount)}
-                                               className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
+                                        className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
                                 </div>
                             </div>
                         </div>

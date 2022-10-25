@@ -29,8 +29,9 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const CustomerAddDiscount = () => {
-    const { customerId } = useParams();
+const CustomerEditDiscount = () => {
+    const { discountId } = useParams();
+    const [loading, setLoading] = useState(true)
     const [selectedDiscountType, setSelectedDiscountType] = useState(discountTypes[0])
     const [services, setServices] = useState([])
     const [selectedServices, setSelectedServices] = useState([]);
@@ -47,18 +48,32 @@ const CustomerAddDiscount = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getAirports()
-        getServices()
+        getDiscountInfo()
     }, [])
 
-    const getAirports = async () => {
-        const { data } = await api.getAirports()
-        setAirports(data.results)
-    }
+    const getDiscountInfo = async () => {
+        const response2 = await api.getDiscount(discountId);
 
-    const getServices = async () => {
-        const { data } = await api.getServices()
-        setServices(data.results)
+        setSelectedServices(response2.data.services)
+        setSelectedAirports(response2.data.airports)
+
+        setAmount(response2.data.discount)
+        setSelectedDiscountType(discountTypes.find(d => d.id === response2.data.type))
+
+        if (response2.data.is_percentage) {
+            setSelectedAmountType(amountTypes[0])
+        } else {
+            setSelectedAmountType(amountTypes[1])
+        }
+
+        const { data } = await api.getAirports()
+        setAirports(data.results.map((a) => ({ id: a.id, name: a.name })))
+        
+        const response = await api.getServices()
+        setServices(response.data.results.map((s) => ({ id: s.id, name: s.name })))
+        
+        setLoading(false)
+
     }
 
     const handleSetAmount = (e) => {
@@ -91,19 +106,20 @@ const CustomerAddDiscount = () => {
             airports: selectedAirports,
         }
 
-        await api.addDiscount(customerId, data)
+        await api.updateDiscount(discountId, data)
+        
         navigate(-1)
     }
 
     const isServiceSelected = (value) => {
-        return selectedServices.find((el) => el === value) ? true : false;
+        return selectedServices.find((el) => el.id === value.id) ? true : false;
     }
 
     const handleSelectService = (value) => {
         if (!isServiceSelected(value)) {
             const selectedServicesUpdated = [
                 ...selectedServices,
-                services.find((el) => el === value)
+                services.find((el) => el.id === value.id)
             ]
             
             setSelectedServices(selectedServicesUpdated);
@@ -116,20 +132,20 @@ const CustomerAddDiscount = () => {
     }
 
     const handleDeselectService = (value) => {
-        const selectedServicesUpdated = selectedServices.filter((el) => el !== value);
+        const selectedServicesUpdated = selectedServices.filter((el) => el.id !== value.id);
         setSelectedServices(selectedServicesUpdated);
         setIsServicesOpen(true);
     }
 
     const isAirportSelected = (value) => {
-        return selectedAirports.find((el) => el === value) ? true : false;
+        return selectedAirports.find((el) => el.id === value.id) ? true : false;
     }
 
     const handleSelectAirport = (value) => {
         if (!isAirportSelected(value)) {
             const selectedAirportsUpdated = [
                 ...selectedAirports,
-                airports.find((el) => el === value)
+                airports.find((el) => el.id === value.id)
             ]
             
             setSelectedAirports(selectedAirportsUpdated);
@@ -142,7 +158,7 @@ const CustomerAddDiscount = () => {
     }
 
     const handleDeselectAirport = (value) => {
-        const selectedAirportsUpdated = selectedAirports.filter((el) => el !== value);
+        const selectedAirportsUpdated = selectedAirports.filter((el) => el.id !== value.id);
         setSelectedAirports(selectedAirportsUpdated);
         setIsAirportsOpen(true);
     }
@@ -150,7 +166,7 @@ const CustomerAddDiscount = () => {
     return (
         <AnimatedPage>
             <div className="mx-auto max-w-md">
-                <div className="font-medium text-md mb-4">Add new discount</div>
+                <div className="font-medium text-md mb-4">Edit discount</div>
                 <Listbox value={selectedDiscountType} onChange={setSelectedDiscountType}>
                 {({ open }) => (
                     <>
@@ -222,7 +238,7 @@ const CustomerAddDiscount = () => {
                 )}
                 </Listbox>
                 
-                {selectedDiscountType.id === 'S' && (
+                {!loading && selectedDiscountType.id === 'S' && (
                     <Listbox
                         as="div"
                         className="space-y-1 mt-5"
@@ -315,7 +331,7 @@ const CustomerAddDiscount = () => {
                     </Listbox>
                 )}
 
-                {selectedDiscountType.id === 'A' && (
+                {!loading && selectedDiscountType.id === 'A' && (
                     <Listbox
                         as="div"
                         className="space-y-1 mt-5"
@@ -504,7 +520,7 @@ const CustomerAddDiscount = () => {
                         border border-transparent bg-red-600 py-2 px-4
                         text-sm font-medium text-white shadow-sm hover:bg-red-600
                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                        Add discount
+                        Edit discount
                     </button>  
                 </div>
             </div>
@@ -515,4 +531,4 @@ const CustomerAddDiscount = () => {
 
 }
 
-export default CustomerAddDiscount;
+export default CustomerEditDiscount;
