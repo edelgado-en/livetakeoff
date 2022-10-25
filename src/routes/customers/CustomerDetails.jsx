@@ -238,7 +238,7 @@ const CustomerDetails = () => {
                       </Switch.Group>
                     </ul>
                   </div>
-                </div>
+                  </div>
                 </div>
         </AnimatedPage>
         

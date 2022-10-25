@@ -453,7 +453,7 @@ const JobAssignments = () => {
                         </div>
                     </div>
 
-                    {/* ADD RETAINER SERVICES */}
+                    {/* TODO: ADD RETAINER SERVICES */}
 
                     <div className="flex flex-col xl:flex-row-reverse justify-end py-4 pb-20 gap-4 mt-8 max-w-md m-auto">
                         <button
