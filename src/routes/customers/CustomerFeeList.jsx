@@ -65,7 +65,7 @@ const CustomerFeeList = () => {
                         <div className="px-4 py-4 sm:px-6">
                             <div className="flex items-center justify-between">
                             <p className="truncate text-sm font-medium text-red-600">
-                                {fee.type === 'S' ? 'By Service' : ''}
+                                {fee.type === 'A' ? 'By Airport' : ''}
                                 {fee.type === 'F' ? 'By FBO' : ''}
                                 {fee.type === 'G' ? 'General' : ''}
                             </p>
