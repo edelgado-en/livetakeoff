@@ -51,12 +51,20 @@ const CustomerProfile = () => {
             <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
                 <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                     <div className="flex">
-                        <img
-                            className="h-24 w-24 rounded-full ring-4
-                                    ring-white sm:h-32 sm:w-32 bg-white border-black"
-                            src={customerDetails?.logo ? customerDetails.logo : ProfilePlaceholder}
-                            alt=""
-                        />
+                        {customerDetails?.logo ? 
+                            <img
+                                className="h-24 w-24 rounded-full ring-4
+                                        ring-white sm:h-32 sm:w-32 bg-white border-black"
+                                src={customerDetails?.logo}
+                                alt=""
+                            />
+                            :
+                            <span className="h-24 w-24 overflow-hidden rounded-full bg-gray-100">
+                                <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </span>
+                        }
                     </div>
                     <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                         <div className="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
