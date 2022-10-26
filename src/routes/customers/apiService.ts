@@ -28,6 +28,10 @@ export const getFbos = () => {
     return httpService.get(`/api/fbos`);
 }
 
+export const getPriceList = () => {
+    return httpService.get(`/api/price-list`);
+}
+
 export const addDiscount = (id: number, request: any) => {
     return httpService.post(`/api/customers/discounts/${id}/`, request);
 }

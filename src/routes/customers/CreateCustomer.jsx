@@ -9,12 +9,67 @@ import ImageUploading from 'react-images-uploading';
 import * as api from './apiService'
 import { toast } from "react-toastify"
 
+import Input from 'react-phone-number-input/input'
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function CreateCustomer() {
-    const navigate = useNavigate()
+const ChevronUpDownIcon = () => {
+  return (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+      </svg>
+  )
+}
+
+
+const CreateCustomer = () => {
+    const navigate = useNavigate();
+    const [name, setName] = useState('');
+    const [about, setAbout] = useState(null);
+    const [phoneNumber, setPhoneNumber] = useState(null);
+    const [billingAddress, setBillingAddress] = useState(null);
+    const [emailAddress, setEmailAddress] = useState(null);
+    
+    const [contacts, setContacts] = useState([]);
+    const [contactSelected, setContactSelected] = useState(null);
+
+    const [billingInfo, setBillingInfo] = useState(null);
+    const [specialInstructions, setSpecialInstructions] = useState(null);
+
+    const [priceList, setPriceList] = useState([])
+    const [priceListSelected, setPriceListSelected] = useState(null);
+
+    const [retainerAmount, setRetainerAmount] = useState(null);
+
+    const [showSpendingInfo, setShowSpendingInfo] = useState(false)
+    const [allowCancelJob, setAllowCancelJob] = useState(false)
+    const [showJobPrice, setShowJobPrice] = useState(false)
+
+    const [discounts, setDiscounts] = useState([])
+    const [fees, setFees] = useState([])
+
+
+    useEffect(() => {
+      //get contact list
+
+      // get price list
+      getPriceList()
+
+      //only get these when clicking on Add and cache it
+          // get airports
+          // get fbos
+          //get services
+
+    }, [])
+
+    const getPriceList = async () => {
+        const { data } = await api.getPriceList();
+
+        setPriceList(data.results);
+        setPriceListSelected(data.results[0])
+    }
 
     return (
         <AnimatedPage>
@@ -37,15 +92,16 @@ export default function CreateCustomer() {
   
             <div className="space-y-6 sm:space-y-5">
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                  Name
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                  Name *
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
                   <input
                     type="text"
-                    name="first-name"
-                    id="first-name"
-                    autoComplete="given-name"
+                    name="name"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
                              focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
                   />
@@ -60,10 +116,11 @@ export default function CreateCustomer() {
                   <textarea
                     id="about"
                     name="about"
+                    value={about}
+                    onChange={(e) => setAbout(e.target.value)}
                     rows={3}
                     className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
                                  focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                    defaultValue={''}
                   />
                   <p className="mt-2 text-sm text-gray-500">Write a few sentences about this customer.</p>
                 </div>
@@ -123,7 +180,7 @@ export default function CreateCustomer() {
                         </label>
                         <p className="pl-1">or drag and drop</p>
                       </div>
-                      <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                      <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
                     </div>
                   </div>
                 </div>
@@ -134,36 +191,36 @@ export default function CreateCustomer() {
           <div className="space-y-6 pt-8 sm:space-y-5 sm:pt-10">
             <div>
               <h3 className="text-lg font-medium leading-6 text-gray-900">Detailed Information</h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">Use a permanent address where you can receive mail.</p>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">Billing and contact information.</p>
             </div>
             <div className="space-y-6 sm:space-y-5">
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                <label htmlFor="first-name" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                   Phone Number
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
-                  <input
-                    type="text"
-                    name="first-name"
-                    id="first-name"
-                    autoComplete="given-name"
+                  <Input
+                    country="US"
                     className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
-                             focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
-                  />
+                    focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                    value={phoneNumber}
+                    onChange={setPhoneNumber}/>
                 </div>
               </div>
   
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                <label htmlFor="last-name" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                <label htmlFor="billingAddress" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                   Billing Address
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
                   <input
                     type="text"
-                    name="last-name"
-                    id="last-name"
-                    autoComplete="family-name"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                    name="billingAddress"
+                    id="billingAddress"
+                    value={billingAddress}
+                    onChange={(e) => setBillingAddress(e.target.value)}
+                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                             focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
                   />
                 </div>
               </div>
@@ -176,9 +233,11 @@ export default function CreateCustomer() {
                   <input
                     id="email"
                     name="email"
+                    value={emailAddress}
+                    onChange={(e) => setEmailAddress(e.target.value)}
                     type="email"
-                    autoComplete="email"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                             focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -192,7 +251,8 @@ export default function CreateCustomer() {
                     id="country"
                     name="country"
                     autoComplete="country-name"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                             focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
                   >
                     <option>user 1</option>
                     <option>user 2</option>
@@ -202,31 +262,35 @@ export default function CreateCustomer() {
               </div>
   
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                <label htmlFor="street-address" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                <label htmlFor="billingInfo" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                   Billing Info
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
                   <input
                     type="text"
-                    name="street-address"
-                    id="street-address"
-                    autoComplete="street-address"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                    value={billingInfo}
+                    onChange={(e) => setBillingInfo(e.target.value)}
+                    name="billingInfo"
+                    id="billingInfo"
+                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                             focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
                 </div>
               </div>
   
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                <label htmlFor="instructions" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                   Special Instructions
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
                   <input
                     type="text"
-                    name="city"
-                    id="city"
-                    autoComplete="address-level2"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                    name="instructions"
+                    value={specialInstructions}
+                    onChange={(e) => setSpecialInstructions(e.target.value)}
+                    id="instructions"
+                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                             focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
                   />
                 </div>
               </div>
@@ -236,27 +300,79 @@ export default function CreateCustomer() {
                   Price List
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
-                  <input
-                    type="text"
-                    name="region"
-                    id="region"
-                    autoComplete="address-level1"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
-                  />
+                    <Listbox value={priceListSelected} onChange={setPriceListSelected}>
+                      {({ open }) => (
+                          <>
+                            <div className="relative mt-1">
+                                <Listbox.Button className="relative w-full max-w-lg sm:max-w-xs sm:text-sm
+                                                           cursor-default rounded-md border
+                                                          border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                          shadow-sm focus:border-sky-500 focus:outline-none
+                                                          focus:ring-1 focus:ring-sky-500">
+                                  <span className="block truncate">
+                                      {priceListSelected ? priceListSelected.name : 'Select price list'}
+                                  </span>
+                                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                      <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                  </span>
+                                </Listbox.Button>
+
+                                <Transition
+                                    show={open}
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0">
+                                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-80 overflow-auto
+                                                                rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                        {priceList.map((price) => (
+                                            <Listbox.Option
+                                                key={price.id}
+                                                className={({ active }) =>
+                                                        classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                value={price}>
+                                                {({ selected, active }) => (
+                                                    <>
+                                                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                            {price.name}
+                                                        </span>
+                                                        {selected ? (
+                                                            <span
+                                                                className={classNames(
+                                                                active ? 'text-white' : 'text-red-600',
+                                                                'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                )}>
+                                                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                            </span>
+                                                        ) : null}
+                                                    </>
+                                                )}
+                                            </Listbox.Option>
+                                        ))}
+                                    </Listbox.Options>
+                                </Transition>
+                            </div>
+                            </>
+                        )}
+                    </Listbox>
                 </div>
               </div>
   
               <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                <label htmlFor="postal-code" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                <label htmlFor="retainerAmount" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                   Retainer Amount (monthly)
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
                   <input
                     type="text"
-                    name="postal-code"
-                    id="postal-code"
-                    autoComplete="postal-code"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                    value={retainerAmount}
+                    onChange={(e) => setRetainerAmount(e.target.value)}
+                    name="retainerAmount"
+                    id="retainerAmount"
+                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                             focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
                   />
                 </div>
               </div>
@@ -283,16 +399,17 @@ export default function CreateCustomer() {
                           </Switch.Description>
                         </div>
                         <Switch
-                          checked={true}
+                          checked={showSpendingInfo}
+                          onChange={setShowSpendingInfo}
                           className={classNames(
-                            true ? 'bg-red-500' : 'bg-gray-200',
+                            showSpendingInfo ? 'bg-red-500' : 'bg-gray-200',
                             'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
                           )}
                         >
                           <span
                             aria-hidden="true"
                             className={classNames(
-                              true ? 'translate-x-5' : 'translate-x-0',
+                              showSpendingInfo ? 'translate-x-5' : 'translate-x-0',
                               'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                             )}
                           />
@@ -308,16 +425,17 @@ export default function CreateCustomer() {
                           </Switch.Description>
                         </div>
                         <Switch
-                          checked={true}
+                          checked={allowCancelJob}
+                          onChange={setAllowCancelJob}
                           className={classNames(
-                            true ? 'bg-red-500' : 'bg-gray-200',
+                            allowCancelJob ? 'bg-red-500' : 'bg-gray-200',
                             'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
                           )}
                         >
                           <span
                             aria-hidden="true"
                             className={classNames(
-                              true ? 'translate-x-5' : 'translate-x-0',
+                              allowCancelJob ? 'translate-x-5' : 'translate-x-0',
                               'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                             )}
                           />
@@ -333,16 +451,17 @@ export default function CreateCustomer() {
                           </Switch.Description>
                         </div>
                         <Switch
-                          checked={true}
+                          checked={showJobPrice}
+                          onChange={setShowJobPrice}
                           className={classNames(
-                            true ? 'bg-red-500' : 'bg-gray-200',
+                            showJobPrice ? 'bg-red-500' : 'bg-gray-200',
                             'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
                           )}
                         >
                           <span
                             aria-hidden="true"
                             className={classNames(
-                              true ? 'translate-x-5' : 'translate-x-0',
+                              showJobPrice ? 'translate-x-5' : 'translate-x-0',
                               'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
                             )}
                           />
@@ -366,7 +485,7 @@ export default function CreateCustomer() {
                             type="button"
                             className="inline-flex items-center rounded-md border border-gray-300
                                     bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
-                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                             <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                             <span>Add</span>
                         </button>
@@ -387,7 +506,7 @@ export default function CreateCustomer() {
                             type="button"
                             className="inline-flex items-center rounded-md border border-gray-300
                                     bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
-                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                             <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
                             <span>Add</span>
                         </button>
@@ -423,4 +542,6 @@ export default function CreateCustomer() {
         </div>
         </AnimatedPage>
     )
-  }
+}
+
+export default CreateCustomer;
