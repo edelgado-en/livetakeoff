@@ -27,21 +27,21 @@ const ChevronUpDownIcon = () => {
 const CreateCustomer = () => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
-    const [about, setAbout] = useState(null);
-    const [phoneNumber, setPhoneNumber] = useState(null);
-    const [billingAddress, setBillingAddress] = useState(null);
-    const [emailAddress, setEmailAddress] = useState(null);
+    const [about, setAbout] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [billingAddress, setBillingAddress] = useState('');
+    const [emailAddress, setEmailAddress] = useState('');
     
     const [contacts, setContacts] = useState([]);
     const [contactSelected, setContactSelected] = useState(null);
 
-    const [billingInfo, setBillingInfo] = useState(null);
-    const [specialInstructions, setSpecialInstructions] = useState(null);
+    const [billingInfo, setBillingInfo] = useState('');
+    const [specialInstructions, setSpecialInstructions] = useState('');
 
     const [priceList, setPriceList] = useState([])
     const [priceListSelected, setPriceListSelected] = useState(null);
 
-    const [retainerAmount, setRetainerAmount] = useState(null);
+    const [retainerAmount, setRetainerAmount] = useState('');
 
     const [showSpendingInfo, setShowSpendingInfo] = useState(false)
     const [allowCancelJob, setAllowCancelJob] = useState(false)
@@ -52,10 +52,8 @@ const CreateCustomer = () => {
 
 
     useEffect(() => {
-      //get contact list
-
-      // get price list
       getPriceList()
+      getCustomerUsers()
 
       //only get these when clicking on Add and cache it
           // get airports
@@ -69,6 +67,13 @@ const CreateCustomer = () => {
 
         setPriceList(data.results);
         setPriceListSelected(data.results[0])
+    }
+
+    const getCustomerUsers = async () => {
+      const { data } = await api.getCustomerUsers();
+
+      setContacts(data.results);
+      setContactSelected(data.results[0])
     }
 
     return (

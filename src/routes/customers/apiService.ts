@@ -32,6 +32,10 @@ export const getPriceList = () => {
     return httpService.get(`/api/price-list`);
 }
 
+export const getCustomerUsers = () => {
+    return httpService.get(`/api/customers/users`);
+}
+
 export const addDiscount = (id: number, request: any) => {
     return httpService.post(`/api/customers/discounts/${id}/`, request);
 }
