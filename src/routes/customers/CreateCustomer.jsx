@@ -12,6 +12,7 @@ import { toast } from "react-toastify"
 import Input from 'react-phone-number-input/input'
 
 import AddDiscount from "./AddDiscount"
+import AddFee from './AddFee'
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -24,19 +25,6 @@ const ChevronUpDownIcon = () => {
       </svg>
   )
 }
-
-const discountTypes = [
-  { id: 'G', name: 'General' },
-  { id: 'S', name: 'By Service' },
-  { id: 'A', name: 'By Airport' },
-]
-
-const amountTypes = [
-  { id: 'P', name: 'Percentage' },
-  { id: 'F', name: 'Fixed $' },
-]
-
-
 
 
 const CreateCustomer = () => {
@@ -65,17 +53,12 @@ const CreateCustomer = () => {
     const [discounts, setDiscounts] = useState([])
     const [fees, setFees] = useState([])
 
-    const [selectedDiscountType, setSelectedDiscountType] = useState(discountTypes[0])
-    const [selectedAmountType, setSelectedAmountType] = useState(amountTypes[0])
+    const [showAddDiscount, setShowAddDiscount] = useState(false)
+    const [showAddFee, setShowAddFee] = useState(false)
 
     useEffect(() => {
       getPriceList()
       getCustomerUsers()
-
-      //only get these when clicking on Add and cache it
-          // get airports
-          // get fbos
-          //get services
 
     }, [])
 
@@ -99,7 +82,7 @@ const CreateCustomer = () => {
         showSpendingInfo,
         allowCancelJob,
         showJobPrice,
-        discounts,
+        discounts: fees,
         fees
       }
 
@@ -111,6 +94,26 @@ const CreateCustomer = () => {
         .catch(err => {
           toast.error('Error adding customer')
         }) */
+    }
+
+    const handleAddDiscount = (addedDiscount) => {
+      setDiscounts([...fees, addedDiscount])
+      setShowAddDiscount(false)
+    }
+
+    const handleRemoveDiscount = (discount) => {
+      const newDiscounts = fees.filter(d => d !== discount)
+      setDiscounts(newDiscounts)
+    }
+
+    const handleAddFee = (addedFee) => {
+      setFees([...fees, addedFee])
+      setShowAddFee(false)
+    }
+
+    const handleRemoveFee = (fee) => {
+      const newFees = fees.filter(f => f !== fee)
+      setFees(newFees)
     }
 
     const getPriceList = async () => {
@@ -545,6 +548,7 @@ const CreateCustomer = () => {
                     <div>
                         <button
                             type="button"
+                            onClick={() => setShowAddDiscount(true)}
                             className="inline-flex items-center rounded-md border border-gray-300
                                     bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
                                     hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
@@ -553,10 +557,59 @@ const CreateCustomer = () => {
                         </button>
                     </div>
                 </div>
-                <AddDiscount
-                  handleCancel={null}
-                  handleSave={null}
-                  />
+                
+                {discounts.length > 0 && (
+                     <ul role="list" className="divide-y divide-gray-200 rounded-md border border-gray-200">
+                     {discounts.map((discount, index) => (
+                       <li
+                         key={index}
+                         className="grid items-center xl:grid-cols-4 lg:grid-cols-4
+                                     md:grid-cols-2 xs:grid-cols-2  py-3 pl-3 pr-4 text-sm"
+                       >
+                         <div className="">
+                           <span className="truncate text-sm font-medium text-red-600">{discount.type.name}</span>
+                         </div>
+                         
+                         <div>
+                           {discount.is_percentage ? '%' : '$'}{discount.discount}
+                         </div>
+
+                         {discount.services.length > 0 && (
+                           <div className="text-xs text-gray-500">
+                               {discount.services.map((s, index) => (
+                                 <div key={index}>{index + 1 + '. '}{s.name}</div>
+                               ))}
+                           </div>
+                         )}
+   
+                         {discount.airports.length > 0 && (
+                             <div className="text-xs text-gray-500">
+                                 {discount.airports.map((a, index) => (
+                                   <div key={index}>{index + 1 + '. '}{a.name}</div>
+                                 ))}
+                             </div>
+                         )}
+
+                         {discount.type.id === 'G' && (
+                          <div></div>
+                         )}
+   
+                         <div className="flex justify-end">
+                           <TrashIcon 
+                               onClick={() => handleRemoveDiscount(discount)}
+                               className="h-4 w-4 cursor-pointer text-gray-500"/>
+                         </div>
+                       </li>
+                     ))}
+                   </ul>
+                )}
+               
+                {showAddDiscount && (
+                    <AddDiscount
+                      handleCancel={() => setShowAddDiscount(false)}
+                      handleSave={handleAddDiscount}
+                    />
+                )}
                 
             </div>
 
@@ -571,6 +624,7 @@ const CreateCustomer = () => {
                     <div>
                         <button
                             type="button"
+                            onClick={() => setShowAddFee(true)}
                             className="inline-flex items-center rounded-md border border-gray-300
                                     bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
                                     hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
@@ -579,6 +633,60 @@ const CreateCustomer = () => {
                         </button>
                     </div>
                 </div>
+
+                {fees.length > 0 && (
+                     <ul role="list" className="divide-y divide-gray-200 rounded-md border border-gray-200">
+                     {fees.map((fee, index) => (
+                       <li
+                         key={index}
+                         className="grid items-center xl:grid-cols-4 lg:grid-cols-4
+                                    md:grid-cols-2 xs:grid-cols-2  py-3 pl-3 pr-4 text-sm"
+                       >
+                         <div className="">
+                           <span className="truncate text-sm font-medium text-red-600">{fee.type.name}</span>
+                         </div>
+                         
+                         <div>
+                           {fee.is_percentage ? '%' : '$'}{fee.fee}
+                         </div>
+
+                         {fee.fbos.length > 0 && (
+                           <div className="text-xs text-gray-500">
+                               {fee.fbos.map((f, index) => (
+                                 <div key={index}>{index + 1 + '. '}{f.name}</div>
+                               ))}
+                           </div>
+                         )}
+   
+                         {fee.airports.length > 0 && (
+                             <div className="text-xs text-gray-500">
+                                 {fee.airports.map((a, index) => (
+                                   <div key={index}>{index + 1 + '. '}{a.name}</div>
+                                 ))}
+                             </div>
+                         )}
+
+                         {fee.type.id === 'G' && (
+                          <div></div>
+                         )}
+   
+                         <div className="flex justify-end">
+                           <TrashIcon 
+                               onClick={() => handleRemoveFee(fee)}
+                               className="h-4 w-4 cursor-pointer text-gray-500"/>
+                         </div>
+                       </li>
+                     ))}
+                   </ul>
+                )}
+               
+                {showAddFee && (
+                    <AddFee
+                      handleCancel={() => setShowAddFee(false)}
+                      handleSave={handleAddFee}
+                    />
+                )}
+
             </div>
 
         </div>

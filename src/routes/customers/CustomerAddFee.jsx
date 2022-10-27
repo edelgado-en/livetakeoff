@@ -82,6 +82,10 @@ const CustomerAddFee = () => {
             }
         }
 
+        if (!amount) {
+            alert('Please enter an amount')
+            return
+        }
 
         const data = {
             type: selectedFeeType.id,
