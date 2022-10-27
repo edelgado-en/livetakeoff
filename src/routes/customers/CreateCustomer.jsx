@@ -11,6 +11,8 @@ import { toast } from "react-toastify"
 
 import Input from 'react-phone-number-input/input'
 
+import AddDiscount from "./AddDiscount"
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -22,6 +24,19 @@ const ChevronUpDownIcon = () => {
       </svg>
   )
 }
+
+const discountTypes = [
+  { id: 'G', name: 'General' },
+  { id: 'S', name: 'By Service' },
+  { id: 'A', name: 'By Airport' },
+]
+
+const amountTypes = [
+  { id: 'P', name: 'Percentage' },
+  { id: 'F', name: 'Fixed $' },
+]
+
+
 
 
 const CreateCustomer = () => {
@@ -50,6 +65,8 @@ const CreateCustomer = () => {
     const [discounts, setDiscounts] = useState([])
     const [fees, setFees] = useState([])
 
+    const [selectedDiscountType, setSelectedDiscountType] = useState(discountTypes[0])
+    const [selectedAmountType, setSelectedAmountType] = useState(amountTypes[0])
 
     useEffect(() => {
       getPriceList()
@@ -61,6 +78,40 @@ const CreateCustomer = () => {
           //get services
 
     }, [])
+
+    const addCustomer = () => {
+      if (name.length === 0) {
+        alert('Please enter a name')
+        return
+      }
+
+      const customer = {
+        name,
+        about,
+        phoneNumber,
+        billingAddress,
+        emailAddress,
+        contactSelected,
+        billingInfo,
+        specialInstructions,
+        priceListSelected,
+        retainerAmount,
+        showSpendingInfo,
+        allowCancelJob,
+        showJobPrice,
+        discounts,
+        fees
+      }
+
+      /* api.addCustomer(customer)
+        .then(res => {
+          toast.success('Customer added successfully')
+          navigate('/customers')
+        })
+        .catch(err => {
+          toast.error('Error adding customer')
+        }) */
+    }
 
     const getPriceList = async () => {
         const { data } = await api.getPriceList();
@@ -252,17 +303,23 @@ const CreateCustomer = () => {
                   Contact
                 </label>
                 <div className="mt-1 sm:col-span-2 sm:mt-0">
-                  <select
-                    id="country"
-                    name="country"
-                    autoComplete="country-name"
-                    className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
-                             focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
-                  >
+                  {contacts.length === 0 ? 
+                    <div className="text-sm text-gray-500 relative top-1">No users with customer access found.</div>
+                    :
+                    <select
+                      id="country"
+                      name="country"
+                      autoComplete="country-name"
+                      className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                              focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                    >
                     <option>user 1</option>
                     <option>user 2</option>
                     <option>user 3</option>
                   </select>
+                    
+                  }
+                  
                 </div>
               </div>
   
@@ -496,6 +553,11 @@ const CreateCustomer = () => {
                         </button>
                     </div>
                 </div>
+                <AddDiscount
+                  handleCancel={null}
+                  handleSave={null}
+                  />
+                
             </div>
 
             <div className="space-y-6 divide-y divide-gray-200 pt-8 sm:space-y-5 sm:pt-10">
@@ -539,7 +601,7 @@ const CreateCustomer = () => {
                           text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
                            focus:ring-red-500 focus:ring-offset-2"
             >
-              Create Customer
+              Add Customer
             </button>
           </div>
         </div>
