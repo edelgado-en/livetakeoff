@@ -71,3 +71,11 @@ export const getFee = (id: number) => {
 export const updateFee = (id: number, request: any) => {
     return httpService.patch(`/api/customers/fees/update/${id}/`, request);
 }
+
+export const createCustomer = (formData: any) => {
+    return httpService.post('/api/customers/create', formData,  {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+}
