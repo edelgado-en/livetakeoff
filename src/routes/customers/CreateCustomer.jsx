@@ -38,8 +38,9 @@ const CreateCustomer = () => {
     const [billingAddress, setBillingAddress] = useState('');
     const [emailAddress, setEmailAddress] = useState('');
     
-    const [contacts, setContacts] = useState([]);
-    const [contactSelected, setContactSelected] = useState(null);
+    // You cannot add a contact because first you need to create the customer
+    //const [contacts, setContacts] = useState([]);
+    //const [contactSelected, setContactSelected] = useState(null);
 
     const [billingInfo, setBillingInfo] = useState('');
     const [specialInstructions, setSpecialInstructions] = useState('');
@@ -64,7 +65,7 @@ const CreateCustomer = () => {
 
     useEffect(() => {
       getPriceList()
-      getCustomerUsers()
+      //getCustomerUsers()
 
     }, [])
 
@@ -81,7 +82,7 @@ const CreateCustomer = () => {
       formData.append('phoneNumber', phoneNumber);
       formData.append('billingAddress', billingAddress);
       formData.append('emailAddress', emailAddress);
-      formData.append('contact', contactSelected);
+      //formData.append('contact', contactSelected);
       formData.append('billingInfo', billingInfo);
       formData.append('specialInstructions', specialInstructions);
       formData.append('priceListId', priceListSelected.id);
@@ -162,12 +163,12 @@ const CreateCustomer = () => {
         setPriceListSelected(data.results[0])
     }
 
-    const getCustomerUsers = async () => {
+    /* const getCustomerUsers = async () => {
       const { data } = await api.getCustomerUsers();
 
       setContacts(data.results);
       setContactSelected(data.results[0])
-    }
+    } */
 
     return (
         <AnimatedPage>
@@ -299,32 +300,9 @@ const CreateCustomer = () => {
                                       </div>
                                   }
     
-                                  {/* <div className="flex max-w-lg">
-                                      {imageList.map((image, index) => (
-                                          <div key={index} className="py-4">
-                                              <div className="">
-                                                  <img className="h-40 h- w-80 rounded-lg" src={image['data_url']} alt="" />
-                                              </div>
-                                              <div className="flex justify-end gap-6 text-gray-500 text-sm pt-2">
-                                                  <PencilIcon 
-                                                      onClick={() => onImageUpdate(index)}
-                                                      className="flex-shrink-0 h-4 w-4 cursor-pointer" />
-                                                  <TrashIcon 
-                                                      onClick={() => onImageRemove(index)} 
-                                                      className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
-                                              </div>
-                                          </div>
-                                      ))}
-                                  </div> */}
                               </>
                               )}
                           </ImageUploading>
-                          {/* <button
-                            type="button"
-                            className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-                          >
-                            Change
-                          </button> */}
                         </div>
                       </div>
                     </div>
@@ -467,8 +445,8 @@ const CreateCustomer = () => {
                         />
                       </div>
                     </div>
-        
-                    <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
+
+                    {/* <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                       <label htmlFor="country" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                         Contact
                       </label>
@@ -489,9 +467,8 @@ const CreateCustomer = () => {
                         </select>
                           
                         }
-                        
                       </div>
-                    </div>
+                    </div> */}
         
                     <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
                       <label htmlFor="billingInfo" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
