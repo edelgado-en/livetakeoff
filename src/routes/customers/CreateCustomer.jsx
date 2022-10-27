@@ -60,7 +60,7 @@ const CreateCustomer = () => {
     const [showAddFee, setShowAddFee] = useState(false)
 
     const [coverImages, setCoverImages] = useState([]);
-    const [avatartImages, setAvatarImages] = useState([]);
+    const [avatarImages, setAvatarImages] = useState([]);
 
     useEffect(() => {
       getPriceList()
@@ -98,6 +98,12 @@ const CreateCustomer = () => {
           }
       });
 
+      avatarImages.forEach(image => {
+        if (image.file.size < 10000000) { // less than 10MB
+            formData.append("logo", image.file)
+        }
+      });
+
       setLoading(true)
         setCreateCustomerMessage('Creating customer. Please wait...')
         
@@ -115,9 +121,13 @@ const CreateCustomer = () => {
         }
     }
 
-    const onChangeCoverPhoto = (imageList, addUpdateIndex) => {
+  const onChangeCoverPhoto = (imageList, addUpdateIndex) => {
       setCoverImages(imageList)
   }
+
+  const onChangeAvatarPhoto = (imageList, addUpdateIndex) => {
+    setAvatarImages(imageList)
+}
 
   const handleSetRetainerAmount = (e) => {
     const value = e.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
@@ -233,17 +243,88 @@ const CreateCustomer = () => {
                       </label>
                       <div className="mt-1 sm:col-span-2 sm:mt-0">
                         <div className="flex items-center">
-                          <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                            <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                          </span>
-                          <button
+                          <ImageUploading
+                              acceptType={['jpg', 'svg', 'png', 'jpeg']}
+                              value={avatarImages}
+                              onChange={onChangeAvatarPhoto}
+                              maxNumber={1}
+                              dataURLKey="data_url">
+                              {({
+                                  imageList,
+                                  onImageUpload,
+                                  onImageRemoveAll,
+                                  onImageUpdate,
+                                  onImageRemove,
+                                  isDragging,
+                                  dragProps,
+                                  errors
+                              }) => (
+                              <>
+                                  {avatarImages.length === 0 && (
+                                    <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+                                      <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                      </svg>
+                                    </span>
+                                  )}
+
+                                  {avatarImages.length > 0 && avatarImages.map((image, index) => (
+                                        <>
+                                        <span className="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+                                           <img
+                                                  className="h-12 w-12 rounded-full ring-4
+                                                          ring-white sm:h-32 sm:w-32 bg-white border-black"
+                                                  src={image['data_url']}
+                                                  alt=""
+                                              />
+                                         </span>
+                                        <span onClick={() => onImageRemove(index)} className="cursor-pointer text-xs text-gray-500 ml-4 underline">remove</span>
+                                        </>
+                                  ))}
+                                  
+                                  <button
+                                    {...dragProps}
+                                    type="button"
+                                    onClick={onImageUpload}
+                                    className="ml-5 rounded-md border border-gray-300
+                                             bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-70
+                                              shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                               focus:ring-sky-500 focus:ring-offset-2"
+                                  >
+                                    Change
+                                  </button>
+    
+                                  {errors && <div className="text-gray-500 mt-6 m-auto text-center text-sm">
+                                      {errors.acceptType && <span>Your selected file type is not allow</span>}
+                                      </div>
+                                  }
+    
+                                  {/* <div className="flex max-w-lg">
+                                      {imageList.map((image, index) => (
+                                          <div key={index} className="py-4">
+                                              <div className="">
+                                                  <img className="h-40 h- w-80 rounded-lg" src={image['data_url']} alt="" />
+                                              </div>
+                                              <div className="flex justify-end gap-6 text-gray-500 text-sm pt-2">
+                                                  <PencilIcon 
+                                                      onClick={() => onImageUpdate(index)}
+                                                      className="flex-shrink-0 h-4 w-4 cursor-pointer" />
+                                                  <TrashIcon 
+                                                      onClick={() => onImageRemove(index)} 
+                                                      className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
+                                              </div>
+                                          </div>
+                                      ))}
+                                  </div> */}
+                              </>
+                              )}
+                          </ImageUploading>
+                          {/* <button
                             type="button"
                             className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
                           >
                             Change
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>
