@@ -235,6 +235,13 @@ const JobInfo = () => {
                         <dt className="text-sm font-medium text-gray-500">Estimated Departure</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'None'}</dd>
                     </div>
+                    {!currentUser.isProjectManager && !currentUser.isCustomer && (
+                        <div className="sm:col-span-1">
+                            <dt className="text-sm font-medium text-gray-500">Price</dt>
+                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.price ? '$' + jobDetails.price : 'None'}</dd>
+                        </div>
+                    )}
+                    
                     <div className="sm:col-span-2">
                         <dt className="text-sm font-medium text-gray-500">Special Instructions</dt>
                         <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
