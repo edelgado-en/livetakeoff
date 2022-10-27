@@ -40,6 +40,7 @@ const EditJob = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     
     const [tailNumber, setTailNumber] = useState('')
+    const [price, setPrice] = useState('')
     const [statuses, setStatuses] = useState(availableStatuses)
     const [selectedStatus, setSelectedStatus] = useState('')
     const [tailNumberErrorMessage, setTailNumberErrorMessage] = useState(null)
@@ -83,9 +84,8 @@ const EditJob = () => {
             
             const response = await api.getJobDetails(jobId)
 
-            console.log(response.data)
-            
             setTailNumber(response.data.tailNumber);
+            setPrice(response.data.price);
 
             //TODO: need to show purchase order as read only
 
@@ -119,6 +119,7 @@ const EditJob = () => {
     const updateJob = async () => {
         const request = {
             tailNumber,
+            price,
             customer: customerSelected.id,
             aircraftType: aircraftTypeSelected.id,
             airport: airportSelected.id,
@@ -164,6 +165,12 @@ const EditJob = () => {
         setCompleteByDate(date);
     }
 
+    const handleSetPrice = (e) => {
+        const value = e.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+
+        setPrice(value)
+    }
+
     return (
         <AnimatedPage>
             {loading && (
@@ -202,6 +209,23 @@ const EditJob = () => {
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                                 />
                                 {tailNumberErrorMessage && <p className="text-red-500 text-xs mt-2">{tailNumberErrorMessage}</p>}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                                Price
+                            </label>
+                            <div className="mt-1">
+                                <input
+                                type="text"
+                                value={price}
+                                onChange={(e) => handleSetPrice(e.target.value)}
+                                name="price"
+                                id="price"
+                                className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                />
                             </div>
                         </div>
 
