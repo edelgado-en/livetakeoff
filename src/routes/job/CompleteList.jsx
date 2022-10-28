@@ -1,6 +1,10 @@
 
 import { useEffect, useState } from 'react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
+import { DownloadIcon } from '@heroicons/react/outline';
+
+import JSZip from "jszip";
+import { saveAs } from 'file-saver';
 
 import * as api from './apiService'
 
@@ -8,6 +12,7 @@ import * as api from './apiService'
 const CompleteList = () => {
     const [jobs, setJobs] = useState([])
     const [totalJobs, setTotalJobs] = useState(0)
+    const [downloadLoading, setDownloadLoading] = useState(false)
 
 
     useEffect(() => {
@@ -34,6 +39,88 @@ const CompleteList = () => {
         })
 
         setJobs(updatedJobs)
+    }
+
+    const downloadAllPhotos = async (job) => {
+        setDownloadLoading(true)
+
+        try {
+            const { data } = await api.getJobPhotos(job.id)
+
+            const interior_photos = []
+            const exterior_photos = []
+            const customer_photos = []
+
+            data.results.forEach(entry => {
+                if (entry.customer_uploaded) {
+                    customer_photos.push(entry)
+
+                } else {
+                    if (entry.interior) {
+                        interior_photos.push(entry)
+                    } else {
+                        exterior_photos.push(entry)
+                    }
+                }
+            });
+
+            const interiorImages = interior_photos.map(p => {return {'customer': false, 'interior': true, 'image': p.image, 'name': p.name}});
+            const exteriorImages = exterior_photos.map(p => {return {'customer': false, 'interior': false, 'image': p.image, 'name': p.name}});
+            const customerImages = customer_photos.map(p => {return {'customer': true, 'image': p.image, 'name': p.name}});
+    
+            const allImages = [...customerImages, ...interiorImages, ...exteriorImages]
+    
+            var zip = new JSZip();
+            let customerProvided = null;
+            let interiorFolder = null;
+            let exteriorFolder = null;
+    
+            if (customerImages.length > 0) {
+                customerProvided = zip.folder('customer_provided')
+            }
+    
+            if (interiorImages.length > 0) {
+                interiorFolder = zip.folder('interior_photos');
+            }
+    
+            if (exteriorImages.length > 0) {
+                exteriorFolder = zip.folder('exterior_photos');
+            }
+    
+            var count = 0;
+    
+            var zipFilename = job.purchase_order + "_all_photos.zip";  
+            allImages.forEach(async function (image, i) {
+              const filename = image.name
+    
+              const response = await fetch(image.image);
+              
+              response.blob().then(blob => {
+                    if (image.customer) {
+                        customerProvided.file(filename, blob, { binary: true });
+                    } else {
+                        if (image.interior) {
+                            interiorFolder.file(filename, blob, { binary: true });
+        
+                        } else {
+                            exteriorFolder.file(filename, blob, { binary: true });
+                        }
+                    }
+    
+                    count++;
+                    if (count === allImages.length) {
+                        zip.generateAsync({ type: 'blob' }).then(function (content) {
+                          saveAs(content, zipFilename);
+                        });
+                        setDownloadLoading(false)
+                    }
+              }); 
+            });
+
+
+        } catch (error) {
+            setDownloadLoading(false)
+        }
     }
 
     return (
@@ -132,6 +219,9 @@ const CompleteList = () => {
                                 <th className="relative whitespace-nowrap py-2 pl-3 pr-4 sm:pr-6">
                                 
                                 </th>
+                                <th className="relative whitespace-nowrap py-2 pl-3 pr-4 sm:pr-6">
+                                
+                                </th>
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
@@ -174,6 +264,14 @@ const CompleteList = () => {
                                                             text-gray-600 shadow-sm hover:bg-gray-50 ">M</div>
                                         )}
                                         <div>{'$'}{job.price ? job.price : '0.00'}</div>
+                                </td>
+                                <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
+                                    {downloadLoading && (<span>...</span>)}
+                                    {!downloadLoading && (
+                                        <DownloadIcon 
+                                            onClick={() => downloadAllPhotos(job)}
+                                            className="h-4 w-4 cursor-pointer text-gray-500"/>
+                                    )}
                                 </td>
                                 <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
                                         {job.status === 'C' && (
