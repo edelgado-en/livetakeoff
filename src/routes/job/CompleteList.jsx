@@ -224,7 +224,7 @@ const CompleteList = () => {
                                 Status
                                 </th>
                                 <th
-                                className="whitespace-nowrap px-2 py-2 text-left text-xs  text-gray-500"
+                                className="whitespace-nowrap px-8 py-2 text-left text-xs  text-gray-500"
                                 >
                                 Price
                                 </th>
@@ -239,21 +239,21 @@ const CompleteList = () => {
                             <tbody className="divide-y divide-gray-200 bg-white">
                             {jobs.map((job) => (
                                 <tr key={job.id}>
-                                <td className="whitespace-nowrap py-2 pl-4 pr-3 text-xs text-gray-500 sm:pl-6">{job.purchase_order}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.requestDate}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.tailNumber}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.aircraftType.name}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.airport.initials}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.fbo.name}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.estimatedETA}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.estimatedETD}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
-                                <td className="px-2 py-2 text-xs text-gray-500">
+                                <td className=" py-2 pl-4 pr-3 text-xs text-gray-500 sm:pl-6">{job.purchase_order}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.requestDate}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.tailNumber}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.aircraftType.name}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.airport.initials}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.fbo.name}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.estimatedETA}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.estimatedETD}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500" style={{minWidth: '250px'}}>
                                     {job.job_service_assignments.map((service, index) => (
                                         <div key={index}>{index + 1}{'. '}{service.service_name}</div>
                                     ))}
                                 </td>
-                                <td className="px-2 py-2 text-xs text-gray-500">
+                                <td className="px-2 py-2 text-xs text-gray-500" style={{minWidth: '250px'}}>
                                     {job.job_retainer_service_assignments.map((service, index) => (
                                         <div key={index}>{index + 1}{'. '}{service.service_name}</div>
                                     ))}
@@ -269,7 +269,7 @@ const CompleteList = () => {
                                         {job.status === 'I' && 'Invoiced'}
                                     </p>
                                 </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
                                         {!job.is_auto_priced && (
                                             <div className="inline-flex items-center rounded border
                                                             border-gray-300 bg-gray-50 px-1 text-xs
