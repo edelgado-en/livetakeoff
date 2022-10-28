@@ -97,3 +97,11 @@ export const getRetainerServices = () => {
 }
 
 
+export const getCompletedJobs = (data: any) => {
+    return httpService.post('/api/jobs/completed', data)
+}
+
+export const invoiceJob = (id: number, data: any) => {
+    return httpService.patch(`/api/jobs/completed/${id}/`, data)
+}
+
