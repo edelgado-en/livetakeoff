@@ -145,10 +145,14 @@ const CompleteList = () => {
                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.estimatedETD}</td>
                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
-                                services
+                                {job.job_service_assignments.map((service, index) => (
+                                    <div key={index}>{index + 1}{'. '}{service.service_name}</div>
+                                ))}
                             </td>
                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
-                                retainers
+                                {job.job_retainer_service_assignments.map((service, index) => (
+                                    <div key={index}>{index + 1}{'. '}{service.service_name}</div>
+                                ))}
                             </td>
                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
                                 <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
