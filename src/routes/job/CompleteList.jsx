@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { DownloadIcon } from '@heroicons/react/outline';
-
+import Loader from '../../components/loader/Loader';
 import JSZip from "jszip";
 import { saveAs } from 'file-saver';
 
@@ -12,6 +12,7 @@ import * as api from './apiService'
 const CompleteList = () => {
     const [jobs, setJobs] = useState([])
     const [totalJobs, setTotalJobs] = useState(0)
+    const [loading, setLoading] = useState(false)
     const [downloadLoading, setDownloadLoading] = useState(false)
 
 
@@ -20,10 +21,18 @@ const CompleteList = () => {
     }, [])
 
     const getJobs = async () => {
-        const { data } = await api.getCompletedJobs({})
+        setLoading(true)
 
-        setJobs(data.results)
-        setTotalJobs(data.count)
+        try {
+            const { data } = await api.getCompletedJobs({})
+    
+            setJobs(data.results)
+            setTotalJobs(data.count)
+            setLoading(false)
+
+        } catch (err) {
+            setLoading(false)
+        }
     }
 
     const invoiceJob = async (jobId) => {
@@ -125,7 +134,10 @@ const CompleteList = () => {
 
     return (
         <AnimatedPage>
-            <div className="px-4 sm:px-6 lg:px-8 -mt-4">
+            {loading && <Loader />} 
+
+            {!loading && (
+                <div className="px-4 sm:px-6 lg:px-8 -mt-4">
                 <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
                         <h1 className="text-xl font-semibold text-gray-900">Completed Jobs</h1>
@@ -154,7 +166,7 @@ const CompleteList = () => {
                                 <th
                                 className="whitespace-nowrap py-2 text-left text-xs text-gray-500 sm:pl-6"
                                 >
-                                Purchase Order
+                                P.O
                                 </th>
                                 <th
                                 className="whitespace-nowrap px-2 py-2 text-left text-xs  text-gray-500"
@@ -236,12 +248,12 @@ const CompleteList = () => {
                                 <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.estimatedETA}</td>
                                 <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.estimatedETD}</td>
                                 <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                <td className="px-2 py-2 text-xs text-gray-500">
                                     {job.job_service_assignments.map((service, index) => (
                                         <div key={index}>{index + 1}{'. '}{service.service_name}</div>
                                     ))}
                                 </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                <td className="px-2 py-2 text-xs text-gray-500">
                                     {job.job_retainer_service_assignments.map((service, index) => (
                                         <div key={index}>{index + 1}{'. '}{service.service_name}</div>
                                     ))}
@@ -296,6 +308,8 @@ const CompleteList = () => {
                     </div>
                 </div>
             </div>
+            )}
+            
         </AnimatedPage>
     )
 }
