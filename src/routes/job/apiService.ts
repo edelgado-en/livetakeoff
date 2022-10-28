@@ -32,8 +32,16 @@ export const deleteService = (id: number) => {
     return httpService.delete(`/api/jobs/services/${id}/`)
 }
 
+export const deleteRetainerService = (id: number) => {
+    return httpService.delete(`/api/jobs/retainer-services/${id}/`)
+}
+
 export const addService = (id:number, request: any) => {
     return httpService.post(`/api/jobs/services/${id}/`, request)
+}
+
+export const addRetainerService = (id:number, request: any) => {
+    return httpService.post(`/api/jobs/retainer-services/${id}/`, request)
 }
 
 export const completeRetainerServiceAssignment = (id: number) => {
@@ -82,6 +90,10 @@ export const createJob = (formData: any) => {
 
 export const getServices = () => {
     return httpService.get('/api/services');
+}
+
+export const getRetainerServices = () => {
+    return httpService.get('/api/retainer-services');
 }
 
 
