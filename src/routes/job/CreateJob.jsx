@@ -138,11 +138,9 @@ const CreateJob = () => {
             const { data } = await api.createJob(formData)
 
             setLoading(false)
-            setCreateJobMessage(null)
+            setCreateJobMessage(`A new job with purchase order ${data.purchase_order} has been added to the queue.`)
 
-            if (routeName === 'jobs') {
-                navigate('/jobs')
-            } else {
+            if (routeName === 'assignments') {
                 navigate('/jobs/' + data.id + '/assignments')
             } 
 
@@ -246,18 +244,38 @@ const CreateJob = () => {
                 </>
             )}
 
-            {/* {!loading && createJobMessage && (
-                <div className="flex flex-col">
-                    <div className="flex-shrink-0">
-                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+            {!loading && createJobMessage && (
+                <div className="mx-auto max-w-lg px-4 pb-16 lg:pb-12 mt-40 text-center">
+                    <div className=" flex justify-center">
+                        <CheckCircleIcon className="h-8 w-8 text-green-400" aria-hidden="true" />
                     </div>
-                    <div className="ml-3 w-0 flex-1 pt-0.5">
-                        <p className="text-sm font-medium text-gray-900">Job created!</p>
-                        <p className="mt-1 text-sm text-gray-500">A new job with purchase order 201221015-1 has been added to the queue.</p>
+                    <div className="">
+                        <p className="text-md font-medium text-gray-900 mt-2">Job created!</p>
+                        <p className="mt-2 text-sm text-gray-500">{createJobMessage}</p>
+                    </div>
+                    <div className=" mt-6 flex justify-center gap-6">
+                        <button
+                            type="button"
+                            onClick={() => navigate('/jobs')}
+                            className="inline-flex items-center rounded-md border
+                                         border-gray-300 bg-white px-3 py-2 text-sm leading-4
+                                          text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                           focus:ring-red-500 focus:ring-offset-2">
+                            Back to Job Listing
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => navigate(0)}
+                            className="inline-flex justify-center rounded-md
+                                    border border-transparent bg-red-600 py-2 px-4
+                                    text-sm font-medium text-white shadow-sm hover:bg-red-600
+                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                            Add another Job
+                        </button>
                     </div>
                     
                 </div>
-            )} */}
+            )}
 
 
             {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
