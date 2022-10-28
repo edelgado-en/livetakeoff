@@ -176,7 +176,7 @@ const CompleteList = () => {
                                 <th
                                 className="whitespace-nowrap px-2 py-2 text-left text-xs  text-gray-500"
                                 >
-                                Tail Number
+                                Tail
                                 </th>
                                 <th
                                 className="whitespace-nowrap px-2 py-2 text-left text-xs  text-gray-500"

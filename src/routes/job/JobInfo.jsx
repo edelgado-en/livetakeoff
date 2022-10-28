@@ -193,7 +193,7 @@ const JobInfo = () => {
                         </div>
                     )}
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Tail</dt>
+                        <dt className="text-sm font-medium text-gray-500">Tail Number</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.tailNumber}</dd>
                     </div>
                     <div className="sm:col-span-1">
