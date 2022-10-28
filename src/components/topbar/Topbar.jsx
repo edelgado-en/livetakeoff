@@ -176,15 +176,28 @@ const Topbar = () => {
                      to={item.href}>
                   <Disclosure.Button
                     className={classNames(
-                      item.current ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                      location.pathname.includes(item.href) ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
                       'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
                     )}
-                    aria-current={item.current ? 'page' : undefined}
                   >
                       {item.name}
                   </Disclosure.Button>
                 </Link>
               ))}
+              {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                    <Link 
+                      to="completed"
+                      >
+                        <Disclosure.Button
+                          className={classNames(
+                            location.pathname.includes("completed") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                            'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                          )}
+                        >
+                            Completed Jobs
+                        </Disclosure.Button>
+                    </Link>
+                )}
             </div>
           </Disclosure.Panel>
         </>
