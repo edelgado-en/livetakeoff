@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from "react"
 import Loader from "../../components/loader/Loader"
 import { Link, useNavigate } from "react-router-dom"
 import { Listbox, Transition } from '@headlessui/react'
-import { PlusIcon, CheckIcon } from "@heroicons/react/outline"
+import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import ImageUploading from 'react-images-uploading';
@@ -246,9 +246,23 @@ const CreateJob = () => {
                 </>
             )}
 
+            {/* {!loading && createJobMessage && (
+                <div className="flex flex-col">
+                    <div className="flex-shrink-0">
+                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+                    </div>
+                    <div className="ml-3 w-0 flex-1 pt-0.5">
+                        <p className="text-sm font-medium text-gray-900">Job created!</p>
+                        <p className="mt-1 text-sm text-gray-500">A new job with purchase order 201221015-1 has been added to the queue.</p>
+                    </div>
+                    
+                </div>
+            )} */}
+
+
             {!loading && errorMessage && <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>}
 
-            {!loading && errorMessage == null && (
+            {!loading && (errorMessage == null && createJobMessage == null) && (
                 <main className="mx-auto max-w-lg px-4 pb-16 lg:pb-12">
                 <div>
                     <div className="space-y-6">

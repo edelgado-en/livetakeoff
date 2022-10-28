@@ -137,7 +137,7 @@ const CreateCustomer = () => {
   }
 
     const handleAddDiscount = (addedDiscount) => {
-      setDiscounts([...fees, addedDiscount])
+      setDiscounts([...discounts, addedDiscount])
       setShowAddDiscount(false)
     }
 
@@ -216,7 +216,7 @@ const CreateCustomer = () => {
                           className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
                                   focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
                         />
-                        <span className="text-xs text-gray-500">Must be unique. Different customers cannot share the same name.</span>
+                        <span className="text-sm text-gray-500">Must be unique. Different customers cannot share the same name.</span>
                       </div>
                     </div>
         
