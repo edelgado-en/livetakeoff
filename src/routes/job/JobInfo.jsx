@@ -238,7 +238,14 @@ const JobInfo = () => {
                     {!currentUser.isProjectManager && !currentUser.isCustomer && (
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Price</dt>
-                            <dd className="mt-1 text-sm text-gray-900">{jobDetails.price ? '$' + jobDetails.price : 'None'}</dd>
+                            <dd className="mt-1 text-sm text-gray-900 flex gap-1">
+                                {!jobDetails.is_auto_priced && (
+                                    <div className="inline-flex items-center rounded border
+                                                  border-gray-300 bg-gray-50 px-1 text-xs
+                                                    text-gray-600 shadow-sm hover:bg-gray-50 ">M</div>
+                                )}
+                                <div>{'$'}{jobDetails.price ? jobDetails.price : '0.00'}</div>
+                            </dd>
                         </div>
                     )}
                     
