@@ -214,7 +214,7 @@ const JobInfo = () => {
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Estimated Arrival</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETA ? jobDetails.estimatedETA : 'None'}</dd>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETA ? jobDetails.estimatedETA : 'No ETA yet'}</dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Complete By</dt>
@@ -233,7 +233,7 @@ const JobInfo = () => {
                     
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Estimated Departure</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'None'}</dd>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'No ETD yet'}</dd>
                     </div>
                     {!currentUser.isProjectManager && !currentUser.isCustomer && (
                         <div className="sm:col-span-1">
