@@ -245,7 +245,7 @@ const CompleteList = () => {
                                 <td className=" px-2 py-2 text-xs text-gray-500">{job.aircraftType.name}</td>
                                 <td className=" px-2 py-2 text-xs text-gray-500">{job.airport.initials}</td>
                                 <td className=" px-2 py-2 text-xs text-gray-500">{job.fbo.name}</td>
-                                <td className=" px-2 py-2 text-xs text-gray-500">{job.estimatedETA}</td>
+                                <td className=" px-2 py-2 text-xs text-gray-500">{job.on_site ? 'On site' : job.estimatedETA}</td>
                                 <td className=" px-2 py-2 text-xs text-gray-500">{job.estimatedETD}</td>
                                 <td className=" px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
                                 <td className=" px-2 py-2 text-xs text-gray-500" style={{minWidth: '250px'}}>

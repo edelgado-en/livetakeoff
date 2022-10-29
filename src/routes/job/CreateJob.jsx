@@ -62,6 +62,8 @@ const CreateJob = () => {
     const [estimatedDepartureDateOpen, setEstimatedDepartureDateOpen] = useState(false)
     const [completeByDateOpen, setCompleteByDateOpen] = useState(false)
 
+    const [onSite, setOnSite] = useState(false)
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -124,6 +126,7 @@ const CreateJob = () => {
         formData.append("services", selectedServiceIds);
         formData.append("retainer_services", selectedRetainerServiceIds);
         formData.append("comment", comment);
+        formData.append("on_site", onSite);
 
         images.forEach(image => {
             if (image.file.size < 10000000) { // less than 10MB
@@ -164,6 +167,7 @@ const CreateJob = () => {
     }
 
     const handleEstimatedArrivalDateChange = (date, event) => {
+        setOnSite(false)
         setEstimatedArrivalDate(date);
     }
 
@@ -229,6 +233,11 @@ const CreateJob = () => {
 
     const onChangePhoto = (imageList, addUpdateIndex) => {
         setImages(imageList)
+    }
+
+    const handleSetOnSite = () => {
+        setOnSite(!onSite)
+        setEstimatedArrivalDate(null)
     }
 
     return (
@@ -550,14 +559,29 @@ const CreateJob = () => {
                         </div>
                         
                         <div>
-                            <label className="block text-sm  text-gray-500 mb-1">
+                            <div className="text-sm  text-gray-500 mb-1 flex justify-between">
                                 Estimated Arrival
+                                <div className="flex gap-2">
+                                    <div className="flex h-5 items-center">
+                                        <input
+                                            id="onSite"
+                                            value={onSite}
+                                            onClick={handleSetOnSite}
+                                            name="onSite"
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                    </div>
+                                    <label htmlFor="onSite" className=" text-gray-500">
+                                        On site
+                                    </label>
+                                </div>
                                 {estimatedArrivalDate && (
                                     <span 
                                         onClick={() => setEstimatedArrivalDate(null)}
                                         className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
                                 )}
-                            </label>
+                            </div>
                             <button
                                 type="button"
                                 onClick={handleToggleEstimatedArrivalDate}
@@ -577,6 +601,7 @@ const CreateJob = () => {
                                 inline
                                 />
                             )}
+
                         </div>
 
                         <div>

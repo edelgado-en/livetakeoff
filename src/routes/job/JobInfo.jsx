@@ -16,7 +16,7 @@ import { selectUser } from "../../routes/userProfile/userSlice";
 const JobInfo = () => {
     const { jobId } = useParams();
     const [loading, setLoading] = useState(false)
-    const [jobDetails, setJobDetails] = useState({})
+    const [jobDetails, setJobDetails] = useState({service_assignments: [], retainer_service_assignments: []})
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
     const currentUser = useAppSelector(selectUser)
@@ -25,6 +25,13 @@ const JobInfo = () => {
     useEffect(() => {
         getJobDetails()
     }, [])
+
+/*     useEffect(() => {
+        if (isAllServicesCompleted()) {
+            setCompleteJobModalOpen(true)
+        }
+
+    }, [jobDetails]) */
 
     const handleToggleJobCompleteModal = () => {
         setCompleteJobModalOpen(!isCompleteJobModalOpen)
@@ -95,11 +102,13 @@ const JobInfo = () => {
             })}
 
             setJobDetails(updatedJobDetails);
+        
 
         } catch (e) {
         
         }
     }
+
 
     const completeRetainerService = async (retainer_service_assignment_id) => {
         try {
@@ -118,6 +127,20 @@ const JobInfo = () => {
         } catch (e) {
             
         }
+    }
+
+    //WORK IN PROGRESS
+    const isAllServicesCompleted = async () => {
+        const { data } = await api.getJobDetails(jobId)
+
+        //TODO: you have to actually pull all the services from the API because in here you only see
+        // the assignments for the current user
+        const allServices = [...data.service_assignments, ...data.retainer_service_assignments]
+
+        const completedServices = allServices.filter((s) => s.status === 'C')
+
+        return allServices.length === completedServices.length && (data.service_assignments.length > 0
+                                                                    || data.retainer_service_assignments.length > 0)
     }
 
     return (
@@ -214,7 +237,13 @@ const JobInfo = () => {
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Estimated Arrival</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETA ? jobDetails.estimatedETA : 'No ETA yet'}</dd>
+                        <dd className="mt-1 text-sm text-gray-900">
+                            {jobDetails.on_site ? 
+                                'On site' 
+                                :
+                                jobDetails.estimatedETA ? jobDetails.estimatedETA : 'No ETA yet'
+                            }
+                        </dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Complete By</dt>

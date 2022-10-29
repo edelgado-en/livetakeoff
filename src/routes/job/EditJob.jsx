@@ -64,6 +64,8 @@ const EditJob = () => {
     const [estimatedDepartureDateOpen, setEstimatedDepartureDateOpen] = useState(false)
     const [completeByDateOpen, setCompleteByDateOpen] = useState(false)
 
+    const [onSite, setOnSite] = useState(false)
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -87,8 +89,6 @@ const EditJob = () => {
             setTailNumber(response.data.tailNumber);
             setPrice(response.data.price);
 
-            //TODO: need to show purchase order as read only
-
             setSelectedStatus(availableStatuses.find(a => a.id === response.data.status))
             setCustomerSelected(data.customers.find(c => c.id === response.data.customer.id))
             setAircraftTypeSelected(data.aircraft_types.find(a => a.id === response.data.aircraftType.id))
@@ -96,12 +96,16 @@ const EditJob = () => {
             setFboSelected(data.fbos.find(f => f.id === response.data.fbo.id))
            
             if (response.data.completeBy) {
-                console.log(response.data.completeBy)
                 setCompleteByDate(new Date(response.data.completeBy))
             }
 
             if (response.data.estimatedETA) {
                 setEstimatedArrivalDate(new Date(response.data.estimatedETA))
+            
+            } else {
+                if (response.data.on_site) {
+                    setOnSite(true)
+                }
             }
 
             if (response.data.estimatedETD) {
@@ -127,7 +131,8 @@ const EditJob = () => {
             status: selectedStatus.id,
             estimatedETA: estimatedArrivalDate,
             estimatedETD: estimatedDepartureDate,
-            completeBy: completeByDate
+            completeBy: completeByDate,
+            on_site: onSite
         }
 
         try {
@@ -154,6 +159,7 @@ const EditJob = () => {
     }
 
     const handleEstimatedArrivalDateChange = (date, event) => {
+        setOnSite(false)
         setEstimatedArrivalDate(date);
     }
 
@@ -169,6 +175,11 @@ const EditJob = () => {
         const value = e.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
 
         setPrice(value)
+    }
+
+    const handleSetOnSite = () => {
+        setOnSite(!onSite)
+        setEstimatedArrivalDate(null)
     }
 
     return (
@@ -520,14 +531,29 @@ const EditJob = () => {
                         </div>
                         
                         <div>
-                            <label className="block text-sm  text-gray-500 mb-1">
+                            <div className="text-sm  text-gray-500 mb-1 flex justify-between">
                                 Estimated Arrival
+                                <div className="flex gap-2">
+                                    <div className="flex h-5 items-center">
+                                        <input
+                                            id="onSite"
+                                            value={onSite}
+                                            onClick={handleSetOnSite}
+                                            name="onSite"
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                    </div>
+                                    <label htmlFor="onSite" className=" text-gray-500">
+                                        On site
+                                    </label>
+                                </div>
                                 {estimatedArrivalDate && (
                                     <span 
                                         onClick={() => setEstimatedArrivalDate(null)}
                                         className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
                                 )}
-                            </label>
+                            </div>
                             <button
                                 type="button"
                                 onClick={handleToggleEstimatedArrivalDate}
