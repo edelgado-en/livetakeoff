@@ -7,13 +7,6 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
 
-const navigation = [
-  { name: 'Jobs', href: 'jobs', current: true },
-  { name: 'Services', href: '#', current: false },
-  { name: 'Price Listing', href: '#', current: false }, 
-  { name: 'Customers', href: 'customers', current: false }, 
-]
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -81,29 +74,35 @@ const Topbar = () => {
                 </Link>
                 <div className="hidden sm:ml-6 sm:block relative" style={{ top: '6px' }}>
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
                       <Link
-                        key={item.name}
-                        to={item.href}
+                        to="/jobs"
                         className={classNames(
-                          location.pathname.includes(item.href) ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                          location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
                           'px-3 py-2 rounded-md text-sm font-medium text-white'
                         )}
-                        aria-current={item.current ? 'page' : undefined}
                       >
-                        {item.name}
+                        Jobs
                       </Link>
-                    ))}
-                    {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
-                      <Link 
-                        to="completed"
-                        className={classNames(
-                          location.pathname.includes("completed") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                          'px-3 py-2 rounded-md text-sm font-medium text-white'
-                        )}>
-                          Completed Jobs
-                      </Link>
-                    )}
+                      {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                        <>
+                          <Link 
+                            to="customers"
+                            className={classNames(
+                              location.pathname.includes("customers") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}>
+                              Customers
+                          </Link>
+                          <Link 
+                            to="completed"
+                            className={classNames(
+                              location.pathname.includes("completed") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}>
+                              Completed Jobs
+                          </Link>
+                        </>
+                      )}
                   </div>
                 </div>
               </div>
@@ -170,32 +169,42 @@ const Topbar = () => {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
-              {navigation.map((item) => (
-                <Link key={item.name}
-                     to={item.href}>
+                <Link 
+                     to="jobs">
                   <Disclosure.Button
                     className={classNames(
-                      location.pathname.includes(item.href) ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                      location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
                       'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
                     )}
                   >
-                      {item.name}
+                      Jobs
                   </Disclosure.Button>
                 </Link>
-              ))}
-              {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
-                    <Link 
-                      to="completed"
+                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                  <>
+                   <Link 
+                        to="customers">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("customers") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
                       >
-                        <Disclosure.Button
-                          className={classNames(
-                            location.pathname.includes("completed") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
-                            'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
-                          )}
-                        >
-                            Completed Jobs
-                        </Disclosure.Button>
+                          Customers
+                      </Disclosure.Button>
                     </Link>
+                    <Link 
+                        to="completed">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("completed") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Completed Jobs
+                      </Disclosure.Button>
+                    </Link>
+                  </>
                 )}
             </div>
           </Disclosure.Panel>
