@@ -17,7 +17,7 @@ export const updateJob = (id: number, formData: any) => {
 }
 
 export const completeServiceAssignment = (id: number) => {
-    return httpService.patch(`/api/jobs/services/${id}/`, { status: 'C' })
+    return httpService.patch(`/api/jobs/services/${id}/`, { status: 'C', project_manager: null })
 }
 
 export const getAssignmentsFormInfo = (id: number) => {
@@ -45,7 +45,7 @@ export const addRetainerService = (id:number, request: any) => {
 }
 
 export const completeRetainerServiceAssignment = (id: number) => {
-    return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
+    return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C', project_manager: null })
 }
 
 export const getJobPhotos = (jobId: number) => {
