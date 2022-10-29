@@ -137,10 +137,10 @@ const CompleteList = () => {
             {loading && <Loader />} 
 
             {!loading && (
-                <div className="px-4 sm:px-6 lg:px-8 -mt-4">
+                <div className="px-3 sm:px-6 lg:px-8 -mt-4">
                 <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
-                        <h1 className="text-xl font-semibold text-gray-900">Completed Jobs</h1>
+                        <h1 className="text-lg font-semibold text-gray-900">Completed Jobs</h1>
                         <p className="mt-2 text-sm text-gray-700">
                             placeholder text.
                         </p>

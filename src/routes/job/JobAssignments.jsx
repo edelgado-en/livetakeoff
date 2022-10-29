@@ -189,6 +189,19 @@ const JobAssignments = () => {
 
     }
 
+    const setSelectedRetainerServiceProjectManager = (selectedPerson, serviceId) => {
+        const updatedRetainerServices = retainerServices.map((s) => {
+            if (s.id === serviceId) {
+                s = {...s, selectedProjectManager: selectedPerson}
+            }
+
+            return s
+        })
+
+        setRetainerServices(updatedRetainerServices) 
+
+    }
+
     const deleteService = async () => {
         await api.deleteService(serviceToBeDeleted.id)
         
@@ -574,7 +587,7 @@ const JobAssignments = () => {
                                             </div>
                                             {(retainerService.status === 'A' || retainerService.status === 'U' || retainerService.status === 'W') && (
                                                 <div className="mt-8">
-                                                    <Listbox value={retainerService.selectedProjectManager} onChange={(person) => setSelectedServiceProjectManager(person, retainerService.id)}>
+                                                    <Listbox value={retainerService.selectedProjectManager} onChange={(person) => setSelectedRetainerServiceProjectManager(person, retainerService.id)}>
                                                     {({ open }) => (
                                                         <>
                                                         <Listbox.Label className="block text-sm text-gray-600">Assigned to</Listbox.Label>

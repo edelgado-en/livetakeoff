@@ -31,7 +31,7 @@ const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) 
                       </p>
 
                       {jobDetails.total_photos === 0 && (
-                        <p className="text-sm text-gray-500 py-3">
+                        <p className="text-sm text-red-500 py-3 font-medium">
                             There are no uploaded photos for this job.
                         </p>
                       )}
