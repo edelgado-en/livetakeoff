@@ -311,7 +311,7 @@ const JobAssignments = () => {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
+                                <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
                                                         rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
                                                         ring-opacity-5 focus:outline-none sm:text-sm">
                                     {projectManagers.map((projectManager) => (
@@ -344,7 +344,14 @@ const JobAssignments = () => {
                                                 >
                                                     {projectManager.first_name + ' ' + projectManager.last_name}
                                                 </span>
+                                                
                                             </div>
+                                            {/* <div className="text-xs flex">
+                                                <div className="w-20"></div>
+                                                <div>
+                                                    This is the about section talking about the availability and specialties and more...
+                                                </div>
+                                            </div> */}
 
                                             {selected ? (
                                             <span

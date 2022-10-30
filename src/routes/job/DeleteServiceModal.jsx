@@ -30,7 +30,7 @@ const DeleteServiceModal = ({ isOpen, handleClose, deleteService, service }) => 
                         </p>
 
                         <p className="text-sm text-gray-500 py-3">
-                            A Whatsapp notification will be send to the project manager.
+                            A SMS notification will be send to the project manager.
                         </p>
                     </div>
                   </div>

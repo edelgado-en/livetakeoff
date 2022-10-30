@@ -342,7 +342,7 @@ const UserProfile = () => {
                 <Switch.Group as="li" className="flex items-center justify-between py-4">
                 <div className="flex flex-col">
                     <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
-                    Receive Whatsapp notifications
+                    Receive SMS notifications
                     </Switch.Label>
                     <Switch.Description className="text-sm text-gray-500">
                     Send text messages when assigning or completing jobs.
