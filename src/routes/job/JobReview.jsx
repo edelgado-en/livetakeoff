@@ -67,6 +67,8 @@ const JobReview = () => {
 
     const invoiceJob = async () => {
         await api.invoiceJob(jobId, { 'status': 'I' })
+
+        navigate(0)
     }
 
     return (

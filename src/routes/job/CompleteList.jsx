@@ -151,7 +151,7 @@ const CompleteList = () => {
                                 Retainers
                                 </th>
                                 <th
-                                className="whitespace-nowrap px-2 py-2 text-left text-xs  text-gray-500"
+                                className="whitespace-nowrap px-2 py-2 text-center text-xs  text-gray-500"
                                 >
                                 Status
                                 </th>
@@ -170,7 +170,7 @@ const CompleteList = () => {
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
                             {jobs.map((job) => (
-                                <tr key={job.id}>
+                                <tr key={job.id} className="hover:bg-gray-50">
                                 <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.purchase_order}</td>
                                 <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.customer.name}</td>
                                 <td className=" px-2 py-2 text-xs text-gray-500">{job.requestDate}</td>
@@ -199,7 +199,7 @@ const CompleteList = () => {
                                         <div key={index}>{index + 1}{'. '}{service.service_name}</div>
                                     ))}
                                 </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                <td className="whitespace-nowrap px-2 py-2 text-xs text-center text-gray-500">
                                     <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
                                                     ${job.status === 'C' && 'bg-green-500 '}
                                                     ${job.status === 'T' && 'bg-black '}
