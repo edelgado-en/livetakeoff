@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from "react"
 import Loader from "../../components/loader/Loader"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom"
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon } from "@heroicons/react/outline"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -34,6 +34,8 @@ function classNames(...classes) {
 const EditJob = () => {
     const { jobId } = useParams();
 
+    const location = useLocation();
+
     const [loading, setLoading] = useState(false)
     const [createJobMessage, setCreateJobMessage] = useState(null)
     const [jobDetails, setJobDetails] = useState({})
@@ -42,7 +44,7 @@ const EditJob = () => {
     const [tailNumber, setTailNumber] = useState('')
     const [price, setPrice] = useState('')
     const [statuses, setStatuses] = useState(availableStatuses)
-    const [selectedStatus, setSelectedStatus] = useState('')
+    const [selectedStatus, setSelectedStatus] = useState({})
     const [tailNumberErrorMessage, setTailNumberErrorMessage] = useState(null)
     const [customers, setCustomers] = useState([])
     const [aircraftTypes, setAircraftTypes] = useState([])
@@ -88,6 +90,10 @@ const EditJob = () => {
 
             setTailNumber(response.data.tailNumber);
             setPrice(response.data.price);
+
+            if (location.pathname.includes('review')) {
+                availableStatuses.push({id: 'I', name: 'Invoiced'})
+            }
 
             setSelectedStatus(availableStatuses.find(a => a.id === response.data.status))
             setCustomerSelected(data.customers.find(c => c.id === response.data.customer.id))
@@ -250,7 +256,7 @@ const EditJob = () => {
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm">
-                                            <span className="block truncate">{selectedStatus.name}</span>
+                                            <span className="block truncate">{selectedStatus?.name}</span>
                                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </span>

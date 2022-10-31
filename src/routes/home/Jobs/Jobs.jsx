@@ -207,7 +207,7 @@ const JobsQueue = () => {
                                     <div className="absolute flex flex-shrink-0 items-center justify-center">
                                       <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
                                     </div>
-                                    <div className="ml-3 text-xs text-gray-700">Pending</div>
+                                    <div className="ml-3 text-xs text-gray-700">TBD</div>
                                   </span>}
                               </div>
                           </div>

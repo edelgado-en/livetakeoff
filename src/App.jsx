@@ -31,7 +31,7 @@ import CustomerEditFee from './routes/customers/CustomerEditFee';
 import CustomerJobs from './routes/customers/CustomerJobs';
 import CustomerProfile from './routes/customers/CustomerProfile';
 import CreateCustomer from './routes/customers/CreateCustomer';
-
+import JobReview from './routes/job/JobReview';
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
@@ -95,6 +95,14 @@ const  App = () => {
                       <Route path="jobs" element={<Jobs />}/>
                       <Route path="create-job" element={<CreateJob />} />
                       <Route path="completed" element={<CompleteList />} />
+                      <Route path="completed/review/:jobId" element={<JobReview />}>
+                        <Route path="photos" element={<JobPhotos />}>
+                            <Route index element={<JobPhotoListing />} />
+                            <Route path="listing" element={<JobPhotoListing />} />
+                            <Route path="upload" element={<JobPhotoUpload />} />
+                        </Route>
+                        <Route path="edit" element={<EditJob />} />
+                      </Route>
 
                       <Route path="create-customer" element={<CreateCustomer />} />
                       

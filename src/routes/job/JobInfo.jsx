@@ -5,6 +5,8 @@ import { CheckCircleIcon } from "@heroicons/react/outline";
 import { toast } from 'react-toastify';
 import * as api from './apiService'
 
+import { Switch } from "@headlessui/react";
+
 import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -12,6 +14,9 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
 
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
 
 const JobInfo = () => {
     const { jobId } = useParams();
@@ -19,6 +24,7 @@ const JobInfo = () => {
     const [jobDetails, setJobDetails] = useState({service_assignments: [], retainer_service_assignments: []})
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
+    const [showActions, setShowActions] = useState(false)
     const currentUser = useAppSelector(selectUser)
     const navigate = useNavigate();
 
@@ -197,6 +203,8 @@ const JobInfo = () => {
                                         ${jobDetails.status === 'U' && 'bg-indigo-500 '}
                                         ${jobDetails.status === 'W' && 'bg-green-500 '}
                                         ${jobDetails.status === 'R' && 'bg-purple-500 '}
+                                        ${jobDetails.status === 'C' && 'bg-green-500 '}
+                                        ${jobDetails.status === 'I' && 'bg-blue-500'}
                                         `} >
                                 {jobDetails.status === 'A' && 'Accepted'}
                                 {jobDetails.status === 'S' && 'Assigned'}
@@ -255,7 +263,7 @@ const JobInfo = () => {
                             <div className="absolute flex flex-shrink-0 items-center justify-center">
                               <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
                             </div>
-                            <div className="ml-3 text-sm text-gray-700">Pending</div>
+                            <div className="ml-3 text-sm text-gray-700">TBD</div>
                           </span>}
                         </dd>
                     </div>
@@ -288,7 +296,33 @@ const JobInfo = () => {
                     </div>
                 </dl>
                 <div className="mx-auto mt-8 max-w-5xl pb-8">
+                    <div className="flex justify-between">
                     <h2 className="text-sm font-medium text-gray-500">Services</h2>
+                        <Switch.Group as="li" className="flex items-center">
+                              <div className="flex flex-col">
+                                <Switch.Label as="p" className="text-sm font-medium text-gray-500" passive>
+                                  {showActions ? 'Hide Actions' : 'Show Actions'}
+                                </Switch.Label>
+                              </div>
+                              <Switch
+                                checked={showActions}
+                                onChange={setShowActions}
+                                className={classNames(
+                                    showActions ? 'bg-red-500' : 'bg-gray-200',
+                                  'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    showActions ? 'translate-x-5' : 'translate-x-0',
+                                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                                  )}
+                                />
+                              </Switch>
+                        </Switch.Group>
+                    </div>
+
                     <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {jobDetails.service_assignments?.length === 0 &&
                             <div className="text-sm text-gray-500">None</div>
@@ -336,7 +370,7 @@ const JobInfo = () => {
                                             </div>
                                         )}
 
-                                        {service.checklist_actions?.map((action) => (
+                                        {showActions && service.checklist_actions?.map((action) => (
                                             <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
                                         ))}
                                     </div>
@@ -391,7 +425,7 @@ const JobInfo = () => {
                                             </div>
                                         )}
                                             
-                                        {service.checklist_actions?.map((action) => (
+                                        {showActions && service.checklist_actions?.map((action) => (
                                                 <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
                                         ))}
                                     </div>
