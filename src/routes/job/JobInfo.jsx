@@ -205,6 +205,7 @@ const JobInfo = () => {
                                         ${jobDetails.status === 'R' && 'bg-purple-500 '}
                                         ${jobDetails.status === 'C' && 'bg-green-500 '}
                                         ${jobDetails.status === 'I' && 'bg-blue-500'}
+                                        ${jobDetails.status === 'T' && 'bg-gray-700'}
                                         `} >
                                 {jobDetails.status === 'A' && 'Accepted'}
                                 {jobDetails.status === 'S' && 'Assigned'}
