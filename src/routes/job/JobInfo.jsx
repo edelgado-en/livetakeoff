@@ -286,12 +286,19 @@ const JobInfo = () => {
                         </div>
                     )}
                     
-                    <div className="sm:col-span-2">
+                    <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Special Instructions</dt>
                         <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
                             {jobDetails.special_instructions?.length === 0 && 'None'}
 
                             {jobDetails.special_instructions}
+                        </dd>
+                    </div>
+
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Created By</dt>
+                        <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                            {jobDetails.created_by?.first_name} {jobDetails.created_by?.last_name}
                         </dd>
                     </div>
                 </dl>
