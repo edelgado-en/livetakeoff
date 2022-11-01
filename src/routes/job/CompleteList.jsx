@@ -309,10 +309,10 @@ const CompleteList = () => {
                                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
                                                 <button
                                                     type="button"
-                                                    style={{ paddingTop: '1px', paddingBottom: '1px' }}
+                                                    style={{ paddingTop: '2px', paddingBottom: '2px' }}
                                                     onClick={() => navigate(`/completed/review/${job.id}`)}
                                                     className="inline-flex items-center rounded border
-                                                        border-gray-300 bg-white px-1 text-xs font-medium
+                                                        border-gray-300 bg-white px-1 text-xs 
                                                         text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
                                                         focus:ring-gray-500 focus:ring-offset-2"
                                                 >
