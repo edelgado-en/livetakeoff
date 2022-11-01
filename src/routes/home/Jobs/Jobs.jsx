@@ -170,7 +170,7 @@ const JobsQueue = () => {
                     onKeyDown={handleKeyDown}
                     className="block w-full rounded-md border-gray-300 pl-10 focus:border-sky-500
                             focus:ring-sky-500 text-xs"
-                    placeholder="by tail, P.O, customer, airport..."
+                    placeholder="tail, P.O, customer, airport..."
                   />
                 </div>
               </div>
