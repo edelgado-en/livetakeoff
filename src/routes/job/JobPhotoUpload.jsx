@@ -18,8 +18,8 @@ const JobPhotoUpload = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [interiorImages, setInteriorImages] = useState([]);
     const [exteriorImages, setExteriorImages] = useState([]);
-    const maxNumberInterior = 20;
-    const maxNumberExterior = 20
+    const maxNumberInterior = 10;
+    const maxNumberExterior = 10
 
     const { jobId } = useParams();
 
@@ -93,7 +93,7 @@ const JobPhotoUpload = () => {
                 setErrorMessage('You do not have permission to view this job.')
             
             } else if (error.response?.status === 406) {
-                setErrorMessage('There are already 20 interior photos for this job.')
+                setErrorMessage('There are already 10 interior photos for this job.')
 
             } else {
                 setErrorMessage('Unable to upload photos at this time.')
@@ -132,7 +132,7 @@ const JobPhotoUpload = () => {
                 setErrorMessage('You do not have permission to view this job.')
             
             } else if (error.response?.status === 406) {
-                setErrorMessage('There are already 20 interior photos for this job.')
+                setErrorMessage('There are already 10 exterior photos for this job.')
 
             } else {
                 setErrorMessage('Unable to upload photos at this time.')
@@ -203,8 +203,8 @@ const JobPhotoUpload = () => {
                                 </div>
                             </div>
 
-                            {errors && <div className="text-gray-500 mt-6 m-auto text-center text-sm">
-                                {errors.maxNumber && <span>You can only upload up to 20 photos</span>}
+                            {errors && <div className="text-red-500 font-medium mt-6 m-auto text-center text-sm">
+                                {errors.maxNumber && <span>You can only upload up to 10 interior photos</span>}
                                 {errors.acceptType && <span>Your selected file type is not allow</span>}
                                 </div>
                             }
@@ -344,8 +344,8 @@ const JobPhotoUpload = () => {
                                 </div>
                             </div>
                             
-                            {errors && <div className="text-gray-500 mt-6 m-auto text-center text-sm">
-                                {errors.maxNumber && <span>You can only upload up to 20 photos</span>}
+                            {errors && <div className="text-red-500 font-medium mt-6 m-auto text-center text-sm">
+                                {errors.maxNumber && <span>You can only upload up to 10 exterior photos</span>}
                                 {errors.acceptType && <span>Your selected file type is not allow</span>}
                                 </div>
                             }

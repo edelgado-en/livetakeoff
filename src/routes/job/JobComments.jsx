@@ -20,15 +20,13 @@ const JobComments = () => {
     const [comments, setComments] = useState([]) 
     const [loading, setLoading] = useState(false)
 
+    // TODO: I have to use redux to dispatch the action to update the job stats
+    // TODO: Update jobDetails.jsx to read from redux store
+
     useEffect(() => {
       getComments()
 
     }, [])
-
-/*     useEffect(() => {
-      bottomRef.current?.scrollIntoView({behavior: 'smooth'});
-      This is annoying
-    }, [comments]) */
 
     const getComments = async () => {
       setLoading(true)

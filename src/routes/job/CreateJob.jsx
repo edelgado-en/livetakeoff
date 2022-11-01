@@ -1096,7 +1096,7 @@ const CreateJob = () => {
                                 acceptType={['jpg', 'gif', 'png', 'jpeg']}
                                 value={images}
                                 onChange={onChangePhoto}
-                                maxNumber={20}
+                                maxNumber={10}
                                 dataURLKey="data_url">
                                 {({
                                     imageList,
@@ -1137,11 +1137,12 @@ const CreateJob = () => {
                                                 </label>
                                                 <p className="pl-1">or drag and drop</p>
                                             </div>
-                                            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB. 10 photos max</p>
                                         </div>
                                     </div>
 
-                                    {errors && <div className="text-gray-500 mt-6 m-auto text-center text-sm">
+                                    {errors && <div className="text-red-500 font-medium mt-6 m-auto text-center text-sm">
+                                        {errors.maxNumber && <span>You can only upload up to 10 photos</span>}
                                         {errors.acceptType && <span>Your selected file type is not allow</span>}
                                         </div>
                                     }
