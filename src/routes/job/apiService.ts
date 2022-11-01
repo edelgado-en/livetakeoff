@@ -97,8 +97,8 @@ export const getRetainerServices = () => {
 }
 
 
-export const getCompletedJobs = (data: any) => {
-    return httpService.post('/api/jobs/completed', data)
+export const getCompletedJobs = (data: any, currentPage: Number) => {
+    return httpService.post(`/api/jobs/completed?page=${currentPage}&size=${200}`, data)
 }
 
 export const invoiceJob = (id: number, data: any) => {

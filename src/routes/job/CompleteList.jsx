@@ -6,6 +6,8 @@ import Loader from '../../components/loader/Loader';
 import { Listbox, Transition, Popover } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom';
 
+import Pagination from "react-js-pagination";
+
 import JSZip from "jszip";
 import { saveAs } from 'file-saver';
 
@@ -40,18 +42,20 @@ const ChevronUpDownIcon = () => {
     )
 }
 
+
 const CompleteList = () => {
     const [jobs, setJobs] = useState([])
     const [totalJobs, setTotalJobs] = useState(0)
     const [loading, setLoading] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
+    const [currentPage, setCurrentPage] = useState(1);
 
     const navigate = useNavigate()
 
     useEffect(() => {
         searchJobs()
-    }, [searchText, statusSelected])
+    }, [searchText, statusSelected, currentPage])
 
     const searchJobs = async () => {
         setLoading(true)
@@ -62,7 +66,7 @@ const CompleteList = () => {
         }
 
         try {
-            const { data } = await api.getCompletedJobs(request)
+            const { data } = await api.getCompletedJobs(request, currentPage)
     
             setJobs(data.results)
             setTotalJobs(data.count)
@@ -71,6 +75,10 @@ const CompleteList = () => {
         } catch (err) {
             setLoading(false)
         }
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
     }
 
     const handleKeyDown = event => {
@@ -207,7 +215,7 @@ const CompleteList = () => {
                 )}
 
                 {!loading && jobs.length > 0 && (
-                    <div className="mt-4 flex flex-col pb-20 m-auto" style={{ maxWidth: '1800px' }}>
+                    <div className="mt-4 flex flex-col m-auto" style={{ maxWidth: '1800px' }}>
                         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-4 lg:-mx-8">
                             <div className="inline-block min-w-full py-2 align-middle px-8">
                                 <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -327,6 +335,25 @@ const CompleteList = () => {
                             </div>
                         </div>
                     </div>
+                )}
+
+                {!loading && totalJobs > 200 && (
+                    <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
+                        <div>
+                         <Pagination
+                            innerClass="pagination pagination-custom"
+                            activePage={currentPage}
+                            hideDisabled
+                            itemClass="page-item page-item-custom"
+                            linkClass="page-link page-link-custom"
+                            itemsCountPerPage={200}
+                            totalItemsCount={totalJobs}
+                            pageRangeDisplayed={3}
+                            onChange={handlePageChange}
+                        /> 
+                        </div>
+                    </div>
+                    
                 )}
                 
             </div>
