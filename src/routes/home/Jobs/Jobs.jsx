@@ -44,9 +44,13 @@ const JobsQueue = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
-  const [searchText, setSearchText] = useState('')
+  const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
   const currentUser = useAppSelector(selectUser)
-  const [statusSelected, setStatusSelected] = useState(availableStatuses[0])
+  const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
+
+  useEffect(() => {
+    localStorage.setItem('searchText', searchText)
+  }, [searchText])
 
   useEffect(() => {
     //Basic throttling
@@ -72,7 +76,7 @@ const JobsQueue = () => {
     setLoading(true)
     
     const request = {
-      searchText,
+      searchText: localStorage.getItem('searchText'),
       status: statusSelected.id,
     }
 
