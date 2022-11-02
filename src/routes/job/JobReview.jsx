@@ -93,7 +93,7 @@ const JobReview = () => {
                     <div className="pb-4">
                         <h1 className="text-2xl font-semibold text-gray-600">Job Review</h1>
                         <p className="mt-1 text-sm text-gray-500">
-                            Ensure all the photos and details are correct before creating a close out.
+                            Ensure all the photos and details are correct before creating a closeout.
                         </p>
                     </div>
                     <div className="flex-1 justify-end text-right">
@@ -132,7 +132,7 @@ const JobReview = () => {
                                         focus:outline-none focus:ring-2 focus:ring-red-500
                                         focus:ring-offset-2 sm:w-auto"
                         >
-                            {downloadLoading ? 'generating...' : 'Close out'}
+                            {downloadLoading ? 'generating...' : 'Closeout'}
                         </button>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ const JobReview = () => {
                 {downloadLoading ? 
                     <div className="text-gray-500 text-center">
                         <Loader />
-                        <div>Generating close out PDF.</div>
+                        <div>Generating closeout PDF.</div>
                         <div>This might take several seconds depending on photos. Please wait...</div> 
                     </div>
                     :
