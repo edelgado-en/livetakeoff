@@ -1,7 +1,7 @@
 
 import { useEffect, useState, Fragment, useRef } from 'react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
-import { DownloadIcon, CheckIcon, ShareIcon } from '@heroicons/react/outline';
+import { DownloadIcon, CheckIcon, ShareIcon, QuestionMarkCircleIcon } from '@heroicons/react/outline';
 import Loader from '../../components/loader/Loader';
 import { Listbox, Transition, Popover } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css"
 
+import JobPriceBreakdownModal from './JobPriceBreakdownModal';
 import Pagination from "react-js-pagination";
 
 import JSZip from "jszip";
@@ -53,7 +54,8 @@ const CompleteList = () => {
     const [searchText, setSearchText] = useState(localStorage.getItem('completedSearchText') || '')
     const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
     const [currentPage, setCurrentPage] = useState(1);
-
+    const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] = useState(false)
+    const [selectedJob, setSelectedJob] = useState(null)
 
     //requested date
     const [requestedDateFrom, setRequestedDateFrom] = useState(null);
@@ -162,6 +164,11 @@ const CompleteList = () => {
         } catch (error) {
             setLoading(false)
         }
+    }
+
+    const handleTogglePriceBreakdownModal = (job) => {
+        setSelectedJob(job)
+        setPriceBreakdownModalOpen(!isPriceBreakdownModalOpen)
     }
 
     const handlePageChange = (page) => {
@@ -907,7 +914,13 @@ const CompleteList = () => {
                                                 </p>
                                             </td>
                                             <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                                                <div className="relative" style={{top: '2px'}}>{'$'}{job.price ? job.price : '0.00'}</div>
+                                                <div className="flex gap-1">
+                                                    {'$'}{job.price ? job.price : '0.00'}
+                                                    {job.is_auto_priced && (
+                                                        <QuestionMarkCircleIcon  onClick={() => handleTogglePriceBreakdownModal(job)}
+                                                                     className="h-4 w-4 text-gray-500 cursor-pointer"/>
+                                                    )}
+                                                </div>
                                             </td>
                                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
                                                 <button
@@ -952,6 +965,11 @@ const CompleteList = () => {
                 )}
                 
             </div>
+
+            {isPriceBreakdownModalOpen && <JobPriceBreakdownModal
+                                            isOpen={isPriceBreakdownModalOpen}
+                                            jobDetails={selectedJob}
+                                            handleClose={handleTogglePriceBreakdownModal} />}
             
         </AnimatedPage>
     )
