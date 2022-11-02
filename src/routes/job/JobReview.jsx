@@ -50,7 +50,7 @@ const JobReview = () => {
 
     const getJobCloseout = async () => {
         setDownloadLoading(true)
-
+        
         try {
             axios({
                 url: `/api/jobs/closeout/${jobId}/`,
@@ -61,7 +61,7 @@ const JobReview = () => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', `${jobDetails?.customer.name}_${jobDetails?.purchase_order}_closeout.pdf`);
+                link.setAttribute('download', `${jobDetails?.customer.name.replace(/\s/g, '')}_${jobDetails?.purchase_order}_closeout.pdf`);
                 document.body.appendChild(link);
                 link.click();
               });
