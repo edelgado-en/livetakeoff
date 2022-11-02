@@ -49,7 +49,7 @@ const CompleteList = () => {
     const [jobs, setJobs] = useState([])
     const [totalJobs, setTotalJobs] = useState(0)
     const [loading, setLoading] = useState(false)
-    const [searchText, setSearchText] = useState('')
+    const [searchText, setSearchText] = useState(localStorage.getItem('completedSearchText') || '')
     const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -88,6 +88,10 @@ const CompleteList = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
+        localStorage.setItem('completedSearchText', searchText)
+      }, [searchText])
+
+    useEffect(() => {
         searchJobs()
     }, [searchText, statusSelected, currentPage])
 
@@ -95,7 +99,7 @@ const CompleteList = () => {
         setLoading(true)
 
         const request = {
-            searchText,
+            searchText: localStorage.getItem('completedSearchText'),
             status: statusSelected.id,
             requestedDateFrom,
             requestedDateTo,
