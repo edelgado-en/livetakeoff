@@ -740,7 +740,6 @@ const CompleteList = () => {
                             <>
                             <div className="relative" style={{width: '120px'}}>
                                 <Listbox.Button className="relative w-full rounded-md 
-                                                            
                                                             bg-white py-1 px-3 pr-8 text-left
                                                             shadow-sm focus:border-gray-500 focus:outline-none
                                                             focus:ring-1 focus:ring-gray-500 text-xs cursor-pointer">

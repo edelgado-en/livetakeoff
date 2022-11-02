@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CheckCircleIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon, QuestionMarkCircleIcon } from "@heroicons/react/outline";
 import { toast } from 'react-toastify';
 import * as api from './apiService'
 
@@ -9,6 +9,7 @@ import { Switch } from "@headlessui/react";
 
 import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
+import JobPriceBreakdownModal from './JobPriceBreakdownModal'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import { useAppSelector } from "../../app/hooks";
@@ -24,6 +25,7 @@ const JobInfo = () => {
     const [jobDetails, setJobDetails] = useState({service_assignments: [], retainer_service_assignments: []})
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
+    const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] = useState(false)
     const [showActions, setShowActions] = useState(false)
     const currentUser = useAppSelector(selectUser)
     const navigate = useNavigate();
@@ -41,6 +43,10 @@ const JobInfo = () => {
 
     const handleToggleJobCompleteModal = () => {
         setCompleteJobModalOpen(!isCompleteJobModalOpen)
+    }
+
+    const handleTogglePriceBreakdownModal = () => {
+        setPriceBreakdownModalOpen(!isPriceBreakdownModalOpen)
     }
 
     const getJobDetails = async () => {
@@ -178,7 +184,6 @@ const JobInfo = () => {
                     {jobDetails.status === 'W' && 
                         <button
                             type="button"
-                            /* onClick={() => updateJobStatus('C')} */
                             onClick={() => handleToggleJobCompleteModal()}
                             className="inline-flex items-center justify-center rounded-md
                                     border border-transparent bg-red-600 px-4 py-2 text-sm
@@ -273,7 +278,7 @@ const JobInfo = () => {
                         <dt className="text-sm font-medium text-gray-500">Estimated Departure</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'No ETD yet'}</dd>
                     </div>
-                    {!currentUser.isProjectManager && !currentUser.isCustomer && (
+                    {!currentUser.isProjectManager && (
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Price</dt>
                             <dd className="mt-1 text-sm text-gray-900 flex gap-1">
@@ -283,6 +288,10 @@ const JobInfo = () => {
                                                     text-gray-600 shadow-sm hover:bg-gray-50 ">M</div>
                                 )}
                                 <div>{'$'}{jobDetails.price ? jobDetails.price : '0.00'}</div>
+                                {/* Check for settings to show the spending info for customers */}
+                                {jobDetails.is_auto_priced && (
+                                    <QuestionMarkCircleIcon  onClick={() => handleTogglePriceBreakdownModal()} className="h-5 w-5 text-gray-500 cursor-pointer"/>
+                                )}
                             </dd>
                         </div>
                     )}
@@ -451,6 +460,11 @@ const JobInfo = () => {
                                             jobDetails={jobDetails}
                                             handleClose={handleToggleJobCompleteModal}
                                             updateJobStatus={updateJobStatus} />}
+
+            {isPriceBreakdownModalOpen && <JobPriceBreakdownModal
+                                            isOpen={isPriceBreakdownModalOpen}
+                                            jobDetails={jobDetails}
+                                            handleClose={handleTogglePriceBreakdownModal} />}
 
         </AnimatedPage>
     )

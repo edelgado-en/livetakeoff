@@ -110,3 +110,7 @@ export const exportJobs = (data: any) => {
     return httpService.post(`/api/jobs/export`, data)
 }
 
+export const getJobPriceBreakdown = (id: number) => {
+    return httpService.get(`/api/jobs/price-breakdown/${id}/`)
+}
+

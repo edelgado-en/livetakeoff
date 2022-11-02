@@ -31,7 +31,7 @@ const ModalFrame = ({ isModalOpen, cancelButtonRef, children } : IProps) => {
           </Transition.Child>
   
           <div className="fixed z-10 inset-0 overflow-y-auto">
-            <div className="flex items-end sm:items-center justify-center p-4 text-center sm:p-0 mt-40 ">
+            <div className="flex items-end sm:items-center justify-center p-4 text-center sm:p-0 mt-32">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-100"
