@@ -1,15 +1,17 @@
 
-import { useEffect, useState, Fragment } from 'react'
+import { useEffect, useState, Fragment, useRef } from 'react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { DownloadIcon, CheckIcon, ShareIcon } from '@heroicons/react/outline';
 import Loader from '../../components/loader/Loader';
 import { Listbox, Transition, Popover } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "./date-picker.css"
 
 import Pagination from "react-js-pagination";
 
 import JSZip from "jszip";
-import { saveAs } from 'file-saver';
 
 import * as api from './apiService'
 
@@ -51,6 +53,38 @@ const CompleteList = () => {
     const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
     const [currentPage, setCurrentPage] = useState(1);
 
+
+    //requested date
+    const [requestedDateFrom, setRequestedDateFrom] = useState(null);
+    const [requestedDateTo, setRequestDateTo] = useState(null);
+    const [requestedDateFromOpen, setRequestedDateFromOpen] = useState(false)
+    const [requestedDateToOpen, setRequestedDateToOpen] = useState(false)
+    
+    //arrival date
+    const [arrivalDateFrom, setArrivalDateFrom] = useState(null);
+    const [arrivalDateTo, setArrivalDateTo] = useState(null);
+    const [arrivalDateFromOpen, setArrivalDateFromOpen] = useState(false)
+    const [arrivalDateToOpen, setArrivalDateToOpen] = useState(false)
+
+    //departure date
+    const [departureDateFrom, setDepartureDateFrom] = useState(null);
+    const [departureDateTo, setDepartureDateTo] = useState(null);
+    const [departureDateFromOpen, setDepartureDateFromOpen] = useState(false)
+    const [departureDateToOpen, setDepartureDateToOpen] = useState(false)
+
+    //complete by
+    const [completeByDateFrom, setCompleteByDateFrom] = useState(null);
+    const [completeByDateTo, setCompleteByDateTo] = useState(null);
+    const [completeByDateFromOpen, setCompleteByDateFromOpen] = useState(false)
+    const [completeByDateToOpen, setCompleteByDateToOpen] = useState(false)
+
+    //completion date
+    const [completionDateFrom, setCompletionDateFrom] = useState(null);
+    const [completionDateTo, setCompletionDateTo] = useState(null);
+    const [completionDateFromOpen, setCompletionDateFromOpen] = useState(false)
+    const [completionDateToOpen, setCompletionDateToOpen] = useState(false)
+
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -63,6 +97,16 @@ const CompleteList = () => {
         const request = {
             searchText,
             status: statusSelected.id,
+            requestedDateFrom,
+            requestedDateTo,
+            arrivalDateFrom,
+            arrivalDateTo,
+            departureDateFrom,
+            departureDateTo,
+            completeByDateFrom,
+            completeByDateTo,
+            completionDateFrom,
+            completionDateTo,
         }
 
         try {
@@ -87,7 +131,117 @@ const CompleteList = () => {
           
           searchJobs();
         }
-    };
+    }
+
+    //requested date
+    const handleToggleRequestedFromDate = () => {
+        setRequestedDateFromOpen(!requestedDateFromOpen)
+    }
+
+    const handleToggleRequestedToDate = () => {
+        setRequestedDateToOpen(!requestedDateToOpen)
+    }
+
+    const handleRequestedDateFromChange = (date, event) => {
+        setRequestedDateFrom(date);
+    }
+
+    const handleRequestedDateToChange = (date, event) => {
+        setRequestDateTo(date);
+    }
+
+    //arrival date
+    const handleToggleArrivalFromDate = () => {
+        setArrivalDateFromOpen(!arrivalDateFromOpen)
+    }
+
+    const handleToggleArrivalToDate = () => {
+        setArrivalDateToOpen(!arrivalDateToOpen)
+    }
+
+    const handleArrivalDateFromChange = (date, event) => {
+        setArrivalDateFrom(date);
+    }
+
+    const handleArrivalDateToChange = (date, event) => {
+        setArrivalDateTo(date);
+    }
+
+    //departure date
+    const handleToggleDepartureFromDate = () => {
+        setDepartureDateFromOpen(!departureDateFromOpen)
+    }
+
+    const handleToggleDepartureToDate = () => {
+        setDepartureDateToOpen(!departureDateToOpen)
+    }
+
+    const handleDepartureDateFromChange = (date, event) => {
+        setDepartureDateFrom(date);
+    }
+
+    const handleDepartureDateToChange = (date, event) => {
+        setDepartureDateTo(date);
+    }
+
+    //complete by date
+    const handleToggleCompleteByFromDate = () => {
+        setCompleteByDateFromOpen(!completeByDateFromOpen)
+    }
+
+    const handleToggleCompleteByToDate = () => {
+        setCompleteByDateToOpen(!completeByDateToOpen)
+    }
+
+    const handleCompleteByDateFromChange = (date, event) => {
+        setCompleteByDateFrom(date);
+    }
+
+    const handleCompleteByDateToChange = (date, event) => {
+        setCompleteByDateTo(date);
+    }
+
+    //completion date
+    const handleToggleCompletionFromDate = () => {
+        setCompletionDateFromOpen(!completionDateFromOpen)
+    }
+
+    const handleToggleCompletionToDate = () => {
+        setCompletionDateToOpen(!completionDateToOpen)
+    }
+
+    const handleCompletionDateFromChange = (date, event) => {
+        setCompletionDateFrom(date);
+    }
+
+    const handleCompletionDateToChange = (date, event) => {
+        setCompletionDateTo(date);
+    }
+
+    const resetAllDateFilters = () => {
+        setRequestedDateFrom(null)
+        setRequestDateTo(null)
+        setArrivalDateFrom(null)
+        setArrivalDateTo(null)
+        setDepartureDateFrom(null)
+        setDepartureDateTo(null)
+        setCompleteByDateFrom(null)
+        setCompleteByDateTo(null)
+        setCompletionDateFrom(null)
+        setCompletionDateTo(null)
+    }
+
+    const handleApplyDateFilters = () => {
+        searchJobs()
+    }
+
+    const isThereAnyDateFilter = () => {
+        return requestedDateFrom || requestedDateTo
+            || arrivalDateFrom || arrivalDateTo
+            || departureDateFrom || departureDateTo
+            || completeByDateFrom || completeByDateTo
+            || completionDateFrom || completionDateTo
+    }
 
     return (
         <AnimatedPage>
@@ -132,18 +286,409 @@ const CompleteList = () => {
                     </div>
                     <div className="flex gap-4">
                         <div>
-                            <button
-                            type="button"
-                            className="inline-flex items-center rounded border border-gray-200
+                            <Popover className="relative">
+                                {({ open }) => (
+                                <>
+                                    <Popover.Button
+                                    className={`
+                                        ${open ? '' : 'text-opacity-90'}
+                                        inline-flex items-center rounded border border-gray-200
                                             bg-white px-2.5 py-1 text-xs text-gray-700 shadow-sm
                                             hover:bg-gray-50 focus:outline-none focus:ring-1
-                                            focus:ring-gray-500 focus:ring-offset-1"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 mr-1">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
-                                </svg>
-                                Filters
-                            </button>
+                                            focus:ring-gray-500 focus:ring-offset-1`}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 mr-1">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+                                        </svg>
+                                        Filters
+                                        {isThereAnyDateFilter() && (
+                                            <div style={{paddingTop: '2px', paddingBottom: '2px'}} 
+                                                    className="bg-red-500 text-white px-2 absolute bottom-2 -right-2
+                                                                rounded-full text-xs font-medium inline-block scale-90">
+                                                !
+                                            </div>
+                                        )}
+                                    </Popover.Button>
+                                    <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-200"
+                                        enterFrom="opacity-0 translate-y-1"
+                                        enterTo="opacity-100 translate-y-0"
+                                        leave="transition ease-in duration-150"
+                                        leaveFrom="opacity-100 translate-y-0"
+                                        leaveTo="opacity-0 translate-y-1">
+                                    <Popover.Panel className="absolute left-1/4 z-10 mt-3 w-96 -translate-x-1/2
+                                                              transform px-4 sm:px-0 max-w-6xl">
+                                        <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                                            <div className="bg-gray-50 p-4 grid grid-cols-2">
+                                                <div>
+                                                    <span className="flex items-center">
+                                                        <span className="text-xs font-medium text-gray-900">
+                                                        Date filters
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                                <div onClick={() => resetAllDateFilters()} className="text-right underline text-xs text-red-500 cursor-pointer">
+                                                    reset
+                                                </div>
+                                                
+                                            </div>
+                                            <div className="relative grid gap-y-2 bg-white p-7 pt-2 divide-y grid-cols-1
+                                                             text-xs text-gray-500">
+                                                <div className="flex flex-col gap-2 pb-2">
+                                                    <div className="font-medium">
+                                                        Requested
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>from</div>
+                                                            {requestedDateFrom && (
+                                                                <span 
+                                                                    onClick={() => setRequestedDateFrom(null)}
+                                                                    className="ml-2 underline text-xs text-red-500
+                                                                                 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleRequestedFromDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {requestedDateFrom?.toLocaleString()}
+                                                        </button>
+                                                        {requestedDateFromOpen && (
+                                                            <DatePicker
+                                                                selected={requestedDateFrom}
+                                                                onChange={(date) => handleRequestedDateFromChange(date)}
+                                                                timeInputLabel="Time:"
+                                                                dateFormat="MM/dd/yyyy h:mm aa"
+                                                                showTimeInput
+                                                                inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>to</div>
+                                                            {requestedDateTo && (
+                                                                <span 
+                                                                    onClick={() => setRequestDateTo(null)}
+                                                                    className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleRequestedToDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {requestedDateTo?.toLocaleString()}
+                                                        </button>
+                                                        {requestedDateToOpen && (
+                                                            <DatePicker
+                                                            selected={requestedDateTo}
+                                                            onChange={(date) => handleRequestedDateToChange(date)}
+                                                            timeInputLabel="Time:"
+                                                            dateFormat="MM/dd/yyyy h:mm aa"
+                                                            showTimeInput
+                                                            inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="flex flex-col gap-2 pb-2">
+                                                    <div className="font-medium pt-2">
+                                                        Arrival
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>from</div>
+                                                            {arrivalDateFrom && (
+                                                                <span 
+                                                                    onClick={() => setArrivalDateFrom(null)}
+                                                                    className="ml-2 underline text-xs text-red-500
+                                                                                 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleArrivalFromDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {arrivalDateFrom?.toLocaleString()}
+                                                        </button>
+                                                        {arrivalDateFromOpen && (
+                                                            <DatePicker
+                                                            selected={arrivalDateFrom}
+                                                            onChange={(date) => handleArrivalDateFromChange(date)}
+                                                            timeInputLabel="Time:"
+                                                            dateFormat="MM/dd/yyyy h:mm aa"
+                                                            showTimeInput
+                                                            inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <div className="flex justify-between">
+                                                            <div>to</div>
+                                                            {arrivalDateTo && (
+                                                                <span 
+                                                                    onClick={() => setArrivalDateTo(null)}
+                                                                    className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleArrivalToDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {arrivalDateTo?.toLocaleString()}
+                                                        </button>
+                                                        {arrivalDateToOpen && (
+                                                            <DatePicker
+                                                                selected={arrivalDateTo}
+                                                                onChange={(date) => handleArrivalDateToChange(date)}
+                                                                timeInputLabel="Time:"
+                                                                dateFormat="MM/dd/yyyy h:mm aa"
+                                                                showTimeInput
+                                                                inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex flex-col gap-2 pb-2">
+                                                    <div className="font-medium pt-2">
+                                                        Departure
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>from</div>
+                                                            {departureDateFrom && (
+                                                                <span 
+                                                                    onClick={() => setDepartureDateFrom(null)}
+                                                                    className="ml-2 underline text-xs text-red-500
+                                                                                 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleDepartureFromDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {departureDateFrom?.toLocaleString()}
+                                                        </button>
+                                                        {departureDateFromOpen && (
+                                                            <DatePicker
+                                                            selected={departureDateFrom}
+                                                            onChange={(date) => handleDepartureDateFromChange(date)}
+                                                            timeInputLabel="Time:"
+                                                            dateFormat="MM/dd/yyyy h:mm aa"
+                                                            showTimeInput
+                                                            inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <div className="flex justify-between">
+                                                            <div>to</div>
+                                                            {departureDateTo && (
+                                                                <span 
+                                                                    onClick={() => setDepartureDateTo(null)}
+                                                                    className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleDepartureToDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {departureDateTo?.toLocaleString()}
+                                                        </button>
+                                                        {departureDateToOpen && (
+                                                            <DatePicker
+                                                                selected={departureDateTo}
+                                                                onChange={(date) => handleDepartureDateToChange(date)}
+                                                                timeInputLabel="Time:"
+                                                                dateFormat="MM/dd/yyyy h:mm aa"
+                                                                showTimeInput
+                                                                inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col gap-2 pb-2">
+                                                    <div className="font-medium pt-2">
+                                                        Complete by
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>from</div>
+                                                            {completeByDateFrom && (
+                                                                <span 
+                                                                    onClick={() => setCompleteByDateFrom(null)}
+                                                                    className="ml-2 underline text-xs text-red-500
+                                                                                 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleCompleteByFromDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {completeByDateFrom?.toLocaleString()}
+                                                        </button>
+                                                        {completeByDateFromOpen && (
+                                                            <DatePicker
+                                                                selected={completeByDateFrom}
+                                                                onChange={(date) => handleCompleteByDateFromChange(date)}
+                                                                timeInputLabel="Time:"
+                                                                dateFormat="MM/dd/yyyy h:mm aa"
+                                                                showTimeInput
+                                                                inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>to</div>
+                                                            {completeByDateTo && (
+                                                                <span 
+                                                                    onClick={() => setCompleteByDateTo(null)}
+                                                                    className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleCompleteByToDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {completeByDateTo?.toLocaleString()}
+                                                        </button>
+                                                        {completeByDateToOpen && (
+                                                            <DatePicker
+                                                                selected={completeByDateTo}
+                                                                onChange={(date) => handleCompleteByDateToChange(date)}
+                                                                timeInputLabel="Time:"
+                                                                dateFormat="MM/dd/yyyy h:mm aa"
+                                                                showTimeInput
+                                                                inline
+                                                            />
+                                                        )}
+                                                    </div>
+
+                                                </div>
+                                                <div className="flex flex-col gap-2 pb-2">
+                                                    <div className="font-medium pt-2">
+                                                        Completion
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>from</div>
+                                                            {completionDateFrom && (
+                                                                <span 
+                                                                    onClick={() => setCompletionDateFrom(null)}
+                                                                    className="ml-2 underline text-xs text-red-500
+                                                                                 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleCompletionFromDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {completionDateFrom?.toLocaleString()}
+                                                        </button>
+                                                        {completionDateFromOpen && (
+                                                            <DatePicker
+                                                                selected={completionDateFrom}
+                                                                onChange={(date) => handleCompletionDateFromChange(date)}
+                                                                timeInputLabel="Time:"
+                                                                dateFormat="MM/dd/yyyy h:mm aa"
+                                                                showTimeInput
+                                                                inline
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between">
+                                                            <div>to</div>
+                                                            {completionDateTo && (
+                                                                <span 
+                                                                    onClick={() => setCompletionDateTo(null)}
+                                                                    className="ml-2 underline text-xs text-red-500 cursor-pointer">clear</span>
+                                                            )}
+                                                        </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={handleToggleCompletionToDate}
+                                                            style={{width: '240px', fontSize: '11px'}}
+                                                            className="inline-flex items-center rounded-md border
+                                                                     h-8 w-full
+                                                                    border-gray-300 bg-white px-1 py-1 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50">
+                                                            {completionDateTo?.toLocaleString()}
+                                                        </button>
+                                                        {completionDateToOpen && (
+                                                            <DatePicker
+                                                                selected={completionDateTo}
+                                                                onChange={(date) => handleCompletionDateToChange(date)}
+                                                                timeInputLabel="Time:"
+                                                                dateFormat="MM/dd/yyyy h:mm aa"
+                                                                showTimeInput
+                                                                inline
+                                                            />
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex justify-end">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleApplyDateFilters()}
+                                                            className="inline-flex items-center rounded-md border border-transparent
+                                                                     bg-red-600 px-3 py-2 text-sm font-medium leading-4 text-white
+                                                                      shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
+                                                                       focus:ring-red-500 focus:ring-offset-2"
+                                                        >
+                                                            Apply
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Popover.Panel>
+                                    </Transition>
+                                </>
+                                )}
+                            </Popover>
                         </div>
                         <Listbox value={statusSelected} onChange={setStatusSelected}>
                         {({ open }) => (
@@ -273,6 +818,11 @@ const CompleteList = () => {
                                             Complete By
                                             </th>
                                             <th
+                                            className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500"
+                                            >
+                                            Completion
+                                            </th>
+                                            <th
                                             className="whitespace-nowrap px-2 py-2 text-center text-xs font-normal uppercase text-gray-500"
                                             >
                                             Status
@@ -300,6 +850,7 @@ const CompleteList = () => {
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.on_site ? 'On site' : job.estimatedETA}</td>
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.estimatedETD}</td>
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
+                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.completion_date}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-center text-gray-500">
                                                 <p style={{ paddingTop: '1px', paddingBottom: '1px' }} className={`inline-flex text-xs text-white rounded-md px-1
                                                                 ${job.status === 'C' && 'bg-green-500 '}
