@@ -12,6 +12,7 @@ import "./date-picker.css"
 import Pagination from "react-js-pagination";
 
 import JSZip from "jszip";
+import { saveAs } from 'file-saver';
 
 import * as api from './apiService'
 
@@ -126,8 +127,41 @@ const CompleteList = () => {
     }
 
     const handleExport = async () => {
-        const { data } = await api.exportJobs()
-        console.log(data)
+        setLoading(true)
+
+        const request = {
+            searchText: localStorage.getItem('completedSearchText'),
+            status: statusSelected.id,
+            requestedDateFrom,
+            requestedDateTo,
+            arrivalDateFrom,
+            arrivalDateTo,
+            departureDateFrom,
+            departureDateTo,
+            completeByDateFrom,
+            completeByDateTo,
+            completionDateFrom,
+            completionDateTo,
+        }
+
+        try {
+            const { data } = await api.exportJobs(request)
+
+            // copy all the csv data to the zip file
+            const zip = new JSZip();
+            zip.file("completed_jobs.csv", data);
+
+            // generate the zip file
+            zip.generateAsync({type:"blob"})
+            .then(function(content) {
+                // see FileSaver.js
+                saveAs(content, "completed_jobs.zip");
+            });
+
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+        }
     }
 
     const handlePageChange = (page) => {
@@ -265,13 +299,14 @@ const CompleteList = () => {
                     <div>
                         <button
                             type="button"
+                            disabled={loading}
                             onClick={() => handleExport()}
                             className="inline-flex items-center rounded border border-gray-200
                                             bg-white px-2.5 py-1.5 text-xs text-gray-700 shadow-sm
                                             hover:bg-gray-50 focus:outline-none focus:ring-1
                                             focus:ring-gray-500 focus:ring-offset-1"
                         >
-                            <ShareIcon className="h-3 w-3 mr-1"/> Export
+                            <ShareIcon className="h-3 w-3 mr-1"/> {loading ? '...' : 'Export'}
                         </button>
                     </div>
                 </div>

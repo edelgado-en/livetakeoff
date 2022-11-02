@@ -106,7 +106,7 @@ export const invoiceJob = (id: number, data: any) => {
     return httpService.patch(`/api/jobs/completed/${id}/`, data)
 }
 
-export const exportJobs = () => {
-    return httpService.get(`/api/jobs/export`)
+export const exportJobs = (data: any) => {
+    return httpService.post(`/api/jobs/export`, data)
 }
 
