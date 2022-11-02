@@ -1,4 +1,5 @@
 import httpService from "../../services/httpService";
+import axios from "axios";
 
 export const getJobDetails = (id: number) => {
     return httpService.get(`/api/jobs/${id}`);
@@ -105,8 +106,7 @@ export const invoiceJob = (id: number, data: any) => {
     return httpService.patch(`/api/jobs/completed/${id}/`, data)
 }
 
-
-export const getJobCloseout = (jobId: number) => {
-    return httpService.get(`/api/jobs/closeout/${jobId}/`)
+export const exportJobs = () => {
+    return httpService.get(`/api/jobs/export`)
 }
 

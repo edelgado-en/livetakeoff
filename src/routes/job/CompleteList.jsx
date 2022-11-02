@@ -125,6 +125,11 @@ const CompleteList = () => {
         }
     }
 
+    const handleExport = async () => {
+        const { data } = await api.exportJobs()
+        console.log(data)
+    }
+
     const handlePageChange = (page) => {
         setCurrentPage(page)
     }
@@ -260,6 +265,7 @@ const CompleteList = () => {
                     <div>
                         <button
                             type="button"
+                            onClick={() => handleExport()}
                             className="inline-flex items-center rounded border border-gray-200
                                             bg-white px-2.5 py-1.5 text-xs text-gray-700 shadow-sm
                                             hover:bg-gray-50 focus:outline-none focus:ring-1

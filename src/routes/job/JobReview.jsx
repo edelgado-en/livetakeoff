@@ -10,6 +10,7 @@ import JobInfo from "./JobInfo"
 import Loader from '../../components/loader/Loader';
 
 import * as api from './apiService'
+import axios from 'axios';
 
 const JobReview = () => {
     const { jobId } = useParams()
@@ -51,13 +52,19 @@ const JobReview = () => {
         setDownloadLoading(true)
 
         try {
-            const { data } = await api.getJobCloseout(jobId)
-            setDownloadLoading(false)
-
-            const file = new Blob([data], { type: "application/pdf" });
-            const fileURL = URL.createObjectURL(file);
-            const pdfWindow = window.open();
-            pdfWindow.location.href = fileURL;
+            axios({
+                url: `/api/jobs/closeout/${jobId}/`,
+                method: 'GET',
+                responseType: 'blob', // important
+              }).then((response) => {
+                  setDownloadLoading(false)
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `${jobDetails?.customer.name}_${jobDetails?.purchase_order}_closeout.pdf`);
+                document.body.appendChild(link);
+                link.click();
+              });
 
 
         } catch (err) {
