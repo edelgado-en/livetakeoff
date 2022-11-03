@@ -804,9 +804,10 @@ const CompleteList = () => {
                 {loading && <Loader />} 
 
                 {!loading && jobs.length === 0 && (
-                    <div className="flex flex-col justify-center items-center h-72">
+                    <div className="flex flex-col gap-2 justify-center items-center h-96">
                         <p className="text-gray-700 text-sm font-medium">No jobs found</p>
-                        <p className="text-gray-500 text-sm">Try changing your filters</p>
+                        <p className="text-gray-500 text-sm">We can't find anything with your search criteria at the moment,</p>
+                        <p className="text-gray-500 text-sm">try searching something else.</p>
                     </div>   
                 )}
 

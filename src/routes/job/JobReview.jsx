@@ -80,7 +80,7 @@ const JobReview = () => {
 
     return (
         <AnimatedPage>
-            <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl mt-8">
+            <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl -mt-3">
                 <div className="flex flex-wrap gap-2">
                     <div>
                         <Link to="/completed" className="text-xs leading-5 font-semibold bg-slate-400/10
@@ -101,8 +101,8 @@ const JobReview = () => {
                                 type="button"
                                 onClick={() => navigate('edit')}
                                 disabled={downloadLoading}
-                                className="inline-flex items-center rounded-md border mr-4 relative top-1
-                                        border-gray-300 bg-white px-4 py-2 text-sm font-medium
+                                className="inline-flex items-center rounded-md border mr-2 relative top-1
+                                        border-gray-300 bg-white px-3 py-2 text-xs font-medium
                                         text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
                                         focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                             >
@@ -113,22 +113,21 @@ const JobReview = () => {
                                 type="button"
                                 disabled={downloadLoading}
                                 onClick={() => invoiceJob()}
-                                className="inline-flex items-center rounded-md border mr-4
-                                        border-gray-300 bg-white px-4 py-2 text-sm font-medium
+                                className="inline-flex items-center rounded-md border mr-2
+                                        border-gray-300 bg-white px-3 py-2 text-xs font-medium 
                                         text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
                                         focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                             >
                                 Invoice
                             </button>    
                         )}
-                        
                         <button
                             type="button"
                             disabled={downloadLoading}
                             onClick={() => getJobCloseout()}
                             className="inline-flex items-center justify-center 
-                                        rounded-md border border-transparent bg-red-600 px-4 py-2
-                                        text-sm font-medium text-white shadow-sm hover:bg-red-700
+                                        rounded-md border border-transparent bg-red-600 px-3 py-2
+                                        text-xs font-medium text-white shadow-sm hover:bg-red-700
                                         focus:outline-none focus:ring-2 focus:ring-red-500
                                         focus:ring-offset-2 sm:w-auto"
                         >
@@ -150,6 +149,7 @@ const JobReview = () => {
                     :
                     <Outlet />
                 }
+                <div className="py-20"></div>
 
             </main>
 

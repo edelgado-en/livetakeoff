@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
-import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, PencilIcon, UserAddIcon } from "@heroicons/react/outline";
+import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, PencilIcon, UserAddIcon, ClockIcon } from "@heroicons/react/outline";
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { useAppSelector } from "../../app/hooks";
@@ -132,20 +132,36 @@ const JobDetails = () => {
                                                 )}
                                                 </Menu.Item>
                                                 <Menu.Item>
-                                                {({ active }) => (
-                                                    <Link
-                                                        to="assignments"
-                                                        className={classNames(
-                                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                            'block px-4 py-2 text-sm'
+                                                    {({ active }) => (
+                                                        <Link
+                                                            to="assignments"
+                                                            className={classNames(
+                                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                                'block px-4 py-2 text-sm'
+                                                        )}
+                                                        >
+                                                            <div className="flex space-x-3">
+                                                                <UserAddIcon className="h-4 w-4 text-gray-500"/>
+                                                                <div>Assignments</div>
+                                                            </div>
+                                                        </Link>
                                                     )}
-                                                    >
-                                                        <div className="flex space-x-3">
-                                                            <UserAddIcon className="h-4 w-4 text-gray-500"/>
-                                                            <div>Assignments</div>
-                                                        </div>
-                                                    </Link>
-                                                )}
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                    {({ active }) => (
+                                                        <Link
+                                                            to="activity"
+                                                            className={classNames(
+                                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                                'block px-4 py-2 text-sm'
+                                                        )}
+                                                        >
+                                                            <div className="flex space-x-3">
+                                                                <ClockIcon className="h-4 w-4 text-gray-500"/>
+                                                                <div>Activity</div>
+                                                            </div>
+                                                        </Link>
+                                                    )}
                                                 </Menu.Item>
                                             
                                                 

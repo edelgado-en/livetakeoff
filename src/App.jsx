@@ -32,11 +32,14 @@ import CustomerJobs from './routes/customers/CustomerJobs';
 import CustomerProfile from './routes/customers/CustomerProfile';
 import CreateCustomer from './routes/customers/CreateCustomer';
 import JobReview from './routes/job/JobReview';
+import JobActivityFeed from './routes/job/JobActivityFeed';
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
 import Layout from './layout/Layout';
-
+import Footer from './components/footer/Footer';
+import PrivacyPolicy from './routes/privacyPolicy/PrivacyPolicy';
+import ChangeLog from './routes/changeLog/ChangeLog';
 
 import { isUserAuthenticated } from './localstorage';
 
@@ -65,13 +68,6 @@ const Fallback = () => {
   return <div></div>
 }
 
-const getPathKey = (path, level = 1) => {
-  // path: "/topics/react/router"
-  // level: 1 -> topics
-  // level: 2 -> topics/react
-  // level: 3 -> topics/react/router
-  return path.split('/').splice(1, level).join('/');
-}
 
 const  App = () => {
   const location = useLocation()
@@ -139,11 +135,15 @@ const  App = () => {
                         <Route path="comments" element={<JobComments />} />
                         <Route path="assignments" element={<JobAssignments />} />
                         <Route path="edit" element={<EditJob />} />
+                        <Route path="activity" element={<JobActivityFeed />} />
                         <Route path="photos" element={<JobPhotos />}>
                             <Route index path="listing" element={<JobPhotoListing />} />
                             <Route path="upload" element={<JobPhotoUpload />} />
                         </Route>
                       </Route>
+
+                      <Route path="privacy-policy" element={<PrivacyPolicy />} />
+                      <Route path="changelog" element={<ChangeLog />} />
 
                       <Route path="*" element={<NotFound />} />
                   </Route>
@@ -151,6 +151,7 @@ const  App = () => {
               </Routes>
             </AnimatePresence>
           </div> 
+          { location.pathname !== '/login' && <Footer /> }
         </div>
       </Suspense>
     </>

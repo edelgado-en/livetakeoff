@@ -114,3 +114,7 @@ export const getJobPriceBreakdown = (id: number) => {
     return httpService.get(`/api/jobs/price-breakdown/${id}/`)
 }
 
+export const getJobActivities = (id: number) => {
+    return httpService.get(`/api/jobs/activity/${id}/`)
+}
+

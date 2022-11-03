@@ -168,7 +168,7 @@ const JobInfo = () => {
                         <h1 className="text-2xl font-semibold text-gray-600">Job Details</h1>
                     </div>
                 </div>
-                <div className="mt-4 mb-8">
+                <div className="mt-4 mb-4">
                     {jobDetails.status === 'S' && 
                         <button
                             type="button"
@@ -194,7 +194,7 @@ const JobInfo = () => {
                     }
                 
                 </div>
-                <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Purchase Order</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.purchase_order ? jobDetails.purchase_order : 'None'}</dd>
