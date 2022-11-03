@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
 
     return (
         <AnimatedPage>
-            <div className="xl:px-16 px-1 m-auto max-w-5xl">
+            <div className="xl:px-16 px-1 m-auto max-w-5xl pb-20">
                 <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 text-center mt-10">Privacy Policy</h1>
                 <p class="mt-4 text-base leading-7 text-slate-600 text-center">Last updated on November 3, 2022</p>
                 <div class="relative px-4 sm:px-6 lg:px-8 text-sm text-gray-500 mt-20" style={{ lineHeight: '1.7142857' }}>
