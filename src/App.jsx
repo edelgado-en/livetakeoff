@@ -98,6 +98,7 @@ const  App = () => {
                             <Route path="upload" element={<JobPhotoUpload />} />
                         </Route>
                         <Route path="edit" element={<EditJob />} />
+                        <Route path="activity" element={<JobActivityFeed />} />
                       </Route>
 
                       <Route path="create-customer" element={<CreateCustomer />} />
