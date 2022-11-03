@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom"
 import { useEffect, useState, Fragment } from "react";
-import { TrashIcon, ChevronRightIcon, PlusIcon, CheckIcon } from "@heroicons/react/outline";
-import { Listbox, Transition } from '@headlessui/react'
+import { TrashIcon, ChevronRightIcon, PlusIcon, CheckIcon, ChevronDownIcon } from "@heroicons/react/outline";
+import { Listbox, Transition, Menu, Popover } from '@headlessui/react'
 import { UserIcon } from "@heroicons/react/solid";
 import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../userProfile/userSlice";
@@ -19,14 +19,6 @@ const MagnifyingGlassIcon = () => {
   )
 }
 
-const ChevronUpDownIcon = () => {
-  return (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-      </svg>
-  )
-}
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -40,6 +32,11 @@ const availableStatuses = [
   {id: 'R', name: 'Review'},
 ]
 
+const sortOptions = [
+  { id: 'requestDate', name: 'Request Date' },
+  { id: 'completeBy', name: 'Complete By' },
+]
+
 const JobsQueue = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +44,7 @@ const JobsQueue = () => {
   const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
   const currentUser = useAppSelector(selectUser)
   const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
+  const [sortSelected, setSortSelected] = useState(sortOptions[0])
 
   useEffect(() => {
     localStorage.setItem('searchText', searchText)
@@ -62,7 +60,7 @@ const JobsQueue = () => {
       clearTimeout(timeoutID);
     };
 
-  }, [searchText, statusSelected])
+  }, [searchText, statusSelected, sortSelected])
 
   const handleKeyDown = event => {
     if (event.key === 'Enter') {
@@ -78,6 +76,7 @@ const JobsQueue = () => {
     const request = {
       searchText: localStorage.getItem('searchText'),
       status: statusSelected.id,
+      sortField: sortSelected.id,
     }
 
     try {
@@ -155,8 +154,9 @@ const JobsQueue = () => {
           </div>
 
           {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
-            <div className="flex justify-between gap-4 mt-2">
-              <div className="">
+            <>
+            <div className="mt-2">
+              <div className="max-w-sm">
                 <div className="relative rounded-md shadow-sm">
                   <div 
                     onClick={() => fetchJobs()}
@@ -178,20 +178,79 @@ const JobsQueue = () => {
                   />
                 </div>
               </div>
+              
+            </div>
+            <div className="flex items-center justify-between pt-3 pb-1">
+            <Listbox value={sortSelected} onChange={setSortSelected}>
+                {({ open }) => (
+                    <>
+                    <div className="relative" style={{width: '130px'}}>
+                        <Listbox.Button className="relative w-full cursor-default rounded-md 
+                                                      bg-white py-2 px-3 pr-8 text-left
+                                                    shadow-sm border-transparent focus:border-transparent focus:ring-0 focus:outline-none
+                                                    text-xs">
+                            <span className="block truncate">
+                                Sort
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                            </span>
+                        </Listbox.Button>
+
+                        <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0">
+                            <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-72 w-full overflow-auto
+                                                        rounded-md bg-white py-1 shadow-lg ring-1
+                                                        ring-black ring-opacity-5 focus:outline-none text-xs">
+                                {sortOptions.map((sort) => (
+                                    <Listbox.Option
+                                        key={sort.id}
+                                        className={({ active }) =>
+                                                classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                        'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                        value={sort}>
+                                        {({ selected, active }) => (
+                                            <>
+                                                <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                    {sort.name}
+                                                </span>
+                                                {selected ? (
+                                                    <span
+                                                        className={classNames(
+                                                        active ? 'text-white' : 'text-red-600',
+                                                        'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                        )}>
+                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                ) : null}
+                                            </>
+                                        )}
+                                    </Listbox.Option>
+                                ))}
+                            </Listbox.Options>
+                        </Transition>
+                    </div>
+                    </>
+                )}
+              </Listbox>
               <div className="">
                   <Listbox value={statusSelected} onChange={setStatusSelected}>
                     {({ open }) => (
                         <>
                         <div className="relative" style={{width: '110px'}}>
-                            <Listbox.Button className="relative w-full cursor-default rounded-md border
-                                                        border-gray-300 bg-white py-2 px-3 pr-8 text-left
-                                                        shadow-sm focus:border-sky-500 focus:outline-none
-                                                        focus:ring-1 focus:ring-sky-500 text-xs">
+                            <Listbox.Button className="relative w-full cursor-default rounded-md 
+                                                         bg-white py-2 px-3 pr-8 text-left
+                                                        shadow-sm border-transparent focus:border-transparent focus:ring-0 focus:outline-none
+                                                        text-xs">
                                 <span className="block truncate">
                                     {statusSelected ? statusSelected.name : 'Status'}
                                 </span>
-                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                    <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                    <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
                                 </span>
                             </Listbox.Button>
 
@@ -236,7 +295,8 @@ const JobsQueue = () => {
                     )}
                   </Listbox>
               </div>
-            </div>  
+            </div>
+            </>  
           )}
 
           {!loading && jobs.length === 0 && (
@@ -282,7 +342,7 @@ const JobsQueue = () => {
           {loading && <Loader />}  
 
           {!loading && (
-            <div className="overflow-hidden bg-white shadow sm:rounded-md mt-4">
+            <div className="overflow-hidden bg-white shadow sm:rounded-md mt-2">
               <ul className="divide-y divide-gray-200">
                 {jobs.map((job) => (
                   <li key={job.id}>

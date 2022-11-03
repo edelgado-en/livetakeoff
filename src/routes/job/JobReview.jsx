@@ -6,7 +6,6 @@ import { ArrowLeftIcon, InformationCircleIcon, ClockIcon } from "@heroicons/reac
 import { PencilIcon } from "@heroicons/react/solid";
 import { Menu, Transition } from '@headlessui/react'
 
-import JobPhotos from "./JobPhotos"
 import JobInfo from "./JobInfo"
 import Loader from '../../components/loader/Loader';
 
