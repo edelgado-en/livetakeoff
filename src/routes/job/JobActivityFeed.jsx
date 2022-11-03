@@ -99,25 +99,55 @@ export default function Example() {
                             <div className="relative flex space-x-3">
                                 <div>
                                 <span
-                                    className={classNames(
-                                    'bg-green-500',
-                                    'h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white'
-                                    )}
+                                    className={`
+                                    ${activity.status === 'A' && 'bg-sky-500 '}
+                                    ${activity.status === 'S' && 'bg-yellow-500 '}
+                                    ${activity.status === 'U' && 'bg-indigo-500 '}
+                                    ${activity.status === 'W' && 'bg-green-500 '}
+                                    ${activity.status === 'R' && 'bg-purple-500 '}
+                                    ${activity.status === 'C' && 'bg-blue-500 '}
+                                    ${activity.status === 'T' && 'bg-black '}
+                                    ${activity.status === 'I' && 'bg-gray-400 '}
+                                    ${activity.status === 'P' && 'bg-red-500 '}
+                                    h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white`
+                                    }
                                 >
-                                     <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />
+                                     <span className="text-white">{activity.status}</span>
                                 </span>
                                 </div>
                                 <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                                 <div>
                                     <p className="text-sm text-gray-500">
-                                    {activity.content}{' '}
-                                    <a href={activity.href} className="font-medium text-gray-900">
-                                        {activity.target}
-                                    </a>
+                                    {activity.status !== 'P' && (
+                                        <>
+                                        <span>Status changed to </span> 
+                                        <span className="font-medium text-black">
+                                            {activity.status === 'A' && 'Accepted'}
+                                            {activity.status === 'S' && 'Assigned'}
+                                            {activity.status === 'U' && 'Submitted'}
+                                            {activity.status === 'W' && 'Work In Progress'}
+                                            {activity.status === 'C' && 'Completed'}
+                                            {activity.status === 'T' && 'Cancelled'}
+                                            {activity.status === 'R' && 'Review'}
+                                            {activity.status === 'I' && 'Invoiced'}
+                                        </span>
+                                        </>
+                                    )}
+
+                                    {activity.status === 'P' && (
+                                        <>
+                                        <span className="text-sm text-gray-500">
+                                            Price changed to
+                                        </span>
+                                        <span className="font-medium text-black ml-1">${activity.price}</span>
+                                        </>
+                                    )}
+                                    
+                                    <span className="ml-1">by {activity.user.first_name} {activity.user.last_name}</span>
                                     </p>
                                 </div>
                                 <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                                    <time dateTime={activity.datetime}>{activity.date}</time>
+                                    <ReactTimeAgo date={new Date(activity.timestamp)} locale="en-US" timeStyle="twitter" />
                                 </div>
                                 </div>
                             </div>
