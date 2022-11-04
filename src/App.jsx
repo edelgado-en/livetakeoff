@@ -100,6 +100,7 @@ const  App = () => {
                         </Route>
                         <Route path="edit" element={<EditJob />} />
                         <Route path="activity" element={<JobActivityFeed />} />
+                        <Route path="comments" element={<JobComments />} />
                       </Route>
 
                       <Route path="create-customer" element={<CreateCustomer />} />
