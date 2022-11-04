@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
-import ModalFrame from '../../components/modal/ModalFrame'
+import { useParams } from 'react-router-dom'
 import { Dialog, Transition } from '@headlessui/react'
 import Loader from '../../components/loader/Loader'
+import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import * as api from './apiService'
 
-
-const JobPriceBreakdownModal = ({ isOpen, handleClose, jobDetails }) => {
+const JobPriceBreakdown = () => {
     const [loading, setLoading] = useState(true)
     const [breakdown, setBreakdown] = useState({})
+    const [errorMessage, setErrorMessage] = useState(null)
+
+    const { jobId } = useParams();
 
     useEffect(() => {
         getPriceBreakdown()
@@ -15,43 +18,40 @@ const JobPriceBreakdownModal = ({ isOpen, handleClose, jobDetails }) => {
 
     const getPriceBreakdown = async () => {
         try {
-            const { data } = await api.getJobPriceBreakdown(jobDetails.id)
+            const { data } = await api.getJobPriceBreakdown(jobId)
             console.log(data)
 
             setBreakdown(data)
 
             setLoading(false)
 
-        } catch (err) {
+        } catch (error) {
             setLoading(false)
+
+            if (error.response?.status === 403) {
+                setErrorMessage('You do not have permission to view price breakdown.')
+            } else {
+                setErrorMessage('Unable to load price breakdown.')
+            }
         }
     }
 
     return (
-        <ModalFrame isModalOpen={isOpen}>
-            <div className="">    
-                <div className="px-2">
-                    <div className="flex justify-end">
-                        <button
-                            type="button"
-                            onClick={handleClose} 
-                            className="z-50 flex h-8 w-8 items-center justify-center rounded-full cursor-pointer
-                                    focus:outline-none focus:ring-1 focus:ring-inset focus:ring-gray-500 border-gray-500 border"
-                            >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                  <div className="-mt-6">
-                    <Dialog.Title as="h3" className="text-lg text-center font-medium leading-6 text-gray-900 relative top-1">
-                      Price Breakdown <div className="text-gray-500 text-sm">{jobDetails.purchase_order}</div>
-                    </Dialog.Title>
-                    
-                    {loading && <Loader />}
+        <AnimatedPage>
+            {loading && <Loader />}
 
-                    {!loading && (
-                        <div className="mt-4">
+            {!loading && errorMessage && (
+                <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>
+            )}
+
+            {!loading && errorMessage == null && (
+                <div className="mt-6 max-w-5xl px-2">
+                    <div className="flex flex-row">
+                        <div className="flex-1">
+                            <h1 className="text-2xl font-semibold text-gray-600">Price Breakdown</h1>
+                        </div>
+                    </div>
+                    <div className="mt-4">
                             <div className="flex justify-between text-xs">
                                 <div className="text-sm text-gray-700">{breakdown.aircraftType}</div>
                                 <div>
@@ -62,7 +62,7 @@ const JobPriceBreakdownModal = ({ isOpen, handleClose, jobDetails }) => {
                                 <h3 className="text-sm text-gray-700">Services</h3>
                                 <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                                     {breakdown.services?.map((service) => (
-                                        <div key={service.id} className="flex justify-between py-2 text-xs">
+                                        <div key={service.id} className="flex justify-between py-2 text-xs hover:bg-gray-50">
                                             <dt className="text-gray-500 pr-2 truncate">{service.name}</dt>
                                             <dd className="whitespace-nowrap text-gray-900">${service.price}</dd>
                                         </div>
@@ -79,7 +79,7 @@ const JobPriceBreakdownModal = ({ isOpen, handleClose, jobDetails }) => {
                                     <h3 className="text-sm text-gray-700">Discounts Applied</h3>
                                     <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                                         {breakdown.discounts.map((discount) => (
-                                            <div key={discount.id} className="flex justify-between py-2 text-xs">
+                                            <div key={discount.id} className="flex justify-between py-2 text-xs hover:bg-gray-50">
                                                 <dt className="text-gray-500 pr-2 truncate">
                                                     {discount.name === 'S' ? 'By Service' : ''}
                                                     {discount.name === 'A' ? 'By Airport' : ''}
@@ -106,7 +106,7 @@ const JobPriceBreakdownModal = ({ isOpen, handleClose, jobDetails }) => {
                                     <h3 className="text-sm text-gray-700">Additional Fees Applied</h3>
                                     <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                                         {breakdown.additionalFees.map((fee) => (
-                                            <div key={fee.id} className="flex justify-between py-2 text-xs">
+                                            <div key={fee.id} className="flex justify-between py-2 text-xs hover:bg-gray-50">
                                                 <dt className="text-gray-500 pr-2 truncate">
                                                     {fee.name === 'A' ? 'By Airport' : ''}
                                                     {fee.name === 'F' ? 'By FBO' : ''}
@@ -129,14 +129,11 @@ const JobPriceBreakdownModal = ({ isOpen, handleClose, jobDetails }) => {
                             </div>
                         
                         </div>
-                    )}
-                    
-                  </div>
                 </div>
-            </div>
-            
-        </ModalFrame>
+            )}
+
+        </AnimatedPage>
     )
 }
 
-export default JobPriceBreakdownModal;
+export default JobPriceBreakdown

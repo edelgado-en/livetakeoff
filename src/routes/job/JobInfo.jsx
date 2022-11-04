@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CheckCircleIcon, QuestionMarkCircleIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon } from "@heroicons/react/outline";
 import { toast } from 'react-toastify';
 import * as api from './apiService'
 
@@ -29,6 +29,7 @@ const JobInfo = () => {
     const [showActions, setShowActions] = useState(false)
     const currentUser = useAppSelector(selectUser)
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         getJobDetails()
@@ -289,8 +290,13 @@ const JobInfo = () => {
                                 )}
                                 <div>{'$'}{jobDetails.price ? jobDetails.price : '0.00'}</div>
                                 {/* Check for settings to show the spending info for customers */}
-                                {jobDetails.is_auto_priced && (
-                                    <QuestionMarkCircleIcon  onClick={() => handleTogglePriceBreakdownModal()} className="h-5 w-5 text-gray-500 cursor-pointer"/>
+                                {jobDetails.is_auto_priced && location.pathname.includes('jobs') && (
+                                    <Link 
+                                        to={`/jobs/${jobDetails.id}/price-breakdown`}
+                                        className="text-sky-600 ml-1 font-medium cursor-pointer text-xs flex gap-1 relative" style={{top: '2px'}}>
+                                        breakdown
+                                        <ArrowRightIcon className="h-3 w-3 relative" style={{top: '1px'}}/>
+                                    </Link>
                                 )}
                             </dd>
                         </div>

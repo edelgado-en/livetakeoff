@@ -2,11 +2,12 @@ import { useEffect, useState, Fragment } from 'react'
 import { useParams, useNavigate, Outlet, Link, useLocation } from "react-router-dom"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage"
 
-import { ArrowLeftIcon, InformationCircleIcon, ClockIcon } from "@heroicons/react/outline";
+import { ArrowLeftIcon, InformationCircleIcon, ClockIcon, CashIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/solid";
 import { Menu, Transition } from '@headlessui/react'
 
 import JobInfo from "./JobInfo"
+import JobPriceBreakdown from './JobPricebreakdown';
 import Loader from '../../components/loader/Loader';
 
 import * as api from './apiService'
@@ -95,7 +96,7 @@ const JobReview = () => {
                         </Link>
                     </div>
                     <div className="pb-4">
-                        <h1 className="text-2xl font-semibold text-gray-600">Job Review</h1>
+                        <h1 className="text-2xl font-semibold text-gray-600">Review</h1>
                         <p className="mt-1 text-sm text-gray-500">
                             Ensure all the photos and details are correct before creating a closeout.
                         </p>
@@ -204,7 +205,6 @@ const JobReview = () => {
                                             </Link>
                                         )}
                                     </Menu.Item>
-                                
                                     
                                 </div>
                                 </Menu.Items>
@@ -214,8 +214,12 @@ const JobReview = () => {
                 </div>
                 
                 {!location.pathname.includes("edit") && !location.pathname.includes("activity") && !downloadLoading && (
+                    <>
                     <JobInfo />
+                    <JobPriceBreakdown />
+                    </>
                 )}
+
 
                 {downloadLoading ? 
                     <div className="text-gray-500 text-center">
@@ -224,7 +228,9 @@ const JobReview = () => {
                         <div>This might take several seconds depending on photos. Please wait...</div> 
                     </div>
                     :
-                    <Outlet />
+                    <div className="max-w-5xl px-2">
+                        <Outlet />
+                    </div>
                 }
                 <div className="py-20"></div>
 

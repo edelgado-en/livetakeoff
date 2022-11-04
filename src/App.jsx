@@ -33,6 +33,7 @@ import CustomerProfile from './routes/customers/CustomerProfile';
 import CreateCustomer from './routes/customers/CreateCustomer';
 import JobReview from './routes/job/JobReview';
 import JobActivityFeed from './routes/job/JobActivityFeed';
+import JobPriceBreakdown from './routes/job/JobPricebreakdown';
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
@@ -137,6 +138,7 @@ const  App = () => {
                         <Route path="assignments" element={<JobAssignments />} />
                         <Route path="edit" element={<EditJob />} />
                         <Route path="activity" element={<JobActivityFeed />} />
+                        <Route path="price-breakdown" element={<JobPriceBreakdown />} />
                         <Route path="photos" element={<JobPhotos />}>
                             <Route index path="listing" element={<JobPhotoListing />} />
                             <Route path="upload" element={<JobPhotoUpload />} />

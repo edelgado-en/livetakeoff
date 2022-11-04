@@ -321,7 +321,7 @@ const CompleteList = () => {
                     <div className="relative rounded-md shadow-sm">
                         <div 
                             onClick={() => searchJobs()}
-                            className="absolute inset-y-0 left-0 flex items-center pl-4 cursor-pointer">
+                            className="absolute inset-y-0 left-0 flex items-center pl-2 cursor-pointer">
                             <MagnifyingGlassIcon  />
                         </div>
                         <input
@@ -331,12 +331,12 @@ const CompleteList = () => {
                             value={searchText}
                             onChange={event => setSearchText(event.target.value)}
                             onKeyDown={handleKeyDown}
-                            className="block w-full rounded-md border-0  pl-10  py-1
+                            className="block w-full rounded-md border-0  pl-8  py-1
                                      text-xs focus:border-transparent focus:ring-0"
                             placeholder="tail, P.O, customer, airport..."
                         />
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-2">
                         <div>
                             <Popover className="relative">
                                 {({ open }) => (
@@ -917,10 +917,7 @@ const CompleteList = () => {
                                             <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
                                                 <div className="flex gap-1">
                                                     {'$'}{job.price ? job.price : '0.00'}
-                                                    {job.is_auto_priced && (
-                                                        <QuestionMarkCircleIcon  onClick={() => handleTogglePriceBreakdownModal(job)}
-                                                                     className="h-4 w-4 text-gray-500 cursor-pointer"/>
-                                                    )}
+                                                    
                                                 </div>
                                             </td>
                                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
