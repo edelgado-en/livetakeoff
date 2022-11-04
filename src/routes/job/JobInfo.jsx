@@ -35,12 +35,6 @@ const JobInfo = () => {
         getJobDetails()
     }, [])
 
-/*     useEffect(() => {
-        if (isAllServicesCompleted()) {
-            setCompleteJobModalOpen(true)
-        }
-
-    }, [jobDetails]) */
 
     const handleToggleJobCompleteModal = () => {
         setCompleteJobModalOpen(!isCompleteJobModalOpen)
@@ -55,7 +49,7 @@ const JobInfo = () => {
 
         try {
             const { data } = await api.getJobDetails(jobId)
-
+            
             setJobDetails(data);
 
             setLoading(false)
@@ -104,7 +98,7 @@ const JobInfo = () => {
 
     const completeService = async (service_assignment_id) => {
         try {
-            await api.completeServiceAssignment(service_assignment_id)
+            const { data } = await api.completeServiceAssignment(service_assignment_id)
 
             const updatedJobDetails = { ...jobDetails, service_assignments: jobDetails.service_assignments?.map((service) => {
                                                     if (service.id === service_assignment_id) {
@@ -115,7 +109,10 @@ const JobInfo = () => {
             })}
 
             setJobDetails(updatedJobDetails);
-        
+
+            if (data.can_complete_job) {
+                setCompleteJobModalOpen(true)
+            }
 
         } catch (e) {
         
@@ -125,7 +122,7 @@ const JobInfo = () => {
 
     const completeRetainerService = async (retainer_service_assignment_id) => {
         try {
-            await api.completeRetainerServiceAssignment(retainer_service_assignment_id)
+            const { data } = await api.completeRetainerServiceAssignment(retainer_service_assignment_id)
 
             const updatedJobDetails = { ...jobDetails, retainer_service_assignments: jobDetails.retainer_service_assignments?.map((service) => {
                                                     if (service.id === retainer_service_assignment_id) {
@@ -136,6 +133,10 @@ const JobInfo = () => {
             })}
 
             setJobDetails(updatedJobDetails);
+
+            if (data.can_complete_job) {
+                setCompleteJobModalOpen(true)
+            }
 
         } catch (e) {
             

@@ -1,5 +1,8 @@
+import { useState, useEffect } from 'react'
 import ModalFrame from '../../components/modal/ModalFrame'
 import { Dialog, Transition } from '@headlessui/react'
+
+import * as api from './apiService'
 
 const ExclamationTriangule = () => {
     return (
@@ -11,6 +14,29 @@ const ExclamationTriangule = () => {
 }
 
 const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) => {
+    const [loading, setLoading] = useState(true)
+    const [isAssignedToOtherPMs, setIsAssignedToOtherPMs] = useState(false)
+    const [photosCount, setPhotosCount] = useState(0)
+
+    useEffect(() => {
+      canCompleteJob()
+    }, [])
+
+    // get the non-customer provided photos count for this job
+    // check if there are other project managers assigned to this job
+    // make api call to see if job can be completed: /jobs/can-complete/{jobId}
+    const canCompleteJob = async () => {
+        try {
+            const { data } = await api.canCompleteJob(jobDetails.id)
+        
+            setIsAssignedToOtherPMs(data.assigned_to_other_pms)
+            setPhotosCount(data.photos_count)
+
+        } catch (error) {
+            setLoading(false)
+        }
+    }
+
 
     return (
         <ModalFrame isModalOpen={isOpen}>
@@ -30,14 +56,14 @@ const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) 
                         to the job after it is completed.
                       </p>
 
-                      {jobDetails.total_photos === 0 && (
-                        <p className="text-sm text-red-500 py-3 font-medium">
-                            There are no uploaded photos for this job.
+                      {photosCount === 0 && (
+                        <p className="text-sm text-red-500 py-2 font-medium">
+                            There are no closeout photos for this job.
                         </p>
                       )}
 
-                      {jobDetails.total_assignees > 0 && (
-                        <p className="text-sm text-gray-500 py-3">
+                      {isAssignedToOtherPMs && (
+                        <p className="text-sm text-gray-500 pb-4">
                             There are other project managers assigned to this job.
                         </p>
                       )}

@@ -1,5 +1,4 @@
 import httpService from "../../services/httpService";
-import axios from "axios";
 
 export const getJobDetails = (id: number) => {
     return httpService.get(`/api/jobs/${id}`);
@@ -18,7 +17,7 @@ export const updateJob = (id: number, formData: any) => {
 }
 
 export const completeServiceAssignment = (id: number) => {
-    return httpService.patch(`/api/jobs/services/${id}/`, { status: 'C', project_manager: null })
+    return httpService.patch(`/api/jobs/services/${id}/`, { status: 'C' })
 }
 
 export const getAssignmentsFormInfo = (id: number) => {
@@ -46,7 +45,7 @@ export const addRetainerService = (id:number, request: any) => {
 }
 
 export const completeRetainerServiceAssignment = (id: number) => {
-    return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C', project_manager: null })
+    return httpService.patch(`/api/jobs/retainer-services/${id}/`, { status: 'C' })
 }
 
 export const getJobPhotos = (jobId: number) => {
@@ -116,5 +115,9 @@ export const getJobPriceBreakdown = (id: number) => {
 
 export const getJobActivities = (id: number) => {
     return httpService.get(`/api/jobs/activity/${id}/`)
+}
+
+export const canCompleteJob = (id: number) => {
+    return httpService.get(`/api/jobs/can-complete/${id}/`)
 }
 
