@@ -96,7 +96,7 @@ const JobReview = () => {
                         </Link>
                     </div>
                     <div className="pb-4">
-                        <h1 className="text-2xl font-semibold text-gray-600">Review</h1>
+                        <h1 className="text-2xl font-semibold text-gray-600">Job Review</h1>
                         <p className="mt-1 text-sm text-gray-500">
                             Ensure all the photos and details are correct before creating a closeout.
                         </p>

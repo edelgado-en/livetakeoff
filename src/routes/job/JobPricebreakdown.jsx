@@ -45,7 +45,7 @@ const JobPriceBreakdown = () => {
             )}
 
             {!loading && errorMessage == null && (
-                <div className="mt-6 max-w-5xl px-2">
+                <div className="mt-6 max-w-5xl px-2 pb-10">
                     <div className="flex flex-row">
                         <div className="flex-1">
                             <h1 className="text-2xl font-semibold text-gray-600">Price Breakdown</h1>
