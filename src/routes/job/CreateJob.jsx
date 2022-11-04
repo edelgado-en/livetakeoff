@@ -839,7 +839,7 @@ const CreateJob = () => {
                                            w-full h-10
                                           border-gray-300 bg-white px-4 py-2 text-sm
                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                {estimatedDepartureDate?.toLocaleString()}
+                                {estimatedDepartureDate ? estimatedDepartureDate.toLocaleString() : 'No ETD yet'}
                             </button>
                             {estimatedDepartureDateOpen && (
                                 <DatePicker
