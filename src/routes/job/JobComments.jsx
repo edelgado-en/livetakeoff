@@ -1,10 +1,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import ReactTimeAgo from 'react-time-ago'
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
+
+import { useAppDispatch } from "../../app/hooks";
+import { resetCommentsCount } from "./jobStats/jobStatsSlice";
 
 import * as api from './apiService'
 
@@ -20,11 +22,11 @@ const JobComments = () => {
     const [comments, setComments] = useState([]) 
     const [loading, setLoading] = useState(false)
 
-    // TODO: I have to use redux to dispatch the action to update the job stats
-    // TODO: Update jobDetails.jsx to read from redux store
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
       getComments()
+      dispatch(resetCommentsCount())
 
     }, [])
 

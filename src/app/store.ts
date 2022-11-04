@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../routes/userProfile/userSlice'
+import jobStatsReducer from '../routes/job/jobStats/jobStatsSlice'
 
 export const store = configureStore({
   reducer: {
-    user: userReducer
+    user: userReducer,
+    jobStats: jobStatsReducer
   },
 });
 

@@ -4,9 +4,11 @@ import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, PencilIcon, UserAddIcon, ClockIcon } from "@heroicons/react/outline";
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { useAppSelector } from "../../app/hooks";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { selectUser } from "../userProfile/userSlice";
+import { selectJobStats, fetchJobStats } from './jobStats/jobStatsSlice';
 import * as api from './apiService'
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -14,19 +16,22 @@ function classNames(...classes) {
 
 const JobDetails = () => {
     const { jobId } = useParams();
-    const [jobStats, setJobStats] = useState({ comments_count: 0, photos_count: 0 });
+    //const [jobStats, setJobStats] = useState({ comments_count: 0, photos_count: 0 });
 
+    const dispatch = useAppDispatch();
     const currentUser = useAppSelector(selectUser)
+    const jobStats = useAppSelector(selectJobStats)
 
     useEffect(() => {
-        getJobStats()
+        //getJobStats()
+        dispatch(fetchJobStats(jobId))
 
     }, [])
 
     const getJobStats = async () => {
         const { data } = await api.getJobStats(jobId)
         
-        setJobStats(data)
+        //setJobStats(data)
     }
 
     return (
