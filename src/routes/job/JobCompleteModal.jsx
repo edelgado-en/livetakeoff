@@ -15,8 +15,9 @@ const ExclamationTriangule = () => {
 
 const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) => {
     const [loading, setLoading] = useState(true)
-    const [isAssignedToOtherPMs, setIsAssignedToOtherPMs] = useState(false)
+    const [otherPMsWorkingOnIt, setOtherPMsWorkingOnIt] = useState(false)
     const [photosCount, setPhotosCount] = useState(0)
+    const [isAdmin, setIsAdmin] = useState(false)
 
     useEffect(() => {
       canCompleteJob()
@@ -29,8 +30,9 @@ const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) 
         try {
             const { data } = await api.canCompleteJob(jobDetails.id)
         
-            setIsAssignedToOtherPMs(data.assigned_to_other_pms)
+            setOtherPMsWorkingOnIt(data.other_pms_working_on_it)
             setPhotosCount(data.photos_count)
+            setIsAdmin(data.is_admin)
 
         } catch (error) {
             setLoading(false)
@@ -62,24 +64,27 @@ const JobCompleteModal = ({ isOpen, handleClose, updateJobStatus, jobDetails }) 
                         </p>
                       )}
 
-                      {isAssignedToOtherPMs && (
-                        <p className="text-sm text-gray-500 pb-4">
-                            There are other project managers assigned to this job.
+                      {!isAdmin && otherPMsWorkingOnIt && (
+                        <p className="text-sm text-red-500 pb-4 font-medium">
+                            You cannot complete the job yet because there are other project managers working on it.
                         </p>
                       )}
                     </div>
                   </div>
                 </div>
                 <div className="mt-6 sm:mt-4 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="button"
-                    onClick={() => updateJobStatus('C')}
-                    className="inline-flex w-full justify-center rounded-md border border-transparent
-                             bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700
-                              focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                  >
-                    Complete
-                  </button>
+                  {(isAdmin || !otherPMsWorkingOnIt) && (
+                      <button
+                      type="button"
+                      onClick={() => updateJobStatus('C')}
+                      className="inline-flex w-full justify-center rounded-md border border-transparent
+                              bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700
+                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Complete
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={handleClose}
