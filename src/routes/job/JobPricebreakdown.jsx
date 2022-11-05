@@ -19,7 +19,6 @@ const JobPriceBreakdown = () => {
     const getPriceBreakdown = async () => {
         try {
             const { data } = await api.getJobPriceBreakdown(jobId)
-            console.log(data)
 
             setBreakdown(data)
 
@@ -44,6 +43,7 @@ const JobPriceBreakdown = () => {
                 <div className="text-gray-500 m-auto text-center mt-20">{errorMessage}</div>
             )}
 
+
             {!loading && errorMessage == null && (
                 <div className="mt-6 max-w-5xl px-2 pb-10">
                     <div className="flex flex-row">
@@ -51,7 +51,10 @@ const JobPriceBreakdown = () => {
                             <h1 className="text-2xl font-semibold text-gray-600">Price Breakdown</h1>
                         </div>
                     </div>
-                    <div className="mt-4">
+                    {breakdown.manuallySet ?
+                        <div className="mt-4 text-gray-500 text-sm">Price was manually set</div>
+                        :
+                        <div className="mt-4">
                             <div className="flex justify-between text-xs">
                                 <div className="text-sm text-gray-700">{breakdown.aircraftType}</div>
                                 <div>
@@ -73,7 +76,7 @@ const JobPriceBreakdown = () => {
                                         <dd className="whitespace-nowrap text-gray-900">{breakdown.servicesPrice}</dd>
                                 </div>
                             </div>
-                            
+                                
                             {breakdown.discounts?.length > 0 && (
                                 <div className="mt-2">
                                     <h3 className="text-sm text-gray-700">Discounts Applied</h3>
@@ -99,8 +102,8 @@ const JobPriceBreakdown = () => {
                                     </div>
                                 </div>  
                             )}
-                            
-                            
+                                
+                                
                             {breakdown.additionalFees?.length > 0 && (
                                 <div className="mt-2">
                                     <h3 className="text-sm text-gray-700">Additional Fees Applied</h3>
@@ -127,8 +130,9 @@ const JobPriceBreakdown = () => {
                                 <dt className="text-gray-500 pr-2 text-right font-medium">Total</dt>
                                 <dd className="whitespace-nowrap text-gray-900">{breakdown.totalPrice}</dd>
                             </div>
-                        
                         </div>
+                    }
+                    
                 </div>
             )}
 
