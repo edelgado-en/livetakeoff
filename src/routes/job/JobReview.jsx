@@ -240,7 +240,9 @@ const JobReview = () => {
                         && !downloadLoading && (
                     <>
                     <JobInfo />
-                    <JobPriceBreakdown />
+                    {jobDetails.is_auto_priced && (
+                        <JobPriceBreakdown />
+                    )}
                     </>
                 )}
 
