@@ -60,7 +60,7 @@ const PriceList = () => {
                                        focus:ring-offset-2 sm:w-auto"
                         >
                             <PlusIcon className="-ml-1 mr-2 h-4 w-4" aria-hidden="true" />
-                            Add list
+                            Add Plan
                         </button>
                     </div>
                 </div>
