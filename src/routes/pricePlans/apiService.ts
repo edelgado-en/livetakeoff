@@ -12,3 +12,11 @@ export const getPricingPlans = () => {
 export const createPricingPlan = (request: any) => {
     return httpService.post('/api/pricing-plans', request)
 }
+
+export const getPriceListing = (id: number) => {
+    return httpService.get(`/api/price-listing/${id}/`);
+}
+
+export const updatePricePlan = (id: number, request: any) => {
+    return httpService.post(`/api/price-listing/${id}/`, request);
+}

@@ -5,39 +5,6 @@ import { Dialog, Transition, Listbox } from '@headlessui/react'
 import { Link } from "react-router-dom"
 import * as api from './apiService'
 
-const sections = [
-  {
-    name: 'Services',
-    features: [
-      { name: 'Exterior detail (Full wet or dry wash)', tiers: { Basic: true, Essential: true, Premium: true } },
-      { name: 'Basic Exterior (Exterior Takeoff Ready)', tiers: { Basic: true, Essential: true, Premium: true } },
-      { name: 'Basic Interior (Interior Takeoff Ready)', tiers: { Essential: true, Premium: true } },
-      { name: 'Brightwork', tiers: { Basic: true, Essential: true, Premium: true } },
-      { name: 'Electrostatic Disinfection', tiers: { Basic: true, Essential: true, Premium: true } },
-      { name: 'Hand/Machine Wax', tiers: { Basic: true, Essential: true, Premium: true } },
-      { name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down', tiers: { Basic: true, Essential: true, Premium: true } },
-    ],
-  }
-]
-
-const priceListTypes = [
-    { id: 1, name: 'Standard' }
-]
-
-const tiers = [
-  { name: 'Standard', href: '#', description: 'All the basics for starting a new client.' },
-  {
-    name: 'Global Appeareance',
-    href: '#',
-    description: '+15% for all services. Custom based.',
-  },
-  {
-    name: 'Holiday Special',
-    href: '#',
-    description: '-10% for all services. Used this list in December',
-  },
-]
-
 
 const XMarkIcon = () => {
     return (
@@ -56,13 +23,6 @@ const MagnifyingGlassIcon = () => {
     )
 }
 
-const ChevronUpDownIcon = () => {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
-        </svg>
-    )
-}
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -74,10 +34,11 @@ const ServicePrices = () => {
     const [loading, setLoading] = useState(true)
     const [totalAircraftTypes, setTotalAircraftTypes] = useState(0)
     const [aircraftTypes, setAircraftTypes] = useState([])
+    const [aircraftTypeSelected, setAircraftTypeSelected] = useState()
     const [aircraftSearchName, setAircraftSearchName] = useState('')
-    const [priceListSelected, setPriceListSelected] = useState(priceListTypes[0])
-    const [price, setPrice] = useState('')
     const [estimatedCompletionTime, setEstimatedCompletionTime] = useState('')
+    const [pricePlans, setPricePlans] = useState([])
+    const [priceListing, setPriceListing] = useState([])
 
     useEffect(() => {
         //Basic throttling
@@ -104,6 +65,19 @@ const ServicePrices = () => {
         setAircraftTypes(data.results)
 
         setLoading(false)
+
+        const response = await api.getPriceListing(1)
+
+        setPriceListing(response.data)
+
+        const response2 = await api.getPricingPlans()
+
+        setPricePlans(response2.data.results)
+
+        //TODO: you have to build it in a different way for mobile
+        // and then update both data structures to keep them in sync
+
+
     }
 
     const handleKeyDown = event => {
@@ -114,10 +88,61 @@ const ServicePrices = () => {
         }
     }
 
-    const getAircraftDetails = () => {
-
+    const getAircraftDetails = (aircraftType) => {
+        setAircraftTypeSelected(aircraftType)
     }
 
+    const updateServicePrice = (serviceName, priceListName, updatedPrice) => {
+
+        const updatedPriceListing = priceListing.map(priceList => {
+            if(priceList.service === serviceName) {
+                const updatedPriceListEntries = priceList.price_list_entries.map(entry => {
+                    if(entry.price_list === priceListName) {
+                        return {
+                            ...entry,
+                            price: updatedPrice
+                        }
+                    }
+
+                    return entry
+                })
+
+                return {
+                    ...priceList,
+                    price_list_entries: updatedPriceListEntries
+                }
+            }
+
+            return priceList
+        })
+
+        setPriceListing(updatedPriceListing)
+    }
+
+    const saveChangesForPricePlan = async (pricePlanName) => {
+        const priceListEntries = priceListing.map(priceList => {
+            const priceListEntry = priceList.price_list_entries.find(entry => entry.price_list === pricePlanName)
+
+            return {
+                service: priceList.service,
+                price: priceListEntry.price
+            }
+        })
+
+        const request = {
+            name: pricePlanName,
+            price_list_entries: priceListEntries,
+            aircraft_type_id: aircraftTypeSelected?.id
+        }
+
+        try {
+          await api.updatePricePlan(aircraftTypeSelected?.id, request)
+
+        } catch (error) {
+
+        } 
+
+    }
 
     return (
         <div className="flex h-full -mt-8">
@@ -228,17 +253,17 @@ const ServicePrices = () => {
                       )}
                         <ul role="list" className="relative z-0 divide-y divide-gray-200">
                         {aircraftTypes.map((aircraft) => (
-                            <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft.id)}>
-                            <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2
-                                             focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
-                                <div className="min-w-0 flex-1">
-                                <a href="#" className="focus:outline-none">
-                                    {/* Extend touch target to entire panel */}
-                                    <span className="absolute inset-0" aria-hidden="true" />
-                                    <p className="text-sm font-medium text-gray-900">{aircraft.name}</p>
-                                </a>
-                                </div>
-                            </div>
+                            <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft)}>
+                              <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2
+                                              focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
+                                  <div className="min-w-0 flex-1">
+                                  <a href="#" className="focus:outline-none">
+                                      {/* Extend touch target to entire panel */}
+                                      <span className="absolute inset-0" aria-hidden="true" />
+                                      <p className="text-sm font-medium text-gray-900">{aircraft.name}</p>
+                                  </a>
+                                  </div>
+                              </div>
                             </li>
                         ))}
                         </ul>
@@ -275,51 +300,41 @@ const ServicePrices = () => {
                   {/* Comparison table */}
                   <div className="mx-auto max-w-2xl bg-white pb-16 sm:pb-16 lg:max-w-7xl">
                     {/* xs to lg */}
-                    <div className="py-4 font-medium text-lg xl:hidden">Aircraft Name</div>
+                    <div className="py-4 font-medium text-lg xl:hidden">{aircraftTypeSelected?.name}</div>
                     <div className="space-y-12 lg:hidden">
-                      {tiers.map((tier) => (
-                        <section key={tier.name}>
+                      {pricePlans.map((pricePlan) => (
+                        <section key={pricePlan.name}>
                           <div className="mb-8 px-4">
-                            <h2 className="text-md font-medium leading-6 text-gray-900">{tier.name}</h2>
-                            <p className="mt-4 text-xs text-gray-500">{tier.description}</p>
+                            <h2 className="text-md font-medium leading-6 text-gray-900">{pricePlan.name}</h2>
+                            <p className="mt-4 text-xs text-gray-500">{pricePlan.description}</p>
                           </div>
             
-                          {sections.map((section) => (
-                            <table key={section.name} className="w-full">
-                              <caption className="border-t border-gray-200 bg-gray-50 py-3 px-4 text-left text-sm font-medium text-gray-900">
-                                {section.name}
-                              </caption>
-                              <thead>
-                                <tr>
-                                  <th className="sr-only" scope="col">
-                                    Feature
+                          <table className="w-full">
+                            <caption className="border-t border-gray-200 bg-gray-50 py-3 px-4 text-left text-sm font-medium text-gray-900">
+                              Services
+                            </caption>
+                            <tbody className="divide-y divide-gray-200">
+                              {priceListing.map((entry) => (
+                                <tr key={entry.service} className="border-t border-gray-200">
+                                  <th className="py-5 px-4 text-left text-xs font-normal text-gray-500" scope="row">
+                                    {entry.service}
                                   </th>
-                                  <th className="sr-only" scope="col">
-                                    Included
-                                  </th>
+                                  <td className="py-5 pr-4">
+                                    <div className="flex gap-2">
+                                     <input type="text" name="first-name" id="first-name"
+                                        style={{ width: '60px' }}
+                                        className="block rounded-md border-gray-300 py-1
+                                                    shadow-sm focus:border-gray-500 focus:ring-gray-500
+                                                  text-xs">
+                                                
+                                      </input>
+                                      <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
+                                    </div>
+                                  </td>
                                 </tr>
-                              </thead>
-                              <tbody className="divide-y divide-gray-200">
-                                {section.features.map((feature) => (
-                                  <tr key={feature.name} className="border-t border-gray-200">
-                                    <th className="py-5 px-4 text-left text-xs font-normal text-gray-500" scope="row">
-                                      {feature.name}
-                                    </th>
-                                    <td className="py-5 pr-4">
-                                      <div className="flex gap-2">
-                                        <input type="text" name="first-name" id="first-name"
-                                          style={{ width: '60px' }}
-                                          className="block rounded-md border-gray-300 py-1
-                                                     shadow-sm focus:border-gray-500 focus:ring-gray-500
-                                                    text-xs"></input>
-                                        <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          ))}
+                              ))}
+                            </tbody>
+                          </table>
             
                           <div className="border-t border-gray-200 px-4 pt-5">
                             <button
@@ -343,13 +358,13 @@ const ServicePrices = () => {
                             <th className="pb-4 pl-6 pr-6 text-left text-sm font-medium text-gray-900" scope="col">
                                 Aircraft
                             </th>
-                            {tiers.map((tier) => (
+                            {pricePlans.map((pricePlan) => (
                               <th
-                                key={tier.name}
+                                key={pricePlan.name}
                                 className="w-1/4 px-6 pb-4 text-left text-md font-medium leading-6 text-gray-900"
                                 scope="col"
                               >
-                                {tier.name}
+                                {pricePlan.name}
                               </th>
                             ))}
                           </tr>
@@ -357,60 +372,61 @@ const ServicePrices = () => {
                         <tbody className="divide-y divide-gray-200 border-t border-gray-200">
                           <tr>
                             <th className="py-5 pl-6 pr-6 text-left align-top text-sm font-medium text-gray-900" scope="row">
-                              Embrarer Legacy 450
+                              {aircraftTypeSelected?.name}
                             </th>
-                            {tiers.map((tier) => (
-                              <td key={tier.name} className="h-full px-6 align-top">
+                            {pricePlans.map((pricePlan) => (
+                              <td key={pricePlan.name} className="h-full px-6 align-top">
                                 <div className="flex h-full flex-col justify-between">
                                   <div>
-                                    <p className="mt-4 text-xs text-gray-500">{tier.description}</p>
+                                    <p className="mt-4 text-xs text-gray-500">{pricePlan.description}</p>
                                   </div>
                                 </div>
                               </td>
                             ))}
                           </tr>
-                          {sections.map((section) => (
-                            <Fragment key={section.name}>
-                              <tr>
-                                <th
-                                  className="bg-gray-50 py-3 pl-6 text-left text-sm font-medium text-gray-900"
-                                  colSpan={4}
-                                  scope="colgroup"
-                                >
-                                  {section.name}
+                          <tr>
+                            <th
+                              className="bg-gray-50 py-3 pl-6 text-left text-sm font-medium text-gray-900"
+                              colSpan={pricePlans.length} /* This has to be tiers.length */
+                              scope="colgroup"
+                            >
+                              Services
+                            </th>
+                          </tr>
+                            {priceListing.map((entry) => (
+                              <tr key={entry.service}>
+                                <th className="py-5 pl-6 pr-6 text-left text-xs font-normal text-gray-500" scope="row">
+                                  {entry.service}
                                 </th>
-                              </tr>
-                              {section.features.map((feature) => (
-                                <tr key={feature.name}>
-                                  <th className="py-5 pl-6 pr-6 text-left text-xs font-normal text-gray-500" scope="row">
-                                    {feature.name}
-                                  </th>
-                                  {tiers.map((tier) => (
-                                    <td key={tier.name} className="py-5 px-6">
-                                      <div className="flex gap-2">
-                                        <input type="text" name="first-name" id="first-name"
+                                {entry.price_list_entries.map((priceList) => (
+                                  <td key={priceList.price_list} className="py-5 px-6">
+                                    <div className="flex gap-2">
+                                      <input 
+                                          type="text"
+                                          name="price"
+                                          id="price"
+                                          value={priceList.price}
+                                          onChange={(e) => updateServicePrice(entry.service, priceList.price_list, e.target.value)}
                                           style={{ width: '80px' }}
                                           className="block rounded-md border-gray-300 py-1
-                                                     shadow-sm focus:border-gray-500 focus:ring-gray-500
-                                                    text-xs"></input>
-                                        <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
-                                      </div>
-                                    </td>
-                                  ))}
-                                </tr>
-                              ))}
-                            </Fragment>
-                          ))}
+                                                    shadow-sm focus:border-gray-500 focus:ring-gray-500
+                                                  text-xs"></input>
+                                      <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
+                                    </div>
+                                  </td>
+                                ))}
+                              </tr>
+                            ))}
                         </tbody>
                         <tfoot>
                           <tr className="border-t border-gray-200">
                             <th className="sr-only" scope="row">
                              
                             </th>
-                            {tiers.map((tier) => (
-                              <td key={tier.name} className="px-6 pt-5">
+                            {pricePlans.map((pricePlan) => (
+                              <td key={pricePlan.name} className="px-6 pt-5">
                                 <button
-                                  href="#"
+                                  onClick={() => saveChangesForPricePlan(pricePlan.name)}
                                   className="block w-1/2 rounded-md border
                                              border-transparent bg-red-500
                                                py-2 text-center text-xs font-semibold
@@ -494,17 +510,17 @@ const ServicePrices = () => {
 
                 <ul role="list" className="relative z-0 divide-y divide-gray-200">
                     {aircraftTypes.map((aircraft) => (
-                    <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft.id)}>
-                        <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2
-                                         focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
-                        <div className="min-w-0 flex-1">
-                            <a href="#" className="focus:outline-none">
-                            <span className="absolute inset-0" aria-hidden="true" />
-                            <p className="text-sm text-gray-900">{aircraft.name}</p>
-                            </a>
-                        </div>
-                        </div>
-                    </li>
+                      <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft)}>
+                          <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2
+                                          focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
+                          <div className="min-w-0 flex-1">
+                              <a href="#" className="focus:outline-none">
+                              <span className="absolute inset-0" aria-hidden="true" />
+                              <p className="text-sm text-gray-900">{aircraft.name}</p>
+                              </a>
+                          </div>
+                          </div>
+                      </li>
                     ))}
                 </ul>
               </nav>
