@@ -50,13 +50,12 @@ const PricePlans = () => {
     const [pricingPlans, setPricingPlans] = useState([]);
 
     useEffect(() => {
-
+        getPricingPlans()
     }, [])
 
     const getPricingPlans = async () => {
         const { data } = await api.getPricingPlans()
-        console.log(data)
-        setPricingPlans(data)
+        setPricingPlans(data.results)
     }
 
     return (
@@ -73,7 +72,7 @@ const PricePlans = () => {
                         <Link
                             to="add"
                             className="inline-flex items-center justify-center rounded-md border border-transparent
-                                     bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm
+                                     bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm
                                       hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500
                                        focus:ring-offset-2 sm:w-auto"
                         >
@@ -83,21 +82,21 @@ const PricePlans = () => {
                     </div>
                 </div>
                 <div className="mt-10 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                    {tiers.map((tier) => (
-                        <div key={tier.name} className="divide-y divide-gray-200 rounded-lg border border-gray-200 shadow-sm">
+                    {pricingPlans.map((pricingPlan) => (
+                        <div key={pricingPlan.name} className="divide-y divide-gray-200 rounded-lg border border-gray-200 shadow-sm">
                             <div className="p-6">
                                 <div className="flex justify-between">
-                                    <h2 className="text-lg font-medium leading-6 text-gray-900">{tier.name}</h2>
-                                    {tier.name !== 'Standard' && (
+                                    <h2 className="text-lg font-medium leading-6 text-gray-900">{pricingPlan.name}</h2>
+                                    {pricingPlan.name !== 'Standard' && (
                                         <div className="flex gap-3">
                                             <PencilIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
                                             <TrashIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
                                         </div>
                                     )}
                                 </div>
-                                <p className="mt-4 text-sm text-gray-500" style={{ minHeight: '60px' }}>{tier.description}</p>
+                                <p className="mt-4 text-sm text-gray-500" style={{ minHeight: '60px' }}>{pricingPlan.description}</p>
                                 <Link
-                                    to={`${tier.id}`}
+                                    to={`${pricingPlan.id}`}
                                     className="mt-8 block w-full rounded-md border border-transparent
                                             bg-red-600 py-2 text-center text-sm font-semibold
                                             text-white hover:bg-red-700"
@@ -109,15 +108,15 @@ const PricePlans = () => {
                                 <ul role="list" className="mt-6 space-y-4">
                                     <li className="flex space-x-3">
                                         <UserIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
-                                        <span className="text-xs text-gray-500">Created by {tier.createdBy}</span>
+                                        <span className="text-xs text-gray-500">Created by {pricingPlan.created_by ? pricingPlan.created_by.username : 'System'}</span>
                                     </li>
                                     <li className="flex space-x-3">
                                         <CalendarIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
-                                        <span className="text-xs text-gray-500">Created on {tier.createdAt}</span>
+                                        <span className="text-xs text-gray-500">Created on {pricingPlan.created_at}</span>
                                     </li>
                                     <li className="flex space-x-3">
                                         <UsersIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
-                                        <span className="text-xs text-gray-500">{tier.customersUsingIt} customer(s) currently using it</span>
+                                        <span className="text-xs text-gray-500">{pricingPlan.num_customers} customer(s) currently using it</span>
                                     </li>
 
                                 </ul>
