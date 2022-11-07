@@ -34,7 +34,7 @@ const ServicePrices = () => {
     const [loading, setLoading] = useState(true)
     const [totalAircraftTypes, setTotalAircraftTypes] = useState(0)
     const [aircraftTypes, setAircraftTypes] = useState([])
-    const [aircraftTypeSelected, setAircraftTypeSelected] = useState()
+    const [aircraftTypeSelected, setAircraftTypeSelected] = useState(null)
     const [aircraftSearchName, setAircraftSearchName] = useState('')
     const [estimatedCompletionTime, setEstimatedCompletionTime] = useState('')
     const [pricePlans, setPricePlans] = useState([])
@@ -66,13 +66,13 @@ const ServicePrices = () => {
 
         setLoading(false)
 
-        const response = await api.getPriceListing(1)
+/*         const response = await api.getPriceListing(1)
 
         setPriceListing(response.data)
 
         const response2 = await api.getPricingPlans()
 
-        setPricePlans(response2.data.results)
+        setPricePlans(response2.data.results) */
 
         //TODO: you have to build it in a different way for mobile
         // and then update both data structures to keep them in sync
@@ -88,8 +88,17 @@ const ServicePrices = () => {
         }
     }
 
-    const getAircraftDetails = (aircraftType) => {
+    const getAircraftDetails = async (aircraftType) => {
         setAircraftTypeSelected(aircraftType)
+
+        const response = await api.getPriceListing(aircraftType.id)
+
+        setPriceListing(response.data)
+
+        const response2 = await api.getPricingPlans()
+
+        setPricePlans(response2.data.results)
+
     }
 
     const updateServicePrice = (serviceName, priceListName, updatedPrice) => {
@@ -351,95 +360,100 @@ const ServicePrices = () => {
             
                     {/* lg+ */}
                     <div className="hidden lg:block">
-                      <table className="h-px w-full table-fixed">
-                        <caption className="sr-only">Pricing plan comparison</caption>
-                        <thead>
-                          <tr>
-                            <th className="pb-4 pl-6 pr-6 text-left text-sm font-medium text-gray-900" scope="col">
-                                Aircraft
-                            </th>
-                            {pricePlans.map((pricePlan) => (
-                              <th
-                                key={pricePlan.name}
-                                className="w-1/4 px-6 pb-4 text-left text-md font-medium leading-6 text-gray-900"
-                                scope="col"
-                              >
-                                {pricePlan.name}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200 border-t border-gray-200">
-                          <tr>
-                            <th className="py-5 pl-6 pr-6 text-left align-top text-sm font-medium text-gray-900" scope="row">
-                              {aircraftTypeSelected?.name}
-                            </th>
-                            {pricePlans.map((pricePlan) => (
-                              <td key={pricePlan.name} className="h-full px-6 align-top">
-                                <div className="flex h-full flex-col justify-between">
-                                  <div>
-                                    <p className="mt-4 text-xs text-gray-500">{pricePlan.description}</p>
-                                  </div>
-                                </div>
-                              </td>
-                            ))}
-                          </tr>
-                          <tr>
-                            <th
-                              className="bg-gray-50 py-3 pl-6 text-left text-sm font-medium text-gray-900"
-                              colSpan={pricePlans.length} /* This has to be tiers.length */
-                              scope="colgroup"
-                            >
-                              Services
-                            </th>
-                          </tr>
-                            {priceListing.map((entry) => (
-                              <tr key={entry.service}>
-                                <th className="py-5 pl-6 pr-6 text-left text-xs font-normal text-gray-500" scope="row">
-                                  {entry.service}
+                      {aircraftTypeSelected === null && (
+                        <div className="text-sm text-gray-700 mt-16">Select an aircraft from the left.</div>
+                      )}
+
+                      {aircraftTypeSelected !== null && (
+                          <table className="h-px w-full table-fixed">
+                            <thead>
+                              <tr>
+                                <th className="pb-4 pl-6 pr-6 text-left text-sm font-medium text-gray-900" scope="col">
+                                    Aircraft
                                 </th>
-                                {entry.price_list_entries.map((priceList) => (
-                                  <td key={priceList.price_list} className="py-5 px-6">
-                                    <div className="flex gap-2">
-                                      <input 
-                                          type="text"
-                                          name="price"
-                                          id="price"
-                                          value={priceList.price}
-                                          onChange={(e) => updateServicePrice(entry.service, priceList.price_list, e.target.value)}
-                                          style={{ width: '80px' }}
-                                          className="block rounded-md border-gray-300 py-1
-                                                    shadow-sm focus:border-gray-500 focus:ring-gray-500
-                                                  text-xs"></input>
-                                      <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
+                                {pricePlans.map((pricePlan) => (
+                                  <th
+                                    key={pricePlan.name}
+                                    className="w-1/4 px-6 pb-4 text-left text-md font-medium leading-6 text-gray-900"
+                                    scope="col"
+                                  >
+                                    {pricePlan.name}
+                                  </th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 border-t border-gray-200">
+                              <tr>
+                                <th className="py-5 pl-6 pr-6 text-left align-top text-sm font-medium text-gray-900" scope="row">
+                                  {aircraftTypeSelected?.name}
+                                </th>
+                                {pricePlans.map((pricePlan) => (
+                                  <td key={pricePlan.name} className="h-full px-6 align-top">
+                                    <div className="flex h-full flex-col justify-between">
+                                      <div>
+                                        <p className="mt-4 text-xs text-gray-500">{pricePlan.description}</p>
+                                      </div>
                                     </div>
                                   </td>
                                 ))}
                               </tr>
-                            ))}
-                        </tbody>
-                        <tfoot>
-                          <tr className="border-t border-gray-200">
-                            <th className="sr-only" scope="row">
-                             
-                            </th>
-                            {pricePlans.map((pricePlan) => (
-                              <td key={pricePlan.name} className="px-6 pt-5">
-                                <button
-                                  onClick={() => saveChangesForPricePlan(pricePlan.name)}
-                                  className="block w-1/2 rounded-md border
-                                             border-transparent bg-red-500
-                                               py-2 text-center text-xs font-semibold
-                                               text-white shadow hover:to-pink-600"
+                              <tr>
+                                <th
+                                  className="bg-gray-50 py-3 pl-6 text-left text-sm font-medium text-gray-900"
+                                  colSpan={pricePlans.length} /* This has to be tiers.length */
+                                  scope="colgroup"
                                 >
-                                  Save Changes
-                                </button>
-                              </td>
-                            ))}
-                          </tr>
-                        </tfoot>
-                        
-                      </table>
+                                  Services
+                                </th>
+                              </tr>
+                                {priceListing.map((entry) => (
+                                  <tr key={entry.service}>
+                                    <th className="py-5 pl-6 pr-6 text-left text-xs font-normal text-gray-500" scope="row">
+                                      {entry.service}
+                                    </th>
+                                    {entry.price_list_entries.map((priceList) => (
+                                      <td key={priceList.price_list} className="py-5 px-6">
+                                        <div className="flex gap-2">
+                                          <input 
+                                              type="text"
+                                              name="price"
+                                              id="price"
+                                              value={priceList.price}
+                                              onChange={(e) => updateServicePrice(entry.service, priceList.price_list, e.target.value)}
+                                              style={{ width: '80px' }}
+                                              className="block rounded-md border-gray-300 py-1
+                                                        shadow-sm focus:border-gray-500 focus:ring-gray-500
+                                                      text-xs"></input>
+                                          <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
+                                        </div>
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))}
+                            </tbody>
+                            <tfoot>
+                              <tr className="border-t border-gray-200">
+                                <th className="sr-only" scope="row">
+                                
+                                </th>
+                                {pricePlans.map((pricePlan) => (
+                                  <td key={pricePlan.name} className="px-6 pt-5">
+                                    <button
+                                      onClick={() => saveChangesForPricePlan(pricePlan.name)}
+                                      className="block w-1/2 rounded-md border
+                                                border-transparent bg-red-500
+                                                  py-2 text-center text-xs font-semibold
+                                                  text-white shadow hover:to-pink-600"
+                                    >
+                                      Save Changes
+                                    </button>
+                                  </td>
+                                ))}
+                              </tr>
+                            </tfoot>
+                          </table>
+                      )}
+                      
                     </div>
                   </div>
                 </div>
@@ -513,12 +527,12 @@ const ServicePrices = () => {
                       <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft)}>
                           <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2
                                           focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
-                          <div className="min-w-0 flex-1">
-                              <a href="#" className="focus:outline-none">
-                              <span className="absolute inset-0" aria-hidden="true" />
-                              <p className="text-sm text-gray-900">{aircraft.name}</p>
-                              </a>
-                          </div>
+                            <div className="min-w-0 flex-1">
+                                <a href="#" className="focus:outline-none">
+                                <span className="absolute inset-0" aria-hidden="true" />
+                                <p className="text-sm text-gray-900">{aircraft.name}</p>
+                                </a>
+                            </div>
                           </div>
                       </li>
                     ))}
