@@ -79,6 +79,12 @@ const CreatePricePlan = () => {
         }
     }
 
+    const handleSetPercentage = (e) => {
+        const value = e.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+
+        setPercentageAdjusted(value)
+    }
+
     return (
         <AnimatedPage>
             {loading && <Loader />}
@@ -272,7 +278,7 @@ const CreatePricePlan = () => {
                                     <input
                                         type="text"
                                         value={percentageAdjusted}
-                                        onChange={(e) => setPercentageAdjusted(e.target.value)}
+                                        onChange={(e) => handleSetPercentage(e.target.value)}
                                         name="amount"
                                         style={{ borderLeft: '0px' }}
                                         className="block w-12 rounded-r-md border-gray-300 shadow-sm
