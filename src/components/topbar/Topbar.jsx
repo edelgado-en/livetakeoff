@@ -107,7 +107,7 @@ const Topbar = () => {
                               location.pathname.includes("price-list") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
                               'px-3 py-2 rounded-md text-sm font-medium text-white'
                             )}>
-                              Price Plans
+                              Price Lists
                           </Link>
                         </>
                       )}
@@ -220,7 +220,7 @@ const Topbar = () => {
                           'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
                         )}
                       >
-                          Price Plans
+                          Price Lists
                       </Disclosure.Button>
                     </Link>
                   </>
