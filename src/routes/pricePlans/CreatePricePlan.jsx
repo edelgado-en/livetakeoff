@@ -80,6 +80,7 @@ const CreatePricePlan = () => {
                     <div className="mt-8">
                         <label htmlFor="tailNumber" className="block text-sm font-medium text-gray-700">
                             Name
+                            <span className="text-sm ml-1 text-gray-500 font-normal">(must be unique)</span>
                         </label>
                         <div className="mt-1">
                             <input
@@ -91,6 +92,7 @@ const CreatePricePlan = () => {
                             className="block w-full rounded-md border-gray-300 shadow-sm
                                     focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                             />
+                            
                         </div>
                     </div>
                     <div className="mt-4">
@@ -111,7 +113,7 @@ const CreatePricePlan = () => {
                         </div>
                     </div>
                     <div className="mt-12">
-                        <div className="text-md font-semibold text-gray-600">Based off Another Price Plan</div>
+                        <div className="text-md font-semibold text-gray-600">Based Off Another Price Plan</div>
                         <p className="mt-2 text-sm text-gray-500">
                             All new price plans are based off an existing price plan. You can optionality add or subtract
                              a percentage from that list that will affect the price of all services for the new list.

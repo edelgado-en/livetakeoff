@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import Loader from "../../components/loader/Loader";
-import { ChevronLeftIcon, CheckIcon, PlusIcon, TrashIcon, PencilIcon, UserIcon, CalendarIcon } from '@heroicons/react/outline'
+import { ChevronLeftIcon, CheckIcon, PlusIcon, TrashIcon, PencilIcon, UserIcon, CalendarIcon, UsersIcon } from '@heroicons/react/outline'
 import { Link } from 'react-router-dom';
 
 import * as api from './apiService'
@@ -13,7 +13,8 @@ const tiers = [
       href: '#',
       description: 'All the basics for starting a new client',
       createdBy: 'System',
-      createdAt: '11/06/2022'
+      createdAt: '11/06/2022',
+      customersUsingIt: 55
     },
     {
       id: 2,
@@ -21,7 +22,8 @@ const tiers = [
       href: '#',
       description: '+15% for all services. Custom based.',
       createdBy: 'edelgado',
-      createdAt: '11/06/2022'
+      createdAt: '11/06/2022',
+      customersUsingIt: 1
     },
     {
       id: 3,
@@ -29,7 +31,8 @@ const tiers = [
       href: '#',
       description: '-10% for all services. Used this list in December',
       createdBy: 'System',
-      createdAt: '11/06/2022'
+      createdAt: '11/06/2022',
+      customersUsingIt: 10
     },
     {
       id: 4,
@@ -37,7 +40,8 @@ const tiers = [
       href: '#',
       description: '+10% for all services for big clients',
       createdBy: 'System',
-      createdAt: '11/06/2022'
+      createdAt: '11/06/2022',
+      customersUsingIt: 1
     },
   ]
 
@@ -111,6 +115,11 @@ const PricePlans = () => {
                                         <CalendarIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
                                         <span className="text-xs text-gray-500">Created on {tier.createdAt}</span>
                                     </li>
+                                    <li className="flex space-x-3">
+                                        <UsersIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                                        <span className="text-xs text-gray-500">{tier.customersUsingIt} customer(s) currently using it</span>
+                                    </li>
+
                                 </ul>
                             </div>
                         </div>
