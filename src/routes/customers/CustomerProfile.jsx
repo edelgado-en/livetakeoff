@@ -9,7 +9,6 @@ const tabs = [
     { name: 'Profile', href: 'details', current: true },
     { name: 'Discounts', href: 'discounts', current: false },
     { name: 'Fees', href: 'fees', current: false },
-    { name: 'Jobs', href: 'jobs', current: false },
 ]
 
 function classNames(...classes) {

@@ -4,6 +4,7 @@ import Loader from "../../components/loader/Loader";
 import { ChevronLeftIcon, CheckIcon, PlusIcon, TrashIcon, PencilIcon, UserIcon, CalendarIcon } from '@heroicons/react/outline'
 import { Link } from 'react-router-dom';
 
+import * as api from './apiService'
 
 const tiers = [
     {
@@ -40,7 +41,20 @@ const tiers = [
     },
   ]
 
-const PriceList = () => {
+const PricePlans = () => {
+    const [loading, setLoading] = useState(true);
+    const [pricingPlans, setPricingPlans] = useState([]);
+
+    useEffect(() => {
+
+    }, [])
+
+    const getPricingPlans = async () => {
+        const { data } = await api.getPricingPlans()
+        console.log(data)
+        setPricingPlans(data)
+    }
+
     return (
         <AnimatedPage>
             <article className="m-auto max-w-5xl px-2">
@@ -52,8 +66,8 @@ const PriceList = () => {
                         </p>
                     </div>
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <button
-                            type="button"
+                        <Link
+                            to="add"
                             className="inline-flex items-center justify-center rounded-md border border-transparent
                                      bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm
                                       hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500
@@ -61,7 +75,7 @@ const PriceList = () => {
                         >
                             <PlusIcon className="-ml-1 mr-2 h-4 w-4" aria-hidden="true" />
                             Add Plan
-                        </button>
+                        </Link>
                     </div>
                 </div>
                 <div className="mt-10 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
@@ -107,4 +121,4 @@ const PriceList = () => {
     )
 }
 
-export default PriceList;
+export default PricePlans;

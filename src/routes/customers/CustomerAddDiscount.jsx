@@ -418,7 +418,7 @@ const CustomerAddDiscount = () => {
                     </label>
                     <div className="flex mt-1">
                         <div>
-                        <Listbox value={selectedAmountType} onChange={setSelectedAmountType}>
+                            <Listbox value={selectedAmountType} onChange={setSelectedAmountType}>
                                 {({ open }) => (
                                     <>
                                     <div className="relative">

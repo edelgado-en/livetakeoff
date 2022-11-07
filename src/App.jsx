@@ -34,8 +34,9 @@ import CreateCustomer from './routes/customers/CreateCustomer';
 import JobReview from './routes/job/JobReview';
 import JobActivityFeed from './routes/job/JobActivityFeed';
 import JobPriceBreakdown from './routes/job/JobPricebreakdown';
-import ServicePrices from './routes/priceList/ServicePrices';
-import PriceList from './routes/priceList/PriceList';
+import ServicePrices from './routes/pricePlans/ServicePrices';
+import PricePlans from './routes/pricePlans/PricePlans';
+import CreatePricePlan from './routes/pricePlans/CreatePricePlan'
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
@@ -150,7 +151,8 @@ const  App = () => {
 
                       <Route path="privacy-policy" element={<PrivacyPolicy />} />
                       <Route path="changelog" element={<ChangeLog />} />
-                      <Route path="price-plans" element={<PriceList />} />
+                      <Route path="price-plans" element={<PricePlans />} />
+                      <Route path="price-plans/add" element={<CreatePricePlan />} />
                       <Route path="price-plans/:pricePlanId" element={<ServicePrices />} />
 
                       <Route path="*" element={<NotFound />} />
