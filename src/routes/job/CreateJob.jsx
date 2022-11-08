@@ -105,17 +105,19 @@ const CreateJob = () => {
     }, [tailNumber])
 
     
-      const getTailAircraftLookup = async () => {
+    const getTailAircraftLookup = async () => {
         if (tailNumber.length > 2) {
             const { data } = await api.getTailAircraftLookup(tailNumber)
-            console.log(data)
 
             if (data) {
-                setAircraftTypeSelected(data)
-                setAircraftSearchTerm(data.name)
+                setAircraftTypeSelected({id: data.aircraft_id, name: data.aircraft_name})
+                setAircraftSearchTerm(data.aircraft_name)
+
+                setCustomerSelected({id: data.customer_id, name: data.customer_name})
+                setCustomerSearchTerm(data.customer_name)
             }
         }
-      }
+    }
 
 
     const getJobInfo = async () => {
