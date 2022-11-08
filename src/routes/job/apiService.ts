@@ -92,6 +92,10 @@ export const getServices = () => {
     return httpService.get('/api/services');
 }
 
+export const getTailAircraftLookup = (tail: string) => {
+    return httpService.get(`/api/tail-aircraft-lookup/${tail}/`);
+}
+
 export const getRetainerServices = () => {
     return httpService.get('/api/retainer-services');
 }

@@ -87,9 +87,35 @@ const CreateJob = () => {
     ? fbos.filter((item) => item.name.toLowerCase().includes(fboSearchTerm.toLowerCase()))
     : fbos;
 
+
     useEffect(() => {
         getJobInfo()
     }, [])
+
+    useEffect(() => {
+        //Basic throttling
+        let timeoutID = setTimeout(() => {
+            getTailAircraftLookup()
+        }, 300);
+    
+        return () => {
+          clearTimeout(timeoutID);
+        };
+    
+    }, [tailNumber])
+
+    
+      const getTailAircraftLookup = async () => {
+        if (tailNumber.length > 2) {
+            const { data } = await api.getTailAircraftLookup(tailNumber)
+            console.log(data)
+
+            if (data) {
+                setAircraftTypeSelected(data)
+                setAircraftSearchTerm(data.name)
+            }
+        }
+      }
 
 
     const getJobInfo = async () => {
