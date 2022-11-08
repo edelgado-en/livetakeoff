@@ -108,13 +108,19 @@ const CreateJob = () => {
     const getTailAircraftLookup = async () => {
         if (tailNumber.length > 2) {
             const { data } = await api.getTailAircraftLookup(tailNumber)
-
+            console.log(data)
             if (data) {
                 setAircraftTypeSelected({id: data.aircraft_id, name: data.aircraft_name})
                 setAircraftSearchTerm(data.aircraft_name)
 
                 setCustomerSelected({id: data.customer_id, name: data.customer_name})
                 setCustomerSearchTerm(data.customer_name)
+
+                if (data.services.length > 0) {
+                    
+                    setSelectedServices(data.services)
+                }
+
             }
         }
     }
@@ -230,7 +236,7 @@ const CreateJob = () => {
     }
 
     const isServiceSelected = (value) => {
-        return selectedServices.find((el) => el === value) ? true : false;
+        return selectedServices.find((el) => el.id === value.id) ? true : false;
     }
     
     const handleSelectService = (value) => {
@@ -250,7 +256,7 @@ const CreateJob = () => {
     }
     
     const handleDeselectService = (value) => {
-        const selectedServicesUpdated = selectedServices.filter((el) => el !== value);
+        const selectedServicesUpdated = selectedServices.filter((el) => el.id !== value.id);
         setSelectedServices(selectedServicesUpdated);
         setIsServicesOpen(true);
     }
