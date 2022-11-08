@@ -29,7 +29,7 @@ export const getFbos = () => {
 }
 
 export const getPriceList = () => {
-    return httpService.get(`/api/price-list`);
+    return httpService.get(`/api/pricing-plans`);
 }
 
 export const getCustomerUsers = () => {
