@@ -4,6 +4,7 @@ import Loader from '../../components/loader/Loader'
 import { Dialog, Transition, Listbox } from '@headlessui/react'
 import { Link } from "react-router-dom"
 import * as api from './apiService'
+import { toast } from "react-toastify"
 
 
 const XMarkIcon = () => {
@@ -65,18 +66,6 @@ const ServicePrices = () => {
         setAircraftTypes(data.results)
 
         setLoading(false)
-
-/*         const response = await api.getPriceListing(1)
-
-        setPriceListing(response.data)
-
-        const response2 = await api.getPricingPlans()
-
-        setPricePlans(response2.data.results) */
-
-        //TODO: you have to build it in a different way for mobile
-        // and then update both data structures to keep them in sync
-
 
     }
 
@@ -158,6 +147,8 @@ const ServicePrices = () => {
 
         try {
           await api.updatePricePlan(aircraftTypeSelected?.id, request)
+
+          toast.success('Price list updated successfully')
 
         } catch (error) {
 
