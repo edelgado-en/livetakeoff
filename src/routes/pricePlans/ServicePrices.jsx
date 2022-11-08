@@ -309,7 +309,7 @@ const ServicePrices = () => {
                   {/* Comparison table */}
                   <div className="mx-auto max-w-2xl bg-white pb-16 sm:pb-16 lg:max-w-7xl">
                     {/* xs to lg */}
-                    <div className="py-4 font-medium text-lg xl:hidden">{aircraftTypeSelected?.name}</div>
+                    {/* <div className="py-4 font-medium text-lg xl:hidden">{aircraftTypeSelected?.name}</div>
                     <div className="space-y-12 lg:hidden">
                       {pricePlans.map((pricePlan) => (
                         <section key={pricePlan.name}>
@@ -356,10 +356,10 @@ const ServicePrices = () => {
                           </div>
                         </section>
                       ))}
-                    </div>
+                    </div> */}
             
                     {/* lg+ */}
-                    <div className="hidden lg:block">
+                    <div className="" style={{minWidth: '1000px'}}>
                       {aircraftTypeSelected === null && (
                         <div className="text-sm text-gray-700 mt-16">Select an aircraft from the left.</div>
                       )}
