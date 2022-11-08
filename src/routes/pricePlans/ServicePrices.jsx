@@ -89,6 +89,18 @@ const ServicePrices = () => {
     }
 
     const getAircraftDetails = async (aircraftType) => {
+        const newAircraftTypes = aircraftTypes.map((item) => {
+            if (item.id === aircraftType.id) {
+              item.showDetails = !item.showDetails
+            
+            } else {
+              item.showDetails = false
+            }
+
+            return item
+        })
+
+        setAircraftTypes(newAircraftTypes)
         setAircraftTypeSelected(aircraftType)
 
         const response = await api.getPriceListing(aircraftType.id)
@@ -263,14 +275,10 @@ const ServicePrices = () => {
                         <ul role="list" className="relative z-0 divide-y divide-gray-200">
                         {aircraftTypes.map((aircraft) => (
                             <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft)}>
-                              <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2
-                                              focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
+                              <div className={`${aircraft.showDetails ? ' border-2 border-red-500' : ''} relative flex items-center space-x-3 px-6 py-5 hover:bg-gray-50`}>
                                   <div className="min-w-0 flex-1">
-                                  <a href="#" className="focus:outline-none">
-                                      {/* Extend touch target to entire panel */}
                                       <span className="absolute inset-0" aria-hidden="true" />
                                       <p className="text-sm font-medium text-gray-900">{aircraft.name}</p>
-                                  </a>
                                   </div>
                               </div>
                             </li>
@@ -359,7 +367,7 @@ const ServicePrices = () => {
                     </div> */}
             
                     {/* lg+ */}
-                    <div className="" style={{minWidth: '1000px'}}>
+                    <div className="" style={{minWidth: '820px'}}>
                       {aircraftTypeSelected === null && (
                         <div className="text-sm text-gray-700 mt-16">Select an aircraft from the left.</div>
                       )}
@@ -368,7 +376,7 @@ const ServicePrices = () => {
                           <table className="h-px w-full table-fixed">
                             <thead>
                               <tr>
-                                <th className="pb-4 pl-6 pr-6 text-left text-sm font-medium text-gray-900" scope="col">
+                                <th className="pb-4 pl-6 pr-6 text-left text-md font-medium text-gray-900" scope="col">
                                     Aircraft
                                 </th>
                                 {pricePlans.map((pricePlan) => (
@@ -385,7 +393,7 @@ const ServicePrices = () => {
                             <tbody className="divide-y divide-gray-200 border-t border-gray-200">
                               <tr>
                                 <th className="py-5 pl-6 pr-6 text-left align-top text-sm font-medium text-gray-900" scope="row">
-                                  {aircraftTypeSelected?.name}
+                                  <div className="text-red-500 font-semibold">{aircraftTypeSelected?.name}</div>
                                 </th>
                                 {pricePlans.map((pricePlan) => (
                                   <td key={pricePlan.name} className="h-full px-6 align-top">
@@ -525,13 +533,11 @@ const ServicePrices = () => {
                 <ul role="list" className="relative z-0 divide-y divide-gray-200">
                     {aircraftTypes.map((aircraft) => (
                       <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft)}>
-                          <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2
-                                          focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
+                          <div className={`${aircraft.showDetails ? ' border-2 border-red-500' : ''}  relative flex items-center space-x-3 px-6 py-5
+                                           hover:bg-gray-50`}>
                             <div className="min-w-0 flex-1">
-                                <a href="#" className="focus:outline-none">
                                 <span className="absolute inset-0" aria-hidden="true" />
                                 <p className="text-sm text-gray-900">{aircraft.name}</p>
-                                </a>
                             </div>
                           </div>
                       </li>
