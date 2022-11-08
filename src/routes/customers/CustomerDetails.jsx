@@ -115,20 +115,18 @@ const CustomerDetails = () => {
                         <dd className="mt-1 text-sm text-gray-900">{customerDetails?.billingAddress? customerDetails?.billingAddress : 'Not specified'}</dd>
                     </div>
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Contact</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{customerDetails?.contact?.username ? customerDetails?.contact?.username : 'Not specified'}</dd>
-                    </div>
-                    <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Billing Info</dt>
                         <dd className="mt-1 text-sm text-gray-900">{customerDetails?.billingInfo ? customerDetails?.billingInfo : 'Not specified'}</dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Instructions</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{customerDetails?.setings?.special_instructions ? customerDetails?.setings?.special_instructions : 'Not specified'}</dd>
+                        <dd className="mt-1 text-sm text-gray-900">{customerDetails?.settings?.special_instructions ? customerDetails?.settings?.special_instructions : 'Not specified'}</dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Price List</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{customerDetails?.settings?.price_list.name}</dd>
+                        <dd className="mt-1 text-sm text-gray-900">
+                            {customerDetails?.settings?.price_list.name}
+                        </dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Retainer Amount (monthly)</dt>

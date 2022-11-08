@@ -31,6 +31,7 @@ import CustomerEditFee from './routes/customers/CustomerEditFee';
 import CustomerJobs from './routes/customers/CustomerJobs';
 import CustomerProfile from './routes/customers/CustomerProfile';
 import CreateCustomer from './routes/customers/CreateCustomer';
+import EditCustomer from './routes/customers/EditCustomer';
 import JobReview from './routes/job/JobReview';
 import JobActivityFeed from './routes/job/JobActivityFeed';
 import JobPriceBreakdown from './routes/job/JobPricebreakdown';
@@ -107,6 +108,7 @@ const  App = () => {
                       </Route>
 
                       <Route path="create-customer" element={<CreateCustomer />} />
+                      <Route path="edit-customer/:customerId" element={<EditCustomer />} />
                       
                       <Route path="customers" element={<Customers />}>
                           <Route path=":customerId/profile" element={<CustomerProfile />}>

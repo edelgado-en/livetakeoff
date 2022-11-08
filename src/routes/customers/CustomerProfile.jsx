@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
 import BannerPlaceholder from '../../images/banner-placeholder.svg'
-import ProfilePlaceholder from '../../images/user-placeholder.jpg'
+
+import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 
 import * as api from './apiService'
 
@@ -25,14 +26,8 @@ const CustomerProfile = () => {
     }, [customerId])
 
     const getCustomerDetails = async () => {
-        
         try {
-            // TODO: you should be calling getCustomerDetails here. You should be calling customer stats
-            // which gives you the name, logo, banner, discounts count, additional fees count, and jobs count
-            // You call getCustomerDetails when you load the CustomerDetails component
             const { data } = await api.getCustomerDetails(customerId)
-    
-            console.log(data)
     
             setCustomerDetails(data)
     
@@ -70,7 +65,9 @@ const CustomerProfile = () => {
                             <h1 className="truncate text-2xl font-bold text-gray-900">{customerDetails?.name}</h1>
                         </div>
                         <div className="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                            
+                            <Link to={`/edit-customer/${customerDetails?.id}`}>
+                                <PencilIcon className="h-4 w-4 cursor-pointer" />
+                            </Link>
                         </div>
                     </div>
                 </div>

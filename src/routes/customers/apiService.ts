@@ -79,3 +79,7 @@ export const createCustomer = (formData: any) => {
         }
     })
 }
+
+export const editCustomer = (id: number, request: any) => {
+    return httpService.patch(`/api/customers/${id}/`, request)
+}

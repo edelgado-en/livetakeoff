@@ -163,13 +163,7 @@ const CreateCustomer = () => {
         setPriceListSelected(data.results[0])
     }
 
-    /* const getCustomerUsers = async () => {
-      const { data } = await api.getCustomerUsers();
-
-      setContacts(data.results);
-      setContactSelected(data.results[0])
-    } */
-
+    
     return (
         <AnimatedPage>
           {loading && (
