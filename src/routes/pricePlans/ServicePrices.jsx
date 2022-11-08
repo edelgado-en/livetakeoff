@@ -103,6 +103,7 @@ const ServicePrices = () => {
     }
 
     const updateServicePrice = (serviceName, priceListName, updatedPrice) => {
+        const price = updatedPrice.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
 
         const updatedPriceListing = priceListing.map(priceList => {
             if(priceList.service === serviceName) {
@@ -110,7 +111,7 @@ const ServicePrices = () => {
                     if(entry.price_list === priceListName) {
                         return {
                             ...entry,
-                            price: updatedPrice
+                            price: price
                         }
                     }
 
@@ -266,7 +267,7 @@ const ServicePrices = () => {
                         <ul role="list" className="relative z-0 divide-y divide-gray-200">
                         {aircraftTypes.map((aircraft) => (
                             <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft)}>
-                              <div className={`${aircraft.showDetails ? ' border-2 border-red-500' : ''} relative flex items-center space-x-3 px-6 py-5 hover:bg-gray-50`}>
+                              <div className={`${aircraft.showDetails ? ' border-2 border-red-500' : ''} cursor-pointer relative flex items-center space-x-3 px-6 py-5 hover:bg-gray-50`}>
                                   <div className="min-w-0 flex-1">
                                       <span className="absolute inset-0" aria-hidden="true" />
                                       <p className="text-sm font-medium text-gray-900">{aircraft.name}</p>
@@ -524,7 +525,7 @@ const ServicePrices = () => {
                 <ul role="list" className="relative z-0 divide-y divide-gray-200">
                     {aircraftTypes.map((aircraft) => (
                       <li key={aircraft.id} onClick={() => getAircraftDetails(aircraft)}>
-                          <div className={`${aircraft.showDetails ? ' border-2 border-red-500' : ''}  relative flex items-center space-x-3 px-6 py-5
+                          <div className={`${aircraft.showDetails ? ' border-2 border-red-500' : ''} cursor-pointer relative flex items-center space-x-3 px-6 py-5
                                            hover:bg-gray-50`}>
                             <div className="min-w-0 flex-1">
                                 <span className="absolute inset-0" aria-hidden="true" />
