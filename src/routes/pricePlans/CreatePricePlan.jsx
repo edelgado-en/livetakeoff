@@ -94,9 +94,9 @@ const CreatePricePlan = () => {
                     <div>
                         <div className="space-y-6">
                             <div>
-                                <h1 className="text-2xl font-semibold text-gray-600">Create Price Plan</h1>
+                                <h1 className="text-2xl font-semibold text-gray-600">Create Price List</h1>
                                 <p className="mt-1 text-sm text-gray-500">
-                                    Let’s get started by filling in the information below to create a new price plan.
+                                    Let’s get started by filling in the information below to create a new price list.
                                 </p>
                             </div>
                         </div>
@@ -106,8 +106,8 @@ const CreatePricePlan = () => {
                         <div>
                             <Loader />
                             <div className="text-gray-500 text-sm m-auto text-center">
-                                <p>Creating new price plan.</p> 
-                                <p>Copying all the prices from <span className="text-gray-500 font-semibold">{pricingPlanSelected?.name}</span> price plan...</p>
+                                <p>Creating new price list.</p> 
+                                <p>Copying all the prices from <span className="text-gray-500 font-semibold">{pricingPlanSelected?.name}</span> price list...</p>
                             </div>
                         </div>
                     )}
@@ -146,13 +146,13 @@ const CreatePricePlan = () => {
                                         className="block w-full rounded-md border-gray-300 shadow-sm
                                                     focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                                         />
-                                    <p className="mt-2 text-sm text-gray-500">Write a couple of sentences describing the purpose of this price plan.</p>
+                                    <p className="mt-2 text-sm text-gray-500">Write a couple of sentences describing the purpose of this price list.</p>
                                 </div>
                             </div>
                             <div className="mt-12">
-                                <div className="text-md font-semibold text-gray-600">Based Off Another Price Plan</div>
+                                <div className="text-md font-semibold text-gray-600">Based Off Another Price List</div>
                                 <p className="mt-2 text-sm text-gray-500">
-                                    All new price plans are based off an existing price plan. You can optionality add or subtract
+                                    All new price lists are based off an existing price list. You can optionality add or subtract
                                     a percentage from that list that will affect the price of all services for the new list.
                                 </p>
                             </div>
@@ -160,7 +160,7 @@ const CreatePricePlan = () => {
                                 <Listbox value={pricingPlanSelected} onChange={setPricingPlanSelected}>
                                     {({ open }) => (
                                         <>
-                                        <Listbox.Label className="block font-medium text-sm text-gray-700">Pricing Plan</Listbox.Label>
+                                        <Listbox.Label className="block font-medium text-sm text-gray-700">Pricing List</Listbox.Label>
                                         <div className="relative mt-1">
                                             <Listbox.Button className="relative w-full cursor-default rounded-md border
                                                                         border-gray-300 bg-white py-2 pl-3 pr-10 text-left
@@ -298,7 +298,7 @@ const CreatePricePlan = () => {
                                                 border border-transparent bg-red-600 py-2 px-4
                                                 text-sm font-medium text-white shadow-sm hover:bg-red-600
                                                 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                        Create Price Plan
+                                        Create Price List
                                     </button>
                                     <button
                                         onClick={() => navigate(-1)}

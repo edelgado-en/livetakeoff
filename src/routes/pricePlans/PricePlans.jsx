@@ -63,7 +63,7 @@ const PricePlans = () => {
             <article className="m-auto max-w-5xl px-2">
                 <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
-                        <h1 className="text-xl font-semibold text-gray-900">Pricing Plans</h1>
+                        <h1 className="text-xl font-semibold text-gray-900">Pricing Lists</h1>
                         <p className="mt-2 text-sm text-gray-700">
                             Start by adding a new one, then add prices for all services.
                         </p>
@@ -77,7 +77,7 @@ const PricePlans = () => {
                                        focus:ring-offset-2 sm:w-auto"
                         >
                             <PlusIcon className="-ml-1 mr-2 h-4 w-4" aria-hidden="true" />
-                            Add Plan
+                            Add List
                         </Link>
                     </div>
                 </div>
