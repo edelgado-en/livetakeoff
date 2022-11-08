@@ -4,6 +4,7 @@ import Loader from "../../components/loader/Loader";
 import { ChevronLeftIcon, CheckIcon, PlusIcon, TrashIcon, PencilIcon, UserIcon, CalendarIcon, UsersIcon } from '@heroicons/react/outline'
 import { Link } from 'react-router-dom';
 import PricePlanDeleteModal from "./PricePlanDeleteModal";
+import PricePlanEditModal from "./PricePlanEditModal";
 
 import * as api from './apiService'
 
@@ -13,6 +14,8 @@ const PricePlans = () => {
     const [pricingPlans, setPricingPlans] = useState([]);
     const [isDeletePricePlanModalOpen, setDeletePricePlanModalOpen] = useState(false)
     const [pricePlanToBeDeleted, setPricePlanToBeDeleted] = useState(null)
+    const [isEditPricePlanModalOpen, setEditPricePlanModalOpen] = useState(false)
+    const [pricePlanToBeEdit, setPricePlanToBeEdit] = useState(null)
 
     useEffect(() => {
         getPricingPlans()
@@ -28,6 +31,11 @@ const PricePlans = () => {
         setDeletePricePlanModalOpen(!isDeletePricePlanModalOpen)
     }
 
+    const handleToggleEditPricePlanModal = (pricePlan) => {
+        setPricePlanToBeEdit(pricePlan)
+        setEditPricePlanModalOpen(!isEditPricePlanModalOpen)
+    }
+
     const handleDeletePricePlan = async (pricePlan) => {
         setDeletePricePlanModalOpen(false)
         setLoading(true)
@@ -41,6 +49,27 @@ const PricePlans = () => {
         } catch (error) {
             setLoading(false)
         }
+    }
+
+    const handleEditPricePlan = async (pricePlan) => {
+        setEditPricePlanModalOpen(false)
+        setLoading(true)
+
+        const request = {
+            name: pricePlan.name,
+            description: pricePlan.description
+        }
+
+        try {
+            await api.editPricePlan(pricePlan.id, request)
+            getPricingPlans()
+
+            setLoading(false)
+
+        } catch (error) {
+            setLoading(false)
+        }
+
     }
 
     return (
@@ -78,7 +107,10 @@ const PricePlans = () => {
                                         <h2 className="text-lg font-medium leading-6 text-gray-900">{pricingPlan.name}</h2>
                                         {pricingPlan.name !== 'Standard' && (
                                             <div className="flex gap-3">
-                                                <PencilIcon className="h-4 w-4 text-gray-500 cursor-pointer" />
+                                                <PencilIcon 
+                                                    onClick={() => handleToggleEditPricePlanModal(pricingPlan)}    
+                                                    className="h-4 w-4 text-gray-500 cursor-pointer" />
+                                                
                                                 <TrashIcon 
                                                     onClick={() => handleToggleDeletePricePlanModal(pricingPlan)}
                                                     className="h-4 w-4 text-gray-500 cursor-pointer" />
@@ -124,6 +156,13 @@ const PricePlans = () => {
                                             priceList={pricePlanToBeDeleted}
                                             handleClose={handleToggleDeletePricePlanModal}
                                             deletePriceList={handleDeletePricePlan} />}
+
+
+            {isEditPricePlanModalOpen && <PricePlanEditModal
+                                            isOpen={isEditPricePlanModalOpen}
+                                            priceList={pricePlanToBeEdit}
+                                            handleClose={handleToggleEditPricePlanModal}
+                                            updatePriceList={handleEditPricePlan} />}
         </AnimatedPage>
     )
 }

@@ -17,6 +17,10 @@ export const deletePricePlan = (id: number) => {
     return httpService.delete(`/api/pricing-plans/${id}/`)
 }
 
+export const editPricePlan = (id: number, request: any) => {
+    return httpService.patch(`/api/pricing-plans/${id}/`, request)
+}
+
 export const getPriceListing = (id: number) => {
     return httpService.get(`/api/price-listing/${id}/`);
 }
