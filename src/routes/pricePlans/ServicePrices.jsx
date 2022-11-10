@@ -298,7 +298,7 @@ const ServicePrices = () => {
                 </div>
               </nav>
 
-              <article className="m-auto max-w-5xl px-2">
+              <article className="m-auto max-w-full  px-6">
                 <div className="flex flex-wrap justify-between text-sm pt-6 pb-2">
                     <div className="pb-4">
                         <span className="text-2xl font-semibold text-gray-600">Prices</span>
@@ -307,7 +307,7 @@ const ServicePrices = () => {
                 </div>
                 <div>
                   {/* Comparison table */}
-                  <div className="mx-auto max-w-2xl bg-white pb-16 sm:pb-16 lg:max-w-7xl">
+                  <div className="mx-auto max-w-full bg-white pb-16 sm:pb-16 lg:max-w-full">
                     {/* xs to lg */}
                     {/* <div className="py-4 font-medium text-lg xl:hidden">{aircraftTypeSelected?.name}</div>
                     <div className="space-y-12 lg:hidden">
@@ -374,7 +374,7 @@ const ServicePrices = () => {
                                 {pricePlans.map((pricePlan) => (
                                   <th
                                     key={pricePlan.name}
-                                    className="w-1/4 px-6 pb-4 text-left text-md font-medium leading-6 text-gray-900"
+                                    className="px-6 pb-4 text-left text-md font-medium leading-6 text-gray-900"
                                     scope="col"
                                   >
                                     {pricePlan.name}
@@ -407,7 +407,7 @@ const ServicePrices = () => {
                                 </th>
                               </tr>
                                 {priceListing.map((entry) => (
-                                  <tr key={entry.service}>
+                                  <tr key={entry.service} className="hover:bg-gray-50">
                                     <th className="py-5 pl-6 pr-6 text-left text-xs font-normal text-gray-500" scope="row">
                                       {entry.service}
                                     </th>
@@ -440,7 +440,7 @@ const ServicePrices = () => {
                                   <td key={pricePlan.name} className="px-6 pt-5">
                                     <button
                                       onClick={() => saveChangesForPricePlan(pricePlan.name)}
-                                      className="block w-1/2 rounded-md border
+                                      className="block w-24 rounded-md border
                                                 border-transparent bg-red-500
                                                   py-2 text-center text-xs font-semibold
                                                   text-white shadow hover:to-pink-600"
@@ -461,7 +461,7 @@ const ServicePrices = () => {
                 
               </article>
             </main>
-            <aside className="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
+            <aside className="hidden w-72 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
               <div className="px-6 pt-6 pb-4">
                 <div className="flex justify-between">
                   <h2 className="text-2xl font-medium text-gray-900">Aircrafts</h2>
