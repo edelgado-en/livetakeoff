@@ -105,12 +105,12 @@ const EditJob = () => {
                 setCompleteByDate(new Date(response.data.completeBy))
             }
 
-            if (response.data.estimatedETA) {
-                setEstimatedArrivalDate(new Date(response.data.estimatedETA))
-            
+            if (response.data.on_site) {
+                setOnSite(true)
+                console.log('on site')
             } else {
-                if (response.data.on_site) {
-                    setOnSite(true)
+                if (response.data.estimatedETA) {
+                    setEstimatedArrivalDate(new Date(response.data.estimatedETA))
                 }
             }
 
@@ -543,6 +543,7 @@ const EditJob = () => {
                                     <div className="flex h-5 items-center">
                                         <input
                                             id="onSite"
+                                            checked={onSite}
                                             value={onSite}
                                             onClick={handleSetOnSite}
                                             name="onSite"
