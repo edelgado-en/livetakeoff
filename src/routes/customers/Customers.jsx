@@ -226,7 +226,7 @@ const Customers = () => {
                       </div>
                     </form>
                     {/* Directory list Mobile */}
-                    <nav className="min-h-0 flex-1 overflow-y-auto mt-5" aria-label="Directory">
+                    <nav className="min-h-0 flex-1 overflow-y-auto mt-5" style={{ height: '800px', paddingBottom: '250px' }} aria-label="Directory">
                       {loading && <Loader /> }
 
                       {!loading && totalCustomers === 0 && (
