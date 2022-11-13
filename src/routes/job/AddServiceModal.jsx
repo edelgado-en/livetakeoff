@@ -23,6 +23,7 @@ const AddServiceModal = ({ isOpen, handleClose, existingServices, projectManager
     const [availableServices, setAvailableServices] = useState([])
     const [errorMessage, setErrorMessage] = useState(null)
     const [missingServiceMessage, setMissingServiceMessage] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         getServices()
@@ -75,6 +76,7 @@ const AddServiceModal = ({ isOpen, handleClose, existingServices, projectManager
             return
         } 
 
+
         if (selectedProjectManager) {
             user = selectedProjectManager.id === 999 ? null : selectedProjectManager.id;
         }
@@ -84,36 +86,47 @@ const AddServiceModal = ({ isOpen, handleClose, existingServices, projectManager
             'user_id': user
         }
 
-        await api.addService(jobId, request)
+        setLoading(true)
 
-        const { data } = await api.getAssignmentsFormInfo(jobId)
+        try {
+            await api.addService(jobId, request)
 
-        data.project_managers.push({
-            id: 999,
-            first_name: 'Unassign',
-            last_name: '',
-            availability: 'busy',
-            profile: {
-                'avatar': 'https://res.cloudinary.com/datidxeqm/image/upload/v1666103235/media/profiles/unassign_fgdefu.png'
-            }
-        })
-        
-        const updatedServices = data.services.map((s) => {
-            s = {...s, projectManagers: data.project_managers}
+            const { data } = await api.getAssignmentsFormInfo(jobId)
+    
+            data.project_managers.push({
+                id: 999,
+                first_name: 'Unassign',
+                last_name: '',
+                availability: 'busy',
+                profile: {
+                    'avatar': 'https://res.cloudinary.com/datidxeqm/image/upload/v1666103235/media/profiles/unassign_fgdefu.png'
+                }
+            })
+            
+            const updatedServices = data.services.map((s) => {
+                s = {...s, projectManagers: data.project_managers}
+    
+                if (s.project_manager) {
+                    //set selected
+                    s.selectedProjectManager = data.project_managers.find(p => p.id === s.project_manager.id)
+    
+                } else {
+                    //set selected as unassign
+                    s.selectedProjectManager = data.project_managers.find(p => p.id === 999)
+                }
+    
+                return s;
+            })
 
-            if (s.project_manager) {
-                //set selected
-                s.selectedProjectManager = data.project_managers.find(p => p.id === s.project_manager.id)
+            setLoading(false)
+    
+            handleAddService(updatedServices)
 
-            } else {
-                //set selected as unassign
-                s.selectedProjectManager = data.project_managers.find(p => p.id === 999)
-            }
+        } catch (error) {
+            setLoading(false)
+        }
 
-            return s;
-        })
 
-        handleAddService(updatedServices)
     }
 
 
@@ -295,13 +308,17 @@ const AddServiceModal = ({ isOpen, handleClose, existingServices, projectManager
                 <button
                     type="button"
                     onClick={() => addService()}
-                    disabled={errorMessage}
+                    disabled={errorMessage || loading}
                     className="inline-flex w-full justify-center rounded-md border border-transparent
                             bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700
                             focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                 >
-                    <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-white" aria-hidden="true" />
-                    <span>Add</span>
+                    {loading ? 'calculating...'
+                         : <>
+                                <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-white" aria-hidden="true" />
+                                <span>Add</span>
+                            </>
+                    }
                 </button>
                 <button
                     type="button"

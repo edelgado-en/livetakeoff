@@ -40,6 +40,7 @@ const ServicePrices = () => {
     const [estimatedCompletionTime, setEstimatedCompletionTime] = useState('')
     const [pricePlans, setPricePlans] = useState([])
     const [priceListing, setPriceListing] = useState([])
+    const [updateLoading, setUpdateLoading] = useState(false)
 
     useEffect(() => {
         //Basic throttling
@@ -146,13 +147,17 @@ const ServicePrices = () => {
             aircraft_type_id: aircraftTypeSelected?.id
         }
 
+        setUpdateLoading(true)
+
         try {
           await api.updatePricePlan(aircraftTypeSelected?.id, request)
 
           toast.success('Price list updated successfully')
 
-        } catch (error) {
+          setUpdateLoading(false)
 
+        } catch (error) {
+          setUpdateLoading(false)
         } 
 
     }
@@ -439,6 +444,7 @@ const ServicePrices = () => {
                                 {pricePlans.map((pricePlan) => (
                                   <td key={pricePlan.name} className="px-6 pt-5">
                                     <button
+                                      disabled={updateLoading}
                                       onClick={() => saveChangesForPricePlan(pricePlan.name)}
                                       className="block w-24 rounded-md border
                                                 border-transparent bg-red-500
