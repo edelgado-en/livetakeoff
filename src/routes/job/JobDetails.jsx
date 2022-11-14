@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react'
-import { Link, useParams, Outlet, useLocation } from "react-router-dom";
+import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, PencilIcon, UserAddIcon, ClockIcon } from "@heroicons/react/outline";
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
@@ -22,6 +22,8 @@ const JobDetails = () => {
     const currentUser = useAppSelector(selectUser)
     const jobStats = useAppSelector(selectJobStats)
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         //getJobStats()
         dispatch(fetchJobStats(jobId))
@@ -39,12 +41,12 @@ const JobDetails = () => {
             <div className="grid grid-cols-2 xl:grid-cols-2 lg:grid-cols-2">
                 <div className="flex">
                     <div>
-                        <Link to="/jobs" className="text-xs leading-5 font-semibold bg-slate-400/10
+                        <button onClick={() => navigate(-1)} className="text-xs leading-5 font-semibold bg-slate-400/10
                                                         rounded-full p-2 text-slate-500
                                                         flex items-center space-x-2 hover:bg-slate-400/20
                                                         dark:highlight-white/5">
                             <ArrowLeftIcon className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
-                        </Link>
+                        </button>
                     </div>
                     <div className="ml-2 text-sm text-slate-500" style={{ marginTop: '5px' }}>
                         Job: {jobStats.purchase_order}
