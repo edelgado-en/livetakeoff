@@ -88,12 +88,12 @@ const JobReview = () => {
             <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl -mt-3">
                 <div className="flex flex-wrap gap-2">
                     <div>
-                        <Link to="/completed" className="text-xs leading-5 font-semibold bg-slate-400/10
+                        <button onClick={() => navigate(-1)} className="text-xs leading-5 font-semibold bg-slate-400/10
                                                         rounded-full p-2 text-slate-500
                                                         flex items-center space-x-2 hover:bg-slate-400/20
                                                         dark:highlight-white/5">
                             <ArrowLeftIcon className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
-                        </Link>
+                        </button>
                     </div>
                     <div className="pb-4">
                         <h1 className="text-2xl font-semibold text-gray-600">Job Review</h1>
