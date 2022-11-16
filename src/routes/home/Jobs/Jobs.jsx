@@ -54,7 +54,7 @@ const JobsQueue = () => {
   const [totalJobs, setTotalJobs] = useState(0);
   const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
   const currentUser = useAppSelector(selectUser)
-  const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
+  const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[1])
   const [sortSelected, setSortSelected] = useState(sortOptions[0])
   const [open, setOpen] = useState(false)
 
@@ -106,6 +106,10 @@ const JobsQueue = () => {
   }, [searchText])
 
   useEffect(() => {
+    localStorage.setItem('statusSelected', JSON.stringify(statusSelected))
+  }, [statusSelected])
+
+  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       fetchJobs()
@@ -148,7 +152,7 @@ const JobsQueue = () => {
     
     const request = {
       searchText: localStorage.getItem('searchText'),
-      status: statusSelected.id,
+      status: JSON.parse(localStorage.getItem('statusSelected')).id,
       sortField: sortSelected.id,
       customer: customerSelected.id,
       airport: airportSelected.id
