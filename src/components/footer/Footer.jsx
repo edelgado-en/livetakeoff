@@ -1,6 +1,8 @@
 
 import { Link } from "react-router-dom";
-import logo from '../../images/logo_2618936_web.png'
+import logo from '../../images/logo_red-no-text.png'
+
+import { useLocation } from "react-router-dom"
 
 const navigation = {
     solutions: [
@@ -87,6 +89,9 @@ const navigation = {
   }
 
 const Footer = () => {
+    const location = useLocation()
+
+
     return (
       <div className="border-t border-slate-900/5 py-8">
         <img
@@ -103,11 +108,14 @@ const Footer = () => {
               </a>
             ))}
         </div>
-        <div className="mt-6 flex items-center justify-center space-x-4 text-sm font-medium leading-6 text-slate-700">
-            <Link to="/privacy-policy">Privacy policy</Link>
-            <div className="h-4 w-px bg-slate-500/20"></div>
-            <Link to="/changelog">Changelog</Link>
-        </div>
+        {!location.pathname.includes('shared') && (
+            <div className="mt-6 flex items-center justify-center space-x-4 text-sm font-medium leading-6 text-slate-700">
+                <Link to="/privacy-policy">Privacy policy</Link>
+                <div className="h-4 w-px bg-slate-500/20"></div>
+                <Link to="/changelog">Changelog</Link>
+            </div>
+        )}
+        
       </div>
     )
 }

@@ -41,10 +41,14 @@ import CreatePricePlan from './routes/pricePlans/CreatePricePlan'
 
 import NotFound from './routes/notfound/NotFound'
 import Login from './routes/login/Login';
+import Signup from './routes/signup/Signup';
 import Layout from './layout/Layout';
 import Footer from './components/footer/Footer';
 import PrivacyPolicy from './routes/privacyPolicy/PrivacyPolicy';
 import ChangeLog from './routes/changeLog/ChangeLog';
+import CustomerHome from './routes/home/customer/CustomerHome';
+
+import SharedJob from './routes/job/SharedJob';
 
 import { isUserAuthenticated } from './localstorage';
 
@@ -89,6 +93,9 @@ const  App = () => {
               {/* <Routes key={location.pathname} location={location}> */}
               <Routes>
                 <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+
+                <Route path="/shared/jobs/:jobId" element={<SharedJob />} />
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<Layout />}>
@@ -106,6 +113,8 @@ const  App = () => {
                         <Route path="activity" element={<JobActivityFeed />} />
                         <Route path="comments" element={<JobComments />} />
                       </Route>
+
+                      <Route path="customer-home" element={<CustomerHome />} />
 
                       <Route path="create-customer" element={<CreateCustomer />} />
                       <Route path="edit-customer/:customerId" element={<EditCustomer />} />
@@ -163,7 +172,7 @@ const  App = () => {
               </Routes>
             </AnimatePresence>
           </div> 
-          { location.pathname !== '/login' && <Footer /> }
+          { location.pathname !== '/login' && location.pathname !== '/signup'  && <Footer /> }
         </div>
       </Suspense>
     </>

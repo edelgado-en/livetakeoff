@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from '../../images/logo_2618936_web.png'
+import whiteLogo from '../../images/logo_white-no-text.png'
 
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
@@ -59,32 +60,33 @@ const Topbar = () => {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
+                {/* TODO: DO NOT GO TO JOBS WHEN YOU ARE A CUSTOMER */}
                 <Link to="jobs" 
-                      className="flex flex-shrink-0 items-center rounded-full p-2 bg-white">
+                      className="flex flex-shrink-0 items-center rounded-full p-2 ">
                    <img
-                    className="block h-8 w-auto lg:hidden"
-                    src={logo}
+                    className="block h-10 w-auto lg:hidden"
+                    src={whiteLogo}
                     alt="Your Company"
                   /> 
                   <img
-                    className="hidden h-8 w-auto lg:block"
-                    src={logo}
+                    className="hidden h-10 w-auto lg:block"
+                    src={whiteLogo}
                     alt="Your Company"
                   />
                 </Link>
-                <div className="hidden sm:ml-6 sm:block relative" style={{ top: '6px' }}>
+                <div className="hidden sm:ml-6 sm:block relative" style={{ top: '12px' }}>
                   <div className="flex space-x-4">
-                      <Link
-                        to="/jobs"
-                        className={classNames(
-                          location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                          'px-3 py-2 rounded-md text-sm font-medium text-white'
-                        )}
-                      >
-                        Jobs
-                      </Link>
                       {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
                         <>
+                            <Link
+                            to="/jobs"
+                            className={classNames(
+                              location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}
+                          >
+                            Jobs
+                          </Link>
                           <Link 
                             to="customers"
                             className={classNames(
@@ -178,7 +180,7 @@ const Topbar = () => {
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
                 <Link 
-                     to="jobs">
+                    to="jobs">
                   <Disclosure.Button
                     className={classNames(
                       location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',

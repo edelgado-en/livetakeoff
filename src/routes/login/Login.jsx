@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 //import Logo from '../../components/topbar/livetakeoff-logo.png';
 import Logo from '../../images/logo_2618936_web.png'
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import api from '../../services/httpService'
@@ -108,15 +108,14 @@ const Login = () => {
                     {loading ? 'sigining in...' : 'Sign in'}
                   </button>
                 </div>
-                {/* <div className="relative flex flex-col justify-center text-sm">
-                  <div className="bg-white px-2 text-gray-500 text-center text-sm">
-                    Forgot your Password? 
+                <div className="relative flex flex-col justify-center text-center text-sm">
+                  <div>
+                    <span className="px-2 text-gray-500">Don't have an account?</span>
+                    <Link to="/signup" className="text-sky-600 hover:text-sky-500">
+                      Sign up
+                    </Link>
                   </div>
-                  <div className="bg-white px-2 text-gray-500 text-center text-xs mt-1">
-                    no worries <a href="" className="underline text-blue-500 mr-1" target="_blank">click here</a>
-                     to reset your password.
-                  </div>
-                </div> */}
+                </div>
               </form>
             </div>
           </div>

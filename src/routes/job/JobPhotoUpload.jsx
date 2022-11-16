@@ -27,6 +27,10 @@ const JobPhotoUpload = () => {
         getJobDetails()
     }, [])
 
+    const refreshPage = () => {
+        window.location.reload(true);
+    }
+
     const getJobDetails = async () => {
         setLoading(true)
 
@@ -172,7 +176,7 @@ const JobPhotoUpload = () => {
                         <>
                             <div className="flex max-w-lg justify-center rounded-md border-2 border-dashed
                                 border-gray-300 px-6 pt-5 pb-6 m-auto" {...dragProps}>
-                                <div className="space-y-1 text-center">
+                                <div className="space-y-2 text-center">
                                     <svg
                                     className="mx-auto h-12 w-12 text-gray-400"
                                     stroke="currentColor"
@@ -199,6 +203,7 @@ const JobPhotoUpload = () => {
                                         </label>
                                         <p className="pl-1">or drag and drop</p>
                                     </div>
+                                    <p className="text-xs text-gray-500">link not working? click <span className="cursor-pointer font-medium text-red-500" onClick={() => refreshPage()}>refresh</span></p>
                                     <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                 </div>
                             </div>
@@ -313,7 +318,7 @@ const JobPhotoUpload = () => {
                         <>
                             <div className="flex max-w-lg justify-center rounded-md border-2 border-dashed
                                 border-gray-300 px-6 pt-5 pb-6 m-auto" {...dragProps}>
-                                <div className="space-y-1 text-center">
+                                <div className="space-y-2 text-center">
                                     <svg
                                     className="mx-auto h-12 w-12 text-gray-400"
                                     stroke="currentColor"
@@ -340,6 +345,7 @@ const JobPhotoUpload = () => {
                                         </label>
                                         <p className="pl-1">or drag and drop</p>
                                     </div>
+                                    <p className="text-xs text-gray-500">link not working? click <span className="cursor-pointer font-medium text-red-500" onClick={() => refreshPage()}>refresh</span></p>
                                     <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                                 </div>
                             </div>
