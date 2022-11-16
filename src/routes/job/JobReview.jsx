@@ -2,9 +2,9 @@ import { useEffect, useState, Fragment } from 'react'
 import { useParams, useNavigate, Outlet, Link, useLocation } from "react-router-dom"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage"
 
-import { ArrowLeftIcon, InformationCircleIcon, ClockIcon, CashIcon } from "@heroicons/react/outline";
+import { ArrowLeftIcon, InformationCircleIcon, ClockIcon, CashIcon, ShareIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/solid";
-import { Menu, Transition } from '@headlessui/react'
+import { Menu, Transition, Popover } from '@headlessui/react'
 
 import JobInfo from "./JobInfo"
 import JobPriceBreakdown from './JobPricebreakdown';
@@ -24,12 +24,21 @@ const JobReview = () => {
     const [downloadLoading, setDownloadLoading] = useState(false)
     const [jobDetails, setJobDetails] = useState({})
     const [errorMessage, setErrorMessage] = useState(null)
+    const [isCopied, setIsCopied] = useState(false);
     const location = useLocation()
 
     useEffect(() => {
         getJobDetails()
         navigate('photos')
     }, [])
+
+    const copyTextToClipboard = async (text) => {
+        if ('clipboard' in navigator) {
+          return await navigator.clipboard.writeText(text);
+        } else {
+          return document.execCommand('copy', true, text);
+        }
+    }
 
     const getJobDetails = async () => {
         setLoading(true)
@@ -83,6 +92,22 @@ const JobReview = () => {
         navigate(0)
     }
 
+    const handleCopyClick = () => {
+        const copyText = 'https://www.livetakeoff.com/shared/jobs/' + jobId + '/';
+
+        copyTextToClipboard(copyText)
+            .then(() => {
+                // If successful, update the isCopied state value
+                setIsCopied(true);
+                setTimeout(() => {
+                setIsCopied(false);
+                }, 1500);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     return (
         <AnimatedPage>
             <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl -mt-3">
@@ -102,6 +127,25 @@ const JobReview = () => {
                         </p>
                     </div>
                     <div className="flex-1 justify-end text-right">
+                        <button
+                            type="button"
+                            onClick={() => handleCopyClick()}
+                            className="inline-flex items-center rounded-md border mr-2
+                                    border-gray-300 bg-white px-3 py-2 text-xs font-medium 
+                                    text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
+                                    focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 "
+                        >
+                             {isCopied ? (
+                                    <>
+                                    <span>copied!</span>
+                                    </>
+                                ) : (
+                                <>
+                                    Share
+                                </>
+                             )}
+                        </button>
+
                         {jobDetails.status === 'C' && (
                             <button
                                 type="button"

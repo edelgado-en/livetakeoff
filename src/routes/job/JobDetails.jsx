@@ -1,13 +1,14 @@
 
 import { useEffect, useState } from 'react'
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, PencilIcon, UserAddIcon, ClockIcon } from "@heroicons/react/outline";
+import { ArrowLeftIcon, ClipboardCheckIcon, PhotographIcon, PencilIcon, UserAddIcon, ClockIcon, ShareIcon } from "@heroicons/react/outline";
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { selectUser } from "../userProfile/userSlice";
 import { selectJobStats, fetchJobStats } from './jobStats/jobStatsSlice';
 import * as api from './apiService'
+import { Popover } from '@headlessui/react'
 
 
 function classNames(...classes) {
@@ -16,24 +17,42 @@ function classNames(...classes) {
 
 const JobDetails = () => {
     const { jobId } = useParams();
-    //const [jobStats, setJobStats] = useState({ comments_count: 0, photos_count: 0 });
+    const [isCopied, setIsCopied] = useState(false);
 
     const dispatch = useAppDispatch();
     const currentUser = useAppSelector(selectUser)
     const jobStats = useAppSelector(selectJobStats)
+    
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        //getJobStats()
         dispatch(fetchJobStats(jobId))
 
     }, [])
 
-    const getJobStats = async () => {
-        const { data } = await api.getJobStats(jobId)
-        
-        //setJobStats(data)
+    const handleCopyClick = () => {
+        const copyText = 'https://www.livetakeoff.com/shared/jobs/' + jobId + '/';
+
+        copyTextToClipboard(copyText)
+            .then(() => {
+                // If successful, update the isCopied state value
+                setIsCopied(true);
+                setTimeout(() => {
+                    setIsCopied(false);
+                }, 1500);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const copyTextToClipboard = async (text) => {
+        if ('clipboard' in navigator) {
+          return await navigator.clipboard.writeText(text);
+        } else {
+          return document.execCommand('copy', true, text);
+        }
     }
 
     return (
@@ -56,6 +75,17 @@ const JobDetails = () => {
                     <div>
                         <div className="">
                             <nav className="flex space-x-4" aria-label="Tabs">
+                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                    <Popover className="relative">
+                                        <Popover.Button>
+                                            <ShareIcon className="h-6 w-6 text-gray-600 cursor-pointer" onClick={() => handleCopyClick()} />
+                                        </Popover.Button>
+
+                                        <Popover.Panel className="absolute z-10">
+                                            <div className="bg-gray-600 text-white text-xs py-1 px-2 rounded-md">copied!</div>
+                                        </Popover.Panel>
+                                    </Popover>
+                                )}
                                 <Link
                                     to="details">
                                      <ClipboardCheckIcon className="h-6 w-6 text-gray-600"/> 

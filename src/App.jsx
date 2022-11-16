@@ -48,7 +48,8 @@ import PrivacyPolicy from './routes/privacyPolicy/PrivacyPolicy';
 import ChangeLog from './routes/changeLog/ChangeLog';
 import CustomerHome from './routes/home/customer/CustomerHome';
 
-import SharedJob from './routes/job/SharedJob';
+import SharedLayout from './routes/shared/SharedLayout';
+import SharedJob from './routes/shared/SharedJob';
 
 import { isUserAuthenticated } from './localstorage';
 
@@ -95,7 +96,11 @@ const  App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
 
-                <Route path="/shared/jobs/:jobId" element={<SharedJob />} />
+                <Route path="/shared" element={<SharedLayout />}>
+                  <Route path="jobs/:jobId" element={<SharedJob />} />
+                </Route>
+
+                {/* <Route path="/shared/jobs/:jobId" element={<SharedJob />} /> */}
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<Layout />}>

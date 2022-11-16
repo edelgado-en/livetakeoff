@@ -366,7 +366,7 @@ const ServicePrices = () => {
                     {/* lg+ */}
                     <div className="" style={{minWidth: '820px'}}>
                       {aircraftTypeSelected === null && (
-                        <div className="text-sm text-gray-700 mt-16">Select an aircraft from the left.</div>
+                        <div className="text-sm text-gray-700 mt-4">Select an aircraft.</div>
                       )}
 
                       {aircraftTypeSelected !== null && (
@@ -418,18 +418,21 @@ const ServicePrices = () => {
                                     </th>
                                     {entry.price_list_entries.map((priceList) => (
                                       <td key={priceList.price_list} className="py-5 px-6">
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-1">
+                                          <div className="pointer-events-none flex items-center">
+                                            <span className="text-gray-500 text-xs">$</span>
+                                          </div>
                                           <input 
                                               type="text"
                                               name="price"
                                               id="price"
                                               value={priceList.price}
                                               onChange={(e) => updateServicePrice(entry.service, priceList.price_list, e.target.value)}
-                                              style={{ width: '80px' }}
+                                              style={{ width: '65px' }}
                                               className="block rounded-md border-gray-300 py-1
                                                         shadow-sm focus:border-gray-500 focus:ring-gray-500
                                                       text-xs"></input>
-                                          <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
+                                          <span className="text-gray-500 relative" style={{ fontSize: '10px', top: '6px' }}>USD</span>
                                         </div>
                                       </td>
                                     ))}

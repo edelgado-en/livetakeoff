@@ -904,9 +904,9 @@ const CompleteList = () => {
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.completion_date}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-center text-gray-500">
-                                                <p style={{ paddingTop: '1px', paddingBottom: '1px' }} className={`inline-flex text-xs text-white rounded-md px-1
+                                                <p style={{ paddingTop: '2px', paddingBottom: '2px' }} className={`inline-flex text-xs text-white rounded-md px-1
                                                                 ${job.status === 'C' && 'bg-green-500 '}
-                                                                ${job.status === 'T' && 'bg-black '}
+                                                                ${job.status === 'T' && 'bg-gray-600 '}
                                                                 ${job.status === 'I' && 'bg-blue-500 '}
                                                                 `}>
                                                     {job.status === 'C' && 'Completed'}

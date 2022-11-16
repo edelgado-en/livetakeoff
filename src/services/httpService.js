@@ -14,7 +14,9 @@ axios.defaults.baseURL = process.env.NODE_ENV === 'production'
                          : API_DEV_BASE_URL
 
 axios.interceptors.request.use((config) => {
-    if (!config.url.includes('token') && !config.url.includes('signup')) {
+    if (!config.url.includes('token')
+             && !config.url.includes('signup')
+             && !config.url.includes('shared')) {
         const accessToken = loadApiAccessToken();
         config.headers['Authorization'] = `JWT ${accessToken}`;
     }
