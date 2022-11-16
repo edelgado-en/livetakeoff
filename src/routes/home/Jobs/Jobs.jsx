@@ -45,6 +45,7 @@ const availableStatuses = [
 const sortOptions = [
   { id: 'requestDate', name: 'Request Date' },
   { id: 'completeBy', name: 'Complete By' },
+  { id: 'arrivalDate', name: 'Arrival Date' },
 ]
 
 const JobsQueue = () => {
@@ -890,7 +891,7 @@ const JobsQueue = () => {
                                 )}
                                 
                                 <div className="text-sm text-gray-500 mt-2">
-                                  Complete by {job.completeBy ? job.completeBy
+                                  Complete by {job.completeBy ? <span className="text-gray-700 text-sm">{job.completeBy}</span>
                                   : 
                                     <span
                                       className="relative inline-flex items-center
@@ -900,6 +901,27 @@ const JobsQueue = () => {
                                       </div>
                                       <div className="ml-3 text-xs text-gray-700">TBD</div>
                                     </span>}
+                                </div>
+                                <div className="text-sm text-gray-500 mt-2">
+                                  Arrival 
+                                  {job.on_site && <span
+                                      className="relative inline-flex items-center
+                                                rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                      <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                                      </div>
+                                      <div className="ml-3 text-xs text-gray-700">On Site</div>
+                                    </span> }
+                                  {!job.on_site && job.estimatedETA == null && <span
+                                      className="relative inline-flex items-center
+                                                rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                      <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                      </div>
+                                      <div className="ml-3 text-xs text-gray-700">TBD</div>
+                                    </span>}
+
+                                  {!job.on_site && job.estimatedETA != null && <span className="text-gray-700 text-sm ml-1">{job.estimatedETA}</span>}
                                 </div>
                             </div>
                           </div>
