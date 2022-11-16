@@ -272,8 +272,8 @@ const AddFee = ({ handleCancel, handleSave }) => {
                                     className="absolute mt-1 z-50 w-full rounded-md bg-white shadow-lg">
                                     <Listbox.Options
                                         static
-                                        className="max-h-70 rounded-md py-1 text-base leading-6 shadow-xs
-                                                overflow-auto focus:outline-none sm:text-sm sm:leading-5 z-50">
+                                        className="max-h-70 h-64 rounded-md py-1 text-base leading-6 shadow-xs
+                                                overflow-y-auto focus:outline-none sm:text-sm sm:leading-5 z-50">
                                         {fbos.map((fbo) => {
                                             const selected = isFboSelected(fbo);
                                             return (

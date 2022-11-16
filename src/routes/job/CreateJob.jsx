@@ -108,7 +108,7 @@ const CreateJob = () => {
     const getTailAircraftLookup = async () => {
         if (tailNumber.length > 2) {
             const { data } = await api.getTailAircraftLookup(tailNumber)
-            console.log(data)
+            
             if (data) {
                 setAircraftTypeSelected({id: data.aircraft_id, name: data.aircraft_name})
                 setAircraftSearchTerm(data.aircraft_name)
@@ -117,8 +117,11 @@ const CreateJob = () => {
                 setCustomerSearchTerm(data.customer_name)
 
                 if (data.services.length > 0) {
-                    
                     setSelectedServices(data.services)
+                }
+
+                if (data.retainer_services.length > 0) {
+                    setSelectedRetainerServices(data.retainer_services)
                 }
 
             }
@@ -262,7 +265,7 @@ const CreateJob = () => {
     }
 
     const isRetainerServiceSelected = (value) => {
-        return selectedRetainerServices.find((el) => el === value) ? true : false;
+        return selectedRetainerServices.find((el) => el.id === value.id) ? true : false;
     }
 
     const handleSelectRetainerService = (value) => {
@@ -282,7 +285,7 @@ const CreateJob = () => {
     }
 
     const handleDeselectRetainerService = (value) => {
-        const selectedRetainerServicesUpdated = selectedRetainerServices.filter((el) => el !== value);
+        const selectedRetainerServicesUpdated = selectedRetainerServices.filter((el) => el.id !== value.id);
         setSelectedRetainerServices(selectedRetainerServicesUpdated);
         setIsRetainerServicesOpen(true);
     }
