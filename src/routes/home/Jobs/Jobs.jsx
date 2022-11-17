@@ -62,10 +62,10 @@ const JobsQueue = () => {
   const [customers, setCustomers] = useState([])
 
   const [airports, setAirports] = useState([])
-  const [airportSelected, setAirportSelected] = useState({id: 'All', name: 'All'})
+  const [airportSelected, setAirportSelected] = useState(JSON.parse(localStorage.getItem('airportSelected')) || {id: 'All', name: 'All'})
   const [airportSearchTerm, setAirportSearchTerm] = useState('')
 
-  const [customerSelected, setCustomerSelected] = useState({id: 'All', name: 'All'})
+  const [customerSelected, setCustomerSelected] = useState(JSON.parse(localStorage.getItem('customerSelected')) || {id: 'All', name: 'All'})
   const [customerSearchTerm, setCustomerSearchTerm] = useState('')
 
   const filteredCustomers = customerSearchTerm
@@ -99,15 +99,29 @@ const JobsQueue = () => {
     data.results.unshift({id: 'All', name: 'All'})
 
     setAirports(data.results)
-}
+  }
 
+  
   useEffect(() => {
     localStorage.setItem('searchText', searchText)
+  
   }, [searchText])
 
+  
   useEffect(() => {
     localStorage.setItem('statusSelected', JSON.stringify(statusSelected))
+  
   }, [statusSelected])
+
+  useEffect(() => {
+    localStorage.setItem('customerSelected', JSON.stringify(customerSelected))
+
+  }, [customerSelected])
+
+  useEffect(() => {
+    localStorage.setItem('airportSelected', JSON.stringify(airportSelected))
+
+  }, [airportSelected])
 
   useEffect(() => {
     //Basic throttling
@@ -154,8 +168,8 @@ const JobsQueue = () => {
       searchText: localStorage.getItem('searchText'),
       status: JSON.parse(localStorage.getItem('statusSelected')).id,
       sortField: sortSelected.id,
-      customer: customerSelected.id,
-      airport: airportSelected.id
+      customer: JSON.parse(localStorage.getItem('customerSelected')).id,
+      airport: JSON.parse(localStorage.getItem('airportSelected')).id
     }
 
     let statusName;
