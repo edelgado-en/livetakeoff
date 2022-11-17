@@ -50,6 +50,7 @@ import CustomerHome from './routes/home/customer/CustomerHome';
 
 import SharedLayout from './routes/shared/SharedLayout';
 import SharedJob from './routes/shared/SharedJob';
+import ContactUs from './routes/shared/ContactUs';
 
 import { isUserAuthenticated } from './localstorage';
 
@@ -98,9 +99,8 @@ const  App = () => {
 
                 <Route path="/shared" element={<SharedLayout />}>
                   <Route path="jobs/:jobId" element={<SharedJob />} />
+                  <Route path="contact" element={<ContactUs />} />
                 </Route>
-
-                {/* <Route path="/shared/jobs/:jobId" element={<SharedJob />} /> */}
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<Layout />}>
@@ -150,7 +150,7 @@ const  App = () => {
                         <Route path="profile" element={<UserProfile />}/>
                         <Route path="password" element={<UserPassword />} />
                       </Route>
-                      
+
                       <Route path="jobs/:jobId" element={<JobDetails />}>
                         <Route index element={<JobInfo />} />
                         <Route index path="details" element={<JobInfo />} />
@@ -167,6 +167,7 @@ const  App = () => {
 
                       <Route path="privacy-policy" element={<PrivacyPolicy />} />
                       <Route path="changelog" element={<ChangeLog />} />
+                      <Route path="contact" element={<ContactUs />} />
                       <Route path="price-plans" element={<PricePlans />} />
                       <Route path="price-plans/add" element={<CreatePricePlan />} />
                       <Route path="price-plans/:pricePlanId" element={<ServicePrices />} />

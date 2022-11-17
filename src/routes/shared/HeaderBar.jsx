@@ -106,12 +106,17 @@ const HeaderBar = () => {
                 alt="livetakeoff"
             />
           </div>
+
+          <div className="hidden md:flex">
+            <Link to="/shared/contact" className="text-base font-medium text-gray-700 hover:text-gray-900">
+                  Contact us
+            </Link>
+          </div>
           <div className="-my-2 -mr-2 md:hidden">
             <Popover.Button className="inline-flex items-center justify-center rounded-md
                                      bg-white p-2 text-gray-400 hover:bg-gray-100
                                       hover:text-gray-500 focus:outline-none focus:ring-2
                                        focus:ring-inset focus:ring-gray-500">
-              <span className="sr-only">Open menu</span>
               <Bars3Icon  aria-hidden="true" />
             </Popover.Button>
           </div>
@@ -133,6 +138,7 @@ const HeaderBar = () => {
         </div>
       </div>
 
+      {/* Mobile */}
       <Transition
         as={Fragment}
         enter="duration-200 ease-out"
@@ -142,7 +148,7 @@ const HeaderBar = () => {
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
       >
-        <Popover.Panel focus className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden">
+        <Popover.Panel focus className="absolute inset-x-0 top-0 z-50 origin-top-right transform p-2 transition md:hidden">
           <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="px-5 pt-5 pb-6">
               <div className="flex items-center justify-between">
@@ -157,7 +163,6 @@ const HeaderBar = () => {
                   <Popover.Button className="inline-flex items-center justify-center rounded-md 
                                            bg-white p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-500
                                             focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
-                    <span className="sr-only">Close menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </Popover.Button>
                 </div>
@@ -166,6 +171,9 @@ const HeaderBar = () => {
               </div>
             </div>
             <div className="space-y-6 py-6 px-5">
+              <Link to="/shared/contact" className="text-base font-medium text-gray-700 hover:text-gray-900">
+                Contact us
+              </Link>
               <div>
                 <Link
                   to="/signup"
