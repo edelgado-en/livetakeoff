@@ -127,7 +127,7 @@ export default function Example() {
                                             {activity.status === 'U' && 'Submitted'}
                                             {activity.status === 'W' && 'Work In Progress'}
                                             {activity.status === 'C' && 'Completed'}
-                                            {activity.status === 'T' && 'Cancelled'}
+                                            {activity.status === 'T' && 'Canceled'}
                                             {activity.status === 'R' && 'Review'}
                                             {activity.status === 'I' && 'Invoiced'}
                                         </span>

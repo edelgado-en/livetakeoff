@@ -60,8 +60,7 @@ const Topbar = () => {
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ">
-                {/* TODO: DO NOT GO TO JOBS WHEN YOU ARE A CUSTOMER */}
-                <Link to="jobs" 
+                <Link to={currentUser.isCustomer ? 'home' : 'jobs'} 
                       className="flex flex-shrink-0 items-center rounded-full p-2 ">
                    <img
                     className="block h-10 w-auto lg:hidden"
@@ -76,6 +75,19 @@ const Topbar = () => {
                 </Link>
                 <div className="hidden sm:ml-6 sm:block relative" style={{ top: '12px' }}>
                   <div className="flex space-x-4">
+                      {/* Add this when you have more links */}
+                      {/* {currentUser.isCustomer && (
+                        <Link
+                          to="/home"
+                          className={classNames(
+                            location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium text-white'
+                          )}
+                        >
+                          Home
+                        </Link>
+                      )} */}
+
                       {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
                         <>
                             <Link
@@ -123,7 +135,7 @@ const Topbar = () => {
                   <div>
                     <Menu.Button className="flex rounded-full bg-red-600 text-sm focus:outline-none">
                       <span className="sr-only">Open user menu</span>
-                      <div className="w-12 text-center">
+                      <div className="">
                           {currentUser.avatar ? 
                             <img
                             className="h-10 w-10 rounded-full"
@@ -131,8 +143,12 @@ const Topbar = () => {
                             alt=""
                           />
                             :
-                            <div className="w-10" style={{ lineHeight: '36px',borderRadius: '50%', fontSize: '15px', background: 'white', color: 'black' }}>
-                              {currentUser.initials}
+                            <div className="flex">
+                              <span className="h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+                                <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                              </span>
                             </div>
                           }
                       </div>
@@ -187,22 +203,51 @@ const Topbar = () => {
               </div>
             </div>
           </div>
-
+          
+          {/* Mobile */}
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
-                <Link 
-                    to="jobs">
-                  <Disclosure.Button
-                    className={classNames(
-                      location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
-                      'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
-                    )}
-                  >
-                      Jobs
-                  </Disclosure.Button>
-                </Link>
+                {currentUser.isCustomer && (
+                  <Link 
+                      to="/home">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("home") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Home
+                    </Disclosure.Button>
+                  </Link>
+                )}
+
+                {currentUser.isProjectManager && (
+                  <Link 
+                      to="jobs">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Jobs
+                    </Disclosure.Button>
+                  </Link>
+                )}
+                
                 {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
                   <>
+                  <Link 
+                      to="jobs">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Jobs
+                    </Disclosure.Button>
+                  </Link>
                    <Link 
                         to="customers">
                       <Disclosure.Button

@@ -108,12 +108,20 @@ const JobReview = () => {
             });
     }
 
+    const handleBackNavigation = () => {
+        if (location.pathname.includes('photos')) {
+            navigate('/completed')
+        } else {
+            navigate(-1)
+        }
+    }
+
     return (
         <AnimatedPage>
             <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl -mt-3">
                 <div className="flex flex-wrap gap-2">
                     <div>
-                        <button onClick={() => navigate(-1)} className="text-xs leading-5 font-semibold bg-slate-400/10
+                        <button onClick={() => handleBackNavigation()} className="text-xs leading-5 font-semibold bg-slate-400/10
                                                         rounded-full p-2 text-slate-500
                                                         flex items-center space-x-2 hover:bg-slate-400/20
                                                         dark:highlight-white/5">

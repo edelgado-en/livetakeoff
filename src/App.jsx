@@ -53,6 +53,8 @@ import SharedJob from './routes/shared/SharedJob';
 import ContactUs from './routes/shared/ContactUs';
 
 import { isUserAuthenticated } from './localstorage';
+import { selectUser } from "./routes/userProfile/userSlice";
+import { useAppSelector } from "./app/hooks";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -82,6 +84,9 @@ const Fallback = () => {
 
 const  App = () => {
   const location = useLocation()
+  const currentUser = useAppSelector(selectUser)
+
+  console.log('currentUser', currentUser);
 
   return (
     <>
@@ -104,7 +109,15 @@ const  App = () => {
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<Layout />}>
-                      <Route index element={<Jobs />}/>
+                      {currentUser.isCustomer && (
+                        <>
+                          <Route index element={<CustomerHome />} />
+                          <Route path="home" element={<CustomerHome />} />
+                        </>
+                      )}
+                      
+                      {!currentUser.isCustomer && <Route index element={<Jobs />} />}
+
                       <Route path="jobs" element={<Jobs />}/>
                       <Route path="create-job" element={<CreateJob />} />
                       <Route path="completed" element={<CompleteList />} />
@@ -118,8 +131,6 @@ const  App = () => {
                         <Route path="activity" element={<JobActivityFeed />} />
                         <Route path="comments" element={<JobComments />} />
                       </Route>
-
-                      <Route path="customer-home" element={<CustomerHome />} />
 
                       <Route path="create-customer" element={<CreateCustomer />} />
                       <Route path="edit-customer/:customerId" element={<EditCustomer />} />

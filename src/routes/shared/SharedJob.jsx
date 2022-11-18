@@ -78,7 +78,7 @@ const SharedJob = () => {
                                 {jobDetails.status === 'U' && 'Submitted'}
                                 {jobDetails.status === 'W' && 'Work In Progress'}
                                 {jobDetails.status === 'C' && 'Complete'}
-                                {jobDetails.status === 'T' && 'Cancelled'}
+                                {jobDetails.status === 'T' && 'Canceled'}
                                 {jobDetails.status === 'R' && 'Review'}
                                 {jobDetails.status === 'I' && 'Invoiced'}
                             </div>

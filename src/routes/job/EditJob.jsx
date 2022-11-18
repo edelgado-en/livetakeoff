@@ -20,7 +20,7 @@ const ChevronUpDownIcon = () => {
 
 const availableStatuses = [
     {id: 'A', name: 'Accepted'},
-    {id: 'T', name: 'Cancelled'},
+    {id: 'T', name: 'Canceled'},
     {id: 'R', name: 'Review'},
     {id: 'S', name: 'Assigned'},
     {id: 'W', name: 'Work In Progress'},

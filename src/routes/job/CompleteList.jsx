@@ -35,7 +35,7 @@ const availableStatuses = [
     {id: 'All', name: 'All'},
     {id: 'C', name: 'Completed'},
     {id: 'I', name: 'Invoiced'},
-    {id: 'T', name: 'Cancelled'},
+    {id: 'T', name: 'Canceled'},
   ]
 
 const ChevronUpDownIcon = () => {
@@ -910,7 +910,7 @@ const CompleteList = () => {
                                                                 ${job.status === 'I' && 'bg-blue-500 '}
                                                                 `}>
                                                     {job.status === 'C' && 'Completed'}
-                                                    {job.status === 'T' && 'Cancelled'}
+                                                    {job.status === 'T' && 'Canceled'}
                                                     {job.status === 'I' && 'Invoiced'}
                                                 </p>
                                             </td>

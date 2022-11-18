@@ -64,6 +64,14 @@ export const getJobComments = (jobId: number) => {
     return httpService.get(`/api/job-comments/${jobId}/`)
 }
 
+export const updateComment = (commentId: number) => {
+    return httpService.patch(`/api/job-comments/${commentId}/`)
+}
+
+export const deleteComment = (commentId: number) => {
+    return httpService.delete(`/api/job-comments/${commentId}/`)
+}
+
 export const createJobComment = (jobId: number, request: any) => {
     return httpService.post(`/api/job-comments/${jobId}/`, request);
 }

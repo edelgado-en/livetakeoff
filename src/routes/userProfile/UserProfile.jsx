@@ -156,12 +156,11 @@ const UserProfile = () => {
                     {user.avatar ? 
                         <img className="h-full w-full rounded-full" src={user.avatar} alt="" />
                         :
-                        <div className="h-10 w-10" style={{ borderRadius: '50%',
-                                        fontSize: '20px', background: '#959aa1', color: 'white' }}>
-                            <div className="relative" style={{ top: '10%', left: '32%' }}>
-                                {user.initials}
-                            </div>
-                        </div>
+                        <span className="h-28 w-28 overflow-hidden rounded-full bg-gray-100">
+                            <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </span>
                     }
                     </div>
                     <div className="ml-5 rounded-md shadow-sm">
@@ -208,19 +207,18 @@ const UserProfile = () => {
                             {user.avatar ? 
                                 <img className="relative h-40 w-40 rounded-full" src={user.avatar} alt="" />
                                 :
-                                <div className="h-40 w-40" style={{ borderRadius: '50%',
-                                        fontSize: '45px', background: '#959aa1', color: 'white' }}>
-                                    <div className="relative" style={{ top: '27%', left: '38%' }}>
-                                        {user.initials}
-                                    </div>
-                                </div>
+                                <span className="h-28 w-28 overflow-hidden rounded-full">
+                                    <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </span>
                             }
                             <label
                                 htmlFor="desktop-user-photo"
                                 className="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
                             >
-                            <span className="cursor-pointer">Change</span>
-                            <span className="sr-only"> user photo</span>
+                                <span className="cursor-pointer">Change</span>
+                                <span className="sr-only"> user photo</span>
                             </label>
                         </div>
                     )}

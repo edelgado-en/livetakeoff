@@ -886,7 +886,7 @@ const JobsQueue = () => {
                                   {job.status === 'U' && 'Submitted'}
                                   {job.status === 'W' && 'Work In Progress'}
                                   {job.status === 'C' && 'Completed'}
-                                  {job.status === 'T' && 'Cancelled'}
+                                  {job.status === 'T' && 'Canceled'}
                                   {job.status === 'R' && 'Review'}
                                   {job.status === 'I' && 'Invoiced'}
                                 </p>
