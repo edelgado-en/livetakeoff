@@ -1,127 +1,40 @@
 import { useState, useEffect, Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Listbox, Transition, Menu, Popover, Disclosure, Dialog } from '@headlessui/react'
 
 import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from '../../userProfile/userSlice';
 import { useNavigate, Link } from 'react-router-dom';  
 
+import ReactTimeAgo from 'react-time-ago'
+
+import Loader from '../../../components/loader/Loader';
+
 import {
   ChevronDownIcon,
   ChevronRightIcon,
-  MagnifyingGlassIcon,
-  StarIcon,
 } from '@heroicons/react/outline'
 
-import { Bars3CenterLeftIcon, XMarkIcon } from '@heroicons/react/outline'
+import { Bars3CenterLeftIcon, CheckIcon, PlusIcon } from '@heroicons/react/outline'
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Domains', href: '#', current: false },
-]
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
-const jobs = [
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'N123BB',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  // More projects...
-]
+import * as api from './apiService'
+
+const XMarkIcon = () => {
+  return (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+  )
+}
+
+const MagnifyingGlassIcon = () => {
+  return (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+
+  )
+}
+
 const activityItems = [
   { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
   { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
@@ -158,10 +71,193 @@ const CheckBadge = () => {
     )
 }
 
+const sortOptions = [
+  { id: 'requestDate', name: 'Request Date' },
+  { id: 'completeBy', name: 'Complete By' },
+  { id: 'arrivalDate', name: 'Arrival Date' },
+]
+
+const availableStatuses = [
+  {id: 'All', name: 'All'},
+  {id: 'A', name: 'Accepted'},
+  {id: 'S', name: 'Assigned'},
+  {id: 'W', name: 'In Progress'},
+  {id: 'U', name: 'Submitted'},
+  {id: 'C', name: 'Complete'},
+  {id: 'T', name: 'Canceled'},
+  {id: 'R', name: 'Review'},
+  {id: 'I', name: 'Invoiced'},
+]
+
 const CustomerHome = () => {
-    const currentUser = useAppSelector(selectUser);
-    const navigate = useNavigate();
+    const [jobs, setJobs] = useState([]);
     const [totalJobs, setTotalJobs] = useState(0);
+    const [loading, setLoading] = useState(false);
+    
+    const [activities, setActivities] = useState([]);
+    const [totalActivities, setTotalActivities] = useState(0);
+    const [activitiesLoading, setActivitiesLoading] = useState(false);
+    
+    const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
+    const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[0])
+    const [sortSelected, setSortSelected] = useState(sortOptions[0])
+    const [airports, setAirports] = useState([])
+    const [airportSelected, setAirportSelected] = useState(JSON.parse(localStorage.getItem('airportSelected')) || {id: 'All', name: 'All'})
+    const [airportSearchTerm, setAirportSearchTerm] = useState('')
+    
+    const [open, setOpen] = useState(false)
+    
+    const [activeFilters, setActiveFilters] = useState([])
+    
+    const currentUser = useAppSelector(selectUser);
+    
+    const navigate = useNavigate();
+
+    const filteredAirports = airportSearchTerm
+    ? airports.filter((item) => item.name.toLowerCase().includes(airportSearchTerm.toLowerCase()))
+    : airports;
+
+
+    useEffect(() => {
+      getJobActivities()
+    }, [])
+
+    useEffect(() => {
+      localStorage.setItem('searchText', searchText)
+    
+    }, [searchText])
+
+    useEffect(() => {
+      localStorage.setItem('statusSelected', JSON.stringify(statusSelected))
+    
+    }, [statusSelected])
+
+    useEffect(() => {
+      localStorage.setItem('airportSelected', JSON.stringify(airportSelected))
+  
+    }, [airportSelected])
+
+    useEffect(() => {
+      //Basic throttling
+      let timeoutID = setTimeout(() => {
+        searchJobs()
+      }, 300);
+  
+      return () => {
+        clearTimeout(timeoutID);
+      };
+  
+    }, [searchText, statusSelected, sortSelected, airportSelected])
+
+    const handleKeyDown = event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        
+        searchJobs();
+      }
+    };
+
+    const getJobActivities = async () => {
+      setActivitiesLoading(true);  
+      
+      try {
+        const { data } = await api.getJobActivities();
+
+        console.log(data);
+
+        setActivities(data.results);
+        setTotalActivities(data.count);
+
+        setActivitiesLoading(false);
+
+      } catch (error) {
+        setActivitiesLoading(false);
+      }
+    }
+
+    const removeActiveFilter = (activeFilterId) => {
+      if (activeFilterId === 'status') {
+        setStatusSelected(availableStatuses[0])
+      
+      } else if (activeFilterId === 'searchText') {
+        setSearchText('')
+      
+      } else if (activeFilterId === 'airport') {
+        setAirportSelected({id: 'All', name: 'All'})
+      }
+  
+      setActiveFilters(activeFilters.filter(filter => filter.id !== activeFilterId))
+  
+    }
+
+    const searchJobs = async () => {
+      setLoading(true)
+      
+      const request = {
+        searchText: localStorage.getItem('searchText'),
+        status: JSON.parse(localStorage.getItem('statusSelected')).id,
+        sortField: sortSelected.id,
+        airport: JSON.parse(localStorage.getItem('airportSelected')).id
+      }
+  
+      let statusName;
+  
+      if (request.status === 'A') {
+        statusName = "Accepted"
+      } else if (request.status === 'S') {
+        statusName = "Assigned"
+      } else if (request.status === 'W') {
+        statusName = "In Progress"
+      } else if (request.status === 'U') {
+        statusName  = "Submitted"
+      } else if (request.status === 'R') {
+        statusName = "Review"
+      } else if (request.status === 'T') {
+        statusName = "Canceled"
+      } else if (request.status === 'I') {
+        statusName = "Invoiced"
+      } else if (request.status === 'C') {
+        statusName = "Complete"
+      }
+  
+      //set active filters
+      let activeFilters = []
+      if (request.searchText) {
+        activeFilters.push({
+          id: 'searchText',
+          name: request.searchText,
+        })
+      }
+      
+      if (request.status !== 'All') {
+        activeFilters.push({
+          id: 'status',
+          name: statusName,
+        })
+      }
+  
+  
+      if (request.airport !== 'All') {
+        activeFilters.push({
+          id: 'airport',
+          name: airportSelected.name,
+        })
+      }
+  
+      setActiveFilters(activeFilters)
+  
+      try {
+          const { data } = await api.searchJobs(request);
+  
+          setJobs(data.results);
+          setTotalJobs(data.count)
+
+          setLoading(false);
+  
+      } catch (e) {
+        setLoading(false)
+      }
+    }
 
     return (
         <div className="mx-auto w-full max-w-7xl flex-grow lg:flex xl:px-8 -mt-8 pb-32">
@@ -194,6 +290,12 @@ const CustomerHome = () => {
                           <div className="text-sm font-medium text-gray-900">
                             {currentUser.first_name} {' '} {currentUser.last_name}
                           </div>
+                          <div class="group flex items-center space-x-2.5">
+                            {currentUser.customerLogo && (
+                              <img className="h-6 w-6 rounded-full" src={currentUser.customerLogo} alt="customerLogo"/>
+                            )}
+                            <span class="text-sm font-medium text-gray-500 group-hover:text-gray-900">{currentUser.customerName}</span>
+                          </div>
                         </div>
                       </Link>
                       {/* Action buttons */}
@@ -205,6 +307,7 @@ const CustomerHome = () => {
                                       text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
                                        focus:ring-red-500 focus:ring-offset-2 xl:w-full"
                         >
+                          <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                           New Job
                         </button>
                       </div>
@@ -228,119 +331,448 @@ const CustomerHome = () => {
             {/* Jobs List */}
             <div className="bg-white lg:min-w-0 lg:flex-1">
               <div className="border-b border-t border-gray-200 pl-4 pr-6 pt-4 pb-4 
-                              sm:pl-6 lg:pl-8 xl:border-t-0 xl:pl-6 xl:pt-6">
+                              sm:pl-6 lg:pl-8 xl:border-t-0 xl:pl-6 xl:pt-5">
                 <div className="flex items-center">
                   <h1 className="flex-1 text-lg font-medium">Jobs</h1>
-                  <Menu as="div" className="relative">
-                    <Menu.Button className="inline-flex w-full justify-center rounded-md
-                                             border border-gray-300 bg-white px-4 py-2 text-sm font-medium
-                                              text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
-                                               focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                      {/* <BarsArrowUpIcon className="mr-3 h-5 w-5 text-gray-400" aria-hidden="true" /> */}
-                      Sort
-                      <ChevronDownIcon className="ml-2.5 -mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </Menu.Button>
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="py-1">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block px-4 py-2 text-sm'
-                              )}
-                            >
-                              Name
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block px-4 py-2 text-sm'
-                              )}
-                            >
-                              Date modified
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block px-4 py-2 text-sm'
-                              )}
-                            >
-                              Date created
-                            </a>
-                          )}
-                        </Menu.Item>
+                  <div className="">
+                    <button
+                      type="button"
+                      className="inline-block flex text-sm font-medium text-gray-500 hover:text-gray-900"
+                      onClick={() => setOpen(true)}
+                    >
+                      Filters
+                    </button>
+                  </div>
+
+                  <Transition.Root show={open} as={Fragment}>
+                    <Dialog as="div" className="relative z-40" onClose={setOpen}>
+                      <Transition.Child
+                        as={Fragment}
+                        enter="transition-opacity ease-linear duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="transition-opacity ease-linear duration-300"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                      </Transition.Child>
+
+                      <div className="fixed inset-0 z-40 flex">
+                        <Transition.Child
+                          as={Fragment}
+                          enter="transition ease-in-out duration-300 transform"
+                          enterFrom="translate-x-full"
+                          enterTo="translate-x-0"
+                          leave="transition ease-in-out duration-300 transform"
+                          leaveFrom="translate-x-0"
+                          leaveTo="translate-x-full"
+                        >
+                          <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+                            <div className="flex items-center justify-between px-4">
+                              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+                              <button
+                                type="button"
+                                className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                                onClick={() => setOpen(false)}
+                              >
+                                <span className="sr-only">Close menu</span>
+                                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                              </button>
+                            </div>
+
+                            {/* Filters */}
+                            <form className="mt-4">
+                                <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
+                                  {({ open }) => (
+                                    <>
+                                      <h3 className="-mx-2 -my-3 flow-root">
+                                        <Disclosure.Button className="flex w-full items-center justify-between
+                                                                    bg-white px-2 py-3 text-sm text-gray-400">
+                                          <span className="font-medium text-gray-900">Status</span>
+                                          <span className="ml-6 flex items-center">
+                                            <ChevronDownIcon
+                                              className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')}
+                                              aria-hidden="true"
+                                            />
+                                          </span>
+                                        </Disclosure.Button>
+                                      </h3>
+                                      <Disclosure.Panel className="pt-6">
+                                        <div className="space-y-6">
+                                          <Listbox value={statusSelected} onChange={setStatusSelected}>
+                                            {({ open }) => (
+                                                <>
+                                                <div className="relative">
+                                                    <Listbox.Button className="relative w-full cursor-default rounded-md 
+                                                                                bg-white py-2 px-3 pr-8 text-left
+                                                                                border border-gray-300
+                                                                                shadow-sm focus:outline-none focus:shadow-outline-blue
+                                                                                focus:border-blue-300
+                                                                                text-xs">
+                                                        <span className="block truncate">
+                                                            {statusSelected ? statusSelected.name : 'Status'}
+                                                        </span>
+                                                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                                            <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                                                        </span>
+                                                    </Listbox.Button>
+
+                                                    <Transition
+                                                        show={open}
+                                                        as={Fragment}
+                                                        leave="transition ease-in duration-100"
+                                                        leaveFrom="opacity-100"
+                                                        leaveTo="opacity-0">
+                                                        <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-96 w-full overflow-auto
+                                                                                    rounded-md bg-white py-1 shadow-lg ring-1
+                                                                                    ring-black ring-opacity-5 focus:outline-none text-xs">
+                                                            {availableStatuses.map((status) => (
+                                                                <Listbox.Option
+                                                                    key={status.id}
+                                                                    className={({ active }) =>
+                                                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                    'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                    value={status}>
+                                                                    {({ selected, active }) => (
+                                                                        <>
+                                                                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                                                {status.name}
+                                                                            </span>
+                                                                            {selected ? (
+                                                                                <span
+                                                                                    className={classNames(
+                                                                                    active ? 'text-white' : 'text-red-600',
+                                                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                                    )}>
+                                                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                                </span>
+                                                                            ) : null}
+                                                                        </>
+                                                                    )}
+                                                                </Listbox.Option>
+                                                            ))}
+                                                        </Listbox.Options>
+                                                    </Transition>
+                                                </div>
+                                                </>
+                                            )}
+                                          </Listbox> 
+                                        </div>
+                                      </Disclosure.Panel>
+                                    </>
+                                  )}
+                                </Disclosure>
+                                
+                                <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
+                                  {({ open }) => (
+                                    <>
+                                      <h3 className="-mx-2 -my-3 flow-root">
+                                        <Disclosure.Button className="flex w-full items-center justify-between
+                                                                    bg-white px-2 py-3 text-sm text-gray-400">
+                                          <span className="font-medium text-gray-900">Airport</span>
+                                          <span className="ml-6 flex items-center">
+                                            <ChevronDownIcon
+                                              className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')}
+                                              aria-hidden="true"
+                                            />
+                                          </span>
+                                        </Disclosure.Button>
+                                      </h3>
+                                      <Disclosure.Panel className="pt-6">
+                                        <div className="space-y-6">
+                                        <Listbox value={airportSelected} onChange={setAirportSelected}>
+                                            {({ open }) => (
+                                                <>
+                                                <div className="relative mt-1">
+                                                    <Listbox.Button className="relative w-full cursor-default rounded-md border
+                                                                                border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                                                shadow-sm focus:border-sky-500 focus:outline-none
+                                                                                focus:ring-1 focus:ring-sky-500 sm:text-sm">
+                                                        <span className="block truncate">
+                                                            {airportSelected ? airportSelected.name : 'Select airport'}
+                                                        </span>
+                                                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                                            <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                        </span>
+                                                    </Listbox.Button>
+
+                                                    <Transition
+                                                        show={open}
+                                                        as={Fragment}
+                                                        leave="transition ease-in duration-100"
+                                                        leaveFrom="opacity-100"
+                                                        leaveTo="opacity-0">
+                                                        <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
+                                                                                    rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                                    ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                                            <div className="relative">
+                                                                <div className="sticky top-0 z-20  px-1">
+                                                                    <div className="mt-1 block  items-center">
+                                                                        <input
+                                                                            type="text"
+                                                                            name="search"
+                                                                            id="search"
+                                                                            value={airportSearchTerm}
+                                                                            onChange={(e) => setAirportSearchTerm(e.target.value)}
+                                                                            className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                                    focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
+                                                                                    border-gray-300 rounded-md"
+                                                                        />
+                                                                        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                                                            {airportSearchTerm && (
+                                                                                <svg
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                                                                viewBox="0 0 20 20"
+                                                                                fill="currentColor"
+                                                                                onClick={() => {
+                                                                                    setAirportSearchTerm("");
+                                                                                }}
+                                                                                >
+                                                                                <path
+                                                                                    fillRule="evenodd"
+                                                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                                                    clipRule="evenodd"
+                                                                                />
+                                                                                </svg>
+                                                                            )}
+                                                                            <svg
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                className="h-6 w-6 text-gray-500 mr-1"
+                                                                                fill="none"
+                                                                                viewBox="0 0 24 24"
+                                                                                stroke="currentColor"
+                                                                            >
+                                                                                <path
+                                                                                strokeLinecap="round"
+                                                                                strokeLinejoin="round"
+                                                                                strokeWidth="2"
+                                                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                                                                />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {filteredAirports.map((airport) => (
+                                                                <Listbox.Option
+                                                                    key={airport.id}
+                                                                    className={({ active }) =>
+                                                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                    'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                    value={airport}>
+                                                                    {({ selected, active }) => (
+                                                                        <>
+                                                                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                                                {airport.name}
+                                                                            </span>
+                                                                            {selected ? (
+                                                                                <span
+                                                                                    className={classNames(
+                                                                                    active ? 'text-white' : 'text-red-600',
+                                                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                                    )}>
+                                                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                                </span>
+                                                                            ) : null}
+                                                                        </>
+                                                                    )}
+                                                                </Listbox.Option>
+                                                            ))}
+                                                        </Listbox.Options>
+                                                    </Transition>
+                                                </div>
+                                                </>
+                                            )}
+                                        </Listbox>
+                                        </div>
+                                      </Disclosure.Panel>
+                                    </>
+                                  )}
+                                </Disclosure>
+                            </form>
+                          </Dialog.Panel>
+                        </Transition.Child>
                       </div>
-                    </Menu.Items>
-                  </Menu>
+                    </Dialog>
+                   </Transition.Root>
                 </div>
               </div>
-              <ul role="list" className="divide-y divide-gray-200 border-b border-gray-200">
-                {jobs.map((project) => (
-                  <li key={project.repo} className="relative py-5 pl-4 pr-6 hover:bg-gray-50 sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6 cursor-pointer">
-                    <div className="flex items-center justify-between space-x-4">
-                      <div className="min-w-0 space-y-3">
-                        <div className="flex items-center space-x-3">
-                          <h2 className="text-sm font-medium text-red-600">
-                            {project.name}
-                          </h2>
-                          <div className="ml-2 text-sm text-gray-700 w-24">20221118-1</div>
-                          <div className="lg:hidden md:hidden sm:hidden xs:flex relative text-sm text-gray-500">
-                            <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                              bg-green-500
-                                            `}>
-                              In Progress
-                            </p>
-                          </div>
-                        </div>
-                        <div href={project.repoHref} className="group relative flex items-center space-x-2.5">
-                          <span className="truncate text-xs text-gray-500">
-                            BCT - Atlantic Aviation BCT - BBJ - Boeing 737
+
+              {activeFilters.length > 0 && (
+                <div className="bg-gray-100">
+                  <div className="mx-auto max-w-7xl py-2 px-4 sm:flex sm:items-center sm:px-6 lg:px-8">
+                    <h3 className="text-xs font-medium text-gray-500">
+                      Filters
+                      <span className="sr-only">, active</span>
+                    </h3>
+
+                    <div aria-hidden="true" className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block" />
+
+                    <div className="mt-2 sm:mt-0 sm:ml-4">
+                      <div className="-m-1 flex flex-wrap items-center">
+                        {activeFilters.map((activeFilter) => (
+                          <span
+                            key={activeFilter.id}
+                            className="m-1 inline-flex items-center rounded-full
+                                      border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-xs font-medium text-gray-900"
+                          >
+                            <span>{activeFilter.name}</span>
+                            <button
+                              type="button"
+                              className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+                            >
+                              <span className="sr-only">Remove filter for {activeFilter.name}</span>
+                              <svg onClick={() => removeActiveFilter(activeFilter.id)} className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                                <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
+                              </svg>
+                            </button>
                           </span>
-                        </div>
-                      </div>
-
-                      {/* The chevron right only shows in Mobile */}
-                      <div className="sm:hidden">
-                        <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                      </div>
-
-                      {/* Right side of the card hidden in mobile due to space */}
-                      <div className="hidden flex-shrink-0 flex-col items-end space-y-3 sm:flex">
-                        <p className="flex items-center space-x-4">
-                          <div className="relative text-sm text-gray-500">
-                            <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                              bg-green-500
-                                            `}>
-                              In Progress
-                            </p>
-                          </div>
-                        </p>
-                        <p className="flex space-x-2 text-xs text-gray-500">
-                          <span>Complete by Nov-26 07:00 AM</span>
-                        </p>
+                        ))}
                       </div>
                     </div>
-                  </li>
-                ))}
-              </ul>
-              <div className="border-t border-gray-200 py-4 text-sm pl-8">
-                  <a href="#" className="font-semibold text-red-600 hover:text-red-900">
-                    View all jobs
-                    <span aria-hidden="true"> &rarr;</span>
-                  </a>
+                  </div>
                 </div>
+              )}
+
+              {loading && <Loader />} 
+              
+              
+              {!loading && jobs.length === 0 && (
+                <div className="text-center py-24">
+                  <svg
+                    className="mx-auto h-12 w-12 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      vectorEffect="non-scaling-stroke"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+                    />
+                  </svg>
+                  <h3 className="mt-2 text-sm font-medium text-gray-900">No jobs</h3>
+                  <p className="mt-1 text-sm text-gray-500">Get started by creating a new job.</p>
+                  <div className="mt-6">
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-md border border-transparent
+                               bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm
+                                hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                    >
+                      <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                      New Job
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {!loading && (
+                <>
+                  <ul role="list" className="divide-y divide-gray-200 border-b border-gray-200">
+                    {jobs.map((job) => (
+                      <li key={job.id} className="relative py-5 pl-4 pr-6 hover:bg-gray-50
+                                                sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6 cursor-pointer">
+                        <div className="flex items-center justify-between space-x-4">
+                          <div className="min-w-0 space-y-3">
+                            <div className="flex items-center space-x-3">
+                              <h2 className="text-sm font-medium text-red-600">
+                                {job.tailNumber}
+                              </h2>
+                              <div className="ml-2 text-sm text-gray-700 w-24">{job.purchase_order}</div>
+                              <div className="lg:hidden md:hidden sm:hidden xs:flex relative text-sm text-gray-500">
+                                <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                                  ${job.status === 'A' && 'bg-blue-500 '}
+                                                  ${job.status === 'S' && 'bg-yellow-500 '}
+                                                  ${job.status === 'U' && 'bg-indigo-500 '}
+                                                  ${job.status === 'W' && 'bg-green-500 '}
+                                                  ${job.status === 'C' && 'bg-green-500 '}
+                                                  ${job.status === 'T' && 'bg-gray-600 '}
+                                                  ${job.status === 'R' && 'bg-purple-500 '}
+                                                  ${job.status === 'I' && 'bg-blue-500 '}
+                                                `}>
+                                      {job.status === 'A' && 'Accepted'}
+                                      {job.status === 'S' && 'Assigned'}
+                                      {job.status === 'U' && 'Submitted'}
+                                      {job.status === 'W' && 'In Progress'}
+                                      {job.status === 'C' && 'Completed'}
+                                      {job.status === 'T' && 'Canceled'}
+                                      {job.status === 'R' && 'Review'}
+                                      {job.status === 'I' && 'Invoiced'}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="group relative flex items-center space-x-2.5">
+                              <span className="truncate text-sm text-gray-500">
+                                {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* The chevron right only shows in Mobile */}
+                          <div className="sm:hidden">
+                            <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                          </div>
+
+                          {/* Right side of the card hidden in mobile due to space */}
+                          <div className="hidden flex-shrink-0 flex-col items-end space-y-3 sm:flex">
+                            <p className="flex items-center space-x-4">
+                              <div className="relative text-sm text-gray-500">
+                                <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                                  ${job.status === 'A' && 'bg-blue-500 '}
+                                                  ${job.status === 'S' && 'bg-yellow-500 '}
+                                                  ${job.status === 'U' && 'bg-indigo-500 '}
+                                                  ${job.status === 'W' && 'bg-green-500 '}
+                                                  ${job.status === 'C' && 'bg-green-500 '}
+                                                  ${job.status === 'T' && 'bg-gray-600 '}
+                                                  ${job.status === 'R' && 'bg-purple-500 '}
+                                                  ${job.status === 'I' && 'bg-blue-500 '}
+                                                `}>
+                                      {job.status === 'A' && 'Accepted'}
+                                      {job.status === 'S' && 'Assigned'}
+                                      {job.status === 'U' && 'Submitted'}
+                                      {job.status === 'W' && 'In Progress'}
+                                      {job.status === 'C' && 'Completed'}
+                                      {job.status === 'T' && 'Canceled'}
+                                      {job.status === 'R' && 'Review'}
+                                      {job.status === 'I' && 'Invoiced'}
+                                </p>
+                              </div>
+                            </p>
+                            <p className="flex space-x-2 text-sm text-gray-500">
+                                Complete by {job.completeBy ? <span className="text-gray-500 text-sm ml-2">{job.completeBy}</span>
+                                : 
+                                <span
+                                  className="relative inline-flex items-center
+                                            rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                  <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                  </div>
+                                  <div className="ml-3 text-xs text-gray-700">TBD</div>
+                                </span>
+                                }
+                            </p>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  {totalJobs > 10 && (
+                    <div className="border-t border-gray-200 py-4 text-sm pl-8">
+                        <div  className="font-semibold text-red-600 hover:text-red-900">
+                          View all jobs
+                          <span aria-hidden="true"> &rarr;</span>
+                        </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
 
@@ -351,34 +783,64 @@ const CustomerHome = () => {
                 <h2 className="text-sm font-semibold">Activity</h2>
               </div>
               <div>
-                <ul role="list" className="divide-y divide-gray-200">
-                  {activityItems.map((item) => (
-                    <li key={item.commit} className="py-4">
-                      <div className="flex space-x-3">
-                        <img
-                          className="h-6 w-6 rounded-full"
-                          src="https://res.cloudinary.com/datidxeqm/image/upload/v1666499214/media/profiles/20130914_203548000_iOS_ra4miq.jpg"
-                          alt=""
-                        />
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <h3 className="text-sm font-medium">You</h3>
-                            <p className="text-sm text-gray-500">{item.time}</p>
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            Status changed to Accepted for tail N123BB
-                          </p>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                <div className="border-t border-gray-200 py-4 text-sm">
-                  <a href="#" className="font-semibold text-red-600 hover:text-red-900">
-                    View all activity
-                    <span aria-hidden="true"> &rarr;</span>
-                  </a>
-                </div>
+
+                {activitiesLoading && <Loader />}
+
+                {!activitiesLoading && totalActivities === 0 && (
+                  <div className="text-center m-auto text-sm py-52">
+                    <div className="font-medium text-gray-500">There is no activity yet.</div>
+                    <div className="text-gray-500">When you request a job you will see the activity here.</div>
+                  </div> 
+                )}
+
+                {!activitiesLoading && (
+                     <ul role="list" className="divide-y divide-gray-200">
+                        {activities.map((activity) => (
+                          <li key={activity.id} className="py-4">
+                            <div className="flex space-x-3">
+                              <img
+                                className="h-6 w-6 rounded-full"
+                                src={activity.user.profile.avatar}
+                                alt=""
+                              />
+                              <div className="flex-1 space-y-1">
+                                <div className="flex items-center justify-between">
+                                  <h3 className="text-xs font-medium">
+                                    {activity.user.id === currentUser.id ? 'You' : `${activity.user.first_name} ${activity.user.last_name}`}
+                                  </h3>
+                                  <p className="text-sm text-gray-500">
+                                    <ReactTimeAgo date={new Date(activity.timestamp)} locale="en-US" timeStyle="twitter" />
+                                  </p>
+                                </div>
+                                <p className="text-xs text-gray-500">
+                                  <span>Status changed to </span> 
+                                  <span className="font-medium text-gray-500">
+                                      {activity.status === 'A' && 'Accepted'}
+                                      {activity.status === 'S' && 'Assigned'}
+                                      {activity.status === 'U' && 'Submitted'}
+                                      {activity.status === 'W' && 'In Progress'}
+                                      {activity.status === 'C' && 'Completed'}
+                                      {activity.status === 'T' && 'Canceled'}
+                                      {activity.status === 'R' && 'Review'}
+                                      {activity.status === 'I' && 'Invoiced'}
+                                  </span> for tail 
+                                  <span className="font-medium text-gray-500"> {activity.tailNumber}</span>
+                                </p>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                )}
+
+                {totalActivities > 0 && (
+                  <div className="border-t border-gray-200 pb-4 pt-10 text-sm">
+                    <div className="font-semibold text-red-600 hover:text-red-900">
+                      View all activity
+                      <span aria-hidden="true"> &rarr;</span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

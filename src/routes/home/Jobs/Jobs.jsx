@@ -53,11 +53,11 @@ const JobsQueue = () => {
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
   const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
-  const currentUser = useAppSelector(selectUser)
   const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[1])
   const [sortSelected, setSortSelected] = useState(sortOptions[0])
   const [open, setOpen] = useState(false)
-
+  
+  const currentUser = useAppSelector(selectUser)
   const [activeFilters, setActiveFilters] = useState([])
   const [customers, setCustomers] = useState([])
 
@@ -802,7 +802,6 @@ const JobsQueue = () => {
                 </div>
               </div>
             )}
-              
             </>  
           )}
 
