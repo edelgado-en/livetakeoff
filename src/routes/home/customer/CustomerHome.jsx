@@ -92,7 +92,7 @@ const availableStatuses = [
 const CustomerHome = () => {
     const [jobs, setJobs] = useState([]);
     const [totalJobs, setTotalJobs] = useState(0);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     
     const [activities, setActivities] = useState([]);
     const [totalActivities, setTotalActivities] = useState(0);

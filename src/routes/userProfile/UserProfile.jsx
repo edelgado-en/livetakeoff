@@ -285,7 +285,7 @@ const UserProfile = () => {
                 </p>
             </div>
             <ul role="list" className="mt-2 divide-y divide-gray-200">
-                <Switch.Group as="li" className="flex items-center justify-between py-4">
+                {/* <Switch.Group as="li" className="flex items-center justify-between py-4">
                 <div className="flex flex-col">
                     <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
                     Set yourself as busy
@@ -310,14 +310,14 @@ const UserProfile = () => {
                     )}
                     />
                 </Switch>
-                </Switch.Group>
+                </Switch.Group> */}
                 <Switch.Group as="li" className="flex items-center justify-between py-4">
                 <div className="flex flex-col">
                     <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
                     Receive email notifications
                     </Switch.Label>
                     <Switch.Description className="text-sm text-gray-500">
-                    Send emails when assigning or completing jobs.
+                    Get emails when jobs are completed.
                     </Switch.Description>
                 </div>
                 <Switch
@@ -343,7 +343,7 @@ const UserProfile = () => {
                     Receive SMS notifications
                     </Switch.Label>
                     <Switch.Description className="text-sm text-gray-500">
-                    Send text messages when assigning or completing jobs.
+                    Get text messages when jobs change status.
                     </Switch.Description>
                 </div>
                 <Switch

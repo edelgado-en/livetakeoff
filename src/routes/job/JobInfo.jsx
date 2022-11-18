@@ -170,33 +170,36 @@ const JobInfo = () => {
                         <h1 className="text-2xl font-semibold text-gray-600">Job Details</h1>
                     </div>
                 </div>
-                <div className="mt-4 mb-4">
-                    {jobDetails.status === 'S' && 
-                        <button
-                            type="button"
-                            onClick={() => updateJobStatus('W')}
-                            className="inline-flex items-center justify-center rounded-md
-                                    border border-transparent bg-red-600 px-4 py-2 text-sm
-                                    font-medium text-white shadow-sm hover:bg-red-700
-                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
-                            Accept Job
-                        </button>
-                    }
+                {!currentUser.isCustomer && (
+                    <div className="mt-4 mb-4">
+                        {jobDetails.status === 'S' && 
+                            <button
+                                type="button"
+                                onClick={() => updateJobStatus('W')}
+                                className="inline-flex items-center justify-center rounded-md
+                                        border border-transparent bg-red-600 px-4 py-2 text-sm
+                                        font-medium text-white shadow-sm hover:bg-red-700
+                                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
+                                Accept Job
+                            </button>
+                        }
 
-                    {jobDetails.status === 'W' && 
-                        <button
-                            type="button"
-                            onClick={() => handleToggleJobCompleteModal()}
-                            className="inline-flex items-center justify-center rounded-md
-                                    border border-transparent bg-red-600 px-4 py-2 text-sm
-                                    font-medium text-white shadow-sm hover:bg-red-700
-                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
-                            Complete Job
-                        </button>
-                    }
+                        {jobDetails.status === 'W' && 
+                            <button
+                                type="button"
+                                onClick={() => handleToggleJobCompleteModal()}
+                                className="inline-flex items-center justify-center rounded-md
+                                        border border-transparent bg-red-600 px-4 py-2 text-sm
+                                        font-medium text-white shadow-sm hover:bg-red-700
+                                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
+                                Complete Job
+                            </button>
+                        }
+                    
+                    </div>
+                )}
                 
-                </div>
-                <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Purchase Order</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.purchase_order ? jobDetails.purchase_order : 'None'}</dd>
@@ -280,7 +283,7 @@ const JobInfo = () => {
                         <dt className="text-sm font-medium text-gray-500">Estimated Departure</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'No ETD yet'}</dd>
                     </div>
-                    {!currentUser.isProjectManager && (
+                    {jobDetails.price && (
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Price</dt>
                             <dd className="mt-1 text-sm text-gray-900 flex gap-1">
@@ -290,7 +293,6 @@ const JobInfo = () => {
                                                     text-gray-600 shadow-sm hover:bg-gray-50 ">M</div>
                                 )}
                                 <div>{'$'}{jobDetails.price ? jobDetails.price : '0.00'}</div>
-                                {/* Check for settings to show the spending info for customers */}
                                 {jobDetails.is_auto_priced && location.pathname.includes('jobs') && (
                                     <Link 
                                         to={`/jobs/${jobDetails.id}/price-breakdown`}
@@ -363,10 +365,9 @@ const JobInfo = () => {
                                         <div className="grid grid-cols-3 text-sm pb-2">
                                             <div className="col-span-2 font-medium text-gray-900 relative top-1">
                                                 {service.name}
-
                                             </div>
                                             <div className="text-right">
-                                                {service.status === 'W' && (
+                                                {!currentUser.isCustomer && service.status === 'W' && (
                                                     <button
                                                         type="button"
                                                         onClick={() => completeService(service.id)}
@@ -387,7 +388,7 @@ const JobInfo = () => {
                                             </div>
                                         </div>
                                         
-                                        {!currentUser.isProjectManager && !currentUser.isCustomer && (
+                                        {!currentUser.isProjectManager && (
                                             <div className="text-xs mb-4 relative inline-flex items-center
                                                             rounded-full border border-gray-300 px-2 py-0.5">
                                                 {service.project_manager}

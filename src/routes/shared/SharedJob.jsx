@@ -33,7 +33,6 @@ const SharedJob = () => {
         try {
             const { data } = await api.getJobDetails(jobId);
 
-            console.log(data);
             setJobDetails(data);
 
             setLoading(false);
