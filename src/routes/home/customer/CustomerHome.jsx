@@ -291,9 +291,9 @@ const CustomerHome = () => {
                             {currentUser.first_name} {' '} {currentUser.last_name}
                           </div>
                           <div class="group flex items-center space-x-2.5">
-                            {currentUser.customerLogo && (
+                            {/* {currentUser.customerLogo && (
                               <img className="h-6 w-6 rounded-full" src={currentUser.customerLogo} alt="customerLogo"/>
-                            )}
+                            )} */}
                             <span class="text-sm font-medium text-gray-500 group-hover:text-gray-900">{currentUser.customerName}</span>
                           </div>
                         </div>
@@ -676,27 +676,33 @@ const CustomerHome = () => {
                 <>
                   <ul role="list" className="divide-y divide-gray-200 border-b border-gray-200">
                     {jobs.map((job) => (
-                      <li key={job.id} className="relative py-5 pl-4 pr-6 hover:bg-gray-50
-                                                sm:py-6 sm:pl-6 lg:pl-8 xl:pl-6 cursor-pointer">
-                        <div className="flex items-center justify-between space-x-4">
-                          <div className="min-w-0 space-y-3">
-                            <div className="flex items-center space-x-3">
-                              <h2 className="text-sm font-medium text-red-600">
-                                {job.tailNumber}
-                              </h2>
-                              <div className="ml-2 text-sm text-gray-700 w-24">{job.purchase_order}</div>
-                              <div className="lg:hidden md:hidden sm:hidden xs:flex relative text-sm text-gray-500">
-                                <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                                  ${job.status === 'A' && 'bg-blue-500 '}
-                                                  ${job.status === 'S' && 'bg-yellow-500 '}
-                                                  ${job.status === 'U' && 'bg-indigo-500 '}
-                                                  ${job.status === 'W' && 'bg-green-500 '}
-                                                  ${job.status === 'C' && 'bg-green-500 '}
-                                                  ${job.status === 'T' && 'bg-gray-600 '}
-                                                  ${job.status === 'R' && 'bg-purple-500 '}
-                                                  ${job.status === 'I' && 'bg-blue-500 '}
-                                                `}>
-                                      {job.status === 'A' && 'Accepted'}
+                      <li key={job.id}>
+                      <Link to={`/jobs/${job.id}/details`} className="block hover:bg-gray-50">
+                        <div className="flex items-center px-4 py-4 sm:px-6">
+                          <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
+                              <div>
+                                <div className="">
+                                  <span className="font-medium text-red-600 text-sm">{job.tailNumber}</span>
+                                  <span className="ml-2 text-sm text-gray-700">{job.purchase_order}</span>
+                                </div>
+  
+                                <div className="mt-2 text-sm text-gray-500 mb-1">
+                                  {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
+                                </div>
+                              </div>
+                              <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
+                                  <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                                ${job.status === 'A' && 'bg-blue-400 '}
+                                                ${job.status === 'S' && 'bg-yellow-500 '}
+                                                ${job.status === 'U' && 'bg-indigo-500 '}
+                                                ${job.status === 'W' && 'bg-green-500 '}
+                                                ${job.status === 'C' && 'bg-green-500 '}
+                                                ${job.status === 'T' && 'bg-gray-600 '}
+                                                ${job.status === 'R' && 'bg-purple-500 '}
+                                                ${job.status === 'I' && 'bg-blue-500 '}
+                                              `}>
+                                    {job.status === 'A' && 'Accepted'}
                                       {job.status === 'S' && 'Assigned'}
                                       {job.status === 'U' && 'Submitted'}
                                       {job.status === 'W' && 'In Progress'}
@@ -704,62 +710,30 @@ const CustomerHome = () => {
                                       {job.status === 'T' && 'Canceled'}
                                       {job.status === 'R' && 'Review'}
                                       {job.status === 'I' && 'Invoiced'}
-                                </p>
+                                  </p>
+                                  
+                                  <div className="text-sm text-gray-500 mt-2">
+                                    Complete by {job.completeBy ? <span className="text-gray-700 text-sm">{job.completeBy}</span>
+                                    : 
+                                      <span
+                                        className="relative inline-flex items-center
+                                                  rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                        <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                          <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                        </div>
+                                        <div className="ml-3 text-xs text-gray-700">TBD</div>
+                                      </span>}
+                                  </div>
                               </div>
                             </div>
-                            <div className="group relative flex items-center space-x-2.5">
-                              <span className="truncate text-sm text-gray-500">
-                                {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
-                              </span>
-                            </div>
                           </div>
-
-                          {/* The chevron right only shows in Mobile */}
-                          <div className="sm:hidden">
+                          <div className="ml-5 flex-shrink-0">
                             <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                           </div>
-
-                          {/* Right side of the card hidden in mobile due to space */}
-                          <div className="hidden flex-shrink-0 flex-col items-end space-y-3 sm:flex">
-                            <p className="flex items-center space-x-4">
-                              <div className="relative text-sm text-gray-500">
-                                <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                                  ${job.status === 'A' && 'bg-blue-500 '}
-                                                  ${job.status === 'S' && 'bg-yellow-500 '}
-                                                  ${job.status === 'U' && 'bg-indigo-500 '}
-                                                  ${job.status === 'W' && 'bg-green-500 '}
-                                                  ${job.status === 'C' && 'bg-green-500 '}
-                                                  ${job.status === 'T' && 'bg-gray-600 '}
-                                                  ${job.status === 'R' && 'bg-purple-500 '}
-                                                  ${job.status === 'I' && 'bg-blue-500 '}
-                                                `}>
-                                      {job.status === 'A' && 'Accepted'}
-                                      {job.status === 'S' && 'Assigned'}
-                                      {job.status === 'U' && 'Submitted'}
-                                      {job.status === 'W' && 'In Progress'}
-                                      {job.status === 'C' && 'Completed'}
-                                      {job.status === 'T' && 'Canceled'}
-                                      {job.status === 'R' && 'Review'}
-                                      {job.status === 'I' && 'Invoiced'}
-                                </p>
-                              </div>
-                            </p>
-                            <p className="flex space-x-2 text-sm text-gray-500">
-                                Complete by {job.completeBy ? <span className="text-gray-500 text-sm ml-2">{job.completeBy}</span>
-                                : 
-                                <span
-                                  className="relative inline-flex items-center
-                                            rounded-full border border-gray-300 px-2 py-0.5 ml-2">
-                                  <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                                  </div>
-                                  <div className="ml-3 text-xs text-gray-700">TBD</div>
-                                </span>
-                                }
-                            </p>
-                          </div>
                         </div>
-                      </li>
+                      </Link>
+                    </li>
+                      
                     ))}
                   </ul>
                   
@@ -813,7 +787,7 @@ const CustomerHome = () => {
                                   </p>
                                 </div>
                                 <p className="text-xs text-gray-500">
-                                  <span>Status changed to </span> 
+                                  <span>Job set to </span> 
                                   <span className="font-medium text-gray-500">
                                       {activity.status === 'A' && 'Accepted'}
                                       {activity.status === 'S' && 'Assigned'}
@@ -823,7 +797,7 @@ const CustomerHome = () => {
                                       {activity.status === 'T' && 'Canceled'}
                                       {activity.status === 'R' && 'Review'}
                                       {activity.status === 'I' && 'Invoiced'}
-                                  </span> for tail 
+                                  </span> for  
                                   <span className="font-medium text-gray-500"> {activity.tailNumber}</span>
                                 </p>
                               </div>
