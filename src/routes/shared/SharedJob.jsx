@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon } from "@heroicons/react/outline";
 import SharedJobPhotoListing from './SharedPhotoListing'
+import SharedComments from './SharedComments'
 import * as api from './apiService'
 
 import { Switch } from "@headlessui/react";
@@ -266,6 +267,10 @@ const SharedJob = () => {
                             ))}
                         </div>
                     </div>
+                    
+                    {jobDetails?.job_comments?.length > 0 && (
+                        <SharedComments comments={jobDetails.job_comments}/>
+                    )} 
 
                     <SharedJobPhotoListing 
                             photos={jobDetails.job_photos}
