@@ -713,16 +713,25 @@ const CustomerHome = () => {
                                   </p>
                                   
                                   <div className="text-sm text-gray-500 mt-2">
-                                    Complete by {job.completeBy ? <span className="text-gray-700 text-sm">{job.completeBy}</span>
-                                    : 
-                                      <span
-                                        className="relative inline-flex items-center
-                                                  rounded-full border border-gray-300 px-2 py-0.5 ml-2">
-                                        <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                          <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                                        </div>
-                                        <div className="ml-3 text-xs text-gray-700">TBD</div>
-                                      </span>}
+                                    {(job.status === 'C' || job.status === 'I') ? (
+                                      <span>Completed on <span className="text-gray-700">{job.completion_date}</span></span>
+                                    )
+                                      :
+                                      (
+                                        <span>Complete by {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
+                                        : 
+                                          <span
+                                            className="relative inline-flex items-center
+                                                      rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                            <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                            </div>
+                                            <div className="ml-3 text-xs text-gray-700">TBD</div>
+                                          </span>}
+                                        
+                                        </span>
+                                      )
+                                    }
                                   </div>
                               </div>
                             </div>
