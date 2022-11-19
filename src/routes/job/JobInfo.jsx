@@ -5,7 +5,7 @@ import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon } from "@heroic
 import { toast } from 'react-toastify';
 import * as api from './apiService'
 
-import { Switch } from "@headlessui/react";
+import { Switch, Popover } from "@headlessui/react";
 
 import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
@@ -392,6 +392,24 @@ const JobInfo = () => {
                                             <div className="text-xs mb-4 relative inline-flex items-center
                                                             rounded-full border border-gray-300 px-2 py-0.5">
                                                 {service.project_manager}
+                                                {/* TODO: show project manager avatar, and first name, last name, email, vendor in popover */}
+                                                {/* <Popover className="relative">
+                                                    <Popover.Button>
+                                                        {service.project_manager}
+                                                    </Popover.Button>
+
+                                                    <Popover.Panel className="absolute z-10">
+                                                        <div className="absolute top-full left-0 mt-2 w-60 origin-top-right
+                                                                         divide-y divide-gray-100 rounded-lg bg-white text-sm font-normal
+                                                                        text-slate-900 shadow-md ring-1 ring-slate-900/5 focus:outline-none
+                                                                        transform opacity-100 scale-100">
+                                                            <p class="truncate py-3 px-3.5 text-sm">
+                                                                <span class="block text-gray-500">Signed in as</span>
+                                                                <span class="mt-1 font-semibold">enriquedelgado806@gmail.com</span>
+                                                            </p>
+                                                        </div>
+                                                    </Popover.Panel>
+                                                </Popover> */}
                                             </div>
                                         )}
 

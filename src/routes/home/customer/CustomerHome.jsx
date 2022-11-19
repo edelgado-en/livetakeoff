@@ -117,9 +117,10 @@ const CustomerHome = () => {
     ? airports.filter((item) => item.name.toLowerCase().includes(airportSearchTerm.toLowerCase()))
     : airports;
 
-
+    
     useEffect(() => {
-      getJobActivities()
+      getJobActivities();
+      getAirports();
     }, [])
 
     useEffect(() => {
@@ -157,13 +158,19 @@ const CustomerHome = () => {
       }
     };
 
+    const getAirports = async () => {
+      const { data } = await api.getAirports()
+  
+      data.results.unshift({id: 'All', name: 'All'})
+  
+      setAirports(data.results)
+    }
+
     const getJobActivities = async () => {
       setActivitiesLoading(true);  
       
       try {
         const { data } = await api.getJobActivities();
-
-        console.log(data);
 
         setActivities(data.results);
         setTotalActivities(data.count);

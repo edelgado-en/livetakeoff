@@ -129,8 +129,14 @@ const Topbar = () => {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-
-                {/* Profile dropdown */}
+                {/* <Link
+                  to=""
+                  className="inline-block rounded-md border border-transparent
+                            bg-indigo-500 py-2 px-4 text-base font-medium
+                              text-white hover:bg-opacity-75 mr-8"
+                >
+                  New Job
+                </Link> */}
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex rounded-full bg-red-600 text-sm focus:outline-none">
