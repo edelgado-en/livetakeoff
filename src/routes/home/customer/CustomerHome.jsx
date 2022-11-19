@@ -775,7 +775,7 @@ const CustomerHome = () => {
           <div className={`${isActivityOpen ? 'bg-gray-50' : 'bg-white'} pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0`}>
             <div className="px-6 lg:w-80">
               <div onClick={() => setIsActivityOpen(!isActivityOpen)} className="cursor-pointer pt-6 pb-2 flex justify-between">
-                <h2 className="text-sm font-semibold">Activity</h2>
+                <h2 className="text-sm font-semibold text-gray-500 hover:text-gray-900">Activity</h2>
                 <div className="relative" style={{ top: '2px'}}>
                   {isActivityOpen ? (
                     <ChevronUpIcon 
