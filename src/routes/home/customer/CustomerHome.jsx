@@ -323,7 +323,9 @@ const CustomerHome = () => {
                     <div className="flex flex-col space-y-6 sm:flex-row sm:space-y-0 sm:space-x-8 xl:flex-col xl:space-x-0 xl:space-y-6">
                       <div className="flex items-center space-x-2">
                         <CheckBadge />
-                        <span className="text-sm font-medium text-gray-500">Basic Member</span>
+                        <span className="text-sm font-medium text-gray-500">
+                          {currentUser.isPremiumMember ? 'Premium Member' : 'On-Demand Member'}
+                        </span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RectangleStack />
