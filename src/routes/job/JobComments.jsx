@@ -23,6 +23,7 @@ const JobComments = () => {
     const [comment, setComment] = useState('') 
     const [comments, setComments] = useState([]) 
     const [loading, setLoading] = useState(false)
+    const [createCommentLoading, setCreateCommentLoading] = useState(false)
     const [sendSMS, setSendSMS] = useState(false)
     const [isPublic, setIsPublic] = useState(false)
     const [isDeleteCommentModalOpen, setDeleteCommentModalOpen] = useState(false)
@@ -90,13 +91,22 @@ const JobComments = () => {
         sendSMS,
         isPublic
       }
+      
+      setCreateCommentLoading(true);
 
-      const { data } = await api.createJobComment(jobId, request);
+      try {
+        const { data } = await api.createJobComment(jobId, request);
 
-      const updatedComments = [...comments, data]
+        const updatedComments = [...comments, data]
 
-      setComments(updatedComments)
-      setComment('')
+        setComments(updatedComments)
+        setComment('')
+
+        setCreateCommentLoading(false);
+
+      } catch (error) {
+        setCreateCommentLoading(false);
+      }
     }
 
     const handleCommentChange = (event) => {
@@ -245,13 +255,14 @@ const JobComments = () => {
                                   </div>
                                   <button
                                     type="submit"
+                                    disabled={createCommentLoading}
                                     onClick={() => createJobComment()}
                                     className="inline-flex items-center justify-center rounded-md
                                               border border-transparent bg-red-600 px-2 py-1 text-sm
                                               text-white shadow-sm hover:bg-red-700 focus:outline-none
                                               focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                                   >
-                                    Post
+                                    {createCommentLoading ? '.....': 'Post'}
                                   </button>
                                 </div>
                                 {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (

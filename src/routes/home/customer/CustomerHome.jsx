@@ -83,7 +83,7 @@ const availableStatuses = [
   {id: 'S', name: 'Assigned'},
   {id: 'W', name: 'In Progress'},
   {id: 'U', name: 'Submitted'},
-  {id: 'C', name: 'Complete'},
+  {id: 'C', name: 'Completed'},
   {id: 'T', name: 'Canceled'},
   {id: 'R', name: 'Review'},
   {id: 'I', name: 'Invoiced'},
