@@ -12,6 +12,7 @@ import Loader from '../../../components/loader/Loader';
 import {
   ChevronDownIcon,
   ChevronRightIcon,
+  ChevronUpIcon
 } from '@heroicons/react/outline'
 
 import { Bars3CenterLeftIcon, CheckIcon, PlusIcon } from '@heroicons/react/outline'
@@ -104,6 +105,8 @@ const CustomerHome = () => {
     const [airports, setAirports] = useState([])
     const [airportSelected, setAirportSelected] = useState(JSON.parse(localStorage.getItem('airportSelected')) || {id: 'All', name: 'All'})
     const [airportSearchTerm, setAirportSearchTerm] = useState('')
+
+    const [isActivityOpen, setIsActivityOpen] = useState(false);
     
     const [open, setOpen] = useState(false)
     
@@ -769,73 +772,86 @@ const CustomerHome = () => {
           </div>
 
           {/* Activity feed */}
-          <div className="bg-gray-50 pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0">
+          <div className={`${isActivityOpen ? 'bg-gray-50' : 'bg-white'} pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0`}>
             <div className="px-6 lg:w-80">
-              <div className="pt-6 pb-2">
+              <div onClick={() => setIsActivityOpen(!isActivityOpen)} className="cursor-pointer pt-6 pb-2 flex justify-between">
                 <h2 className="text-sm font-semibold">Activity</h2>
+                <div className="relative" style={{ top: '2px'}}>
+                  {isActivityOpen ? (
+                    <ChevronUpIcon 
+                    className="h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" />
+                  ) : (
+                    <ChevronDownIcon 
+                       className="h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" />
+                  ) }
+                  
+                </div>
               </div>
-              <div>
+              {isActivityOpen && (
+                <div>
+                  {activitiesLoading && <Loader />}
 
-                {activitiesLoading && <Loader />}
+                  {!activitiesLoading && totalActivities === 0 && (
+                    <div className="text-center m-auto text-sm py-52">
+                      <div className="font-medium text-gray-500">There is no activity yet.</div>
+                      <div className="text-gray-500">When you request a job you will see the activity here.</div>
+                    </div> 
+                  )}
 
-                {!activitiesLoading && totalActivities === 0 && (
-                  <div className="text-center m-auto text-sm py-52">
-                    <div className="font-medium text-gray-500">There is no activity yet.</div>
-                    <div className="text-gray-500">When you request a job you will see the activity here.</div>
-                  </div> 
-                )}
-
-                {!activitiesLoading && (
-                     <ul role="list" className="divide-y divide-gray-200">
-                        {activities.map((activity) => (
-                          <li key={activity.id} className="py-4">
-                            <div className="flex space-x-3">
-                              <img
-                                className="h-6 w-6 rounded-full"
-                                src={activity.user.profile.avatar}
-                                alt=""
-                              />
-                              <div className="flex-1 space-y-1">
-                                <div className="flex items-center justify-between">
-                                  <h3 className="text-xs font-medium">
-                                    {activity.user.id === currentUser.id ? 'You' : `${activity.user.first_name} ${activity.user.last_name}`}
-                                  </h3>
-                                  <p className="text-sm text-gray-500">
-                                    <ReactTimeAgo date={new Date(activity.timestamp)} locale="en-US" timeStyle="twitter" />
+                  {!activitiesLoading && (
+                      <ul role="list" className="divide-y divide-gray-200">
+                          {activities.map((activity) => (
+                            <li key={activity.id} className="py-4">
+                              <div className="flex space-x-3">
+                                <img
+                                  className="h-6 w-6 rounded-full"
+                                  src={activity.user.profile.avatar}
+                                  alt=""
+                                />
+                                <div className="flex-1 space-y-1">
+                                  <div className="flex items-center justify-between">
+                                    <h3 className="text-xs font-medium">
+                                      {activity.user.id === currentUser.id ? 'You' : `${activity.user.first_name} ${activity.user.last_name}`}
+                                    </h3>
+                                    <p className="text-sm text-gray-500">
+                                      <ReactTimeAgo date={new Date(activity.timestamp)} locale="en-US" timeStyle="twitter" />
+                                    </p>
+                                  </div>
+                                  <p className="text-xs text-gray-500">
+                                    <span>Job set to </span> 
+                                    <span className="font-medium text-gray-500">
+                                        {activity.status === 'A' && 'Accepted'}
+                                        {activity.status === 'S' && 'Assigned'}
+                                        {activity.status === 'U' && 'Submitted'}
+                                        {activity.status === 'W' && 'In Progress'}
+                                        {activity.status === 'C' && 'Completed'}
+                                        {activity.status === 'T' && 'Canceled'}
+                                        {activity.status === 'R' && 'Review'}
+                                        {activity.status === 'I' && 'Invoiced'}
+                                    </span> for  
+                                    <span className="font-medium text-gray-500"> {activity.tailNumber}</span>
                                   </p>
                                 </div>
-                                <p className="text-xs text-gray-500">
-                                  <span>Job set to </span> 
-                                  <span className="font-medium text-gray-500">
-                                      {activity.status === 'A' && 'Accepted'}
-                                      {activity.status === 'S' && 'Assigned'}
-                                      {activity.status === 'U' && 'Submitted'}
-                                      {activity.status === 'W' && 'In Progress'}
-                                      {activity.status === 'C' && 'Completed'}
-                                      {activity.status === 'T' && 'Canceled'}
-                                      {activity.status === 'R' && 'Review'}
-                                      {activity.status === 'I' && 'Invoiced'}
-                                  </span> for  
-                                  <span className="font-medium text-gray-500"> {activity.tailNumber}</span>
-                                </p>
                               </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                )}
+                            </li>
+                          ))}
+                        </ul>
+                  )}
 
-                {totalActivities > 0 && (
-                  <div className="border-t border-gray-200 pb-4 pt-10 text-sm">
-                    <div className="font-semibold text-red-600 hover:text-red-900">
-                      View all activity
-                      <span aria-hidden="true"> &rarr;</span>
+                  {totalActivities > 0 && (
+                    <div className="border-t border-gray-200 pb-4 pt-10 text-sm">
+                      <div className="font-semibold text-red-600 hover:text-red-900">
+                        View all activity
+                        <span aria-hidden="true"> &rarr;</span>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
+              
             </div>
           </div>
+          
         </div>
     )
 }
