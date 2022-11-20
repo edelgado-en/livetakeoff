@@ -325,6 +325,17 @@ const CreateJob = () => {
                     <div className="">
                         <p className="text-md font-medium text-gray-900 mt-2">Job created!</p>
                         <p className="mt-2 text-sm text-gray-500">{createJobMessage}</p>
+                        
+                        {currentUser.isCustomer && (
+                            <>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Our account managers have been notified of your request. 
+                            </p>
+                            <p className="mt-2 text-sm text-gray-500">
+                                If you want to receive updates on your job, you can enable SMS notifications in your profile settings <Link to="/user-settings/profile" className="text-blue-500 hover:text-blue-600">here</Link>.
+                            </p>
+                            </>
+                        )}
                     </div>
                     <div className=" mt-6 flex justify-center gap-6">
                         <button
