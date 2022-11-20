@@ -423,61 +423,68 @@ const JobInfo = () => {
                         ))}
                     </div>
                 </div>
-                <div className="mx-auto max-w-5xl pb-12">
-                    <h2 className="text-sm font-medium text-gray-500">Retainer Services</h2>
-                    <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        {jobDetails.retainer_service_assignments?.length === 0 &&
-                            <div className="text-sm text-gray-500">None</div>
-                        }
-                        
-                        {jobDetails.retainer_service_assignments?.map((service) => (
-                            <div
-                                key={service.id}
-                                className="relative flex items-center space-x-3 rounded-lg
-                                        border border-gray-300 bg-white px-6 py-5 shadow-sm
-                                        hover:border-gray-400">
-                                <div className="min-w-0 flex-1">
-                                    <div className="">
-                                        <div className="grid grid-cols-3 text-sm pb-2">
-                                            <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
-                                            <div className="text-right">
-                                                {service.status === 'W' && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => completeRetainerService(service.id)}
-                                                        className="inline-flex items-center rounded border
-                                                                border-gray-300 bg-white px-2.5 py-1.5 text-xs
-                                                                font-medium text-gray-700 shadow-sm hover:bg-gray-50
-                                                                focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                                        Complete
-                                                    </button>    
-                                                )}
+                {(currentUser.isAdmin
+                    || currentUser.isProjectManager
+                             || currentUser.isSuperUser
+                             || currentUser.isAccountManager
+                             || (currentUser.isCustomer && currentUser.isPremiumMember)) && (
+                    <div className="mx-auto max-w-5xl pb-12">
+                        <h2 className="text-sm font-medium text-gray-500">Retainer Services</h2>
+                        <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            {jobDetails.retainer_service_assignments?.length === 0 &&
+                                <div className="text-sm text-gray-500">None</div>
+                            }
+                            
+                            {jobDetails.retainer_service_assignments?.map((service) => (
+                                <div
+                                    key={service.id}
+                                    className="relative flex items-center space-x-3 rounded-lg
+                                            border border-gray-300 bg-white px-6 py-5 shadow-sm
+                                            hover:border-gray-400">
+                                    <div className="min-w-0 flex-1">
+                                        <div className="">
+                                            <div className="grid grid-cols-3 text-sm pb-2">
+                                                <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
+                                                <div className="text-right">
+                                                    {service.status === 'W' && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => completeRetainerService(service.id)}
+                                                            className="inline-flex items-center rounded border
+                                                                    border-gray-300 bg-white px-2.5 py-1.5 text-xs
+                                                                    font-medium text-gray-700 shadow-sm hover:bg-gray-50
+                                                                    focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                                            Complete
+                                                        </button>    
+                                                    )}
 
-                                                {service.status === 'C' && (
-                                                    <div className="flex-shrink-0 flex justify-end">
-                                                        <CheckCircleIcon className="h-6 w-6 text-red-400" />
-                                                    </div>
-                                                )}
+                                                    {service.status === 'C' && (
+                                                        <div className="flex-shrink-0 flex justify-end">
+                                                            <CheckCircleIcon className="h-6 w-6 text-red-400" />
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
+
+                                            {!currentUser.isProjectManager && !currentUser.isCustomer && (
+                                                <div className="text-xs mb-4 relative inline-flex items-center
+                                                                rounded-full border border-gray-300 px-2 py-0.5">
+                                                    {service.project_manager}
+                                                </div>
+                                            )}
+                                                
+                                            {showActions && service.checklist_actions?.map((action) => (
+                                                    <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
+                                            ))}
                                         </div>
-
-                                        {!currentUser.isProjectManager && !currentUser.isCustomer && (
-                                            <div className="text-xs mb-4 relative inline-flex items-center
-                                                            rounded-full border border-gray-300 px-2 py-0.5">
-                                                {service.project_manager}
-                                            </div>
-                                        )}
-                                            
-                                        {showActions && service.checklist_actions?.map((action) => (
-                                                <div key={action.id} className="text-sm text-gray-500 py-1">{action.name}</div>
-                                        ))}
                                     </div>
+                                    
                                 </div>
-                                
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
+                
             </div>
             )}
 

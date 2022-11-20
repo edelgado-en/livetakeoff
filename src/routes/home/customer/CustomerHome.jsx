@@ -80,10 +80,10 @@ const sortOptions = [
 
 const availableStatuses = [
   {id: 'All', name: 'All Open Jobs'},
+  {id: 'U', name: 'Submitted'},
   {id: 'A', name: 'Accepted'},
   {id: 'S', name: 'Assigned'},
   {id: 'W', name: 'In Progress'},
-  {id: 'U', name: 'Submitted'},
   {id: 'R', name: 'Review'},
   {id: 'T', name: 'Canceled'},
   {id: 'C', name: 'Completed'},
