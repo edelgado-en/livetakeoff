@@ -612,6 +612,31 @@ const CustomerHome = () => {
                 </div>
               </div>
 
+              <div className="">
+                <div className="w-full">
+                <div className="relative border-b border-gray-200">
+                  <div 
+                    onClick={() => searchJobs()}
+                    className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
+                    <MagnifyingGlassIcon 
+                        className="h-4 w-4 text-gray-400 cursor-pointer"
+                        aria-hidden="true" />
+                        </div>
+                        <input
+                          type="search"
+                          name="search"
+                          id="search"
+                          value={searchText}
+                          onChange={event => setSearchText(event.target.value)}
+                          onKeyDown={handleKeyDown}
+                          className="block w-full  pl-10 focus:border-sky-500 border-none py-4 
+                                  focus:ring-sky-500 text-sm"
+                          placeholder="search by tail or P.O"
+                        />
+                    </div>
+                  </div>
+              </div>
+
               {activeFilters.length > 0 && (
                 <div className="bg-gray-100">
                   <div className="mx-auto max-w-7xl py-2 px-4 sm:flex sm:items-center sm:px-6 lg:px-8">

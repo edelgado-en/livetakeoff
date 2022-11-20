@@ -697,7 +697,6 @@ const JobsQueue = () => {
                   />
                 </div>
               </div>
-              
             </div>
             <div className="flex items-center justify-between pt-3 pb-1">
             <Listbox value={sortSelected} onChange={setSortSelected}>
