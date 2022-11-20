@@ -626,8 +626,9 @@ const CustomerHome = () => {
                       <div className="-m-1 flex flex-wrap items-center">
                         {activeFilters.map((activeFilter) => (
                           <span
+                            onClick={() => removeActiveFilter(activeFilter.id)}
                             key={activeFilter.id}
-                            className="m-1 inline-flex items-center rounded-full
+                            className="m-1 inline-flex items-center rounded-full cursor-pointer
                                       border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-xs font-medium text-gray-900"
                           >
                             <span>{activeFilter.name}</span>
@@ -636,7 +637,7 @@ const CustomerHome = () => {
                               className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
                             >
                               <span className="sr-only">Remove filter for {activeFilter.name}</span>
-                              <svg onClick={() => removeActiveFilter(activeFilter.id)} className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                              <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
                                 <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
                               </svg>
                             </button>

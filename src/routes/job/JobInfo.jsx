@@ -283,7 +283,7 @@ const JobInfo = () => {
                         <dt className="text-sm font-medium text-gray-500">Estimated Departure</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.estimatedETD ? jobDetails.estimatedETD : 'No ETD yet'}</dd>
                     </div>
-                    {jobDetails.price && (
+                    {currentUser.canSeePrice && (
                         <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Price</dt>
                             <dd className="mt-1 text-sm text-gray-900 flex gap-1">
