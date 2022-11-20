@@ -79,14 +79,14 @@ const sortOptions = [
 ]
 
 const availableStatuses = [
-  {id: 'All', name: 'All'},
+  {id: 'All', name: 'All Open Jobs'},
   {id: 'A', name: 'Accepted'},
   {id: 'S', name: 'Assigned'},
   {id: 'W', name: 'In Progress'},
   {id: 'U', name: 'Submitted'},
-  {id: 'C', name: 'Completed'},
-  {id: 'T', name: 'Canceled'},
   {id: 'R', name: 'Review'},
+  {id: 'T', name: 'Canceled'},
+  {id: 'C', name: 'Completed'},
   {id: 'I', name: 'Invoiced'},
 ]
 
@@ -437,14 +437,14 @@ const CustomerHome = () => {
                                                         leaveFrom="opacity-100"
                                                         leaveTo="opacity-0">
                                                         <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-96 w-full overflow-auto
-                                                                                    rounded-md bg-white py-1 shadow-lg ring-1
+                                                                                    rounded-md bg-white py-1 shadow-lg ring-1 
                                                                                     ring-black ring-opacity-5 focus:outline-none text-xs">
                                                             {availableStatuses.map((status) => (
                                                                 <Listbox.Option
                                                                     key={status.id}
                                                                     className={({ active }) =>
                                                                             classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                                    'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                                    `${status.id === 'R' || status.id === 'All' ? 'border-b border-gray-200 mb-4' : ''} relative cursor-default select-none py-2 pl-3 pr-9`)}
                                                                     value={status}>
                                                                     {({ selected, active }) => (
                                                                         <>
