@@ -6,6 +6,11 @@ import AnimatedPage from '../../components/animatedPage/AnimatedPage';
 
 import * as api from './apiService'
 
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
 const PhoneIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
@@ -25,8 +30,80 @@ const EnvelopeIcon = () => {
 }
 
 
-const offices = [
-  { id: 1, city: 'Fort Lauderdale', address: ['750 SW 34th ST, Suite 209', 'Fort Lauderdale, Florida 33315'] },
+const locations = [
+  { id: 1,
+    name: 'South Florida',
+    airports: [
+       {initials: 'BCT', name: 'Boca Raton Airport'},
+       {initials: 'FLL', name: 'Florida Lauderdale International Airport'},
+       {initials: 'FXE', name: 'Florida Lauderdale Executive Airport'},
+       {initials: 'MIA', name: 'Miami International Airport'},
+       {initials: 'OPF', name: 'Miami-Opa Locka Executive Airport'},
+       {initials: 'PBI', name: 'Palm Beach International Airport'},
+       {initials: 'SUA', name: 'Stuart Florida Airport'},
+      ]
+  },
+  { id: 2,
+    name: 'Florida West Coast',
+    airports: [
+      {initials: 'NAP', name: 'Naples International Airport'},
+       {initials: 'RSW', name: 'Forts Myers Airport'},
+       {initials: 'SRQ', name: 'Sarasota Bradenton International Airport'},
+       {initials: 'TPA', name: 'Tampa International Airport'},
+       {initials: 'TPF', name: 'Peter O. Knight Airport'},
+       {initials: 'VDF', name: 'Tampa Executive Airport'},
+    ]
+  },
+  { id: 3,
+    name: 'Central Florida',
+    airports: [
+      {initials: 'DAB', name: 'Daytona Beach International Airport'},
+       {initials: 'MLB', name: 'Melbourne Orlando International Airport'},
+       {initials: 'ORL', name: 'Orlando International Airport'},
+       {initials: 'MCO', name: 'Orlando International Airport'},
+       {initials: 'SFB', name: 'Orlando Sanford International Airport'},
+    ]
+  },
+  { id: 4,
+    name: 'Nevada',
+    airports: [
+      {initials: 'LAS', name: 'Las Vegas Airport'},
+       {initials: 'HND', name: 'Haneda Airport'},
+    ]
+  },
+  { id: 5,
+    name: 'California',
+    airports: [
+      {initials: 'BUR', name: 'Hollywood Burbank Airport'},
+       {initials: 'VNY', name: 'Van Nuys Airport'},
+    ]
+  },
+  { id: 6,
+    name: 'Arizona',
+    airports: [
+      {initials: 'SDL', name: 'Scottsdale Airport'},
+       {initials: 'PHX', name: 'Phoenix Sky Harbor Airport'},
+       {initials: 'TUS', name: 'Tucson International Airport'},
+    ]
+  },
+  { id: 7,
+    name: 'Baltimore-Washington',
+    airports: [
+      {initials: 'IAD', name: 'Dulles International Airport'},
+       {initials: 'BWI', name: 'Baltimore Washington International Airport'},
+       {initials: 'DCA', name: 'Reagan National Airport'},
+       {initials: 'RIC', name: 'Richmond International Airport'},
+    ]
+  },
+  { id: 8,
+    name: 'Boston-Connecticut-New Hampshire-Rhode Island-Portland',
+    airports: [
+        {initials: 'BOS', name: 'Logan International Airport'},
+        {initials: 'BDL', name: 'Bradley International Airport'},
+        {initials: 'SFZ', name: 'North Central State Airport'},
+        {initials: 'OQU', name: 'Norwood Memorial Airport'},
+    ]
+  },
 ]
 
 const ContactUs = () => {
@@ -392,25 +469,46 @@ const ContactUs = () => {
              <section>
                <div className="mx-auto max-w-7xl py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
                  <h2 id="offices-heading" className="text-3xl font-bold tracking-tight text-warm-gray-900">
-                   Our offices
+                   Our Locations
                  </h2>
                  <p className="mt-6 max-w-3xl text-lg text-warm-gray-500">
-                   Checkout our offices. Our headquarter is located in the heart of Fort Lauderdale City.
+                   Find us at the following airports.
                  </p>
-                 <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-                   {offices.map((office) => (
-                     <div key={office.id}>
-                       <h3 className="text-lg font-medium text-warm-gray-900">{office.city}</h3>
-                       <p className="mt-2 text-base text-warm-gray-500">
-                         {office.address.map((line) => (
-                           <span key={line} className="block">
-                             {line}
-                           </span>
-                         ))}
-                       </p>
-                     </div>
-                   ))}
-                 </div>
+                 <div className="divide-y divide-gray-200 overflow-hidden rounded-lg mt-4
+                               bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+                  {locations.map((location, actionIdx) => (
+                    <div
+                      key={location.id}
+                      className={classNames(
+                        actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '',
+                        actionIdx === 1 ? 'sm:rounded-tr-lg' : '',
+                        actionIdx === locations.length - 2 ? 'sm:rounded-bl-lg' : '',
+                        actionIdx === locations.length - 1 ? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none' : '',
+                        'relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500'
+                      )}
+                    >
+                      <div>
+                      </div>
+                      <div className="">
+                        <h3 className="text-lg font-medium">
+                          <a href={location.href} className="focus:outline-none">
+                            {/* Extend touch target to entire panel */}
+                            <span className="absolute inset-0" aria-hidden="true" />
+                            {location.name}
+                          </a>
+                        </h3>
+                        {location.airports.map((airport, index) => (
+                            <div key={index} className=" flex gap-2 mt-2 text-sm text-gray-500">
+                              <span>{index + 1}. </span>
+                              <div className="font-semibold text-gray-500 w-7">{airport.initials}</div>
+                              <div>{airport.name}</div>
+                            </div>
+                        ))}
+                        
+                      </div>
+                    </div>
+                  ))}
+                </div>
                </div>
              </section>
            </main>
