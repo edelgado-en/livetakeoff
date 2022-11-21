@@ -89,20 +89,21 @@ const SharedJob = () => {
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.customer?.name}</dd>
                     </div>
                     <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Airport</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.airport?.name}</dd>
+                    </div>
+                    
+                    <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Tail Number</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.tailNumber}</dd>
-                    </div>
-                    <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Aircraft Type</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.aircraftType?.name}</dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">FBO</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.fbo?.name}</dd>
                     </div>
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Airport</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.airport?.name}</dd>
+                        <dt className="text-sm font-medium text-gray-500">Aircraft Type</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.aircraftType?.name}</dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Request Date</dt>
@@ -119,17 +120,9 @@ const SharedJob = () => {
                         </dd>
                     </div>
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Complete By</dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                            {jobDetails.completeBy ? jobDetails.completeBy 
-                            : <span
-                            className="relative inline-flex items-center
-                                       rounded-full border border-gray-300 px-2 py-0.5">
-                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                            </div>
-                            <div className="ml-3 text-sm text-gray-700">TBD</div>
-                          </span>}
+                        <dt className="text-sm font-medium text-gray-500">Requested By</dt>
+                        <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
+                            {jobDetails.created_by?.first_name} {jobDetails.created_by?.last_name}
                         </dd>
                     </div>
                     
@@ -141,16 +134,24 @@ const SharedJob = () => {
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Special Instructions</dt>
                         <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
-                            {jobDetails.special_instructions?.length === 0 && 'None'}
+                            {!jobDetails.special_instructions && 'None provided'}
 
                             {jobDetails.special_instructions}
                         </dd>
                     </div>
 
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Requested By</dt>
-                        <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
-                            {jobDetails.created_by?.first_name} {jobDetails.created_by?.last_name}
+                        <dt className="text-sm font-medium text-gray-500">Complete By</dt>
+                        <dd className="mt-1 text-sm text-gray-900">
+                            {jobDetails.completeBy ? jobDetails.completeBy 
+                            : <span
+                            className="relative inline-flex items-center
+                                       rounded-full border border-gray-300 px-2 py-0.5">
+                            <div className="absolute flex flex-shrink-0 items-center justify-center">
+                              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                            </div>
+                            <div className="ml-3 text-sm text-gray-700">TBD</div>
+                          </span>}
                         </dd>
                     </div>
                     </dl>
