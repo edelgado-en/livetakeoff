@@ -981,7 +981,7 @@ const JobsQueue = () => {
             </div>
           )}
 
-          {!loading && totalJobs > 200 && (
+          {!loading && totalJobs > 50 && (
               <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
                   <div>
                     <Pagination
