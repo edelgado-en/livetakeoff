@@ -106,6 +106,13 @@ const JobComments = () => {
 
       } catch (error) {
         setCreateCommentLoading(false);
+
+        if (error.response?.status === 403) {
+          alert('You do not have permission to create a comment for this job.')
+        } else {
+            alert('Unable to create comment.')
+        }
+
       }
     }
 

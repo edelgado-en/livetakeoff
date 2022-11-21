@@ -68,7 +68,7 @@ const JobDetails = () => {
                         </button>
                     </div>
                     <div className="ml-2 text-sm text-slate-500" style={{ marginTop: '5px' }}>
-                        Job: {jobStats.purchase_order}
+                        {jobStats.purchase_order}
                     </div>
                 </div>
                 <div className="flex-1 flex justify-end">
