@@ -289,11 +289,8 @@ const CustomerHome = () => {
                           <div className="text-sm font-medium text-gray-900">
                             {currentUser.first_name} {' '} {currentUser.last_name}
                           </div>
-                          <div class="group flex items-center space-x-2.5">
-                            {/* {currentUser.customerLogo && (
-                              <img className="h-6 w-6 rounded-full" src={currentUser.customerLogo} alt="customerLogo"/>
-                            )} */}
-                            <span class="text-sm font-medium text-gray-500 group-hover:text-gray-900">{currentUser.customerName}</span>
+                          <div className="group flex items-center space-x-2.5">
+                            <span className="text-sm font-medium text-gray-500 group-hover:text-gray-900">{currentUser.customerName}</span>
                           </div>
                         </div>
                       </Link>

@@ -95,8 +95,6 @@ const JobsQueue = () => {
       availableStatuses.push({id: 'T', name: 'Canceled'})
       availableStatuses.push({id: 'C', name: 'Completed'})
       availableStatuses.push({id: 'I', name: 'Invoiced'})
-
-      setStatusSelected(availableStatuses[0])
     }
 
   }, [])
