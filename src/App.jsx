@@ -112,9 +112,10 @@ const  App = () => {
                       {currentUser.isCustomer && (
                         <>
                           <Route index element={<CustomerHome />} />
-                          <Route path="home" element={<CustomerHome />} />
                         </>
                       )}
+
+                      <Route path="home" element={<CustomerHome />} />
                       
                       {!currentUser.isCustomer && <Route index element={<Jobs />} />}
 

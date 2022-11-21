@@ -308,33 +308,36 @@ const CustomerHome = () => {
                           </div>
                         </div>
                       </Link>
-                      {/* Action buttons */}
-                      <div className="flex flex-col sm:flex-row xl:flex-col">
-                        <Link
-                          to="/create-job"
-                          className="inline-flex items-center justify-center rounded-md border
-                                     border-transparent bg-red-600 px-4 py-2 text-sm font-medium
-                                      text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
-                                       focus:ring-red-500 focus:ring-offset-2 xl:w-full"
-                        >
-                          <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                          New Job
-                        </Link>
-                      </div>
+                      {currentUser.isCustomer && (
+                        <div className="flex flex-col sm:flex-row xl:flex-col">
+                          <Link
+                            to="/create-job"
+                            className="inline-flex items-center justify-center rounded-md border
+                                      border-transparent bg-red-600 px-4 py-2 text-sm font-medium
+                                        text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
+                                        focus:ring-red-500 focus:ring-offset-2 xl:w-full"
+                          >
+                            <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                            New Job
+                          </Link>
+                        </div>
+                      )}
                     </div>
-                    {/* Meta info */}
-                    <div className="flex flex-col space-y-6 sm:flex-row sm:space-y-0 sm:space-x-8 xl:flex-col xl:space-x-0 xl:space-y-6">
-                      <div className="flex items-center space-x-2">
-                        <CheckBadge />
-                        <span className="text-sm font-medium text-gray-500">
-                          {currentUser.isPremiumMember ? 'Premium Member' : 'On-Demand Member'}
-                        </span>
+                    {currentUser.isCustomer && (
+                      <div className="flex flex-col space-y-6 sm:flex-row sm:space-y-0 sm:space-x-8 xl:flex-col xl:space-x-0 xl:space-y-6">
+                        <div className="flex items-center space-x-2">
+                          <CheckBadge />
+                          <span className="text-sm font-medium text-gray-500">
+                            {currentUser.isPremiumMember ? 'Premium Member' : 'On-Demand Member'}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RectangleStack />
+                          <span className="text-sm font-medium text-gray-500">{totalJobs} Jobs</span>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RectangleStack />
-                        <span className="text-sm font-medium text-gray-500">{totalJobs} Jobs</span>
-                      </div>
-                    </div>
+                    )}
+                    
                   </div>
                 </div>
               </div>
@@ -695,18 +698,22 @@ const CustomerHome = () => {
                     />
                   </svg>
                   <h3 className="mt-2 text-sm font-medium text-gray-900">No jobs</h3>
-                  <p className="mt-1 text-sm text-gray-500">Get started by creating a new job.</p>
-                  <div className="mt-6">
-                    <Link
-                      to="/create-job"
-                      className="inline-flex items-center rounded-md border border-transparent
-                               bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm
-                                hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                    >
-                      <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                      New Job
-                    </Link>
-                  </div>
+                  {currentUser.isCustomer && (
+                    <>
+                      <p className="mt-1 text-sm text-gray-500">Get started by creating a new job.</p>
+                      <div className="mt-6">
+                        <Link
+                          to="/create-job"
+                          className="inline-flex items-center rounded-md border border-transparent
+                                  bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm
+                                    hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        >
+                          <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                          New Job
+                        </Link>
+                      </div>  
+                    </>
+                  )}
                 </div>
               )}
 
@@ -798,85 +805,88 @@ const CustomerHome = () => {
           </div>
 
           {/* Activity feed */}
-          <div className={`${isActivityOpen ? 'bg-gray-50' : 'bg-white'} pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0`}>
-            <div className="px-6 lg:w-80">
-              <div onClick={() => setIsActivityOpen(!isActivityOpen)} className="cursor-pointer pt-6 pb-2 flex justify-between">
-                <h2 className="text-sm font-semibold text-gray-500 hover:text-gray-900">Activity</h2>
-                <div className="relative" style={{ top: '2px'}}>
-                  {isActivityOpen ? (
-                    <ChevronUpIcon 
-                    className="h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" />
-                  ) : (
-                    <ChevronDownIcon 
-                       className="h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" />
-                  ) }
-                  
+          {currentUser.isCustomer && (
+            <div className={`${isActivityOpen ? 'bg-gray-50' : 'bg-white'} pr-4 sm:pr-6 lg:flex-shrink-0 lg:border-l lg:border-gray-200 lg:pr-8 xl:pr-0`}>
+              <div className="px-6 lg:w-80">
+                <div onClick={() => setIsActivityOpen(!isActivityOpen)} className="cursor-pointer pt-6 pb-2 flex justify-between">
+                  <h2 className="text-sm font-semibold text-gray-500 hover:text-gray-900">Activity</h2>
+                  <div className="relative" style={{ top: '2px'}}>
+                    {isActivityOpen ? (
+                      <ChevronUpIcon 
+                      className="h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" />
+                    ) : (
+                      <ChevronDownIcon 
+                        className="h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" />
+                    ) }
+                    
+                  </div>
                 </div>
-              </div>
-              {isActivityOpen && (
-                <div>
-                  {activitiesLoading && <Loader />}
+                {isActivityOpen && (
+                  <div>
+                    {activitiesLoading && <Loader />}
 
-                  {!activitiesLoading && totalActivities === 0 && (
-                    <div className="text-center m-auto text-sm py-52">
-                      <div className="font-medium text-gray-500">There is no activity yet.</div>
-                      <div className="text-gray-500">When you request a job you will see the activity here.</div>
-                    </div> 
-                  )}
+                    {!activitiesLoading && totalActivities === 0 && (
+                      <div className="text-center m-auto text-sm py-52">
+                        <div className="font-medium text-gray-500">There is no activity yet.</div>
+                        <div className="text-gray-500">When you request a job you will see the activity here.</div>
+                      </div> 
+                    )}
 
-                  {!activitiesLoading && (
-                      <ul role="list" className="divide-y divide-gray-200">
-                          {activities.map((activity) => (
-                            <li key={activity.id} className="py-4">
-                              <div className="flex space-x-3">
-                                <img
-                                  className="h-6 w-6 rounded-full"
-                                  src={activity.user.profile.avatar}
-                                  alt=""
-                                />
-                                <div className="flex-1 space-y-1">
-                                  <div className="flex items-center justify-between">
-                                    <h3 className="text-xs font-medium">
-                                      {activity.user.id === currentUser.id ? 'You' : `${activity.user.first_name} ${activity.user.last_name}`}
-                                    </h3>
-                                    <p className="text-sm text-gray-500">
-                                      <ReactTimeAgo date={new Date(activity.timestamp)} locale="en-US" timeStyle="twitter" />
+                    {!activitiesLoading && (
+                        <ul role="list" className="divide-y divide-gray-200">
+                            {activities.map((activity) => (
+                              <li key={activity.id} className="py-4">
+                                <div className="flex space-x-3">
+                                  <img
+                                    className="h-6 w-6 rounded-full"
+                                    src={activity.user.profile.avatar}
+                                    alt=""
+                                  />
+                                  <div className="flex-1 space-y-1">
+                                    <div className="flex items-center justify-between">
+                                      <h3 className="text-xs font-medium">
+                                        {activity.user.id === currentUser.id ? 'You' : `${activity.user.first_name} ${activity.user.last_name}`}
+                                      </h3>
+                                      <p className="text-sm text-gray-500">
+                                        <ReactTimeAgo date={new Date(activity.timestamp)} locale="en-US" timeStyle="twitter" />
+                                      </p>
+                                    </div>
+                                    <p className="text-xs text-gray-500">
+                                      <span>Job set to </span> 
+                                      <span className="font-medium text-gray-500">
+                                          {activity.status === 'A' && 'Accepted'}
+                                          {activity.status === 'S' && 'Assigned'}
+                                          {activity.status === 'U' && 'Submitted'}
+                                          {activity.status === 'W' && 'In Progress'}
+                                          {activity.status === 'C' && 'Completed'}
+                                          {activity.status === 'T' && 'Canceled'}
+                                          {activity.status === 'R' && 'Review'}
+                                          {activity.status === 'I' && 'Invoiced'}
+                                      </span> for  
+                                      <span className="font-medium text-gray-500"> {activity.tailNumber}</span>
                                     </p>
                                   </div>
-                                  <p className="text-xs text-gray-500">
-                                    <span>Job set to </span> 
-                                    <span className="font-medium text-gray-500">
-                                        {activity.status === 'A' && 'Accepted'}
-                                        {activity.status === 'S' && 'Assigned'}
-                                        {activity.status === 'U' && 'Submitted'}
-                                        {activity.status === 'W' && 'In Progress'}
-                                        {activity.status === 'C' && 'Completed'}
-                                        {activity.status === 'T' && 'Canceled'}
-                                        {activity.status === 'R' && 'Review'}
-                                        {activity.status === 'I' && 'Invoiced'}
-                                    </span> for  
-                                    <span className="font-medium text-gray-500"> {activity.tailNumber}</span>
-                                  </p>
                                 </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                  )}
+                              </li>
+                            ))}
+                          </ul>
+                    )}
 
-                  {totalActivities > 0 && (
-                    <div className="border-t border-gray-200 pb-4 pt-10 text-sm">
-                      <div className="font-semibold text-red-600 hover:text-red-900">
-                        View all activity
-                        <span aria-hidden="true"> &rarr;</span>
+                    {totalActivities > 0 && (
+                      <div className="border-t border-gray-200 pb-4 pt-10 text-sm">
+                        <div className="font-semibold text-red-600 hover:text-red-900">
+                          View all activity
+                          <span aria-hidden="true"> &rarr;</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              )}
-              
+                    )}
+                  </div>
+                )}
+                
+              </div>
             </div>
-          </div>
+          )}
+          
           
         </div>
     )
