@@ -750,7 +750,7 @@ const CustomerHome = () => {
                                     )
                                       :
                                       (
-                                        <span>Complete by {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
+                                        <span>Complete before {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
                                         : 
                                           <span
                                             className="relative inline-flex items-center

@@ -141,7 +141,7 @@ const SharedJob = () => {
                     </div>
 
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Complete By</dt>
+                        <dt className="text-sm font-medium text-gray-500">Complete Before</dt>
                         <dd className="mt-1 text-sm text-gray-900">
                             {jobDetails.completeBy ? jobDetails.completeBy 
                             : <span

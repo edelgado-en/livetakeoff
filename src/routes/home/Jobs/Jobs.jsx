@@ -46,7 +46,7 @@ const availableStatuses = [
 
 const sortOptions = [
   { id: 'requestDate', name: 'Request Date' },
-  { id: 'completeBy', name: 'Complete By' },
+  { id: 'completeBy', name: 'Complete Before' },
   { id: 'arrivalDate', name: 'Arrival Date' },
 ]
 
@@ -717,7 +717,7 @@ const JobsQueue = () => {
             <Listbox value={sortSelected} onChange={setSortSelected}>
                 {({ open }) => (
                     <>
-                    <div className="relative" style={{width: '130px'}}>
+                    <div className="relative" style={{width: '150px'}}>
                         <Listbox.Button className="relative w-full cursor-default rounded-md 
                                                       bg-white py-2 px-3 pr-8 text-left
                                                     shadow-sm border-transparent focus:border-transparent focus:ring-0 focus:outline-none
@@ -931,7 +931,7 @@ const JobsQueue = () => {
                                     )
                                       :
                                       (
-                                        <span>Complete by {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
+                                        <span>Complete before {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
                                         : 
                                           <span
                                             className="relative inline-flex items-center
