@@ -1,8 +1,8 @@
 import httpService from "../../../services/httpService";
 
 
-export const getJobs = (data: any) => {
-    return httpService.post('/api/jobs', data);
+export const getJobs = (data: any, currentPage: Number) => {
+    return httpService.post(`/api/jobs?page=${currentPage}&size=${50}`, data);
 }
 
 export const getCurrentUser = () => {

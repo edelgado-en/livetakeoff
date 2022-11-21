@@ -793,10 +793,10 @@ const CustomerHome = () => {
                   
                   {totalJobs > 10 && (
                     <div className="border-t border-gray-200 py-4 text-sm pl-8">
-                        <div  className="font-semibold text-red-600 hover:text-red-900">
+                        <Link to="/jobs" className="font-semibold text-red-600 hover:text-red-900">
                           View all jobs
                           <span aria-hidden="true"> &rarr;</span>
-                        </div>
+                        </Link>
                     </div>
                   )}
                 </>
