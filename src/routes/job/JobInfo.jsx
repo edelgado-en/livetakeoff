@@ -10,6 +10,7 @@ import { Switch, Popover } from "@headlessui/react";
 import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
 import JobPriceBreakdownModal from './JobPriceBreakdownModal'
+import JobCancelModal from "./JobCancelModal";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import { useAppSelector } from "../../app/hooks";
@@ -25,7 +26,11 @@ const JobInfo = () => {
     const [jobDetails, setJobDetails] = useState({service_assignments: [], retainer_service_assignments: []})
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
+    const [isCancelJobModalOpen, setIsCancelJobModalOpen] = useState(false)
+
     const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] = useState(false)
+
+
     const [showActions, setShowActions] = useState(false)
     const currentUser = useAppSelector(selectUser)
     const navigate = useNavigate();
@@ -38,6 +43,10 @@ const JobInfo = () => {
 
     const handleToggleJobCompleteModal = () => {
         setCompleteJobModalOpen(!isCompleteJobModalOpen)
+    }
+
+    const handleToggleJobCancelModal = () => {
+        setIsCancelJobModalOpen(!isCancelJobModalOpen)
     }
 
     const handleTogglePriceBreakdownModal = () => {
@@ -63,14 +72,18 @@ const JobInfo = () => {
                 setErrorMessage('Unable to load job details.')
             }
         }
-
     }
 
-    // it could W(Work In Progress) or C(completed)
+    // it could W(Work In Progress) or C(completed) or T(Cancelled)
     const updateJobStatus = async (status) => {
+        setCompleteJobModalOpen(false)
+        setIsCancelJobModalOpen(false)
+        
+        setLoading(true)
+
         try {
             await api.updateJobStatus(jobId, status)
-
+            
             const updatedJobDetails = {
                 ...jobDetails,
                 status,
@@ -86,13 +99,15 @@ const JobInfo = () => {
 
             setJobDetails(updatedJobDetails)
 
-            setCompleteJobModalOpen(false)
+            setLoading(false)
 
             if (status === 'C') {
                 navigate('/jobs')
             }
 
         } catch (e) {
+            toast.error('Unable to update job status.')
+            setLoading(false)
         }
     }
 
@@ -143,19 +158,6 @@ const JobInfo = () => {
         }
     }
 
-    //WORK IN PROGRESS
-    const isAllServicesCompleted = async () => {
-        const { data } = await api.getJobDetails(jobId)
-
-        //TODO: you have to actually pull all the services from the API because in here you only see
-        // the assignments for the current user
-        const allServices = [...data.service_assignments, ...data.retainer_service_assignments]
-
-        const completedServices = allServices.filter((s) => s.status === 'C')
-
-        return allServices.length === completedServices.length && (data.service_assignments.length > 0
-                                                                    || data.retainer_service_assignments.length > 0)
-    }
 
     return (
         <AnimatedPage>
@@ -170,6 +172,25 @@ const JobInfo = () => {
                         <h1 className="text-2xl font-semibold text-gray-600">Job Details</h1>
                     </div>
                 </div>
+
+                {currentUser.isCustomer
+                         && (jobDetails.status === 'U'
+                                || jobDetails.status === 'A'
+                                || jobDetails.status === 'R'
+                                || jobDetails.status === 'S') && (
+                    <div className="mt-4 mb-4">
+                        <button
+                            type="button"
+                            onClick={() => handleToggleJobCancelModal()}
+                            className="inline-flex items-center rounded-md border
+                                         border-gray-300 bg-white px-4 py-2 text-sm font-medium
+                                          text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
+                                           focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                            Cancel Job
+                        </button>
+                    </div>
+                )}
+
                 {!currentUser.isCustomer && (
                     <div className="mt-4 mb-4">
                         {jobDetails.status === 'S' && 
@@ -492,6 +513,12 @@ const JobInfo = () => {
                 
             </div>
             )}
+
+            {isCancelJobModalOpen && <JobCancelModal
+                                            isOpen={isCancelJobModalOpen}
+                                            jobDetails={jobDetails}
+                                            handleClose={handleToggleJobCancelModal}
+                                            updateJobStatus={updateJobStatus} />}
 
             {isCompleteJobModalOpen && <JobCompleteModal
                                             isOpen={isCompleteJobModalOpen}

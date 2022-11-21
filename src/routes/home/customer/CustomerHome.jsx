@@ -215,6 +215,8 @@ const CustomerHome = () => {
         statusName = "Invoiced"
       } else if (request.status === 'C') {
         statusName = "Complete"
+      } else if (request.status === 'All') {
+        statusName = "All Open Jobs"
       }
   
       //set active filters
@@ -226,13 +228,10 @@ const CustomerHome = () => {
         })
       }
       
-      if (request.status !== 'All') {
-        activeFilters.push({
-          id: 'status',
-          name: statusName,
-        })
-      }
-  
+      activeFilters.push({
+        id: 'status',
+        name: statusName,
+      })
   
       if (request.airport !== 'All') {
         activeFilters.push({
