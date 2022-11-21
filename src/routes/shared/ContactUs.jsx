@@ -34,74 +34,95 @@ const locations = [
   { id: 1,
     name: 'South Florida',
     airports: [
-       {initials: 'BCT', name: 'Boca Raton Airport'},
-       {initials: 'FLL', name: 'Florida Lauderdale International Airport'},
-       {initials: 'FXE', name: 'Florida Lauderdale Executive Airport'},
-       {initials: 'MIA', name: 'Miami International Airport'},
-       {initials: 'OPF', name: 'Miami-Opa Locka Executive Airport'},
-       {initials: 'PBI', name: 'Palm Beach International Airport'},
-       {initials: 'SUA', name: 'Stuart Florida Airport'},
+       {initials: 'KBCT', name: 'Boca Raton Airport'},
+       {initials: 'KFLL', name: 'Fort Lauderdale Hollywood International Airport (Headquarters!)'},
+       {initials: 'KFXE', name: 'Florida Lauderdale Executive Airport'},
+       {initials: 'KMIA', name: 'Miami International Airport'},
+       {initials: 'KOPF', name: 'Miami-Opa Locka Executive Airport'},
+       {initials: 'KPBI', name: 'Palm Beach International Airport'},
+       {initials: 'KSUA', name: 'Stuart Witham Field'},
       ]
   },
   { id: 2,
     name: 'Florida West Coast',
     airports: [
-      {initials: 'NAP', name: 'Naples International Airport'},
-       {initials: 'RSW', name: 'Forts Myers Airport'},
-       {initials: 'SRQ', name: 'Sarasota Bradenton International Airport'},
-       {initials: 'TPA', name: 'Tampa International Airport'},
-       {initials: 'TPF', name: 'Peter O. Knight Airport'},
-       {initials: 'VDF', name: 'Tampa Executive Airport'},
+      {initials: 'KAPF', name: 'Naples Municipal Airport'},
+       {initials: 'KRSW', name: 'Southwest Florida International Airport'},
+       {initials: 'KSRQ', name: 'Sarasota Bradenton International Airport'},
+       {initials: 'KTPA', name: 'Tampa International Airport'},
+       {initials: 'KTPF', name: 'Peter O. Knight Airport'},
+       {initials: 'KVDF', name: 'Tampa Executive Airport'},
     ]
   },
   { id: 3,
     name: 'Central Florida',
     airports: [
-      {initials: 'DAB', name: 'Daytona Beach International Airport'},
-       {initials: 'MLB', name: 'Melbourne Orlando International Airport'},
-       {initials: 'ORL', name: 'Orlando International Airport'},
-       {initials: 'MCO', name: 'Orlando International Airport'},
-       {initials: 'SFB', name: 'Orlando Sanford International Airport'},
+      {initials: 'KDAB', name: 'Daytona Beach International Airport'},
+       {initials: 'KMLB', name: 'Melbourne Orlando International Airport'},
+       {initials: 'KORL', name: 'Orlando Executive Airport'},
+       {initials: 'KMCO', name: 'Orlando International Airport'},
+       {initials: 'KSFB', name: 'Orlando Sanford International Airport'},
     ]
   },
   { id: 4,
     name: 'Nevada',
     airports: [
-      {initials: 'LAS', name: 'Las Vegas Airport'},
-       {initials: 'HND', name: 'Haneda Airport'},
+      {initials: 'KLAS', name: 'Harry Reid International Airport'},
+       {initials: 'KHND', name: 'Henderson Executive Airport'},
     ]
   },
   { id: 5,
     name: 'California',
     airports: [
-      {initials: 'BUR', name: 'Hollywood Burbank Airport'},
+      {initials: 'KBUR', name: 'Burbank Bob Hope Airport'},
        {initials: 'VNY', name: 'Van Nuys Airport'},
     ]
   },
   { id: 6,
     name: 'Arizona',
     airports: [
-      {initials: 'SDL', name: 'Scottsdale Airport'},
-       {initials: 'PHX', name: 'Phoenix Sky Harbor Airport'},
-       {initials: 'TUS', name: 'Tucson International Airport'},
+      {initials: 'KSDL', name: 'Scottsdale Airport'},
+       {initials: 'KPHX', name: 'Phoenix Sky Harbor Airport'},
+       {initials: 'KTUS', name: 'Tucson International Airport'},
     ]
   },
   { id: 7,
-    name: 'Baltimore-Washington',
+    name: 'Washington',
     airports: [
-      {initials: 'IAD', name: 'Dulles International Airport'},
-       {initials: 'BWI', name: 'Baltimore Washington International Airport'},
-       {initials: 'DCA', name: 'Reagan National Airport'},
-       {initials: 'RIC', name: 'Richmond International Airport'},
+      {initials: 'KIAD', name: 'Washington Dulles International Airport'},
+       {initials: 'KBWI', name: 'Baltimore/Washington International Airport'},
+       {initials: 'KJYO', name: 'Leesburg Executive Airport'},
+       {initials: 'KHEF', name: 'Manassas Regional Airport'},
+       {initials: 'KGAI', name: 'Montgomery County Airport'},
+       {initials: 'KDCA', name: 'Ronald Reagan National Airport'},
+       {initials: 'KRIC', name: 'Richmond International Airport'},
     ]
   },
   { id: 8,
-    name: 'Boston-Connecticut-New Hampshire-Rhode Island-Portland',
+    name: 'Boston – Connecticut - New Hampshire - Rhode Island - Oregon',
     airports: [
-        {initials: 'BOS', name: 'Logan International Airport'},
-        {initials: 'BDL', name: 'Bradley International Airport'},
-        {initials: 'SFZ', name: 'North Central State Airport'},
-        {initials: 'OQU', name: 'Norwood Memorial Airport'},
+      {initials: 'KBDL', name: 'Bradley International Airport'},
+      {initials: 'KALB', name: 'Albany International Airport'},
+      {initials: 'KEEN', name: 'Dillant–Hopkins Airport'},
+      {initials: 'KASH', name: 'Nashua Airport'},
+      {initials: 'KLWM', name: 'Lawrence Municipal Airport'},
+      {initials: 'KHYA', name: 'Barnstable Municipal Airport'},
+      {initials: 'KORE', name: 'Orange Municipal Airport'},
+      {initials: 'KBED', name: 'Hanscom Field Airport'},
+      {initials: 'KGON', name: 'Groton–New London Airport'},
+      {initials: 'KHFD', name: 'Hartford–Brainard Airport'},
+      {initials: 'KBAF', name: 'Westfield-Barnes Regional Airport'},
+      {initials: 'KBVY', name: 'Beverly Regional Airport'},
+      {initials: 'KBOS', name: 'Logan International Airport'},
+      {initials: 'KPSM', name: 'Portsmouth International Airport'},
+      {initials: 'KLCI', name: 'Laconia Municipal Airport'},
+      {initials: 'KSFZ', name: 'North Central State Airport'},
+      {initials: 'KCQX', name: 'Chatham Municipal Airport'},
+      {initials: 'KHYA', name: 'Barnstable Municipal Airport'},
+      {initials: 'KORH', name: 'Worcester Regional Airport'},
+      {initials: 'K3B0', name: 'Southbridge Municipal Airport'},
+      {initials: 'KFIT', name: 'Fitchburg Municipal Airport'},
+      {initials: 'KLCI', name: 'Laconia Municipal Airport'},
     ]
   },
 ]
@@ -499,8 +520,8 @@ const ContactUs = () => {
                         </h3>
                         {location.airports.map((airport, index) => (
                             <div key={index} className=" flex gap-2 mt-2 text-sm text-gray-500">
-                              <span>{index + 1}. </span>
-                              <div className="font-semibold text-gray-500 w-7">{airport.initials}</div>
+                              <span className="w-4">{index + 1}. </span>
+                              <div className="font-semibold text-gray-500 w-10">{airport.initials}</div>
                               <div>{airport.name}</div>
                             </div>
                         ))}
