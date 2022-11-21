@@ -201,8 +201,8 @@ const JobInfo = () => {
                 
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Purchase Order</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.purchase_order ? jobDetails.purchase_order : 'None'}</dd>
+                        <dt className="text-sm font-medium text-gray-500">Tail Number</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.tailNumber}</dd>
                     </div>
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Status</dt>
@@ -238,11 +238,11 @@ const JobInfo = () => {
                         <dt className="text-sm font-medium text-gray-500">Airport</dt>
                         <dd className="mt-1 text-sm text-gray-900">{jobDetails.airport?.name}</dd>
                     </div>
-                   
+
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Tail Number</dt>
-                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.tailNumber}</dd>
-                    </div>
+                        <dt className="text-sm font-medium text-gray-500">Purchase Order</dt>
+                        <dd className="mt-1 text-sm text-gray-900">{jobDetails.purchase_order ? jobDetails.purchase_order : 'None'}</dd>
+                    </div> 
                     
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">FBO</dt>
