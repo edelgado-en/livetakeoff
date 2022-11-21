@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom"
 import { useEffect, useState, Fragment } from "react";
-import { TrashIcon, ChevronRightIcon, PlusIcon, CheckIcon, ChevronDownIcon } from "@heroicons/react/outline";
+import { ChevronRightIcon, PlusIcon, CheckIcon, ChevronDownIcon } from "@heroicons/react/outline";
 import { Listbox, Transition, Menu, Popover, Disclosure, Dialog } from '@headlessui/react'
 import { UserIcon } from "@heroicons/react/solid";
 import { useAppSelector } from "../../../app/hooks";
@@ -36,11 +36,11 @@ function classNames(...classes) {
 }
 
 const availableStatuses = [
-  {id: 'All', name: 'All'},
+  {id: 'All', name: 'All Open Jobs'},
+  {id: 'U', name: 'Submitted'},
   {id: 'A', name: 'Accepted'},
   {id: 'S', name: 'Assigned'},
   {id: 'W', name: 'In Progress'},
-  {id: 'U', name: 'Submitted'},
   {id: 'R', name: 'Review'},
 ]
 
@@ -56,7 +56,7 @@ const JobsQueue = () => {
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
   const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
-  const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[1])
+  const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[2])
   const [sortSelected, setSortSelected] = useState(sortOptions[0])
   const [open, setOpen] = useState(false)
   
@@ -82,6 +82,14 @@ const JobsQueue = () => {
   useEffect(() => {
     getCustomers();
     getAirports();
+
+    if (currentUser?.isCustomer) {
+      //append closed jobs statuses to available statuses
+      availableStatuses.push({id: 'T', name: 'Canceled'})
+      availableStatuses.push({id: 'C', name: 'Completed'})
+      availableStatuses.push({id: 'I', name: 'Invoiced'})
+    }
+
   }, [])
 
   const getCustomers = async () => {
@@ -181,17 +189,12 @@ const JobsQueue = () => {
 
     let statusName;
 
-    if (request.status === 'A') {
-      statusName = "Accepted"
-    } else if (request.status === 'S') {
-      statusName = "Assigned"
-    } else if (request.status === 'W') {
-      statusName = "In Progress"
-    } else if (request.status === 'U') {
-      statusName  = "Submitted"
-    } else if (request.status === 'R') {
-      statusName = "Review"
-    }
+    //get status name by request.status
+    availableStatuses.forEach(status => {
+      if (status.id === request.status) {
+        statusName = status.name
+      }
+    })
 
     //set active filters
     let activeFilters = []
@@ -382,7 +385,7 @@ const JobsQueue = () => {
                                                   leave="transition ease-in duration-100"
                                                   leaveFrom="opacity-100"
                                                   leaveTo="opacity-0">
-                                                  <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-72 w-full overflow-auto
+                                                  <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-96 w-full overflow-auto
                                                                               rounded-md bg-white py-1 shadow-lg ring-1
                                                                               ring-black ring-opacity-5 focus:outline-none text-xs">
                                                       {availableStatuses.map((status) => (
@@ -886,20 +889,23 @@ const JobsQueue = () => {
                             </div>
                             <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
                                 <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                              ${job.status === 'A' && 'bg-blue-500 '}
+                                              ${job.status === 'A' && 'bg-blue-400 '}
                                               ${job.status === 'S' && 'bg-yellow-500 '}
                                               ${job.status === 'U' && 'bg-indigo-500 '}
                                               ${job.status === 'W' && 'bg-green-500 '}
+                                              ${job.status === 'C' && 'bg-green-500 '}
+                                              ${job.status === 'T' && 'bg-gray-600 '}
                                               ${job.status === 'R' && 'bg-purple-500 '}
+                                              ${job.status === 'I' && 'bg-blue-500 '}
                                             `}>
-                                  {job.status === 'A' && 'Accepted'}
-                                  {job.status === 'S' && 'Assigned'}
-                                  {job.status === 'U' && 'Submitted'}
-                                  {job.status === 'W' && 'Work In Progress'}
-                                  {job.status === 'C' && 'Completed'}
-                                  {job.status === 'T' && 'Canceled'}
-                                  {job.status === 'R' && 'Review'}
-                                  {job.status === 'I' && 'Invoiced'}
+                                    {job.status === 'A' && 'Accepted'}
+                                    {job.status === 'S' && 'Assigned'}
+                                    {job.status === 'U' && 'Submitted'}
+                                    {job.status === 'W' && 'In Progress'}
+                                    {job.status === 'C' && 'Completed'}
+                                    {job.status === 'T' && 'Canceled'}
+                                    {job.status === 'R' && 'Review'}
+                                    {job.status === 'I' && 'Invoiced'}
                                 </p>
                                 {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && job.asignees?.length > 0 && (
                                     <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">
@@ -920,16 +926,25 @@ const JobsQueue = () => {
                                 )}
                                 
                                 <div className="text-sm text-gray-500 mt-2">
-                                  Complete by {job.completeBy ? <span className="text-gray-700 text-sm">{job.completeBy}</span>
-                                  : 
-                                    <span
-                                      className="relative inline-flex items-center
-                                                rounded-full border border-gray-300 px-2 py-0.5 ml-2">
-                                      <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                                      </div>
-                                      <div className="ml-3 text-xs text-gray-700">TBD</div>
-                                    </span>}
+                                {(job.status === 'C' || job.status === 'I') ? (
+                                      <span>Completed on <span className="text-gray-700">{job.completion_date}</span></span>
+                                    )
+                                      :
+                                      (
+                                        <span>Complete by {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
+                                        : 
+                                          <span
+                                            className="relative inline-flex items-center
+                                                      rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                            <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                            </div>
+                                            <div className="ml-3 text-xs text-gray-700">TBD</div>
+                                          </span>}
+                                        
+                                        </span>
+                                      )
+                                    }
                                 </div>
                                 <div className="text-sm text-gray-500 mt-2">
                                   Arrival 

@@ -148,7 +148,7 @@ const SharedJob = () => {
                     </div>
 
                     <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Created By</dt>
+                        <dt className="text-sm font-medium text-gray-500">Requested By</dt>
                         <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
                             {jobDetails.created_by?.first_name} {jobDetails.created_by?.last_name}
                         </dd>

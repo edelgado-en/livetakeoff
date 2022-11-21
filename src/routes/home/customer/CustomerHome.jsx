@@ -15,7 +15,7 @@ import {
   ChevronUpIcon
 } from '@heroicons/react/outline'
 
-import { Bars3CenterLeftIcon, CheckIcon, PlusIcon } from '@heroicons/react/outline'
+import { CheckIcon, PlusIcon } from '@heroicons/react/outline'
 
 import * as api from './apiService'
 
@@ -35,19 +35,6 @@ const MagnifyingGlassIcon = () => {
 
   )
 }
-
-const activityItems = [
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  { project: 'N123BB', commit: '2d89f0c8', environment: 'production', time: '1h' },
-  // More items...
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -747,7 +734,7 @@ const CustomerHome = () => {
                                                 ${job.status === 'R' && 'bg-purple-500 '}
                                                 ${job.status === 'I' && 'bg-blue-500 '}
                                               `}>
-                                    {job.status === 'A' && 'Accepted'}
+                                      {job.status === 'A' && 'Accepted'}
                                       {job.status === 'S' && 'Assigned'}
                                       {job.status === 'U' && 'Submitted'}
                                       {job.status === 'W' && 'In Progress'}
