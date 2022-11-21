@@ -197,7 +197,7 @@ const SharedJob = () => {
                                     <div className="min-w-0 flex-1">
                                         <div className="focus:outline-none">
                                             <div className="grid grid-cols-3 text-sm pb-2">
-                                                <div className="col-span-2 font-medium text-gray-900 relative top-1">
+                                                <div className={`${service.status === 'C' ? 'col-span-2' : 'col-span-3'} font-medium text-gray-900 relative top-1`}>
                                                     {service.name}
                                                 </div>
                                                 <div className="text-right">
@@ -241,7 +241,7 @@ const SharedJob = () => {
                                     <div className="min-w-0 flex-1">
                                         <div className="">
                                             <div className="grid grid-cols-3 text-sm pb-2">
-                                                <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
+                                                <div className={`${service.status === 'C' ? 'col-span-2' : 'col-span-3'} font-medium text-gray-900 relative top-1`}>{service.name}</div>
                                                 <div className="text-right">
                                                     {service.status === 'C' && (
                                                         <div className="flex-shrink-0 flex justify-end">
