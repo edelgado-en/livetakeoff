@@ -66,7 +66,8 @@ const sortOptions = [
 ]
 
 const availableStatuses = [
-  {id: 'All', name: 'All Open Jobs'},
+  {id: 'All', name: 'All'},
+  {id: 'O', name: 'All Open Jobs'},
   {id: 'U', name: 'Submitted'},
   {id: 'A', name: 'Accepted'},
   {id: 'S', name: 'Assigned'},
@@ -87,7 +88,7 @@ const CustomerHome = () => {
     const [activitiesLoading, setActivitiesLoading] = useState(false);
     
     const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
-    const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[0])
+    const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[1])
     const [sortSelected, setSortSelected] = useState(sortOptions[0])
     const [airports, setAirports] = useState([])
     const [airportSelected, setAirportSelected] = useState(JSON.parse(localStorage.getItem('airportSelected')) || {id: 'All', name: 'All'})
@@ -215,7 +216,7 @@ const CustomerHome = () => {
         statusName = "Invoiced"
       } else if (request.status === 'C') {
         statusName = "Complete"
-      } else if (request.status === 'All') {
+      } else if (request.status === 'O') {
         statusName = "All Open Jobs"
       }
   
@@ -228,11 +229,13 @@ const CustomerHome = () => {
         })
       }
       
-      activeFilters.push({
-        id: 'status',
-        name: statusName,
-      })
-  
+      if (request.status !== 'All') {
+        activeFilters.push({
+          id: 'status',
+          name: statusName,
+        })
+      }
+
       if (request.airport !== 'All') {
         activeFilters.push({
           id: 'airport',

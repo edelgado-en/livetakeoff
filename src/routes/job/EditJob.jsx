@@ -108,7 +108,7 @@ const EditJob = () => {
 
             if (response.data.on_site) {
                 setOnSite(true)
-                console.log('on site')
+            
             } else {
                 if (response.data.estimatedETA) {
                     setEstimatedArrivalDate(new Date(response.data.estimatedETA))
@@ -269,7 +269,7 @@ const EditJob = () => {
                                             leave="transition ease-in duration-100"
                                             leaveFrom="opacity-100"
                                             leaveTo="opacity-0">
-                                            <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                                            <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
                                                                         rounded-md bg-white py-1 text-base shadow-lg ring-1
                                                                         ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                                 {availableStatuses.map((status) => (

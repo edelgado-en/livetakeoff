@@ -86,8 +86,6 @@ const  App = () => {
   const location = useLocation()
   const currentUser = useAppSelector(selectUser)
 
-  console.log('currentUser', currentUser);
-
   return (
     <>
       <Suspense fallback={<Fallback />}>

@@ -56,7 +56,7 @@ const JobsQueue = () => {
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
   const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
-  const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[2])
+  const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || {id: 'A', name: 'Accepted'})
   const [sortSelected, setSortSelected] = useState(sortOptions[0])
   const [open, setOpen] = useState(false)
   
@@ -84,10 +84,19 @@ const JobsQueue = () => {
     getAirports();
 
     if (currentUser?.isCustomer) {
+      //remove the first entry and replace it with {id: 'All', name: 'All'},{id: 'O', name: 'All Open Jobs'},
+      availableStatuses.shift()
+
+      //Add {id: 'All', name: 'All'},{id: 'O', name: 'All Open Jobs'} to the beginning of the array
+      availableStatuses.unshift({id: 'O', name: 'All Open Jobs'})
+      availableStatuses.unshift({id: 'All', name: 'All'})
+
       //append closed jobs statuses to available statuses
       availableStatuses.push({id: 'T', name: 'Canceled'})
       availableStatuses.push({id: 'C', name: 'Completed'})
       availableStatuses.push({id: 'I', name: 'Invoiced'})
+
+      setStatusSelected(availableStatuses[0])
     }
 
   }, [])
@@ -392,8 +401,8 @@ const JobsQueue = () => {
                                                           <Listbox.Option
                                                               key={status.id}
                                                               className={({ active }) =>
-                                                                      classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                              'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                    `${status.id === 'R' || status.id === 'All' ? 'border-b border-gray-200 mb-4' : ''} relative cursor-default select-none py-2 pl-3 pr-9`)}
                                                               value={status}>
                                                               {({ selected, active }) => (
                                                                   <>

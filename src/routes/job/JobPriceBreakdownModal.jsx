@@ -16,7 +16,6 @@ const JobPriceBreakdownModal = ({ isOpen, handleClose, jobDetails }) => {
     const getPriceBreakdown = async () => {
         try {
             const { data } = await api.getJobPriceBreakdown(jobDetails.id)
-            console.log(data)
 
             setBreakdown(data)
 

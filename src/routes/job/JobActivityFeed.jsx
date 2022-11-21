@@ -74,8 +74,6 @@ export default function Example() {
         const { data } = await api.getJobActivities(jobId)
         
         setActivities(data.results)
-
-        console.log(data.results)
     }
   
   
