@@ -6,7 +6,7 @@ export const searchJobs = (data: any) => {
 }
 
 export const getJobActivities = () => {
-    return httpService.get('/api/customers/activities?page=1&size=12')
+    return httpService.get('/api/customers/activities?page=1&size=14')
 }
 
 export const getAirports = () => {
