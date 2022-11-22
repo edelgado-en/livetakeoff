@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { Link, useParams, Outlet, useLocation } from "react-router-dom";
-import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon, ShareIcon } from "@heroicons/react/outline";
+import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon, ShareIcon, ArrowLeftIcon } from "@heroicons/react/outline";
 import * as api from './apiService'
 import { toast } from "react-toastify";
 import { Popover } from '@headlessui/react'
@@ -15,6 +15,7 @@ const EstimateDetail = () => {
     const [estimateDetails, setEstimateDetails] = useState(null)
     const [isCopied, setIsCopied] = useState(false);
 
+    const navigate = useNavigate()
     const location = useLocation()
     const { id } = useParams()
 
@@ -28,7 +29,6 @@ const EstimateDetail = () => {
         try {
             const { data } = await api.getEstimateDetail(id)
 
-            console.log(data);
             setEstimateDetails(data);
 
             setLoading(false)
@@ -84,7 +84,16 @@ const EstimateDetail = () => {
                         </div>
                     </div>
                     <div className="flex flex-row mb-4">
-                        <div className="flex-1">
+                        <div className="flex gap-2">
+                            {!location.pathname.includes('shared') && (
+                                <button onClick={() => navigate(-1)} className="text-xs leading-5 font-semibold bg-slate-400/10
+                                    rounded-full p-2 text-slate-500
+                                    flex items-center space-x-2 hover:bg-slate-400/20
+                                    dark:highlight-white/5">
+                                    <ArrowLeftIcon className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
+                                </button>
+                            )}
+                            
                             <h1 className="text-2xl font-semibold text-gray-600">Job Estimate</h1>
                         </div>
                     </div>
@@ -246,8 +255,7 @@ const EstimateDetail = () => {
                             <div className="pb-20 flex justify-end">
                                 <Popover className="relative">
                                     <Popover.Button>
-                                        <button
-                                            type="button"
+                                        <div
                                             onClick={() => handleCopyClick()} 
                                             className="flex gap-2 rounded-md border border-gray-300 bg-white
                                                     py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
@@ -255,7 +263,7 @@ const EstimateDetail = () => {
                                         >
                                             <ShareIcon className="h-4 w-4 relative" style={{top: '2px'}} />
                                             Share
-                                        </button>
+                                        </div>
                                     </Popover.Button>
 
                                     <Popover.Panel className="absolute z-10">
