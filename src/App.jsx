@@ -48,6 +48,10 @@ import PrivacyPolicy from './routes/privacyPolicy/PrivacyPolicy';
 import ChangeLog from './routes/changeLog/ChangeLog';
 import CustomerHome from './routes/home/customer/CustomerHome';
 
+import CreateEstimate from './routes/estimates/CreateEstimate';
+import Estimates from './routes/estimates/Estimates';
+import EstimateDetail from './routes/estimates/EstimateDetail';
+
 import SharedLayout from './routes/shared/SharedLayout';
 import SharedJob from './routes/shared/SharedJob';
 import ContactUs from './routes/shared/ContactUs';
@@ -103,6 +107,7 @@ const  App = () => {
                 <Route path="/shared" element={<SharedLayout />}>
                   <Route path="jobs/:jobId" element={<SharedJob />} />
                   <Route path="contact" element={<ContactUs />} />
+                  <Route path="estimates/:id" element={<EstimateDetail />} />
                 </Route>
 
                 <Route element={<ProtectedRoute />}>
@@ -116,6 +121,10 @@ const  App = () => {
                       <Route path="home" element={<CustomerHome />} />
                       
                       {!currentUser.isCustomer && <Route index element={<Jobs />} />}
+
+                      <Route path="create-estimate" element={<CreateEstimate />} />
+                      <Route path="estimates" element={<Estimates />} /> 
+                      <Route path="estimates/:id" element={<EstimateDetail />} />  
 
                       <Route path="jobs" element={<Jobs />}/>
                       <Route path="create-job" element={<CreateJob />} />

@@ -248,12 +248,12 @@ const Customers = () => {
                                     <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
                                   </div>
                                   <div className="min-w-0 flex-1">
-                                    <a href="#" className="focus:outline-none">
+                                    <div  className="focus:outline-none">
                                       {/* Extend touch target to entire panel */}
                                       <span className="absolute inset-0" aria-hidden="true" />
                                       <p className="text-sm font-medium text-gray-900">{customer.name}</p>
                                       <p className="truncate text-sm text-gray-500">{customer.emailAddress ? customer.emailAddress : 'No email specified'}</p>
-                                    </a>
+                                    </div>
                                   </div>
                                 </div>
                               </li>
@@ -355,18 +355,18 @@ const Customers = () => {
                     </div>
                     <ul role="list" className="relative z-0 divide-y divide-gray-200">
                       {customerDirectory[letter]?.map((customer) => (
-                        <li key={customer.id} onClick={() => getCustomerDetails(customer.id)}>
+                        <li key={customer.id} onClick={() => getCustomerDetails(customer.id)} className="cursor-pointer">
                           <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
                             <div className="flex-shrink-0">
                               <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
                             </div>
                             <div className="min-w-0 flex-1">
-                              <a href="#" className="focus:outline-none">
+                              <div className="focus:outline-none">
                                 {/* Extend touch target to entire panel */}
                                 <span className="absolute inset-0" aria-hidden="true" />
                                 <p className="text-sm font-medium text-gray-900">{customer.name}</p>
                                 <p className="truncate text-sm text-gray-500">{customer.emailAddress ? customer.emailAddress : 'No email specified'}</p>
-                              </a>
+                              </div>
                             </div>
                           </div>
                         </li>

@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { useForm } from 'react-hook-form';
 import Loader from '../../components/loader/Loader';
@@ -6,6 +6,8 @@ import AnimatedPage from '../../components/animatedPage/AnimatedPage';
 
 import * as api from './apiService'
 
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../../routes/userProfile/userSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -128,9 +130,27 @@ const locations = [
 ]
 
 const ContactUs = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const currentUser = useAppSelector(selectUser)
+
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    defaultValues: {
+      firstName: currentUser?.first_name,
+      lastName: currentUser?.last_name,
+      email: currentUser?.email
+    }
+  });
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
+
+  useEffect(() => {
+    reset({
+      firstName: currentUser?.first_name,
+      lastName: currentUser?.last_name,
+      email: currentUser?.email
+      })
+
+  }, [currentUser])
+
 
   const onSubmit = handleSubmit((data) => {
     handleSendMessage(data)
