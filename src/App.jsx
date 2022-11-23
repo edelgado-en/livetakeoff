@@ -117,7 +117,6 @@ const  App = () => {
                       {currentUser.isCustomer && (
                         <>
                           <Route index element={<CustomerHome />} />
-                          <Route path="premium" element={<CustomerPremium />} />
                         </>
                       )}
 
@@ -125,6 +124,7 @@ const  App = () => {
                       
                       {!currentUser.isCustomer && <Route index element={<Jobs />} />}
 
+                      <Route path="premium" element={<CustomerPremium />} />
                       <Route path="create-estimate" element={<CreateEstimate />} />
                       <Route path="estimates" element={<Estimates />} /> 
                       <Route path="estimates/:id" element={<EstimateDetail />} />  
