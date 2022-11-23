@@ -85,15 +85,6 @@ const EstimateDetail = () => {
                     </div>
                     <div className="flex flex-row mb-4">
                         <div className="flex gap-2">
-                            {!location.pathname.includes('shared') && (
-                                <button onClick={() => navigate(-1)} className="text-xs leading-5 font-semibold bg-slate-400/10
-                                    rounded-full p-2 text-slate-500
-                                    flex items-center space-x-2 hover:bg-slate-400/20
-                                    dark:highlight-white/5">
-                                    <ArrowLeftIcon className="flex-shrink-0 h-4 w-4 cursor-pointer"/>
-                                </button>
-                            )}
-                            
                             <h1 className="text-2xl font-semibold text-gray-600">Job Estimate</h1>
                         </div>
                     </div>
@@ -102,7 +93,7 @@ const EstimateDetail = () => {
                             <div className="flex space-x-3 space-y-3 pb-8 pt-6">
                                 {estimateDetails?.customer.logo ? 
                                     <img
-                                    className="h-10 w-10 rounded-full"
+                                    className="h-10 w-10 rounded-full relative top-3"
                                     src={estimateDetails.customer.logo}
                                     alt=""
                                 />
@@ -152,7 +143,9 @@ const EstimateDetail = () => {
                     <div className="mt-6 max-w-5xl px-2 pb-10">
                         <div className="mt-8">
                             <div className="flex justify-between text-xs">
-                                <div className="text-sm text-gray-700">{estimateDetails?.aircraftType.name}</div>
+                                <div className="text-sm text-gray-700">
+                                    <span className="font-medium">{estimateDetails?.aircraftType?.name}</span>  <span className="ml-1 text-gray-500">at {estimateDetails?.airport?.initials}</span>
+                                </div>
                             </div>
                             <div className="mt-4">
                                 <h3 className="text-sm text-gray-700">Services</h3>
@@ -252,7 +245,15 @@ const EstimateDetail = () => {
                         )}
 
                         {!location.pathname.includes('shared') && (
-                            <div className="pb-20 flex justify-end">
+                            <div className="pb-20 flex justify-end gap-3">
+                                <button
+                                    onClick={() => navigate(-1)} 
+                                    className="flex gap-2 rounded-md border border-gray-300 bg-white
+                                            py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                >
+                                    Back
+                                </button>
                                 <Popover className="relative">
                                     <Popover.Button>
                                         <div

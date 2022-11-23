@@ -73,7 +73,7 @@ const JobPriceBreakdown = () => {
                                 </dl>
                                 <div className="flex justify-end py-2 text-xs mt-1">
                                         <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
-                                        <dd className="whitespace-nowrap text-gray-900">{breakdown.servicesPrice}</dd>
+                                        <dd className="whitespace-nowrap text-gray-900">${breakdown.servicesPrice}</dd>
                                 </div>
                             </div>
                                 
@@ -98,7 +98,7 @@ const JobPriceBreakdown = () => {
                                     </dl>
                                     <div className="flex justify-end py-2 text-xs mt-1">
                                         <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
-                                        <dd className="whitespace-nowrap text-gray-900">{breakdown.discountedPrice}</dd>
+                                        <dd className="whitespace-nowrap text-gray-900">${breakdown.discountedPrice}</dd>
                                     </div>
                                 </div>  
                             )}
@@ -128,7 +128,7 @@ const JobPriceBreakdown = () => {
 
                             <div className="flex justify-end py-4 text-xs">
                                 <dt className="text-gray-500 pr-2 text-right font-medium">Total</dt>
-                                <dd className="whitespace-nowrap text-gray-900">{breakdown.totalPrice}</dd>
+                                <dd className="whitespace-nowrap text-gray-900">${breakdown.totalPrice}</dd>
                             </div>
                         </div>
                     }

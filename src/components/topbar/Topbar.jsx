@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { MenuIcon, XIcon, PlusIcon } from "@heroicons/react/outline";
 import logo from '../../images/logo_2618936_web.png'
 import whiteLogo from '../../images/logo_white-no-text.png'
 
@@ -10,6 +10,14 @@ import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
+}
+
+const XMarkIcon = () => {
+  return (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+  )
 }
 
 const Bars3Icon = () => {
@@ -75,18 +83,37 @@ const Topbar = () => {
                 </Link>
                 <div className="hidden sm:ml-6 sm:block relative" style={{ top: '12px' }}>
                   <div className="flex space-x-4">
-                      {/* Add this when you have more links */}
-                      {/* {currentUser.isCustomer && (
+                      {currentUser.isCustomer && (
+                        <>
                         <Link
                           to="/home"
                           className={classNames(
-                            location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                            location.pathname.includes('home') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
                             'px-3 py-2 rounded-md text-sm font-medium text-white'
                           )}
                         >
                           Home
                         </Link>
-                      )} */}
+                        <Link
+                          to="/jobs"
+                          className={classNames(
+                            location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium text-white'
+                          )}
+                        >
+                          Jobs
+                        </Link>
+                        <Link
+                          to="/estimates"
+                          className={classNames(
+                            location.pathname.includes('estimates') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium text-white'
+                          )}
+                        >
+                          Estimates
+                        </Link>
+                        </>
+                      )} 
 
                       {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
                         <>
@@ -123,20 +150,20 @@ const Topbar = () => {
                             )}>
                               Price Lists
                           </Link>
+                          <Link 
+                            to="estimates"
+                            className={classNames(
+                              location.pathname.includes("estimates") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}>
+                              Estimates
+                          </Link>
                         </>
                       )}
                   </div>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {/* <Link
-                  to=""
-                  className="inline-block rounded-md border border-transparent
-                            bg-indigo-500 py-2 px-4 text-base font-medium
-                              text-white hover:bg-opacity-75 mr-8"
-                >
-                  New Job
-                </Link> */}
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex rounded-full bg-red-600 text-sm focus:outline-none">
@@ -172,7 +199,7 @@ const Topbar = () => {
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-60
                                            origin-top-right rounded-md bg-white py-1 shadow-lg ring-1
                                             ring-black ring-opacity-5 focus:outline-none">
-                      <p className="truncate py-3 px-3.5 border-b">
+                      <div className="truncate py-3 px-3.5 border-b">
                           <div className="block text-xs text-gray-500">Signed in as</div>
                           <div className="mt-0.5 text-sm text-gray-700 py-1">
                             {currentUser.isAdmin ? 'Admin'
@@ -181,8 +208,8 @@ const Topbar = () => {
                               : currentUser.isCustomer ? 'Customer'
                               : 'Project Manager'}
                           </div>
-                          <div className="text-sm font-semibold text-gray-700">{currentUser.email}</div>
-                      </p>
+                          <div className="text-sm font-semibold text-gray-500">{currentUser.email}</div>
+                      </div>
                       
                       <Menu.Item>
                         {({ active }) => (
@@ -229,6 +256,7 @@ const Topbar = () => {
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
                 {currentUser.isCustomer && (
+                  <>
                   <Link 
                       to="/home">
                     <Disclosure.Button
@@ -240,6 +268,29 @@ const Topbar = () => {
                         Home
                     </Disclosure.Button>
                   </Link>
+                  <Link 
+                      to="/jobs">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Jobs
+                    </Disclosure.Button>
+                  </Link>
+                  <Link 
+                      to="/estimates">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("estimates") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Estimates
+                    </Disclosure.Button>
+                  </Link>
+                  </>
                 )}
 
                 {currentUser.isProjectManager && (
@@ -300,6 +351,17 @@ const Topbar = () => {
                         )}
                       >
                           Price Lists
+                      </Disclosure.Button>
+                    </Link>
+                    <Link 
+                        to="estimates">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("estimates") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Estimates
                       </Disclosure.Button>
                     </Link>
                   </>
