@@ -326,10 +326,11 @@ const CustomerHome = () => {
                             {currentUser.isPremiumMember ? 'Premium Member' : 'On-Demand Member'}
                           </span>
                           {!currentUser.isPremiumMember && (
-                            <Link to="/premium" className="lg:hidden underline ml-6">
+                            <Link to="/premium" className="lg:hidden underline ml-6 text-xs relative" style={{top:'1px'}}>
                               Go Premium
                             </Link>
                           )}
+
                         </div>
                         <div className="flex items-center space-x-2">
                           <RectangleStack />
