@@ -28,12 +28,12 @@ const CustomerPremium = () => {
         <main className="lg:relative -mt-8">
         <div className="mx-auto w-full max-w-7xl pt-16 pb-20 text-center lg:py-48 lg:text-left">
           <div className="px-4 sm:px-8 lg:w-1/2 xl:pr-16">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
-              <span className="block xl:inline">A better way to</span>{' '}
-              <span className="block text-red-600 xl:inline">manage your business</span>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
+              <div className="block xl:inline">Premium Membership</div>
             </h1>
+            <div className="block text-red-600 xl:inline text-3xl font-semibold">Enjoy the ultimate piece of mind</div>
             <p className="mx-auto mt-3 max-w-md text-lg text-gray-500 sm:text-xl md:mt-5 md:max-w-3xl">
-              Everything you need all in one platform. It's never been easier to get your job done.
+              The best customer experience while building long-term relationships and trust by providing the highest level of integrity and professionalism in the aviation industry.
             </p>
             <div className="mt-10 sm:flex sm:justify-center lg:justify-start">
                 <form action="#" className="sm:mx-auto sm:max-w-xl lg:mx-0">
