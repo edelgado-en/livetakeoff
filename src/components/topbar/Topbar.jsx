@@ -164,6 +164,11 @@ const Topbar = () => {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                {(currentUser.isCustomer && !currentUser.isPremiumMember) && (
+                  <Link to="/premium" className="hidden lg:flex text-sm font-medium mr-2 text-white hover:underline relative" style={{top: '2px'}}>
+                    Go Premium
+                  </Link>
+                )}
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex rounded-full bg-red-600 text-sm focus:outline-none">
@@ -210,7 +215,7 @@ const Topbar = () => {
                           </div>
                           <div className="text-sm font-semibold text-gray-500">{currentUser.email}</div>
                       </div>
-                      
+
                       <Menu.Item>
                         {({ active }) => (
                           <Link

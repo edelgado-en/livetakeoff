@@ -46,7 +46,9 @@ import Layout from './layout/Layout';
 import Footer from './components/footer/Footer';
 import PrivacyPolicy from './routes/privacyPolicy/PrivacyPolicy';
 import ChangeLog from './routes/changeLog/ChangeLog';
+
 import CustomerHome from './routes/home/customer/CustomerHome';
+import CustomerPremium from './routes/home/customer/CustomerPremium';
 
 import CreateEstimate from './routes/estimates/CreateEstimate';
 import Estimates from './routes/estimates/Estimates';
@@ -115,6 +117,7 @@ const  App = () => {
                       {currentUser.isCustomer && (
                         <>
                           <Route index element={<CustomerHome />} />
+                          <Route path="premium" element={<CustomerPremium />} />
                         </>
                       )}
 

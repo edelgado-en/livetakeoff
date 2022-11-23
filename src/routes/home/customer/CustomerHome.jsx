@@ -320,11 +320,16 @@ const CustomerHome = () => {
                     </div>
                     {currentUser.isCustomer && (
                       <div className="flex flex-col space-y-6 sm:flex-row sm:space-y-0 sm:space-x-8 xl:flex-col xl:space-x-0 xl:space-y-6">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center">
                           <CheckBadge />
-                          <span className="text-sm font-medium text-gray-500">
+                          <span className="text-sm font-medium text-gray-500 ml-2">
                             {currentUser.isPremiumMember ? 'Premium Member' : 'On-Demand Member'}
                           </span>
+                          {!currentUser.isPremiumMember && (
+                            <Link to="/premium" className="lg:hidden underline ml-6">
+                              Go Premium
+                            </Link>
+                          )}
                         </div>
                         <div className="flex items-center space-x-2">
                           <RectangleStack />

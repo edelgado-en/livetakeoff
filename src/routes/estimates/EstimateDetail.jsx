@@ -293,7 +293,7 @@ const EstimateDetail = () => {
                             {location.pathname.includes("shared") && estimateDetails.is_processed && (
                                 <>
                                     <div className="text-sm pb-20 py-8">
-                                        This estimate was {estimateDetails.status === 'A' ? 'accepted' : 'rejected'} on <ReactTimeAgo date={new Date(estimateDetails?.processed_at)} locale="en-US" timeStyle="twitter" />
+                                        This estimate was {estimateDetails.status === 'A' ? 'accepted' : 'rejected'} <ReactTimeAgo date={new Date(estimateDetails?.processed_at)} locale="en-US" timeStyle="twitter" />
                                     </div>
                                 </>
                             )}
