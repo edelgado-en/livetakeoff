@@ -56,6 +56,8 @@ import EstimateDetail from './routes/estimates/EstimateDetail';
 
 import SharedLayout from './routes/shared/SharedLayout';
 import SharedJob from './routes/shared/SharedJob';
+import ShareJobEstimate from './routes/shared/SharedJobEstimate';
+
 import ContactUs from './routes/shared/ContactUs';
 
 import { isUserAuthenticated } from './localstorage';
@@ -109,7 +111,7 @@ const  App = () => {
                 <Route path="/shared" element={<SharedLayout />}>
                   <Route path="jobs/:jobId" element={<SharedJob />} />
                   <Route path="contact" element={<ContactUs />} />
-                  <Route path="estimates/:id" element={<EstimateDetail />} />
+                  <Route path="estimates/:encoded_id" element={<ShareJobEstimate />} />
                 </Route>
 
                 <Route element={<ProtectedRoute />}>

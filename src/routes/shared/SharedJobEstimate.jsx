@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
-import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon, ShareIcon, ArrowLeftIcon } from "@heroicons/react/outline";
+import { useParams } from "react-router-dom";
+import { CheckCircleIcon } from "@heroicons/react/outline";
 import * as api from './apiService'
 import { toast } from "react-toastify";
-import { Popover } from '@headlessui/react'
 import logo from '../../images/logo_red-no-text.png'
 
 import ReactTimeAgo from 'react-time-ago'
@@ -12,15 +11,12 @@ import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 
-const EstimateDetail = () => {
+const ShareJobEstimate = () => {
     const [loading, setLoading] = useState(true)
     const [estimateDetails, setEstimateDetails] = useState(null)
-    const [isCopied, setIsCopied] = useState(false)
     const [estimateProcessed, setEstimateProcessed] = useState(false)
 
-    const navigate = useNavigate()
-    const location = useLocation()
-    const { id } = useParams()
+    const { encoded_id } = useParams()
 
     useEffect(() => {
         getEstimate()
@@ -30,7 +26,7 @@ const EstimateDetail = () => {
         setLoading(true)
 
         try {
-            const { data } = await api.getEstimateDetail(id)
+            const { data } = await api.getEstimateDetail(encoded_id)
 
             setEstimateDetails(data);
 
@@ -42,27 +38,20 @@ const EstimateDetail = () => {
         }
     }
 
-    const handleCopyClick = () => {
-        const copyText = 'https://www.livetakeoff.com/shared/estimates/' + estimateDetails.encoded_id + '/';
+    const updateEstimate = async (status) => {
+        setLoading(true)
+        
+        try {
+            await api.updateEstimate(encoded_id, { 'status': status })
+            
+            setEstimateProcessed(true)
 
-        copyTextToClipboard(copyText)
-            .then(() => {
-                // If successful, update the isCopied state value
-                setIsCopied(true);
-                setTimeout(() => {
-                    setIsCopied(false);
-                }, 1500);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+            setLoading(false)
 
-    const copyTextToClipboard = async (text) => {
-        if ('clipboard' in navigator) {
-          return await navigator.clipboard.writeText(text);
-        } else {
-          return document.execCommand('copy', true, text);
+        } catch (error) {
+            setLoading(false)
+            toast.error('Unable to update estimate')
+
         }
     }
 
@@ -246,73 +235,42 @@ const EstimateDetail = () => {
                             </div>
                         </div>
                         
-                        {!location.pathname.includes('shared') && (
-                            <div className="pb-8 border-b border-gray-200">
-                                <div className="flex justify-between">
-                                        <div className="text-sm font-medium text-gray-900 relative top-3">Share this link</div>
-                                        <div className="text-right">
-                                            <Popover className="relative">
-                                                <Popover.Button>
-                                                    <div
-                                                        onClick={() => handleCopyClick()} 
-                                                        className="flex gap-2 rounded-md border border-gray-300 bg-white
-                                                                py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
-                                                                hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                                                    >
-                                                        <ShareIcon className="h-4 w-4 relative" style={{top: '2px'}} />
-                                                        Share
-                                                    </div>
-                                                </Popover.Button>
-
-                                                <Popover.Panel className="absolute z-10">
-                                                    <div className="bg-gray-600 text-white text-xs py-1 px-2 rounded-md mt-1 relative left-4">copied!</div>
-                                                </Popover.Panel>
-                                            </Popover>
-                                        </div>
-                                </div>
-                                <div className="text-sm text-gray-500 pt-2">
-                                    You can share this link with a client to allow them to view this estimate. He/she can accept or reject it. You will get a SMS notification when he/she does.
-                                </div> 
-                            </div>
-                        )}
-                        
 
                         <div className="text-right">
-                            <div className="pb-20 flex justify-end gap-3 mt-8">
-                                <button
-                                    onClick={() => navigate('/estimates')} 
-                                    className="flex gap-2 rounded-md border border-gray-300 bg-white
-                                            py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
-                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                                >
-                                    Back to Estimates
-                                </button>
-                                {(!estimateDetails.job && (estimateDetails.status === 'P' || estimateDetails.status === 'A')) && (
-                                    <button
-                                        onClick={() => navigate(`/create-job/${estimateDetails.id}`)}
+                            {!estimateDetails.is_processed && (
+                                <>
+                                    <div className="text-sm pb-4 text-gray-500">This estimate is not a contract or a bill.</div>
+                                    <div className="font-medium text-sm pb-4">We look forward to working with you!</div>
+                                    <div className="pb-20 py-8">
+                                        <button
                                         type="button"
-                                        className="inline-flex items-center justify-center 
-                                                rounded-md border border-transparent bg-red-600 px-4 py-2
-                                                text-sm font-medium text-white shadow-sm hover:bg-red-700
-                                                focus:outline-none focus:ring-2 focus:ring-red-500
-                                                focus:ring-offset-2 sm:w-auto"
-                                    >
-                                        Create Job
-                                    </button>
-                                )}
+                                        onClick={() => updateEstimate('R')}
+                                        className="rounded-md border border-gray-300 bg-white
+                                                py-2 px-4 text-sm font-medium text-gray-700 shadow-sm mr-6
+                                                hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                        >
+                                            Reject
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => updateEstimate('A')}
+                                            className="inline-flex justify-center rounded-md 
+                                            border border-transparent bg-red-600 py-2 px-4
+                                            text-sm font-medium text-white shadow-sm hover:bg-red-600
+                                            focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                            Accept
+                                        </button>
+                                    </div>
+                                </>
+                            )}
 
-                                {(estimateDetails.job && (
-                                    <Link
-                                        to={`/jobs/${estimateDetails.job.id}/details`} 
-                                        className="flex gap-2 rounded-md border border-gray-300 bg-white
-                                            py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
-                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                                    >
-                                        View Job
-                                    </Link>
-                                ))}
-                            </div>
-                            
+                            {estimateDetails.is_processed && (
+                                <>
+                                    <div className="text-sm pb-20 py-8">
+                                        This estimate was {estimateDetails.status === 'A' ? 'accepted' : 'rejected'} <ReactTimeAgo date={new Date(estimateDetails?.processed_at)} locale="en-US" timeStyle="twitter" />
+                                    </div>
+                                </>
+                            )}
                         </div>
                         </>    
                     )}
@@ -325,4 +283,4 @@ const EstimateDetail = () => {
 
 }
 
-export default EstimateDetail;
+export default ShareJobEstimate;
