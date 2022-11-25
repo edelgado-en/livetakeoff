@@ -1,7 +1,7 @@
 import httpService from "../../services/httpService";
 
-export const getJobDetails = (id: number) => {
-    return httpService.get(`/api/shared/jobs/${id}`);
+export const getJobDetails = (encoded_id: any) => {
+    return httpService.get(`/api/shared/jobs/${encoded_id}`);
 }
 
 export const sendMessage = (data: any) => {

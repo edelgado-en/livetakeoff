@@ -109,7 +109,7 @@ const  App = () => {
                 <Route path="/signup" element={<Signup />} />
 
                 <Route path="/shared" element={<SharedLayout />}>
-                  <Route path="jobs/:jobId" element={<SharedJob />} />
+                  <Route path="jobs/:encoded_id" element={<SharedJob />} />
                   <Route path="contact" element={<ContactUs />} />
                   <Route path="estimates/:encoded_id" element={<ShareJobEstimate />} />
                 </Route>

@@ -32,7 +32,7 @@ const JobDetails = () => {
     }, [])
 
     const handleCopyClick = () => {
-        const copyText = 'https://www.livetakeoff.com/shared/jobs/' + jobId + '/';
+        const copyText = 'https://www.livetakeoff.com/shared/jobs/' + jobStats.encoded_id + '/';
 
         copyTextToClipboard(copyText)
             .then(() => {

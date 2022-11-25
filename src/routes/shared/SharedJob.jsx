@@ -17,7 +17,7 @@ function classNames(...classes) {
 }
 
 const SharedJob = () => {
-    const { jobId } = useParams();
+    const { encoded_id } = useParams();
     const [loading, setLoading] = useState(false)
     const [jobDetails, setJobDetails] = useState({service_assignments: [], retainer_service_assignments: []})
     const [showActions, setShowActions] = useState(false)
@@ -31,7 +31,7 @@ const SharedJob = () => {
         setLoading(true);
 
         try {
-            const { data } = await api.getJobDetails(jobId);
+            const { data } = await api.getJobDetails(encoded_id);
 
             setJobDetails(data);
 

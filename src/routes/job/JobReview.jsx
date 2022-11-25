@@ -93,7 +93,7 @@ const JobReview = () => {
     }
 
     const handleCopyClick = () => {
-        const copyText = 'https://www.livetakeoff.com/shared/jobs/' + jobId + '/';
+        const copyText = 'https://www.livetakeoff.com/shared/jobs/' + jobDetails.encoded_id + '/';
 
         copyTextToClipboard(copyText)
             .then(() => {
