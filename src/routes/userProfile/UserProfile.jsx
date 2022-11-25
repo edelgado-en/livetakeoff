@@ -292,8 +292,9 @@ const UserProfile = () => {
             </div>
         </div>
         
-        {currentUser.isCustomer && (
+        
             <div className="divide-y divide-gray-200 pt-6">
+            {currentUser.isCustomer && (
                 <div className="px-4 sm:px-6">
                     <div>
                         <h2 className="text-lg font-medium leading-6 text-gray-900">Privacy</h2>
@@ -356,6 +357,7 @@ const UserProfile = () => {
                         </Switch.Group>
                     </ul>
                 </div>
+            )}
                 <div className="mt-4 flex justify-end py-4 px-4 sm:px-6">
                     <button
                         type="submit"
@@ -368,7 +370,6 @@ const UserProfile = () => {
                     </button>
                 </div>
             </div>
-        )}
         
         </form> 
     )
