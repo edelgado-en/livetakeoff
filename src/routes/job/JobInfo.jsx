@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon, PencilIcon } from "@heroicons/react/outline";
 import { toast } from 'react-toastify';
 import * as api from './apiService'
 
@@ -167,9 +167,20 @@ const JobInfo = () => {
 
             {!loading && errorMessage == null && (
                 <div className="mt-6 max-w-5xl px-2">
-                <div className="flex flex-row">
-                    <div className="flex-1">
+                <div className="flex justify-between">
+                    <div className="">
                         <h1 className="text-2xl font-semibold text-gray-600">Job Details</h1>
+                    </div>
+                    <div>
+                        {(currentUser.isCustomer && (jobDetails.status === 'U' || jobDetails.status === 'A' || jobDetails.status === 'S')) && (
+                            <Link to="../customer-edit" className="text-xs leading-5 font-semibold bg-slate-400/10
+                                rounded-full p-2 text-slate-500
+                                flex items-center space-x-2 hover:bg-slate-400/20
+                                dark:highlight-white/5">
+                                <PencilIcon className="h-5 w-5 cursor-pointer" />
+                            </Link>
+                        )}
+                        
                     </div>
                 </div>
 
@@ -205,6 +216,18 @@ const JobInfo = () => {
                             </button>
                         }
 
+                        {jobDetails.status === 'U' && 
+                            <button
+                                type="button"
+                                onClick={() => updateJobStatus('A')}
+                                className="inline-flex items-center justify-center rounded-md
+                                        border border-transparent bg-red-600 px-4 py-2 text-sm
+                                        font-medium text-white shadow-sm hover:bg-red-700
+                                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
+                                Accept Job
+                            </button>
+                        }
+
                         {jobDetails.status === 'W' && 
                             <button
                                 type="button"
@@ -219,7 +242,7 @@ const JobInfo = () => {
                     
                     </div>
                 )}
-                
+
                 <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Tail Number</dt>

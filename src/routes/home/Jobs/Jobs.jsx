@@ -41,7 +41,6 @@ const availableStatuses = [
   {id: 'A', name: 'Accepted'},
   {id: 'S', name: 'Assigned'},
   {id: 'W', name: 'In Progress'},
-  {id: 'R', name: 'Review'},
 ]
 
 const sortOptions = [

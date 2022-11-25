@@ -49,6 +49,7 @@ import ChangeLog from './routes/changeLog/ChangeLog';
 
 import CustomerHome from './routes/home/customer/CustomerHome';
 import CustomerPremium from './routes/home/customer/CustomerPremium';
+import CustomerEditJob from './routes/job/CustomerEditJob';
 
 import CreateEstimate from './routes/estimates/CreateEstimate';
 import Estimates from './routes/estimates/Estimates';
@@ -184,6 +185,7 @@ const  App = () => {
                         <Route path="comments" element={<JobComments />} />
                         <Route path="assignments" element={<JobAssignments />} />
                         <Route path="edit" element={<EditJob />} />
+                        <Route path="customer-edit" element={<CustomerEditJob />} />
                         <Route path="activity" element={<JobActivityFeed />} />
                         <Route path="price-breakdown" element={<JobPriceBreakdown />} />
                         <Route path="photos" element={<JobPhotos />}>
