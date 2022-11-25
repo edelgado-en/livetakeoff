@@ -92,8 +92,12 @@ const EditJob = () => {
             setTailNumber(response.data.tailNumber);
             setPrice(response.data.price);
 
+            
             if (location.pathname.includes('review')) {
-                availableStatuses.push({id: 'I', name: 'Invoiced'})
+                // only add Invoiced if it is not part of the availableStatuses array already
+                if (!availableStatuses.find(status => status.id === 'I')) {
+                    availableStatuses.push({id: 'I', name: 'Invoiced'})
+                }
             }
 
             setSelectedStatus(availableStatuses.find(a => a.id === response.data.status))
