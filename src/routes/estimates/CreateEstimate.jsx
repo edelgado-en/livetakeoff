@@ -91,6 +91,11 @@ const CreateEstimate = () => {
     const createEstimate = async () => {
         const selectedServices = services.filter(service => service.selected === true)
 
+        if (!tailNumber || tailNumber.length === 0) {
+            alert('Please enter a Tail number')
+            return
+        }
+
         if (!aircraftTypeSelected) {
             alert('Please select an aircrat type')
             return
@@ -163,7 +168,7 @@ const CreateEstimate = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="tailNumber" className="block text-sm text-gray-500">
+                            <label htmlFor="tailNumber" className="block text-sm font-medium text-gray-700">
                                 Tail Number
                             </label>
                             <div className="mt-1">

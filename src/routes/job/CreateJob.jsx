@@ -1142,7 +1142,7 @@ const CreateJob = () => {
                                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                                 Create Job
                             </button>
-                            <Link to="/jobs" className="w-full">
+                            <button onClick={() => navigate(-1)} className="w-full">
                                 <button
                                     type="button"
                                     className="rounded-md border border-gray-300 bg-white w-full
@@ -1151,7 +1151,7 @@ const CreateJob = () => {
                                 >
                                     Cancel
                                 </button>  
-                            </Link>
+                            </button>
                         </div>
 
                         <div className="h-28"></div>

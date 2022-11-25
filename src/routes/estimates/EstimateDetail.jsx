@@ -98,7 +98,7 @@ const EstimateDetail = () => {
                             />
                         </div>
                         <div className="text-right text-sm text-gray-500">
-                            <div className="text-xl font-medium text-gray-700">Livetakeoff</div>
+                            <div className="text-xl font-medium text-gray-700">LiveTakeoff</div>
                             <div>750 SW 34th ST, Suite 209</div>
                             <div>Fort Lauderdale Florida 33315</div>
                         </div>

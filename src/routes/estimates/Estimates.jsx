@@ -110,7 +110,8 @@ const Estimates = () => {
                                             <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
                                                 <div>
                                                     <div className="">
-                                                        <span className="font-medium text-sm">{estimate?.aircraftType?.name}</span>
+                                                        <span className="font-medium text-red-600 text-sm">{estimate.tailNumber}</span>
+                                                        <span className="text-sm"> - {estimate?.aircraftType?.name}</span>
                                                         <span className="ml-2 text-xs text-gray-500">
                                                             <ReactTimeAgo date={new Date(estimate?.requested_at)} locale="en-US" timeStyle="twitter" />    
                                                         </span>
