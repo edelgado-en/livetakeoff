@@ -11,7 +11,7 @@ export const fetchUser = createAsyncThunk(
 
     async (_, thunkAPI) => {
 
-        const { data } : any = await api.getUsetDetails();
+        const { data } : any = await api.getUserDetails();
 
         return data;
     }

@@ -4,6 +4,9 @@ import { Disclosure, Menu, Switch, Transition } from '@headlessui/react'
 import ImageUploading from 'react-images-uploading';
 import { useNavigate } from "react-router-dom";
 
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../userProfile/userSlice";
+
 import AnimatedPage from "../../components/animatedPage/AnimatedPage"
 import { toast } from "react-toastify"
 import { useForm } from "react-hook-form";
@@ -18,10 +21,11 @@ function classNames(...classes) {
 
 const UserProfile = () => {
     const [user, setUser] = useState({})
-    const [availableToHire, setAvailableToHire] = useState(true)
-    const [privateAccount, setPrivateAccount] = useState(false)
-    const [receiveWhatsappNotifications, setReceiveWhatsappNotifications] = useState(false)
+    const [receiveSMSNotifications, setReceiveSMSNotifications] = useState(false)
+    const [receiveEmailNotifications, setReceiveEmailNotifications] = useState(false)
     const [images, setImages] = useState([]);
+
+    const currentUser = useAppSelector(selectUser)
 
     const navigate = useNavigate()
 
@@ -37,7 +41,10 @@ const UserProfile = () => {
     }, [user])
 
     const getUserDetails = async () => {
-        const { data } = await api.getUsetDetails();
+        const { data } = await api.getUserDetails();
+
+        setReceiveEmailNotifications(data.receive_email_notifications)
+        setReceiveSMSNotifications(data.receive_sms_notifications)
 
         setUser(data);
     }
@@ -66,7 +73,9 @@ const UserProfile = () => {
             about: data.about,
             first_name: data.first_name,
             last_name: data.last_name,
-            email: data.email
+            email: data.email,
+            email_notifications: receiveEmailNotifications,
+            sms_notifications: receiveSMSNotifications
         }
 
         handleUpdateUser(request)
@@ -74,7 +83,14 @@ const UserProfile = () => {
     })
 
     const handleUpdateUser = async (data) => {
-        await api.updateUser(data)
+        try {
+            await api.updateUser(data)
+
+            toast.success('Profile Updated!')
+
+        } catch (error) {
+            toast.error('Unable to update profile')
+        }
     }
 
     return (
@@ -146,7 +162,7 @@ const UserProfile = () => {
 
             <div className="mt-6 flex-grow lg:mt-0 lg:ml-6 lg:flex-shrink-0 lg:flex-grow-0">
                 <p className="text-sm font-medium text-gray-700" aria-hidden="true">
-                Photo
+                    Photo
                 </p>
                 <div className="mt-1 lg:hidden">
                 <div className="flex items-center">
@@ -229,155 +245,131 @@ const UserProfile = () => {
             </div>
 
             <div className="mt-6 grid grid-cols-12 gap-6">
-            <div className="col-span-12 sm:col-span-6">
-                <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                First name
-                </label>
-                <input
-                type="text"
-                name="first-name"
-                id="first-name"
-                {...register('first_name', { required: 'First name is required' })}
-                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3
-                            shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-                />
-                { errors.first_name && <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p> }
-            </div>
+                <div className="col-span-12 sm:col-span-6">
+                    <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                        First name
+                    </label>
+                    <input
+                        type="text"
+                        name="first-name"
+                        id="first-name"
+                        {...register('first_name', { required: 'First name is required' })}
+                        className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3
+                                    shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
+                    />
+                    { errors.first_name && <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p> }
+                </div>
 
-            <div className="col-span-12 sm:col-span-6">
-                <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
-                Last name
-                </label>
-                <input
-                type="text"
-                name="last-name"
-                id="last-name"
-                {...register('last_name', { required: 'Last name is required' })}
-                className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3
-                            shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-                />
-                { errors.last_name && <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p> }
-            </div>
+                <div className="col-span-12 sm:col-span-6">
+                    <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
+                        Last name
+                    </label>
+                    <input
+                        type="text"
+                        name="last-name"
+                        id="last-name"
+                        {...register('last_name', { required: 'Last name is required' })}
+                        className="mt-1 block w-full rounded-md border border-gray-300 py-2 px-3
+                                    shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
+                    />
+                    { errors.last_name && <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p> }
+                </div>
 
-            <div className="col-span-12">
-                <label htmlFor="url" className="block text-sm font-medium text-gray-700">
-                Email
-                </label>
-                <input
-                type="text"
-                name="url"
-                id="url"
-                {...register('email', { required: 'Email is required' })}
-                className="mt-1 block w-full rounded-md border border-gray-300
-                            py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
-                />
-                { errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p> }
-            </div>
+                <div className="col-span-12">
+                    <label htmlFor="url" className="block text-sm font-medium text-gray-700">
+                        Email
+                    </label>
+                    <input
+                        type="text"
+                        name="url"
+                        id="url"
+                        {...register('email', { required: 'Email is required' })}
+                        className="mt-1 block w-full rounded-md border border-gray-300
+                                    py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
+                    />
+                    { errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p> }
+                </div>
             </div>
         </div>
-
-        <div className="divide-y divide-gray-200 pt-6">
-            <div className="px-4 sm:px-6">
-            <div>
-                <h2 className="text-lg font-medium leading-6 text-gray-900">Privacy</h2>
-                <p className="mt-1 text-sm text-gray-500">
-                Your privacy settings. Only visible to you and account managers.
-                </p>
-            </div>
-            <ul role="list" className="mt-2 divide-y divide-gray-200">
-                {/* <Switch.Group as="li" className="flex items-center justify-between py-4">
-                <div className="flex flex-col">
-                    <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
-                    Set yourself as busy
-                    </Switch.Label>
-                    <Switch.Description className="text-sm text-gray-500">
-                    Enable this when you in vacations or unavailable.
-                    </Switch.Description>
+        
+        {currentUser.isCustomer && (
+            <div className="divide-y divide-gray-200 pt-6">
+                <div className="px-4 sm:px-6">
+                    <div>
+                        <h2 className="text-lg font-medium leading-6 text-gray-900">Privacy</h2>
+                        <p className="mt-1 text-sm text-gray-500">
+                            Your privacy settings. Only visible to you and account managers.
+                        </p>
+                    </div>
+                    <ul role="list" className="mt-2 divide-y divide-gray-200">
+                        <Switch.Group as="li" className="flex items-center justify-between py-4">
+                            <div className="flex flex-col">
+                                <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
+                                    Receive email notifications
+                                </Switch.Label>
+                                <Switch.Description className="text-sm text-gray-500">
+                                    Get emails when jobs are completed.
+                                </Switch.Description>
+                            </div>
+                            <Switch
+                                checked={receiveEmailNotifications}
+                                onChange={setReceiveEmailNotifications}
+                                className={classNames(
+                                receiveEmailNotifications ? 'bg-red-500' : 'bg-gray-200',
+                                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+                                )}
+                            >
+                                <span
+                                aria-hidden="true"
+                                className={classNames(
+                                    receiveEmailNotifications ? 'translate-x-5' : 'translate-x-0',
+                                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                                )}
+                                />
+                            </Switch>
+                        </Switch.Group>
+                        <Switch.Group as="li" className="flex items-center justify-between py-4">
+                            <div className="flex flex-col">
+                                <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
+                                    Receive SMS notifications
+                                </Switch.Label>
+                                <Switch.Description className="text-sm text-gray-500">
+                                    Get text messages when jobs change status.
+                                </Switch.Description>
+                            </div>
+                            <Switch
+                                checked={receiveSMSNotifications}
+                                onChange={setReceiveSMSNotifications}
+                                className={classNames(
+                                    receiveSMSNotifications ? 'bg-red-500' : 'bg-gray-200',
+                                'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+                                )}
+                            >
+                                <span
+                                aria-hidden="true"
+                                className={classNames(
+                                    receiveSMSNotifications ? 'translate-x-5' : 'translate-x-0',
+                                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                                )}
+                                />
+                            </Switch>
+                        </Switch.Group>
+                    </ul>
                 </div>
-                <Switch
-                    checked={availableToHire}
-                    onChange={setAvailableToHire}
-                    className={classNames(
-                    availableToHire ? 'bg-red-500' : 'bg-gray-200',
-                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2'
-                    )}
-                >
-                    <span
-                    aria-hidden="true"
-                    className={classNames(
-                        availableToHire ? 'translate-x-5' : 'translate-x-0',
-                        'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                    )}
-                    />
-                </Switch>
-                </Switch.Group> */}
-                <Switch.Group as="li" className="flex items-center justify-between py-4">
-                <div className="flex flex-col">
-                    <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
-                    Receive email notifications
-                    </Switch.Label>
-                    <Switch.Description className="text-sm text-gray-500">
-                    Get emails when jobs are completed.
-                    </Switch.Description>
+                <div className="mt-4 flex justify-end py-4 px-4 sm:px-6">
+                    <button
+                        type="submit"
+                        className="ml-5 inline-flex justify-center rounded-md border
+                                    border-transparent bg-red-600 py-2 px-4 text-sm
+                                    font-medium text-white  hover:bg-red-800 focus:outline-none focus:ring-2
+                                focus:ring-red-500 focus:ring-offset-2"
+                    >
+                        Save
+                    </button>
                 </div>
-                <Switch
-                    checked={privateAccount}
-                    onChange={setPrivateAccount}
-                    className={classNames(
-                    privateAccount ? 'bg-red-500' : 'bg-gray-200',
-                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                    )}
-                >
-                    <span
-                    aria-hidden="true"
-                    className={classNames(
-                        privateAccount ? 'translate-x-5' : 'translate-x-0',
-                        'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                    )}
-                    />
-                </Switch>
-                </Switch.Group>
-                <Switch.Group as="li" className="flex items-center justify-between py-4">
-                <div className="flex flex-col">
-                    <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
-                    Receive SMS notifications
-                    </Switch.Label>
-                    <Switch.Description className="text-sm text-gray-500">
-                    Get text messages when jobs change status.
-                    </Switch.Description>
-                </div>
-                <Switch
-                    checked={receiveWhatsappNotifications}
-                    onChange={setReceiveWhatsappNotifications}
-                    className={classNames(
-                    receiveWhatsappNotifications ? 'bg-red-500' : 'bg-gray-200',
-                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                    )}
-                >
-                    <span
-                    aria-hidden="true"
-                    className={classNames(
-                        receiveWhatsappNotifications ? 'translate-x-5' : 'translate-x-0',
-                        'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                    )}
-                    />
-                </Switch>
-                </Switch.Group>
-            </ul>
             </div>
-            <div className="mt-4 flex justify-end py-4 px-4 sm:px-6">
-            
-            <button
-                type="submit"
-                className="ml-5 inline-flex justify-center rounded-md border
-                            border-transparent bg-red-600 py-2 px-4 text-sm
-                            font-medium text-white  hover:bg-red-800 focus:outline-none focus:ring-2
-                        focus:ring-red-500 focus:ring-offset-2"
-            >
-                Save
-            </button>
-            </div>
-        </div>
+        )}
+        
         </form> 
     )
 }

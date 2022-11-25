@@ -996,7 +996,7 @@ const JobsQueue = () => {
                       hideDisabled
                       itemClass="page-item page-item-custom"
                       linkClass="page-link page-link-custom"
-                      itemsCountPerPage={200}
+                      itemsCountPerPage={50}
                       totalItemsCount={totalJobs}
                       pageRangeDisplayed={3}
                       onChange={handlePageChange}

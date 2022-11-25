@@ -1,6 +1,6 @@
 import httpService from "../../services/httpService";
 
-export const getUsetDetails = () => {
+export const getUserDetails = () => {
     return httpService.get('/api/users/me');
 }
 
