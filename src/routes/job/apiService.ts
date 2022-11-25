@@ -134,5 +134,5 @@ export const canCompleteJob = (id: number) => {
 }
 
 export const getEstimateDetail = (id: any) => {
-    return httpService.get(`/api/estimates/${id}`)
+    return httpService.get(`/api/estimates/details/${id}`)
 }

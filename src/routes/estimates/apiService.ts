@@ -14,9 +14,9 @@ export const searchEstimates = (data: any) => {
 }
 
 export const getEstimateDetail = (id: any) => {
-    return httpService.get(`/api/estimates/${id}`)
+    return httpService.get(`/api/estimates/details/${id}`)
 }
 
 export const updateEstimate = (id: any, data: any) => {
-    return httpService.post(`/api/estimates/${id}/`, data)
+    return httpService.post(`/api/estimates/details/${id}/`, data)
 }
