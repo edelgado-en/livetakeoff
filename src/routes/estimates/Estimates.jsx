@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { useEffect, useState, Fragment } from "react";
-import { ChevronRightIcon, PlusIcon, CheckIcon, ChevronDownIcon } from "@heroicons/react/outline";
+import { ChevronRightIcon, PlusIcon, CheckIcon, ChevronDownIcon, BriefcaseIcon } from "@heroicons/react/outline";
 import { Listbox, Transition, Menu, Popover, Disclosure, Dialog } from '@headlessui/react'
 import { UserIcon } from "@heroicons/react/solid";
 import { useAppSelector } from "../../app/hooks";
@@ -144,7 +144,10 @@ const Estimates = () => {
                                                         )}
                                                         <div className="text-gray-500 text-sm relative top-1" style={{ marginLeft: '6px' }}>{estimate?.requested_by?.username}</div>
                                                     </div>
-                                                    <div className="text-sm text-gray-500 mt-2">
+                                                    <div className="text-sm text-gray-500 mt-2 flex xl:justify-end xs:justify-start">
+                                                        {estimate.job && (
+                                                            <span><BriefcaseIcon className="mr-2 h-4 w-4 text-gray-500 relative" style={{top: '2px'}}/></span>
+                                                        )}
                                                         <span className="text-gray-700">${estimate?.total_price}</span>
                                                     </div>
                                                     

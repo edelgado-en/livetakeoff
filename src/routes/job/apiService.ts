@@ -133,3 +133,6 @@ export const canCompleteJob = (id: number) => {
     return httpService.get(`/api/jobs/can-complete/${id}/`)
 }
 
+export const getEstimateDetail = (id: any) => {
+    return httpService.get(`/api/estimates/${id}`)
+}

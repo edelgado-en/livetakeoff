@@ -73,19 +73,8 @@ const CustomerPremium = () => {
                 <div className="py-6">What's included</div>
 
                 <ul role="list" className="divide-y divide-gray-200">
-                    {features.slice(0, 5).map((feature, featureIdx) => (
+                    {features.map((feature, featureIdx) => (
                     <li key={feature} className={classNames(featureIdx === 0 ? 'md:py-0 md:pb-4' : '', 'py-4 flex')}>
-                        <CheckIcon className="h-6 w-6 flex-shrink-0 text-green-500" aria-hidden="true" />
-                        <span className="ml-3 text-base text-gray-500">{feature}</span>
-                    </li>
-                    ))}
-                </ul>
-                <ul role="list" className="divide-y divide-gray-200 border-t border-gray-200 md:border-t-0">
-                    {features.slice(5).map((feature, featureIdx) => (
-                    <li
-                        key={feature}
-                        className={classNames(featureIdx === 0 ? 'md:border-t-0 md:py-0 md:pb-4' : '', 'py-4 flex')}
-                    >
                         <CheckIcon className="h-6 w-6 flex-shrink-0 text-green-500" aria-hidden="true" />
                         <span className="ml-3 text-base text-gray-500">{feature}</span>
                     </li>

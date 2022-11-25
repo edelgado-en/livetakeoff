@@ -130,7 +130,10 @@ const  App = () => {
                       <Route path="estimates/:id" element={<EstimateDetail />} />  
 
                       <Route path="jobs" element={<Jobs />}/>
+                      
                       <Route path="create-job" element={<CreateJob />} />
+                      <Route path="create-job/:estimateId" element={<CreateJob />} />
+
                       <Route path="completed" element={<CompleteList />} />
                       <Route path="completed/review/:jobId" element={<JobReview />}>
                         <Route path="photos" element={<JobPhotos />}>

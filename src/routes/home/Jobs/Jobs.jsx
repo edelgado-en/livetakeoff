@@ -290,7 +290,7 @@ const JobsQueue = () => {
               </p>
             </div>
             <div className="text-right">
-            {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+            {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer) && (
                 <Link to="/create-job">
                   <button
                     type="button"

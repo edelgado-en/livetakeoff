@@ -121,11 +121,11 @@ const EstimateDetail = () => {
                                 <h1 className="text-2xl font-semibold text-gray-600">Job Estimate</h1>
                             </div>
                             {(estimateDetails?.status === 'A' || estimateDetails?.status === 'R') && (
-                                <div className={`text-xs text-white rounded-md py-1 px-2
+                                <div className={`text-sm text-white rounded-md py-1 px-2
                                             ${estimateDetails.status === 'A' && 'bg-green-500 '}
                                             ${estimateDetails.status === 'R' && 'bg-gray-500 '}
                                             `}>
-                                    <div className="relative top-1">
+                                    <div className="relative font-medium" style={{top: '2px'}}>
                                         {estimateDetails.status === 'A' && 'Accepted'}
                                         {estimateDetails.status === 'R' && 'Rejected'}
                                     </div>
@@ -262,6 +262,38 @@ const EstimateDetail = () => {
                                 </div>
                             </div>
                         </div>
+                        
+                        {!location.pathname.includes('shared') && (
+                            <div className="pb-8 border-b border-gray-200">
+                                <div className="flex justify-between">
+                                        <div className="text-sm font-medium text-gray-900 relative top-3">Share this link</div>
+                                        <div className="text-right">
+                                            <Popover className="relative">
+                                                <Popover.Button>
+                                                    <div
+                                                        onClick={() => handleCopyClick()} 
+                                                        className="flex gap-2 rounded-md border border-gray-300 bg-white
+                                                                py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                                                hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                                    >
+                                                        <ShareIcon className="h-4 w-4 relative" style={{top: '2px'}} />
+                                                        Share
+                                                    </div>
+                                                </Popover.Button>
+
+                                                <Popover.Panel className="absolute z-10">
+                                                    <div className="bg-gray-600 text-white text-xs py-1 px-2 rounded-md mt-1 relative left-4">copied!</div>
+                                                </Popover.Panel>
+                                            </Popover>
+                                        </div>
+                                </div>
+                                <div className="text-sm text-gray-500 pt-2">
+                                    You can share this link with a client to allow them to view this estimate. He/she can accept or reject it. You will get a SMS notification when he/she does.
+                                </div> 
+                            </div>
+                        )}
+                        
+
                         <div className="text-right">
                             {location.pathname.includes("shared") && !estimateDetails.is_processed && (
                                 <>
@@ -299,33 +331,39 @@ const EstimateDetail = () => {
                             )}
 
                             {!location.pathname.includes('shared') && (
-                                <div className="pb-20 flex justify-end gap-3">
+                                <div className="pb-20 flex justify-end gap-3 mt-8">
                                     <button
-                                        onClick={() => navigate(-1)} 
+                                        onClick={() => navigate('/estimates')} 
                                         className="flex gap-2 rounded-md border border-gray-300 bg-white
                                                 py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
                                                 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                                     >
                                         Back to Estimates
                                     </button>
-                                    <Popover className="relative">
-                                        <Popover.Button>
-                                            <div
-                                                onClick={() => handleCopyClick()} 
-                                                className="flex gap-2 rounded-md border border-gray-300 bg-white
-                                                        py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
-                                                        hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                                            >
-                                                <ShareIcon className="h-4 w-4 relative" style={{top: '2px'}} />
-                                                Share
-                                            </div>
-                                        </Popover.Button>
+                                    {(!estimateDetails.job && (estimateDetails.status === 'P' || estimateDetails.status === 'A')) && (
+                                        <button
+                                            onClick={() => navigate(`/create-job/${estimateDetails.id}`)}
+                                            type="button"
+                                            className="inline-flex items-center justify-center 
+                                                    rounded-md border border-transparent bg-red-600 px-4 py-2
+                                                    text-sm font-medium text-white shadow-sm hover:bg-red-700
+                                                    focus:outline-none focus:ring-2 focus:ring-red-500
+                                                    focus:ring-offset-2 sm:w-auto"
+                                        >
+                                            Create Job
+                                        </button>
+                                    )}
 
-                                        <Popover.Panel className="absolute z-10">
-                                            <div className="bg-gray-600 text-white text-xs py-1 px-2 rounded-md mt-1 relative left-4">copied!</div>
-                                        </Popover.Panel>
-                                    </Popover>
-                                    
+                                    {(estimateDetails.job && (
+                                        <Link
+                                            to={`/jobs/${estimateDetails.job.id}/details`} 
+                                            className="flex gap-2 rounded-md border border-gray-300 bg-white
+                                                py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                                hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                        >
+                                            View Job
+                                        </Link>
+                                    ))}
                                 </div>
                             )}
                             
