@@ -1,7 +1,7 @@
 import { useEffect, useState, Fragment } from "react"
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { toast } from "react-toastify"
-import { ChevronLeftIcon, CheckIcon, PlusIcon, MinusIcon, ShareIcon, CashIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/outline'
+import { ChevronLeftIcon, CheckIcon, PlusIcon, MinusIcon, ShareIcon, CashIcon, ChevronUpIcon, ChevronDownIcon, XCircleIcon } from '@heroicons/react/outline'
 import Loader from "../../../components/loader/Loader"
 import { Dialog, Transition, Listbox } from '@headlessui/react'
 
@@ -161,6 +161,8 @@ const TailNumberReport = () => {
             const response = await api.getTailStatsDetails(tailStatsDetails.tailNumber)
         
             setSidebarOpen(false)
+            setShowRecentServices(false)
+            setRecentRetainers(false)
 
             // update the jobsByMonthData array with the new data response.data.jobs_by_month by matching the requestDate
             /* jobsByMonthData.forEach((item, index) => {
@@ -400,7 +402,13 @@ const TailNumberReport = () => {
                                                                 <div className="w-6">
                                                                     <BriefCaseIcon className="h-6 w-6 text-gray-500"/>
                                                                 </div>
-                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} jobs</span>
+                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} total job(s)</span>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <div className="w-6">
+                                                                    <XCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                                </div>
+                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled job(s)</span>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
                                                                 <span className="text-sm font-medium text-gray-900">
@@ -417,7 +425,7 @@ const TailNumberReport = () => {
                                                                 <h2 className="text-md font-medium text-gray-500">Project Managers</h2>
                                                                 
                                                                 {tailStatsDetails?.project_manager_stats?.length === 0 && (
-                                                                    <div className="text-center text-gray-500 pt-10">No completed jobs found</div>    
+                                                                    <div className="text-center text-sm text-gray-500 pt-10">No completed jobs found</div>    
                                                                 )}
 
                                                                 <ul role="list" className="mt-3 space-y-3">
@@ -427,7 +435,7 @@ const TailNumberReport = () => {
                                                                                 <div className="flex-shrink-0">
                                                                                     <img
                                                                                         className="h-8 w-8 rounded-full"
-                                                                                        src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                                                                                        src={'https://res.cloudinary.com/datidxeqm/image/upload/v1/' + user.user__profile__avatar}
                                                                                         alt=""
                                                                                     />
                                                                                 </div>
@@ -458,6 +466,10 @@ const TailNumberReport = () => {
                                                     <div className="space-y-8 border-t border-b border-gray-200 py-6">
                                                         <div>
                                                             <h2 className="text-lg font-medium text-gray-900">All Services Performed</h2>
+                                                            {tailStatsDetails?.service_stats?.length === 0 && (
+                                                                <div className="text-center text-sm text-gray-500 pt-10">No services found</div>    
+                                                            )}
+
                                                             <ul role="list" className="mt-3 space-y-3">
                                                                 {tailStatsDetails?.service_stats?.map((service, index) => (
                                                                     <li key={index} className="hover:bg-gray-50 rounded-md">
@@ -499,7 +511,7 @@ const TailNumberReport = () => {
                                                             <h2 className="text-lg font-medium text-gray-900">All Retainers Performed</h2>
                                                             
                                                             {tailStatsDetails?.retainer_service_stats?.length === 0 && (
-                                                                <div className="text-center text-gray-500 pt-10">No retainers found</div>    
+                                                                <div className="text-center text-sm text-gray-500 pt-10">No retainers found</div>    
                                                             )}
 
                                                             <ul role="list" className="mt-3 space-y-3">
@@ -673,16 +685,22 @@ const TailNumberReport = () => {
                                                     <div className="w-6">
                                                         <BriefCaseIcon className="h-6 w-6 text-gray-500"/>
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} jobs</span>
+                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} total job(s)</span>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
-                                                <span className="text-sm font-medium text-gray-900">
-                                                    {tailStatsDetails?.first_job_date && (
-                                                        <>
-                                                            Since <ReactTimeAgo date={new Date(tailStatsDetails?.first_job_date[0].requestDate)} locale="en-US" timeStyle="twitter" /> 
-                                                        </>
-                                                    )}
-                                                </span>
+                                                    <div className="w-6">
+                                                        <XCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled job(s)</span>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <span className="text-sm font-medium text-gray-900">
+                                                        {tailStatsDetails?.first_job_date && (
+                                                            <>
+                                                                Since <ReactTimeAgo date={new Date(tailStatsDetails?.first_job_date[0].requestDate)} locale="en-US" timeStyle="twitter" /> 
+                                                            </>
+                                                        )}
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div className="mt-6 space-y-8 border-t border-gray-200 py-6">
@@ -690,7 +708,7 @@ const TailNumberReport = () => {
                                                     <h2 className="text-md font-medium text-gray-500">Project Managers</h2>
                                                     
                                                     {tailStatsDetails?.project_manager_stats?.length === 0 && (
-                                                        <div className="text-center text-gray-500 pt-10">No completed jobs found</div>    
+                                                        <div className="text-center text-sm text-gray-500 pt-10">No completed jobs found</div>    
                                                     )}
 
                                                     <ul role="list" className="mt-3 space-y-3">
