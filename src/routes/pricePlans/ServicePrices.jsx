@@ -260,7 +260,7 @@ const ServicePrices = () => {
                       </div>
                     </form>
                     {/* Directory list Mobile */}
-                    <nav className="min-h-0 flex-1 overflow-y-auto mt-5">
+                    <nav className="min-h-0 flex-1 overflow-y-auto mt-5" style={{ height: '800px', paddingBottom: '250px' }}>
                       {loading && <Loader /> }
 
                       {!loading && totalAircraftTypes === 0 && (
@@ -313,57 +313,6 @@ const ServicePrices = () => {
                 <div>
                   {/* Comparison table */}
                   <div className="mx-auto max-w-full bg-white pb-16 sm:pb-16 lg:max-w-full">
-                    {/* xs to lg */}
-                    {/* <div className="py-4 font-medium text-lg xl:hidden">{aircraftTypeSelected?.name}</div>
-                    <div className="space-y-12 lg:hidden">
-                      {pricePlans.map((pricePlan) => (
-                        <section key={pricePlan.name}>
-                          <div className="mb-8 px-4">
-                            <h2 className="text-md font-medium leading-6 text-gray-900">{pricePlan.name}</h2>
-                            <p className="mt-4 text-xs text-gray-500">{pricePlan.description}</p>
-                          </div>
-            
-                          <table className="w-full">
-                            <caption className="border-t border-gray-200 bg-gray-50 py-3 px-4 text-left text-sm font-medium text-gray-900">
-                              Services
-                            </caption>
-                            <tbody className="divide-y divide-gray-200">
-                              {priceListing.map((entry) => (
-                                <tr key={entry.service} className="border-t border-gray-200">
-                                  <th className="py-5 px-4 text-left text-xs font-normal text-gray-500" scope="row">
-                                    {entry.service}
-                                  </th>
-                                  <td className="py-5 pr-4">
-                                    <div className="flex gap-2">
-                                     <input type="text" name="first-name" id="first-name"
-                                        style={{ width: '60px' }}
-                                        className="block rounded-md border-gray-300 py-1
-                                                    shadow-sm focus:border-gray-500 focus:ring-gray-500
-                                                  text-xs">
-                                                
-                                      </input>
-                                      <span className="text-gray-500 relative top-1" style={{ fontSize: '10px' }}>USD</span>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-            
-                          <div className="border-t border-gray-200 px-4 pt-5">
-                            <button
-                              className="block w-full rounded-md border border-transparent
-                                       bg-red-500 py-2 text-center text-sm
-                                         font-semibold text-white shadow hover:to-pink-600"
-                            >
-                              Save Changes
-                            </button>
-                          </div>
-                        </section>
-                      ))}
-                    </div> */}
-            
-                    {/* lg+ */}
                     <div className="" style={{minWidth: '820px'}}>
                       {aircraftTypeSelected === null && (
                         <div className="text-sm text-gray-700 mt-4">Select an aircraft.</div>
@@ -475,7 +424,7 @@ const ServicePrices = () => {
                 <div className="flex justify-between">
                   <h2 className="text-2xl font-medium text-gray-900">Aircrafts</h2>
                   <div>
-                      <Link to="/create-customer">
+                      <Link to="/create-aircraft">
                         <button type="button" className="flex items-center justify-center rounded-full bg-red-600 p-1
                                                     text-white hover:bg-red-700 focus:outline-none focus:ring-2
                                                         focus:ring-red-500 focus:ring-offset-2">
