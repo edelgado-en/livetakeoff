@@ -359,28 +359,25 @@ const TailNumberReport = () => {
                                             </div>
                                         )}
 
-                                        <ul role="list" className="relative z-0 divide-y divide-gray-200">
-                                            {tailStats.map((tail, index) => (
-                                                <li key={index} onClick={() => getTailStatsDetails(tail)}>
-                                                    <div className={`${tail.showDetails ? ' border-2 border-red-500' : ''}
-                                                                    cursor-pointer relative flex justify-between space-x-3 xl:px-6 lg:px-6 md:px-6 sm:px-2 xs:px-2 pr-6 py-5 hover:bg-gray-50 text-sm`}>
-                                                        <div className="">
-                                                            <div className="font-medium text-gray-900">{tail.tailNumber}</div>
-                                                            <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
+                                        {!loading && (
+                                            <ul role="list" className="relative z-0 divide-y divide-gray-200">
+                                                {tailStats.map((tail, index) => (
+                                                    <li key={index} onClick={() => getTailStatsDetails(tail)}>
+                                                        <div className={`${tail.showDetails ? ' border-2 border-red-500' : ''}
+                                                                        cursor-pointer relative flex justify-between space-x-3 xl:px-6 lg:px-6 md:px-6 sm:px-2 xs:px-2 pr-6 py-5 hover:bg-gray-50 text-sm`}>
+                                                            <div className="">
+                                                                <div className="font-medium text-gray-900">{tail.tailNumber}</div>
+                                                                <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
+                                                                <div>{tail.job_count} <span className="text-gray-500">jobs</span></div>
+                                                            </div>
                                                         </div>
-                                                        <div className="text-right">
-                                                            {tail.total_price && (
-                                                                <div className="text-green-700 font-medium">${tail?.total_price?.toLocaleString()}</div>
-                                                            )}
-                                                            {!tail.total_price && (
-                                                                <div>$0</div>
-                                                            )}
-                                                            <div>{tail.job_count} <span className="text-gray-500">jobs</span></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
                                     </nav> 
 
                                     {(!loading && totalTailStats > 20) && (
@@ -926,28 +923,26 @@ const TailNumberReport = () => {
                             </div>
                             )}
 
-                            <ul role="list" className="relative z-0 divide-y divide-gray-200">
-                                {tailStats.map((tail, index) => (
-                                <li key={index} onClick={() => getTailStatsDetails(tail)}>
-                                   <div className={`${tail.showDetails ? ' border-2 border-red-500' : ''}
-                                                                    cursor-pointer relative flex justify-between space-x-3 xl:px-6 lg:px-6 md:px-6 sm:px-2 xs:px-2 pr-6 py-5 hover:bg-gray-50 text-sm`}>
-                                        <div className="">
-                                            <div className="font-medium text-gray-900">{tail.tailNumber}</div>
-                                            <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
-                                        </div>
-                                        <div className="text-right">
-                                            {tail.total_price && (
-                                                <div className="text-green-700 font-medium">${tail?.total_price?.toLocaleString()}</div>
-                                            )}
-                                            {!tail.total_price && (
-                                                <div>$0</div>
-                                            )}
-                                            <div>{tail?.job_count?.toLocaleString()} <span className="text-gray-500">jobs</span></div>
-                                        </div>
-                                    </div>
-                                </li>
-                                ))}
-                            </ul>
+                            {!loading && (
+                                <ul role="list" className="relative z-0 divide-y divide-gray-200">
+                                    {tailStats.map((tail, index) => (
+                                        <li key={index} onClick={() => getTailStatsDetails(tail)}>
+                                            <div className={`${tail.showDetails ? ' border-2 border-red-500' : ''}
+                                                                            cursor-pointer relative flex justify-between space-x-3 xl:px-6 lg:px-6 md:px-6 sm:px-2 xs:px-2 pr-6 py-5 hover:bg-gray-50 text-sm`}>
+                                                <div className="">
+                                                    <div className="font-medium text-gray-900">{tail.tailNumber}</div>
+                                                    <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
+                                                    <div>{tail?.job_count?.toLocaleString()} <span className="text-gray-500">jobs</span></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            
                         </nav>
                     </aside>
                  </div>
