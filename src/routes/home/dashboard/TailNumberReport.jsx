@@ -163,13 +163,13 @@ const TailNumberReport = () => {
             setSidebarOpen(false)
 
             // update the jobsByMonthData array with the new data response.data.jobs_by_month by matching the requestDate
-            jobsByMonthData.forEach((item, index) => {
+            /* jobsByMonthData.forEach((item, index) => {
                 response.data.jobs_by_month.forEach((item2, index2) => {
                     if (item.requestDate === item2.requestDate) {
                         jobsByMonthData[index].job_count = item2.job_count
                     }
                 })
-            })
+            }) */
 
             setTailStatsDetails(response.data)
 
@@ -541,7 +541,7 @@ const TailNumberReport = () => {
                                                 </div>
                                             </div>
                                             {/* Desktop */}
-                                            <section className="hidden xl:block lg:block md:block mt-8 xl:mt-10">
+                                            {/* <section className="hidden xl:block lg:block md:block mt-8 xl:mt-10">
                                                 <div className="divide-y divide-gray-200">
                                                     <div className="pb-4">
                                                         <h2 id="activity-title" className="text-lg font-medium text-gray-900">
@@ -571,7 +571,7 @@ const TailNumberReport = () => {
                                                         </ResponsiveContainer>
                                                     </div>
                                                 </div>
-                                            </section>
+                                            </section> */}
 
                                             <section aria-labelledby="activity-title" className="mt-8 xl:mt-10 pb-20">
                                                 <div>
