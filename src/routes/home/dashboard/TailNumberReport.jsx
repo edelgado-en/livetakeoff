@@ -82,9 +82,10 @@ const jobsByMonthData = [
 ];
 
 const sortOptions = [
-    { id: 'total_price', name: 'Total price' },
-    { id: 'completeBy', name: 'Complete Before' },
-    { id: 'arrivalDate', name: 'Arrival Date' },
+    { id: 'total_price_desc', name: 'Price (High to Low)' },
+    { id: 'total_price_asc', name: 'Price (Low to High)' },
+    { id: 'job_count_desc', name: 'Jobs (High to Low)' },
+    { id: 'job_count_asc', name: 'Jobs (Low to High)' },
   ]
 
 const BriefCaseIcon = () => {
@@ -103,6 +104,7 @@ function classNames(...classes) {
 const TailNumberReport = () => {
     const [loading, setLoading] = useState()
     const [currentPage, setCurrentPage] = useState(1)
+    const [sortSelected, setSortSelected] = useState(sortOptions[0])
     const [tailStatsDetailsLoading, setTailStatsDetailsLoading] = useState(false)
     const [tailStats, setTailStats] = useState([])
     const [tailStatsDetails, setTailStatsDetails] = useState(null)
@@ -125,7 +127,7 @@ const TailNumberReport = () => {
         clearTimeout(timeoutID);
       };
 
-    }, [searchText, currentPage])
+    }, [searchText, currentPage, sortSelected])
 
     const handleKeyDown = event => {
         if (event.key === 'Enter') {
@@ -140,7 +142,7 @@ const TailNumberReport = () => {
 
         const request = {
             'searchText': searchText,
-            'sortDirection': 'desc'
+            'sortSelected': sortSelected.id,
         }
 
         try {
@@ -288,6 +290,64 @@ const TailNumberReport = () => {
                                             </div>
                                         </div>
                                     </form>
+                                    <div className="flex justify-end">
+                                        <Listbox value={sortSelected} onChange={setSortSelected}>
+                                            {({ open }) => (
+                                                <>
+                                                <div className="relative" style={{width: '100px'}}>
+                                                    <Listbox.Button className="relative w-full cursor-default rounded-md 
+                                                                                bg-white py-2 px-3 pr-8 text-left mt-3
+                                                                                shadow-sm border border-gray-300 focus:border-transparent focus:ring-0 focus:outline-none
+                                                                                text-xs">
+                                                        <span className="block truncate">
+                                                            Sort
+                                                        </span>
+                                                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                                            <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                                                        </span>
+                                                    </Listbox.Button>
+
+                                                    <Transition
+                                                        show={open}
+                                                        as={Fragment}
+                                                        leave="transition ease-in duration-100"
+                                                        leaveFrom="opacity-100"
+                                                        leaveTo="opacity-0">
+                                                        <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-72 w-full overflow-auto w-40
+                                                                                    rounded-md bg-white py-1 shadow-lg ring-1
+                                                                                    ring-black ring-opacity-5 focus:outline-none text-xs">
+                                                            {sortOptions.map((sort) => (
+                                                                <Listbox.Option
+                                                                    key={sort.id}
+                                                                    className={({ active }) =>
+                                                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                    'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                    value={sort}>
+                                                                    {({ selected, active }) => (
+                                                                        <>
+                                                                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                                                {sort.name}
+                                                                            </span>
+                                                                            {selected ? (
+                                                                                <span
+                                                                                    className={classNames(
+                                                                                    active ? 'text-white' : 'text-red-600',
+                                                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                                    )}>
+                                                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                                </span>
+                                                                            ) : null}
+                                                                        </>
+                                                                    )}
+                                                                </Listbox.Option>
+                                                            ))}
+                                                        </Listbox.Options>
+                                                    </Transition>
+                                                </div>
+                                                </>
+                                            )}
+                                        </Listbox>
+                                    </div>
                                     {/* Directory list Mobile */}
                                     <nav className="min-h-0 flex-1 overflow-y-auto mt-5" style={{ height: '800px', paddingBottom: '250px' }}>
                                     
@@ -309,14 +369,19 @@ const TailNumberReport = () => {
                                                             <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
                                                         </div>
                                                         <div className="text-right">
-                                                            <div>${tail?.total_price?.toLocaleString()}</div>
+                                                            {tail.total_price && (
+                                                                <div className="text-green-700 font-medium">${tail?.total_price?.toLocaleString()}</div>
+                                                            )}
+                                                            {!tail.total_price && (
+                                                                <div>$0</div>
+                                                            )}
                                                             <div>{tail.job_count} <span className="text-gray-500">jobs</span></div>
                                                         </div>
                                                     </div>
                                                 </li>
                                             ))}
                                         </ul>
-                                    </nav>
+                                    </nav> 
 
                                     {(!loading && totalTailStats > 20) && (
                                         <div className="">
@@ -760,7 +825,7 @@ const TailNumberReport = () => {
                         </article>
                     </main>
                     <aside className="hidden w-72 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
-                        <div className="px-6 pt-6 pb-4">
+                        <div className="px-6 pt-6">
                             <div className="flex justify-between">
                                 <h2 className="text-2xl font-medium text-gray-900">Tail Numbers</h2>
                             </div>
@@ -793,6 +858,64 @@ const TailNumberReport = () => {
                                 </div>
                             </form>
                         </div>
+                        <div className="flex justify-end pr-6">
+                            <Listbox value={sortSelected} onChange={setSortSelected}>
+                                {({ open }) => (
+                                    <>
+                                    <div className="relative" style={{width: '100px'}}>
+                                        <Listbox.Button className="relative w-full cursor-default rounded-md 
+                                                                    bg-white py-2 px-3 pr-8 text-left mt-3
+                                                                    shadow-sm border border-gray-300 focus:border-transparent focus:ring-0 focus:outline-none
+                                                                    text-xs">
+                                            <span className="block truncate">
+                                                Sort
+                                            </span>
+                                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                                <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                                            </span>
+                                        </Listbox.Button>
+
+                                        <Transition
+                                            show={open}
+                                            as={Fragment}
+                                            leave="transition ease-in duration-100"
+                                            leaveFrom="opacity-100"
+                                            leaveTo="opacity-0">
+                                            <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-72 w-full overflow-auto w-40
+                                                                        rounded-md bg-white py-1 shadow-lg ring-1
+                                                                        ring-black ring-opacity-5 focus:outline-none text-xs">
+                                                {sortOptions.map((sort) => (
+                                                    <Listbox.Option
+                                                        key={sort.id}
+                                                        className={({ active }) =>
+                                                                classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                        'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                        value={sort}>
+                                                        {({ selected, active }) => (
+                                                            <>
+                                                                <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                                    {sort.name}
+                                                                </span>
+                                                                {selected ? (
+                                                                    <span
+                                                                        className={classNames(
+                                                                        active ? 'text-white' : 'text-red-600',
+                                                                        'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                        )}>
+                                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                    </span>
+                                                                ) : null}
+                                                            </>
+                                                        )}
+                                                    </Listbox.Option>
+                                                ))}
+                                            </Listbox.Options>
+                                        </Transition>
+                                    </div>
+                                    </>
+                                )}
+                            </Listbox>
+                        </div>
 
                         <nav className="min-h-0 flex-1 overflow-y-auto">
                             {loading && <Loader />}
@@ -813,7 +936,12 @@ const TailNumberReport = () => {
                                             <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
                                         </div>
                                         <div className="text-right">
-                                            <div>${tail?.total_price?.toLocaleString()}</div>
+                                            {tail.total_price && (
+                                                <div className="text-green-700 font-medium">${tail?.total_price?.toLocaleString()}</div>
+                                            )}
+                                            {!tail.total_price && (
+                                                <div>$0</div>
+                                            )}
                                             <div>{tail?.job_count?.toLocaleString()} <span className="text-gray-500">jobs</span></div>
                                         </div>
                                     </div>
