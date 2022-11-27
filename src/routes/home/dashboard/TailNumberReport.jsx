@@ -81,6 +81,12 @@ const jobsByMonthData = [
     },
 ];
 
+const sortOptions = [
+    { id: 'total_price', name: 'Total price' },
+    { id: 'completeBy', name: 'Complete Before' },
+    { id: 'arrivalDate', name: 'Arrival Date' },
+  ]
+
 const BriefCaseIcon = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -353,7 +359,7 @@ const TailNumberReport = () => {
                         <article className="m-auto max-w-6xl px-6">
                             <div className="flex flex-wrap justify-between text-sm pt-6 border-b border-gray-200">
                                 <div className="pb-4">
-                                    <span className="text-2xl font-semibold text-gray-600">Tail Report</span>
+                                    <span className="text-2xl font-semibold text-gray-700">Tail Report</span>
                                 </div>
                                 <div>
                                     <button
@@ -465,7 +471,7 @@ const TailNumberReport = () => {
                                                     </aside>
                                                     <div className="space-y-8 border-t border-b border-gray-200 py-6">
                                                         <div>
-                                                            <h2 className="text-lg font-medium text-gray-900">All Services Performed</h2>
+                                                            <h2 className="text-md font-medium text-gray-900">All Services Performed</h2>
                                                             {tailStatsDetails?.service_stats?.length === 0 && (
                                                                 <div className="text-center text-sm text-gray-500 pt-10">No services found</div>    
                                                             )}
@@ -508,7 +514,7 @@ const TailNumberReport = () => {
                                                     
                                                     <div className="space-y-8 border-t border-b border-gray-200 py-6">
                                                         <div>
-                                                            <h2 className="text-lg font-medium text-gray-900">All Retainers Performed</h2>
+                                                            <h2 className="text-md font-medium text-gray-900">All Retainers Performed</h2>
                                                             
                                                             {tailStatsDetails?.retainer_service_stats?.length === 0 && (
                                                                 <div className="text-center text-sm text-gray-500 pt-10">No retainers found</div>    
@@ -589,7 +595,7 @@ const TailNumberReport = () => {
                                                 <div>
                                                     <div className="divide-y divide-gray-200">
                                                         <div className="pb-4">
-                                                            <h2 id="activity-title" className="text-lg font-medium text-gray-900">
+                                                            <h2 id="activity-title" className="text-md font-medium text-gray-900">
                                                                 Recent Activity
                                                             </h2>
                                                         </div>
