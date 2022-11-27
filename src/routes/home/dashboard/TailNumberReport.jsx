@@ -82,8 +82,8 @@ const jobsByMonthData = [
 ];
 
 const sortOptions = [
-    { id: 'total_price_desc', name: 'Price (High to Low)' },
-    { id: 'total_price_asc', name: 'Price (Low to High)' },
+    /* { id: 'total_price_desc', name: 'Price (High to Low)' },
+    { id: 'total_price_asc', name: 'Price (Low to High)' }, */
     { id: 'job_count_desc', name: 'Jobs (High to Low)' },
     { id: 'job_count_asc', name: 'Jobs (Low to High)' },
   ]
