@@ -473,7 +473,7 @@ const Topbar = () => {
                           Estimates
                       </Disclosure.Button>
                     </Link>
-                    <div class="mt-8 border-t border-white py-6">
+                    <div class="mt-4 border-t border-white py-2">
                       <nav class="grid">
                           {dashboards.map((item) => (
                             <Link
@@ -484,7 +484,7 @@ const Topbar = () => {
                                 <Disclosure.Button
                                   className={classNames(
                                     location.pathname.includes(item.href) ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
-                                    'px-3 rounded-md text-base font-medium text-white w-full text-left flex py-3'
+                                    'px-3 rounded-md text-base font-medium text-white w-full text-left flex py-3 -ml-4'
                                   )}
                                 >
                                     <item.icon className="h-6 w-6 flex-shrink-0 text-white" aria-hidden="true" />
