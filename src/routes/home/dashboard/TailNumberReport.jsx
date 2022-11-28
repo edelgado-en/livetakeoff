@@ -9,6 +9,9 @@ import ReactTimeAgo from 'react-time-ago'
 
 import AnimatedPage from "../../../components/animatedPage/AnimatedPage"
 
+import JSZip from "jszip";
+import { saveAs } from 'file-saver';
+
 import Pagination from "react-js-pagination";
 
 import * as api from './apiService'
@@ -23,7 +26,7 @@ const XMarkIcon = () => {
 
 const MagnifyingGlassIcon = () => {
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
         </svg>
 
@@ -263,7 +266,7 @@ const TailNumberReport = () => {
                                         <h2 className="text-2xl font-medium text-gray-900">Tail Numbers</h2>
                                     </div>
                                     <p className="mt-1 text-sm text-gray-600">Search list of {totalTailStats} tail numbers</p>
-                                    <form className="mt-6 flex space-x-4" action="#">
+                                    <form className="mt-4 flex space-x-2" action="#">
                                         <div className="min-w-0 flex-1">
                                             <label htmlFor="search" className="sr-only">
                                                 Search
@@ -284,21 +287,20 @@ const TailNumberReport = () => {
                                                     onChange={event => setSearchText(event.target.value)}
                                                     onKeyDown={handleKeyDown}
                                                     className="block w-full rounded-md border-gray-300 pl-10 focus:border-sky-500
-                                                            focus:ring-sky-500 sm:text-sm"
+                                                            focus:ring-sky-500 text-sm"
                                                     placeholder="Search tail..."
                                                 />
                                             </div>
                                         </div>
-                                    </form>
-                                    <div className="flex justify-end">
+                                        <div className="flex justify-end">
                                         <Listbox value={sortSelected} onChange={setSortSelected}>
                                             {({ open }) => (
                                                 <>
-                                                <div className="relative" style={{width: '100px'}}>
+                                                <div className="relative" style={{width: '75px'}}>
                                                     <Listbox.Button className="relative w-full cursor-default rounded-md 
-                                                                                bg-white py-2 px-3 pr-8 text-left mt-3
-                                                                                shadow-sm border border-gray-300 focus:border-transparent focus:ring-0 focus:outline-none
-                                                                                text-xs">
+                                                                                bg-white py-2 px-3 pr-8 text-left
+                                                                                shadow-sm border border-gray-300  focus:ring-0 focus:outline-none
+                                                                                text-xs" style={{paddingTop: '9px', paddingBottom: '9px', margintop: '4px'}}>
                                                         <span className="block truncate">
                                                             Sort
                                                         </span>
@@ -348,6 +350,8 @@ const TailNumberReport = () => {
                                             )}
                                         </Listbox>
                                     </div>
+                                    </form>
+                                    
                                     {/* Directory list Mobile */}
                                     <nav className="min-h-0 flex-1 overflow-y-auto mt-5" style={{ height: '800px', paddingBottom: '250px' }}>
                                     
@@ -542,7 +546,7 @@ const TailNumberReport = () => {
                                                                 {tailStatsDetails?.service_stats?.map((service, index) => (
                                                                     <li key={index} className="hover:bg-gray-50 rounded-md">
                                                                         <div className="flex gap-6 text-sm">
-                                                                            <div className="text-sm font-medium text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{service.service__name}</div>
+                                                                            <div className="text-sm text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{service.service__name}</div>
                                                                             <div className="text-gray-500 relative top-1 text-right flex-1 py-2">{service.services_count.toLocaleString()} time(s)</div>
                                                                         </div>
                                                                     </li>
@@ -559,12 +563,12 @@ const TailNumberReport = () => {
                                                     {showRecentServices && (
                                                         <div className="space-y-8 border-t border-b border-gray-200 py-6 pb-8">
                                                             <div>
-                                                                <h2 className="text-md font-medium text-gray-500">Recent Services</h2>
+                                                                <h2 className="text-md font-medium text-gray-900">Recent Services</h2>
                                                                 <ul className="mt-3 space-y-3">
                                                                     {tailStatsDetails?.recent_services?.map((service, index) => (
                                                                         <li key={index} className="hover:bg-gray-50 rounded-md">
                                                                             <div className="flex gap-6 text-sm">
-                                                                                <div className="text-sm font-medium text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{service.service__name}</div>
+                                                                                <div className="text-sm text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{service.service__name}</div>
                                                                                 <div className="text-gray-500 relative top-1 text-right flex-1 py-2"><ReactTimeAgo date={new Date(service.updated_at)} locale="en-US" timeStyle="twitter" /></div>
                                                                             </div>
                                                                         </li>
@@ -586,7 +590,7 @@ const TailNumberReport = () => {
                                                                 {tailStatsDetails?.retainer_service_stats?.map((retainer_service, index) => (
                                                                     <li key={index} className="hover:bg-gray-50 rounded-md">
                                                                         <div className="flex gap-6 text-sm">
-                                                                            <div className="text-sm font-medium text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{retainer_service.retainer_service__name}</div>
+                                                                            <div className="text-sm text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{retainer_service.retainer_service__name}</div>
                                                                             <div className="text-gray-500 relative top-1 text-right flex-1 py-2">{retainer_service.services_count.toLocaleString()} time(s)</div>
                                                                         </div>
                                                                     </li>
@@ -603,12 +607,12 @@ const TailNumberReport = () => {
                                                     {showRecentRetainers && (
                                                         <div className="space-y-8 border-t border-b border-gray-200 py-6 pb-8">
                                                             <div className="">
-                                                                <h2 className="text-md font-medium text-gray-500">Recent Retainers</h2>
+                                                                <h2 className="text-md font-medium text-gray-900">Recent Retainers</h2>
                                                                 <ul className="mt-3 space-y-3">
                                                                     {tailStatsDetails?.recent_retainer_services?.map((retainer, index) => (
                                                                         <li key={index} className="hover:bg-gray-50 rounded-md">
                                                                             <div className="flex gap-6 text-sm">
-                                                                                <div className="text-sm font-medium text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{retainer.retainer_service__name}</div>
+                                                                                <div className="text-sm text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{retainer.retainer_service__name}</div>
                                                                                 <div className="text-gray-500 relative top-1 text-right flex-1 py-2"><ReactTimeAgo date={new Date(retainer.updated_at)} locale="en-US" timeStyle="twitter" /></div>
                                                                             </div>
                                                                         </li>
@@ -822,12 +826,12 @@ const TailNumberReport = () => {
                         </article>
                     </main>
                     <aside className="hidden w-72 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
-                        <div className="px-6 pt-6">
+                        <div className="px-4 pt-6">
                             <div className="flex justify-between">
                                 <h2 className="text-2xl font-medium text-gray-900">Tail Numbers</h2>
                             </div>
                             <p className="mt-1 text-sm text-gray-600">Search list of {totalTailStats} tail numbers</p>
-                            <form className="mt-6 flex space-x-4" action="#">
+                            <form className="mt-6 flex space-x-2" action="#">
                                 <div className="min-w-0 flex-1">
                                     <label htmlFor="search" className="sr-only">
                                         Search
@@ -848,71 +852,72 @@ const TailNumberReport = () => {
                                             onChange={event => setSearchText(event.target.value)}
                                             onKeyDown={handleKeyDown}
                                             className="block w-full rounded-md border-gray-300 pl-10 focus:border-sky-500
-                                                    focus:ring-sky-500 sm:text-sm"
+                                                    focus:ring-sky-500 text-sm"
                                             placeholder="Search tail..."
                                         />
                                     </div>
                                 </div>
+                                <div className="flex justify-end">
+                                    <Listbox value={sortSelected} onChange={setSortSelected}>
+                                        {({ open }) => (
+                                            <>
+                                            <div className="relative" style={{width: '75px'}}>
+                                                <Listbox.Button className="relative w-full cursor-default rounded-md 
+                                                                            bg-white py-2 px-3 text-left
+                                                                            shadow-sm border border-gray-300  focus:ring-0 focus:outline-none
+                                                                            text-xs" style={{marginTop: '2px'}}>
+                                                    <span className="block truncate">
+                                                        Sort
+                                                    </span>
+                                                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                                        <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                                                    </span>
+                                                </Listbox.Button>
+
+                                                <Transition
+                                                    show={open}
+                                                    as={Fragment}
+                                                    leave="transition ease-in duration-100"
+                                                    leaveFrom="opacity-100"
+                                                    leaveTo="opacity-0">
+                                                    <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-72 w-full overflow-auto w-40
+                                                                                rounded-md bg-white py-1 shadow-lg ring-1
+                                                                                ring-black ring-opacity-5 focus:outline-none text-xs">
+                                                        {sortOptions.map((sort) => (
+                                                            <Listbox.Option
+                                                                key={sort.id}
+                                                                className={({ active }) =>
+                                                                        classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                value={sort}>
+                                                                {({ selected, active }) => (
+                                                                    <>
+                                                                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                                            {sort.name}
+                                                                        </span>
+                                                                        {selected ? (
+                                                                            <span
+                                                                                className={classNames(
+                                                                                active ? 'text-white' : 'text-red-600',
+                                                                                'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                                )}>
+                                                                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                            </span>
+                                                                        ) : null}
+                                                                    </>
+                                                                )}
+                                                            </Listbox.Option>
+                                                        ))}
+                                                    </Listbox.Options>
+                                                </Transition>
+                                            </div>
+                                            </>
+                                        )}
+                                    </Listbox>
+                                </div>
                             </form>
                         </div>
-                        <div className="flex justify-end pr-6">
-                            <Listbox value={sortSelected} onChange={setSortSelected}>
-                                {({ open }) => (
-                                    <>
-                                    <div className="relative" style={{width: '100px'}}>
-                                        <Listbox.Button className="relative w-full cursor-default rounded-md 
-                                                                    bg-white py-2 px-3 pr-8 text-left mt-3
-                                                                    shadow-sm border border-gray-300 focus:border-transparent focus:ring-0 focus:outline-none
-                                                                    text-xs">
-                                            <span className="block truncate">
-                                                Sort
-                                            </span>
-                                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-                                                <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
-                                            </span>
-                                        </Listbox.Button>
-
-                                        <Transition
-                                            show={open}
-                                            as={Fragment}
-                                            leave="transition ease-in duration-100"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0">
-                                            <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-72 w-full overflow-auto w-40
-                                                                        rounded-md bg-white py-1 shadow-lg ring-1
-                                                                        ring-black ring-opacity-5 focus:outline-none text-xs">
-                                                {sortOptions.map((sort) => (
-                                                    <Listbox.Option
-                                                        key={sort.id}
-                                                        className={({ active }) =>
-                                                                classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                        'relative cursor-default select-none py-2 pl-3 pr-9')}
-                                                        value={sort}>
-                                                        {({ selected, active }) => (
-                                                            <>
-                                                                <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                                    {sort.name}
-                                                                </span>
-                                                                {selected ? (
-                                                                    <span
-                                                                        className={classNames(
-                                                                        active ? 'text-white' : 'text-red-600',
-                                                                        'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                        )}>
-                                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                                    </span>
-                                                                ) : null}
-                                                            </>
-                                                        )}
-                                                    </Listbox.Option>
-                                                ))}
-                                            </Listbox.Options>
-                                        </Transition>
-                                    </div>
-                                    </>
-                                )}
-                            </Listbox>
-                        </div>
+                        
 
                         <nav className="min-h-0 flex-1 overflow-y-auto">
                             {loading && <Loader />}
