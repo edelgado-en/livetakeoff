@@ -120,6 +120,13 @@ const JobDetails = () => {
                                         )}
                                     </div>
                                 </Link>
+
+                                {currentUser.isCustomer && (
+                                    <Link
+                                        to="activity">
+                                        <ClockIcon className="h-6 w-6 text-gray-600"/>
+                                    </Link>
+                                )}
                                 
                                 {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
                                     <Menu as="div" className="relative inline-block text-left">
