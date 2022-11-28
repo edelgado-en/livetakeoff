@@ -1,12 +1,53 @@
-import { Fragment, useEffect, useState } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { MenuIcon, XIcon, PlusIcon } from "@heroicons/react/outline";
+import { Fragment, useEffect, useState, useRef } from "react";
+import { Disclosure, Menu, Transition, Popover, Listbox } from "@headlessui/react";
+import { MenuIcon, XIcon, PlusIcon, UserGroupIcon, CurrencyDollarIcon, ChartBarIcon, ChevronDownIcon, PresentationChartBarIcon, ViewGridIcon} from "@heroicons/react/outline";
 import logo from '../../images/logo_2618936_web.png'
 import whiteLogo from '../../images/logo_white-no-text.png'
 
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
+
+const WrenchIcon = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-600">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />
+    </svg>
+  )
+}
+
+const dashboards = [
+  {
+    name: 'Tail Number Report',
+    description: "A breakdown of open services by airport.",
+    href: '/tail-report',
+    icon: PresentationChartBarIcon,
+  },
+  {
+    name: 'User Productivity',
+    description: 'Find out which project manager is the most productive.',
+    href: '/user-productivity',
+    icon: ChartBarIcon,
+  },
+  {
+    name: 'Services by Airport',
+    description: "A breakdown of open services by airport.",
+    href: '/services-by-airport',
+    icon: ViewGridIcon,
+  },
+  {
+    name: 'Retainer Customers',
+    description: 'Checkout the price breakdown for all retainer customers.',
+    href: '/retainer-customers',
+    icon: UserGroupIcon,
+  },
+  {
+    name: 'Revenues',
+    description: 'Revenues by customer, airport, FBO, and service.',
+    href: '/revenues',
+    icon: CurrencyDollarIcon,
+  },
+]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -34,6 +75,7 @@ const Topbar = () => {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectUser)
   const location  = useLocation();
+  const [showDashboardMenu, setDashboardMenu] = useState(false)
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -46,6 +88,14 @@ const Topbar = () => {
 
     navigate('/login');
 
+  }
+  const handleDashboardLink = (href) => {
+    navigate(href);
+    setDashboardMenu(false);
+  }
+
+  const toggleDashboardMenu = () => {
+    setDashboardMenu(!showDashboardMenu)
   }
 
   return (
@@ -158,6 +208,60 @@ const Topbar = () => {
                             )}>
                               Estimates
                           </Link>
+                          <Popover className="relative">
+                            {({ open }) => (
+                              <>
+                                <Popover.Button
+                                  onClick={() => toggleDashboardMenu()}
+                                  className={classNames(
+                                    open ? 'text-white' : 'text-white',
+                                    'group inline-flex items-center rounded-md text-sm px-3 py-2 bg-red-600 hover:bg-red-700 hover:text-white font-medium'
+                                  )}
+                                >
+                                  <span>Dashboards</span>
+                                  <ChevronDownIcon
+                                    className={classNames(
+                                      open ? 'text-white' : 'text-white',
+                                      'ml-2 h-4 w-4'
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                </Popover.Button>
+
+                                <Transition
+                                  as={Fragment}
+                                  show={showDashboardMenu}
+                                  enter="transition ease-out duration-200"
+                                  enterFrom="opacity-0 translate-y-1"
+                                  enterTo="opacity-100 translate-y-0"
+                                  leave="transition ease-in duration-150"
+                                  leaveFrom="opacity-100 translate-y-0"
+                                  leaveTo="opacity-0 translate-y-1"
+                                >
+                                  <Popover.Panel className="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2">
+                                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                                      <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                        {dashboards.map((item) => (
+                                          <button
+                                              key={item.name}
+                                              onClick={() => handleDashboardLink(item.href)}
+                                              to={item.href}
+                                              className="-m-3 flex items-start rounded-lg px-3 py-4 hover:bg-gray-50"
+                                            >
+                                              <item.icon className="h-6 w-6 flex-shrink-0 text-red-600" aria-hidden="true" />
+                                              <div className="ml-4 text-left">
+                                                <p className="text-base font-medium text-gray-900">{item.name}</p>
+                                                <p className="mt-1 text-sm text-gray-500">{item.description}</p>
+                                              </div>
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </Popover.Panel>
+                                </Transition>
+                              </>
+                            )}
+                          </Popover>
                         </>
                       )}
                   </div>
@@ -369,6 +473,29 @@ const Topbar = () => {
                           Estimates
                       </Disclosure.Button>
                     </Link>
+                    <div class="mt-8 border-t border-white py-6">
+                      <nav class="grid">
+                          {dashboards.map((item) => (
+                            <Link
+                                key={item.name}
+                                to={item.href}
+                                className="flex items-start rounded-lg px-3 py-1"
+                              >
+                                <Disclosure.Button
+                                  className={classNames(
+                                    location.pathname.includes(item.href) ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                                    'px-3 rounded-md text-base font-medium text-white w-full text-left flex py-3'
+                                  )}
+                                >
+                                    <item.icon className="h-6 w-6 flex-shrink-0 text-white" aria-hidden="true" />
+                                    <div className="ml-4 text-left">
+                                      <p className="text-base font-medium text-white">{item.name}</p>
+                                    </div>
+                                </Disclosure.Button>
+                            </Link>
+                          ))}
+                      </nav>
+                    </div>
                   </>
                 )}
             </div>
