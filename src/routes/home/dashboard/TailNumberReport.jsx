@@ -1,7 +1,8 @@
 import { useEffect, useState, Fragment } from "react"
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { toast } from "react-toastify"
-import { ChevronLeftIcon, CheckIcon, PlusIcon, MinusIcon, ShareIcon, CashIcon, ChevronUpIcon, ChevronDownIcon, XCircleIcon } from '@heroicons/react/outline'
+import { useNavigate } from "react-router-dom";
+import { ChevronLeftIcon, CheckIcon, PlusIcon, MinusIcon, ShareIcon, CashIcon, ChevronUpIcon, ChevronDownIcon, XCircleIcon, CheckCircleIcon, ThumbUpIcon } from '@heroicons/react/outline'
 import Loader from "../../../components/loader/Loader"
 import { Dialog, Transition, Listbox } from '@headlessui/react'
 
@@ -12,9 +13,20 @@ import AnimatedPage from "../../../components/animatedPage/AnimatedPage"
 import JSZip from "jszip";
 import { saveAs } from 'file-saver';
 
+import { useAppSelector } from "../../../app/hooks";
+import { selectUser } from "../../userProfile/userSlice";
+
 import Pagination from "react-js-pagination";
 
 import * as api from './apiService'
+
+const ArrowTopRightIcon = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6 text-gray-500">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+        </svg>
+    )
+}
 
 const XMarkIcon = () => {
     return (
@@ -105,10 +117,10 @@ function classNames(...classes) {
 }
 
 const TailNumberReport = () => {
-    const [loading, setLoading] = useState()
+    const [loading, setLoading] = useState(true)
+    const [tailStatsDetailsLoading, setTailStatsDetailsLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
     const [sortSelected, setSortSelected] = useState(sortOptions[0])
-    const [tailStatsDetailsLoading, setTailStatsDetailsLoading] = useState(false)
     const [tailStats, setTailStats] = useState([])
     const [tailStatsDetails, setTailStatsDetails] = useState(null)
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -119,6 +131,10 @@ const TailNumberReport = () => {
     const [showRecentRetainers, setRecentRetainers] = useState(false)
 
     const [firstLoad, setFirstLoad] = useState(true)
+
+    const navigate = useNavigate()
+
+    const currentUser = useAppSelector(selectUser)
 
     useEffect(() => {
         //Basic throttling
@@ -212,6 +228,20 @@ const TailNumberReport = () => {
 
     const toggleRecentRetainers = () => {
         setRecentRetainers(!showRecentRetainers)
+    }
+
+    const handleRedirectToJobsQueue = () => {
+        //set the tailNumber in the localStorage and statusSelected to All
+        localStorage.setItem('searchText', tailStatsDetails?.tailNumber)
+
+        if (currentUser.isCustomer) {
+            localStorage.setItem('statusSelected', JSON.stringify({id: 'All', name: 'All Open Jobs'},))
+
+        } else {
+            localStorage.setItem('statusSelected', JSON.stringify({id: 'O', name: 'All Open Jobs'},))
+        }
+
+        navigate('/jobs')
     }
 
 
@@ -478,13 +508,33 @@ const TailNumberReport = () => {
                                                                 <div className="w-6">
                                                                     <BriefCaseIcon className="h-6 w-6 text-gray-500"/>
                                                                 </div>
-                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} total job(s)</span>
+                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} total <span className="text-gray-500">job(s)</span></span>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <div className="w-6">
+                                                                    <CheckCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                                </div>
+                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_invoiced_jobs.toLocaleString()} invoiced <span className="text-gray-500">job(s)</span></span>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <div className="w-6">
+                                                                    <ThumbUpIcon className="h-6 w-6 text-gray-500"/>
+                                                                </div>
+                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_completed_jobs.toLocaleString()} completed <span className="text-gray-500">job(s)</span></span>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
                                                                 <div className="w-6">
                                                                     <XCircleIcon className="h-6 w-6 text-gray-500"/>
                                                                 </div>
-                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled job(s)</span>
+                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled <span className="text-gray-500">job(s)</span></span>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2 " onClick={() => handleRedirectToJobsQueue()}>
+                                                                <div className="w-6">
+                                                                    <ArrowTopRightIcon className="h-6 w-6 text-gray-500"/>
+                                                                </div>
+                                                                <span className={`text-sm font-medium ${tailStatsDetails?.total_open_jobs > 0 ? 'text-blue-600 underline' : 'text-gray-900'} `}>
+                                                                    {tailStatsDetails?.total_open_jobs.toLocaleString()} open <span className={`${tailStatsDetails?.total_open_jobs > 0 ? 'text-blue-600' : 'text-gray-500'}`}>job(s)</span>
+                                                                </span>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
                                                                 <span className="text-sm font-medium text-gray-900">
@@ -498,7 +548,7 @@ const TailNumberReport = () => {
                                                         </div>
                                                         <div className="mt-6 space-y-8 border-t border-gray-200 py-6 pb-8">
                                                             <div>
-                                                                <h2 className="text-md font-medium text-gray-500">Project Managers</h2>
+                                                                <h2 className="text-md font-medium text-gray-500">Team</h2>
                                                                 
                                                                 {tailStatsDetails?.project_manager_stats?.length === 0 && (
                                                                     <div className="text-center text-sm text-gray-500 pt-10">No completed jobs found</div>    
@@ -761,13 +811,33 @@ const TailNumberReport = () => {
                                                     <div className="w-6">
                                                         <BriefCaseIcon className="h-6 w-6 text-gray-500"/>
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} total job(s)</span>
+                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_jobs.toLocaleString()} total <span className="text-gray-500">job(s)</span></span>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <div className="w-6">
+                                                        <CheckCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_invoiced_jobs.toLocaleString()} invoiced <span className="text-gray-500">job(s)</span></span>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <div className="w-6">
+                                                        <ThumbUpIcon className="h-6 w-6 text-gray-500"/>
+                                                    </div>
+                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_completed_jobs.toLocaleString()} completed <span className="text-gray-500">job(s)</span></span>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
                                                     <div className="w-6">
                                                         <XCircleIcon className="h-6 w-6 text-gray-500"/>
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled job(s)</span>
+                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled <span className="text-gray-500">job(s)</span></span>
+                                                </div>
+                                                <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleRedirectToJobsQueue()}>
+                                                    <div className="w-6">
+                                                        <ArrowTopRightIcon className="h-6 w-6 text-gray-500"/>
+                                                    </div>
+                                                    <span className={`text-sm font-medium ${tailStatsDetails?.total_open_jobs > 0 ? 'text-blue-600 underline' : 'text-gray-900'} `}>
+                                                        {tailStatsDetails?.total_open_jobs.toLocaleString()} open <span className={`${tailStatsDetails?.total_open_jobs > 0 ? 'text-blue-600' : 'text-gray-500'}`}>job(s)</span>
+                                                    </span>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
                                                     <span className="text-sm font-medium text-gray-900">
@@ -781,7 +851,7 @@ const TailNumberReport = () => {
                                             </div>
                                             <div className="mt-6 space-y-8 border-t border-gray-200 py-6">
                                                 <div>
-                                                    <h2 className="text-md font-medium text-gray-500">Project Managers</h2>
+                                                    <h2 className="text-md font-medium text-gray-500">Team</h2>
                                                     
                                                     {tailStatsDetails?.project_manager_stats?.length === 0 && (
                                                         <div className="text-center text-sm text-gray-500 pt-10">No completed jobs found</div>    
