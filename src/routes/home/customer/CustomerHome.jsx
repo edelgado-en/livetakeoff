@@ -312,7 +312,7 @@ const CustomerHome = () => {
                                       shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
                                        focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 xl:ml-0 xl:mt-3 xl:w-full"
                           >
-                            Create Estimate
+                            New Estimate
                           </Link>
                         </div>
                       )}

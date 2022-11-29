@@ -152,7 +152,7 @@ const Estimates = () => {
                                                                 ${estimate.status === 'R' && 'bg-gray-500 '}
                                                                 `}>
                                                         {estimate.status === 'P' && 'Pending'}
-                                                        {estimate.status === 'A' && 'Accepted'}
+                                                        {estimate.status === 'A' && 'Approved'}
                                                         {estimate.status === 'R' && 'Rejected'}
                                                     </p>
                                                     <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">

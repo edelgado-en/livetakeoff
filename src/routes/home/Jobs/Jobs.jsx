@@ -86,14 +86,27 @@ const JobsQueue = () => {
       //remove the first entry and replace it with {id: 'All', name: 'All'},{id: 'O', name: 'All Open Jobs'},
       availableStatuses.shift()
 
-      //Add {id: 'All', name: 'All'},{id: 'O', name: 'All Open Jobs'} to the beginning of the array
-      availableStatuses.unshift({id: 'O', name: 'All Open Jobs'})
-      availableStatuses.unshift({id: 'All', name: 'All'})
+      // only add O if it does not exists in the availableStatuses
+      if (!availableStatuses.find(status => status.id === 'O')) {
+        availableStatuses.unshift({id: 'O', name: 'All Open Jobs'})
+      }
 
-      //append closed jobs statuses to available statuses
-      availableStatuses.push({id: 'T', name: 'Canceled'})
-      availableStatuses.push({id: 'C', name: 'Completed'})
-      availableStatuses.push({id: 'I', name: 'Invoiced'})
+      if (!availableStatuses.find(status => status.id === 'All')) {
+        availableStatuses.unshift({id: 'All', name: 'All'})
+      }
+
+      if (!availableStatuses.find(status => status.id === 'T')) {
+        availableStatuses.push({id: 'T', name: 'Canceled'})
+      }
+
+      if (!availableStatuses.find(status => status.id === 'C')) {
+        availableStatuses.push({id: 'C', name: 'Completed'})
+      }
+
+      if (!availableStatuses.find(status => status.id === 'I')) {
+        availableStatuses.push({id: 'I', name: 'Invoiced'})
+      }
+
     }
 
   }, [])

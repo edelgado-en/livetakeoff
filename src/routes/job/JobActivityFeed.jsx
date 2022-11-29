@@ -53,6 +53,7 @@ export default function Example() {
                                         ${activity.status === 'T' && 'bg-black '}
                                         ${activity.status === 'I' && 'bg-gray-400 '}
                                         ${activity.status === 'P' && 'bg-red-500 '}
+                                        ${activity.status === 'X' && 'bg-gray-500'}
                                         h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white`
                                         }
                                     >
@@ -83,6 +84,7 @@ export default function Example() {
                                                         {activity.status === 'T' && 'Canceled'}
                                                         {activity.status === 'R' && 'Review'}
                                                         {activity.status === 'I' && 'Invoiced'}
+                                                        {activity.status === 'X' && 'Unassign'}
                                                     </span>
                                                     </>
                                                 )}
