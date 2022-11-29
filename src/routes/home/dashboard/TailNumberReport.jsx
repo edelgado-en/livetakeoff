@@ -35,51 +35,51 @@ const MagnifyingGlassIcon = () => {
 
 const jobsByMonthData = [
     {
-        requestDate: 'Jan',
+        month: 'Jan',
         job_count: 0,
     },
     {
-        requestDate: 'Feb',
+        month: 'Feb',
         job_count: 0,
     },
     {
-        requestDate: 'March',
+        month: 'March',
         job_count: 0,
     },
     {
-        requestDate: 'April',
+        month: 'April',
         job_count: 0,
     },
     {
-        requestDate: 'May',
+        month: 'May',
         job_count: 0,
     },
     {
-        requestDate: 'June',
+        month: 'June',
         job_count: 0,
     },
     {
-        requestDate: 'July',
+        month: 'July',
         job_count: 0,
     },
     {
-        requestDate: 'Aug',
+        month: 'Aug',
         job_count: 0,
     },
     {
-        requestDate: 'Sept',
+        month: 'Sept',
         job_count: 0,
     },
     {
-        requestDate: 'Oct',
+        month: 'Oct',
         job_count: 0,
     },
     {
-        requestDate: 'Nov',
+        month: 'Nov',
         job_count: 0,
     },
     {
-        requestDate: 'Dec',
+        month: 'Dec',
         job_count: 0,
     },
 ];
@@ -175,14 +175,18 @@ const TailNumberReport = () => {
             setShowRecentServices(false)
             setRecentRetainers(false)
 
+            //TODO: in January get the data from jobs_by_year and add a dropdown to user can select a year: 2022 or 2023
+            // and show the corresponding data for that year
+            
+
             // update the jobsByMonthData array with the new data response.data.jobs_by_month by matching the requestDate
-            /* jobsByMonthData.forEach((item, index) => {
+            jobsByMonthData.forEach((item, index) => {
                 response.data.jobs_by_month.forEach((item2, index2) => {
-                    if (item.requestDate === item2.requestDate) {
+                    if (item.month === item2.month) {
                         jobsByMonthData[index].job_count = item2.job_count
                     }
                 })
-            }) */
+            })
 
             setTailStatsDetails(response.data)
 
@@ -625,11 +629,11 @@ const TailNumberReport = () => {
                                                 </div>
                                             </div>
                                             {/* Desktop */}
-                                            {/* <section className="hidden xl:block lg:block md:block mt-8 xl:mt-10">
+                                            <section className="hidden xl:block lg:block md:block mt-8 xl:mt-10">
                                                 <div className="divide-y divide-gray-200">
                                                     <div className="pb-4">
                                                         <h2 id="activity-title" className="text-lg font-medium text-gray-900">
-                                                            Jobs Created by Month
+                                                            Jobs Completed by Month
                                                         </h2>
                                                     </div>
                                                     <div>
@@ -646,7 +650,7 @@ const TailNumberReport = () => {
                                                             }}
                                                             >
                                                             <CartesianGrid strokeDasharray="3 3" />
-                                                            <XAxis dataKey="requestDate" />
+                                                            <XAxis dataKey="month" />
                                                             <YAxis />
                                                             <Tooltip />
                                                             <Legend />
@@ -655,7 +659,7 @@ const TailNumberReport = () => {
                                                         </ResponsiveContainer>
                                                     </div>
                                                 </div>
-                                            </section> */}
+                                            </section> 
 
                                             <section aria-labelledby="activity-title" className="mt-8 xl:mt-10 pb-20">
                                                 <div>
