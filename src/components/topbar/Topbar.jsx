@@ -171,6 +171,15 @@ const Topbar = () => {
                         >
                           Tail Report
                         </Link>
+                        <Link
+                          to="/contact"
+                          className={classNames(
+                            location.pathname.includes('contact') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium text-white'
+                          )}
+                        >
+                          Contact Us
+                        </Link>
                         </>
                       )} 
 
@@ -417,6 +426,18 @@ const Topbar = () => {
                       )}
                     >
                         Tail Report
+                    </Disclosure.Button>
+                  </Link>
+
+                  <Link 
+                      to="/contact">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("contact") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Contact Us
                     </Disclosure.Button>
                   </Link>
                   
