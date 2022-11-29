@@ -18,7 +18,7 @@ const WrenchIcon = () => {
 
 const dashboards = [
   {
-    name: 'Tail Number Report',
+    name: 'Tail Report',
     description: "A breakdown of open services by airport.",
     href: '/tail-report',
     icon: PresentationChartBarIcon,
@@ -161,6 +161,15 @@ const Topbar = () => {
                           )}
                         >
                           Estimates
+                        </Link>
+                        <Link
+                          to="/tail-report"
+                          className={classNames(
+                            location.pathname.includes('tail-report') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                            'px-3 py-2 rounded-md text-sm font-medium text-white'
+                          )}
+                        >
+                          Tail Report
                         </Link>
                         </>
                       )} 
@@ -399,6 +408,18 @@ const Topbar = () => {
                         Estimates
                     </Disclosure.Button>
                   </Link>
+                  <Link 
+                      to="/tail-report">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("tail-report") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Tail Report
+                    </Disclosure.Button>
+                  </Link>
+                  
                   </>
                 )}
 

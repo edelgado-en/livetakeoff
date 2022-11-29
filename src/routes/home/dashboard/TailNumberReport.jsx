@@ -177,6 +177,10 @@ const TailNumberReport = () => {
                 getTailStatsDetails(data.results[0])
             }
 
+            if (data.results.length === 0) {
+                setTailStatsDetailsLoading(false)
+            }
+
         } catch (error) {
             setLoading(false)
         }
@@ -194,6 +198,11 @@ const TailNumberReport = () => {
             //TODO: in January get the data from jobs_by_year and add a dropdown to user can select a year: 2022 or 2023
             // and show the corresponding data for that year
             
+            // first set all job_count to 0 for all months to reset
+            jobsByMonthData.forEach((item, index) => {
+                jobsByMonthData[index].job_count = 0
+            })
+
 
             // update the jobsByMonthData array with the new data response.data.jobs_by_month by matching the requestDate
             jobsByMonthData.forEach((item, index) => {
@@ -393,7 +402,7 @@ const TailNumberReport = () => {
 
                                         {!loading && totalTailStats === 0 && (
                                             <div className="text-gray-500 text-sm flex flex-col mt-20 text-center">
-                                            <p className="font-semibold">No tail number found.</p>
+                                            <p className="">No tails found.</p>
                                             </div>
                                         )}
 
@@ -408,7 +417,9 @@ const TailNumberReport = () => {
                                                                 <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
                                                             </div>
                                                             <div className="text-right">
-                                                                <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
+                                                                {currentUser.showSpendingInfo && (
+                                                                    <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
+                                                                )}
                                                                 <div>{tail.job_count} <span className="text-gray-500">jobs</span></div>
                                                             </div>
                                                         </div>
@@ -462,7 +473,7 @@ const TailNumberReport = () => {
                                     <span className="text-2xl font-semibold text-gray-700">Tail Report</span>
                                 </div>
                                 <div>
-                                    <button
+                                    {/* <button
                                         type="button"
                                         disabled={loading || tailStatsDetailsLoading}
                                         onClick={() => handleExport()}
@@ -472,13 +483,17 @@ const TailNumberReport = () => {
                                                    focus:ring-offset-2"
                                     >
                                         <ShareIcon className="h-4 w-4 mr-1 relative" style={{top: '2px'}}/> {loading ? '...' : 'Export'}
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
 
                             {tailStatsDetailsLoading && <Loader />}
 
-                            {!tailStatsDetailsLoading && (
+                            {(!tailStatsDetailsLoading && !tailStatsDetails) && (
+                                <div className="mt-20 m-auto text-center">No tail selected.</div>
+                            )}
+
+                            {(!tailStatsDetailsLoading && tailStatsDetails) &&(
                                 <div className="flex-1">
                                     <div className="py-4 xl:py-6">
                                     <div className="xl:grid xl:max-w-5xl xl:grid-cols-3">
@@ -498,12 +513,14 @@ const TailNumberReport = () => {
                                                     <aside className="mt-8 xl:hidden">
                                                         <h2 className="sr-only">Details</h2>
                                                         <div className="space-y-5">
-                                                            <div className="flex items-center space-x-2">
-                                                                <div className="w-6">
-                                                                    <CashIcon className="h-6 w-6 text-green-700" />
+                                                            {currentUser.showSpendingInfo && (
+                                                                <div className="flex items-center space-x-2">
+                                                                    <div className="w-6">
+                                                                        <CashIcon className="h-6 w-6 text-green-700" />
+                                                                    </div>
+                                                                    <span className="text-sm font-medium text-green-700">${tailStatsDetails?.total_price.toLocaleString()}</span>
                                                                 </div>
-                                                                <span className="text-sm font-medium text-green-700">${tailStatsDetails?.total_price.toLocaleString()}</span>
-                                                            </div>
+                                                            )}
                                                             <div className="flex items-center space-x-2">
                                                                 <div className="w-6">
                                                                     <BriefCaseIcon className="h-6 w-6 text-gray-500"/>
@@ -576,6 +593,10 @@ const TailNumberReport = () => {
                                                         <div className="space-y-8 border-t border-b border-gray-200 py-6 pb-8">
                                                             <div>
                                                                 <h2 className="text-md font-medium text-gray-500">Airports</h2>
+                                                                {tailStatsDetails?.airport_stats?.length === 0 && (
+                                                                    <div className="text-center text-sm text-gray-500 pt-10">No airports found</div>    
+                                                                )}
+
                                                                 <ul role="list" className="mt-3 space-y-3">
                                                                     {tailStatsDetails?.airport_stats?.map((airport, index) => (
                                                                         <li key={index} className="">
@@ -801,12 +822,14 @@ const TailNumberReport = () => {
                                         {/* Desktop */}
                                         <aside className="hidden xl:block xl:pl-8">
                                             <div className="space-y-5">
-                                                <div className="flex items-center space-x-2">
-                                                    <div className="w-6">
-                                                        <CashIcon className="h-6 w-6 text-green-700" />
+                                                {currentUser.showSpendingInfo && (
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-6">
+                                                            <CashIcon className="h-6 w-6 text-green-700" />
+                                                        </div>
+                                                        <span className="text-sm font-medium text-green-700">${tailStatsDetails?.total_price.toLocaleString()}</span>
                                                     </div>
-                                                    <span className="text-sm font-medium text-green-700">${tailStatsDetails?.total_price.toLocaleString()}</span>
-                                                </div>
+                                                )}
                                                 <div className="flex items-center space-x-2">
                                                     <div className="w-6">
                                                         <BriefCaseIcon className="h-6 w-6 text-gray-500"/>
@@ -879,6 +902,10 @@ const TailNumberReport = () => {
                                             <div className="space-y-8 border-t border-gray-200 py-6">
                                                 <div>
                                                     <h2 className="text-md font-medium text-gray-500">Airports</h2>
+                                                    {tailStatsDetails?.airport_stats?.length === 0 && (
+                                                        <div className="text-center text-sm text-gray-500 pt-10">No airports found</div>    
+                                                    )}
+
                                                     <ul role="list" className="mt-3 space-y-3">
                                                         {tailStatsDetails?.airport_stats?.map((airport, index) => (
                                                             <li key={index} className="">
@@ -998,7 +1025,7 @@ const TailNumberReport = () => {
 
                             {!loading && totalTailStats === 0 && (
                             <div className="text-gray-500 text-sm flex flex-col mt-20 text-center">
-                                <p className="font-semibold">No tail number found.</p>
+                                <p className="">No tails found.</p>
                             </div>
                             )}
 
@@ -1013,7 +1040,9 @@ const TailNumberReport = () => {
                                                     <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
+                                                    {currentUser.showSpendingInfo && (
+                                                        <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
+                                                    )}
                                                     <div>{tail?.job_count?.toLocaleString()} <span className="text-gray-500">jobs</span></div>
                                                 </div>
                                             </div>
