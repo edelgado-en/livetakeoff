@@ -598,7 +598,7 @@ const JobsQueue = () => {
                                               <Listbox.Button className="relative w-full cursor-default rounded-md border
                                                                           border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                           shadow-sm focus:border-sky-500 focus:outline-none
-                                                                          focus:ring-1 focus:ring-sky-500 sm:text-sm">
+                                                                          focus:ring-1 focus:ring-sky-500 text-xs">
                                                   <span className="block truncate">
                                                       {airportSelected ? airportSelected.name : 'Select airport'}
                                                   </span>
@@ -614,8 +614,8 @@ const JobsQueue = () => {
                                                   leaveFrom="opacity-100"
                                                   leaveTo="opacity-0">
                                                   <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
-                                                                              rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                                              ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                                                              rounded-md bg-white py-1 shadow-lg ring-1
+                                                                              ring-black ring-opacity-5 focus:outline-none text-xs">
                                                       <div className="relative">
                                                           <div className="sticky top-0 z-20  px-1">
                                                               <div className="mt-1 block  items-center">
@@ -670,7 +670,7 @@ const JobsQueue = () => {
                                                               key={airport.id}
                                                               className={({ active }) =>
                                                                       classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                              'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                              'relative cursor-default select-none py-2 pl-3 pr-9 text-xs')}
                                                               value={airport}>
                                                               {({ selected, active }) => (
                                                                   <>

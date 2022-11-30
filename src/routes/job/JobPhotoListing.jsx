@@ -10,6 +10,9 @@ import ReactTimeAgo from 'react-time-ago'
 import JSZip from "jszip";
 import { saveAs } from 'file-saver';
 
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../../routes/userProfile/userSlice";
+
 import * as api from './apiService'
 import { toast } from "react-toastify";
 
@@ -29,8 +32,9 @@ const JobPhotoListing = () => {
     const [interiorPhotos, setInteriorPhotos] = useState([])
     const [exteriorPhotos, setExteriorPhotos] = useState([])
     const [customerPhotos, setCustomerPhotos] = useState([])
+
+    const currentUser = useAppSelector(selectUser)
     
-   
     const { jobId } = useParams();
 
     useEffect(() => {
@@ -331,7 +335,9 @@ const JobPhotoListing = () => {
                             <div className="font-semibold text-gray-600 mt-4">
                                 No photos uploaded
                             </div>
-                            <span className="text-gray-500">Click on the plus icon to upload some photos.</span>                            
+                            {!currentUser.isCustomer && (
+                                <span className="text-gray-500">Click on the plus icon to upload some photos.</span>                            
+                            )}
                         </div>
                     )}
                     
@@ -375,7 +381,9 @@ const JobPhotoListing = () => {
                                 <div className="font-semibold text-gray-600 mt-4">
                                     No photos uploaded
                                 </div>
-                                <span className="text-gray-500">Click on the plus icon to upload some photos.</span>                            
+                                {!currentUser.isCustomer && (
+                                    <span className="text-gray-500">Click on the plus icon to upload some photos.</span>                            
+                                )}
                             </div>
                     )}
                     <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 gap-1 pl-9 xl:pl-1">

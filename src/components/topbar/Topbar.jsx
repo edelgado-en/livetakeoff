@@ -24,7 +24,7 @@ const dashboards = [
     icon: PresentationChartBarIcon,
   },
   {
-    name: 'User Productivity',
+    name: 'Team Productivity',
     description: 'Find out which project manager is the most productive.',
     href: '/user-productivity',
     icon: ChartBarIcon,

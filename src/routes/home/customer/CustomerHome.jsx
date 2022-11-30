@@ -503,7 +503,7 @@ const CustomerHome = () => {
                                                     <Listbox.Button className="relative w-full cursor-default rounded-md border
                                                                                 border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                                 shadow-sm focus:border-sky-500 focus:outline-none
-                                                                                focus:ring-1 focus:ring-sky-500 sm:text-sm">
+                                                                                focus:ring-1 focus:ring-sky-500 text-xs">
                                                         <span className="block truncate">
                                                             {airportSelected ? airportSelected.name : 'Select airport'}
                                                         </span>
@@ -519,8 +519,8 @@ const CustomerHome = () => {
                                                         leaveFrom="opacity-100"
                                                         leaveTo="opacity-0">
                                                         <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
-                                                                                    rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                                                    ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                                                                    rounded-md bg-white py-1 shadow-lg ring-1
+                                                                                    ring-black ring-opacity-5 focus:outline-none text-xs">
                                                             <div className="relative">
                                                                 <div className="sticky top-0 z-20  px-1">
                                                                     <div className="mt-1 block  items-center">
@@ -838,7 +838,7 @@ const CustomerHome = () => {
                               <li key={activity.id} className="py-4">
                                 <div className="flex space-x-3">
                                   <img
-                                    className="h-6 w-6 rounded-full"
+                                    className="h-9 w-9 rounded-full"
                                     src={activity.user.profile.avatar}
                                     alt=""
                                   />
