@@ -111,7 +111,7 @@ const Login = () => {
                 <div className="relative flex flex-col justify-center text-center text-sm">
                   <div>
                     <span className="px-2 text-gray-500">Don't have an account?</span>
-                    <Link to="/signup" className="text-sky-600 hover:text-sky-500">
+                    <Link to="/signup" className="text-blue-600 hover:text-blue-500">
                       Sign up
                     </Link>
                   </div>

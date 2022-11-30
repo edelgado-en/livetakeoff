@@ -111,12 +111,14 @@ const  App = () => {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
                 <Route path="/shared" element={<SharedLayout />}>
                   <Route path="jobs/:encoded_id" element={<SharedJob />} />
                   <Route path="contact" element={<ContactUs />} />
                   <Route path="estimates/:encoded_id" element={<ShareJobEstimate />} />
                 </Route>
+
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/" element={<Layout />}>
@@ -200,7 +202,6 @@ const  App = () => {
                         </Route>
                       </Route>
 
-                      <Route path="privacy-policy" element={<PrivacyPolicy />} />
                       <Route path="changelog" element={<ChangeLog />} />
                       <Route path="contact" element={<ContactUs />} />
                       <Route path="price-plans" element={<PricePlans />} />

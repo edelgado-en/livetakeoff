@@ -19,6 +19,7 @@ const Signup = () => {
     const [customerName, setCustomerName] = useState('');
     const [vendorName, setVendorName] = useState('');
     const [successMessage, setSuccessMessage] = useState(null);
+    const [agreement, setAgreement] = useState(false)
 
     const onSubmit = async () => {
         if (firstName === '') {
@@ -40,6 +41,11 @@ const Signup = () => {
         if (selectedRole === null) {
             alert('Role is required');
             return;
+        }
+
+        if (!agreement) {
+            alert('Agreement of Terms and Conditions is required');
+            return
         }
 
 
@@ -91,7 +97,7 @@ const Signup = () => {
                 <div className="sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="text-md font-medium text-gray-900 mt-2">Your request has been submitted!</div>
                     <p className="mt-2 text-sm text-gray-500">You will receive an email with further instructions shortly.</p>
-                    <div className="mt-2 text-sm text-gray-500">Go Back to the <Link to="/login" className="text-sky-500 font-medium cursor-pointer">Login</Link> screen</div>
+                    <div className="mt-2 text-sm text-gray-500">Go Back to the <Link to="/login" className="text-blue-600 font-medium cursor-pointer">Login</Link> screen</div>
                 </div>
             </div>
               
@@ -267,13 +273,30 @@ const Signup = () => {
                             {loading ? 'sending...' : 'Sign up'}
                         </button>
                         </div>
+                        <div className="relative flex items-start">
+                            <div className="flex h-5 items-center">
+                            <input
+                                id="agreement" 
+                                name="agreement"
+                                value={agreement}
+                                onChange={setAgreement}       
+                                type="checkbox"
+                                className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                            />
+                            </div>
+                            <div className="ml-3 text-sm">
+                            <label htmlFor="agreement"  className="text-gray-500 text-sm">
+                                By signing up, you agree to our Terms and Conditions and <Link to="/privacy-policy" className="text-blue-600 hover:text-blue-500">Privacy Policy</Link>
+                            </label>
+                            </div>
+                        </div> 
                         <div className="relative flex flex-col justify-center text-center text-sm">
-                        <div>
-                            <span className="px-2 text-gray-500">Already have an account?</span>
-                            <Link to="/login" className="text-blue-600 hover:text-blue-500">
-                            Log in
-                            </Link>
-                        </div>
+                            <div>
+                                <span className="px-2 text-gray-500">Already have an account?</span>
+                                <Link to="/login" className="text-blue-600 hover:text-blue-500">
+                                Log in
+                                </Link>
+                            </div>
                         </div>
                     </form>
                     </div>
