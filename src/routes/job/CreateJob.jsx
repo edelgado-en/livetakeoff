@@ -326,10 +326,8 @@ const CreateJob = () => {
 
     const addAnotherJob = () => {
         setCreateJobMessage(null)
-        //TODO: reset all values in the form
 
-
-        navigate('/create-job')
+        window.location.reload()
     }
 
     return (
