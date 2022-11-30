@@ -19,7 +19,6 @@ const Signup = () => {
     const [customerName, setCustomerName] = useState('');
     const [vendorName, setVendorName] = useState('');
     const [successMessage, setSuccessMessage] = useState(null);
-    const [agreement, setAgreement] = useState(false)
 
     const onSubmit = async () => {
         if (firstName === '') {
@@ -41,11 +40,6 @@ const Signup = () => {
         if (selectedRole === null) {
             alert('Role is required');
             return;
-        }
-
-        if (!agreement) {
-            alert('Agreement of Terms and Conditions is required');
-            return
         }
 
 
@@ -274,16 +268,6 @@ const Signup = () => {
                         </button>
                         </div>
                         <div className="relative flex items-start">
-                            <div className="flex h-5 items-center">
-                            <input
-                                id="agreement" 
-                                name="agreement"
-                                value={agreement}
-                                onChange={setAgreement}       
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                            />
-                            </div>
                             <div className="ml-3 text-sm">
                             <label htmlFor="agreement"  className="text-gray-500 text-sm">
                                 By signing up, you agree to our Terms and Conditions and <Link to="/privacy-policy" className="text-blue-600 hover:text-blue-500">Privacy Policy</Link>
