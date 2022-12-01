@@ -13,6 +13,7 @@ import * as api from './apiService'
 import Pagination from "react-js-pagination";
 
 import * as customerApi from '../../customers/apiService'
+import { toast } from "react-toastify";
 
 const XMarkIcon = () => {
   return (
@@ -285,6 +286,7 @@ const JobsQueue = () => {
         setTotalJobs(data.count)
 
     } catch (e) {
+      toast.error('Unable to get jobs')
       setJobs([])
     }
 

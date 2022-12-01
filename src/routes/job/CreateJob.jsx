@@ -326,6 +326,7 @@ const CreateJob = () => {
 
     const addAnotherJob = () => {
         setCreateJobMessage(null)
+        setTailNumber('')
 
         window.location.reload()
     }

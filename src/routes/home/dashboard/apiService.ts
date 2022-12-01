@@ -8,3 +8,7 @@ export const searchTailStats = (data: any, currentPage: Number) => {
 export const getTailStatsDetails = (tailNumber: string) => {
     return httpService.get(`/api/tail-stats/${tailNumber}/`);
 }
+
+export const getServicesByAirport = () => {
+    return httpService.get('/api/services-by-airport')
+}
