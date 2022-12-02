@@ -54,6 +54,7 @@ import CustomerEditJob from './routes/job/CustomerEditJob';
 import JobDashboard from './routes/home/dashboard/JobDashboard';
 import TailNumberReport from './routes/home/dashboard/TailNumberReport';
 import ServicesByAirport from './routes/home/dashboard/ServicesByAirport';
+import RetainerCustomers from './routes/home/dashboard/RetainerCustomers';
 
 import CreateEstimate from './routes/estimates/CreateEstimate';
 import Estimates from './routes/estimates/Estimates';
@@ -143,6 +144,7 @@ const  App = () => {
                       <Route path="dashboard" element={<JobDashboard />} />
                       <Route path="tail-report" element={<TailNumberReport />} />
                       <Route path="services-by-airport" element={<ServicesByAirport />} />
+                      <Route path="retainer-customers" element={<RetainerCustomers />} />
 
                       <Route path="create-job" element={<CreateJob />} />
                       <Route path="create-job/:estimateId" element={<CreateJob />} />

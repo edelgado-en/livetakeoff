@@ -12,3 +12,7 @@ export const getTailStatsDetails = (tailNumber: string) => {
 export const getServicesByAirport = () => {
     return httpService.get('/api/services-by-airport')
 }
+
+export const searchRetainerCustomers = (data: any, currentPage: Number) => {
+    return httpService.post(`/api/customers/retainers?page=${currentPage}&size=${100}`, data);
+} 

@@ -19,7 +19,7 @@ const WrenchIcon = () => {
 const dashboards = [
   {
     name: 'Tail Report',
-    description: "A breakdown of open services by airport.",
+    description: "See detailed information about a tail number.",
     href: '/tail-report',
     icon: PresentationChartBarIcon,
   },

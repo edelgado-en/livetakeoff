@@ -1018,7 +1018,6 @@ const JobsQueue = () => {
                   /> 
                   </div>
               </div>
-              
           )}
           
           <div className="py-20"></div>

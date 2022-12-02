@@ -1,16 +1,8 @@
 import { useEffect, useState, Fragment } from "react"
 import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom";
-
 import AnimatedPage from "../../../components/animatedPage/AnimatedPage"
-
 import Loader from "../../../components/loader/Loader";
-
 import * as api from './apiService'
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
 
 
 const ServicesByAirport = () => {
@@ -24,7 +16,7 @@ const ServicesByAirport = () => {
     const getServicesBreakdown = async () => {
         try {
             const { data } = await api.getServicesByAirport()
-
+            
             setServicesBreakdown(data)
 
             setLoading(false)
