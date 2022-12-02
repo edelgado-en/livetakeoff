@@ -124,7 +124,7 @@ const RetainerCustomers = () => {
                                         <div className="min-w-0 flex-1">
                                             <div  className="focus:outline-none">
                                                 <span className="absolute inset-0" aria-hidden="true" />
-                                                <p className="text-sm  text-gray-900 truncate overflow-ellipsis xs:w-48">Wheels Up / Delta Private Jets / Mountain Aviation / Travel Manag and more and more</p>
+                                                <p className="text-sm  text-gray-900 truncate overflow-ellipsis xs:w-48">{customer.name}</p>
                                                 <p className="truncate text-xs text-gray-500">{customer.emailAddress ? customer.emailAddress : 'No email specified'}</p>
                                             </div>
                                         </div>

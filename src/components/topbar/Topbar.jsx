@@ -38,7 +38,7 @@ const dashboards = [
   {
     name: 'Retainer Customers',
     description: 'Checkout the price breakdown for all retainer customers.',
-    href: '/retainer-customers',
+    href: '/retainers',
     icon: UserGroupIcon,
   },
   {

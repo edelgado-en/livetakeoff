@@ -144,7 +144,7 @@ const  App = () => {
                       <Route path="dashboard" element={<JobDashboard />} />
                       <Route path="tail-report" element={<TailNumberReport />} />
                       <Route path="services-by-airport" element={<ServicesByAirport />} />
-                      <Route path="retainer-customers" element={<RetainerCustomers />} />
+                      <Route path="retainers" element={<RetainerCustomers />} />
 
                       <Route path="create-job" element={<CreateJob />} />
                       <Route path="create-job/:estimateId" element={<CreateJob />} />
