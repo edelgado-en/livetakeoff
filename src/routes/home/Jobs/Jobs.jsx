@@ -64,6 +64,8 @@ const JobsQueue = () => {
   const [activeFilters, setActiveFilters] = useState([])
   const [customers, setCustomers] = useState([])
 
+  const [customersWOpenJobs, setCustomersWOpenJobs] = useState([])
+
   const [airports, setAirports] = useState([])
   const [airportSelected, setAirportSelected] = useState(JSON.parse(localStorage.getItem('airportSelected')) || {id: 'All', name: 'All'})
   const [airportSearchTerm, setAirportSearchTerm] = useState('')
@@ -80,7 +82,12 @@ const JobsQueue = () => {
     : airports;
 
   useEffect(() => {
-    getCustomers();
+    getCustomers({ name: '', open_jobs: true })
+
+  }, [])
+
+  useEffect(() => {
+    getCustomers({name: '', open_jobs: false});
     getAirports();
 
     if (currentUser?.isCustomer) {
@@ -112,16 +119,19 @@ const JobsQueue = () => {
 
   }, [])
 
-  const getCustomers = async () => {
-      const request = {
-        name: '',
-      } 
+  const getCustomers = async (request) => {
 
       const { data } = await customerApi.getCustomers(request);
 
-      data.results.unshift({id: 'All', name: 'All'})
+      if (request.open_jobs) {
+        setCustomersWOpenJobs(data.results)
       
-      setCustomers(data.results)
+      } else {
+        data.results.unshift({id: 'All', name: 'All'})
+        setCustomers(data.results)
+
+      }
+
   }
 
   const getAirports = async () => {
@@ -295,7 +305,8 @@ const JobsQueue = () => {
 
     return (
       <AnimatedPage>
-        <div className="xl:px-16 px-4 m-auto max-w-5xl -mt-3">
+        <div className={`px-4 m-auto ${(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) ? 'max-w-7xl' : 'max-w-5xl'} -mt-3 flex flex-wrap`}>
+          <div className="flex-1 xl:px-10 lg:px-10 md:px-10">
           <div className="grid grid-cols-2">
             <div className="">
               <h1 className="text-2xl font-semibold text-gray-600">Jobs Queue</h1>
@@ -1020,9 +1031,37 @@ const JobsQueue = () => {
               </div>
           )}
           
-          <div className="py-20"></div>
+          </div>
+
+          {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager)) && (
+            <div className="">
+              <h2 className="font-medium text-gray-900">Customers</h2>
+              <div className="text-sm text-gray-500">Currently serving the following customers</div>
+                <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                  {customersWOpenJobs.map((customer) => (
+                    <li key={customer.id} >
+                      <Link to={`/customers/${customer.id}/profile/details`}
+                             className="relative flex items-center space-x-3 px-6 py-3 focus-within:ring-2
+                                          hover:bg-gray-50">
+                        <div className="flex-shrink-0">
+                          <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div  className="focus:outline-none">
+                            {/* Extend touch target to entire panel */}
+                            <span className="absolute inset-0" aria-hidden="true" />
+                            <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{customer.name}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+            </div>
+          )}
 
         </div>
+        <div className="py-20"></div>
       </AnimatedPage>
     )
   }
