@@ -197,7 +197,7 @@ const JobComments = () => {
                                       <div>
                                         <TrashIcon 
                                             onClick={() => handleToggleDeleteCommentModal(comment)}
-                                            className="h-4 w-4 cursor-pointer text-gray-500" />
+                                            className="h-4 w-4 cursor-pointer text-gray-500 relative" style={{top:'2px'}} />
                                       </div>
                                     </div>
                                   )}
