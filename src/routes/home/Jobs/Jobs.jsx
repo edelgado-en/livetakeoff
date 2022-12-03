@@ -1036,7 +1036,7 @@ const JobsQueue = () => {
           {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager)) && (
             <div className="">
               <h2 className="font-medium text-gray-900">Customers</h2>
-              <div className="text-sm text-gray-500">Currently serving the following customers</div>
+              <div className="text-sm text-gray-500">Currently serving <span className="font-medium text-gray-900">{customersWOpenJobs.length}</span> customer(s)</div>
                 <ul className="relative z-0 divide-y divide-gray-200 mt-2">
                   {customersWOpenJobs.map((customer) => (
                     <li key={customer.id} >
