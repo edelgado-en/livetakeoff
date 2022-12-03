@@ -895,7 +895,7 @@ const JobsQueue = () => {
           {loading && <Loader />}  
 
           {!loading && (
-            <div className="overflow-hidden bg-white shadow sm:rounded-md mt-2">
+            <div className="overflow-hidden bg-white shadow sm:rounded-md mt-2 mb-4">
               <ul className="divide-y divide-gray-200">
                 {jobs.map((job) => (
                   <li key={job.id}>
