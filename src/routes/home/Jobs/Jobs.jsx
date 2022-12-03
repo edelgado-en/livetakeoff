@@ -1034,7 +1034,7 @@ const JobsQueue = () => {
           </div>
 
           {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager)) && (
-            <div className="">
+            <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
               <h2 className="font-medium text-gray-900">Customers</h2>
               <div className="text-sm text-gray-500">Currently serving <span className="font-medium text-gray-900">{customersWOpenJobs.length}</span> customer(s)</div>
                 <ul className="relative z-0 divide-y divide-gray-200 mt-2">
