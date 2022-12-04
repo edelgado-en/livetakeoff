@@ -369,6 +369,15 @@ const JobInfo = () => {
                             {jobDetails.special_instructions}
                         </dd>
                     </div>
+                    
+                    {jobDetails.completion_date && (
+                        <div className="sm:col-span-1">
+                            <dt className="text-sm font-medium text-gray-500">Completion Date</dt>
+                            <dd className="mt-1 text-sm text-gray-900">
+                                {jobDetails.completion_date}
+                            </dd>
+                        </div>
+                    ) }
                 </dl>
                 <div className="mx-auto mt-8 max-w-5xl pb-8">
                     <div className="flex justify-between">
