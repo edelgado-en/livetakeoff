@@ -470,7 +470,7 @@ const JobAssignments = () => {
                                                                 leaveFrom="opacity-100"
                                                                 leaveTo="opacity-0"
                                                             >
-                                                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
+                                                            <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
                                                                                     rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
                                                                                     ring-opacity-5 focus:outline-none sm:text-sm">
                                                                 {service.projectManagers.map((projectManager) => (
@@ -629,7 +629,7 @@ const JobAssignments = () => {
                                                                 leaveFrom="opacity-100"
                                                                 leaveTo="opacity-0"
                                                             >
-                                                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto
+                                                            <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
                                                                                     rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
                                                                                     ring-opacity-5 focus:outline-none sm:text-sm">
                                                                 {retainerService.projectManagers.map((projectManager) => (
