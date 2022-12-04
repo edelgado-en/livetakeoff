@@ -16,8 +16,8 @@ export const getCustomerDiscounts = (id: number) => {
     return httpService.get(`/api/customers/discounts/${id}`);
 }
 
-export const getAirports = () => {
-    return httpService.get(`/api/airports`);
+export const getAirports = (request:any = { name: '', open_jobs:false }) => {
+    return httpService.post(`/api/airports`, request);
 }
 
 export const getServices = () => {

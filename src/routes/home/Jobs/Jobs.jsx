@@ -88,6 +88,7 @@ const JobsQueue = () => {
 
   useEffect(() => {
     getCustomers({name: '', open_jobs: false});
+
     getAirports();
 
     if (currentUser?.isCustomer) {
@@ -120,7 +121,6 @@ const JobsQueue = () => {
   }, [])
 
   const getCustomers = async (request) => {
-
       const { data } = await customerApi.getCustomers(request);
 
       if (request.open_jobs) {
@@ -131,11 +131,23 @@ const JobsQueue = () => {
         setCustomers(data.results)
 
       }
-
   }
 
   const getAirports = async () => {
-    const { data } = await customerApi.getAirports()
+    let request = {
+      name: '',
+      open_jobs: false
+    }
+
+    if (!currentUser.isCustomer) {
+      request.open_jobs = true
+    
+    } else {
+      request.onlyIncludeCustomerJobs = true
+    }
+
+
+    const { data } = await customerApi.getAirports(request)
 
     data.results.unshift({id: 'All', name: 'All'})
 
@@ -746,7 +758,7 @@ const JobsQueue = () => {
                   </div>
               </div>
             <div className="flex items-center justify-between pt-3 pb-1">
-            <Listbox value={sortSelected} onChange={setSortSelected}>
+              <Listbox value={sortSelected} onChange={setSortSelected}>
                 {({ open }) => (
                     <>
                     <div className="relative" style={{width: '150px'}}>
@@ -802,14 +814,14 @@ const JobsQueue = () => {
                     </>
                 )}
               </Listbox>
-                  <div className="">
-                    <button
-                    type="button"
-                    className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900"
-                    onClick={() => setOpen(true)}
-                  >
-                    Filters
-                  </button>
+                <div className="xl:hidden lg:hidden md:hidden">
+                  <button
+                  type="button"
+                  className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900"
+                  onClick={() => setOpen(true)}
+                >
+                  Filters
+                </button>
               </div>
             </div>
             {/* Active filters */}
@@ -1033,31 +1045,73 @@ const JobsQueue = () => {
           
           </div>
 
-          {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager)) && (
-            <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
-              <h2 className="font-medium text-gray-900">Customers</h2>
-              <div className="text-sm text-gray-500">Currently serving <span className="font-medium text-gray-900">{customersWOpenJobs.length}</span> customer(s)</div>
-                <ul className="relative z-0 divide-y divide-gray-200 mt-2">
-                  {customersWOpenJobs.map((customer) => (
-                    <li key={customer.id} >
-                      <Link to={`/customers/${customer.id}/profile/details`}
-                             className="relative flex items-center space-x-3 px-6 py-3 focus-within:ring-2
-                                          hover:bg-gray-50">
-                        <div className="flex-shrink-0">
-                          <img className="h-10 w-10 rounded-full" src={customer.logo} alt="" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div  className="focus:outline-none">
-                            {/* Extend touch target to entire panel */}
-                            <span className="absolute inset-0" aria-hidden="true" />
-                            <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{customer.name}</p>
+          {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer)) && (
+              <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
+                <div className="hidden xl:block lg:block pb-8">
+                  <h2 className="font-medium text-gray-900">Status</h2>
+                  <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                    {availableStatuses.map((status) => (
+                      <li key={status.id}>
+                        <div onClick={() => setStatusSelected({ id: status.id, name: status.name })}
+                                className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                              hover:bg-gray-50">
+                            <div className="min-w-0 flex-1">
+                              <div  className="focus:outline-none">
+                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{status.name}</p>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-            </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                {!currentUser.isCustomer && (
+                  <div className="pb-8">
+                    <h2 className="font-medium text-gray-900">Customers <span className="text-gray-500 text-sm ml-1 font-normal">({customersWOpenJobs.length})</span></h2>
+                    <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                      {customersWOpenJobs.map((customer) => (
+                        <li key={customer.id} >
+                          <div onClick={() => setCustomerSelected({ id: customer.id, name: customer.name })}
+                                className="relative flex items-center space-x-3 pr-6 pl-3 py-1 focus-within:ring-2 cursor-pointer
+                                              hover:bg-gray-50">
+                            <div className="flex-shrink-0">
+                              <img className="h-8 w-8 rounded-full" src={customer.logo} alt="" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div  className="focus:outline-none">
+                                {/* Extend touch target to entire panel */}
+                                <span className="absolute inset-0" aria-hidden="true" />
+                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{customer.name}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="pb-8">
+                  <h2 className="font-medium text-gray-900">Airports<span className="text-gray-500 text-sm ml-1 font-normal">({filteredAirports.length - 1})</span></h2>
+                  <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                    {filteredAirports.map((airport) => (
+                      <li key={airport.id}>
+                        <div onClick={() => setAirportSelected({ id: airport.id, name: airport.name })}
+                                className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                              hover:bg-gray-50">
+                            <div className="min-w-0 flex-1">
+                              <div  className="focus:outline-none">
+                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{airport.name}</p>
+                              </div>
+                            </div>
+                          </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+              </div>
           )}
 
         </div>
