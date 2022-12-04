@@ -1102,7 +1102,7 @@ const JobsQueue = () => {
                                               hover:bg-gray-50">
                             <div className="min-w-0 flex-1">
                               <div  className="focus:outline-none">
-                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{airport.name}</p>
+                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-60">{airport.name}</p>
                               </div>
                             </div>
                           </div>
