@@ -1047,7 +1047,7 @@ const JobsQueue = () => {
 
           {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer)) && (
               <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
-                <div className="hidden xl:block lg:block pb-8">
+                <div className="hidden xl:block lg:block pb-4">
                   <h2 className="font-medium text-gray-900">Status</h2>
                   <ul className="relative z-0 divide-y divide-gray-200 mt-2">
                     {availableStatuses.map((status) => (
@@ -1067,7 +1067,7 @@ const JobsQueue = () => {
                 </div>
                 
                 {!currentUser.isCustomer && (
-                  <div className="pb-8">
+                  <div className="pb-4">
                     <h2 className="font-medium text-gray-900">Customers <span className="text-gray-500 text-sm ml-1 font-normal">({customersWOpenJobs.length})</span></h2>
                     <ul className="relative z-0 divide-y divide-gray-200 mt-2">
                       {customersWOpenJobs.map((customer) => (
