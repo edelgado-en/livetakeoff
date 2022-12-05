@@ -314,8 +314,8 @@ const JobInfo = () => {
 
                     <div className="sm:col-span-1">
                         <dt className="text-sm font-medium text-gray-500">Requested By</dt>
-                        <dd className="mt-1 max-w-prose space-y-5 text-sm text-gray-900">
-                            {jobDetails.created_by?.first_name} {jobDetails.created_by?.last_name}
+                        <dd className="mt-1 space-y-5 text-sm text-gray-900 truncate overflow-ellipsis max-w-sm">
+                            {jobDetails.requested_by ? jobDetails.requested_by : jobDetails.created_by?.first_name + ' ' + jobDetails.created_by?.last_name}
                         </dd>
                     </div>
                     

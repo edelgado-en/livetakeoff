@@ -326,7 +326,7 @@ const CustomerEditJob = () => {
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm">
-                                            <span className="block truncate">{fboSelected.name}</span>
+                                            <span className="block truncate">{fboSelected?.name}</span>
                                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                             </span>

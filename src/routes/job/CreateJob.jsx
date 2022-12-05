@@ -56,6 +56,8 @@ const CreateJob = () => {
     const [completeByDate, setCompleteByDate] = useState(null);
     const [comment, setComment] = useState('');
 
+    const [requestedBy, setRequestedBy] = useState('')
+
     const [images, setImages] = useState([]);
 
     const [estimatedArrivalDateOpen, setEstimatedArrivalDateOpen] = useState(false)
@@ -235,6 +237,7 @@ const CreateJob = () => {
         formData.append("retainer_services", selectedRetainerServiceIds);
         formData.append("comment", comment);
         formData.append("on_site", onSite);
+        formData.append("requested_by", requestedBy)
 
         if (estimateId) {
             formData.append("estimate_id", estimateId);
@@ -964,14 +967,34 @@ const CreateJob = () => {
                                 />
                             )}
                         </div>
+                        
+                        {!currentUser.isCustomer && (
+                            <div>
+                                <label htmlFor="tailNumber" className="block text-sm text-gray-500">
+                                    Requested By
+                                </label>
+                                <span className="text-xs text-gray-500">Enter a name when creating a job on behalf of someone else</span>
+                                <div className="mt-1">
+                                    <input
+                                    type="text"
+                                    value={requestedBy}
+                                    onChange={(e) => setRequestedBy(e.target.value)}
+                                    name="requestedBy"
+                                    id="requestedBy"
+                                    className="block w-full rounded-md border-gray-300 shadow-sm
+                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                        )}
 
                         <div className="text-sm leading-5 font-medium text-gray-700">Services</div>
 
-                        {services.map((service) => (
-                            <div key={service.id} className="relative flex items-start">
+                        {services.map((service, index) => (
+                            <div key={index} className="relative flex items-start">
                                 <div className="flex h-5 items-center">
                                 <input
-                                    id={service.id} 
+                                    id={'service' + service.id} 
                                     name={service.name}
                                     checked={service.selected}
                                     onChange={() => handleServiceChange(service)}       
@@ -980,7 +1003,7 @@ const CreateJob = () => {
                                 />
                                 </div>
                                 <div className="ml-3 text-sm">
-                                <label htmlFor={service.name}  className="text-gray-700">
+                                <label htmlFor={'service' + service.id}  className="text-gray-700">
                                     {service.name}
                                 </label>
                                 </div>
@@ -1002,7 +1025,7 @@ const CreateJob = () => {
                                     <div key={retainerService.id} className="relative flex items-start">
                                         <div className="flex h-5 items-center">
                                         <input
-                                            id={retainerService.id} 
+                                            id={'retainer' + retainerService.id} 
                                             name={retainerService.name}
                                             checked={retainerService.selected}
                                             onChange={() => handleRetainerServiceChange(retainerService)}       
@@ -1011,7 +1034,7 @@ const CreateJob = () => {
                                         />
                                         </div>
                                         <div className="ml-3 text-sm">
-                                        <label htmlFor={retainerService.name}  className="text-gray-700">
+                                        <label htmlFor={'retainer' + retainerService.id}  className="text-gray-700">
                                             {retainerService.name}
                                         </label>
                                         </div>

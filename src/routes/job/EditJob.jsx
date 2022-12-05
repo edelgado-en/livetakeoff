@@ -67,6 +67,8 @@ const EditJob = () => {
     const [estimatedDepartureDateOpen, setEstimatedDepartureDateOpen] = useState(false)
     const [completeByDateOpen, setCompleteByDateOpen] = useState(false)
 
+    const [requestedBy, setRequestedBy] = useState('')
+
     const [customerSearchTerm, setCustomerSearchTerm] = useState('')
     const [aircraftSearchTerm, setAircraftSearchTerm] = useState('')
     const [airportSearchTerm, setAirportSearchTerm] = useState('')
@@ -112,8 +114,11 @@ const EditJob = () => {
 
             setTailNumber(response.data.tailNumber);
             setPrice(response.data.price);
-
             
+            if (response.data.requested_by) {
+                setRequestedBy(response.data.requested_by)
+            }
+
             if (location.pathname.includes('review')) {
                 // only add Invoiced if it is not part of the availableStatuses array already
                 if (!availableStatuses.find(status => status.id === 'I')) {
@@ -152,6 +157,12 @@ const EditJob = () => {
         }
     }
 
+    let requested_by = null
+
+    if (requestedBy !== '') {
+        requested_by = requestedBy
+    }
+
     const updateJob = async () => {
         const request = {
             tailNumber,
@@ -164,7 +175,8 @@ const EditJob = () => {
             estimatedETA: estimatedArrivalDate,
             estimatedETD: estimatedDepartureDate,
             completeBy: completeByDate,
-            on_site: onSite
+            on_site: onSite,
+            requested_by: requested_by
         }
 
         try {
@@ -757,7 +769,7 @@ const EditJob = () => {
                                     </>
                                 )}
                             </Listbox>
-                        </div>
+                        </div> 
                         
                         <div>
                             <div className="text-sm  text-gray-500 mb-1 flex justify-between">
@@ -864,6 +876,24 @@ const EditJob = () => {
                                 />
                             )}
                         </div>
+
+                        <div>
+                            <label htmlFor="requestedBy" className="block text-sm font-medium text-gray-700">
+                                Requested By
+                            </label>
+                            <span className="text-xs text-gray-500">Enter a name when creating a job on behalf of someone else</span>
+                            <div className="mt-1">
+                                <input
+                                type="text"
+                                value={requestedBy}
+                                onChange={(e) => setRequestedBy(e.target.value)}
+                                name="requestedBy"
+                                id="requestedBy"
+                                className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                />
+                            </div>
+                        </div> 
 
                         <div className="flex flex-col py-4 pb-20 gap-4">
                             
