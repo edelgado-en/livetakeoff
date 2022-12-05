@@ -59,6 +59,8 @@ const CompleteList = () => {
     const [customerSelected, setCustomerSelected] = useState(JSON.parse(localStorage.getItem('completedCustomerSelected')) || {id: 'All', name: 'All'})
     const [customerSearchTerm, setCustomerSearchTerm] = useState('')
 
+    const [activeFilters, setActiveFilters] = useState([])
+
     const [currentPage, setCurrentPage] = useState(1);
     const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] = useState(false)
     const [selectedJob, setSelectedJob] = useState(null)
@@ -98,8 +100,6 @@ const CompleteList = () => {
 
     const [showMoreDates, setShowMoreDates] = useState(false)
 
-
-
     const filteredAirports = airportSearchTerm
     ? airports.filter((item) => item.name.toLowerCase().includes(airportSearchTerm.toLowerCase()))
     : airports;
@@ -135,7 +135,15 @@ const CompleteList = () => {
     }, [airportSelected])
 
     useEffect(() => {
-        searchJobs()
+        //Basic throttling
+        let timeoutID = setTimeout(() => {
+            searchJobs()
+        }, 300);
+  
+        return () => {
+            clearTimeout(timeoutID);
+        };
+
     }, [searchText, statusSelected, currentPage, airportSelected, customerSelected])
 
     const searchJobs = async () => {
@@ -158,6 +166,48 @@ const CompleteList = () => {
             completionDateTo,
         }
 
+        let statusName;
+
+        //get status name by request.status
+        availableStatuses.forEach(status => {
+            if (status.id === request.status) {
+                statusName = status.name
+            }
+        })
+
+        //set active filters
+        let activeFilters = []
+        if (request.searchText) {
+            activeFilters.push({
+                id: 'searchText',
+                name: request.searchText,
+            })
+        }
+        
+        if (request.status !== 'All') {
+            activeFilters.push({
+                id: 'status',
+                name: statusName,
+            })
+        }
+
+        if (request.customer !== 'All') {
+            activeFilters.push({
+                id: 'customer',
+                name: customerSelected.name,
+            })
+        }
+
+        if (request.airport !== 'All') {
+            activeFilters.push({
+                id: 'airport',
+                name: airportSelected.name,
+            })
+        }
+
+        setActiveFilters(activeFilters)
+
+
         try {
             const { data } = await api.getCompletedJobs(request, currentPage)
     
@@ -168,6 +218,23 @@ const CompleteList = () => {
         } catch (err) {
             setLoading(false)
         }
+    }
+
+    const removeActiveFilter = (activeFilterId) => {
+        if (activeFilterId === 'status') {
+          setStatusSelected(availableStatuses[0])
+        
+        } else if (activeFilterId === 'searchText') {
+          setSearchText('')
+        
+        } else if (activeFilterId === 'customer') {
+          setCustomerSelected({id: 'All', name: 'All'})
+        
+        } else if (activeFilterId === 'airport') {
+          setAirportSelected({id: 'All', name: 'All'})
+        }
+    
+        setActiveFilters(activeFilters.filter(filter => filter.id !== activeFilterId))
     }
 
     const getAirports = async () => {
@@ -882,7 +949,7 @@ const CompleteList = () => {
                 </div>
 
 
-                <div className="mt-1 flex gap-4">
+                <div className="flex gap-4">
                     <div className="xl:block lg:block hidden w-60">
                         <div className="pb-4">
                             <div className="text-sm font-medium text-gray-900 mt-8">Status</div>
@@ -1105,6 +1172,43 @@ const CompleteList = () => {
                     <div className="overflow-x-auto w-full">
                         <div className="inline-block min-w-full pb-2 align-middle">
                             
+                            {activeFilters.length > 0 && (
+                                <div className="bg-gray-100">
+                                    <div className="py-2 sm:flex sm:items-center px-4">
+                                    <h3 className="text-xs font-medium text-gray-500">
+                                        Active Filters
+                                        <span className="sr-only">, active</span>
+                                    </h3>
+
+                                    <div aria-hidden="true" className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block" />
+
+                                    <div className="mt-2 sm:mt-0 sm:ml-4">
+                                        <div className="-m-1 flex flex-wrap items-center">
+                                        {activeFilters.map((activeFilter) => (
+                                            <span
+                                            key={activeFilter.id}
+                                            onClick={() => removeActiveFilter(activeFilter.id)}
+                                            className="m-1 inline-flex items-center rounded-full cursor-pointer
+                                                        border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-xs font-medium text-gray-900"
+                                            >
+                                            <span>{activeFilter.name}</span>
+                                            <button
+                                                type="button"
+                                                className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+                                            >
+                                                <span className="sr-only">Remove filter for {activeFilter.name}</span>
+                                                <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                                                <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
+                                                </svg>
+                                            </button>
+                                            </span>
+                                        ))}
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            )}
+
                             {loading && <Loader />} 
 
                             {!loading && jobs.length === 0 && (
