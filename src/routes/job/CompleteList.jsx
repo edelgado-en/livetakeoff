@@ -1232,6 +1232,11 @@ const CompleteList = () => {
                                             <th
                                             className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500"
                                             >
+                                            C.P.O
+                                            </th>
+                                            <th
+                                            className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500"
+                                            >
                                             Customer
                                             </th>
                                             <th
@@ -1298,6 +1303,7 @@ const CompleteList = () => {
                                         {jobs.map((job) => (
                                             <tr key={job.id} className="hover:bg-gray-50">
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.purchase_order}</td>
+                                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.customer_purchase_order}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.customer.name}</td>
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.requestDate}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.tailNumber}</td>

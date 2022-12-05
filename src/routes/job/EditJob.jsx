@@ -68,6 +68,7 @@ const EditJob = () => {
     const [completeByDateOpen, setCompleteByDateOpen] = useState(false)
 
     const [requestedBy, setRequestedBy] = useState('')
+    const [customerPurchaseOrder, setCustomerPurchaseOrder] = useState('')
 
     const [customerSearchTerm, setCustomerSearchTerm] = useState('')
     const [aircraftSearchTerm, setAircraftSearchTerm] = useState('')
@@ -114,6 +115,7 @@ const EditJob = () => {
 
             setTailNumber(response.data.tailNumber);
             setPrice(response.data.price);
+            setCustomerPurchaseOrder(response.data.customer_purchase_order)
             
             if (response.data.requested_by) {
                 setRequestedBy(response.data.requested_by)
@@ -163,6 +165,12 @@ const EditJob = () => {
         requested_by = requestedBy
     }
 
+    let customer_purchase_order = null
+
+    if (customerPurchaseOrder !== '') {
+        customer_purchase_order = customerPurchaseOrder
+    }
+
     const updateJob = async () => {
         const request = {
             tailNumber,
@@ -176,7 +184,8 @@ const EditJob = () => {
             estimatedETD: estimatedDepartureDate,
             completeBy: completeByDate,
             on_site: onSite,
-            requested_by: requested_by
+            requested_by: requested_by,
+            customer_purchase_order: customer_purchase_order
         }
 
         try {
@@ -878,7 +887,7 @@ const EditJob = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="requestedBy" className="block text-sm font-medium text-gray-700">
+                            <label htmlFor="requestedBy" className="block text-sm text-gray-500">
                                 Requested By
                             </label>
                             <span className="text-xs text-gray-500">Enter a name when creating a job on behalf of someone else</span>
@@ -889,6 +898,23 @@ const EditJob = () => {
                                 onChange={(e) => setRequestedBy(e.target.value)}
                                 name="requestedBy"
                                 id="requestedBy"
+                                className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                />
+                            </div>
+                        </div> 
+
+                        <div>
+                            <label htmlFor="customer_purchase_order" className="block text-sm text-gray-500">
+                                Customer Purchase Order
+                            </label>
+                            <div className="mt-1">
+                                <input
+                                type="text"
+                                value={customerPurchaseOrder}
+                                onChange={(e) => setCustomerPurchaseOrder(e.target.value)}
+                                name="customer_purchase_order"
+                                id="customer_purchase_order"
                                 className="block w-full rounded-md border-gray-300 shadow-sm
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                                 />

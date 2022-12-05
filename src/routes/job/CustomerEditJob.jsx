@@ -53,6 +53,8 @@ const CustomerEditJob = () => {
     const [estimatedDepartureDateOpen, setEstimatedDepartureDateOpen] = useState(false)
     const [completeByDateOpen, setCompleteByDateOpen] = useState(false)
 
+    const [customerPurchaseOrder, setCustomerPurchaseOrder] = useState('')
+
     const [onSite, setOnSite] = useState(false)
 
     const navigate = useNavigate();
@@ -75,6 +77,7 @@ const CustomerEditJob = () => {
             const response = await api.getJobDetails(jobId)
 
             setTailNumber(response.data.tailNumber);
+            setCustomerPurchaseOrder(response.data.customer_purchase_order)
 
             setAircraftTypeSelected(data.aircraft_types.find(a => a.id === response.data.aircraftType.id))
             setAirportSelected(data.airports.find(a => a.id === response.data.airport.id))
@@ -106,6 +109,12 @@ const CustomerEditJob = () => {
     }
 
     const updateJob = async () => {
+        let customer_purchase_order = null
+
+        if (customerPurchaseOrder !== '') {
+            customer_purchase_order = customerPurchaseOrder
+        }
+
         const request = {
             tailNumber,
             aircraftType: aircraftTypeSelected.id,
@@ -114,7 +123,8 @@ const CustomerEditJob = () => {
             estimatedETA: estimatedArrivalDate,
             estimatedETD: estimatedDepartureDate,
             completeBy: completeByDate,
-            on_site: onSite
+            on_site: onSite,
+            customer_purchase_order: customer_purchase_order
         }
 
         try {
@@ -479,6 +489,23 @@ const CustomerEditJob = () => {
                                 />
                             )}
                         </div>
+
+                        <div>
+                            <label htmlFor="customer_purchase_order" className="block text-sm text-gray-500">
+                                Customer Purchase Order
+                            </label>
+                            <div className="mt-1">
+                                <input
+                                type="text"
+                                value={customerPurchaseOrder}
+                                onChange={(e) => setCustomerPurchaseOrder(e.target.value)}
+                                name="customer_purchase_order"
+                                id="customer_purchase_order"
+                                className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                />
+                            </div>
+                        </div> 
 
                         <div className="flex flex-col py-4 pb-20 gap-4">
                             <button
