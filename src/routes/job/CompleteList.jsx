@@ -51,10 +51,13 @@ const CompleteList = () => {
     const [totalJobs, setTotalJobs] = useState(0)
     const [loading, setLoading] = useState(false)
     const [searchText, setSearchText] = useState(localStorage.getItem('completedSearchText') || '')
-    const [statusSelected, setStatusSelected] = useState(availableStatuses[1])
+    const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('completedStatusSelected')) || availableStatuses[1])
 
     const [airportSelected, setAirportSelected] = useState(JSON.parse(localStorage.getItem('completedAirportSelected')) || {id: 'All', name: 'All'})
     const [airportSearchTerm, setAirportSearchTerm] = useState('')
+
+    const [customerSelected, setCustomerSelected] = useState(JSON.parse(localStorage.getItem('completedCustomerSelected')) || {id: 'All', name: 'All'})
+    const [customerSearchTerm, setCustomerSearchTerm] = useState('')
 
     const [currentPage, setCurrentPage] = useState(1);
     const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] = useState(false)
@@ -95,8 +98,7 @@ const CompleteList = () => {
 
     const [showMoreDates, setShowMoreDates] = useState(false)
 
-    const [customerSelected, setCustomerSelected] = useState(JSON.parse(localStorage.getItem('completedCustomerSelected')) || {id: 'All', name: 'All'})
-    const [customerSearchTerm, setCustomerSearchTerm] = useState('')
+
 
     const filteredAirports = airportSearchTerm
     ? airports.filter((item) => item.name.toLowerCase().includes(airportSearchTerm.toLowerCase()))
@@ -115,7 +117,22 @@ const CompleteList = () => {
 
     useEffect(() => {
         localStorage.setItem('completedSearchText', searchText)
-      }, [searchText])
+    }, [searchText])
+
+    useEffect(() => {
+        localStorage.setItem('completedStatusSelected', JSON.stringify(statusSelected))
+      
+    }, [statusSelected])
+
+    useEffect(() => {
+        localStorage.setItem('completedCustomerSelected', JSON.stringify(customerSelected))
+
+    }, [customerSelected])
+
+    useEffect(() => {
+        localStorage.setItem('completedAirportSelected', JSON.stringify(airportSelected))
+
+    }, [airportSelected])
 
     useEffect(() => {
         searchJobs()
@@ -126,9 +143,9 @@ const CompleteList = () => {
 
         const request = {
             searchText: localStorage.getItem('completedSearchText'),
-            status: statusSelected.id,
-            airport: airportSelected.id,
-            customer: customerSelected.id,
+            status: JSON.parse(localStorage.getItem('completedStatusSelected')).id,
+            airport: JSON.parse(localStorage.getItem('completedAirportSelected')).id,
+            customer: JSON.parse(localStorage.getItem('completedCustomerSelected')).id,
             requestedDateFrom,
             requestedDateTo,
             arrivalDateFrom,
@@ -987,7 +1004,7 @@ const CompleteList = () => {
                             </Listbox>
                         </div>
 
-                        <div className="mt-72">
+                        <div className="mt-72 pt-8">
                             <div className="text-sm font-medium text-gray-900 mb-2">Airports</div>
                             <Listbox value={airportSelected} onChange={setAirportSelected}>
                                 {({ open }) => (
