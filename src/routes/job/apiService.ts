@@ -96,6 +96,10 @@ export const createJob = (formData: any) => {
     })
 }
 
+export const getAirports = (request: any) => {
+    return httpService.post(`/api/airports`, request);
+}
+
 export const getServices = () => {
     return httpService.get('/api/services');
 }
@@ -108,6 +112,9 @@ export const getRetainerServices = () => {
     return httpService.get('/api/retainer-services');
 }
 
+export const getCustomers = (request: any) => {
+    return httpService.post('/api/customers', request);
+}
 
 export const getCompletedJobs = (data: any, currentPage: Number) => {
     return httpService.post(`/api/jobs/completed?page=${currentPage}&size=${200}`, data)
