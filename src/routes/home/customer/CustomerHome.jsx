@@ -21,7 +21,7 @@ import * as api from './apiService'
 
 const XMarkIcon = () => {
   return (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
   )
@@ -389,32 +389,20 @@ const CustomerHome = () => {
                               <h2 className="text-lg font-medium text-gray-900">Filters</h2>
                               <button
                                 type="button"
-                                className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                                className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md  p-2 text-gray-400"
                                 onClick={() => setOpen(false)}
                               >
                                 <span className="sr-only">Close menu</span>
-                                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                <XMarkIcon className="h-6 w-6 text-gray-500" aria-hidden="true" />
                               </button>
                             </div>
 
                             {/* Filters */}
                             <form className="mt-4">
-                                <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
-                                  {({ open }) => (
-                                    <>
-                                      <h3 className="-mx-2 -my-3 flow-root">
-                                        <Disclosure.Button className="flex w-full items-center justify-between
-                                                                    bg-white px-2 py-3 text-sm text-gray-400">
-                                          <span className="font-medium text-gray-900">Status</span>
-                                          <span className="ml-6 flex items-center">
-                                            <ChevronDownIcon
-                                              className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')}
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        </Disclosure.Button>
+                                <div className="border-t border-gray-200 px-4 py-6">
+                                      <h3 className="text-sm">
+                                        <span className="font-medium text-gray-900">Status</span>
                                       </h3>
-                                      <Disclosure.Panel className="">
                                         <div className="space-y-6">
                                           <ul className="relative z-0 divide-y divide-gray-200 mt-2">
                                             {availableStatuses.map((status) => (
@@ -432,138 +420,122 @@ const CustomerHome = () => {
                                             ))}
                                           </ul>
                                         </div>
-                                      </Disclosure.Panel>
-                                    </>
-                                  )}
-                                </Disclosure>
+                                </div>
                                 
-                                <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
-                                  {({ open }) => (
-                                    <>
-                                      <h3 className="-mx-2 -my-3 flow-root">
-                                        <Disclosure.Button className="flex w-full items-center justify-between
-                                                                    bg-white px-2 py-3 text-sm text-gray-400">
-                                          <span className="font-medium text-gray-900">Airports</span>
-                                          <span className="ml-6 flex items-center">
-                                            <ChevronDownIcon
-                                              className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')}
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        </Disclosure.Button>
-                                      </h3>
-                                      <Disclosure.Panel className="pt-6">
-                                        <div className="space-y-6">
-                                        <Listbox value={airportSelected} onChange={setAirportSelected}>
-                                            {({ open }) => (
-                                                <>
-                                                <div className="relative mt-1">
-                                                    <Listbox.Button className="relative w-full cursor-default rounded-md border
-                                                                                border-gray-300 bg-white py-2 pl-3 pr-10 text-left
-                                                                                shadow-sm focus:border-sky-500 focus:outline-none
-                                                                                focus:ring-1 focus:ring-sky-500 text-xs">
-                                                        <span className="block truncate">
-                                                            {airportSelected ? airportSelected.name : 'Select airport'}
-                                                        </span>
-                                                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                                            <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                                        </span>
-                                                    </Listbox.Button>
+                                <div className="border-t border-gray-200 px-4 py-6">
+                                    <h3 className="text-sm">
+                                        <span className="font-medium text-gray-900">Airports</span>
+                                    </h3>
+                                    <div className="pt-2">
+                                      <div className="space-y-6">
+                                      <Listbox value={airportSelected} onChange={setAirportSelected}>
+                                          {({ open }) => (
+                                              <>
+                                              <div className="relative mt-1">
+                                                  <Listbox.Button className="relative w-full cursor-default rounded-md border
+                                                                              border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                                              shadow-sm focus:border-sky-500 focus:outline-none
+                                                                              focus:ring-1 focus:ring-sky-500 text-xs">
+                                                      <span className="block truncate">
+                                                          {airportSelected ? airportSelected.name : 'Select airport'}
+                                                      </span>
+                                                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                                          <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                      </span>
+                                                  </Listbox.Button>
 
-                                                    <Transition
-                                                        show={open}
-                                                        as={Fragment}
-                                                        leave="transition ease-in duration-100"
-                                                        leaveFrom="opacity-100"
-                                                        leaveTo="opacity-0">
-                                                        <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
-                                                                                    rounded-md bg-white py-1 shadow-lg ring-1
-                                                                                    ring-black ring-opacity-5 focus:outline-none text-xs">
-                                                            <div className="relative">
-                                                                <div className="sticky top-0 z-20  px-1">
-                                                                    <div className="mt-1 block  items-center">
-                                                                        <input
-                                                                            type="text"
-                                                                            name="search"
-                                                                            id="search"
-                                                                            value={airportSearchTerm}
-                                                                            onChange={(e) => setAirportSearchTerm(e.target.value)}
-                                                                            className="border px-2  focus:ring-sky-500
-                                                                                    focus:border-sky-500 block w-full py-1 pr-12  sm:text-sm
-                                                                                    border-gray-300 rounded-md"
-                                                                        />
-                                                                        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
-                                                                            {airportSearchTerm && (
-                                                                                <svg
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                className="h-5 w-5 text-blue-500 font-bold mr-1"
-                                                                                viewBox="0 0 20 20"
-                                                                                fill="currentColor"
-                                                                                onClick={() => {
-                                                                                    setAirportSearchTerm("");
-                                                                                }}
-                                                                                >
-                                                                                <path
-                                                                                    fillRule="evenodd"
-                                                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                                                    clipRule="evenodd"
-                                                                                />
-                                                                                </svg>
-                                                                            )}
-                                                                            <svg
-                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                className="h-5 w-5 text-gray-500 mr-1"
-                                                                                fill="none"
-                                                                                viewBox="0 0 24 24"
-                                                                                stroke="currentColor"
-                                                                            >
-                                                                                <path
-                                                                                strokeLinecap="round"
-                                                                                strokeLinejoin="round"
-                                                                                strokeWidth="2"
-                                                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                                                                />
-                                                                            </svg>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {filteredAirports.map((airport) => (
-                                                                <Listbox.Option
-                                                                    key={airport.id}
-                                                                    className={({ active }) =>
-                                                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                                    'relative cursor-default select-none py-2 pl-3 pr-9')}
-                                                                    value={airport}>
-                                                                    {({ selected, active }) => (
-                                                                        <>
-                                                                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                                                {airport.name}
-                                                                            </span>
-                                                                            {selected ? (
-                                                                                <span
-                                                                                    className={classNames(
-                                                                                    active ? 'text-white' : 'text-red-600',
-                                                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                                    )}>
-                                                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                                                </span>
-                                                                            ) : null}
-                                                                        </>
-                                                                    )}
-                                                                </Listbox.Option>
-                                                            ))}
-                                                        </Listbox.Options>
-                                                    </Transition>
-                                                </div>
-                                                </>
-                                            )}
-                                        </Listbox>
-                                        </div>
-                                      </Disclosure.Panel>
-                                    </>
-                                  )}
-                                </Disclosure>
+                                                  <Transition
+                                                      show={open}
+                                                      as={Fragment}
+                                                      leave="transition ease-in duration-100"
+                                                      leaveFrom="opacity-100"
+                                                      leaveTo="opacity-0">
+                                                      <Listbox.Options className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
+                                                                                  rounded-md bg-white py-1 shadow-lg ring-1
+                                                                                  ring-black ring-opacity-5 focus:outline-none text-xs">
+                                                          <div className="relative">
+                                                              <div className="sticky top-0 z-20  px-1">
+                                                                  <div className="mt-1 block  items-center">
+                                                                      <input
+                                                                          type="text"
+                                                                          name="search"
+                                                                          id="search"
+                                                                          value={airportSearchTerm}
+                                                                          onChange={(e) => setAirportSearchTerm(e.target.value)}
+                                                                          className="border px-2  focus:ring-sky-500
+                                                                                  focus:border-sky-500 block w-full py-1 pr-12  sm:text-sm
+                                                                                  border-gray-300 rounded-md"
+                                                                      />
+                                                                      <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                                                          {airportSearchTerm && (
+                                                                              <svg
+                                                                              xmlns="http://www.w3.org/2000/svg"
+                                                                              className="h-5 w-5 text-blue-500 font-bold mr-1"
+                                                                              viewBox="0 0 20 20"
+                                                                              fill="currentColor"
+                                                                              onClick={() => {
+                                                                                  setAirportSearchTerm("");
+                                                                              }}
+                                                                              >
+                                                                              <path
+                                                                                  fillRule="evenodd"
+                                                                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                                                  clipRule="evenodd"
+                                                                              />
+                                                                              </svg>
+                                                                          )}
+                                                                          <svg
+                                                                              xmlns="http://www.w3.org/2000/svg"
+                                                                              className="h-5 w-5 text-gray-500 mr-1"
+                                                                              fill="none"
+                                                                              viewBox="0 0 24 24"
+                                                                              stroke="currentColor"
+                                                                          >
+                                                                              <path
+                                                                              strokeLinecap="round"
+                                                                              strokeLinejoin="round"
+                                                                              strokeWidth="2"
+                                                                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                                                              />
+                                                                          </svg>
+                                                                      </div>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                          {filteredAirports.map((airport) => (
+                                                              <Listbox.Option
+                                                                  key={airport.id}
+                                                                  className={({ active }) =>
+                                                                          classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                  'relative cursor-default select-none py-2 pl-3 pr-9')}
+                                                                  value={airport}>
+                                                                  {({ selected, active }) => (
+                                                                      <>
+                                                                          <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                                                                              {airport.name}
+                                                                          </span>
+                                                                          {selected ? (
+                                                                              <span
+                                                                                  className={classNames(
+                                                                                  active ? 'text-white' : 'text-red-600',
+                                                                                  'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                                                  )}>
+                                                                                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                              </span>
+                                                                          ) : null}
+                                                                      </>
+                                                                  )}
+                                                              </Listbox.Option>
+                                                          ))}
+                                                      </Listbox.Options>
+                                                  </Transition>
+                                              </div>
+                                              </>
+                                          )}
+                                      </Listbox>
+                                      </div>
+                                    </div>
+                                </div>
                             </form>
                           </Dialog.Panel>
                         </Transition.Child>
