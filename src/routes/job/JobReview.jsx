@@ -13,6 +13,9 @@ import Loader from '../../components/loader/Loader';
 import * as api from './apiService'
 import axios from 'axios';
 
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../../routes/userProfile/userSlice";
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -26,6 +29,8 @@ const JobReview = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCopied, setIsCopied] = useState(false);
     const location = useLocation()
+
+    const currentUser = useAppSelector(selectUser)
 
     useEffect(() => {
         getJobDetails()
@@ -154,7 +159,8 @@ const JobReview = () => {
                              )}
                         </button>
 
-                        {jobDetails.status === 'C' && (
+                        {(jobDetails.status === 'C' && (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager)) && (
+                            <>
                             <button
                                 type="button"
                                 disabled={downloadLoading}
@@ -165,20 +171,22 @@ const JobReview = () => {
                                         focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                             >
                                 Invoice
-                            </button>    
+                            </button>
+                            <button
+                                type="button"
+                                disabled={downloadLoading}
+                                onClick={() => getJobCloseout()}
+                                className="inline-flex items-center justify-center 
+                                            rounded-md border border-transparent bg-red-600 px-3 py-2
+                                            text-xs font-medium text-white shadow-sm hover:bg-red-700
+                                            focus:outline-none focus:ring-2 focus:ring-red-500
+                                            focus:ring-offset-2 sm:w-auto"
+                            >
+                                {downloadLoading ? 'generating...' : 'Closeout'}
+                            </button> 
+                            </>   
                         )}
-                        <button
-                            type="button"
-                            disabled={downloadLoading}
-                            onClick={() => getJobCloseout()}
-                            className="inline-flex items-center justify-center 
-                                        rounded-md border border-transparent bg-red-600 px-3 py-2
-                                        text-xs font-medium text-white shadow-sm hover:bg-red-700
-                                        focus:outline-none focus:ring-2 focus:ring-red-500
-                                        focus:ring-offset-2 sm:w-auto"
-                        >
-                            {downloadLoading ? 'generating...' : 'Closeout'}
-                        </button>
+                        
                         <Menu as="div" className="relative inline-block text-left top-2 ml-2">
                             <div>
                                 <Menu.Button className="flex items-center rounded-full
@@ -225,22 +233,24 @@ const JobReview = () => {
                                             </Link>
                                         )}
                                     </Menu.Item>
-                                    <Menu.Item>
-                                    {({ active }) => (
-                                        <Link
-                                            to="edit"
-                                            className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                                'block px-4 py-2 text-sm'
+                                    {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                        <Menu.Item>
+                                        {({ active }) => (
+                                            <Link
+                                                to="edit"
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm'
+                                            )}
+                                            >
+                                                <div className="flex space-x-3">
+                                                    <PencilIcon className="h-4 w-4 text-gray-500"/>
+                                                    <div>Edit</div>
+                                                </div>
+                                            </Link>
                                         )}
-                                        >
-                                            <div className="flex space-x-3">
-                                                <PencilIcon className="h-4 w-4 text-gray-500"/>
-                                                <div>Edit</div>
-                                            </div>
-                                        </Link>
+                                        </Menu.Item>
                                     )}
-                                    </Menu.Item>
                                     <Menu.Item>
                                         {({ active }) => (
                                             <Link

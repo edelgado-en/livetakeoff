@@ -145,13 +145,13 @@ const Topbar = () => {
                           Home
                         </Link>
                         <Link
-                          to="/jobs"
+                          to="/completed"
                           className={classNames(
-                            location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                            location.pathname.includes('completed') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
                             'px-3 py-2 rounded-md text-sm font-medium text-white'
                           )}
                         >
-                          Jobs
+                          Completed Jobs
                         </Link>
                         <Link
                           to="/estimates"
@@ -399,14 +399,14 @@ const Topbar = () => {
                     </Disclosure.Button>
                   </Link>
                   <Link 
-                      to="/jobs">
+                      to="/completed">
                     <Disclosure.Button
                       className={classNames(
-                        location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        location.pathname.includes("completed") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
                         'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
                       )}
                     >
-                        Jobs
+                        Completed Jobs
                     </Disclosure.Button>
                   </Link>
                   <Link 
