@@ -1612,9 +1612,11 @@ const CompleteList = () => {
                                                                 {job.status === 'I' && 'Invoiced'}
                                                             </p>
                                                             
-                                                            <div className="text-sm text-gray-500 mt-2">
-                                                            <span>Completed on <span className="text-gray-700">{job.completion_date}</span></span>
-                                                                
+                                                            <div className="text-sm text-gray-500 mt-2 flex justify-between gap-2">
+                                                                <div>Completed on <span className="text-gray-700">{job.completion_date}</span></div>
+                                                                {currentUser.canSeePrice && (
+                                                                    <div className="text-right text-gray-900">${job.price?.toLocaleString()}</div>
+                                                                )}
                                                             </div>
                                                             <div className="text-sm text-gray-500 mt-2">
                                                             
