@@ -257,10 +257,6 @@ const CompleteList = () => {
           closed_jobs: true
         }
 
-        if (currentUser.isCustomer) {
-            request.onlyIncludeCustomerJobs = true
-        } 
-    
         const { data } = await api.getAirports(request)
     
         data.results.unshift({id: 'All', name: 'All'})
