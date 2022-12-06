@@ -539,12 +539,14 @@ const TailNumberReport = () => {
                                                                 </div>
                                                                 <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_completed_jobs.toLocaleString()} completed <span className="text-gray-500">job(s)</span></span>
                                                             </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <div className="w-6">
-                                                                    <XCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                            {!currentUser.isCustomer && (
+                                                                <div className="flex items-center space-x-2">
+                                                                    <div className="w-6">
+                                                                        <XCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                                    </div>
+                                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled <span className="text-gray-500">job(s)</span></span>
                                                                 </div>
-                                                                <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled <span className="text-gray-500">job(s)</span></span>
-                                                            </div>
+                                                            )}
                                                             <div className="flex items-center space-x-2 " onClick={() => handleRedirectToJobsQueue()}>
                                                                 <div className="w-6">
                                                                     <ArrowTopRightIcon className="h-6 w-6 text-gray-500"/>
@@ -848,12 +850,14 @@ const TailNumberReport = () => {
                                                     </div>
                                                     <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_completed_jobs.toLocaleString()} completed <span className="text-gray-500">job(s)</span></span>
                                                 </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <div className="w-6">
-                                                        <XCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                {!currentUser.isCustomer && (
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-6">
+                                                            <XCircleIcon className="h-6 w-6 text-gray-500"/>
+                                                        </div>
+                                                        <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled <span className="text-gray-500">job(s)</span></span>
                                                     </div>
-                                                    <span className="text-sm font-medium text-gray-900">{tailStatsDetails?.total_canceled_jobs.toLocaleString()} canceled <span className="text-gray-500">job(s)</span></span>
-                                                </div>
+                                                )}
                                                 <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleRedirectToJobsQueue()}>
                                                     <div className="w-6">
                                                         <ArrowTopRightIcon className="h-6 w-6 text-gray-500"/>
