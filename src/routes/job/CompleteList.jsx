@@ -3,7 +3,7 @@ import { useEffect, useState, Fragment, useRef } from 'react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { DownloadIcon, CheckIcon, ShareIcon, QuestionMarkCircleIcon, ChevronDownIcon } from '@heroicons/react/outline';
 import Loader from '../../components/loader/Loader';
-import { Listbox, Transition, Popover } from '@headlessui/react'
+import { Listbox, Transition, Popover, Dialog } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -32,6 +32,14 @@ const MagnifyingGlassIcon = () => {
     )
 }
 
+const XMarkIcon = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    )
+  }
+
 
 const availableStatuses = [
     {id: 'All', name: 'All'},
@@ -52,6 +60,7 @@ const CompleteList = () => {
     const [jobs, setJobs] = useState([])
     const [totalJobs, setTotalJobs] = useState(0)
     const [loading, setLoading] = useState(false)
+    const [open, setOpen] = useState(false)
     const [searchText, setSearchText] = useState(localStorage.getItem('completedSearchText') || '')
     const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('completedStatusSelected')) || {id: 'C', name: 'Completed'})
 
@@ -903,63 +912,275 @@ const CompleteList = () => {
                                 )}
                             </Popover>
                         </div>
-                        <div className="xl:hidden lg:hidden md:hidden xs:block sm:block">
-                            <Listbox value={statusSelected} onChange={setStatusSelected}>
-                            {({ open }) => (
-                                <>
-                                <div className="relative" style={{width: '120px'}}>
-                                    <Listbox.Button className="relative w-full rounded-md 
-                                                                bg-white py-1 px-3 pr-8 text-left
-                                                                shadow-sm focus:border-gray-500 focus:outline-none
-                                                                focus:ring-1 focus:ring-gray-500 text-xs cursor-pointer">
-                                        <span className="block truncate">
-                                            {statusSelected ? statusSelected.name : 'Status'}
-                                        </span>
-                                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                            <ChevronUpDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
-                                        </span>
-                                    </Listbox.Button>
 
-                                    <Transition
-                                        show={open}
-                                        as={Fragment}
-                                        leave="transition ease-in duration-100"
-                                        leaveFrom="opacity-100"
-                                        leaveTo="opacity-0">
-                                        <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-72 w-full overflow-auto
-                                                                    rounded-md bg-white py-1 shadow-lg ring-1
-                                                                    ring-black ring-opacity-5 focus:outline-none text-xs">
-                                            {availableStatuses.map((status) => (
-                                                <Listbox.Option
-                                                    key={status.id}
-                                                    className={({ active }) =>
-                                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                    'relative cursor-default select-none py-2 pl-3 pr-9')}
-                                                    value={status}>
-                                                    {({ selected, active }) => (
+                        <Transition.Root show={open} as={Fragment}>
+                            <Dialog as="div" className="relative z-40" onClose={setOpen}>
+                                <Transition.Child
+                                as={Fragment}
+                                enter="transition-opacity ease-linear duration-300"
+                                enterFrom="opacity-0"
+                                enterTo="opacity-100"
+                                leave="transition-opacity ease-linear duration-300"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                                >
+                                <div className="fixed inset-0 bg-black bg-opacity-25" />
+                                </Transition.Child>
+
+                                <div className="fixed inset-0 z-40 flex">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="transition ease-in-out duration-300 transform"
+                                    enterFrom="translate-x-full"
+                                    enterTo="translate-x-0"
+                                    leave="transition ease-in-out duration-300 transform"
+                                    leaveFrom="translate-x-0"
+                                    leaveTo="translate-x-full"
+                                >
+                                    <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+                                    <div className="flex items-center justify-between px-4">
+                                        <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+                                        <button
+                                        type="button"
+                                        className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                                        onClick={() => setOpen(false)}
+                                        >
+                                        <span className="sr-only">Close menu</span>
+                                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                        </button>
+                                    </div>
+
+                                    {/* Filters */}
+                                    <form className="mt-4">
+                                        <div className="pb-4 px-4">
+                                            <h2 className="font-medium text-sm text-gray-900">Status</h2>
+                                            <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                                                {availableStatuses.map((status) => (
+                                                    <li key={status.id}>
+                                                    <div onClick={() => setStatusSelected({ id: status.id, name: status.name })}
+                                                            className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                                            hover:bg-gray-50">
+                                                        <div className="min-w-0 flex-1">
+                                                            <div  className="focus:outline-none">
+                                                            <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{status.name}</p>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        {!currentUser.isCustomer && (
+                                            <div className="px-4 pb-4">
+                                                <div className="text-sm font-medium text-gray-900 mb-2">Customers</div>
+                                                <Listbox value={customerSelected} onChange={setCustomerSelected}>
+                                                    {({ open }) => (
                                                         <>
-                                                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                                {status.name}
-                                                            </span>
-                                                            {selected ? (
-                                                                <span
-                                                                    className={classNames(
-                                                                    active ? 'text-white' : 'text-red-600',
-                                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                    )}>
-                                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                                </span>
-                                                            ) : null}
+                                                        <div className="relative mt-1">
+                                                            <Transition
+                                                                show={true}
+                                                                as={Fragment}
+                                                                leave="transition ease-in duration-100"
+                                                                leaveFrom="opacity-100"
+                                                                leaveTo="opacity-0">
+                                                                <Listbox.Options className="absolute z-10 mt-1 max-h-72 w-full overflow-auto
+                                                                                            rounded-md bg-white py-1 text-base ring-1
+                                                                                            ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                                                    <div className="relative">
+                                                                        <div className="sticky top-0 z-20  px-1">
+                                                                            <div className="mt-1 block  items-center">
+                                                                                <input
+                                                                                    type="text"
+                                                                                    name="search"
+                                                                                    id="search"
+                                                                                    value={customerSearchTerm}
+                                                                                    onChange={(e) => setCustomerSearchTerm(e.target.value)}
+                                                                                    className="border px-2 focus:ring-sky-500
+                                                                                                focus:border-sky-500 block w-full py-1 pr-12 font-normal text-sm
+                                                                                                border-gray-300 rounded-md"
+                                                                                />
+                                                                                <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                                                                    {customerSearchTerm && (
+                                                                                        <svg
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        className="h-4 w-4 text-blue-500 font-bold mr-1"
+                                                                                        viewBox="0 0 20 20"
+                                                                                        fill="currentColor"
+                                                                                        onClick={() => {
+                                                                                            setCustomerSearchTerm("");
+                                                                                        }}
+                                                                                        >
+                                                                                        <path
+                                                                                            fillRule="evenodd"
+                                                                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                                                            clipRule="evenodd"
+                                                                                        />
+                                                                                        </svg>
+                                                                                    )}
+                                                                                    <svg
+                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                        className="h-4 w-4 text-gray-500 mr-1"
+                                                                                        fill="none"
+                                                                                        viewBox="0 0 24 24"
+                                                                                        stroke="currentColor"
+                                                                                    >
+                                                                                        <path
+                                                                                        strokeLinecap="round"
+                                                                                        strokeLinejoin="round"
+                                                                                        strokeWidth="2"
+                                                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                                                                        />
+                                                                                    </svg>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    {filteredCustomers.map((customer) => (
+                                                                        <Listbox.Option
+                                                                            key={customer.id}
+                                                                            className={({ active }) =>
+                                                                                    classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                            'relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50')}
+                                                                            value={customer}>
+                                                                            {({ selected, active }) => (
+                                                                                <>
+                                                                                    <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate w-36 overflow-ellipsis')}>
+                                                                                        {customer.name}
+                                                                                    </span>
+                                                                                    {selected ? (
+                                                                                        <span
+                                                                                            className={classNames(
+                                                                                            active ? 'text-white' : 'text-red-600',
+                                                                                            'absolute inset-y-0 right-0 flex items-center pr-2'
+                                                                                            )}>
+                                                                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                                        </span>
+                                                                                    ) : null}
+                                                                                </>
+                                                                            )}
+                                                                        </Listbox.Option>
+                                                                    ))}
+                                                                </Listbox.Options>
+                                                            </Transition>
+                                                        </div>
                                                         </>
                                                     )}
-                                                </Listbox.Option>
-                                            ))}
-                                        </Listbox.Options>
-                                    </Transition>
+                                                </Listbox>
+                                            </div>
+                                        )}
+                                        
+                                        <div className={`${!currentUser.isCustomer ? 'mt-72' : ''} px-4`}>
+                                            <h2 className="font-medium text-sm text-gray-900">Airports</h2>
+                                            <Listbox value={airportSelected} onChange={setAirportSelected}>
+                                                {({ open }) => (
+                                                    <>
+                                                    <div className="relative mt-1 w-full">
+                                                        <Transition
+                                                            show={true}
+                                                            as={Fragment}
+                                                            leave="transition ease-in duration-100"
+                                                            leaveFrom="opacity-100"
+                                                            leaveTo="opacity-0">
+                                                            <Listbox.Options className="absolute z-10 mt-1 max-h-72 w-full overflow-auto
+                                                                                        rounded-md bg-white py-1 ring-1
+                                                                                        ring-black ring-opacity-5 focus:outline-none text-xs">
+                                                                <div className="relative">
+                                                                    <div className="sticky top-0 z-20  px-1">
+                                                                        <div className="mt-1 block  items-center">
+                                                                            <input
+                                                                                type="text"
+                                                                                name="search"
+                                                                                id="search"
+                                                                                value={airportSearchTerm}
+                                                                                onChange={(e) => setAirportSearchTerm(e.target.value)}
+                                                                                className="border px-2  focus:ring-sky-500
+                                                                                        focus:border-sky-500 block w-full py-1 pr-12 font-normal text-sm
+                                                                                        border-gray-300 rounded-md"
+                                                                            />
+                                                                            <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                                                                {airportSearchTerm && (
+                                                                                    <svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    className="h-4 w-4 text-blue-500 font-bold mr-1"
+                                                                                    viewBox="0 0 20 20"
+                                                                                    fill="currentColor"
+                                                                                    onClick={() => {
+                                                                                        setAirportSearchTerm("");
+                                                                                    }}
+                                                                                    >
+                                                                                    <path
+                                                                                        fillRule="evenodd"
+                                                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                                                        clipRule="evenodd"
+                                                                                    />
+                                                                                    </svg>
+                                                                                )}
+                                                                                <svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    className="h-4 w-4 text-gray-500 mr-1"
+                                                                                    fill="none"
+                                                                                    viewBox="0 0 24 24"
+                                                                                    stroke="currentColor"
+                                                                                >
+                                                                                    <path
+                                                                                    strokeLinecap="round"
+                                                                                    strokeLinejoin="round"
+                                                                                    strokeWidth="2"
+                                                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                                                                    />
+                                                                                </svg>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                {filteredAirports.map((airport) => (
+                                                                    <Listbox.Option
+                                                                        key={airport.id}
+                                                                        className={({ active }) =>
+                                                                                classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                                                        'relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50')}
+                                                                        value={airport}>
+                                                                        {({ selected, active }) => (
+                                                                            <>
+                                                                                <div className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate w-36 overflow-ellipsis')}>
+                                                                                    {airport.name}
+                                                                                </div>
+                                                                                {selected ? (
+                                                                                    <span
+                                                                                        className={classNames(
+                                                                                        active ? 'text-white' : 'text-red-600',
+                                                                                        'absolute inset-y-0 right-0 flex items-center pr-2'
+                                                                                        )}>
+                                                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                                    </span>
+                                                                                ) : null}
+                                                                            </>
+                                                                        )}
+                                                                    </Listbox.Option>
+                                                                ))}
+                                                            </Listbox.Options>
+                                                        </Transition>
+                                                    </div>
+                                                    </>
+                                                )}
+                                            </Listbox>
+                                        </div>
+                                    </form>
+                                    </Dialog.Panel>
+                                </Transition.Child>
                                 </div>
-                                </>
-                            )}
-                            </Listbox>
+                            </Dialog>
+                        </Transition.Root>
+
+                        <div className="xl:hidden lg:hidden md:hidden xs:block sm:block">
+                            <button
+                                type="button"
+                                className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900"
+                                onClick={() => setOpen(true)}
+                            >
+                                Filters
+                            </button>
                         </div>
                     </div>
                 </div>
