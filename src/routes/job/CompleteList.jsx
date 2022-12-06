@@ -474,7 +474,7 @@ const CompleteList = () => {
                     </div>
                     <div className="flex gap-2">
                         <div className="">
-                            <Popover className="relative">
+                            <Popover className="relative hidden xl:block lg:block md:block">
                                 {({ open }) => (
                                 <>
                                     <Popover.Button
@@ -1180,31 +1180,30 @@ const CompleteList = () => {
                                         <span className="sr-only">, active</span>
                                     </h3>
 
-                                    <div aria-hidden="true" className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block" />
-
-                                    <div className="mt-2 sm:mt-0 sm:ml-4">
-                                        <div className="-m-1 flex flex-wrap items-center">
-                                        {activeFilters.map((activeFilter) => (
-                                            <span
-                                            key={activeFilter.id}
-                                            onClick={() => removeActiveFilter(activeFilter.id)}
-                                            className="m-1 inline-flex items-center rounded-full cursor-pointer
-                                                        border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-xs font-medium text-gray-900"
-                                            >
-                                            <span>{activeFilter.name}</span>
-                                            <button
-                                                type="button"
-                                                className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
-                                            >
-                                                <span className="sr-only">Remove filter for {activeFilter.name}</span>
-                                                <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-                                                <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
-                                                </svg>
-                                            </button>
-                                            </span>
-                                        ))}
+                                    <div className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block" />
+                                        <div className="mt-2 sm:mt-0 sm:ml-4">
+                                            <div className="-m-1 flex flex-wrap items-center">
+                                                {activeFilters.map((activeFilter) => (
+                                                    <span
+                                                    key={activeFilter.id}
+                                                    onClick={() => removeActiveFilter(activeFilter.id)}
+                                                    className="m-1 inline-flex items-center rounded-full cursor-pointer
+                                                                border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-xs font-medium text-gray-900"
+                                                    >
+                                                    <span>{activeFilter.name}</span>
+                                                    <button
+                                                        type="button"
+                                                        className="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
+                                                    >
+                                                        <span className="sr-only">Remove filter for {activeFilter.name}</span>
+                                                        <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                                                        <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
+                                                        </svg>
+                                                    </button>
+                                                    </span>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
                                 </div>
                             )}
@@ -1235,7 +1234,7 @@ const CompleteList = () => {
                                             C.P.O
                                             </th>
                                             <th
-                                            className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500"
+                                            className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500 w-28 max-w-xs"
                                             >
                                             Customer
                                             </th>
@@ -1265,21 +1264,6 @@ const CompleteList = () => {
                                             FBO
                                             </th>
                                             <th
-                                            className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase  text-gray-500"
-                                            >
-                                            Arrival
-                                            </th>
-                                            <th
-                                            className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500"
-                                            >
-                                            Departure
-                                            </th>
-                                            <th
-                                            className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500"
-                                            >
-                                            Complete Before
-                                            </th>
-                                            <th
                                             className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500"
                                             >
                                             Completion
@@ -1304,16 +1288,13 @@ const CompleteList = () => {
                                             <tr key={job.id} className="hover:bg-gray-50">
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.purchase_order}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.customer_purchase_order}</td>
-                                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.customer.name}</td>
+                                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500 truncate overflow-ellipsis w-28 max-w-xs" style={{maxWidth: '170px'}}>{job.customer.name}</td>
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.requestDate}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.tailNumber}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.aircraftType.name}</td>
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.airport.initials}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.fbo.name}</td>
-                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.on_site ? 'On site' : job.estimatedETA}</td>
-                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.estimatedETD}</td>
-                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.completeBy}</td>
-                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.completion_date}</td>
+                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.complettion_date}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-center text-gray-500">
                                                 <p style={{ paddingTop: '2px', paddingBottom: '2px' }} className={`inline-flex text-xs text-white rounded-md px-1
                                                                 ${job.status === 'C' && 'bg-green-500 '}
