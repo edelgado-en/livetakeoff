@@ -1320,7 +1320,7 @@ const CompleteList = () => {
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.aircraftType.name}</td>
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.airport.initials}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.fbo.name}</td>
-                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.complettion_date}</td>
+                                            <td className=" px-2 py-2 text-xs text-gray-500">{job.completion_date}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-center text-gray-500">
                                                 <p style={{ paddingTop: '2px', paddingBottom: '2px' }} className={`inline-flex text-xs text-white rounded-md px-1
                                                                 ${job.status === 'C' && 'bg-green-500 '}
