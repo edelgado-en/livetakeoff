@@ -136,16 +136,12 @@ const JobsQueue = () => {
   const getAirports = async () => {
     let request = {
       name: '',
-      open_jobs: false
+      open_jobs: true
     }
 
-    if (!currentUser.isCustomer) {
-      request.open_jobs = true
-    
-    } else {
+    if (currentUser.isCustomer) {
       request.onlyIncludeCustomerJobs = true
-    }
-
+    } 
 
     const { data } = await customerApi.getAirports(request)
 

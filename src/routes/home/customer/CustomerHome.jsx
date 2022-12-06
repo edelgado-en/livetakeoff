@@ -66,15 +66,11 @@ const sortOptions = [
 ]
 
 const availableStatuses = [
-  {id: 'All', name: 'All'},
-  {id: 'O', name: 'All Open Jobs'},
+  {id: 'All', name: 'All Open Jobs'},
   {id: 'U', name: 'Submitted'},
   {id: 'A', name: 'Accepted'},
   {id: 'S', name: 'Assigned'},
   {id: 'W', name: 'In Progress'},
-  {id: 'T', name: 'Canceled'},
-  {id: 'C', name: 'Completed'},
-  {id: 'I', name: 'Invoiced'},
 ]
 
 const CustomerHome = () => {
@@ -87,7 +83,7 @@ const CustomerHome = () => {
     const [activitiesLoading, setActivitiesLoading] = useState(false);
     
     const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
-    const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[1])
+    const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || availableStatuses[0])
     const [sortSelected, setSortSelected] = useState(sortOptions[0])
     const [airports, setAirports] = useState([])
     const [airportSelected, setAirportSelected] = useState(JSON.parse(localStorage.getItem('airportSelected')) || {id: 'All', name: 'All'})
@@ -149,7 +145,12 @@ const CustomerHome = () => {
     };
 
     const getAirports = async () => {
-      const { data } = await api.getAirports()
+      const request = {
+        open_jobs: true,
+        onlyIncludeCustomerJobs: true
+      }
+
+      const { data } = await api.getAirports(request)
   
       data.results.unshift({id: 'All', name: 'All'})
   
@@ -413,66 +414,23 @@ const CustomerHome = () => {
                                           </span>
                                         </Disclosure.Button>
                                       </h3>
-                                      <Disclosure.Panel className="pt-6">
+                                      <Disclosure.Panel className="">
                                         <div className="space-y-6">
-                                          <Listbox value={statusSelected} onChange={setStatusSelected}>
-                                            {({ open }) => (
-                                                <>
-                                                <div className="relative">
-                                                    <Listbox.Button className="relative w-full cursor-default rounded-md 
-                                                                                bg-white py-2 px-3 pr-8 text-left
-                                                                                border border-gray-300
-                                                                                shadow-sm focus:outline-none focus:shadow-outline-blue
-                                                                                focus:border-blue-300
-                                                                                text-xs">
-                                                        <span className="block truncate">
-                                                            {statusSelected ? statusSelected.name : 'Status'}
-                                                        </span>
-                                                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-                                                            <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
-                                                        </span>
-                                                    </Listbox.Button>
-
-                                                    <Transition
-                                                        show={open}
-                                                        as={Fragment}
-                                                        leave="transition ease-in duration-100"
-                                                        leaveFrom="opacity-100"
-                                                        leaveTo="opacity-0">
-                                                        <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-96 w-full overflow-auto
-                                                                                    rounded-md bg-white py-1 shadow-lg ring-1 
-                                                                                    ring-black ring-opacity-5 focus:outline-none text-xs">
-                                                            {availableStatuses.map((status) => (
-                                                                <Listbox.Option
-                                                                    key={status.id}
-                                                                    className={({ active }) =>
-                                                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
-                                                                                    `${status.id === 'R' || status.id === 'All' ? 'border-b border-gray-200 mb-4' : ''} relative cursor-default select-none py-2 pl-3 pr-9`)}
-                                                                    value={status}>
-                                                                    {({ selected, active }) => (
-                                                                        <>
-                                                                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
-                                                                                {status.name}
-                                                                            </span>
-                                                                            {selected ? (
-                                                                                <span
-                                                                                    className={classNames(
-                                                                                    active ? 'text-white' : 'text-red-600',
-                                                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                                    )}>
-                                                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                                                </span>
-                                                                            ) : null}
-                                                                        </>
-                                                                    )}
-                                                                </Listbox.Option>
-                                                            ))}
-                                                        </Listbox.Options>
-                                                    </Transition>
-                                                </div>
-                                                </>
-                                            )}
-                                          </Listbox> 
+                                          <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                                            {availableStatuses.map((status) => (
+                                              <li key={status.id}>
+                                                <div onClick={() => setStatusSelected({ id: status.id, name: status.name })}
+                                                        className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                                      hover:bg-gray-50">
+                                                    <div className="min-w-0 flex-1">
+                                                      <div  className="focus:outline-none">
+                                                        <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{status.name}</p>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                              </li>
+                                            ))}
+                                          </ul>
                                         </div>
                                       </Disclosure.Panel>
                                     </>
@@ -485,7 +443,7 @@ const CustomerHome = () => {
                                       <h3 className="-mx-2 -my-3 flow-root">
                                         <Disclosure.Button className="flex w-full items-center justify-between
                                                                     bg-white px-2 py-3 text-sm text-gray-400">
-                                          <span className="font-medium text-gray-900">Airport</span>
+                                          <span className="font-medium text-gray-900">Airports</span>
                                           <span className="ml-6 flex items-center">
                                             <ChevronDownIcon
                                               className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')}
@@ -530,15 +488,15 @@ const CustomerHome = () => {
                                                                             id="search"
                                                                             value={airportSearchTerm}
                                                                             onChange={(e) => setAirportSearchTerm(e.target.value)}
-                                                                            className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
-                                                                                    focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
+                                                                            className="border px-2  focus:ring-sky-500
+                                                                                    focus:border-sky-500 block w-full py-1 pr-12  sm:text-sm
                                                                                     border-gray-300 rounded-md"
                                                                         />
                                                                         <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
                                                                             {airportSearchTerm && (
                                                                                 <svg
                                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                                className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                                                                className="h-5 w-5 text-blue-500 font-bold mr-1"
                                                                                 viewBox="0 0 20 20"
                                                                                 fill="currentColor"
                                                                                 onClick={() => {
@@ -554,7 +512,7 @@ const CustomerHome = () => {
                                                                             )}
                                                                             <svg
                                                                                 xmlns="http://www.w3.org/2000/svg"
-                                                                                className="h-6 w-6 text-gray-500 mr-1"
+                                                                                className="h-5 w-5 text-gray-500 mr-1"
                                                                                 fill="none"
                                                                                 viewBox="0 0 24 24"
                                                                                 stroke="currentColor"
@@ -791,14 +749,14 @@ const CustomerHome = () => {
                     ))}
                   </ul>
                   
-                  {totalJobs > 10 && (
+                  {/* {totalJobs > 10 && (
                     <div className="border-t border-gray-200 py-4 text-sm pl-8">
                         <Link to="/jobs" className="font-semibold text-red-600 hover:text-red-900">
                           View all
                           <span aria-hidden="true"> &rarr;</span>
                         </Link>
                     </div>
-                  )}
+                  )} */}
                 </>
               )}
             </div>
