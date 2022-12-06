@@ -1330,7 +1330,7 @@ const CompleteList = () => {
                                             </td>
                                             <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
                                                 <div className="flex gap-1">
-                                                    {'$'}{job.price ? job.price : '0.00'}
+                                                    {'$'}{job.price ? job.price.toLocaleString() : '0.00'}
                                                     
                                                 </div>
                                             </td>
