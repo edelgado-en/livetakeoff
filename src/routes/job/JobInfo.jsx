@@ -447,7 +447,7 @@ const JobInfo = () => {
 
                                                 {service.status === 'C' && (
                                                     <div className="flex-shrink-0 flex justify-end">
-                                                        <CheckCircleIcon className="h-6 w-6 text-red-400" />
+                                                        <CheckCircleIcon className="h-6 w-6 text-green-500" />
                                                     </div>
                                                 )}
 
@@ -512,7 +512,7 @@ const JobInfo = () => {
                                             <div className="grid grid-cols-3 text-sm pb-2">
                                                 <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
                                                 <div className="text-right">
-                                                    {service.status === 'W' && (
+                                                    {!currentUser.isCustomer && service.status === 'W' && (
                                                         <button
                                                             type="button"
                                                             onClick={() => completeRetainerService(service.id)}
@@ -526,7 +526,7 @@ const JobInfo = () => {
 
                                                     {service.status === 'C' && (
                                                         <div className="flex-shrink-0 flex justify-end">
-                                                            <CheckCircleIcon className="h-6 w-6 text-red-400" />
+                                                            <CheckCircleIcon className="h-6 w-6 text-green-500" />
                                                         </div>
                                                     )}
                                                 </div>

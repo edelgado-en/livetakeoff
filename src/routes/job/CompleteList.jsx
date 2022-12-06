@@ -1,8 +1,9 @@
 
 import { useEffect, useState, Fragment, useRef } from 'react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
-import { DownloadIcon, CheckIcon, ShareIcon, QuestionMarkCircleIcon, ChevronDownIcon } from '@heroicons/react/outline';
+import { DownloadIcon, ChevronRightIcon, CheckIcon, ShareIcon, QuestionMarkCircleIcon, ChevronDownIcon } from '@heroicons/react/outline';
 import Loader from '../../components/loader/Loader';
+import { UserIcon } from "@heroicons/react/solid";
 import { Listbox, Transition, Popover, Dialog } from '@headlessui/react'
 import { useNavigate } from 'react-router-dom';
 import DatePicker from "react-datepicker";
@@ -1410,7 +1411,6 @@ const CompleteList = () => {
                     </div>
                     <div className="overflow-x-auto w-full">
                         <div className="inline-block min-w-full pb-2 align-middle">
-                            
                             {activeFilters.length > 0 && (
                                 <div className="bg-gray-100">
                                     <div className="py-2 sm:flex sm:items-center px-4">
@@ -1458,7 +1458,9 @@ const CompleteList = () => {
                             )}
 
                             {!loading && jobs.length > 0 && (
-                                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                                <>
+                                {/* DESKTOP */}
+                                <div className="hidden md:block lg:block xl:block overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                                     <table className="min-w-full divide-y divide-gray-300">
                                         <thead className="bg-gray-50">
                                         <tr>
@@ -1573,6 +1575,64 @@ const CompleteList = () => {
                                         </tbody>
                                     </table>
                                 </div>
+
+                                {/* MOBILE */}
+                                <div className="xs:block sm:block xl:hidden lg:hidden md:hidden overflow-hidden bg-white shadow sm:rounded-md mt-2 mb-4">
+                                    <ul className="divide-y divide-gray-200">
+                                        {jobs.map((job) => (
+                                        <li key={job.id}>
+                                            <div onClick={() => navigate(`/completed/review/${job.id}`)} className="block hover:bg-gray-50">
+                                                <div className="flex items-center px-4 py-4 sm:px-6">
+                                                    <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                                                    <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
+                                                        <div>
+                                                        <div className="">
+                                                            <span className="font-medium text-red-600 text-sm">{job.tailNumber}</span>
+                                                            <span className="ml-2 text-sm text-gray-700">{job.purchase_order}</span>
+                                                        </div>
+                                                        
+                                                        {!currentUser.isCustomer && (
+                                                            <div className="text-sm text-gray-800 mt-2 flex gap-1">
+                                                                <UserIcon className="h-4 w-4 text-gray-400" />{job.customer?.name}
+                                                            </div>
+                                                        )}
+
+                                                        <div className="mt-2 text-sm text-gray-500 mb-1">
+                                                            {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
+                                                        </div>
+                                                        </div>
+                                                        <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
+                                                            <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                                                        ${job.status === 'C' && 'bg-green-500 '}
+                                                                        ${job.status === 'T' && 'bg-gray-600 '}
+                                                                        ${job.status === 'I' && 'bg-blue-500 '}
+                                                                        `}>
+                                                                {job.status === 'C' && 'Completed'}
+                                                                {job.status === 'T' && 'Canceled'}
+                                                                {job.status === 'I' && 'Invoiced'}
+                                                            </p>
+                                                            
+                                                            <div className="text-sm text-gray-500 mt-2">
+                                                            <span>Completed on <span className="text-gray-700">{job.completion_date}</span></span>
+                                                                
+                                                            </div>
+                                                            <div className="text-sm text-gray-500 mt-2">
+                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div className="ml-5 flex-shrink-0">
+                                                        <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                </>
                             )}
                         </div>
                     </div>
