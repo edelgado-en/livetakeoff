@@ -51,7 +51,7 @@ import CustomerHome from './routes/home/customer/CustomerHome';
 import CustomerPremium from './routes/home/customer/CustomerPremium';
 import CustomerEditJob from './routes/job/CustomerEditJob';
 
-import JobDashboard from './routes/home/dashboard/JobDashboard';
+import TeamProductivity from './routes/home/dashboard/TeamProductivity';
 import TailNumberReport from './routes/home/dashboard/TailNumberReport';
 import ServicesByAirport from './routes/home/dashboard/ServicesByAirport';
 import RetainerCustomers from './routes/home/dashboard/RetainerCustomers';
@@ -141,7 +141,7 @@ const  App = () => {
 
                       <Route path="jobs" element={<Jobs />}/>
                       
-                      <Route path="dashboard" element={<JobDashboard />} />
+                      <Route path="team-productivity" element={<TeamProductivity />} />
                       <Route path="tail-report" element={<TailNumberReport />} />
                       <Route path="services-by-airport" element={<ServicesByAirport />} />
                       <Route path="retainers" element={<RetainerCustomers />} />

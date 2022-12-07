@@ -32,7 +32,7 @@ const dashboards = [
   {
     name: 'Team Productivity',
     description: 'Find out which project manager is the most productive.',
-    href: '/user-productivity',
+    href: '/team-productivity',
     icon: ChartBarIcon,
   },
   {

@@ -394,7 +394,7 @@ const JobsQueue = () => {
                                                         hover:bg-gray-50">
                                       <div className="min-w-0 flex-1">
                                         <div  className="focus:outline-none">
-                                          <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{status.name}</p>
+                                          <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{status.name}</p>
                                         </div>
                                       </div>
                                     </div>
@@ -419,7 +419,7 @@ const JobsQueue = () => {
                                           <div  className="focus:outline-none">
                                             {/* Extend touch target to entire panel */}
                                             <span className="absolute inset-0" aria-hidden="true" />
-                                            <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{customer.name}</p>
+                                            <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{customer.name}</p>
                                           </div>
                                         </div>
                                       </div>
@@ -439,7 +439,7 @@ const JobsQueue = () => {
                                                         hover:bg-gray-50">
                                       <div className="min-w-0 flex-1">
                                         <div  className="focus:outline-none">
-                                          <p className="text-sm text-gray-700 truncate overflow-ellipsis w-60">{airport.name}</p>
+                                          <p className="text-xs text-gray-700 truncate overflow-ellipsis w-60">{airport.name}</p>
                                         </div>
                                       </div>
                                     </div>
@@ -769,7 +769,7 @@ const JobsQueue = () => {
           {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer)) && (
               <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
                 <div className="hidden xl:block lg:block pb-4">
-                  <h2 className="font-medium text-gray-900">Status</h2>
+                  <h2 className="font-medium text-sm text-gray-900">Status</h2>
                   <ul className="relative z-0 divide-y divide-gray-200 mt-2">
                     {availableStatuses.map((status) => (
                       <li key={status.id}>
@@ -778,7 +778,7 @@ const JobsQueue = () => {
                                               hover:bg-gray-50">
                             <div className="min-w-0 flex-1">
                               <div  className="focus:outline-none">
-                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{status.name}</p>
+                                <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{status.name}</p>
                               </div>
                             </div>
                           </div>
@@ -789,7 +789,7 @@ const JobsQueue = () => {
                 
                 {!currentUser.isCustomer && (
                   <div className="pb-4">
-                    <h2 className="font-medium text-gray-900">Customers <span className="text-gray-500 text-sm ml-1 font-normal">({customersWOpenJobs.length})</span></h2>
+                    <h2 className="font-medium text-sm text-gray-900">Customers <span className="text-gray-500 text-sm ml-1 font-normal">({customersWOpenJobs.length})</span></h2>
                     <ul className="relative z-0 divide-y divide-gray-200 mt-2">
                       {customersWOpenJobs.map((customer) => (
                         <li key={customer.id} >
@@ -803,7 +803,7 @@ const JobsQueue = () => {
                               <div  className="focus:outline-none">
                                 {/* Extend touch target to entire panel */}
                                 <span className="absolute inset-0" aria-hidden="true" />
-                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">{customer.name}</p>
+                                <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{customer.name}</p>
                               </div>
                             </div>
                           </div>
@@ -814,7 +814,7 @@ const JobsQueue = () => {
                 )}
 
                 <div className="pb-8">
-                  <h2 className="font-medium text-gray-900">Airports<span className="text-gray-500 text-sm ml-1 font-normal">({filteredAirports.length - 1})</span></h2>
+                  <h2 className="font-medium text-sm text-gray-900">Airports<span className="text-gray-500 text-sm ml-1 font-normal">({filteredAirports.length - 1})</span></h2>
                   <ul className="relative z-0 divide-y divide-gray-200 mt-2">
                     {filteredAirports.map((airport) => (
                       <li key={airport.id}>
@@ -823,7 +823,7 @@ const JobsQueue = () => {
                                               hover:bg-gray-50">
                             <div className="min-w-0 flex-1">
                               <div  className="focus:outline-none">
-                                <p className="text-sm text-gray-700 truncate overflow-ellipsis w-60">{airport.name}</p>
+                                <p className="text-xs text-gray-700 truncate overflow-ellipsis w-60">{airport.name}</p>
                               </div>
                             </div>
                           </div>
