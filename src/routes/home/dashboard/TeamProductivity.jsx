@@ -68,6 +68,30 @@ const people = [
       'https://res.cloudinary.com/datidxeqm/image/upload/v1668098128/media/profiles/Adolfo_veriir.jpg',
     bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
   },
+  {
+    name: 'Luis Betancourt',
+    imageUrl:
+      'https://res.cloudinary.com/datidxeqm/image/upload/v1668097426/media/profiles/Luis_pb787q.jpg',
+    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
+  },
+  {
+    name: 'Ricardo Cueto',
+    imageUrl:
+      'https://res.cloudinary.com/datidxeqm/image/upload/v1668097182/media/profiles/Ricardo_u4cg5p.jpg',
+    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
+  },
+  {
+    name: 'Luis Torres',
+    imageUrl:
+      'https://res.cloudinary.com/datidxeqm/image/upload/v1668098528/media/profiles/Luis_Torres_qirq0h.jpg',
+    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
+  },
+  {
+    name: 'Antonio Carmona',
+    imageUrl:
+      'https://res.cloudinary.com/datidxeqm/image/upload/v1668099311/media/profiles/Antonio_bqdxpx.jpg',
+    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
+  },
 ]
 
 function classNames(...classes) {
@@ -129,7 +153,7 @@ const TeamProductivity = () => {
       </dl>
 
       <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
-                      gap-8 gap-y-8 my-12">
+                      gap-8 gap-y-8 gap-x-28 my-12">
         <div className="">
           <div className="text-lg font-medium tracking-tight">Top 5 Services</div>
             <div className="pr-2 text-gray-500">
