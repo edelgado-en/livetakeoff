@@ -106,7 +106,7 @@ const TeamProductivity = () => {
       <h3 className="text-lg font-medium leading-6 text-gray-900 pt-8">Last 30 days</h3>
 
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="relative overflow-hidden rounded-lg px-4 pt-5 shadow sm:px-6 sm:pt-6">
+          <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
             <dt>
               <div className="absolute rounded-md p-3 border-blue-400 border-2">
                 <BriefcaseIcon className="h-6 w-6 text-blue-400" aria-hidden="true" />
@@ -117,7 +117,7 @@ const TeamProductivity = () => {
               <p className="text-2xl font-semibold text-gray-900">252</p>
             </dd>
           </div>
-          <div className="relative overflow-hidden rounded-lg px-4 pt-5 shadow sm:px-6 sm:pt-6">
+          <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
             <dt>
               <div className="absolute rounded-md p-3 border-sky-400 border-2">
                 <WrenchIcon  />
@@ -128,7 +128,7 @@ const TeamProductivity = () => {
               <p className="text-2xl font-semibold text-gray-900">451</p>
             </dd>
           </div>
-          <div className="relative overflow-hidden rounded-lg px-4 pt-5 shadow sm:px-6 sm:pt-6">
+          <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
             <dt>
               <div className="absolute rounded-md p-3 border-indigo-400 border-2">
                 <Wrench2Icon  />
@@ -139,7 +139,7 @@ const TeamProductivity = () => {
               <p className="text-2xl font-semibold text-gray-900">451</p>
             </dd>
           </div>
-          <div className="relative overflow-hidden rounded-lg px-4 pt-5 shadow sm:px-6 sm:pt-6">
+          <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
             <dt>
               <div className="absolute rounded-md p-3 border-green-400 border-2">
                 <CashIcon className="h-6 w-6 text-green-500"  />
@@ -153,7 +153,7 @@ const TeamProductivity = () => {
       </dl>
 
       <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
-                      gap-8 gap-y-8 gap-x-28 my-12">
+                      gap-8 gap-y-8 gap-x-28 my-8">
         <div className="">
           <div className="text-lg font-medium tracking-tight">Top 5 Services</div>
             <div className="pr-2 text-gray-500">
@@ -200,30 +200,46 @@ const TeamProductivity = () => {
         </div>
       </div>
 
-      <div className="">
+      <div className="pb-32">
       <div className="mx-auto max-w-7xl">
         <div className="space-y-8">
           <h2 className="text-lg font-medium tracking-tight">Project Managers</h2>
 
-          <ul className="space-y-12 lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8 lg:gap-y-12 lg:space-y-0">
+          <ul className="space-y-12 lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
             {people.map((person) => (
               <li key={person.name}>
-                <div className="space-y-4 sm:grid sm:grid-cols-3 sm:gap-6 sm:space-y-0 lg:gap-8">
-                  <div className="text-center m-auto">
-                    <img className="rounded-lg object-cover shadow-lg" src={person.imageUrl} alt="" />
+                <div className="flex gap-4 flex-start">
+                  <div className="flex-shrink-0">
+                    <img className="rounded-lg h-32 w-32" src={person.imageUrl} alt="" />
                   </div>
-                  <div className="sm:col-span-2">
-                    <div className="space-y-4">
+                  <div className="w-full">
+                    <div className="space-y-2">
                       <div className="space-y-1 text-md font-medium leading-6">
                         <h3>{person.name}</h3>
                       </div>
-                      <div className="text-md grid grid-cols-2 text-gray-500 max-w-xs">
-                        <div className="">Services Completed</div>
+                      <div className="flex justify-between text-gray-500 text-sm">
+                        <div className="flex-1">Services Completed</div>
                         <div className="text-right">156</div>
-                        <div className="">Retainers Completed</div>
+                        {/* <div className="">Retainers Completed</div>
                         <div className="text-right">234</div>
                         <div className="">Revenue</div>
-                        <div className="text-right">$12,345</div>
+                        <div className="text-right">$12,345</div> */}
+                      </div>
+                      <div className="flex justify-between text-gray-500 text-sm">
+                        <div className="flex-1">Retainers Completed</div>
+                        <div className="text-right">234</div>
+                        {/* <div className="">Retainers Completed</div>
+                        <div className="text-right">234</div>
+                        <div className="">Revenue</div>
+                        <div className="text-right">$12,345</div> */}
+                      </div>
+                      <div className="flex justify-between text-gray-500 text-sm">
+                        <div className="flex-1">Revenue<span className="text-xs ml-1 text-gray-500">(services only)</span></div>
+                        <div className="text-right font-medium">$12,345</div>
+                        {/* <div className="">Retainers Completed</div>
+                        <div className="text-right">234</div>
+                        <div className="">Revenue</div>
+                        <div className="text-right">$12,345</div> */}
                       </div>
                     </div>
                   </div>
