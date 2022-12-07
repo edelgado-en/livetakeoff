@@ -135,7 +135,7 @@ const TeamProductivity = () => {
             <div className="pr-2 text-gray-500">
               {topServices.map((service, index) => (
                 <div key={index}>
-                  <div className="flex justify-between py-3 text-sm gap-3">
+                  <div className="flex justify-between py-3 pb-1 text-sm gap-3">
                     <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
                     <div className="text-right">
                       <div>
@@ -158,7 +158,7 @@ const TeamProductivity = () => {
           <div className="pr-2 text-gray-500">
             {topRetainers.map((service, index) => (
               <div key={index}>
-                <div className="flex justify-between py-3 text-sm gap-3">
+                <div className="flex justify-between py-3 pb-1 text-sm gap-3">
                   <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
                   <div className="text-right">
                     <div>
