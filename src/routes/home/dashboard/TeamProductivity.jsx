@@ -21,6 +21,22 @@ const Wrench2Icon = () => {
   )
 }
 
+const topServices = [
+  {name: 'Basic Exterior (Exterior Level 1 / Exterior Takeoff Ready)', count: 215, percent: 40.57},
+  {name: 'Basic Interior (Interior Level 1 / Interior Takeoff Ready)', count: 199, percent: 37.03},
+  {name: 'Exterior detail (Exterior Levels 2 or 3 / Full wet or dry wash)', count: 150, percent: 28.07},
+  {name: 'Carpet Extraction (Carpet shampoo)', count: 98, percent: 18.39},
+  {name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down', count: 52, percent: 9.8},
+]
+
+const topRetainers = [
+  {name: 'Basic Exterior (Exterior Level 1 / Exterior Takeoff Ready)', count: 215, percent: 70.57},
+  {name: 'Basic Interior (Interior Level 1 / Interior Takeoff Ready)', count: 199, percent: 20.03},
+  {name: 'Exterior detail (Exterior Levels 2 or 3 / Full wet or dry wash)', count: 150, percent: 15.07},
+  {name: 'Carpet Extraction (Carpet shampoo)', count: 98, percent: 5.39},
+  {name: 'Full wet wash and dry plus belly and landing gear degrease and wipe down', count: 52, percent: 2.8},
+]
+
 const people = [
   {
     name: 'Wilson Lazarazo',
@@ -112,8 +128,56 @@ const TeamProductivity = () => {
           </div>
       </dl>
 
-      <div className="bg-white">
-      <div className="mx-auto max-w-7xl py-12">
+      <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
+                      gap-8 gap-y-8 my-12">
+        <div className="">
+          <div className="text-lg font-medium tracking-tight">Top 5 Services</div>
+            <div className="pr-2 text-gray-500">
+              {topServices.map((service, index) => (
+                <div key={index}>
+                  <div className="flex justify-between py-3 text-sm gap-3">
+                    <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
+                    <div className="text-right">
+                      <div>
+                        {service.count} <span className="text-xs">times</span>
+                      </div>
+                      <div>{service.percent + '%'}</div>
+                    </div>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                    <div className="h-1.5 rounded-full bg-blue-500" style={{width: service.percent + '%'}}></div>
+                  </div>
+                </div>
+              ))}
+              
+            </div>
+        </div>
+
+        <div className="">
+          <div className="text-lg font-medium tracking-tight">Top 5 Retainers</div>
+          <div className="pr-2 text-gray-500">
+            {topRetainers.map((service, index) => (
+              <div key={index}>
+                <div className="flex justify-between py-3 text-sm gap-3">
+                  <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
+                  <div className="text-right">
+                    <div>
+                      {service.count} <span className="text-xs">times</span>
+                    </div>
+                    <div>{service.percent + '%'}</div>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                  <div className="h-1.5 rounded-full bg-blue-500" style={{width: service.percent + '%'}}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="">
+      <div className="mx-auto max-w-7xl">
         <div className="space-y-8">
           <h2 className="text-lg font-medium tracking-tight">Project Managers</h2>
 
