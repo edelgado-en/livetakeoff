@@ -1,8 +1,10 @@
 
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 
-import { UsersIcon, CashIcon, BriefcaseIcon, ArrowSmRightIcon  } from '@heroicons/react/outline'
+import { UsersIcon, CashIcon, BriefcaseIcon, ArrowSmRightIcon, CheckIcon, ChevronDownIcon} from '@heroicons/react/outline'
+
+import { Listbox, Transition, Menu, Popover, Disclosure, Dialog } from '@headlessui/react'
 
 import { toast } from "react-toastify"
 
@@ -31,61 +33,15 @@ const Wrench2Icon = () => {
   )
 }
 
-const people = [
-  {
-    name: 'Wilson Lazarazo',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668096959/media/profiles/Wilson_jsuh5z.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Randy Fermin',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668096644/media/profiles/Randy_rgjxsz.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Leroy Hernandez',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668096362/media/profiles/Leroy_yfe3cg.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Belkis Grinan',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668096086/media/profiles/Belkis_h5uel9.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Adolfo Blanco',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668098128/media/profiles/Adolfo_veriir.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Luis Betancourt',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668097426/media/profiles/Luis_pb787q.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Ricardo Cueto',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668097182/media/profiles/Ricardo_u4cg5p.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Luis Torres',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668098528/media/profiles/Luis_Torres_qirq0h.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
-  {
-    name: 'Antonio Carmona',
-    imageUrl:
-      'https://res.cloudinary.com/datidxeqm/image/upload/v1668099311/media/profiles/Antonio_bqdxpx.jpg',
-    bio: 'Ultricies massa malesuada viverra cras lobortis. Tempor orci hac ligula dapibus mauris sit ut eu. Eget turpis urna maecenas cras. Nisl dictum.',
-  },
+const dateOptions = [
+  { id: 'yesterday', name: 'Yesterday' },
+  { id: 'last7Days', name: 'Last Seven Days' },
+  { id: 'lastWeek', name: 'Last Week' },
+  { id: 'MTD', name: 'Month to Date' },
+  { id: 'lastMonth', name: 'Last Month' },
+  { id: 'lastQuarter', name: 'Last Quarter' },
+  { id: 'YTD', name: 'Year to Date'},
+  { id: 'lastYear', name: 'Last Year' },
 ]
 
 function classNames(...classes) {
@@ -95,18 +51,18 @@ function classNames(...classes) {
 const TeamProductivity = () => {
   const [loading, setLoading] = useState(true)
   const [productivityData, setProductivityData] = useState({})
+  const [dateSelected, setDateSelected] = useState(dateOptions[3])
 
   useEffect(() => {
     getTeamProductivityStats()
-  }, [])
+  }, [dateSelected])
 
   const getTeamProductivityStats = async () => {
     setLoading(true)
 
     try {
-      const { data } = await api.getTeamProductivityStats({name: ''})
+      const { data } = await api.getTeamProductivityStats({ dateSelected: dateSelected.id })
 
-      console.log(data)
       setProductivityData(data)
 
       setLoading(false)
@@ -120,9 +76,64 @@ const TeamProductivity = () => {
   return (
     <AnimatedPage>
       <div className="px-4 max-w-7xl m-auto">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-3xl">Team Productivity</h2>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-3xl pb-5">Team Productivity</h2>
 
-        <h3 className="text-lg font-medium leading-6 text-gray-900 pt-8">Last 30 days</h3>
+        <Listbox value={dateSelected} onChange={setDateSelected}>
+            {({ open }) => (
+                <>
+                <div className="relative" style={{width:'340px'}}>
+                    <Listbox.Button className="relative w-full cursor-default rounded-md 
+                                                  bg-white py-2 px-3 pr-8 text-left
+                                                shadow-sm border-gray-200 border focus:border-gray-200 focus:ring-0 focus:outline-none
+                                                text-lg font-medium leading-6 text-gray-900">
+                        <span className="block truncate">
+                            {dateSelected.name}
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                            <ChevronDownIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
+                        </span>
+                    </Listbox.Button>
+
+                    <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0">
+                        <Listbox.Options className="absolute left-0 z-10 mt-1 max-h-96 w-full overflow-auto
+                                                    rounded-md bg-white py-1 shadow-lg ring-1
+                                                    ring-black ring-opacity-5 focus:outline-none text-sm">
+                            {dateOptions.map((sort) => (
+                                <Listbox.Option
+                                    key={sort.id}
+                                    className={({ active }) =>
+                                            classNames(active ? 'text-white bg-red-600' : 'text-gray-900',
+                                                    'relative select-none py-2 pl-3 pr-9 cursor-pointer text-md')}
+                                    value={sort}>
+                                    {({ selected, active }) => (
+                                        <>
+                                            <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate text-md')}>
+                                                {sort.name}
+                                            </span>
+                                            {selected ? (
+                                                <span
+                                                    className={classNames(
+                                                    active ? 'text-white' : 'text-red-600',
+                                                    'absolute inset-y-0 right-0 flex items-center pr-4'
+                                                    )}>
+                                                    <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                </span>
+                                            ) : null}
+                                        </>
+                                    )}
+                                </Listbox.Option>
+                            ))}
+                        </Listbox.Options>
+                    </Transition>
+                </div>
+                </>
+            )}
+        </Listbox>
 
         {loading && <Loader />}
 
