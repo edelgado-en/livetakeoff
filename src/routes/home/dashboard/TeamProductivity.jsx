@@ -203,7 +203,8 @@ const TeamProductivity = () => {
       <div className="pb-32">
       <div className="mx-auto max-w-7xl">
         <div className="space-y-8">
-          <h2 className="text-lg font-medium tracking-tight">Project Managers</h2>
+          <h2 className="text-lg font-medium tracking-tight">Project Managers<span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
+                                            rounded-full text-xs font-medium md:inline-block">9</span></h2>
 
           <ul className="space-y-12 lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
             {people.map((person) => (
