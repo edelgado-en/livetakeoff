@@ -104,7 +104,7 @@ const TeamProductivity = () => {
     setLoading(true)
 
     try {
-      const { data } = await api.getTeamProductivityStats({})
+      const { data } = await api.getTeamProductivityStats({name: ''})
 
       console.log(data)
       setProductivityData(data)
