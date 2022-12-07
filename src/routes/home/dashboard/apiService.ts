@@ -16,3 +16,7 @@ export const getServicesByAirport = () => {
 export const searchRetainerCustomers = (data: any, currentPage: Number) => {
     return httpService.post(`/api/customers/retainers?page=${currentPage}&size=${100}`, data);
 } 
+
+export const getTeamProductivityStats = (data: any) => {
+    return httpService.post('/api/team-productivity', data)
+}
