@@ -1,6 +1,6 @@
 
 
-import { UsersIcon, CashIcon, BriefcaseIcon,  } from '@heroicons/react/outline'
+import { UsersIcon, CashIcon, BriefcaseIcon, ArrowSmRightIcon  } from '@heroicons/react/outline'
 
 const WrenchIcon = () => {
   return (
@@ -220,26 +220,17 @@ const TeamProductivity = () => {
                       <div className="flex justify-between text-gray-500 text-sm">
                         <div className="flex-1">Services Completed</div>
                         <div className="text-right">156</div>
-                        {/* <div className="">Retainers Completed</div>
-                        <div className="text-right">234</div>
-                        <div className="">Revenue</div>
-                        <div className="text-right">$12,345</div> */}
                       </div>
                       <div className="flex justify-between text-gray-500 text-sm">
                         <div className="flex-1">Retainers Completed</div>
                         <div className="text-right">234</div>
-                        {/* <div className="">Retainers Completed</div>
-                        <div className="text-right">234</div>
-                        <div className="">Revenue</div>
-                        <div className="text-right">$12,345</div> */}
                       </div>
                       <div className="flex justify-between text-gray-500 text-sm">
                         <div className="flex-1">Revenue<span className="text-xs ml-1 text-gray-500">(services only)</span></div>
                         <div className="text-right font-medium">$12,345</div>
-                        {/* <div className="">Retainers Completed</div>
-                        <div className="text-right">234</div>
-                        <div className="">Revenue</div>
-                        <div className="text-right">$12,345</div> */}
+                      </div>
+                      <div className="w-full text-right text-sm text-blue-500">
+                        <span className="cursor-pointer">more <ArrowSmRightIcon className="h-4 w-4 inline-block"/></span>
                       </div>
                     </div>
                   </div>
