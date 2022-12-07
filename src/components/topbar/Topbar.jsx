@@ -41,12 +41,12 @@ const dashboards = [
     href: '/retainers',
     icon: UserGroupIcon,
   },
-  {
+/*   {
     name: 'Revenues',
     description: 'Revenues by customer, airport, FBO, and service.',
     href: '/revenues',
     icon: CurrencyDollarIcon,
-  },
+  }, */
 ]
 
 function classNames(...classes) {
@@ -524,7 +524,7 @@ const Topbar = () => {
                             <Link
                                 key={item.name}
                                 to={item.href}
-                                className="flex items-start rounded-lg px-3 py-1"
+                                className="flex items-start rounded-lg px-3 "
                               >
                                 <Disclosure.Button
                                   className={classNames(
