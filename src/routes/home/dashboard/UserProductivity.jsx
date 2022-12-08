@@ -70,13 +70,146 @@ const UserProductivity = () => {
                                     <span className="text-gray-900 mx-1">
                                     <ReactTimeAgo date={new Date(productivityData.member_since)} locale="en-US" timeStyle="twitter" />
                                   </span>
-                                  - works for 
+                                  - 
                                   <span className="text-gray-900 mx-1">
                                     {productivityData.user.vendor}
                                   </span>
                                   </div>
                             </div>
                         </div>
+
+                        <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
+                                        gap-8 gap-y-8 gap-x-28 my-8">
+                            <div>
+                                <div className="space-y-6 lg:col-span-2 lg:col-start-1">
+                                    <section>
+                                        <div className="">
+                                        <div className="py-2 border-b border-gray-200 pb-3">
+                                            <h2 className="text-lg font-medium tracking-tight">
+                                                General Stats
+                                            </h2>
+                                            <p className="mt-1 max-w-2xl text-sm text-gray-500">General information.</p>
+                                        </div>
+                                        <div className="pt-2">
+                                            <dl className="grid grid-cols-2 gap-y-8">
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Total Revenue</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">${productivityData.total_revenue.toLocaleString()}</dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Services Completed</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{productivityData.services_completed}</dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Retainers Completed</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{productivityData.retainers_completed}</dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Jobs Completed</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{productivityData.jobs_completed}</dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Photos Uploaded</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{productivityData.photos_uploaded}</dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Comments Created</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{productivityData.comments_created}</dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Lastest Service</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">
+                                                    <ReactTimeAgo date={new Date(productivityData.last_service_date)} locale="en-US" timeStyle="twitter" />
+                                                </dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Lastest Retainer</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">
+                                                    <ReactTimeAgo date={new Date(productivityData.last_retainer_service_date)} locale="en-US" timeStyle="twitter" />
+                                                </dd>
+                                            </div>
+                                            
+                                            </dl>
+                                        </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            <div>
+                                <div className="pt-2 border-b border-gray-200 pb-3">
+                                    <h2 className="text-lg font-medium tracking-tight">
+                                        Recent Services
+                                    </h2>
+                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Data gathered from the last 100 completed services.</p>
+                                </div>
+                                <div className="pr-2 text-gray-500">
+                                    {productivityData.recent_service_stats.map((service, index) => (
+                                        <div key={index} className="border-b border-gray-200">
+                                            <div className="truncate overflow-ellipsis w-80 font-medium pt-4 text-sm" >{service.service}</div>
+                                            <div className="grid grid-cols-2 text-sm px-6 py-2 pb-4">
+                                                {service.stats.map((stat, index) => (
+                                                    <>
+                                                    <div>{stat.aircraft}</div>
+                                                    <div className="text-right font-medium">
+                                                        {stat.time_to_complete} <span className="ml-1 text-xs text-gray-500 font-normal">avg</span>
+                                                    </div>
+                                                    </>
+                                                ))}  
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
+                                        gap-8 gap-y-8 gap-x-28 my-8 xl:pt-8">
+                            <div className="">
+                                <div className="text-lg font-medium tracking-tight">Top 5 Services</div>
+                                <div className="pr-2 text-gray-500">
+                                    {productivityData.top_five_services.map((service, index) => (
+                                        <div key={index}>
+                                        <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                            <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
+                                            <div className="text-right">
+                                                <div>
+                                                    <span className="font-medium">{service.total}</span> <span className="text-xs">times</span>
+                                                </div>
+                                                <div>{service.percentage + '%'}</div>
+                                            </div>
+                                        </div>
+                                        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                                            <div className="h-1.5 rounded-full bg-blue-500" style={{width: service.percentage + '%'}}></div>
+                                        </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="">
+                                <div className="text-lg font-medium tracking-tight">Top 5 Retainers</div>
+                                <div className="pr-2 text-gray-500">
+                                    {productivityData.top_five_retainer_services.map((service, index) => (
+                                    <div key={index}>
+                                        <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                        <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
+                                        <div className="text-right">
+                                            <div>
+                                            <span className="font-medium">{service.total}</span> <span className="text-xs">times</span>
+                                            </div>
+                                            <div>{service.percentage + '%'}</div>
+                                        </div>
+                                        </div>
+                                        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                                        <div className="h-1.5 rounded-full bg-blue-500" style={{width: service.percentage + '%'}}></div>
+                                        </div>
+                                    </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 )}
 
