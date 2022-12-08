@@ -168,6 +168,9 @@ const UserProductivity = () => {
                             <div className="">
                                 <div className="text-lg font-medium tracking-tight">Top 5 Services</div>
                                 <div className="pr-2 text-gray-500">
+                                    {productivityData.top_five_services.length === 0 && (
+                                        <div className="m-auto text-sm text-center mt-20">No services found.</div>
+                                    )}
                                     {productivityData.top_five_services.map((service, index) => (
                                         <div key={index}>
                                         <div className="flex justify-between py-3 pb-1 text-sm gap-3">
@@ -190,21 +193,24 @@ const UserProductivity = () => {
                             <div className="">
                                 <div className="text-lg font-medium tracking-tight">Top 5 Retainers</div>
                                 <div className="pr-2 text-gray-500">
+                                    {productivityData.top_five_retainer_services.length === 0 && (
+                                        <div className="m-auto text-sm text-center mt-20">No retainers found.</div>
+                                    )}
                                     {productivityData.top_five_retainer_services.map((service, index) => (
-                                    <div key={index}>
-                                        <div className="flex justify-between py-3 pb-1 text-sm gap-3">
-                                        <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
-                                        <div className="text-right">
-                                            <div>
-                                            <span className="font-medium">{service.total}</span> <span className="text-xs">times</span>
+                                        <div key={index}>
+                                            <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                            <div className="truncate overflow-ellipsis w-64" >{service.name}</div>
+                                            <div className="text-right">
+                                                <div>
+                                                <span className="font-medium">{service.total}</span> <span className="text-xs">times</span>
+                                                </div>
+                                                <div>{service.percentage + '%'}</div>
                                             </div>
-                                            <div>{service.percentage + '%'}</div>
+                                            </div>
+                                            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                                            <div className="h-1.5 rounded-full bg-blue-500" style={{width: service.percentage + '%'}}></div>
+                                            </div>
                                         </div>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
-                                        <div className="h-1.5 rounded-full bg-blue-500" style={{width: service.percentage + '%'}}></div>
-                                        </div>
-                                    </div>
                                     ))}
                                 </div>
                             </div>
