@@ -88,7 +88,7 @@ const UserProductivity = () => {
                                             <h2 className="text-lg font-medium tracking-tight">
                                                 General Stats
                                             </h2>
-                                            <p className="mt-1 max-w-2xl text-sm text-gray-500">General information.</p>
+                                            <p className="mt-1 max-w-2xl text-sm text-gray-500">Checkout the overall statistics.</p>
                                         </div>
                                         <div className="pt-2">
                                             <dl className="grid grid-cols-2 gap-y-8">
