@@ -94,19 +94,19 @@ const UserProductivity = () => {
                                             <dl className="grid grid-cols-2 gap-y-8">
                                             <div className="">
                                                 <dt className="text-sm font-medium text-gray-500">Total Revenue</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">${productivityData.total_revenue.toLocaleString()}</dd>
+                                                <dd className="mt-1 text-sm text-green-600 font-medium">${productivityData.total_revenue.toLocaleString()}</dd>
                                             </div>
                                             <div className="">
                                                 <dt className="text-sm font-medium text-gray-500">Services Completed</dt>
                                                 <dd className="mt-1 text-sm text-gray-900">{productivityData.services_completed}</dd>
                                             </div>
                                             <div className="">
-                                                <dt className="text-sm font-medium text-gray-500">Retainers Completed</dt>
-                                                <dd className="mt-1 text-sm text-gray-900">{productivityData.retainers_completed}</dd>
-                                            </div>
-                                            <div className="">
                                                 <dt className="text-sm font-medium text-gray-500">Jobs Completed</dt>
                                                 <dd className="mt-1 text-sm text-gray-900">{productivityData.jobs_completed}</dd>
+                                            </div>
+                                            <div className="">
+                                                <dt className="text-sm font-medium text-gray-500">Retainers Completed</dt>
+                                                <dd className="mt-1 text-sm text-gray-900">{productivityData.retainers_completed}</dd>
                                             </div>
                                             <div className="">
                                                 <dt className="text-sm font-medium text-gray-500">Photos Uploaded</dt>
@@ -140,7 +140,7 @@ const UserProductivity = () => {
                                     <h2 className="text-lg font-medium tracking-tight">
                                         Recent Services
                                     </h2>
-                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Data gathered from the last 100 completed services.</p>
+                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Data gathered from the last 50 completed services.</p>
                                 </div>
                                 <div className="pr-2 text-gray-500">
                                     {productivityData.recent_service_stats.map((service, index) => (
