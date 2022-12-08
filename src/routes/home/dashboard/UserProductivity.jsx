@@ -91,7 +91,7 @@ const UserProductivity = () => {
                                             <p className="mt-1 max-w-2xl text-sm text-gray-500">Checkout the overall statistics.</p>
                                         </div>
                                         <div className="pt-2">
-                                            <dl className="grid grid-cols-2 gap-y-8">
+                                            <dl className="grid grid-cols-2 gap-y-6">
                                             <div className="">
                                                 <dt className="text-sm font-medium text-gray-500">Total Revenue</dt>
                                                 <dd className="mt-1 text-sm text-green-600 font-medium">${productivityData.total_revenue.toLocaleString()}</dd>
@@ -145,7 +145,7 @@ const UserProductivity = () => {
                                 <div className="pr-2 text-gray-500">
                                     {productivityData.top_five_airports.map((airport, index) => (
                                         <div key={index} className="m-auto max-w-sm">
-                                            <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                            <div className="flex justify-between py-3 text-sm gap-3">
                                                 <div className="truncate overflow-ellipsis w-64" >{airport.job__airport__name}</div>
                                                 <div className="text-right">
                                                     <div>
