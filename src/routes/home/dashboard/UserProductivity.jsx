@@ -136,10 +136,15 @@ const UserProductivity = () => {
                                 </div>
                             </div>
                             <div className="">
-                                <div className="text-lg font-medium tracking-tight">Top 5 Airports</div>
+                                <div className="py-2 border-b border-gray-200 pb-3">
+                                    <h2 className="text-lg font-medium tracking-tight">
+                                        Top 5 Airports
+                                    </h2>
+                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Airports where services have been completed.</p>
+                                </div>
                                 <div className="pr-2 text-gray-500">
                                     {productivityData.top_five_airports.map((airport, index) => (
-                                        <div key={index}>
+                                        <div key={index} className="m-auto max-w-sm">
                                             <div className="flex justify-between py-3 pb-1 text-sm gap-3">
                                                 <div className="truncate overflow-ellipsis w-64" >{airport.job__airport__name}</div>
                                                 <div className="text-right">
@@ -229,10 +234,15 @@ const UserProductivity = () => {
                                 </div>
                             </div>
                             <div className="">
-                                <div className="text-lg font-medium tracking-tight">Top 5 Aircrafts</div>
+                                <div className="py-2 border-b border-gray-200 pb-3">
+                                    <h2 className="text-lg font-medium tracking-tight">
+                                        Top 5 Aircrafts
+                                    </h2>
+                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Aircrafts where services have been completed.</p>
+                                </div>
                                 <div className="pr-2 text-gray-500">
                                     {productivityData.top_five_aircraft_types.map((aircraft, index) => (
-                                        <div key={index}>
+                                        <div key={index} className="m-auto max-w-sm">
                                             <div className="flex justify-between py-3 pb-1 text-sm gap-3">
                                             <div className="truncate overflow-ellipsis w-64" >{aircraft.job__aircraftType__name}</div>
                                             <div className="text-right">
