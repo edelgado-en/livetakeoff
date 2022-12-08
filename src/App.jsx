@@ -52,6 +52,7 @@ import CustomerPremium from './routes/home/customer/CustomerPremium';
 import CustomerEditJob from './routes/job/CustomerEditJob';
 
 import TeamProductivity from './routes/home/dashboard/TeamProductivity';
+import UserProductivity from './routes/home/dashboard/UserProductivity';
 import TailNumberReport from './routes/home/dashboard/TailNumberReport';
 import ServicesByAirport from './routes/home/dashboard/ServicesByAirport';
 import RetainerCustomers from './routes/home/dashboard/RetainerCustomers';
@@ -142,6 +143,7 @@ const  App = () => {
                       <Route path="jobs" element={<Jobs />}/>
                       
                       <Route path="team-productivity" element={<TeamProductivity />} />
+                      <Route path="user-productivity/:id" element={<UserProductivity />} />
                       <Route path="tail-report" element={<TailNumberReport />} />
                       <Route path="services-by-airport" element={<ServicesByAirport />} />
                       <Route path="retainers" element={<RetainerCustomers />} />

@@ -1,17 +1,14 @@
 
 
 import { useEffect, useState, Fragment } from 'react'
-
 import { UsersIcon, CashIcon, BriefcaseIcon, ArrowSmRightIcon, CheckIcon, ChevronDownIcon} from '@heroicons/react/outline'
-
 import { Listbox, Transition, Menu, Popover, Disclosure, Dialog } from '@headlessui/react'
 
+import { Link } from 'react-router-dom'
 import { toast } from "react-toastify"
-
 import * as api from './apiService'
 
 import AnimatedPage from '../../../components/animatedPage/AnimatedPage'
-
 import Loader from '../../../components/loader/Loader'
 
 const WrenchIcon = () => {
@@ -35,7 +32,7 @@ const Wrench2Icon = () => {
 
 const dateOptions = [
   { id: 'yesterday', name: 'Yesterday' },
-  { id: 'last7Days', name: 'Last Seven Days' },
+  { id: 'last7Days', name: 'Last 7 Days' },
   { id: 'lastWeek', name: 'Last Week' },
   { id: 'MTD', name: 'Month to Date' },
   { id: 'lastMonth', name: 'Last Month' },
@@ -265,7 +262,7 @@ const TeamProductivity = () => {
                             <div className="text-right font-medium">${user.total_revenue.toLocaleString()}</div>
                           </div>
                           <div className="w-full text-right text-sm text-blue-500">
-                            <span className="cursor-pointer">more <ArrowSmRightIcon className="h-4 w-4 inline-block"/></span>
+                            <Link to={`/user-productivity/${user.id}`} className="cursor-pointer">more <ArrowSmRightIcon className="h-4 w-4 inline-block"/></Link>
                           </div>
                         </div>
                       </div>
