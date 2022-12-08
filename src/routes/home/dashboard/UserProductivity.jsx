@@ -119,13 +119,17 @@ const UserProductivity = () => {
                                             <div className="">
                                                 <dt className="text-sm font-medium text-gray-500">Lastest Service</dt>
                                                 <dd className="mt-1 text-sm text-gray-900">
-                                                    <ReactTimeAgo date={new Date(productivityData.last_service_date)} locale="en-US" timeStyle="twitter" />
+                                                    {productivityData.last_service_date ? (
+                                                        <ReactTimeAgo date={new Date(productivityData.last_service_date)} locale="en-US" timeStyle="twitter" />
+                                                    ): 'None'}
                                                 </dd>
                                             </div>
                                             <div className="">
                                                 <dt className="text-sm font-medium text-gray-500">Lastest Retainer</dt>
                                                 <dd className="mt-1 text-sm text-gray-900">
-                                                    <ReactTimeAgo date={new Date(productivityData.last_retainer_service_date)} locale="en-US" timeStyle="twitter" />
+                                                    {productivityData.last_retainer_service_date ? (
+                                                        <ReactTimeAgo date={new Date(productivityData.last_retainer_service_date)} locale="en-US" timeStyle="twitter" />
+                                                    ): 'None'}
                                                 </dd>
                                             </div>
                                             
