@@ -79,7 +79,7 @@ const UserProductivity = () => {
                         </div>
 
                         <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
-                                        gap-8 gap-y-8 gap-x-28 my-8">
+                                        gap-8 gap-y-12 gap-x-28 my-8">
                             <div>
                                 <div className="space-y-6 lg:col-span-2 lg:col-start-1">
                                     <section>
@@ -135,26 +135,18 @@ const UserProductivity = () => {
                                     </section>
                                 </div>
                             </div>
-                            <div>
-                                <div className="pt-2 border-b border-gray-200 pb-3">
-                                    <h2 className="text-lg font-medium tracking-tight">
-                                        Recent Services
-                                    </h2>
-                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Data gathered from the last 50 completed services.</p>
-                                </div>
+                            <div className="">
+                                <div className="text-lg font-medium tracking-tight">Top 5 Airports</div>
                                 <div className="pr-2 text-gray-500">
-                                    {productivityData.recent_service_stats.map((service, index) => (
-                                        <div key={index} className="border-b border-gray-200">
-                                            <div className="truncate overflow-ellipsis w-80 font-medium pt-4 text-sm" >{service.service}</div>
-                                            <div className="grid grid-cols-2 text-sm px-6 py-2 pb-4">
-                                                {service.stats.map((stat, index) => (
-                                                    <>
-                                                    <div>{stat.aircraft}</div>
-                                                    <div className="text-right font-medium">
-                                                        {stat.time_to_complete} <span className="ml-1 text-xs text-gray-500 font-normal">avg</span>
+                                    {productivityData.top_five_airports.map((airport, index) => (
+                                        <div key={index}>
+                                            <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                                <div className="truncate overflow-ellipsis w-64" >{airport.job__airport__name}</div>
+                                                <div className="text-right">
+                                                    <div>
+                                                        <span className="font-medium">{airport.count}</span> <span className="text-xs">times</span>
                                                     </div>
-                                                    </>
-                                                ))}  
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
@@ -163,7 +155,7 @@ const UserProductivity = () => {
                         </div>
 
                         <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
-                                        gap-8 gap-y-8 gap-x-28 my-8 xl:pt-8">
+                                        gap-8 gap-y-12 gap-x-28 my-8 xl:pt-8">
                             <div className="">
                                 <div className="text-lg font-medium tracking-tight">Top 5 Services</div>
                                 <div className="pr-2 text-gray-500">
@@ -208,6 +200,54 @@ const UserProductivity = () => {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
+                                        gap-8 gap-y-8 gap-x-28 my-8 xl:pt-8">
+                            <div>
+                                <div className="pt-2 border-b border-gray-200 pb-3">
+                                    <h2 className="text-lg font-medium tracking-tight">
+                                        Recent Services
+                                    </h2>
+                                    <p className="mt-1 max-w-2xl text-sm text-gray-500">Data gathered from the last 50 completed services.</p>
+                                </div>
+                                <div className="pr-2 text-gray-500">
+                                    {productivityData.recent_service_stats.map((service, index) => (
+                                        <div key={index} className="border-b border-gray-200">
+                                            <div className="truncate overflow-ellipsis w-80 font-medium pt-4 text-sm" >{service.service}</div>
+                                            <div className="grid grid-cols-2 text-sm px-6 py-2 pb-4">
+                                                {service.stats.map((stat, index) => (
+                                                    <>
+                                                    <div>{stat.aircraft}</div>
+                                                    <div className="text-right font-medium">
+                                                        {stat.time_to_complete} <span className="ml-1 text-xs text-gray-500 font-normal">avg</span>
+                                                    </div>
+                                                    </>
+                                                ))}  
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="">
+                                <div className="text-lg font-medium tracking-tight">Top 5 Aircrafts</div>
+                                <div className="pr-2 text-gray-500">
+                                    {productivityData.top_five_aircraft_types.map((aircraft, index) => (
+                                        <div key={index}>
+                                            <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                            <div className="truncate overflow-ellipsis w-64" >{aircraft.job__aircraftType__name}</div>
+                                            <div className="text-right">
+                                                <div>
+                                                <span className="font-medium">{aircraft.count}</span> <span className="text-xs">times</span>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        
 
 
                     </div>
