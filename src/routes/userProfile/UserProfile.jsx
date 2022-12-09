@@ -335,7 +335,7 @@ const UserProfile = () => {
                                     Receive SMS notifications
                                 </Switch.Label>
                                 <Switch.Description className="text-sm text-gray-500">
-                                    Get text messages when jobs change status.
+                                    Get text messages when jobs change status. <span className="text-xs">(Mobile messaging rates may apply)</span>
                                 </Switch.Description>
                             </div>
                             <Switch

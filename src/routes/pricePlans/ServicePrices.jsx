@@ -216,7 +216,7 @@ const ServicePrices = () => {
                     <div className="flex justify-between">
                       <h2 className="text-2xl font-medium text-gray-900">Aircrafts</h2>
                       <div>
-                          <Link to="/create-aircraft">
+                          {/* <Link to="/create-aircraft">
                           <button 
                               type="button" 
                               className="flex items-center justify-center rounded-full bg-red-600 p-1
@@ -228,7 +228,7 @@ const ServicePrices = () => {
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
                               </svg>
                           </button>
-                          </Link>
+                          </Link> */}
                       </div>
                     </div>
                     <p className="mt-1 text-sm text-gray-600">Search list of {totalAircraftTypes} aircrafts types</p>
@@ -424,7 +424,7 @@ const ServicePrices = () => {
                 <div className="flex justify-between">
                   <h2 className="text-2xl font-medium text-gray-900">Aircrafts</h2>
                   <div>
-                      <Link to="/create-aircraft">
+                      {/* <Link to="/create-aircraft">
                         <button type="button" className="flex items-center justify-center rounded-full bg-red-600 p-1
                                                     text-white hover:bg-red-700 focus:outline-none focus:ring-2
                                                         focus:ring-red-500 focus:ring-offset-2">
@@ -434,7 +434,7 @@ const ServicePrices = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
                             </svg>
                         </button>
-                      </Link>
+                      </Link> */}
                   </div>
                 </div>
                 <p className="mt-1 text-sm text-gray-600">Search list of {totalAircraftTypes} aircraft types</p>

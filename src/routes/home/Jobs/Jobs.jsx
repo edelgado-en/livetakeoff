@@ -319,7 +319,7 @@ const JobsQueue = () => {
             <div className="">
               <h1 className="text-2xl font-semibold text-gray-600">Jobs Queue</h1>
               <p className="mt-1 text-sm text-gray-500">
-                Total jobs: <span className="text-gray-900">{totalJobs}</span>
+                Total: <span className="text-gray-900">{totalJobs}</span>
               </p>
             </div>
             <div className="text-right">

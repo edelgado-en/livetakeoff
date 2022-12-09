@@ -459,8 +459,8 @@ const CompleteList = () => {
                 <div className="flex justify-between border-b border-gray-200 py-2">
                     <div className="flex gap-2">
                         <h1 className="text-lg font-semibold text-gray-700">Completed Jobs</h1>
-                        <p className="text-xs text-gray-700 relative top-2">
-                            Total jobs: {totalJobs}
+                        <p className="text-sm text-gray-700 relative" style={{top: '5px'}}>
+                            Total: {totalJobs}
                         </p>
                     </div>
                     <div>

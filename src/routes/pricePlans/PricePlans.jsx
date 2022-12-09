@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import PricePlanDeleteModal from "./PricePlanDeleteModal";
 import PricePlanEditModal from "./PricePlanEditModal";
 
+import ReactTimeAgo from 'react-time-ago'
+
 import * as api from './apiService'
 
 
@@ -128,18 +130,18 @@ const PricePlans = () => {
                                     </Link>
                                 </div>
                                 <div className="px-6 pt-2 pb-8">
-                                    <ul role="list" className="mt-6 space-y-4">
+                                    <ul className="mt-6 space-y-4">
                                         <li className="flex space-x-3">
-                                            <UserIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
-                                            <span className="text-xs text-gray-500">Created by {pricingPlan.created_by ? pricingPlan.created_by.username : 'System'}</span>
+                                            <UserIcon className="h-5 w-5 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                                            <span className="text-sm text-gray-500">Created by {pricingPlan.created_by ? pricingPlan.created_by.username : 'System'}</span>
                                         </li>
                                         <li className="flex space-x-3">
-                                            <CalendarIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
-                                            <span className="text-xs text-gray-500">Created on {pricingPlan.created_at}</span>
+                                            <CalendarIcon className="h-5 w-5 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                                            <span className="text-sm text-gray-500">Created on <ReactTimeAgo date={new Date(pricingPlan.created_at)} locale="en-US" timeStyle="twitter" /></span>
                                         </li>
                                         <li className="flex space-x-3">
-                                            <UsersIcon className="h-4 w-4 flex-shrink-0 text-gray-500" aria-hidden="true" />
-                                            <span className="text-xs text-gray-500">{pricingPlan.num_customers} customer(s) currently using it</span>
+                                            <UsersIcon className="h-5 w-5 flex-shrink-0 text-gray-500" aria-hidden="true" />
+                                            <span className="text-sm text-gray-500">{pricingPlan.num_customers} customer(s) currently using it</span>
                                         </li>
 
                                     </ul>

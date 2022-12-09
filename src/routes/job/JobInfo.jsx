@@ -333,7 +333,7 @@ const JobInfo = () => {
                                                   border-gray-300 bg-gray-50 px-1 text-xs
                                                     text-gray-600 shadow-sm hover:bg-gray-50 ">M</div>
                                 )}
-                                <div>{'$'}{jobDetails.price ? jobDetails.price : '0.00'}</div>
+                                <div>{'$'}{jobDetails.price ? jobDetails.price.toLocaleString() : '0.00'}</div>
                                 {jobDetails.is_auto_priced && location.pathname.includes('jobs') && (
                                     <Link 
                                         to={`/jobs/${jobDetails.id}/price-breakdown`}
