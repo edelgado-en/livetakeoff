@@ -12,3 +12,7 @@ export const getJobActivities = () => {
 export const getAirports = (request: any) => {
     return httpService.post(`/api/airports`, request);
 }
+
+export const sendPremiumRequest = (data: any) => {
+    return httpService.post(`/api/premium/contact`, data)
+}
