@@ -21,6 +21,6 @@ export const getTeamProductivityStats = (data: any) => {
     return httpService.post('/api/team-productivity', data)
 }
 
-export const getUserProductivityStats = (id: number) => {
-    return httpService.get(`/api/user-productivity/${id}/`)
+export const getUserProductivityStats = (id: number, data: any) => {
+    return httpService.post(`/api/user-productivity/${id}/`, data)
 }
