@@ -331,7 +331,7 @@ const JobInfo = () => {
                                 {!jobDetails.is_auto_priced && (
                                     <div className="inline-flex items-center rounded border
                                                   border-gray-300 bg-gray-50 px-1 text-xs
-                                                    text-gray-600 shadow-sm hover:bg-gray-50 ">M</div>
+                                                    text-gray-600 shadow-sm hover:bg-gray-50">M</div>
                                 )}
                                 <div>{'$'}{jobDetails.price ? jobDetails.price.toLocaleString() : '0.00'}</div>
                                 {jobDetails.is_auto_priced && location.pathname.includes('jobs') && (
