@@ -153,15 +153,19 @@ const Topbar = () => {
                         >
                           Completed Jobs
                         </Link>
-                        <Link
-                          to="/estimates"
-                          className={classNames(
-                            location.pathname.includes('estimates') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                            'px-3 py-2 rounded-md text-sm font-medium text-white'
-                          )}
-                        >
-                          Estimates
-                        </Link>
+
+                        {currentUser.enableEstimates && (
+                          <Link
+                            to="/estimates"
+                            className={classNames(
+                              location.pathname.includes('estimates') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}
+                          >
+                            Estimates
+                          </Link>
+                        )}
+
                         <Link
                           to="/tail-report"
                           className={classNames(
@@ -409,17 +413,21 @@ const Topbar = () => {
                         Completed Jobs
                     </Disclosure.Button>
                   </Link>
-                  <Link 
-                      to="/estimates">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("estimates") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
-                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
-                      )}
-                    >
-                        Estimates
-                    </Disclosure.Button>
-                  </Link>
+                  
+                  {currentUser.enableEstimates && (
+                    <Link 
+                        to="/estimates">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("estimates") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Estimates
+                      </Disclosure.Button>
+                    </Link>
+                  )}
+
                   <Link 
                       to="/tail-report">
                     <Disclosure.Button
