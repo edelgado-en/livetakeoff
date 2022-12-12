@@ -1,6 +1,5 @@
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
-
 const PrivacyPolicy = () => {
 
     return (

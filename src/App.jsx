@@ -46,6 +46,7 @@ import Layout from './layout/Layout';
 import Footer from './components/footer/Footer';
 import PrivacyPolicy from './routes/privacyPolicy/PrivacyPolicy';
 import ChangeLog from './routes/changeLog/ChangeLog';
+import TermsAndConditions from './routes/termsAndConditions/TermsAndConditions';
 
 import CustomerHome from './routes/home/customer/CustomerHome';
 import CustomerPremium from './routes/home/customer/CustomerPremium';
@@ -115,6 +116,7 @@ const  App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
                 <Route path="/shared" element={<SharedLayout />}>
                   <Route path="jobs/:encoded_id" element={<SharedJob />} />
