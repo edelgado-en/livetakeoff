@@ -40,18 +40,33 @@ const availableStatuses = [
 const Estimates = () => {
     const [loading, setLoading] = useState(true)
     const [estimates, setEstimates] = useState([])
+    const [searchText, setSearchText] = useState(localStorage.getItem('estimateSearchText') || '')
     const [totalEstimates, setTotalEstimates] = useState(0)
 
     useEffect(() => {
-        searchEstimates()
-    }, [])
+        //Basic throttling
+        let timeoutID = setTimeout(() => {
+            searchEstimates()
+        }, 300);
+    
+        return () => {
+          clearTimeout(timeoutID);
+        };
+    
+    }, [searchText])
+
+    useEffect(() => {
+        localStorage.setItem('estimateSearchText', searchText)
+      
+    }, [searchText])
 
     const searchEstimates = async () => {
         setLoading(true)
 
         const request = {
             status: 'All',
-            customer: 'All'
+            customer: 'All',
+            searchText: localStorage.getItem('estimateSearchText'),
         }
 
         try {
@@ -65,7 +80,14 @@ const Estimates = () => {
         } catch (error) {
             setLoading(false)
         }
+    }
 
+    const handleKeyDown = event => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          
+          searchEstimates();
+        }
     }
 
     return (
@@ -91,6 +113,27 @@ const Estimates = () => {
                                 New Estimate
                             </button>
                         </Link>
+                    </div>
+                </div>
+
+                <div className="w-full mt-4">
+                    <div className="relative border-b border-gray-200">
+                        <div 
+                            onClick={() => searchEstimates()}
+                            className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer">
+                            <MagnifyingGlassIcon className="h-4 w-4 text-gray-400 cursor-pointer" aria-hidden="true" />
+                        </div>
+                        <input
+                            type="search"
+                            name="search"
+                            id="search"
+                            value={searchText}
+                            onChange={event => setSearchText(event.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className="block w-full  pl-10 focus:border-sky-500 border-none py-4 
+                                    focus:ring-sky-500 text-sm"
+                            placeholder="search by tail"
+                        />
                     </div>
                 </div>
 
