@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../userProfile/userSlice";
 
+import Input from 'react-phone-number-input/input'
+
 import AnimatedPage from "../../components/animatedPage/AnimatedPage"
 import { toast } from "react-toastify"
 import { useForm } from "react-hook-form";
@@ -21,6 +23,7 @@ function classNames(...classes) {
 
 const UserProfile = () => {
     const [user, setUser] = useState({})
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [receiveSMSNotifications, setReceiveSMSNotifications] = useState(false)
     const [receiveEmailNotifications, setReceiveEmailNotifications] = useState(false)
     const [images, setImages] = useState([]);
@@ -43,6 +46,7 @@ const UserProfile = () => {
     const getUserDetails = async () => {
         const { data } = await api.getUserDetails();
 
+        setPhoneNumber(data.phone_number)
         setReceiveEmailNotifications(data.receive_email_notifications)
         setReceiveSMSNotifications(data.receive_sms_notifications)
 
@@ -74,6 +78,7 @@ const UserProfile = () => {
             first_name: data.first_name,
             last_name: data.last_name,
             email: data.email,
+            phone_number: phoneNumber,
             email_notifications: receiveEmailNotifications,
             sms_notifications: receiveSMSNotifications
         }
@@ -288,6 +293,19 @@ const UserProfile = () => {
                                     py-2 px-3 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm"
                     />
                     { errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p> }
+                </div>
+
+                <div className="col-span-12">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                        Phone
+                    </label>
+                    <Input
+                          country="US"
+                          className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                          focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                          value={phoneNumber}
+                          onChange={setPhoneNumber}
+                    />
                 </div>
             </div>
         </div>

@@ -893,15 +893,17 @@ const CreateJob = () => {
                                            w-full h-10
                                           border-gray-300 bg-white px-4 py-2 text-sm
                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                {estimatedArrivalDate?.toLocaleString()}
+                                {estimatedArrivalDate?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                             </button>
                             {estimatedArrivalDateOpen && (
                                 <DatePicker
                                 selected={estimatedArrivalDate}
                                 onChange={(date) => handleEstimatedArrivalDateChange(date)}
-                                timeInputLabel="Time:"
-                                dateFormat="MM/dd/yyyy h:mm aa"
-                                showTimeInput
+                                locale="pt-BR"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={15}
+                                dateFormat="Pp"
                                 inline
                                 />
                             )}
@@ -924,15 +926,17 @@ const CreateJob = () => {
                                            w-full h-10
                                           border-gray-300 bg-white px-4 py-2 text-sm
                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                {estimatedDepartureDate ? estimatedDepartureDate.toLocaleString() : 'No ETD yet'}
+                                {estimatedDepartureDate ? estimatedDepartureDate.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'}) : 'No ETD yet'}
                             </button>
                             {estimatedDepartureDateOpen && (
                                 <DatePicker
                                     selected={estimatedDepartureDate}
                                     onChange={(date) => handleEstimatedDepartureDateChange(date)}
-                                    timeInputLabel="Time:"
-                                    dateFormat="MM/dd/yyyy h:mm aa"
-                                    showTimeInput
+                                    locale="pt-BR"
+                                    showTimeSelect
+                                    timeFormat="HH:mm"
+                                    timeIntervals={15}
+                                    dateFormat="Pp"
                                     inline
                                 />
                             )}
@@ -954,15 +958,17 @@ const CreateJob = () => {
                                            w-full h-10
                                           border-gray-300 bg-white px-4 py-2 text-sm
                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                {completeByDate?.toLocaleString()}
+                                {completeByDate?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                             </button>
                             {completeByDateOpen && (
                                 <DatePicker
                                     selected={completeByDate}
                                     onChange={(date) => handleCompleteByDateChange(date)}
-                                    timeInputLabel="Time:"
-                                    dateFormat="MM/dd/yyyy h:mm aa"
-                                    showTimeInput
+                                    locale="pt-BR"
+                                    showTimeSelect
+                                    timeFormat="HH:mm"
+                                    timeIntervals={15}
+                                    dateFormat="Pp"
                                     inline
                                 />
                             )}
@@ -1164,15 +1170,13 @@ const CreateJob = () => {
                                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                                 Create Job
                             </button>
-                            <button onClick={() => navigate(-1)} className="w-full">
-                                <button
+                            <button onClick={() => navigate(-1)}
                                     type="button"
                                     className="rounded-md border border-gray-300 bg-white w-full
                                             py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
                                             hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                                 >
                                     Cancel
-                                </button>  
                             </button>
                         </div>
 

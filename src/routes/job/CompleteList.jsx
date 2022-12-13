@@ -571,15 +571,17 @@ const CompleteList = () => {
                                                                      h-8 w-full
                                                                     border-gray-300 bg-white px-1 py-1 
                                                                         text-gray-700 shadow-sm hover:bg-gray-50">
-                                                            {requestedDateFrom?.toLocaleString()}
+                                                            {requestedDateFrom?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                         </button>
                                                         {requestedDateFromOpen && (
                                                             <DatePicker
                                                                 selected={requestedDateFrom}
                                                                 onChange={(date) => handleRequestedDateFromChange(date)}
-                                                                timeInputLabel="Time:"
-                                                                dateFormat="MM/dd/yyyy h:mm aa"
-                                                                showTimeInput
+                                                                locale="pt-BR"
+                                                                showTimeSelect
+                                                                timeFormat="HH:mm"
+                                                                timeIntervals={15}
+                                                                dateFormat="Pp"
                                                                 inline
                                                             />
                                                         )}
@@ -601,16 +603,18 @@ const CompleteList = () => {
                                                                      h-8 w-full
                                                                     border-gray-300 bg-white px-1 py-1 
                                                                         text-gray-700 shadow-sm hover:bg-gray-50">
-                                                            {requestedDateTo?.toLocaleString()}
+                                                            {requestedDateTo?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                         </button>
                                                         {requestedDateToOpen && (
                                                             <DatePicker
-                                                            selected={requestedDateTo}
-                                                            onChange={(date) => handleRequestedDateToChange(date)}
-                                                            timeInputLabel="Time:"
-                                                            dateFormat="MM/dd/yyyy h:mm aa"
-                                                            showTimeInput
-                                                            inline
+                                                                selected={requestedDateTo}
+                                                                onChange={(date) => handleRequestedDateToChange(date)}
+                                                                locale="pt-BR"
+                                                                showTimeSelect
+                                                                timeFormat="HH:mm"
+                                                                timeIntervals={15}
+                                                                dateFormat="Pp"
+                                                                inline
                                                             />
                                                         )}
                                                     </div>
@@ -638,15 +642,17 @@ const CompleteList = () => {
                                                                      h-8 w-full
                                                                     border-gray-300 bg-white px-1 py-1 
                                                                         text-gray-700 shadow-sm hover:bg-gray-50">
-                                                            {completionDateFrom?.toLocaleString()}
+                                                            {completionDateFrom?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                         </button>
                                                         {completionDateFromOpen && (
                                                             <DatePicker
                                                                 selected={completionDateFrom}
                                                                 onChange={(date) => handleCompletionDateFromChange(date)}
-                                                                timeInputLabel="Time:"
-                                                                dateFormat="MM/dd/yyyy h:mm aa"
-                                                                showTimeInput
+                                                                locale="pt-BR"
+                                                                showTimeSelect
+                                                                timeFormat="HH:mm"
+                                                                timeIntervals={15}
+                                                                dateFormat="Pp"
                                                                 inline
                                                             />
                                                         )}
@@ -668,15 +674,17 @@ const CompleteList = () => {
                                                                      h-8 w-full
                                                                     border-gray-300 bg-white px-1 py-1 
                                                                         text-gray-700 shadow-sm hover:bg-gray-50">
-                                                            {completionDateTo?.toLocaleString()}
+                                                            {completionDateTo?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                         </button>
                                                         {completionDateToOpen && (
                                                             <DatePicker
                                                                 selected={completionDateTo}
                                                                 onChange={(date) => handleCompletionDateToChange(date)}
-                                                                timeInputLabel="Time:"
-                                                                dateFormat="MM/dd/yyyy h:mm aa"
-                                                                showTimeInput
+                                                                locale="pt-BR"
+                                                                showTimeSelect
+                                                                timeFormat="HH:mm"
+                                                                timeIntervals={15}
+                                                                dateFormat="Pp"
                                                                 inline
                                                             />
                                                         )}
@@ -709,15 +717,17 @@ const CompleteList = () => {
                                                                         h-8 w-full
                                                                         border-gray-300 bg-white px-1 py-1 
                                                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                {arrivalDateFrom?.toLocaleString()}
+                                                                {arrivalDateFrom?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                             </button>
                                                             {arrivalDateFromOpen && (
                                                                 <DatePicker
                                                                 selected={arrivalDateFrom}
                                                                 onChange={(date) => handleArrivalDateFromChange(date)}
-                                                                timeInputLabel="Time:"
-                                                                dateFormat="MM/dd/yyyy h:mm aa"
-                                                                showTimeInput
+                                                                locale="pt-BR"
+                                                                showTimeSelect
+                                                                timeFormat="HH:mm"
+                                                                timeIntervals={15}
+                                                                dateFormat="Pp"
                                                                 inline
                                                                 />
                                                             )}
@@ -739,16 +749,16 @@ const CompleteList = () => {
                                                                         h-8 w-full
                                                                         border-gray-300 bg-white px-1 py-1 
                                                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                {arrivalDateTo?.toLocaleString()}
+                                                                {arrivalDateTo?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                             </button>
                                                             {arrivalDateToOpen && (
                                                                 <DatePicker
-                                                                    selected={arrivalDateTo}
-                                                                    onChange={(date) => handleArrivalDateToChange(date)}
-                                                                    timeInputLabel="Time:"
-                                                                    dateFormat="MM/dd/yyyy h:mm aa"
-                                                                    showTimeInput
-                                                                    inline
+                                                                locale="pt-BR"
+                                                                showTimeSelect
+                                                                timeFormat="HH:mm"
+                                                                timeIntervals={15}
+                                                                dateFormat="Pp"
+                                                                inline
                                                                 />
                                                             )}
                                                         </div>
@@ -776,15 +786,17 @@ const CompleteList = () => {
                                                                         h-8 w-full
                                                                         border-gray-300 bg-white px-1 py-1 
                                                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                {departureDateFrom?.toLocaleString()}
+                                                                {departureDateFrom?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                             </button>
                                                             {departureDateFromOpen && (
                                                                 <DatePicker
                                                                 selected={departureDateFrom}
                                                                 onChange={(date) => handleDepartureDateFromChange(date)}
-                                                                timeInputLabel="Time:"
-                                                                dateFormat="MM/dd/yyyy h:mm aa"
-                                                                showTimeInput
+                                                                locale="pt-BR"
+                                                                showTimeSelect
+                                                                timeFormat="HH:mm"
+                                                                timeIntervals={15}
+                                                                dateFormat="Pp"
                                                                 inline
                                                                 />
                                                             )}
@@ -806,15 +818,17 @@ const CompleteList = () => {
                                                                         h-8 w-full
                                                                         border-gray-300 bg-white px-1 py-1 
                                                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                {departureDateTo?.toLocaleString()}
+                                                                {departureDateTo?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                             </button>
                                                             {departureDateToOpen && (
                                                                 <DatePicker
                                                                     selected={departureDateTo}
                                                                     onChange={(date) => handleDepartureDateToChange(date)}
-                                                                    timeInputLabel="Time:"
-                                                                    dateFormat="MM/dd/yyyy h:mm aa"
-                                                                    showTimeInput
+                                                                    locale="pt-BR"
+                                                                    showTimeSelect
+                                                                    timeFormat="HH:mm"
+                                                                    timeIntervals={15}
+                                                                    dateFormat="Pp"
                                                                     inline
                                                                 />
                                                             )}
@@ -843,7 +857,7 @@ const CompleteList = () => {
                                                                         h-8 w-full
                                                                         border-gray-300 bg-white px-1 py-1 
                                                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                {completeByDateFrom?.toLocaleString()}
+                                                                {completeByDateFrom?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                             </button>
                                                             {completeByDateFromOpen && (
                                                                 <DatePicker
@@ -873,7 +887,7 @@ const CompleteList = () => {
                                                                         h-8 w-full
                                                                         border-gray-300 bg-white px-1 py-1 
                                                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                                                {completeByDateTo?.toLocaleString()}
+                                                                {completeByDateTo?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                                                             </button>
                                                             {completeByDateToOpen && (
                                                                 <DatePicker

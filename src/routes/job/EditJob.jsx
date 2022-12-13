@@ -812,15 +812,17 @@ const EditJob = () => {
                                            w-full h-10
                                           border-gray-300 bg-white px-4 py-2 text-sm
                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                {estimatedArrivalDate?.toLocaleString()}
+                                {estimatedArrivalDate?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                             </button>
                             {estimatedArrivalDateOpen && (
                                 <DatePicker
                                 selected={estimatedArrivalDate}
                                 onChange={(date) => handleEstimatedArrivalDateChange(date)}
-                                timeInputLabel="Time:"
-                                dateFormat="MM/dd/yyyy h:mm aa"
-                                showTimeInput
+                                locale="pt-BR"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={15}
+                                dateFormat="Pp"
                                 inline
                                 />
                             )}
@@ -842,15 +844,17 @@ const EditJob = () => {
                                            w-full h-10
                                           border-gray-300 bg-white px-4 py-2 text-sm
                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                {estimatedDepartureDate?.toLocaleString()}
+                                {estimatedDepartureDate?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                             </button>
                             {estimatedDepartureDateOpen && (
                                 <DatePicker
                                     selected={estimatedDepartureDate}
                                     onChange={(date) => handleEstimatedDepartureDateChange(date)}
-                                    timeInputLabel="Time:"
-                                    dateFormat="MM/dd/yyyy h:mm aa"
-                                    showTimeInput
+                                    locale="pt-BR"
+                                    showTimeSelect
+                                    timeFormat="HH:mm"
+                                    timeIntervals={15}
+                                    dateFormat="Pp"
                                     inline
                                 />
                             )}
@@ -872,15 +876,17 @@ const EditJob = () => {
                                            w-full h-10
                                           border-gray-300 bg-white px-4 py-2 text-sm
                                             text-gray-700 shadow-sm hover:bg-gray-50">
-                                {completeByDate?.toLocaleString()}
+                                {completeByDate?.toLocaleString('en-US', {hour12: false, year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
                             </button>
                             {completeByDateOpen && (
                                 <DatePicker
                                     selected={completeByDate}
                                     onChange={(date) => handleCompleteByDateChange(date)}
-                                    timeInputLabel="Time:"
-                                    dateFormat="MM/dd/yyyy h:mm aa"
-                                    showTimeInput
+                                    locale="pt-BR"
+                                    showTimeSelect
+                                    timeFormat="HH:mm"
+                                    timeIntervals={15}
+                                    dateFormat="Pp"
                                     inline
                                 />
                             )}
