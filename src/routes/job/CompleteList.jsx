@@ -580,7 +580,7 @@ const CompleteList = () => {
                                                                 locale="pt-BR"
                                                                 showTimeSelect
                                                                 timeFormat="HH:mm"
-                                                                timeIntervals={15}
+                                                                timeIntervals={5}
                                                                 dateFormat="Pp"
                                                                 inline
                                                             />
@@ -612,7 +612,7 @@ const CompleteList = () => {
                                                                 locale="pt-BR"
                                                                 showTimeSelect
                                                                 timeFormat="HH:mm"
-                                                                timeIntervals={15}
+                                                                timeIntervals={5}
                                                                 dateFormat="Pp"
                                                                 inline
                                                             />
@@ -651,7 +651,7 @@ const CompleteList = () => {
                                                                 locale="pt-BR"
                                                                 showTimeSelect
                                                                 timeFormat="HH:mm"
-                                                                timeIntervals={15}
+                                                                timeIntervals={5}
                                                                 dateFormat="Pp"
                                                                 inline
                                                             />
@@ -683,7 +683,7 @@ const CompleteList = () => {
                                                                 locale="pt-BR"
                                                                 showTimeSelect
                                                                 timeFormat="HH:mm"
-                                                                timeIntervals={15}
+                                                                timeIntervals={5}
                                                                 dateFormat="Pp"
                                                                 inline
                                                             />
@@ -726,7 +726,7 @@ const CompleteList = () => {
                                                                 locale="pt-BR"
                                                                 showTimeSelect
                                                                 timeFormat="HH:mm"
-                                                                timeIntervals={15}
+                                                                timeIntervals={5}
                                                                 dateFormat="Pp"
                                                                 inline
                                                                 />
@@ -756,7 +756,7 @@ const CompleteList = () => {
                                                                 locale="pt-BR"
                                                                 showTimeSelect
                                                                 timeFormat="HH:mm"
-                                                                timeIntervals={15}
+                                                                timeIntervals={5}
                                                                 dateFormat="Pp"
                                                                 inline
                                                                 />
@@ -795,7 +795,7 @@ const CompleteList = () => {
                                                                 locale="pt-BR"
                                                                 showTimeSelect
                                                                 timeFormat="HH:mm"
-                                                                timeIntervals={15}
+                                                                timeIntervals={5}
                                                                 dateFormat="Pp"
                                                                 inline
                                                                 />
@@ -827,7 +827,7 @@ const CompleteList = () => {
                                                                     locale="pt-BR"
                                                                     showTimeSelect
                                                                     timeFormat="HH:mm"
-                                                                    timeIntervals={15}
+                                                                    timeIntervals={5}
                                                                     dateFormat="Pp"
                                                                     inline
                                                                 />
