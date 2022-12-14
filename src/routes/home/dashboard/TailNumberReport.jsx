@@ -646,7 +646,7 @@ const TailNumberReport = () => {
                                                                         <li key={index} className="hover:bg-gray-50 rounded-md">
                                                                             <div className="flex gap-6 text-sm">
                                                                                 <div className="text-sm text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{service.service__name}</div>
-                                                                                <div className="text-gray-500 relative top-1 text-right flex-1 py-2"><ReactTimeAgo date={new Date(service.updated_at)} locale="en-US" timeStyle="twitter" /></div>
+                                                                                <div className="text-gray-500 relative top-1 text-right flex-1 py-2"><ReactTimeAgo date={new Date(service.timestamp)} locale="en-US" timeStyle="twitter" /></div>
                                                                             </div>
                                                                         </li>
                                                                     ))}
@@ -690,7 +690,7 @@ const TailNumberReport = () => {
                                                                         <li key={index} className="hover:bg-gray-50 rounded-md">
                                                                             <div className="flex gap-6 text-sm">
                                                                                 <div className="text-sm text-gray-900 relative top-1 w-60 truncate overflow-ellipsis py-2">{retainer.retainer_service__name}</div>
-                                                                                <div className="text-gray-500 relative top-1 text-right flex-1 py-2"><ReactTimeAgo date={new Date(retainer.updated_at)} locale="en-US" timeStyle="twitter" /></div>
+                                                                                <div className="text-gray-500 relative top-1 text-right flex-1 py-2"><ReactTimeAgo date={new Date(retainer.timestamp)} locale="en-US" timeStyle="twitter" /></div>
                                                                             </div>
                                                                         </li>
                                                                     ))}
