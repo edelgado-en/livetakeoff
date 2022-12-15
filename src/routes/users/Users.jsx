@@ -153,7 +153,7 @@ const Users = () => {
                   
                   <div className="flex-shrink-0 border-t border-gray-200 p-4">
                     <div className="flex justify-between">
-                      <h2 className="text-2xl font-medium text-gray-900">Users</h2>
+                      <h2 className="text-2xl font-medium text-gray-900">Team</h2>
                       {/* <div>
                           <Link to="/create-customer">
                           <button 
@@ -246,7 +246,7 @@ const Users = () => {
               <nav className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden" aria-label="Breadcrumb">
                 <div onClick={() => setSidebarOpen(true)} className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
                   <ChevronLeftIcon className="-ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-                  <span>Users</span>
+                  <span>Team</span>
                 </div>
               </nav>
 
@@ -260,7 +260,7 @@ const Users = () => {
               <div className="px-6 pt-6 pb-4">
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <h2 className="text-2xl font-medium text-gray-900">Users</h2>
+                    <h2 className="text-2xl font-medium text-gray-900">Team</h2>
                     <span className="bg-gray-100 text-gray-700 ml-2 py-2 px-2
                                             rounded-full text-xs font-medium inline-block">{totalUsers}</span>
                   </div>
