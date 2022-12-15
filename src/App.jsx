@@ -52,6 +52,9 @@ import CustomerHome from './routes/home/customer/CustomerHome';
 import CustomerPremium from './routes/home/customer/CustomerPremium';
 import CustomerEditJob from './routes/job/CustomerEditJob';
 
+import Users from './routes/users/Users';
+import UserDetails from './routes/users/UserDetails'
+
 import TeamProductivity from './routes/home/dashboard/TeamProductivity';
 import UserProductivity from './routes/home/dashboard/UserProductivity';
 import TailNumberReport from './routes/home/dashboard/TailNumberReport';
@@ -163,6 +166,10 @@ const  App = () => {
                         <Route path="edit" element={<EditJob />} />
                         <Route path="activity" element={<JobActivityFeed />} />
                         <Route path="comments" element={<JobComments />} />
+                      </Route>
+
+                      <Route path="users" element={<Users />}>
+                        <Route path=":userId" element={<UserDetails />} />
                       </Route>
 
                       <Route path="create-customer" element={<CreateCustomer />} />
