@@ -27,6 +27,9 @@ const UserDetails = () => {
     const [totalAirports, setTotalAirports] = useState(0)
     const [loadingAirports, setLoadingAirports] = useState(false)
     const [airportSearchText, setAirportSearchText] = useState('')
+    const [airportAlreadyAdded, setAirportAlreadyAdded] = useState(false)
+
+    const [availableAirports, setAvailableAirports] = useState([])
 
     const navigate = useNavigate()
 
@@ -44,6 +47,8 @@ const UserDetails = () => {
 
     useEffect(() => {
         getUserDetails()
+        getAvailableAirports()
+        setAirportAlreadyAdded(false)
     }, [userId])
 
     const getAirports = async () => {
@@ -57,6 +62,7 @@ const UserDetails = () => {
             
             setAirports(data.results)
             setTotalAirports(data.count)
+            setAirportAlreadyAdded(false)
 
             setLoadingAirports(false)
 
@@ -76,6 +82,59 @@ const UserDetails = () => {
 
         } catch (err) {
             setLoading(false)
+        }
+    }
+
+    const getAvailableAirports = async () => {
+        try {
+            const { data } = await api.getUserAvailableAirports(userId)
+
+            setAvailableAirports(data)
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const addAvailableAirport = async (airportId) => {
+        try {
+            const request = {
+                'user_id': userId,
+                'airport_id': airportId
+            }
+
+            // check if airportId already exists in available airports array
+            const airportExists = availableAirports.find(airport => airport.id === airportId)
+
+            if (airportExists) {
+                setAirportAlreadyAdded(true)
+            } else {
+                const { data } = await api.addUserAvailableAirport(request)
+                setAirportAlreadyAdded(false)
+                setAvailableAirports([...availableAirports, data])
+            }
+
+
+        } catch (error) {
+            setAirportAlreadyAdded(false)
+        }
+    }
+
+    const deleteAvailableAirport = async (airportId) => {
+        try {
+            const request = {
+                'user_id': userId,
+                'airport_id': airportId
+            }
+
+            await api.deleteUserAvailableAirport(request)
+
+            setAirportAlreadyAdded(false)
+            
+            setAvailableAirports(availableAirports.filter(airport => airport.id !== airportId))
+
+        } catch (error) {
+            
         }
     }
 
@@ -130,9 +189,18 @@ const UserDetails = () => {
                                 <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
                                     <div className="border border-gray-200 rounded-md p-4" style={{height: '680px'}}>
                                         <div className="font-medium text-sm">
-                                            All Airports
-                                            <span className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                            rounded-full text-xs font-medium inline-block">{totalAirports}</span>
+                                            <div className="flex justify-between">
+                                                <div>
+                                                    All Airports
+                                                    <span className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                    rounded-full text-xs font-medium inline-block">{totalAirports}</span>
+                                                </div>
+                                                <div>
+                                                    {airportAlreadyAdded && (
+                                                        <div className="text-red-500 text-xs relative top-1">Airport already added</div>
+                                                    )}
+                                                </div>
+                                            </div>
 
                                             <div className="min-w-0 flex-1 my-2">
                                                 <label htmlFor="search" className="sr-only">
@@ -175,6 +243,7 @@ const UserDetails = () => {
                                                                 <div>
                                                                     <button
                                                                         type="button"
+                                                                        onClick={() => addAvailableAirport(airport.id)}
                                                                         className="inline-flex items-center rounded border
                                                                                     border-gray-300 bg-white px-2 py-1 text-xs
                                                                                     text-gray-700 shadow-sm
@@ -194,9 +263,50 @@ const UserDetails = () => {
                                         </div>
                                     </div>
                                     <div className="border border-gray-200 rounded-md p-4" style={{height: '680px'}}>
-                                        <div className="font-medium text-sm">Available Airports</div>
-                                        <div className="text-xs text-gray-500">
-                                            <div className="text-center m-auto mt-24 text-sm">No available airports set.</div>
+                                        <div className="font-medium text-sm">
+                                            Available Airports
+                                            <span className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                            rounded-full text-xs font-medium inline-block">{availableAirports.length}</span>
+                                        </div>
+                                        <div className="text-xs">
+                                            
+                                            {availableAirports.length === 0 && (
+                                                <div className="text-center m-auto mt-24 text-sm">No available airports set.</div>
+                                            )}
+
+                                            <div className="overflow-y-auto" style={{maxHeight: '560px'}}>
+                                                {availableAirports.map((airport) => (
+                                                    <div key={airport.id} className="relative">
+                                                        <ul className="">
+                                                            <li className="">
+                                                                <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                                                    <div className="flex-shrink-0 text-xs w-6 font-medium">
+                                                                        {airport.initials}
+                                                                    </div>
+                                                                    <div className="min-w-0 flex-1">
+                                                                        <p className="text-xs text-gray-900 font-normal truncate overflow-ellipsis w-60">{airport.name}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => deleteAvailableAirport(airport.id)}
+                                                                            className="inline-flex items-center rounded border
+                                                                                        border-gray-300 bg-white px-2 py-1 text-xs
+                                                                                        text-gray-700 shadow-sm
+                                                                                        hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                        "
+                                                                        >
+                                                                            Remove
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+
                                         </div>
                                     </div>
                                 </div>
