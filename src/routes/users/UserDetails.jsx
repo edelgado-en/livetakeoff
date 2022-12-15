@@ -131,34 +131,36 @@ const UserDetails = () => {
                                                 />
                                                 </div>
                                             </div>
+                                            <div className="overflow-y-auto" style={{maxHeight: '550px'}}>
                                             {airports.map((airport) => (
                                                 <div key={airport.id} className="relative">
-                                                <ul className="relative z-0 divide-y divide-gray-200">
-                                                    <li className="cursor-pointer">
-                                                        <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                                            <div className="flex-shrink-0 text-xs w-6">
-                                                                {airport.initials}
+                                                    <ul className="">
+                                                        <li className="">
+                                                            <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                                                <div className="flex-shrink-0 text-xs w-6">
+                                                                    {airport.initials}
+                                                                </div>
+                                                                <div className="min-w-0 flex-1">
+                                                                    <p className="text-xs text-gray-900 font-normal truncate overflow-ellipsis w-60">{airport.name}</p>
+                                                                </div>
+                                                                <div>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="inline-flex items-center rounded border
+                                                                                    border-gray-300 bg-white px-2 py-1 text-xs
+                                                                                    text-gray-700 shadow-sm
+                                                                                    hover:bg-gray-50 focus:outline-none focus:ring-2
+                                                                                    "
+                                                                    >
+                                                                        Add
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                            <div className="min-w-0 flex-1">
-                                                                <p className="text-xs text-gray-900 font-normal truncate overflow-ellipsis w-60">{airport.name}</p>
-                                                            </div>
-                                                            <div>
-                                                                <button
-                                                                    type="button"
-                                                                    className="inline-flex items-center rounded border
-                                                                                 border-gray-300 bg-white px-2 py-1 text-xs
-                                                                                 text-gray-700 shadow-sm
-                                                                                  hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                                                   "
-                                                                >
-                                                                    Add
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             ))}
+                                            </div>
 
                                         </div>
                                     </div>
