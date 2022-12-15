@@ -133,7 +133,7 @@ const UserDetails = () => {
                                                 />
                                                 </div>
                                             </div>
-                                            <div className="overflow-y-auto" style={{maxHeight: '680px'}}>
+                                            <div className="overflow-y-auto" style={{maxHeight: '560px'}}>
                                             {airports.map((airport) => (
                                                 <div key={airport.id} className="relative">
                                                     <ul className="">
@@ -166,7 +166,7 @@ const UserDetails = () => {
 
                                         </div>
                                     </div>
-                                    <div className="border border-gray-200 rounded-md p-4" style={{height: '600px'}}>
+                                    <div className="border border-gray-200 rounded-md p-4" style={{height: '680px'}}>
                                         <div className="font-medium text-sm">Available Airports</div>
                                         <div className="text-xs text-gray-500">
                                             <div className="text-center m-auto mt-24 text-sm">No available airports set.</div>
