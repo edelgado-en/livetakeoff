@@ -99,7 +99,7 @@ const UserDetails = () => {
                                 <div className="text-sm text-gray-500 px-2">Manage airports. This user will only be available for job assignment if the job is in any of the airports in the available list.</div>
 
                                 <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
-                                    <div className="border border-gray-200 rounded-md p-4" style={{height: '600px'}}>
+                                    <div className="border border-gray-200 rounded-md p-4" style={{height: '680px'}}>
                                         <div className="font-medium text-sm">
                                             All Airports
                                             <span className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
@@ -131,7 +131,7 @@ const UserDetails = () => {
                                                 />
                                                 </div>
                                             </div>
-                                            <div className="overflow-y-auto" style={{maxHeight: '550px'}}>
+                                            <div className="overflow-y-auto" style={{maxHeight: '680px'}}>
                                             {airports.map((airport) => (
                                                 <div key={airport.id} className="relative">
                                                     <ul className="">
