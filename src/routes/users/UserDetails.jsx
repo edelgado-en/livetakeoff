@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, Outlet, useLocation } from "react-router-dom";
+import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Dialog, Transition, Switch, Menu } from '@headlessui/react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
+
+import { PencilIcon, ChartBarIcon } from "@heroicons/react/solid";
 
 import ReactTimeAgo from 'react-time-ago'
 
@@ -25,6 +27,8 @@ const UserDetails = () => {
     const [totalAirports, setTotalAirports] = useState(0)
     const [loadingAirports, setLoadingAirports] = useState(false)
     const [airportSearchText, setAirportSearchText] = useState('')
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         //Basic throttling
@@ -89,12 +93,35 @@ const UserDetails = () => {
             {loading && <Loader />}
 
             {!loading && (
-                <div className="mt-8 max-w-7xl m-auto">
+                <div className=" max-w-7xl m-auto">
                     <div className="xl:grid xl:grid-cols-8">
                         <div className="xl:col-span-6 xl:border-r xl:border-gray-200 xl:pr-8">
                             <img className="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src={userDetails.avatar} alt="" />
                             <h3 className="mt-4 text-xl font-medium text-center text-gray-900">{userDetails.first_name} {' '} {userDetails.last_name}</h3>
                             <div className="mt-1 text-sm text-gray-500 text-center">{userDetails.email}</div>
+
+                            <div className="mt-4 flex gap-6 justify-center">
+                                <div className="text-center">
+                                    <button onClick={() => navigate('/users/' + userId + '/productivity')}
+                                             className="text-xs leading-5 font-semibold bg-slate-400/20 w-9
+                                                        rounded-full p-2 text-slate-500 m-auto text-center
+                                                        flex items-center space-x-2 hover:bg-slate-400/40
+                                                        dark:highlight-white/5">
+                                        <ChartBarIcon className=" h-5 w-5 cursor-pointer"/>
+                                    </button>
+                                    <div className="text-sm font-medium mt-1">Stats</div>
+                                </div>
+                                <div className="text-center">
+                                    <button 
+                                             className="text-xs leading-5 font-semibold bg-slate-400/20 w-9
+                                                        rounded-full p-2 text-slate-500 m-auto text-center
+                                                        flex items-center space-x-2 hover:bg-slate-400/40
+                                                        dark:highlight-white/5">
+                                        <PencilIcon className=" h-5 w-5 cursor-pointer"/>
+                                    </button>
+                                    <div className="text-sm font-medium mt-1">Edit</div>
+                                </div>
+                            </div>
 
                             <div className="mt-8">
                                 <div className="font-medium px-2">Airports</div>

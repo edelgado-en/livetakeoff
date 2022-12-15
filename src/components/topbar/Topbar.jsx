@@ -230,6 +230,14 @@ const Topbar = () => {
                             )}>
                               Estimates
                           </Link>
+                          <Link 
+                            to="users"
+                            className={classNames(
+                              location.pathname.includes("users") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}>
+                              Team
+                          </Link>
                           <Popover className="relative">
                             {({ open }) => (
                               <>
@@ -524,6 +532,17 @@ const Topbar = () => {
                         )}
                       >
                           Estimates
+                      </Disclosure.Button>
+                    </Link>
+                    <Link 
+                        to="users">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("users") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Team
                       </Disclosure.Button>
                     </Link>
                     <div class="mt-4 border-t border-white py-2">

@@ -170,6 +170,7 @@ const  App = () => {
 
                       <Route path="users" element={<Users />}>
                         <Route path=":userId" element={<UserDetails />} />
+                        <Route path=":id/productivity" element={<UserProductivity />} />
                       </Route>
 
                       <Route path="create-customer" element={<CreateCustomer />} />
