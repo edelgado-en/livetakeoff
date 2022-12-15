@@ -3,6 +3,8 @@ import { Link, useParams, Outlet, useLocation } from "react-router-dom";
 import { Dialog, Transition, Switch, Menu } from '@headlessui/react'
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
+import ReactTimeAgo from 'react-time-ago'
+
 import Loader from "../../components/loader/Loader";
 
 import * as api from './apiService'
@@ -181,6 +183,10 @@ const UserDetails = () => {
                             <div className="space-y-5">
                                 <div className="font-medium">General Info</div>
                                 <div className="">
+                                    <dt className="text-sm font-medium text-gray-500">Member Since</dt>
+                                    <dd className="mt-1 text-sm text-gray-900"><ReactTimeAgo date={new Date(userDetails.member_since)} locale="en-US" timeStyle="twitter" /></dd>
+                                </div>
+                                <div className="">
                                     <dt className="text-sm font-medium text-gray-500">First Name</dt>
                                     <dd className="mt-1 text-sm text-gray-900">{userDetails.first_name}</dd>
                                 </div>
@@ -192,6 +198,10 @@ const UserDetails = () => {
                                     <dt className="text-sm font-medium text-gray-500">Username</dt>
                                     <dd className="mt-1 text-sm text-gray-900">{userDetails.username}</dd>
                                 </div>
+                                <div className="border-t border-gray-200 pt-4">
+                                    <dt className="text-sm font-medium text-gray-500">Phone Number</dt>
+                                    <dd className="mt-1 text-sm text-gray-900">{userDetails.phone_number ? userDetails.phone_number : 'Not specified'}</dd>
+                                </div>
                                 <div className="">
                                     <dt className="text-sm font-medium text-gray-500">Location</dt>
                                     <dd className="mt-1 text-sm text-gray-900">{userDetails.location ? userDetails.location : 'Not specified'}</dd>
@@ -202,9 +212,22 @@ const UserDetails = () => {
                                         {(userDetails.is_superuser || userDetails.is_staff) && 'Admin'}
                                         {userDetails.is_account_manager && 'Account Manager'}
                                         {userDetails.is_project_manager && 'Project Manager'}
-                                        {userDetails.customerName && 'Customer User'}
+                                        {userDetails.customer_name && 'Customer User'}
                                     </dd>
                                 </div>
+                                {userDetails.customer_name && (
+                                    <div className="">
+                                        <dt className="text-sm font-medium text-gray-500">Customer</dt>
+                                        <dd className="mt-1 text-sm text-gray-900">{userDetails.customer_name}</dd>
+                                    </div>
+                                )}
+
+                                {userDetails.vendor_name && (
+                                    <div className="">
+                                        <dt className="text-sm font-medium text-gray-500">Vendor</dt>
+                                        <dd className="mt-1 text-sm text-gray-900">{userDetails.vendor_name}</dd>
+                                    </div>
+                                )}
                             </div>
                         </aside>
                     </div>
