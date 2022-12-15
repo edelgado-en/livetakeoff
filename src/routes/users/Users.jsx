@@ -95,10 +95,9 @@ const Users = () => {
     }
   };
 
-  const getUserDetails = async (userId) => {
+  const getUserDetails = (userId) => {
     setSidebarOpen(false)
     navigate('/users/' + userId)
-    
   }
 
   return (
@@ -317,7 +316,7 @@ const Users = () => {
                   </div>
                 )}
                 {/* DESKTOP */}
-                {!loading && users.map((user) => (
+                {users.map((user) => (
                   <div key={user.id} className="relative">
                     <ul className="relative z-0 divide-y divide-gray-200">
                         <li onClick={() => getUserDetails(user.id)} className="border-b cursor-pointer">
