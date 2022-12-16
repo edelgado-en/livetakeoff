@@ -134,7 +134,7 @@ const UserDetails = () => {
             setAvailableAirports(availableAirports.filter(airport => airport.id !== airportId))
 
         } catch (error) {
-            
+
         }
     }
 
@@ -182,9 +182,40 @@ const UserDetails = () => {
                                 </div>
                             </div>
 
+                            {/* Mobile */}
+                            <aside className="mt-8 xl:hidden px-4">
+                                <div className="font-medium">General Info</div>
+                                <div className="grid grid-cols-2 mt-2 gap-y-4">
+                                    <div>
+                                        <dt className="text-sm font-medium text-gray-500">Member Since</dt>
+                                        <dd className="mt-1 text-sm text-gray-900"><ReactTimeAgo date={new Date(userDetails.member_since)} locale="en-US" timeStyle="twitter" /></dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-sm font-medium text-gray-500">First Name</dt>
+                                        <dd className="mt-1 text-sm text-gray-900">{userDetails.first_name}</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-sm font-medium text-gray-500">Username</dt>
+                                        <dd className="mt-1 text-sm text-gray-900">{userDetails.username}</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-sm font-medium text-gray-500">Last Name</dt>
+                                        <dd className="mt-1 text-sm text-gray-900">{userDetails.last_name}</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-sm font-medium text-gray-500">Phone Number</dt>
+                                        <dd className="mt-1 text-sm text-gray-900">{userDetails.phone_number ? userDetails.phone_number : 'Not specified'}</dd>
+                                    </div>
+                                    <div>
+                                        <dt className="text-sm font-medium text-gray-500">Location</dt>
+                                        <dd className="mt-1 text-sm text-gray-900">{userDetails.location ? userDetails.location : 'Not specified'}</dd>
+                                    </div>
+                                </div>
+                            </aside>
+
                             <div className="mt-8">
-                                <div className="font-medium px-2">Airports</div>
-                                <div className="text-sm text-gray-500 px-2">Manage airports. This user will only be available for job assignment if the job is in any of the airports in the available list.</div>
+                                <div className="font-medium px-4">Airports</div>
+                                <div className="text-sm text-gray-500 px-4">Manage airports. This user will only be available for job assignment if the job is in any of the airports in the available list.</div>
 
                                 <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
                                     <div className="border border-gray-200 rounded-md p-4" style={{height: '680px'}}>

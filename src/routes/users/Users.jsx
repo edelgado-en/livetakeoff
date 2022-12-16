@@ -225,6 +225,19 @@ const Users = () => {
                                       <p className="truncate text-xs text-gray-500">{user.email ? user.email : 'No email specified'}</p>
                                     </div>
                                   </div>
+                                  <div>
+                                    <span className={`inline-flex items-center rounded-full
+                                          px-2 py-0.5 text-xs
+                                          ${(user.is_staff || user.is_super_user) ? 'text-green-800 bg-green-100' : ''}
+                                          ${user.is_account_manager ? 'text-blue-800 bg-blue-100' : ''}
+                                          ${user.is_project_manager ? 'text-violet-800 bg-violet-100' : ''}
+                                          ${user.customer_name ? 'text-sky-800 bg-sky-100' : ''} `}>
+                                      {(user.is_staff || user.is_super_user) && 'Admin'}
+                                      {user.is_project_manager && 'P. Manager'}
+                                      {user.is_account_manager && 'A. Manager'}
+                                      {user.customer_name && 'Customer'}
+                                    </span>
+                                  </div>
                                 </div>
                               </li>
                           </ul>
