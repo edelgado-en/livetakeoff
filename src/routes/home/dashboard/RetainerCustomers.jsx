@@ -74,7 +74,7 @@ const RetainerCustomers = () => {
                 </div>
                 <div className="grid grid-cols-2 py-4 text-sm">
                     <div>
-                        Total Retainers: <span className="text-gray-900 font-medium">{totalCustomers}</span>
+                        Total: <span className="text-gray-900 font-medium">{totalCustomers}</span>
                     </div>
                     <div>
                     </div>
