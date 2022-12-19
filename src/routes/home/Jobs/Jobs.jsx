@@ -56,7 +56,7 @@ const JobsQueue = () => {
   const [loading, setLoading] = useState(true);
   const [totalJobs, setTotalJobs] = useState(0);
   const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
-  const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || {id: 'A', name: 'Accepted'})
+  const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || {id: 'All', name: 'All Open Jobs'})
   const [sortSelected, setSortSelected] = useState(sortOptions[0])
   const [open, setOpen] = useState(false)
   
