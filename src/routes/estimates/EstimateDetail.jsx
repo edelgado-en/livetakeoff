@@ -186,7 +186,7 @@ const EstimateDetail = () => {
                                     </dl>
                                     <div className="flex justify-end py-2 text-xs mt-1">
                                             <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
-                                            <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.services_price}</dd>
+                                            <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.services_price.toLocaleString()}</dd>
                                     </div>
                                 </div>
                                     
@@ -211,7 +211,7 @@ const EstimateDetail = () => {
                                         </dl>
                                         <div className="flex justify-end py-2 text-xs mt-1">
                                             <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
-                                            <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.discounted_price}</dd>
+                                            <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.discounted_price.toLocaleString()}</dd>
                                         </div>
                                     </div>  
                                 )}
@@ -240,8 +240,8 @@ const EstimateDetail = () => {
                                 )}
 
                                 <div className="flex justify-end py-4 text-xs">
-                                    <dt className="text-gray-500 pr-2 text-right font-medium">Total</dt>
-                                    <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.total_price}</dd>
+                                    <dt className="text-black pr-2 text-right font-bold">Total</dt>
+                                    <dd className="whitespace-nowrap text-black font-bold">${estimateDetails?.total_price.toLocaleString()}</dd>
                                 </div>
                             </div>
                         </div>

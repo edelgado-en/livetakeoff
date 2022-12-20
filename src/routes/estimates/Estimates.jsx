@@ -212,7 +212,7 @@ const Estimates = () => {
                                                         {estimate.job && (
                                                             <span><BriefcaseIcon className="mr-2 h-4 w-4 text-gray-500 relative" style={{top: '2px'}}/></span>
                                                         )}
-                                                        <span className="text-gray-700">${estimate?.total_price}</span>
+                                                        <span className="text-gray-700">${estimate?.total_price.toLocaleString()}</span>
                                                     </div>
                                                     
                                                 </div>
