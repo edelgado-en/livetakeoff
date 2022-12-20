@@ -34,6 +34,7 @@ const HeaderBar = () => {
                 src={logo}
                 alt="livetakeoff"
             />
+            <div className="font-bold text-xl relative top-2 ml-1">LiveTakeoff</div>
           </div>
 
           <div className="hidden md:flex">
