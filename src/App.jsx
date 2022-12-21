@@ -166,6 +166,7 @@ const  App = () => {
                         <Route path="edit" element={<EditJob />} />
                         <Route path="activity" element={<JobActivityFeed />} />
                         <Route path="comments" element={<JobComments />} />
+                        <Route path="services" element={<JobAssignments />} />
                       </Route>
 
                       <Route path="users" element={<Users />}>

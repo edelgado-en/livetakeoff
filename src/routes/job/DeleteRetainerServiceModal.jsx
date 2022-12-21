@@ -1,5 +1,6 @@
 import ModalFrame from '../../components/modal/ModalFrame'
 import { Dialog } from '@headlessui/react'
+import { useLocation } from "react-router-dom"
 
 const ExclamationTriangule = () => {
     return (
@@ -10,6 +11,8 @@ const ExclamationTriangule = () => {
 }
 
 const DeleteServiceModal = ({ isOpen, handleClose, deleteRetainerService, retainerService }) => {
+
+    const location = useLocation()
 
     return (
         <ModalFrame isModalOpen={isOpen}>
@@ -24,15 +27,25 @@ const DeleteServiceModal = ({ isOpen, handleClose, deleteRetainerService, retain
                       <div className="text-gray-500 text-sm mt-2">{retainerService.name}</div>
                     </Dialog.Title>
                     
-                    <div className="mt-4">
-                        <p className="text-sm text-gray-500 py-3">
-                            Deleting a retainer service will also unassign the project manager associated with it.
-                        </p>
+                    {!location.pathname.includes('review') && (
+                      <div className="mt-4">
+                          <p className="text-sm text-gray-500 py-3">
+                              Deleting a retainer service will also unassign the project manager associated with it.
+                          </p>
 
-                        <p className="text-sm text-gray-500 py-3">
-                            A SMS notification will be send to the project manager.
-                        </p>
-                    </div>
+                          <p className="text-sm text-gray-500 py-3">
+                              A SMS notification will be send to the project manager.
+                          </p>
+                      </div>
+                    )}
+
+                    {location.pathname.includes('review') && (
+                      <div className="mt-4">
+                          <p className="text-sm text-gray-500 py-1">
+                              Are you sure you want to delete this retainer service?
+                          </p>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="mt-6 sm:mt-4 sm:flex sm:flex-row-reverse">
