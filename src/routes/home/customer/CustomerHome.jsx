@@ -570,7 +570,7 @@ const CustomerHome = () => {
                                 </div>
   
                                 <div className="mt-2 text-sm text-gray-500 mb-1">
-                                  {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
+                                  <span className="font-medium">{job.airport.initials}</span> - {job.fbo.name} - {job.aircraftType.name}
                                 </div>
                               </div>
                               <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">

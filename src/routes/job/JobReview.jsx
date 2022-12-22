@@ -173,17 +173,20 @@ const JobReview = () => {
 
                         {(jobDetails.status === 'C' && (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager)) && (
                             <>
-                            <button
-                                type="button"
-                                disabled={downloadLoading}
-                                onClick={() => invoiceJob()}
-                                className="inline-flex items-center rounded-md border mr-2
-                                        border-gray-300 bg-white px-3 py-2 text-xs font-medium 
-                                        text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
-                                        focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                            >
-                                Invoice
-                            </button>
+                            {currentUser.enableInvoices && (
+                                <button
+                                    type="button"
+                                    disabled={downloadLoading}
+                                    onClick={() => invoiceJob()}
+                                    className="inline-flex items-center rounded-md border mr-2
+                                            border-gray-300 bg-white px-3 py-2 text-xs font-medium 
+                                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
+                                            focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                >
+                                    Invoice
+                                </button>
+                            )}
+
                             <button
                                 type="button"
                                 disabled={downloadLoading}

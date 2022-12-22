@@ -649,8 +649,25 @@ const JobsQueue = () => {
                               )}
 
                               <div className="mt-2 text-sm text-gray-500 mb-1">
-                                {job.airport.initials} - {job.fbo.name} - {job.aircraftType.name}
+                                <span className="font-medium">{job.airport.initials}</span> - {job.fbo.name} - {job.aircraftType.name}
                               </div>
+                              {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && job.asignees?.length > 0 && (
+                                    <div className="flex -space-x-1 overflow-hidden justify-start my-2">
+                                        {job.asignees?.map((asignee) => (
+                                          <Fragment key={asignee.username}>
+                                            <img
+                                              className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
+                                              src={asignee.profile.avatar}
+                                              alt={asignee.username}
+                                            />
+                                          </Fragment>
+                                        ))}
+                                        {job.asignees?.length === 1 && (
+                                          <div className="text-gray-500 text-sm relative top-1" style={{ marginLeft: '6px' }}>{job.asignees?.[0].username}</div>
+                                        )}
+                                    </div>
+                                    
+                              )}
                             </div>
                             <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
                                 <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
@@ -672,45 +689,8 @@ const JobsQueue = () => {
                                     {job.status === 'R' && 'Review'}
                                     {job.status === 'I' && 'Invoiced'}
                                 </p>
-                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && job.asignees?.length > 0 && (
-                                    <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">
-                                        {job.asignees?.map((asignee) => (
-                                          <Fragment key={asignee.username}>
-                                            <img
-                                              className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                                              src={asignee.profile.avatar}
-                                              alt={asignee.username}
-                                            />
-                                          </Fragment>
-                                        ))}
-                                        {job.asignees?.length === 1 && (
-                                          <div className="text-gray-500 text-sm relative top-1" style={{ marginLeft: '6px' }}>{job.asignees?.[0].username}</div>
-                                        )}
-                                    </div>
-                                    
-                                )}
                                 
-                                <div className="text-sm text-gray-500 mt-2">
-                                {(job.status === 'C' || job.status === 'I') ? (
-                                      <span>Completed on <span className="text-gray-700">{job.completion_date}</span></span>
-                                    )
-                                      :
-                                      (
-                                        <span>Complete before {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
-                                        : 
-                                          <span
-                                            className="relative inline-flex items-center
-                                                      rounded-full border border-gray-300 px-2 py-0.5 ml-2">
-                                            <div className="absolute flex flex-shrink-0 items-center justify-center">
-                                              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                                            </div>
-                                            <div className="ml-3 text-xs text-gray-700">TBD</div>
-                                          </span>}
-                                        
-                                        </span>
-                                      )
-                                    }
-                                </div>
+                                
                                 <div className="text-sm text-gray-500 mt-2">
                                   Arrival 
                                   {job.on_site && <span
@@ -731,6 +711,40 @@ const JobsQueue = () => {
                                     </span>}
 
                                   {!job.on_site && job.estimatedETA != null && <span className="text-gray-700 text-sm ml-1">{job.estimatedETA}</span>}
+                                </div>
+                                <div className="text-sm text-gray-500 mt-2">
+                                  Departure
+                                  {job.estimatedETD == null && <span
+                                      className="relative inline-flex items-center
+                                                rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                      <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                      </div>
+                                      <div className="ml-3 text-xs text-gray-700">TBD</div>
+                                    </span>}
+
+                                  {job.estimatedETD != null && <span className="text-gray-700 text-sm ml-1">{job.estimatedETD}</span>}
+                                </div>
+                                <div className="text-sm text-gray-500 mt-2">
+                                {(job.status === 'C' || job.status === 'I') ? (
+                                      <span>Completed on <span className="text-gray-700">{job.completion_date}</span></span>
+                                    )
+                                      :
+                                      (
+                                        <span>Complete before {job.completeBy ? <span className="text-gray-700">{job.completeBy}</span>
+                                        : 
+                                          <span
+                                            className="relative inline-flex items-center
+                                                      rounded-full border border-gray-300 px-2 py-0.5 ml-2">
+                                            <div className="absolute flex flex-shrink-0 items-center justify-center">
+                                              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                                            </div>
+                                            <div className="ml-3 text-xs text-gray-700">TBD</div>
+                                          </span>}
+                                        
+                                        </span>
+                                      )
+                                    }
                                 </div>
                             </div>
                           </div>

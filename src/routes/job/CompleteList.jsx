@@ -130,6 +130,10 @@ const CompleteList = () => {
             if (!availableStatuses.find(status => status.id === 'T')) {
                 availableStatuses.push({id: 'T', name: 'Canceled'})
             }
+        } else {
+            if (availableStatuses.find(status => status.id === 'T')) {
+                availableStatuses.splice(availableStatuses.findIndex(status => status.id === 'T'), 1)
+            }
         }
 
     }, [currentUser])
