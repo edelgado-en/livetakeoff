@@ -17,6 +17,7 @@ axios.interceptors.request.use((config) => {
     if (!config.url.includes('token')
              && !config.url.includes('signup')
              && !config.url.includes('estimates/details')
+             && !config.url.includes('forgot-password')
              && !config.url.includes('shared')) {
         const accessToken = loadApiAccessToken();
         config.headers['Authorization'] = `JWT ${accessToken}`;
