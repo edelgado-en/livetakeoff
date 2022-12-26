@@ -10,6 +10,9 @@ import "./date-picker.css"
 import * as api from './apiService'
 import { toast } from "react-toastify"
 
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../../routes/userProfile/userSlice";
+
 const ChevronUpDownIcon = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400">
@@ -37,6 +40,8 @@ const EditJob = () => {
 
     const location = useLocation();
 
+    const currentUser = useAppSelector(selectUser)
+
     const [loading, setLoading] = useState(false)
     const [createJobMessage, setCreateJobMessage] = useState(null)
     const [jobDetails, setJobDetails] = useState({})
@@ -53,6 +58,8 @@ const EditJob = () => {
     const [fbos, setFbos] = useState([])
     const [services, setServices] = useState([])
     const [retainerServices, setRetainerServices] = useState([])
+
+    const [tags, setTags] = useState([])
 
     const [customerSelected, setCustomerSelected] = useState({})
     const [aircraftTypeSelected, setAircraftTypeSelected] = useState({})
@@ -110,6 +117,7 @@ const EditJob = () => {
             setFbos(data.fbos)
             setServices(data.services)
             setRetainerServices(data.retainer_services)
+            setTags(data.tags)
             
             const response = await api.getJobDetails(jobId)
 
@@ -151,6 +159,17 @@ const EditJob = () => {
                 setEstimatedDepartureDate(new Date(response.data.estimatedETD))
             }
 
+            // update tags with the selected tags
+            const updatedTags = data.tags.map(tag => {
+                if (response.data.tags.find(t => t.tag_name === tag.name)) {
+                    return {...tag, selected: true}
+                } else {
+                    return {...tag, selected: false}
+                }
+            })
+
+            setTags(updatedTags)
+
             setLoading(false)
 
         } catch (error) {
@@ -172,6 +191,9 @@ const EditJob = () => {
     }
 
     const updateJob = async () => {
+        const selectedTags = tags.filter(tag => tag.selected === true)
+        const selectedTagIds = selectedTags.map(tag => tag.id)
+
         const request = {
             tailNumber,
             price,
@@ -185,7 +207,8 @@ const EditJob = () => {
             completeBy: completeByDate,
             on_site: onSite,
             requested_by: requested_by,
-            customer_purchase_order: customer_purchase_order
+            customer_purchase_order: customer_purchase_order,
+            tags: selectedTagIds
         }
 
         try {
@@ -233,6 +256,17 @@ const EditJob = () => {
     const handleSetOnSite = () => {
         setOnSite(!onSite)
         setEstimatedArrivalDate(null)
+    }
+
+    const handleTagChange = (tag) => {
+        const tagsUpdated = tags.map((el) => {
+            if (el.id === tag.id) {
+                el.selected = !el.selected
+            }
+            return el
+        })
+
+        setTags(tagsUpdated)
     }
 
     return (
@@ -925,7 +959,34 @@ const EditJob = () => {
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                                 />
                             </div>
-                        </div> 
+                        </div>
+
+                        {(currentUser.isAdmin
+                             || currentUser.isSuperUser
+                             || currentUser.isAccountManager) && (
+                            <>
+                                <div className="text-sm leading-5 font-medium text-gray-700">Tags</div>
+                                {tags.map((tag) => (
+                                    <div key={tag.id} className="relative flex items-start">
+                                        <div className="flex h-5 items-center">
+                                        <input
+                                            id={'tag' + tag.id} 
+                                            name={tag.name}
+                                            checked={tag.selected}
+                                            onChange={() => handleTagChange(tag)}       
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                        </div>
+                                        <div className="ml-3 text-sm">
+                                        <label htmlFor={'tag' + tag.id}  className="text-gray-700">
+                                            {tag.name}
+                                        </label>
+                                        </div>
+                                    </div>   
+                                ))}
+                            </>
+                        )} 
 
                         <div className="flex flex-col py-4 pb-20 gap-4">
                             

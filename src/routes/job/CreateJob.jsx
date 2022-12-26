@@ -46,6 +46,8 @@ const CreateJob = () => {
     const [retainerServices, setRetainerServices] = useState([])
     const [servicesErrorMessage, setServicesErrorMessage] = useState(null)
 
+    const [tags, setTags] = useState([])
+
     const [customerSelected, setCustomerSelected] = useState(null)
     const [aircraftTypeSelected, setAircraftTypeSelected] = useState(null)
     const [airportSelected, setAirportSelected] = useState(null)
@@ -166,6 +168,7 @@ const CreateJob = () => {
             setFbos(data.fbos)
             setServices(data.services)
             setRetainerServices(data.retainer_services)
+            setTags(data.tags)
 
             // if estimateId is passed in, get the estimate info and pre-populate the form
             if (estimateId) {
@@ -201,6 +204,7 @@ const CreateJob = () => {
     const createJob = async (routeName) => {
         const selectedServices = services.filter(service => service.selected === true)
         const selectedRetainerServices = retainerServices.filter(retainerService => retainerService.selected === true)
+        const selectedTags = tags.filter(tag => tag.selected === true)
 
         setTailNumberErrorMessage(null)
         setServicesErrorMessage(null)
@@ -222,6 +226,7 @@ const CreateJob = () => {
 
         const selectedServiceIds = selectedServices.map(service => service.id)
         const selectedRetainerServiceIds = selectedRetainerServices.map(service => service.id)
+        const selectedTagIds = selectedTags.map(tag => tag.id)
 
         const formData = new FormData()
         
@@ -235,6 +240,7 @@ const CreateJob = () => {
         formData.append("complete_by_date", completeByDate);
         formData.append("services", selectedServiceIds);
         formData.append("retainer_services", selectedRetainerServiceIds);
+        formData.append("tags", selectedTagIds);
         formData.append("comment", comment);
         formData.append("on_site", onSite);
         formData.append("requested_by", requestedBy)
@@ -325,6 +331,17 @@ const CreateJob = () => {
         })
 
         setRetainerServices(retainerServicesUpdated)
+    }
+
+    const handleTagChange = (tag) => {
+        const tagsUpdated = tags.map((el) => {
+            if (el.id === tag.id) {
+                el.selected = !el.selected
+            }
+            return el
+        })
+
+        setTags(tagsUpdated)
     }
 
     const addAnotherJob = () => {
@@ -1048,6 +1065,34 @@ const CreateJob = () => {
                                 ))}
                             </>
                        )}
+
+                       {(currentUser.isAdmin
+                             || currentUser.isSuperUser
+                             || currentUser.isAccountManager) && (
+                            <>
+                                <div className="py-1"></div>
+                                <div className="text-sm leading-5 font-medium text-gray-700">Tags</div>
+                                {tags.map((tag) => (
+                                    <div key={tag.id} className="relative flex items-start">
+                                        <div className="flex h-5 items-center">
+                                        <input
+                                            id={'tag' + tag.id} 
+                                            name={tag.name}
+                                            checked={tag.selected}
+                                            onChange={() => handleTagChange(tag)}       
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                        </div>
+                                        <div className="ml-3 text-sm">
+                                        <label htmlFor={'tag' + tag.id}  className="text-gray-700">
+                                            {tag.name}
+                                        </label>
+                                        </div>
+                                    </div>   
+                                ))}
+                            </>
+                        )}
                         
                         <div className="py-1"></div>
                         <div>

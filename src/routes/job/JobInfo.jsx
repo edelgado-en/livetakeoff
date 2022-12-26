@@ -386,6 +386,29 @@ const JobInfo = () => {
                         </dd>
                     </div>
 
+                    <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Tags</dt>
+                        <dd className="mt-1 text-sm text-gray-900">
+                            {jobDetails.tags?.length === 0 && (
+                                <span className="text-gray-900">None</span>
+                            )}
+
+                            {jobDetails.tags?.map((tag) => (
+                                <div key={tag.id} className={`text-xs inline-block rounded-md px-2 py-1 text-white mr-1
+                                                        ${tag.tag_color === 'red' && 'bg-red-400'}
+                                                        ${tag.tag_color === 'orange' && 'bg-orange-400 '}
+                                                        ${tag.tag_color === 'amber' && 'bg-amber-500 '}
+                                                        ${tag.tag_color === 'indigo' && 'bg-indigo-500 '}
+                                                        ${tag.tag_color === 'violet' && 'bg-violet-500 '}
+                                                        ${tag.tag_color === 'fuchsia' && 'bg-fuchsia-500 '} 
+                                                        ${tag.tag_color === 'pink' && 'bg-pink-500 '}
+                                                        `}>
+                                {tag.tag_name}
+                                </div>
+                            ))}
+                        </dd>
+                    </div>
+
                 </dl>
                 <div className="mx-auto mt-8 max-w-5xl pb-8">
                     <div className="flex justify-between">
