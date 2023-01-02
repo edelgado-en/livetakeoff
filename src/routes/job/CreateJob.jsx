@@ -206,6 +206,14 @@ const CreateJob = () => {
         const selectedRetainerServices = retainerServices.filter(retainerService => retainerService.selected === true)
         const selectedTags = tags.filter(tag => tag.selected === true)
 
+        let selectedCustomer = customerSelected
+
+        if (currentUser.customerId) {
+            selectedCustomer = {
+                id: currentUser.customerId,
+            }
+        }
+
         setTailNumberErrorMessage(null)
         setServicesErrorMessage(null)
 
@@ -219,7 +227,7 @@ const CreateJob = () => {
             return
         }
 
-        if (!customerSelected || !aircraftTypeSelected || !airportSelected || !fboSelected) {
+        if (!selectedCustomer || !aircraftTypeSelected || !airportSelected || !fboSelected) {
             setTailNumberErrorMessage('Missing required fields')
             return
         }
@@ -231,7 +239,7 @@ const CreateJob = () => {
         const formData = new FormData()
         
         formData.append("tail_number", tailNumber);
-        formData.append("customer_id", customerSelected.id);
+        formData.append("customer_id", selectedCustomer.id);
         formData.append("aircraft_type_id", aircraftTypeSelected.id);
         formData.append("airport_id", airportSelected.id);
         formData.append("fbo_id", fboSelected.id);
