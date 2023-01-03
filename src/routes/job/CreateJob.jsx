@@ -1,8 +1,8 @@
 import { useState, useEffect, Fragment, useRef } from "react"
 import Loader from "../../components/loader/Loader"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { Listbox, Transition } from '@headlessui/react'
-import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
+import { Listbox, Transition, } from '@headlessui/react'
+import { PlusIcon, CheckIcon, CheckCircleIcon, InboxIcon, XCircleIcon } from "@heroicons/react/outline"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import ImageUploading from 'react-images-uploading';
@@ -31,6 +31,8 @@ function classNames(...classes) {
 const CreateJob = () => {
     const { estimateId } = useParams();
 
+    const [showTailAlert, setShowTailAlert] = useState(false)
+    const [tailAlert, setTailAlert] = useState(null)
     const [loading, setLoading] = useState(false)
     const [createJobMessage, setCreateJobMessage] = useState(null)
     const [jobDetails, setJobDetails] = useState({})
@@ -101,7 +103,7 @@ const CreateJob = () => {
     useEffect(() => {
         //Basic throttling
         let timeoutID = setTimeout(() => {
-            getTailAircraftLookup()
+            getTailLookups()
         }, 300);
     
         return () => {
@@ -111,7 +113,7 @@ const CreateJob = () => {
     }, [tailNumber])
 
     
-    const getTailAircraftLookup = async () => {
+    const getTailLookups = async () => {
         if (tailNumber?.length > 2 && !estimateId) {
             const { data } = await api.getTailAircraftLookup(tailNumber)
             
@@ -153,6 +155,18 @@ const CreateJob = () => {
                     setRetainerServices(updatedRetainerServices)
                 }
             }
+
+            if (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) {
+                const response = await api.getTailAlertLookup(tailNumber)
+                if (response.data?.id > 0) {
+                    setShowTailAlert(true)
+                    setTailAlert(response.data)
+                } else {
+                    setShowTailAlert(false)
+                    setTailAlert(null)
+                }
+            }
+
         }
     }
 
@@ -357,6 +371,11 @@ const CreateJob = () => {
         setTailNumber('')
 
         window.location.reload()
+    }
+
+    const deleteTailAlert = async () => {
+        await api.deleteTailAlert(tailAlert.id)
+        setShowTailAlert(false)
     }
 
     return (
@@ -1238,6 +1257,70 @@ const CreateJob = () => {
                 </div>
             </main>
             )}
+
+            {/* Tail Alert Notification */}
+            <div
+                aria-live="assertive"
+                className="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
+                <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
+                {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
+                <Transition
+                    show={showTailAlert}
+                    as={Fragment}
+                    enter="transform ease-out duration-300 transition"
+                    enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+                    enterTo="translate-y-0 opacity-100 sm:translate-x-0"
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                    <div className="p-4">
+                        <div className="flex items-start">
+                            <div className="flex-shrink-0">
+                                <InboxIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
+                            </div>
+                            <div className="ml-3 w-0 flex-1 pt-0.5">
+                                <p className="text-sm font-medium text-gray-900">Tail Number Alert</p>
+                                <p className="mt-1 text-sm text-gray-500">
+                                    {tailAlert?.message}
+                                </p>
+                                <div className="mt-3 flex space-x-7">
+                                <button
+                                    type="button"
+                                    onClick={() => deleteTailAlert()}
+                                    className="rounded-md bg-white text-sm font-medium
+                                            text-red-600 hover:text-red-500 focus:outline-none
+                                            focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                >
+                                    Delete
+                                </button>
+                                <button
+                                    onClick={() => {setShowTailAlert(false)}}
+                                    type="button"
+                                    className="rounded-md bg-white text-sm font-medium
+                                                 text-gray-700 hover:text-gray-500 focus:outline-none
+                                                  focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                >
+                                    Dismiss
+                                </button>
+                                </div>
+                            </div>
+                            <div className="ml-4 flex flex-shrink-0">
+                                <button
+                                    type="button"
+                                    className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    onClick={() => {setShowTailAlert(false)}}>
+                                    <span className="sr-only">Close</span>
+                                    <XCircleIcon className="h-5 w-5" aria-hidden="true" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </Transition>
+                </div>
+            </div>
             
         </AnimatedPage>
     )

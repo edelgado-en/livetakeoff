@@ -69,6 +69,8 @@ import SharedLayout from './routes/shared/SharedLayout';
 import SharedJob from './routes/shared/SharedJob';
 import ShareJobEstimate from './routes/shared/SharedJobEstimate';
 
+import TailAlerts from './routes/alerts/TailAlerts';
+
 import ContactUs from './routes/shared/ContactUs';
 
 import { isUserAuthenticated } from './localstorage';
@@ -224,6 +226,8 @@ const  App = () => {
                       <Route path="price-plans" element={<PricePlans />} />
                       <Route path="price-plans/add" element={<CreatePricePlan />} />
                       <Route path="price-plans/:pricePlanId" element={<ServicePrices />} />
+
+                      <Route path="tail-alerts" element={<TailAlerts />} />
 
                       <Route path="*" element={<NotFound />} />
                   </Route>

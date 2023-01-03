@@ -108,6 +108,10 @@ export const getTailAircraftLookup = (tail: string) => {
     return httpService.get(`/api/tail-aircraft-lookup/${tail}/`);
 }
 
+export const getTailAlertLookup = (tail: string) => {
+    return httpService.get(`/api/tail-alert-lookup/${tail}/`);
+}
+
 export const getRetainerServices = () => {
     return httpService.get('/api/retainer-services');
 }
@@ -142,4 +146,8 @@ export const canCompleteJob = (id: number) => {
 
 export const getEstimateDetail = (id: any) => {
     return httpService.get(`/api/estimates/details/${id}`)
+}
+
+export const deleteTailAlert = (id: number) => {
+    return httpService.delete(`/api/tail-alerts/${id}/`);
 }
