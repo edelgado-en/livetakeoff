@@ -1,6 +1,8 @@
 import { Fragment, useEffect, useState, useRef } from "react";
 import { Disclosure, Menu, Transition, Popover, Listbox } from "@headlessui/react";
-import { MenuIcon, XIcon, PlusIcon, UserGroupIcon, CurrencyDollarIcon, ChartBarIcon, ChevronDownIcon, PresentationChartBarIcon, ViewGridIcon} from "@heroicons/react/outline";
+import { MenuIcon, XIcon, PlusIcon, UserGroupIcon, UsersIcon,
+        CurrencyDollarIcon, ChartBarIcon, ChevronDownIcon, CalculatorIcon, ExclamationCircleIcon,
+        PresentationChartBarIcon, ViewGridIcon } from "@heroicons/react/outline";
 import logo from '../../images/logo_2618936_web.png'
 import whiteLogo from '../../images/logo_white-no-text.png'
 
@@ -34,20 +36,48 @@ const dashboards = [
     description: 'Find out which project manager is the most productive.',
     href: '/team-productivity',
     icon: ChartBarIcon,
+  }
+]
+
+const moreOptions = [
+  {
+    name: 'Estimates',
+    description: "Create job estimates to be approved by customer.",
+    href: '/estimates',
+    icon: CalculatorIcon,
+  },
+  {
+    name: 'Team',
+    description: "Checkout user's detailed information.",
+    href: '/users',
+    icon: UserGroupIcon,
+  },
+  {
+    name: 'Customers',
+    description: "Adjust discounts and fees for each customer.",
+    href: '/customers',
+    icon: UsersIcon,
   },
   {
     name: 'Retainer Customers',
     description: 'Checkout the price breakdown for all retainer customers.',
     href: '/retainers',
-    icon: UserGroupIcon,
+    icon: UsersIcon,
   },
-/*   {
-    name: 'Revenues',
-    description: 'Revenues by customer, airport, FBO, and service.',
-    href: '/revenues',
+  {
+    name: 'Tail Alerts',
+    description: 'Manage tail number alerts.',
+    href: '/tail-alerts',
+    icon: ExclamationCircleIcon,
+  },
+  {
+    name: 'Price Lists',
+    description: 'Setup indiviual prices for aircrafts and services.',
+    href: '/price-plans',
     icon: CurrencyDollarIcon,
-  }, */
+  },
 ]
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -76,6 +106,7 @@ const Topbar = () => {
   const currentUser = useAppSelector(selectUser)
   const location  = useLocation();
   const [showDashboardMenu, setDashboardMenu] = useState(false)
+  const [showMoreMenu, setShowMoreMenu] = useState(false)
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -89,13 +120,27 @@ const Topbar = () => {
     navigate('/login');
 
   }
+
   const handleDashboardLink = (href) => {
     navigate(href);
+    setDashboardMenu(false);
+    setShowMoreMenu(false);
+  }
+
+  const handleMoreLink = (href) => {
+    navigate(href);
+    setShowMoreMenu(false);
     setDashboardMenu(false);
   }
 
   const toggleDashboardMenu = () => {
     setDashboardMenu(!showDashboardMenu)
+    setShowMoreMenu(false);
+  }
+
+  const toggleMoreMenu = () => {
+    setShowMoreMenu(!showMoreMenu)
+    setDashboardMenu(false);
   }
 
   return (
@@ -199,14 +244,6 @@ const Topbar = () => {
                             Jobs
                           </Link>
                           <Link 
-                            to="customers"
-                            className={classNames(
-                              location.pathname.includes("customers") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium text-white'
-                            )}>
-                              Customers
-                          </Link>
-                          <Link 
                             to="completed"
                             className={classNames(
                               location.pathname.includes("completed") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
@@ -214,43 +251,11 @@ const Topbar = () => {
                             )}>
                               Completed Jobs
                           </Link>
-                          <Link 
-                            to="price-plans"
-                            className={classNames(
-                              location.pathname.includes("price-list") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium text-white'
-                            )}>
-                              Price Lists
-                          </Link>
-                          <Link 
-                            to="estimates"
-                            className={classNames(
-                              location.pathname.includes("estimates") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium text-white'
-                            )}>
-                              Estimates
-                          </Link>
-                          <Link 
-                            to="users"
-                            className={classNames(
-                              location.pathname.includes("users") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium text-white'
-                            )}>
-                              Team
-                          </Link>
-                          <Link 
-                            to="tail-alerts"
-                            className={classNames(
-                              location.pathname.includes("alerts") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium text-white'
-                            )}>
-                              Alerts
-                          </Link>
                           <Popover className="relative">
                             {({ open }) => (
                               <>
                                 <Popover.Button
-                                onMouseEnter={() => setDashboardMenu(true)}
+                                onMouseEnter={() => toggleDashboardMenu()}
                                   onClick={() => toggleDashboardMenu()}
                                   className={classNames(
                                     open ? 'text-white' : 'text-white',
@@ -286,6 +291,63 @@ const Topbar = () => {
                                           <button
                                               key={item.name}
                                               onClick={() => handleDashboardLink(item.href)}
+                                              to={item.href}
+                                              className="-m-3 flex items-start rounded-lg px-3 py-4 hover:bg-gray-50"
+                                            >
+                                              <item.icon className="h-6 w-6 flex-shrink-0 text-red-600" aria-hidden="true" />
+                                              <div className="ml-4 text-left">
+                                                <p className="text-base font-medium text-gray-900">{item.name}</p>
+                                                <p className="mt-1 text-sm text-gray-500">{item.description}</p>
+                                              </div>
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </Popover.Panel>
+                                </Transition>
+                              </>
+                            )}
+                          </Popover>
+                          <Popover className="relative">
+                            {({ open }) => (
+                              <>
+                                <Popover.Button
+                                onMouseEnter={() => toggleMoreMenu()}
+                                  onClick={() => toggleMoreMenu()}
+                                  className={classNames(
+                                    open ? 'text-white' : 'text-white',
+                                    'group inline-flex items-center rounded-md text-sm px-3 py-2 bg-red-600 hover:bg-red-700 hover:text-white font-medium'
+                                  )}
+                                >
+                                  <span>More</span>
+                                  <ChevronDownIcon
+                                    className={classNames(
+                                      open ? 'text-white' : 'text-white',
+                                      'ml-2 h-4 w-4'
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                </Popover.Button>
+
+                                <Transition
+                                  as={Fragment}
+                                  show={showMoreMenu}
+                                  enter="transition ease-out duration-200"
+                                  enterFrom="opacity-0 translate-y-1"
+                                  enterTo="opacity-100 translate-y-0"
+                                  leave="transition ease-in duration-150"
+                                  leaveFrom="opacity-100 translate-y-0"
+                                  leaveTo="opacity-0 translate-y-1"
+                                >
+                                  <Popover.Panel 
+                                    onMouseLeave={() => setShowMoreMenu(false)}
+                                  className="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2">
+                                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                                      <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                        {moreOptions.map((item) => (
+                                          <button
+                                              key={item.name}
+                                              onClick={() => handleMoreLink(item.href)}
                                               to={item.href}
                                               className="-m-3 flex items-start rounded-lg px-3 py-4 hover:bg-gray-50"
                                             >
@@ -487,7 +549,7 @@ const Topbar = () => {
                 
                 {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
                   <>
-                  <Link 
+                   <Link 
                       to="jobs">
                     <Disclosure.Button
                       className={classNames(
@@ -497,18 +559,7 @@ const Topbar = () => {
                     >
                         Jobs
                     </Disclosure.Button>
-                  </Link>
-                   <Link 
-                        to="customers">
-                      <Disclosure.Button
-                        className={classNames(
-                          location.pathname.includes("customers") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
-                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
-                        )}
-                      >
-                          Customers
-                      </Disclosure.Button>
-                    </Link>
+                   </Link>
                     <Link 
                         to="completed">
                       <Disclosure.Button
@@ -518,17 +569,6 @@ const Topbar = () => {
                         )}
                       >
                           Completed Jobs
-                      </Disclosure.Button>
-                    </Link>
-                    <Link 
-                        to="price-plans">
-                      <Disclosure.Button
-                        className={classNames(
-                          location.pathname.includes("price-list") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
-                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
-                        )}
-                      >
-                          Price Lists
                       </Disclosure.Button>
                     </Link>
                     <Link 
@@ -543,6 +583,28 @@ const Topbar = () => {
                       </Disclosure.Button>
                     </Link>
                     <Link 
+                        to="customers">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("customers") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Customers
+                      </Disclosure.Button>
+                    </Link>
+                    <Link 
+                        to="retainers">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("customers") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Retainer Customers
+                      </Disclosure.Button>
+                    </Link>
+                    <Link 
                         to="users">
                       <Disclosure.Button
                         className={classNames(
@@ -553,6 +615,7 @@ const Topbar = () => {
                           Team
                       </Disclosure.Button>
                     </Link>
+                    
                     <Link 
                         to="tail-alerts">
                       <Disclosure.Button
@@ -562,6 +625,17 @@ const Topbar = () => {
                         )}
                       >
                           Alerts
+                      </Disclosure.Button>
+                    </Link>
+                    <Link 
+                        to="price-plans">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("price-list") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Price Lists
                       </Disclosure.Button>
                     </Link>
                     <div className="mt-4 border-t border-white py-2">
