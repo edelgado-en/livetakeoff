@@ -52,7 +52,12 @@ const Login = () => {
 
             setLoading(false);
 
-            navigate('/');
+            if (data.first_time_login) {
+              navigate('/user-settings/password')
+
+            } else {
+              navigate('/');
+            }
 
         } catch (e) {
           toast.error('Unable to login');
@@ -66,7 +71,6 @@ const Login = () => {
       const { userName, email } = data;
 
       try {
-        console.log('sending request')
           await api.post('/api/forgot-password', { userName, email });
 
           setMessageSent(true)
