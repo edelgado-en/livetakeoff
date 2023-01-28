@@ -206,7 +206,7 @@ const AddServiceModal = ({ isOpen, handleClose, existingServices, projectManager
                                 <div className="text-xs text-red-500 mt-2 ml-1">{missingServiceMessage}</div>
                             )}
                         </div>
-                        {!location.pathname.includes('review') && (
+                        {(!location.pathname.includes('review') && !location.pathname.includes('details')) && (
                             <div className="mt-6">
                                 <Listbox value={selectedProjectManager} onChange={setSelectedProjectManager}>
                                 {({ open }) => (
@@ -328,6 +328,7 @@ const AddServiceModal = ({ isOpen, handleClose, existingServices, projectManager
                 <button
                     type="button"
                     onClick={handleClose}
+                    disabled={loading}
                     className="mt-3 inline-flex w-full justify-center rounded-md border
                                 border-gray-300 bg-white px-4 py-2 text-base font-medium
                                 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2

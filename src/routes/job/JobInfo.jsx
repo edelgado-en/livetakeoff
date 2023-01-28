@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import { Link, useParams, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { CheckCircleIcon, QuestionMarkCircleIcon, ArrowRightIcon, PencilIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon, TrashIcon, ArrowRightIcon, PencilIcon, PlusIcon } from "@heroicons/react/outline";
 import { toast } from 'react-toastify';
 import * as api from './apiService'
 
@@ -12,6 +12,9 @@ import JobCompleteModal from './JobCompleteModal'
 import JobPriceBreakdownModal from './JobPriceBreakdownModal'
 import JobCancelModal from "./JobCancelModal";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
+
+import AddServiceModal from './AddServiceModal';
+import AddRetainerServiceModal from "./AddRetainerServiceModal";
 
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
@@ -29,6 +32,9 @@ const JobInfo = () => {
     const [isCancelJobModalOpen, setIsCancelJobModalOpen] = useState(false)
 
     const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] = useState(false)
+
+    const [isAddServiceModalOpen, setAddServiceModalOpen] = useState(false)
+    const [isAddRetainerServiceModalOpen, setAddRetainerServiceModalOpen] = useState(false)
 
 
     const [showActions, setShowActions] = useState(false)
@@ -158,6 +164,46 @@ const JobInfo = () => {
         }
     }
 
+    const removeService = async (service) => {
+        await api.deleteService(service.id)
+
+        const updatedJobDetails = { ...jobDetails,
+                                     service_assignments: jobDetails.service_assignments?.filter((s) => s.id !== service.id) }
+
+        setJobDetails(updatedJobDetails)
+
+    }
+
+    const removeRetainerService = async (service) => {
+        await api.deleteRetainerService(service.id)
+
+        const updatedJobDetails = { ...jobDetails,
+                                     retainer_service_assignments: jobDetails.retainer_service_assignments?.filter((s) => s.id !== service.id) }
+
+        setJobDetails(updatedJobDetails)
+    }
+
+    const handleToggleAddServiceModal = () => {
+        setAddServiceModalOpen(!isAddServiceModalOpen)
+    }
+
+    const handleToggleAddRetainerServiceModal = () => {
+        setAddRetainerServiceModalOpen(!isAddRetainerServiceModalOpen)
+    }
+
+    const handleAddService = (updatedServices) => {
+        setAddServiceModalOpen(false)
+        
+        //refetch the job details because you have to rebuild all services
+        getJobDetails()
+    }
+
+    const handleAddRetainerService = (updatedServices) => {
+        setAddRetainerServiceModalOpen(false)
+
+        //refetch the job details because you have to rebuild all services
+        getJobDetails()
+    }
 
     return (
         <AnimatedPage>
@@ -412,30 +458,44 @@ const JobInfo = () => {
                 </dl>
                 <div className="mx-auto mt-8 max-w-5xl pb-8">
                     <div className="flex justify-between">
-                    <h2 className="text-sm font-medium text-gray-500">Services</h2>
-                        <Switch.Group as="li" className="flex items-center">
-                              <div className="flex flex-col">
-                                <Switch.Label as="p" className="text-sm font-medium text-gray-500" passive>
-                                  {showActions ? 'Hide Actions' : 'Show Actions'}
-                                </Switch.Label>
-                              </div>
-                              <Switch
-                                checked={showActions}
-                                onChange={setShowActions}
-                                className={classNames(
-                                    showActions ? 'bg-red-500' : 'bg-gray-200',
-                                  'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                                )}
-                              >
-                                <span
-                                  aria-hidden="true"
-                                  className={classNames(
-                                    showActions ? 'translate-x-5' : 'translate-x-0',
-                                    'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                                  )}
-                                />
-                              </Switch>
-                        </Switch.Group>
+                        <h2 className="text-sm font-medium text-gray-500">Services</h2>
+                        <div className="flex gap-4 text-right">
+                            <Switch.Group as="li" className="flex items-center">
+                                <div className="flex flex-col">
+                                    <Switch.Label as="p" className="text-sm font-medium text-gray-500" passive>
+                                    {showActions ? 'Hide Actions' : 'Show Actions'}
+                                    </Switch.Label>
+                                </div>
+                                <Switch
+                                    checked={showActions}
+                                    onChange={setShowActions}
+                                    className={classNames(
+                                        showActions ? 'bg-red-500' : 'bg-gray-200',
+                                    'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+                                    )}
+                                >
+                                    <span
+                                    aria-hidden="true"
+                                    className={classNames(
+                                        showActions ? 'translate-x-5' : 'translate-x-0',
+                                        'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                                    )}
+                                    />
+                                </Switch>
+                            </Switch.Group>
+                            {currentUser.isCustomer 
+                                    && (jobDetails.status === 'A' || jobDetails.status === 'U') && (
+                                <button
+                                    type="button"
+                                    onClick={handleToggleAddServiceModal}
+                                    className="inline-flex items-center rounded-md border border-gray-300
+                                            bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
+                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                    <PlusIcon className="-ml-2 mr-1 h-4 w-4 text-gray-400" aria-hidden="true" />
+                                    <span>Add</span>
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -456,6 +516,15 @@ const JobInfo = () => {
                                                 {service.name}
                                             </div>
                                             <div className="text-right">
+                                                {currentUser.isCustomer 
+                                                    && (jobDetails.status === 'A' || jobDetails.status === 'U') && (
+                                                    <div className="flex justify-end">
+                                                        <TrashIcon 
+                                                        onClick={() => removeService(service)}
+                                                        className="h-5 w-5 text-gray-400 cursor-pointer" />
+                                                    </div>
+                                                )}
+                                                
                                                 {!currentUser.isCustomer && service.status === 'W' && (
                                                     <button
                                                         type="button"
@@ -518,7 +587,21 @@ const JobInfo = () => {
                              || currentUser.isAccountManager
                              || (currentUser.isCustomer && currentUser.isPremiumMember)) && (
                     <div className="mx-auto max-w-5xl pb-12">
-                        <h2 className="text-sm font-medium text-gray-500">Retainer Services</h2>
+                        <div className="flex justify-between">
+                            <h2 className="text-sm font-medium text-gray-500">Retainer Services</h2>
+                            {currentUser.isCustomer 
+                                    && (jobDetails.status === 'A' || jobDetails.status === 'U') && (
+                                <button
+                                    type="button"
+                                    onClick={handleToggleAddRetainerServiceModal}
+                                    className="inline-flex items-center rounded-md border border-gray-300
+                                            bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm
+                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                    <PlusIcon className="-ml-2 mr-1 h-4 w-4 text-gray-400" aria-hidden="true" />
+                                    <span>Add</span>
+                                </button>
+                            )}
+                        </div>
                         <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
                             {jobDetails.retainer_service_assignments?.length === 0 &&
                                 <div className="text-sm text-gray-500">None</div>
@@ -535,6 +618,15 @@ const JobInfo = () => {
                                             <div className="grid grid-cols-3 text-sm pb-2">
                                                 <div className="col-span-2 font-medium text-gray-900 relative top-1">{service.name}</div>
                                                 <div className="text-right">
+                                                    {currentUser.isCustomer 
+                                                        && (jobDetails.status === 'A' || jobDetails.status === 'U') && (
+                                                        <div className="flex justify-end">
+                                                            <TrashIcon 
+                                                            onClick={() => removeRetainerService(service)}
+                                                            className="h-5 w-5 text-gray-400 cursor-pointer" />
+                                                        </div>
+                                                    )}
+
                                                     {!currentUser.isCustomer && service.status === 'W' && (
                                                         <button
                                                             type="button"
@@ -593,6 +685,24 @@ const JobInfo = () => {
                                             isOpen={isPriceBreakdownModalOpen}
                                             jobDetails={jobDetails}
                                             handleClose={handleTogglePriceBreakdownModal} />}
+
+            {isAddServiceModalOpen && <AddServiceModal
+                                            isOpen={isAddServiceModalOpen}
+                                            handleClose={handleToggleAddServiceModal}
+                                            existingServices={[]}
+                                            projectManagers={[]}
+                                            handleAddService={handleAddService}
+                                            jobId={jobId}
+                                             />}
+
+            {isAddRetainerServiceModalOpen && <AddRetainerServiceModal
+                                            isOpen={isAddRetainerServiceModalOpen}
+                                            handleClose={handleToggleAddRetainerServiceModal}
+                                            existingServices={[]}
+                                            projectManagers={[]}
+                                            handleAddService={handleAddRetainerService}
+                                            jobId={jobId}
+                                                />}
 
         </AnimatedPage>
     )

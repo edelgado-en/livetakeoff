@@ -24,6 +24,7 @@ const AddRetainerServiceModal = ({ isOpen, handleClose, existingServices, projec
     const [availableServices, setAvailableServices] = useState([])
     const [errorMessage, setErrorMessage] = useState(null)
     const [missingServiceMessage, setMissingServiceMessage] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     const location = useLocation()
 
@@ -86,36 +87,46 @@ const AddRetainerServiceModal = ({ isOpen, handleClose, existingServices, projec
             'user_id': user
         }
 
-        await api.addRetainerService(jobId, request)
+        setLoading(true)
 
-        const { data } = await api.getAssignmentsFormInfo(jobId)
+        try {
+            await api.addRetainerService(jobId, request)
 
-        data.project_managers.push({
-            id: 999,
-            first_name: 'Unassign',
-            last_name: '',
-            availability: 'busy',
-            profile: {
-                'avatar': 'https://res.cloudinary.com/datidxeqm/image/upload/v1666103235/media/profiles/unassign_fgdefu.png'
-            }
-        })
+            const { data } = await api.getAssignmentsFormInfo(jobId)
+
+            data.project_managers.push({
+                id: 999,
+                first_name: 'Unassign',
+                last_name: '',
+                availability: 'busy',
+                profile: {
+                    'avatar': 'https://res.cloudinary.com/datidxeqm/image/upload/v1666103235/media/profiles/unassign_fgdefu.png'
+                }
+            })
+            
+            const updatedRetainerServices = data.retainer_services.map((s) => {
+                s = {...s, projectManagers: data.project_managers}
+
+                if (s.project_manager) {
+                    //set selected
+                    s.selectedProjectManager = data.project_managers.find(p => p.id === s.project_manager.id)
+
+                } else {
+                    //set selected as unassign
+                    s.selectedProjectManager = data.project_managers.find(p => p.id === 999)
+                }
+
+                return s;
+
+            })
+
+            setLoading(false)
+            handleAddService(updatedRetainerServices)
         
-        const updatedRetainerServices = data.retainer_services.map((s) => {
-            s = {...s, projectManagers: data.project_managers}
+        } catch (error) {
+            setLoading(false)
+        }
 
-            if (s.project_manager) {
-                //set selected
-                s.selectedProjectManager = data.project_managers.find(p => p.id === s.project_manager.id)
-
-            } else {
-                //set selected as unassign
-                s.selectedProjectManager = data.project_managers.find(p => p.id === 999)
-            }
-
-            return s;
-        })
-
-        handleAddService(updatedRetainerServices)
     }
 
 
@@ -193,7 +204,7 @@ const AddRetainerServiceModal = ({ isOpen, handleClose, existingServices, projec
                             )}
                         </div>
 
-                        {!location.pathname.includes('review') && (
+                        {(!location.pathname.includes('review') && !location.pathname.includes('details')) && (
                             <div className="mt-6">
                                 <Listbox value={selectedProjectManager} onChange={setSelectedProjectManager}>
                                 {({ open }) => (
@@ -301,17 +312,23 @@ const AddRetainerServiceModal = ({ isOpen, handleClose, existingServices, projec
                 <button
                     type="button"
                     onClick={() => addRetainerService()}
-                    disabled={errorMessage}
+                    disabled={errorMessage || loading}
                     className="inline-flex w-full justify-center rounded-md border border-transparent
                             bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700
                             focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                 >
-                    <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-white" aria-hidden="true" />
-                    <span>Add</span>
+                    {loading ? 'calculating...'
+                         : <>
+                                <PlusIcon className="-ml-2 mr-1 h-5 w-5 text-white" aria-hidden="true" />
+                                <span>Add</span>
+                            </>
+                    }
+
                 </button>
                 <button
                     type="button"
                     onClick={handleClose}
+                    disabled={loading}
                     className="mt-3 inline-flex w-full justify-center rounded-md border
                                 border-gray-300 bg-white px-4 py-2 text-base font-medium
                                 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
