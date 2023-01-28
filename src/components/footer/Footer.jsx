@@ -99,7 +99,7 @@ const Footer = () => {
             src={logo}
             alt="Livetakeoff logo"
         /> 
-        <p className="mt-2 text-center text-sm leading-6 text-slate-500">&#169; 2022 Livetakeoff. All rights reserved.</p>
+        <p className="mt-2 text-center text-sm leading-6 text-slate-500">&#169; 2023 Livetakeoff. All rights reserved.</p>
         <div className="flex space-x-6 justify-center mt-6">
             {navigation.social.map((item) => (
               <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
