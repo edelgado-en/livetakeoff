@@ -44,8 +44,18 @@ const CreateJob = () => {
     const [aircraftTypes, setAircraftTypes] = useState([])
     const [airports, setAirports] = useState([])
     const [fbos, setFbos] = useState([])
+    
     const [services, setServices] = useState([])
     const [retainerServices, setRetainerServices] = useState([])
+
+    const [interiorServices, setInteriorServices] = useState([])
+    const [exteriorServices, setExteriorServices] = useState([])
+    const [otherServices, setOtherServices] = useState([])
+
+    const [interiorRetainerServices, setInteriorRetainerServices] = useState([])
+    const [exteriorRetainerServices, setExteriorRetainerServices] = useState([])
+    const [otherRetainerServices, setOtherRetainerServices] = useState([])
+    
     const [servicesErrorMessage, setServicesErrorMessage] = useState(null)
 
     const [tags, setTags] = useState([])
@@ -126,33 +136,83 @@ const CreateJob = () => {
 
                 //Do not update services if there there is an estimate id, just respect the services used in the estimate id
                 if (data.services.length > 0 && estimateId === undefined) {
+                    //iterate through data.services and based on the category, iterate through each of the services and set the selected field to true if the ids match
+                    data.services.forEach(service => {
+                        if (service.category === 'I') {
+                            const updatedInteriorServices = interiorServices.map(s => {
+                                if (s.id === service.id) {
+                                    return {...s, selected: true}
+                                } else {
+                                    return {...s, selected: false}
+                                }
+                            })
+                            
+                            setInteriorServices(updatedInteriorServices)
 
-                    //update the services array and set the field as selected if the ids match
-                    const updatedServices = services.map(service => {
-                        const foundService = data.services.find(s => s.id === service.id)
-                        if (foundService) {
-                            return {...service, selected: true}
-                        } else {
-                            return {...service, selected: false}
+                        } else if (service.category === 'E') {
+                            const updatedExteriorServices = exteriorServices.map(s => {
+                                if (s.id === service.id) {
+                                    return {...s, selected: true}
+                                } else {
+                                    return {...s, selected: false}
+                                }
+                            })
+                            
+                            setExteriorServices(updatedExteriorServices)
+
+                        } else if (service.category === 'O') {
+                            const updatedOtherServices = otherServices.map(s => {
+                                if (s.id === service.id) {
+                                    return {...s, selected: true}
+                                } else {
+                                    return {...s, selected: false}
+                                }
+                            })
+
+                            setOtherServices(updatedOtherServices)
+
                         }
                     })
-
-                    setServices(updatedServices)
 
                 }
 
                 if (data.retainer_services.length > 0) {
-                    //update the retainer services array and set the field as selected if the ids match
-                    const updatedRetainerServices = retainerServices.map(service => {
-                        const foundService = data.retainer_services.find(s => s.id === service.id)
-                        if (foundService) {
-                            return {...service, selected: true}
-                        } else {
-                            return {...service, selected: false}
+                    //iterate through data.retainer_services and based on the category, iterate through each of the retainer services and set the selected field to true if the ids match
+                    data.retainer_services.forEach(retainerService => {
+                        if (retainerService.category === 'I') {
+                            const updatedInteriorRetainerServices = interiorRetainerServices.map(service => {
+                                if (service.id === retainerService.id) {
+                                    return {...service, selected: true}
+                                } else {
+                                    return {...service, selected: false}
+                                }
+                            })
+
+                            setInteriorRetainerServices(updatedInteriorRetainerServices)
+
+                        } else if (retainerService.category === 'E') {
+                            const updatedExteriorRetainerServices = exteriorRetainerServices.map(service => {
+                                if (service.id === retainerService.id) {
+                                    return {...service, selected: true}
+                                } else {
+                                    return {...service, selected: false}
+                                }
+                            })
+
+                            setExteriorRetainerServices(updatedExteriorRetainerServices)
+
+                        } else if (retainerService.category === 'O') {
+                            const updatedOtherRetainerServices = otherRetainerServices.map(service => {
+                                if (service.id === retainerService.id) {
+                                    return {...service, selected: true}
+                                } else {
+                                    return {...service, selected: false}
+                                }
+                            })
+
+                            setOtherRetainerServices(updatedOtherRetainerServices)
                         }
                     })
-
-                    setRetainerServices(updatedRetainerServices)
                 }
             }
 
@@ -180,9 +240,52 @@ const CreateJob = () => {
             setAircraftTypes(data.aircraft_types)
             setAirports(data.airports)
             setFbos(data.fbos)
+            setTags(data.tags)
+            
             setServices(data.services)
             setRetainerServices(data.retainer_services)
-            setTags(data.tags)
+
+            const interior = []
+            const exterior = []
+            const other = []
+
+            data.services.forEach(service => {
+                if (service.category === 'I') {
+                    interior.push(service)
+
+                } else if (service.category === 'E') {
+                    exterior.push(service)
+
+                } else {
+                    other.push(service)
+                }
+            })
+
+            setInteriorServices(interior)
+            setExteriorServices(exterior)
+            setOtherServices(other)
+
+            const interiorRetainer = []
+            const exteriorRetainer = []
+            const otherRetainer = []
+
+
+            data.retainer_services.forEach(retainerService => {
+                if (retainerService.category === 'I') {
+                    interiorRetainer.push(retainerService)
+
+                } else if (retainerService.category === 'E') {
+                    exteriorRetainer.push(retainerService)
+
+                } else {
+                    otherRetainer.push(retainerService)
+                }
+            })
+
+            setInteriorRetainerServices(interiorRetainer)
+            setExteriorRetainerServices(exteriorRetainer)
+            setOtherRetainerServices(otherRetainer)
+
 
             // if estimateId is passed in, get the estimate info and pre-populate the form
             if (estimateId) {
@@ -192,18 +295,45 @@ const CreateJob = () => {
                 setAircraftTypeSelected(response.data.aircraftType)
                 setAirportSelected(response.data.airport)
                 setFboSelected(response.data.fbo)
-                
-                // the lookup has to be done by name because the ids are different in services vs estimate services
-                const updatedServices = data.services.map(service => {
-                    const foundService = response.data.services.find(s => s.name === service.name)
-                    if (foundService) {
-                        return {...service, selected: true}
+ 
+                //iterate through data.services and based on the service.category,
+                // update the selected field to true if there is a match by service name
+                // the match has to be done by name because the service id from an estimate is different than a regular service id
+                response.data.services.forEach(service => {
+                    if (service.category === 'I') {
+                        const updatedInteriorServices = interior.map(s => {
+                            if (s.name === service.name) {
+                                return {...s, selected: true}
+                            } else {
+                                return {...s, selected: false}
+                            }
+                        })
+                        
+                        setInteriorServices(updatedInteriorServices)
+
+                    } else if (service.category === 'E') {
+                        const updatedExteriorServices = exterior.map(s => {
+                            if (s.name === service.name) {
+                                return {...s, selected: true}
+                            } else {
+                                return {...s, selected: false}
+                            }
+                        })
+
+                        setExteriorServices(updatedExteriorServices)
+
                     } else {
-                        return {...service, selected: false}
+                        const updatedOtherServices = other.map(s => {
+                            if (s.name === service.name) {
+                                return {...s, selected: true}
+                            } else {
+                                return {...s, selected: false}
+                            }
+                        })
+
+                        setOtherServices(updatedOtherServices)
                     }
                 })
-
-                setServices(updatedServices)
             }
 
             setLoading(false)
@@ -216,8 +346,16 @@ const CreateJob = () => {
     }
 
     const createJob = async (routeName) => {
-        const selectedServices = services.filter(service => service.selected === true)
-        const selectedRetainerServices = retainerServices.filter(retainerService => retainerService.selected === true)
+        let selectedServices = []
+        selectedServices = selectedServices.concat(interiorServices.filter(service => service.selected === true))
+        selectedServices = selectedServices.concat(exteriorServices.filter(service => service.selected === true))
+        selectedServices = selectedServices.concat(otherServices.filter(service => service.selected === true))
+
+        let selectedRetainerServices = []
+        selectedRetainerServices = selectedRetainerServices.concat(interiorRetainerServices.filter(service => service.selected === true))
+        selectedRetainerServices = selectedRetainerServices.concat(exteriorRetainerServices.filter(service => service.selected === true))
+        selectedRetainerServices = selectedRetainerServices.concat(otherRetainerServices.filter(service => service.selected === true))
+        
         const selectedTags = tags.filter(tag => tag.selected === true)
 
         let selectedCustomer = customerSelected
@@ -334,25 +472,70 @@ const CreateJob = () => {
     }
 
     const handleServiceChange = (service) => {
-        const servicesUpdated = services.map((el) => {
-            if (el.id === service.id) {
-                el.selected = !el.selected
-            }
-            return el
-        })
 
-        setServices(servicesUpdated)
+        if (service.category === 'I') {
+            const interiorServicesUpdated = interiorServices.map((el) => {
+                if (el.id === service.id) {
+                    el.selected = !el.selected
+                }
+                return el
+            })
+
+            setInteriorServices(interiorServicesUpdated)
+
+        } else if (service.category === 'E') {
+            const exteriorServicesUpdated = exteriorServices.map((el) => {
+                if (el.id === service.id) {
+                    el.selected = !el.selected
+                }
+                return el
+            })
+
+            setExteriorServices(exteriorServicesUpdated)
+
+        } else {
+            const otherServicesUpdated = otherServices.map((el) => {
+                if (el.id === service.id) {
+                    el.selected = !el.selected
+                }
+                return el
+            })
+
+            setOtherServices(otherServicesUpdated)
+        }
     }
 
     const handleRetainerServiceChange = (retainerService) => {
-        const retainerServicesUpdated = retainerServices.map((el) => {
-            if (el.id === retainerService.id) {
-                el.selected = !el.selected
-            }
-            return el
-        })
+        if (retainerService.category === 'I') {
+            const interiorRetainerServicesUpdated = interiorRetainerServices.map((el) => {
+                if (el.id === retainerService.id) {
+                    el.selected = !el.selected
+                }
+                return el
+            })
 
-        setRetainerServices(retainerServicesUpdated)
+            setInteriorRetainerServices(interiorRetainerServicesUpdated)
+
+        } else if (retainerService.category === 'E') {
+            const exteriorRetainerServicesUpdated = exteriorRetainerServices.map((el) => {
+                if (el.id === retainerService.id) {
+                    el.selected = !el.selected
+                }
+                return el
+            })
+
+            setExteriorRetainerServices(exteriorRetainerServicesUpdated)
+
+        } else {
+            const otherRetainerServicesUpdated = otherRetainerServices.map((el) => {
+                if (el.id === retainerService.id) {
+                    el.selected = !el.selected
+                }
+                return el
+            })
+
+            setOtherRetainerServices(otherRetainerServicesUpdated)
+        }
     }
 
     const handleTagChange = (tag) => {
@@ -1039,29 +1222,89 @@ const CreateJob = () => {
                         )}
 
                         <div className="text-sm leading-5 font-medium text-gray-700">Services</div>
-
-                        {services.map((service, index) => (
-                            <div key={index} className="relative flex items-start">
-                                <div className="flex h-5 items-center">
-                                <input
-                                    id={'service' + service.id} 
-                                    name={service.name}
-                                    checked={service.selected}
-                                    onChange={() => handleServiceChange(service)}       
-                                    type="checkbox"
-                                    className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                                />
+                        
+                        {interiorServices.length > 0 && (
+                            <div className="rounded-md p-4 border border-gray-300">
+                                <div className="uppercase text-gray-500 text-sm tracking-wide">
+                                    INTERIOR
                                 </div>
-                                <div className="ml-3 text-sm">
-                                <label htmlFor={'service' + service.id}  className="text-gray-700">
-                                    {service.name}
-                                </label>
+                                {interiorServices.map((service, index) => (
+                                    <div key={index} className="relative flex items-start my-6">
+                                        <div className="flex h-5 items-center">
+                                        <input
+                                            id={'service' + service.id} 
+                                            name={service.name}
+                                            checked={service.selected}
+                                            onChange={() => handleServiceChange(service)}       
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                        </div>
+                                        <div className="ml-3 text-sm">
+                                        <label htmlFor={'service' + service.id}  className="text-gray-700 cursor-pointer">
+                                            {service.name}
+                                        </label>
+                                        </div>
+                                    </div>   
+                                ))}
+                            </div>
+                        )}
+
+                        {exteriorServices.length > 0 && (
+                            <div className="rounded-md p-4 border border-gray-300">
+                                <div className="uppercase text-gray-500 text-sm tracking-wide">
+                                    EXTERIOR
                                 </div>
-                            </div>   
-                        ))}
+                                {exteriorServices.map((service, index) => (
+                                    <div key={index} className="relative flex items-start my-6">
+                                        <div className="flex h-5 items-center">
+                                        <input
+                                            id={'service' + service.id} 
+                                            name={service.name}
+                                            checked={service.selected}
+                                            onChange={() => handleServiceChange(service)}       
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                        </div>
+                                        <div className="ml-3 text-sm">
+                                        <label htmlFor={'service' + service.id}  className="text-gray-700 cursor-pointer">
+                                            {service.name}
+                                        </label>
+                                        </div>
+                                    </div>   
+                                ))}
+                            </div>
+                        )}
 
+                        {otherServices.length > 0 && (
+                            <div className="rounded-md p-4 border border-gray-300">
+                                <div className="uppercase text-gray-500 text-sm tracking-wide">
+                                    OTHER
+                                </div>
+                                {otherServices.map((service, index) => (
+                                    <div key={index} className="relative flex items-start my-6">
+                                        <div className="flex h-5 items-center">
+                                        <input
+                                            id={'service' + service.id} 
+                                            name={service.name}
+                                            checked={service.selected}
+                                            onChange={() => handleServiceChange(service)}       
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                        </div>
+                                        <div className="ml-3 text-sm">
+                                        <label htmlFor={'service' + service.id}  className="text-gray-700 cursor-pointer">
+                                            {service.name}
+                                        </label>
+                                        </div>
+                                    </div>   
+                                ))}
+                            </div>
+                        )}
 
-                        {servicesErrorMessage && <p className="text-red-500 text-xs font-semibold mt-2">{servicesErrorMessage}</p>}
+                       {servicesErrorMessage && <p className="text-red-500 text-sm font-semibold mt-2">{servicesErrorMessage}</p>}
                        
                        
                        {(currentUser.isAdmin
@@ -1071,7 +1314,87 @@ const CreateJob = () => {
                             <>
                                 <div className="py-1"></div>
                                 <div className="text-sm leading-5 font-medium text-gray-700">Retainer Services</div>
-                                {retainerServices.map((retainerService) => (
+                                {interiorRetainerServices.length > 0 && (
+                                    <div className="rounded-md p-4 border border-gray-300">
+                                        <div className="uppercase text-gray-500 text-sm tracking-wide">
+                                            INTERIOR
+                                        </div>
+                                        {interiorRetainerServices.map((service, index) => (
+                                            <div key={index} className="relative flex items-start my-6">
+                                                <div className="flex h-5 items-center">
+                                                <input
+                                                    id={'retainer' + service.id} 
+                                                    name={service.name}
+                                                    checked={service.selected}
+                                                    onChange={() => handleRetainerServiceChange(service)}       
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                                />
+                                                </div>
+                                                <div className="ml-3 text-sm">
+                                                <label htmlFor={'retainer' + service.id}  className="text-gray-700 cursor-pointer">
+                                                    {service.name}
+                                                </label>
+                                                </div>
+                                            </div>   
+                                        ))}
+                                    </div>
+                                )}
+
+                                {exteriorRetainerServices.length > 0 && (
+                                    <div className="rounded-md p-4 border border-gray-300">
+                                        <div className="uppercase text-gray-500 text-sm tracking-wide">
+                                            EXTERIOR
+                                        </div>
+                                        {exteriorRetainerServices.map((service, index) => (
+                                            <div key={index} className="relative flex items-start my-6">
+                                                <div className="flex h-5 items-center">
+                                                <input
+                                                    id={'retainer' + service.id} 
+                                                    name={service.name}
+                                                    checked={service.selected}
+                                                    onChange={() => handleRetainerServiceChange(service)}       
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                                />
+                                                </div>
+                                                <div className="ml-3 text-sm">
+                                                <label htmlFor={'retainer' + service.id}  className="text-gray-700 cursor-pointer">
+                                                    {service.name}
+                                                </label>
+                                                </div>
+                                            </div>   
+                                        ))}
+                                    </div>
+                                )}
+
+                                {otherRetainerServices.length > 0 && (
+                                    <div className="rounded-md p-4 border border-gray-300">
+                                        <div className="uppercase text-gray-500 text-sm tracking-wide">
+                                            OTHER
+                                        </div>
+                                        {otherRetainerServices.map((service, index) => (
+                                            <div key={index} className="relative flex items-start my-6">
+                                                <div className="flex h-5 items-center">
+                                                <input
+                                                    id={'retainer' + service.id} 
+                                                    name={service.name}
+                                                    checked={service.selected}
+                                                    onChange={() => handleRetainerServiceChange(service)}       
+                                                    type="checkbox"
+                                                    className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                                />
+                                                </div>
+                                                <div className="ml-3 text-sm">
+                                                <label htmlFor={'retainer' + service.id}  className="text-gray-700 cursor-pointer">
+                                                    {service.name}
+                                                </label>
+                                                </div>
+                                            </div>   
+                                        ))}
+                                    </div>
+                                )}
+                                {/* {retainerServices.map((retainerService) => (
                                     <div key={retainerService.id} className="relative flex items-start">
                                         <div className="flex h-5 items-center">
                                         <input
@@ -1089,7 +1412,7 @@ const CreateJob = () => {
                                         </label>
                                         </div>
                                     </div>   
-                                ))}
+                                ))} */}
                             </>
                        )}
 
