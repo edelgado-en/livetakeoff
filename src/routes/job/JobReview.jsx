@@ -248,7 +248,7 @@ const JobReview = () => {
                                             </Link>
                                         )}
                                     </Menu.Item>
-                                    {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                    {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                                         <>
                                         <Menu.Item>
                                         {({ active }) => (

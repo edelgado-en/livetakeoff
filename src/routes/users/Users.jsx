@@ -32,6 +32,7 @@ const roleOptions = [
   { id: 'Customers', name: 'Customers' },
   { id: 'Project Managers', name: 'P. Managers' },
   { id: 'Account Managers', name: 'A. Managers' },
+  { id: 'Internal Coordinators', name: 'I. Coordinator' },
   { id: 'Admins', name: 'Admins' },
 ]
 
@@ -303,10 +304,12 @@ const Users = () => {
                                           ${(user.is_staff || user.is_super_user) ? 'text-green-800 bg-green-100' : ''}
                                           ${user.is_account_manager ? 'text-blue-800 bg-blue-100' : ''}
                                           ${user.is_project_manager ? 'text-violet-800 bg-violet-100' : ''}
+                                          ${user.is_internal_coordinator ? 'text-orange-800 bg-orange-100' : ''}
                                           ${user.customer_name ? 'text-sky-800 bg-sky-100' : ''} `}>
                                       {(user.is_staff || user.is_super_user) && 'Admin'}
                                       {user.is_project_manager && 'P. Manager'}
                                       {user.is_account_manager && 'A. Manager'}
+                                      {user.is_internal_coordinator && 'Coordinator'}
                                       {user.customer_name && 'Customer'}
                                     </span>
                                   </div>
@@ -483,11 +486,13 @@ const Users = () => {
                                          px-2 py-0.5 text-xs
                                          ${(user.is_staff || user.is_super_user) ? 'text-green-800 bg-green-100' : ''}
                                          ${user.is_account_manager ? 'text-blue-800 bg-blue-100' : ''}
+                                         ${user.is_internal_coordinator ? 'text-orange-800 bg-orange-100' : ''}
                                          ${user.is_project_manager ? 'text-violet-800 bg-violet-100' : ''}
                                          ${user.customer_name ? 'text-sky-800 bg-sky-100' : ''} `}>
                                 {(user.is_staff || user.is_super_user) && 'Admin'}
                                 {user.is_project_manager && 'Project Manager'}
                                 {user.is_account_manager && 'Account Manager'}
+                                {user.is_internal_coordinator && 'Coordinator'}
                                 {user.customer_name && 'Customer'}
                               </span>
                             </div>

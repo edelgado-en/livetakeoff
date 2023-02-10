@@ -211,7 +211,7 @@ const JobPhotoUpload = () => {
             <>
             {!loading && (
                 <>
-                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                     <div className="mt-8 mb-20">
                         <ImageUploading
                             multiple

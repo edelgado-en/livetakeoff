@@ -585,6 +585,7 @@ const JobInfo = () => {
                     || currentUser.isProjectManager
                              || currentUser.isSuperUser
                              || currentUser.isAccountManager
+                             || currentUser.isInternalCoordinator
                              || (currentUser.isCustomer && currentUser.isPremiumMember)) && (
                     <div className="mx-auto max-w-5xl pb-12">
                         <div className="flex justify-between">

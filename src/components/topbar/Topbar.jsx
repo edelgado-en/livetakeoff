@@ -39,6 +39,21 @@ const dashboards = [
   }
 ]
 
+const internalCoordinatorDashboards = [
+  {
+    name: 'Tail Report',
+    description: "See detailed information about a tail number.",
+    href: '/tail-report',
+    icon: PresentationChartBarIcon,
+  },
+  {
+    name: 'Services by Airport',
+    description: "A breakdown of open services by airport.",
+    href: '/services-by-airport',
+    icon: ViewGridIcon,
+  }
+]
+
 const moreOptions = [
   {
     name: 'Estimates',
@@ -367,6 +382,85 @@ const Topbar = () => {
                           </Popover>
                         </>
                       )}
+
+                      {currentUser.isInternalCoordinator && (
+                        <>
+                           <Link
+                            to="/jobs"
+                            className={classNames(
+                              location.pathname.includes('jobs') ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}
+                          >
+                            Jobs
+                          </Link>
+                          <Link 
+                            to="completed"
+                            className={classNames(
+                              location.pathname.includes("completed") ? 'bg-red-700' : ' hover:bg-red-700 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium text-white'
+                            )}>
+                              Completed Jobs
+                          </Link>
+                          <Popover className="relative">
+                            {({ open }) => (
+                              <>
+                                <Popover.Button
+                                onMouseEnter={() => toggleDashboardMenu()}
+                                  onClick={() => toggleDashboardMenu()}
+                                  className={classNames(
+                                    open ? 'text-white' : 'text-white',
+                                    'group inline-flex items-center rounded-md text-sm px-3 py-2 bg-red-600 hover:bg-red-700 hover:text-white font-medium'
+                                  )}
+                                >
+                                  <span>Dashboards</span>
+                                  <ChevronDownIcon
+                                    className={classNames(
+                                      open ? 'text-white' : 'text-white',
+                                      'ml-2 h-4 w-4'
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                </Popover.Button>
+
+                                <Transition
+                                  as={Fragment}
+                                  show={showDashboardMenu}
+                                  enter="transition ease-out duration-200"
+                                  enterFrom="opacity-0 translate-y-1"
+                                  enterTo="opacity-100 translate-y-0"
+                                  leave="transition ease-in duration-150"
+                                  leaveFrom="opacity-100 translate-y-0"
+                                  leaveTo="opacity-0 translate-y-1"
+                                >
+                                  <Popover.Panel 
+                                    onMouseLeave={() => setDashboardMenu(false)}
+                                  className="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2">
+                                    <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                                      <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                        {internalCoordinatorDashboards.map((item) => (
+                                          <button
+                                              key={item.name}
+                                              onClick={() => handleDashboardLink(item.href)}
+                                              to={item.href}
+                                              className="-m-3 flex items-start rounded-lg px-3 py-4 hover:bg-gray-50"
+                                            >
+                                              <item.icon className="h-6 w-6 flex-shrink-0 text-red-600" aria-hidden="true" />
+                                              <div className="ml-4 text-left">
+                                                <p className="text-base font-medium text-gray-900">{item.name}</p>
+                                                <p className="mt-1 text-sm text-gray-500">{item.description}</p>
+                                              </div>
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </Popover.Panel>
+                                </Transition>
+                              </>
+                            )}
+                          </Popover>
+                        </>
+                      )}
                   </div>
                 </div>
               </div>
@@ -417,12 +511,13 @@ const Topbar = () => {
                             {currentUser.isAdmin ? 'Admin'
                               : currentUser.isSuperUser ? 'Super User'
                               : currentUser.isAccountManager ? 'Account Manager'
+                              : currentUser.isInternalCoordinator ? 'Internal Coordinator'
                               : currentUser.isCustomer ? 'Customer'
                               : 'Project Manager'}
                           </div>
                           <div className="text-sm font-semibold text-gray-500">{currentUser.email}</div>
                       </div>
-
+                      
                       <Menu.Item>
                         {({ active }) => (
                           <Link
@@ -661,6 +756,57 @@ const Topbar = () => {
                           ))}
                       </nav>
                     </div>
+                  </>
+                )}
+
+                {currentUser.isInternalCoordinator && (
+                  <>
+                    <Link 
+                      to="jobs">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("jobs") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                        'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                      )}
+                    >
+                        Jobs
+                    </Disclosure.Button>
+                   </Link>
+                    <Link 
+                        to="completed">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("completed") ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                          'block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left'
+                        )}
+                      >
+                          Completed Jobs
+                      </Disclosure.Button>
+                    </Link>
+                    <div className="mt-4 border-t border-white py-2">
+                      <nav className="grid">
+                          {internalCoordinatorDashboards.map((item) => (
+                            <Link
+                                key={item.name}
+                                to={item.href}
+                                className="flex items-start rounded-lg px-3 "
+                              >
+                                <Disclosure.Button
+                                  className={classNames(
+                                    location.pathname.includes(item.href) ? 'bg-red-700' : 'hover:bg-red-700 hover:text-white',
+                                    'px-3 rounded-md text-base font-medium text-white w-full text-left flex py-3 -ml-4'
+                                  )}
+                                >
+                                    <item.icon className="h-6 w-6 flex-shrink-0 text-white" aria-hidden="true" />
+                                    <div className="ml-4 text-left">
+                                      <p className="text-base font-medium text-white">{item.name}</p>
+                                    </div>
+                                </Disclosure.Button>
+                            </Link>
+                          ))}
+                      </nav>
+                    </div>
+
                   </>
                 )}
             </div>

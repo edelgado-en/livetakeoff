@@ -963,6 +963,7 @@ const EditJob = () => {
 
                         {(currentUser.isAdmin
                              || currentUser.isSuperUser
+                             || currentUser.isInternalCoordinator
                              || currentUser.isAccountManager) && (
                             <>
                                 <div className="text-sm leading-5 font-medium text-gray-700">Tags</div>

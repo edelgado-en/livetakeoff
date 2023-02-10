@@ -313,7 +313,7 @@ const JobsQueue = () => {
 
     return (
       <AnimatedPage>
-        <div className={`px-4 m-auto ${(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) ? 'max-w-7xl' : 'max-w-5xl'} -mt-3 flex flex-wrap`}>
+        <div className={`px-4 m-auto ${(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) ? 'max-w-7xl' : 'max-w-5xl'} -mt-3 flex flex-wrap`}>
           <div className="flex-1 xl:px-10 lg:px-10 md:px-10">
           <div className="grid grid-cols-2">
             <div className="">
@@ -323,7 +323,7 @@ const JobsQueue = () => {
               </p>
             </div>
             <div className="text-right">
-            {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer) && (
+            {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer || currentUser.isInternalCoordinator) && (
                 <Link to="/create-job">
                   <button
                     type="button"
@@ -342,7 +342,7 @@ const JobsQueue = () => {
             
           </div>
 
-          {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer) && (
+          {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer || currentUser.isInternalCoordinator) && (
             <>
             {/* Mobile filter dialog */}
             <Transition.Root show={open} as={Fragment}>
@@ -586,7 +586,7 @@ const JobsQueue = () => {
           )}
 
           {!loading && jobs.length === 0 && (
-              (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer) ?
+              (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer || currentUser.isInternalCoordinator) ?
                 <div className="text-center mt-14 ">
                   <svg
                     className="mx-auto h-12 w-12 text-gray-400"
@@ -651,7 +651,7 @@ const JobsQueue = () => {
                               <div className="mt-2 text-sm text-gray-500 mb-1">
                                 <span className="font-medium">{job.airport.initials}</span> - {job.fbo.name} - {job.aircraftType.name}
                               </div>
-                              {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && job.asignees?.length > 0 && (
+                              {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && job.asignees?.length > 0 && (
                                     <div className="flex -space-x-1 overflow-hidden justify-start my-2">
                                         {job.asignees?.map((asignee) => (
                                           <Fragment key={asignee.username}>
@@ -796,7 +796,7 @@ const JobsQueue = () => {
           
           </div>
 
-          {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isCustomer)) && (
+          {((currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator || currentUser.isCustomer)) && (
               <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
                 <div className="hidden xl:block lg:block pb-4">
                   <h2 className="font-medium text-sm text-gray-900">Status</h2>

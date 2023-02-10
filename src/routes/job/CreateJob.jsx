@@ -216,7 +216,7 @@ const CreateJob = () => {
                 }
             }
 
-            if (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) {
+            if (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) {
                 const response = await api.getTailAlertLookup(tailNumber)
                 if (response.data?.id > 0) {
                     setShowTailAlert(true)
@@ -1310,6 +1310,7 @@ const CreateJob = () => {
                        {(currentUser.isAdmin
                              || currentUser.isSuperUser
                              || currentUser.isAccountManager
+                             || currentUser.isInternalCoordinator
                              || (currentUser.isCustomer && currentUser.isPremiumMember)) && (
                             <>
                                 <div className="py-1"></div>
@@ -1418,6 +1419,7 @@ const CreateJob = () => {
 
                        {(currentUser.isAdmin
                              || currentUser.isSuperUser
+                             || currentUser.isInternalCoordinator
                              || currentUser.isAccountManager) && (
                             <>
                                 <div className="py-1"></div>

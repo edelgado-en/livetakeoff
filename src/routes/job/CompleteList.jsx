@@ -126,7 +126,7 @@ const CompleteList = () => {
 
     useEffect(() => {
         
-        if (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) {
+        if (currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) {
             if (!availableStatuses.find(status => status.id === 'T')) {
                 availableStatuses.push({id: 'T', name: 'Canceled'})
             }
@@ -1534,11 +1534,14 @@ const CompleteList = () => {
                                             >
                                             Status
                                             </th>
-                                            <th
-                                            className="whitespace-nowrap px-8 py-2 text-left text-xs font-normal uppercase text-gray-500"
-                                            >
-                                            Price
-                                            </th>
+                                            {!currentUser.isInternalCoordinator && (
+                                                <th
+                                                className="whitespace-nowrap px-8 py-2 text-left text-xs font-normal uppercase text-gray-500"
+                                                >
+                                                Price
+                                                </th>
+
+                                            )}
                                             <th className="relative whitespace-nowrap py-2 pl-3 pr-4 sm:pr-6">
                                             
                                             </th>
@@ -1549,7 +1552,7 @@ const CompleteList = () => {
                                             <tr key={job.id} className="hover:bg-gray-50">
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.purchase_order}</td>
                                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">{job.customer_purchase_order}</td>
-                                            {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                            {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                                                 <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500 truncate overflow-ellipsis w-28 max-w-xs" style={{maxWidth: '170px'}}>{job.customer.name}</td>
                                             )}
                                             <td className=" px-2 py-2 text-xs text-gray-500">{job.requestDate}</td>
@@ -1570,10 +1573,11 @@ const CompleteList = () => {
                                                 </p>
                                             </td>
                                             <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                                                <div className="flex gap-1">
-                                                    {'$'}{job.price ? job.price.toLocaleString() : '0.00'}
-                                                    
-                                                </div>
+                                                {!currentUser.isInternalCoordinator && (
+                                                    <div className="flex gap-1">
+                                                        {'$'}{job.price ? job.price.toLocaleString() : '0.00'}
+                                                    </div>
+                                                )}
                                             </td>
                                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
                                                 <button

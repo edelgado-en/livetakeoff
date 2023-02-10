@@ -182,7 +182,7 @@ const JobComments = () => {
                                     {comment.author.first_name} {' '} {comment.author.last_name}
                                   </div>
                                   
-                                  {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                  {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                                     <div className="flex gap-x-4">
                                       <div className="ml-4 cursor-pointer" onClick={() => toggleCommentVisibility(comment)}>
                                         <span
@@ -238,7 +238,7 @@ const JobComments = () => {
                               <>
                                 <div className="mt-3 flex items-center justify-between">
                                   <div className="pr-8">
-                                    {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                    {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                                       <div className="flex">
                                         <div className="flex h-5 items-center">
                                           <input
@@ -272,7 +272,7 @@ const JobComments = () => {
                                     {createCommentLoading ? '.....': 'Post'}
                                   </button>
                                 </div>
-                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                                   <div className="mt-3 flex items-center justify-between">
                                       <div className="flex">
                                         <div className="flex h-5 items-center">

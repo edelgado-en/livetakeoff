@@ -75,7 +75,7 @@ const JobDetails = () => {
                     <div>
                         <div className="">
                             <nav className="flex space-x-4" aria-label="Tabs">
-                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                                     <Popover className="relative">
                                         <Popover.Button>
                                             <ShareIcon className="h-6 w-6 text-gray-600 cursor-pointer" onClick={() => handleCopyClick()} />
@@ -128,7 +128,7 @@ const JobDetails = () => {
                                     </Link>
                                 )}
                                 
-                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager) && (
+                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
                                     <Menu as="div" className="relative inline-block text-left">
                                         <div>
                                             <Menu.Button className="flex items-center rounded-full
