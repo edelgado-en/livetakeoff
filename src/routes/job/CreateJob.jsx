@@ -3,6 +3,7 @@ import Loader from "../../components/loader/Loader"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { Listbox, Transition, } from '@headlessui/react'
 import { PlusIcon, CheckIcon, CheckCircleIcon, InboxIcon, XCircleIcon } from "@heroicons/react/outline"
+import { InformationCircleIcon } from "@heroicons/react/solid"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import ImageUploading from 'react-images-uploading';
@@ -1304,6 +1305,22 @@ const CreateJob = () => {
                             </div>
                         )}
 
+                        {currentUser.isCustomer  && (
+                            <div className="rounded-md bg-blue-50 p-4">
+                                <div className="flex">
+                                    <div className="flex-shrink-0">
+                                        <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
+                                    </div>
+                                    <div className="ml-3 flex-1 md:flex md:justify-between">
+                                        <p className="text-sm text-blue-700">If you don't see your Aircraft Type or the Service you need is not listed, please
+                                            <Link to="/contact" className="mx-1 font-semibold">Contact Us</Link> or call 
+                                            <a href="tel:+17869756255" className="ml-1 font-semibold">786-975-6255</a> so we can coordinate it for you.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                        {servicesErrorMessage && <p className="text-red-500 text-sm font-semibold mt-2">{servicesErrorMessage}</p>}
                        
                        
@@ -1313,7 +1330,6 @@ const CreateJob = () => {
                              || currentUser.isInternalCoordinator
                              || (currentUser.isCustomer && currentUser.isPremiumMember)) && (
                             <>
-                                <div className="py-1"></div>
                                 <div className="text-sm leading-5 font-medium text-gray-700">Retainer Services</div>
                                 {interiorRetainerServices.length > 0 && (
                                     <div className="rounded-md p-4 border border-gray-300">

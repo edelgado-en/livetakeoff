@@ -3,6 +3,7 @@ import Loader from "../../components/loader/Loader"
 import { Link, useNavigate } from "react-router-dom"
 import { Listbox, Transition } from '@headlessui/react'
 import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
+import { InformationCircleIcon } from "@heroicons/react/solid"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { TrashIcon, PencilIcon } from "@heroicons/react/outline";
 import * as api from './apiService'
@@ -650,6 +651,22 @@ const CreateEstimate = () => {
                                 </div>
                             </div>   
                         ))}
+
+                        {currentUser.isCustomer  && (
+                            <div className="rounded-md bg-blue-50 p-4">
+                                <div className="flex">
+                                    <div className="flex-shrink-0">
+                                        <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
+                                    </div>
+                                    <div className="ml-3 flex-1 md:flex md:justify-between">
+                                        <p className="text-sm text-blue-700">Estimates are in BETA, if you see a service that shows zero cost, please 
+                                            <Link to="/contact" className="mx-1 font-semibold">Contact Us</Link> or call 
+                                            <a href="tel:+17869756255" className="ml-1 font-semibold">786-975-6255</a> so we can coordinate it for you.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         <div className="flex flex-col py-4 pb-20 gap-4">
                             <button
