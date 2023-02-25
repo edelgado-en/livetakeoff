@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment, useRef } from "react"
 import Loader from "../../components/loader/Loader"
 import { Link, useNavigate } from "react-router-dom"
-import { Listbox, Transition } from '@headlessui/react'
+import { Listbox, Transition, Switch } from '@headlessui/react'
 import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline"
 import { InformationCircleIcon } from "@heroicons/react/solid"
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -43,6 +43,8 @@ const CreateEstimate = () => {
     const [aircraftSearchTerm, setAircraftSearchTerm] = useState('')
     const [airportSearchTerm, setAirportSearchTerm] = useState('')
     const [fboSearchTerm, setFboSearchTerm] = useState('')
+
+    const [showTotals, setShowTotals] = useState(true)
 
     const currentUser = useAppSelector(selectUser)
 
@@ -126,6 +128,7 @@ const CreateEstimate = () => {
             fbo_id: fboSelected.id,
             airport_id: airportSelected.id,
             customer_id: customerSelected ? customerSelected.id : null,
+            show_totals: showTotals
         }
 
         try {
@@ -651,6 +654,42 @@ const CreateEstimate = () => {
                                 </div>
                             </div>   
                         ))}
+
+                    
+                    {!currentUser.isCustomer && (
+                        <div className="divide-y divide-gray-200">
+                            <div className="">
+                                <ul role="list" className="mt-2 divide-y divide-gray-200">
+                                <Switch.Group as="li" className="flex items-center justify-between py-4">
+                                    <div className="flex flex-col">
+                                    <Switch.Label as="p" className="text-sm leading-5 font-medium text-gray-700" passive>
+                                        Show Totals
+                                    </Switch.Label>
+                                    <Switch.Description className="text-sm text-gray-500">
+                                        Controls whether to show the "Total" and "Subtotal" values.
+                                    </Switch.Description>
+                                    </div>
+                                    <Switch
+                                    checked={showTotals}
+                                    onChange={setShowTotals}
+                                    className={classNames(
+                                        showTotals ? 'bg-red-500' : 'bg-gray-200',
+                                        'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
+                                    )}
+                                    >
+                                    <span
+                                        aria-hidden="true"
+                                        className={classNames(
+                                        showTotals ? 'translate-x-5' : 'translate-x-0',
+                                        'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                                        )}
+                                    />
+                                    </Switch>
+                                </Switch.Group>
+                                </ul>
+                            </div>
+                        </div>
+                    )}
 
                         {currentUser.isCustomer  && (
                             <div className="rounded-md bg-blue-50 p-4">

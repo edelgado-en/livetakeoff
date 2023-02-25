@@ -173,14 +173,16 @@ const ShareJobEstimate = () => {
                                             </div>
                                         ))}
                                     </dl>
-                                    <div className="flex justify-end py-2 text-xs mt-1">
-                                            <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
-                                            <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.services_price.toLocaleString()}</dd>
-                                    </div>
+                                    {estimateDetails?.show_totals && (
+                                        <div className="flex justify-end py-2 text-xs mt-1">
+                                                <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
+                                                <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.services_price.toLocaleString()}</dd>
+                                        </div>
+                                    )}
                                 </div>
                                     
                                 {estimateDetails?.job_estimate_discounts?.length > 0 && (
-                                    <div className="mt-2">
+                                    <div className="mt-4">
                                         <h3 className="text-sm text-gray-700">Discounts Applied</h3>
                                         <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                                             {estimateDetails.job_estimate_discounts.map((discount, index) => (
@@ -198,16 +200,19 @@ const ShareJobEstimate = () => {
                                                 </div>
                                             ))}
                                         </dl>
-                                        <div className="flex justify-end py-2 text-xs mt-1">
-                                            <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
-                                            <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.discounted_price.toLocaleString()}</dd>
-                                        </div>
+
+                                        {estimateDetails?.show_totals && (
+                                            <div className="flex justify-end py-2 text-xs mt-1">
+                                                <dt className="text-gray-500 pr-2 text-right font-medium">Subtotal</dt>
+                                                <dd className="whitespace-nowrap text-gray-900">${estimateDetails?.discounted_price.toLocaleString()}</dd>
+                                            </div>
+                                        )}
                                     </div>  
                                 )}
                                     
                                     
                                 {estimateDetails?.job_estimate_additional_fees?.length > 0 && (
-                                    <div className="mt-2">
+                                    <div className="mt-4">
                                         <h3 className="text-sm text-gray-700">Additional Fees Applied</h3>
                                         <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                                             {estimateDetails.job_estimate_additional_fees.map((fee, index) => (
@@ -228,10 +233,12 @@ const ShareJobEstimate = () => {
                                     </div>
                                 )}
 
-                                <div className="flex justify-end py-4 text-xs">
-                                    <dt className="text-black pr-2 text-right font-bold">Total</dt>
-                                    <dd className="whitespace-nowrap text-black font-bold">${estimateDetails?.total_price.toLocaleString()}</dd>
-                                </div>
+                                {estimateDetails?.show_totals && (
+                                    <div className="flex justify-end py-4 text-xs">
+                                        <dt className="text-black pr-2 text-right font-bold">Total</dt>
+                                        <dd className="whitespace-nowrap text-black font-bold">${estimateDetails?.total_price.toLocaleString()}</dd>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         
