@@ -137,83 +137,69 @@ const CreateJob = () => {
 
                 //Do not update services if there there is an estimate id, just respect the services used in the estimate id
                 if (data.services.length > 0 && estimateId === undefined) {
-                    //iterate through data.services and based on the category, iterate through each of the services and set the selected field to true if the ids match
-                    data.services.forEach(service => {
-                        if (service.category === 'I') {
-                            const updatedInteriorServices = interiorServices.map(s => {
-                                if (s.id === service.id) {
-                                    return {...s, selected: true}
-                                } else {
-                                    return {...s, selected: false}
-                                }
-                            })
-                            
-                            setInteriorServices(updatedInteriorServices)
-
-                        } else if (service.category === 'E') {
-                            const updatedExteriorServices = exteriorServices.map(s => {
-                                if (s.id === service.id) {
-                                    return {...s, selected: true}
-                                } else {
-                                    return {...s, selected: false}
-                                }
-                            })
-                            
-                            setExteriorServices(updatedExteriorServices)
-
-                        } else if (service.category === 'O') {
-                            const updatedOtherServices = otherServices.map(s => {
-                                if (s.id === service.id) {
-                                    return {...s, selected: true}
-                                } else {
-                                    return {...s, selected: false}
-                                }
-                            })
-
-                            setOtherServices(updatedOtherServices)
-
+                    const updatedInteriorServices = interiorServices.map(s => {
+                        if (data.services.some(service => service.id === s.id && service.category === 'I')) {
+                            return {...s, selected: true}
+                        } else {
+                            return {...s, selected: false}
                         }
                     })
 
+                    setInteriorServices(updatedInteriorServices)
+
+                    const updatedExteriorServices = exteriorServices.map(s => {
+                        if (data.services.some(service => service.id === s.id && service.category === 'E')) {
+                            return {...s, selected: true}
+                        } else {
+                            return {...s, selected: false}
+                        }
+                    })
+
+                    setExteriorServices(updatedExteriorServices)
+
+                    const updatedOtherServices = otherServices.map(s => {
+                        if (data.services.some(service => service.id === s.id && service.category === 'O')) {
+                            return {...s, selected: true}
+                        } else {
+                            return {...s, selected: false}
+                        }
+                    })
+
+                    setOtherServices(updatedOtherServices)
+                    
                 }
 
                 if (data.retainer_services.length > 0) {
-                    //iterate through data.retainer_services and based on the category, iterate through each of the retainer services and set the selected field to true if the ids match
-                    data.retainer_services.forEach(retainerService => {
-                        if (retainerService.category === 'I') {
-                            const updatedInteriorRetainerServices = interiorRetainerServices.map(service => {
-                                if (service.id === retainerService.id) {
-                                    return {...service, selected: true}
-                                } else {
-                                    return {...service, selected: false}
-                                }
-                            })
-
-                            setInteriorRetainerServices(updatedInteriorRetainerServices)
-
-                        } else if (retainerService.category === 'E') {
-                            const updatedExteriorRetainerServices = exteriorRetainerServices.map(service => {
-                                if (service.id === retainerService.id) {
-                                    return {...service, selected: true}
-                                } else {
-                                    return {...service, selected: false}
-                                }
-                            })
-
-                            setExteriorRetainerServices(updatedExteriorRetainerServices)
-
-                        } else if (retainerService.category === 'O') {
-                            const updatedOtherRetainerServices = otherRetainerServices.map(service => {
-                                if (service.id === retainerService.id) {
-                                    return {...service, selected: true}
-                                } else {
-                                    return {...service, selected: false}
-                                }
-                            })
-
-                            setOtherRetainerServices(updatedOtherRetainerServices)
+                    const updatedInteriorRetainerServices = interiorRetainerServices.map(s => {
+                        if (data.retainer_services.some(service => service.id === s.id && service.category === 'I')) {
+                            return {...s, selected: true}
+                        } else {
+                            return {...s, selected: false}
                         }
                     })
+
+                    setInteriorRetainerServices(updatedInteriorRetainerServices)
+
+                    const updatedExteriorRetainerServices = exteriorRetainerServices.map(s => {
+                        if (data.retainer_services.some(service => service.id === s.id && service.category === 'E')) {
+                            return {...s, selected: true}
+                        } else {
+                            return {...s, selected: false}
+                        }
+                    })
+
+                    setExteriorRetainerServices(updatedExteriorRetainerServices)
+
+                    const updatedOtherRetainerServices = otherRetainerServices.map(s => {
+                        if (data.retainer_services.some(service => service.id === s.id && service.category === 'O')) {
+                            return {...s, selected: true}
+                        } else {
+                            return {...s, selected: false}
+                        }
+                    })
+
+                    setOtherRetainerServices(updatedOtherRetainerServices)
+
                 }
             }
 
