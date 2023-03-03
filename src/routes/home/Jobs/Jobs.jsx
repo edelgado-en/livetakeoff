@@ -73,6 +73,9 @@ const JobsQueue = () => {
   const [customerSelected, setCustomerSelected] = useState(JSON.parse(localStorage.getItem('customerSelected')) || {id: 'All', name: 'All'})
   const [customerSearchTerm, setCustomerSearchTerm] = useState('')
 
+  const [projectManagers, setProjectManagers] = useState([])
+  const [projectManagerSelected, setProjectManagerSelected] = useState(JSON.parse(localStorage.getItem('projectManagerSelected')) || {id: 'All', name: 'All'})
+
   const filteredCustomers = customerSearchTerm
     ? customers.filter((item) => item.name.toLowerCase().includes(customerSearchTerm.toLowerCase()))
     : customers;
@@ -87,7 +90,11 @@ const JobsQueue = () => {
   }, [])
 
   useEffect(() => {
-    getCustomers({name: '', open_jobs: false});
+    getUsers()
+
+  }, [])
+
+  useEffect(() => {
 
     getAirports();
 
@@ -133,6 +140,16 @@ const JobsQueue = () => {
       }
   }
 
+  const getUsers = async () => {
+    const request = {
+      open_jobs_only: true
+    }
+
+    const { data } = await api.searchUsers(request);
+
+    setProjectManagers(data.results)
+  }
+
   const getAirports = async () => {
     let request = {
       name: '',
@@ -168,6 +185,11 @@ const JobsQueue = () => {
   }, [customerSelected])
 
   useEffect(() => {
+    localStorage.setItem('projectManagerSelected', JSON.stringify(projectManagerSelected))
+
+  }, [projectManagerSelected])
+
+  useEffect(() => {
     localStorage.setItem('airportSelected', JSON.stringify(airportSelected))
 
   }, [airportSelected])
@@ -182,7 +204,7 @@ const JobsQueue = () => {
       clearTimeout(timeoutID);
     };
 
-  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage])
+  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage, projectManagerSelected])
 
   const handleKeyDown = event => {
     if (event.key === 'Enter') {
@@ -204,6 +226,9 @@ const JobsQueue = () => {
     
     } else if (activeFilterId === 'airport') {
       setAirportSelected({id: 'All', name: 'All'})
+    
+    } else if (activeFilterId === 'projectManager') {
+      setProjectManagerSelected({id: 'All', name: 'All'})
     }
 
     setActiveFilters(activeFilters.filter(filter => filter.id !== activeFilterId))
@@ -222,7 +247,8 @@ const JobsQueue = () => {
       status: JSON.parse(localStorage.getItem('statusSelected')).id,
       sortField: sortSelected.id,
       customer: JSON.parse(localStorage.getItem('customerSelected')).id,
-      airport: JSON.parse(localStorage.getItem('airportSelected')).id
+      airport: JSON.parse(localStorage.getItem('airportSelected')).id,
+      project_manager: JSON.parse(localStorage.getItem('projectManagerSelected')).id,
     }
 
     let statusName;
@@ -254,6 +280,13 @@ const JobsQueue = () => {
       activeFilters.push({
         id: 'customer',
         name: customerSelected.name,
+      })
+    }
+
+    if (request.project_manager !== 'All') {
+      activeFilters.push({
+        id: 'projectManager',
+        name: projectManagerSelected.name,
       })
     }
 
@@ -818,6 +851,7 @@ const JobsQueue = () => {
                 </div>
                 
                 {!currentUser.isCustomer && (
+                  <>
                   <div className="pb-4">
                     <h2 className="font-medium text-sm text-gray-900">Customers <span className="text-gray-500 text-sm ml-1 font-normal">({customersWOpenJobs.length})</span></h2>
                     <ul className="relative z-0 divide-y divide-gray-200 mt-2">
@@ -841,6 +875,30 @@ const JobsQueue = () => {
                       ))}
                     </ul>
                   </div>
+                  <div className="pb-4">
+                    <h2 className="font-medium text-sm text-gray-900">Assignees <span className="text-gray-500 text-sm ml-1 font-normal">({projectManagers.length})</span></h2>
+                    <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                      {projectManagers.map((projectManager) => (
+                        <li key={projectManager.id} >
+                          <div onClick={() => setProjectManagerSelected({ id: projectManager.id, name: projectManager.username })}
+                                className="relative flex items-center space-x-3 pr-6 pl-3 py-1 focus-within:ring-2 cursor-pointer
+                                              hover:bg-gray-50">
+                            <div className="flex-shrink-0">
+                              <img className="h-8 w-8 rounded-full" src={projectManager.avatar} alt="" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div  className="focus:outline-none">
+                                {/* Extend touch target to entire panel */}
+                                <span className="absolute inset-0" aria-hidden="true" />
+                                <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{projectManager.first_name} {projectManager.last_name} <span className="text-gray-500 text-xs">({projectManager.username})</span></p>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  </>
                 )}
 
                 <div className="pb-8">

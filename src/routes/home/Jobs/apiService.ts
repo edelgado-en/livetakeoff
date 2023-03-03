@@ -11,3 +11,7 @@ export const getCurrentUser = () => {
 export const testSendEmail = () => {
     return httpService.get('/api/email/send')
 }
+
+export const searchUsers = (data: any) => {
+    return httpService.post('/api/users', data);
+}
