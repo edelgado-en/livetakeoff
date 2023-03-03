@@ -890,7 +890,7 @@ const JobsQueue = () => {
                               <div  className="focus:outline-none">
                                 {/* Extend touch target to entire panel */}
                                 <span className="absolute inset-0" aria-hidden="true" />
-                                <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{projectManager.first_name} {projectManager.last_name} <span className="text-gray-500 text-xs">({projectManager.username})</span></p>
+                                <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{projectManager.first_name} {projectManager.last_name}</p>
                               </div>
                             </div>
                           </div>
