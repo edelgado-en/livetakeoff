@@ -710,7 +710,7 @@ const JobsQueue = () => {
                                                                   ${tag.tag_color === 'amber' && 'border-amber-500 text-amber-500'}
                                                                   ${tag.tag_color === 'indigo' && ' border-indigo-500 text-indigo-500'}
                                                                   ${tag.tag_color === 'violet' && ' border-violet-500 text-violet-500'}
-                                                                  ${tag.tag_color === 'fuchsia' && 'border-fuchsia-500 text-fuchsia-500'}'}'} 
+                                                                  ${tag.tag_color === 'fuchsia' && 'border-fuchsia-500 text-fuchsia-500'} 
                                                                   ${tag.tag_color === 'pink' && 'border-pink-500 text-pink-500'}
                                                                  `}>
                                       {tag.tag_short_name}
