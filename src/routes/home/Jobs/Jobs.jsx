@@ -704,16 +704,16 @@ const JobsQueue = () => {
 
                               <div className="flex justify-start my-2 gap-2">
                                   {job.tags?.map((tag) => (
-                                    <div key={tag.id} className={`text-xs inline-block rounded-md px-2 py-1 text-white
-                                                                  ${tag.tag_color === 'red' && 'bg-red-400'}
-                                                                  ${tag.tag_color === 'orange' && 'bg-orange-400 '}
-                                                                  ${tag.tag_color === 'amber' && 'bg-amber-500 '}
-                                                                  ${tag.tag_color === 'indigo' && 'bg-indigo-500 '}
-                                                                  ${tag.tag_color === 'violet' && 'bg-violet-500 '}
-                                                                  ${tag.tag_color === 'fuchsia' && 'bg-fuchsia-500 '} 
-                                                                  ${tag.tag_color === 'pink' && 'bg-pink-500 '}
+                                    <div key={tag.id} className={`text-xs inline-block rounded-md px-2 py-1 text-white border
+                                                                  ${tag.tag_color === 'red' && 'border-red-500 text-red-500'}
+                                                                  ${tag.tag_color === 'orange' && 'border-orange-500 text-orange-500 '}
+                                                                  ${tag.tag_color === 'amber' && 'border-amber-500 text-amber-500'}
+                                                                  ${tag.tag_color === 'indigo' && ' border-indigo-500 text-indigo-500'}
+                                                                  ${tag.tag_color === 'violet' && ' border-violet-500 text-violet-500'}
+                                                                  ${tag.tag_color === 'fuchsia' && 'border-fuchsia-500 text-fuchsia-500'}'}'} 
+                                                                  ${tag.tag_color === 'pink' && 'border-pink-500 text-pink-500'}
                                                                  `}>
-                                      {tag.tag_name}
+                                      {tag.tag_short_name}
                                     </div>
                                   ))}
                               </div>
