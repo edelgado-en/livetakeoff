@@ -457,6 +457,20 @@ const JobsQueue = () => {
                           </div>
 
                           {!currentUser.isCustomer && (
+                              <>
+                              <div className="px-4 py-4">
+                                <h2 className="font-medium text-sm text-gray-900">Tags</h2>
+                                <div className="grid grid-cols-2 gap-2 mt-2">
+                                    {tags.map((tag) => (
+                                        <div key={tag.id} onClick={() => handleToggleTag(tag)} 
+                                            className={`${tag.selected ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50'}
+                                                          rounded-md border border-gray-200 cursor-pointer
+                                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}>
+                                            {tag.name}
+                                        </div>
+                                    ))}
+                                </div>
+                              </div>
                               <div className="px-4 py-4">
                                 <h2 className="font-medium text-sm text-gray-900">Customers <span className="text-gray-500 text-sm ml-1 font-normal">({customersWOpenJobs.length})</span></h2>
                                 <ul className="relative z-0 divide-y divide-gray-200 mt-2">
@@ -480,6 +494,30 @@ const JobsQueue = () => {
                                   ))}
                                 </ul>
                               </div>
+                              <div className="px-4 py-4">
+                                <h2 className="font-medium text-sm text-gray-900">Assignees <span className="text-gray-500 text-sm ml-1 font-normal">({projectManagers.length})</span></h2>
+                                <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                                  {projectManagers.map((projectManager) => (
+                                    <li key={projectManager.id} >
+                                      <div onClick={() => setProjectManagerSelected({ id: projectManager.id, name: projectManager.username })}
+                                            className="relative flex items-center space-x-3 pr-6 pl-3 py-1 focus-within:ring-2 cursor-pointer
+                                                          hover:bg-gray-50">
+                                        <div className="flex-shrink-0">
+                                          <img className="h-8 w-8 rounded-full" src={projectManager.avatar} alt="" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <div  className="focus:outline-none">
+                                            {/* Extend touch target to entire panel */}
+                                            <span className="absolute inset-0" aria-hidden="true" />
+                                            <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">{projectManager.first_name} {projectManager.last_name}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                              </>
                           )}
                           
                           <div className="px-4 py-4">
