@@ -76,6 +76,8 @@ const JobsQueue = () => {
   const [projectManagers, setProjectManagers] = useState([])
   const [projectManagerSelected, setProjectManagerSelected] = useState(JSON.parse(localStorage.getItem('projectManagerSelected')) || {id: 'All', name: 'All'})
 
+  const [tags, setTags] = useState([])
+
   const filteredCustomers = customerSearchTerm
     ? customers.filter((item) => item.name.toLowerCase().includes(customerSearchTerm.toLowerCase()))
     : customers;
@@ -92,6 +94,10 @@ const JobsQueue = () => {
   useEffect(() => {
     getUsers()
 
+  }, [])
+
+  useEffect(() => {
+    getTags()
   }, [])
 
   useEffect(() => {
@@ -126,6 +132,11 @@ const JobsQueue = () => {
     }
 
   }, [])
+
+  const getTags = async () => {
+    const { data } = await api.getTags();
+    setTags(data.results);
+  }
 
   const getCustomers = async (request) => {
       const { data } = await customerApi.getCustomers(request);
@@ -198,13 +209,13 @@ const JobsQueue = () => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       fetchJobs()
-    }, 300);
+    }, 500);
 
     return () => {
       clearTimeout(timeoutID);
     };
 
-  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage, projectManagerSelected])
+  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage, projectManagerSelected, tags])
 
   const handleKeyDown = event => {
     if (event.key === 'Enter') {
@@ -249,6 +260,7 @@ const JobsQueue = () => {
       customer: JSON.parse(localStorage.getItem('customerSelected')).id,
       airport: JSON.parse(localStorage.getItem('airportSelected')).id,
       project_manager: JSON.parse(localStorage.getItem('projectManagerSelected')).id,
+      tags: tags.filter(item => item.selected).map(item => item.id)
     }
 
     let statusName;
@@ -342,6 +354,14 @@ const JobsQueue = () => {
     }
 
     setLoading(false)
+  }
+
+  const handleToggleTag = (tag) => {
+    const newTags = [...tags]
+    const index = newTags.findIndex(item => item.id === tag.id)
+    newTags[index].selected = !newTags[index].selected
+    
+    setTags(newTags)
   }
 
     return (
@@ -857,6 +877,19 @@ const JobsQueue = () => {
                 
                 {!currentUser.isCustomer && (
                   <>
+                  <div className="pb-4">
+                    <h2 className="font-medium text-sm text-gray-900">Tags</h2>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                        {tags.map((tag) => (
+                            <div key={tag.id} onClick={() => handleToggleTag(tag)} 
+                                className={`${tag.selected ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50'}
+                                              rounded-md border border-gray-200 cursor-pointer
+                                            py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}>
+                                {tag.name}
+                            </div>
+                        ))}
+                    </div>
+                  </div>
                   <div className="pb-4">
                     <h2 className="font-medium text-sm text-gray-900">Customers <span className="text-gray-500 text-sm ml-1 font-normal">({customersWOpenJobs.length})</span></h2>
                     <ul className="relative z-0 divide-y divide-gray-200 mt-2">

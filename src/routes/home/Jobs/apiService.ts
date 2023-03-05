@@ -15,3 +15,7 @@ export const testSendEmail = () => {
 export const searchUsers = (data: any) => {
     return httpService.post('/api/users', data);
 }
+
+export const getTags = () => {
+    return httpService.get('/api/tags');
+}
