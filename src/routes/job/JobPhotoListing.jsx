@@ -17,6 +17,7 @@ import * as api from './apiService'
 import { toast } from "react-toastify";
 
 import photosIcon from './photosIcon.png'
+import ImageNotAvailable from '../../images/img_not_available.jpg'
 
 const JobPhotoListing = () => {
     const [currentImageInterior, setCurrentImageInterior] = useState(0);
@@ -40,6 +41,10 @@ const JobPhotoListing = () => {
     useEffect(() => {
         getPhotos()
     }, [])
+
+    const onImageError = (e) => {
+        e.target.src = ImageNotAvailable
+      }
 
     const openImageViewer = (index) => {
         setCurrentImageInterior(index);
@@ -277,7 +282,7 @@ const JobPhotoListing = () => {
                         {customerPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
                                 <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewerCustomer(index) }>
-                                    <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
+                                    <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" onError={onImageError} />
                                 </div>
                                 <div className="flex text-gray-500 text-sm pt-2">
                                     <CloudDownloadIcon 
@@ -345,7 +350,7 @@ const JobPhotoListing = () => {
                         {interiorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
                                 <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewer(index) }>
-                                    <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
+                                    <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" onError={onImageError} />
                                 </div>
                                 <div className="flex text-gray-500 text-sm pt-2">
                                     <CloudDownloadIcon 
@@ -390,7 +395,7 @@ const JobPhotoListing = () => {
                         {exteriorPhotos.map((photo, index) => (
                             <div key={index} className="py-4">
                                 <div className="flex-shrink-0 cursor-pointer" onClick={ () => openImageViewerExterior(index) }>
-                                    <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" />
+                                    <img className="h-60 w-72 rounded-lg" src={photo.image} alt="" onError={onImageError} />
                                 </div>
                                 <div className="flex text-gray-500 text-sm pt-2">
                                     <CloudDownloadIcon 
