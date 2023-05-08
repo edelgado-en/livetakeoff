@@ -57,7 +57,7 @@ const JobsQueue = () => {
   const [totalJobs, setTotalJobs] = useState(0);
   const [searchText, setSearchText] = useState(localStorage.getItem('searchText') || '')
   const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || {id: 'All', name: 'All Open Jobs'})
-  const [sortSelected, setSortSelected] = useState(sortOptions[0])
+  const [sortSelected, setSortSelected] = useState(JSON.parse(localStorage.getItem('sortSelected')) || { id: 'requestDate', name: 'Request Date' })
   const [open, setOpen] = useState(false)
   
   const currentUser = useAppSelector(selectUser)
@@ -206,6 +206,11 @@ const JobsQueue = () => {
   }, [airportSelected])
 
   useEffect(() => {
+    localStorage.setItem('sortSelected', JSON.stringify(sortSelected))
+
+  }, [sortSelected])
+
+  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       fetchJobs()
@@ -256,7 +261,7 @@ const JobsQueue = () => {
     const request = {
       searchText: localStorage.getItem('searchText'),
       status: JSON.parse(localStorage.getItem('statusSelected')).id,
-      sortField: sortSelected.id,
+      sortField: JSON.parse(localStorage.getItem('sortSelected')).id,
       customer: JSON.parse(localStorage.getItem('customerSelected')).id,
       airport: JSON.parse(localStorage.getItem('airportSelected')).id,
       project_manager: JSON.parse(localStorage.getItem('projectManagerSelected')).id,
@@ -579,7 +584,7 @@ const JobsQueue = () => {
                                                     shadow-sm border-transparent focus:border-transparent focus:ring-0 focus:outline-none
                                                     text-xs">
                             <span className="block truncate">
-                                Sort
+                                {sortSelected.name}
                             </span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
                                 <ChevronDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
