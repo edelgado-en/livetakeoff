@@ -59,6 +59,8 @@ const JobsQueue = () => {
   const [statusSelected, setStatusSelected] = useState(JSON.parse(localStorage.getItem('statusSelected')) || {id: 'All', name: 'All Open Jobs'})
   const [sortSelected, setSortSelected] = useState(JSON.parse(localStorage.getItem('sortSelected')) || { id: 'requestDate', name: 'Request Date' })
   const [open, setOpen] = useState(false)
+
+  const [dueToday, setDueToday] = useState(false)
   
   const currentUser = useAppSelector(selectUser)
   const [activeFilters, setActiveFilters] = useState([])
@@ -221,7 +223,7 @@ const JobsQueue = () => {
       clearTimeout(timeoutID);
     };
 
-  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage, projectManagerSelected, tags])
+  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage, projectManagerSelected, tags, dueToday])
 
   const handleKeyDown = event => {
     if (event.key === 'Enter') {
@@ -357,7 +359,12 @@ const JobsQueue = () => {
               job.isDueToday = true
             }
 
-            jobs.push(job)
+            if (!dueToday) {
+              jobs.push(job)
+
+            } else if (dueToday && job.isDueToday) {
+              jobs.push(job)
+            }
         })
 
         setJobs(jobs);
@@ -377,6 +384,10 @@ const JobsQueue = () => {
     newTags[index].selected = !newTags[index].selected
     
     setTags(newTags)
+  }
+
+  const handleToggleDueToday = () => {
+    setDueToday(!dueToday)
   }
 
     return (
@@ -937,6 +948,17 @@ const JobsQueue = () => {
                 
                 {!currentUser.isCustomer && (
                   <>
+                  <div className="pb-4">
+                    <h2 className="font-medium text-sm text-gray-900">Alerts</h2>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <div  onClick={() => handleToggleDueToday()} 
+                          className={`${dueToday ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50'}
+                                        rounded-md border border-gray-200 cursor-pointer
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}>
+                          DUE TODAY
+                      </div>
+                    </div>
+                  </div>
                   <div className="pb-4">
                     <h2 className="font-medium text-sm text-gray-900">Tags</h2>
                     <div className="grid grid-cols-2 gap-2 mt-2">
