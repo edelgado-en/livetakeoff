@@ -61,6 +61,8 @@ const JobsQueue = () => {
   const [open, setOpen] = useState(false)
 
   const [dueToday, setDueToday] = useState(false)
+
+  const [dueTodayCount, setDueTodayCount] = useState(0)
   
   const currentUser = useAppSelector(selectUser)
   const [activeFilters, setActiveFilters] = useState([])
@@ -328,6 +330,8 @@ const JobsQueue = () => {
         const month = today.getMonth() + 1;
         const day = today.getDate();
         const todayFormattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
+
+        let totalDueToday = 0;
         
         data.results.forEach((job) => {
             let uniqueUserIds = []
@@ -357,6 +361,7 @@ const JobsQueue = () => {
 
             if (job.completeBy && job.completeBy.includes(todayFormattedDate)) {
               job.isDueToday = true
+              totalDueToday++;
             }
 
             if (!dueToday) {
@@ -369,6 +374,7 @@ const JobsQueue = () => {
 
         setJobs(jobs);
         setTotalJobs(data.count)
+        setDueTodayCount(totalDueToday)
 
     } catch (e) {
       toast.error('Unable to get jobs')
@@ -952,10 +958,12 @@ const JobsQueue = () => {
                     <h2 className="font-medium text-sm text-gray-900">Alerts</h2>
                     <div className="grid grid-cols-2 gap-2 mt-2">
                       <div  onClick={() => handleToggleDueToday()} 
-                          className={`${dueToday ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50 text-red-500 border-red-500 font-semibold'}
+                          className={`${dueToday ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50'}
+                                      ${dueTodayCount > 0 && !dueToday ? ' text-red-500 border-red-500 font-semibold' : ''}
                                         rounded-md border border-gray-200 cursor-pointer
-                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}>
-                          DUE TODAY
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}>
+                          <div>DUE TODAY</div>
+                          <div>{dueTodayCount}</div>
                       </div>
                     </div>
                   </div>
