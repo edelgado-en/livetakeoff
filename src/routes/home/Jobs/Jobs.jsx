@@ -86,6 +86,7 @@ const JobsQueue = () => {
     ? airports.filter((item) => item.name.toLowerCase().includes(airportSearchTerm.toLowerCase()))
     : airports;
 
+
   useEffect(() => {
     getCustomers({ name: '', open_jobs: true })
 
@@ -320,6 +321,11 @@ const JobsQueue = () => {
         const { data } = await api.getJobs(request, currentPage);
 
         const jobs = []
+
+        const today = new Date();
+        const month = today.getMonth() + 1;
+        const day = today.getDate();
+        const todayFormattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
         
         data.results.forEach((job) => {
             let uniqueUserIds = []
@@ -346,6 +352,10 @@ const JobsQueue = () => {
             })
 
             job.asignees = uniqueUsers;
+
+            if (job.completeBy && job.completeBy.includes(todayFormattedDate)) {
+              job.isDueToday = true
+            }
 
             jobs.push(job)
         })
@@ -787,25 +797,32 @@ const JobsQueue = () => {
                               </div>
                             </div>
                             <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
-                                <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                              ${job.status === 'A' && 'bg-blue-400 '}
-                                              ${job.status === 'S' && 'bg-yellow-500 '}
-                                              ${job.status === 'U' && 'bg-indigo-500 '}
-                                              ${job.status === 'W' && 'bg-green-500 '}
-                                              ${job.status === 'C' && 'bg-green-500 '}
-                                              ${job.status === 'T' && 'bg-gray-600 '}
-                                              ${job.status === 'R' && 'bg-purple-500 '}
-                                              ${job.status === 'I' && 'bg-blue-500 '}
-                                            `}>
-                                    {job.status === 'A' && 'Accepted'}
-                                    {job.status === 'S' && 'Assigned'}
-                                    {job.status === 'U' && 'Submitted'}
-                                    {job.status === 'W' && 'In Progress'}
-                                    {job.status === 'C' && 'Completed'}
-                                    {job.status === 'T' && 'Canceled'}
-                                    {job.status === 'R' && 'Review'}
-                                    {job.status === 'I' && 'Invoiced'}
-                                </p>
+                                <div className="flex gap-2 xl:justify-end lg:justify-end xs:justify-start sm:justify-start">
+                                  {job.isDueToday && (
+                                    <p className={`inline-flex text-xs rounded-md py-1 px-2 text-red-500 border border-red-500 font-semibold`}>
+                                        DUE TODAY
+                                    </p>
+                                  )}
+                                  <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                                ${job.status === 'A' && 'bg-blue-400 '}
+                                                ${job.status === 'S' && 'bg-yellow-500 '}
+                                                ${job.status === 'U' && 'bg-indigo-500 '}
+                                                ${job.status === 'W' && 'bg-green-500 '}
+                                                ${job.status === 'C' && 'bg-green-500 '}
+                                                ${job.status === 'T' && 'bg-gray-600 '}
+                                                ${job.status === 'R' && 'bg-purple-500 '}
+                                                ${job.status === 'I' && 'bg-blue-500 '}
+                                              `}>
+                                      {job.status === 'A' && 'Accepted'}
+                                      {job.status === 'S' && 'Assigned'}
+                                      {job.status === 'U' && 'Submitted'}
+                                      {job.status === 'W' && 'In Progress'}
+                                      {job.status === 'C' && 'Completed'}
+                                      {job.status === 'T' && 'Canceled'}
+                                      {job.status === 'R' && 'Review'}
+                                      {job.status === 'I' && 'Invoiced'}
+                                  </p>
+                                </div>
                                 
                                 
                                 <div className="text-sm text-gray-500 mt-2">
