@@ -952,7 +952,7 @@ const JobsQueue = () => {
                     <h2 className="font-medium text-sm text-gray-900">Alerts</h2>
                     <div className="grid grid-cols-2 gap-2 mt-2">
                       <div  onClick={() => handleToggleDueToday()} 
-                          className={`${dueToday ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50'}
+                          className={`${dueToday ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50 text-red-500 border-red-500 font-semibold'}
                                         rounded-md border border-gray-200 cursor-pointer
                                       py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}>
                           DUE TODAY
