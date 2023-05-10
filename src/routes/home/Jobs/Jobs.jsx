@@ -61,9 +61,11 @@ const JobsQueue = () => {
   const [open, setOpen] = useState(false)
 
   const [dueToday, setDueToday] = useState(false)
-
   const [dueTodayCount, setDueTodayCount] = useState(0)
   
+  const [overdue, setOverdue] = useState(false)
+  const [overdueCount, setOverdueCount] = useState(0)
+
   const currentUser = useAppSelector(selectUser)
   const [activeFilters, setActiveFilters] = useState([])
   const [customers, setCustomers] = useState([])
@@ -225,7 +227,7 @@ const JobsQueue = () => {
       clearTimeout(timeoutID);
     };
 
-  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage, projectManagerSelected, tags, dueToday])
+  }, [searchText, statusSelected, sortSelected, customerSelected, airportSelected, currentPage, projectManagerSelected, tags, dueToday, overdue])
 
   const handleKeyDown = event => {
     if (event.key === 'Enter') {
@@ -331,7 +333,11 @@ const JobsQueue = () => {
         const day = today.getDate();
         const todayFormattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
 
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+
         let totalDueToday = 0;
+        let totalOverdue = 0;
         
         data.results.forEach((job) => {
             let uniqueUserIds = []
@@ -364,10 +370,21 @@ const JobsQueue = () => {
               totalDueToday++;
             }
 
-            if (!dueToday) {
+            if (job.completeByFullDate) {
+              const completeByDate = new Date(job.completeByFullDate)
+              if (completeByDate < yesterday) {
+                job.isOverdue = true
+                totalOverdue++;
+              }
+            }
+
+            if (!dueToday && !overdue) {
               jobs.push(job)
 
             } else if (dueToday && job.isDueToday) {
+              jobs.push(job)
+            
+            } else if (overdue && job.isOverdue) {
               jobs.push(job)
             }
         })
@@ -375,6 +392,7 @@ const JobsQueue = () => {
         setJobs(jobs);
         setTotalJobs(data.count)
         setDueTodayCount(totalDueToday)
+        setOverdueCount(totalOverdue)
 
     } catch (e) {
       toast.error('Unable to get jobs')
@@ -393,7 +411,13 @@ const JobsQueue = () => {
   }
 
   const handleToggleDueToday = () => {
+    setOverdue(false)
     setDueToday(!dueToday)
+  }
+
+  const handleToggleOverdue = () => {
+    setDueToday(false)
+    setOverdue(!overdue)
   }
 
     return (
@@ -820,6 +844,11 @@ const JobsQueue = () => {
                                         DUE TODAY
                                     </p>
                                   )}
+                                  {job.isOverdue && (
+                                    <p className={`inline-flex text-xs rounded-md py-1 px-2 text-red-500 border border-red-500 font-semibold`}>
+                                        OVERDUE
+                                    </p>
+                                  )}
                                   <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
                                                 ${job.status === 'A' && 'bg-blue-400 '}
                                                 ${job.status === 'S' && 'bg-yellow-500 '}
@@ -964,6 +993,14 @@ const JobsQueue = () => {
                                       py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}>
                           <div>DUE TODAY</div>
                           <div>{dueTodayCount}</div>
+                      </div>
+                      <div  onClick={() => handleToggleOverdue()} 
+                          className={`${overdue ? 'ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500' : 'hover:bg-gray-50'}
+                                      ${overdueCount > 0 && !overdue ? ' text-red-500 border-red-500 font-semibold' : ''}
+                                        rounded-md border border-gray-200 cursor-pointer
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}>
+                          <div>OVERDUE</div>
+                          <div>{overdueCount}</div>
                       </div>
                     </div>
                   </div>
