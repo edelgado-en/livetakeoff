@@ -13,8 +13,9 @@ import Loader from '../../components/loader/Loader';
 import * as api from './apiService'
 import axios from 'axios';
 
-import { useAppSelector } from "../../app/hooks";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
+import { selectJobStats, fetchJobStats } from './jobStats/jobStatsSlice';
 
 
 const WrenchIcon = () => {
@@ -33,6 +34,7 @@ function classNames(...classes) {
 const JobReview = () => {
     const { jobId } = useParams()
     const navigate = useNavigate()
+    const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(false)
     const [downloadLoading, setDownloadLoading] = useState(false)
     const [jobDetails, setJobDetails] = useState({})
@@ -41,6 +43,12 @@ const JobReview = () => {
     const location = useLocation()
 
     const currentUser = useAppSelector(selectUser)
+    const jobStats = useAppSelector(selectJobStats)
+
+    useEffect(() => {
+        dispatch(fetchJobStats(jobId))
+
+    }, [])
 
     useEffect(() => {
         getJobDetails()
@@ -317,6 +325,12 @@ const JobReview = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
                                                     </svg>
                                                     <div>Comments</div>
+                                                    {jobStats.comments_count > 0 && (
+                                                        <div className="bg-red-500 text-white py-1 px-2 relative bottom-2 right-4
+                                                                    rounded-full text-xs font-medium inline-block scale-90">
+                                                            {jobStats.comments_count}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </Link>
                                         )}
@@ -326,6 +340,12 @@ const JobReview = () => {
                                 </Menu.Items>
                             </Transition>
                         </Menu>
+                        {jobStats.comments_count > 0 && (
+                            <div className="bg-red-500 text-white py-1 px-2 relative bottom-2 right-4
+                                                                rounded-full text-xs font-medium inline-block scale-90">
+                                {jobStats.comments_count}
+                            </div>
+                        )}
                     </div>
                 </div>
                 
