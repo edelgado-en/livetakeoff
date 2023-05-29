@@ -11,6 +11,7 @@ import Loader from "../../components/loader/Loader";
 import JobCompleteModal from './JobCompleteModal'
 import JobPriceBreakdownModal from './JobPriceBreakdownModal'
 import JobCancelModal from "./JobCancelModal";
+import JobReturnModal from "./JobReturnModal";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import AddServiceModal from './AddServiceModal';
@@ -30,6 +31,7 @@ const JobInfo = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [isCompleteJobModalOpen, setCompleteJobModalOpen] = useState(false)
     const [isCancelJobModalOpen, setIsCancelJobModalOpen] = useState(false)
+    const [isReturnJobModalOpen, setReturnJobModalOpen] = useState(false)
 
     const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] = useState(false)
 
@@ -57,6 +59,10 @@ const JobInfo = () => {
 
     const handleTogglePriceBreakdownModal = () => {
         setPriceBreakdownModalOpen(!isPriceBreakdownModalOpen)
+    }
+
+    const handleToggleJobReturnModal = () => {
+        setReturnJobModalOpen(!isReturnJobModalOpen)
     }
 
     const getJobDetails = async () => {
@@ -113,6 +119,26 @@ const JobInfo = () => {
 
         } catch (e) {
             toast.error('Unable to update job status.')
+            setLoading(false)
+        }
+    }
+
+    const returnJob = async (comment) => {
+        setReturnJobModalOpen(false)
+
+        setLoading(true)
+
+        const request = {
+            comment
+        }
+
+        try {
+            await api.returnJob(jobId, request)
+
+            navigate('/jobs')
+
+        } catch (error) {
+            toast.error('Unable to return job.')
             setLoading(false)
         }
     }
@@ -250,7 +276,8 @@ const JobInfo = () => {
 
                 {!currentUser.isCustomer && (
                     <div className="mt-4 mb-4">
-                        {jobDetails.status === 'S' && 
+                        {jobDetails.status === 'S' && (
+                            <div className="flex gap-4">
                             <button
                                 type="button"
                                 onClick={() => updateJobStatus('W')}
@@ -260,7 +287,17 @@ const JobInfo = () => {
                                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto">
                                 Accept Job
                             </button>
-                        }
+                            {currentUser.isProjectManager && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleToggleJobReturnModal()}
+                                    className="rounded bg-white px-4 py-2 text-sm text-gray-900
+                                                 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                    Return Job
+                                </button>
+                            )}
+                            </div>
+                        )}
 
                         {jobDetails.status === 'U' && 
                             <button
@@ -680,6 +717,13 @@ const JobInfo = () => {
                                             jobDetails={jobDetails}
                                             handleClose={handleToggleJobCancelModal}
                                             updateJobStatus={updateJobStatus} />}
+
+            {isReturnJobModalOpen && <JobReturnModal 
+                                            isOpen={isReturnJobModalOpen}
+                                            jobDetails={jobDetails}
+                                            handleClose={handleToggleJobReturnModal}
+                                            returnJob={returnJob}
+                                            />}
 
             {isCompleteJobModalOpen && <JobCompleteModal
                                             isOpen={isCompleteJobModalOpen}

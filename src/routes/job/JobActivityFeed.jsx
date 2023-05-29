@@ -125,6 +125,7 @@ export default function Example() {
                                                     {activity.activity_type === 'F' && 'FBO'}
                                                     {activity.activity_type === 'T' && 'Tail Number'}
                                                     {activity.activity_type === 'U' && 'Photos Uploaded'}
+                                                    {activity.activity_type === 'R' && 'Job Returned'}
                                                 </span>
                                                 
                                                 {activity.activity_type !== 'U' && (

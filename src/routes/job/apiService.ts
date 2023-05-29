@@ -12,6 +12,10 @@ export const updateJobStatus = (id: number, status: string) => {
     return httpService.patch(`/api/jobs/${id}/`, { status });
 }
 
+export const returnJob = (id: number, data: any) => {
+    return httpService.post(`/api/jobs/return/${id}/`, data);
+}
+
 export const updateJob = (id: number, formData: any) => {
     return httpService.patch(`/api/jobs/edit/${id}/`, formData);
 }
