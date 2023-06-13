@@ -1534,7 +1534,7 @@ const CompleteList = () => {
                                             >
                                             Status
                                             </th>
-                                            {!currentUser.isInternalCoordinator && (
+                                            {!currentUser.isInternalCoordinator && currentUser.canSeePrice && (
                                                 <th
                                                 className="whitespace-nowrap px-8 py-2 text-left text-xs font-normal uppercase text-gray-500"
                                                 >
@@ -1573,7 +1573,7 @@ const CompleteList = () => {
                                                 </p>
                                             </td>
                                             <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                                                {!currentUser.isInternalCoordinator && (
+                                                {!currentUser.isInternalCoordinator && currentUser.canSeePrice && (
                                                     <div className="flex gap-1">
                                                         {'$'}{job.price ? job.price.toLocaleString() : '0.00'}
                                                     </div>
