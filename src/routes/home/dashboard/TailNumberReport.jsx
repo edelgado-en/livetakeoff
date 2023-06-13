@@ -417,7 +417,7 @@ const TailNumberReport = () => {
                                                                 <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
                                                             </div>
                                                             <div className="text-right">
-                                                                {currentUser.showSpendingInfo && (
+                                                                {currentUser.showSpendingInfo && currentUser.canSeePrice && (
                                                                     <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
                                                                 )}
                                                                 <div>{tail.job_count} <span className="text-gray-500">jobs</span></div>
@@ -513,7 +513,7 @@ const TailNumberReport = () => {
                                                     <aside className="mt-8 xl:hidden">
                                                         <h2 className="sr-only">Details</h2>
                                                         <div className="space-y-5">
-                                                            {currentUser.showSpendingInfo && (
+                                                            {currentUser.showSpendingInfo && currentUser.canSeePrice && (
                                                                 <div className="flex items-center space-x-2">
                                                                     <div className="w-6">
                                                                         <CashIcon className="h-6 w-6 text-green-700" />
@@ -793,7 +793,8 @@ const TailNumberReport = () => {
                                                                                     </>
                                                                                 )}
 
-                                                                                {activity.status === 'P' && (
+
+                                                                                {activity.status === 'P' && currentUser.showSpendingInfo && currentUser.canSeePrice && (
                                                                                     <>
                                                                                     <span className="text-sm text-gray-500">
                                                                                         Price changed to
@@ -824,7 +825,7 @@ const TailNumberReport = () => {
                                         {/* Desktop */}
                                         <aside className="hidden xl:block xl:pl-8">
                                             <div className="space-y-5">
-                                                {currentUser.showSpendingInfo && (
+                                                {currentUser.showSpendingInfo && currentUser.canSeePrice && (
                                                     <div className="flex items-center space-x-2">
                                                         <div className="w-6">
                                                             <CashIcon className="h-6 w-6 text-green-700" />
@@ -1044,7 +1045,7 @@ const TailNumberReport = () => {
                                                     <div className="text-gray-500 mt-1">{tail.aircraftType__name}</div>
                                                 </div>
                                                 <div className="text-right">
-                                                    {currentUser.showSpendingInfo && (
+                                                    {currentUser.showSpendingInfo && currentUser.canSeePrice && (
                                                         <div className="text-green-700 font-medium">${tail.total_price ? tail.total_price?.toLocaleString() : 0}</div>
                                                     )}
                                                     <div>{tail?.job_count?.toLocaleString()} <span className="text-gray-500">jobs</span></div>
