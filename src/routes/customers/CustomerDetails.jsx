@@ -209,7 +209,7 @@ const CustomerDetails = () => {
                           />
                         </Switch>
                       </Switch.Group>
-                      <Switch.Group as="li" className="flex items-center justify-between py-4">
+                      {/* <Switch.Group as="li" className="flex items-center justify-between py-4">
                         <div className="flex flex-col">
                           <Switch.Label as="p" className="text-sm font-medium text-gray-900" passive>
                             Show Job Price
@@ -234,7 +234,7 @@ const CustomerDetails = () => {
                             )}
                           />
                         </Switch>
-                      </Switch.Group>
+                      </Switch.Group> */}
                     </ul>
                   </div>
                   </div>
