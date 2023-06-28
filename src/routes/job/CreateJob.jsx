@@ -135,8 +135,9 @@ const CreateJob = () => {
                 setCustomerSelected({id: data.customer_id, name: data.customer_name})
                 setCustomerSearchTerm(data.customer_name)
 
-                //Do not update services if there there is an estimate id, just respect the services used in the estimate id
-                if (data.services.length > 0 && estimateId === undefined) {
+                // Do not update services if there there is an estimate id, just respect the services used in the estimate id
+                // Do not update services for customer users
+                if (data.services.length > 0 && estimateId === undefined && !currentUser.isCustomer) {
                     const updatedInteriorServices = interiorServices.map(s => {
                         if (data.services.some(service => service.id === s.id && service.category === 'I')) {
                             return {...s, selected: true}
@@ -169,7 +170,8 @@ const CreateJob = () => {
                     
                 }
 
-                if (data.retainer_services.length > 0) {
+                // Do not update retainer services for customer users
+                if (data.retainer_services.length > 0 && !currentUser.isCustomer) {
                     const updatedInteriorRetainerServices = interiorRetainerServices.map(s => {
                         if (data.retainer_services.some(service => service.id === s.id && service.category === 'I')) {
                             return {...s, selected: true}
