@@ -257,10 +257,10 @@ const TeamProductivity = () => {
                             <div className="flex-1">Retainers Completed</div>
                             <div className="text-right">{user.total_retainer_services}</div>
                           </div>
-                          <div className="flex justify-between text-gray-500 text-sm">
+                          {/* <div className="flex justify-between text-gray-500 text-sm">
                             <div className="flex-1">Revenue<span className="text-xs ml-1 text-gray-500">(services only)</span></div>
                             <div className="text-right font-medium">${user.total_revenue.toLocaleString()}</div>
-                          </div>
+                          </div> */}
                           <div className="w-full text-right text-sm text-blue-500">
                             <Link to={`/user-productivity/${user.id}`} className="cursor-pointer">more <ArrowSmRightIcon className="h-4 w-4 inline-block"/></Link>
                           </div>
