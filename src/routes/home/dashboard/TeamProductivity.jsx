@@ -236,6 +236,7 @@ const TeamProductivity = () => {
             <div className="space-y-8">
               <h2 className="text-lg font-medium tracking-tight">Project Managers<span className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
                                                 rounded-full text-xs font-medium md:inline-block">{productivityData.users.length}</span></h2>
+              <div className="text-sm text-gray-500">Total revenues per user have been collected since July 1th, 2023</div>
 
               <ul className="space-y-12 lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
                 {productivityData.users.map((user, index) => (
@@ -257,10 +258,10 @@ const TeamProductivity = () => {
                             <div className="flex-1">Retainers Completed</div>
                             <div className="text-right">{user.total_retainer_services}</div>
                           </div>
-                          {/* <div className="flex justify-between text-gray-500 text-sm">
+                          <div className="flex justify-between text-gray-500 text-sm">
                             <div className="flex-1">Revenue<span className="text-xs ml-1 text-gray-500">(services only)</span></div>
                             <div className="text-right font-medium">${user.total_revenue.toLocaleString()}</div>
-                          </div> */}
+                          </div> 
                           <div className="w-full text-right text-sm text-blue-500">
                             <Link to={`/user-productivity/${user.id}`} className="cursor-pointer">more <ArrowSmRightIcon className="h-4 w-4 inline-block"/></Link>
                           </div>
