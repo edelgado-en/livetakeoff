@@ -26,6 +26,7 @@ const JobComments = () => {
     const [createCommentLoading, setCreateCommentLoading] = useState(false)
     const [sendSMS, setSendSMS] = useState(false)
     const [isPublic, setIsPublic] = useState(false)
+    const [sendEmail, setSendEmail] = useState(false)
     const [isDeleteCommentModalOpen, setDeleteCommentModalOpen] = useState(false)
     const [commentToBeDeleted, setCommentToBeDeleted] = useState(null)
 
@@ -85,11 +86,16 @@ const JobComments = () => {
       setIsPublic(!isPublic)
     }
 
+    const handleSetSendEmail = () => {
+      setSendEmail(!sendEmail)
+    }
+
     const createJobComment = async () => {
       const request = {
         comment,
         sendSMS,
-        isPublic
+        isPublic,
+        sendEmail
       }
       
       setCreateCommentLoading(true);
@@ -291,6 +297,29 @@ const JobComments = () => {
                                             Public
                                           </label>
                                           <p className="text-gray-500">Will be visible in the closeout link and customer portal.</p>
+                                        </div>
+                                      </div>
+                                  </div>
+                                )}
+                                {(currentUser.isAdmin || currentUser.isSuperUser || currentUser.isAccountManager || currentUser.isInternalCoordinator) && (
+                                  <div className="mt-3 flex items-center justify-between">
+                                      <div className="flex">
+                                        <div className="flex h-5 items-center">
+                                          <input
+                                            id="email"
+                                            name="email"
+                                            value={sendEmail}
+                                                onClick={handleSetSendEmail}
+                                            type="checkbox"
+                                            className="h-4 w-4 rounded border-gray-300 text-red-600
+                                                  focus:ring-red-500"
+                                          />
+                                        </div>
+                                        <div className="ml-3 text-sm">
+                                          <label htmlFor="email" className="font-medium text-gray-700">
+                                            Send Email
+                                          </label>
+                                          <p className="text-gray-500">Send an email notification to the customer's email.</p>
                                         </div>
                                       </div>
                                   </div>
