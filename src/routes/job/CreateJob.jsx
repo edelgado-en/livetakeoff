@@ -41,6 +41,7 @@ const CreateJob = () => {
     
     const [tailNumber, setTailNumber] = useState('')
     const [tailNumberErrorMessage, setTailNumberErrorMessage] = useState(null)
+    const [requestedByErrorMessage, setRequestedByErrorMessage] = useState(null)
     const [customers, setCustomers] = useState([])
     const [aircraftTypes, setAircraftTypes] = useState([])
     const [airports, setAirports] = useState([])
@@ -370,6 +371,11 @@ const CreateJob = () => {
 
         if (!selectedCustomer || !aircraftTypeSelected || !airportSelected || !fboSelected) {
             setTailNumberErrorMessage('Missing required fields')
+            return
+        }
+
+        if (currentUser.promptRequestedBy && requestedBy.length === 0) {
+            setRequestedByErrorMessage('Enter your name and email')
             return
         }
 
@@ -1190,12 +1196,14 @@ const CreateJob = () => {
                             )}
                         </div>
                         
-                        {!currentUser.isCustomer && (
+                        {(!currentUser.isCustomer || currentUser.promptRequestedBy) && (
                             <div>
-                                <label htmlFor="tailNumber" className="block text-sm text-gray-500">
+                                <label htmlFor="tailNumber" className={`block text-sm ${currentUser.promptRequestedBytext ? 'text-gray-500' : 'text--gray-700'}`}>
                                     Requested By
                                 </label>
-                                <span className="text-xs text-gray-500">Enter a name when creating a job on behalf of someone else</span>
+                                <span className="text-xs text-gray-500">
+                                    Enter your name and email address when creating a job on behalf of someone else
+                                </span>
                                 <div className="mt-1">
                                     <input
                                     type="text"
@@ -1206,6 +1214,16 @@ const CreateJob = () => {
                                     className="block w-full rounded-md border-gray-300 shadow-sm
                                             focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                                     />
+                                    {requestedByErrorMessage && (
+                                        <div className="flex gap-2">
+                                            <div className="flex-shrink-0 relative top-1">
+                                                <InformationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+                                            </div>
+                                            <div>
+                                                <p className="text-red-500 text-xs font-semibold mt-2">{requestedByErrorMessage}</p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
