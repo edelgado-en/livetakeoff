@@ -1202,7 +1202,7 @@ const CreateJob = () => {
                                     Requested By
                                 </label>
                                 <span className="text-xs text-gray-500">
-                                    Enter your name and email address when creating a job on behalf of someone else
+                                    Enter your name and email address
                                 </span>
                                 <div className="mt-1">
                                     <input
