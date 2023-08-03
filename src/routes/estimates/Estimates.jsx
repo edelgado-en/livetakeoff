@@ -12,6 +12,7 @@ import * as api from './apiService'
 import ReactTimeAgo from 'react-time-ago'
 import Pagination from "react-js-pagination";
 
+import DeleteEstimateModal from "./DeleteEstimateModal";
 
 const XMarkIcon = () => {
     return (
@@ -42,6 +43,8 @@ const Estimates = () => {
     const [estimates, setEstimates] = useState([])
     const [searchText, setSearchText] = useState(localStorage.getItem('estimateSearchText') || '')
     const [totalEstimates, setTotalEstimates] = useState(0)
+    const [isDeleteEstimateModalOpen, setDeleteEstimateModalOpen] = useState(false)
+    const [estimateToBeDeleted, setEstimateToBeDeleted] = useState(null)
 
     useEffect(() => {
         //Basic throttling
@@ -88,6 +91,24 @@ const Estimates = () => {
           
           searchEstimates();
         }
+    }
+
+    const handleToggleDeleteEstimateModal = (estimate) => {
+        if (estimate) {
+            setEstimateToBeDeleted(estimate)
+        } else {
+            setEstimateToBeDeleted(null)
+        }
+
+        setDeleteEstimateModalOpen(!isDeleteEstimateModalOpen)
+    }
+
+    const deleteEstimate = async (estimate) => {
+        await api.deleteEstimate(estimate.id)
+
+        setDeleteEstimateModalOpen(false)
+
+        searchEstimates()
     }
 
     return (
@@ -167,18 +188,18 @@ const Estimates = () => {
                         <ul className="divide-y divide-gray-200">
                             {estimates.map((estimate) => (
                                 <li key={estimate.id}>
-                                     <Link to={`/estimates/${estimate.id}`} className="block hover:bg-gray-50">
+                                     <div className="block hover:bg-gray-50">
                                         <div className="flex items-center px-4 py-4 sm:px-6">
                                             <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                                             <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
                                                 <div>
-                                                    <div className="">
+                                                    <Link to={`/estimates/${estimate.id}`} className="">
                                                         <span className="font-medium text-red-600 text-sm">{estimate.tailNumber}</span>
                                                         <span className="text-sm"> - {estimate?.aircraftType?.name}</span>
                                                         <span className="ml-2 text-xs text-gray-500">
                                                             <ReactTimeAgo date={new Date(estimate?.requested_at)} locale="en-US" timeStyle="twitter" />    
                                                         </span>
-                                                    </div>
+                                                    </Link>
                                                     
                                                     <div className="text-sm text-gray-800 mt-2 flex gap-1">
                                                         {estimate.customer.name}
@@ -189,6 +210,11 @@ const Estimates = () => {
                                                     </div>
                                                 </div>
                                                 <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
+                                                    {estimate.status !== 'A' && (
+                                                        <p onClick={() => handleToggleDeleteEstimateModal(estimate)} className={`cursor-pointer mr-3 inline-flex text-xs text-gray-700 rounded-md py-1 px-2 border b-gray-700 hover:bg-gray-100`}>
+                                                            Delete
+                                                        </p>
+                                                    )}
                                                     <p className={`inline-flex text-xs text-white rounded-md py-1 px-2
                                                                 ${estimate.status === 'P' && 'bg-blue-400 '}
                                                                 ${estimate.status === 'A' && 'bg-green-500 '}
@@ -218,16 +244,23 @@ const Estimates = () => {
                                                 </div>
                                             </div>
                                             </div>
-                                            <div className="ml-5 flex-shrink-0">
+                                            <Link to={`/estimates/${estimate.id}`} className="ml-5 flex-shrink-0">
                                                 <ChevronRightIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                            </div>
+                                            </Link>
                                         </div>
-                                    </Link>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 )}
+
+                {isDeleteEstimateModalOpen && <DeleteEstimateModal 
+                                                isOpen={isDeleteEstimateModalOpen}
+                                                handleClose={handleToggleDeleteEstimateModal}
+                                                deleteEstimate={deleteEstimate}
+                                                fee={estimateToBeDeleted}
+                                            />}
 
             </div> 
         </AnimatedPage>

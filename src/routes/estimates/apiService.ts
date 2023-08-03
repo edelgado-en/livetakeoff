@@ -16,3 +16,7 @@ export const searchEstimates = (data: any) => {
 export const getEstimateDetail = (id: any) => {
     return httpService.get(`/api/estimates/details/${id}`)
 }
+
+export const deleteEstimate = (id: number) => {
+    return httpService.delete(`/api/estimates/${id}/`);
+}
