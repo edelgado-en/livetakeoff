@@ -186,7 +186,63 @@ const CreateItem = () => {
     setLocationItems(newLocationItems);
   };
 
-  const createItem = () => {};
+  const createItem = async () => {
+    if (itemName.length === 0) {
+      alert("Please enter an item name.");
+      return;
+    }
+
+    if (measureUnitSelected === null) {
+      alert("Please select a measure unit.");
+      return;
+    }
+
+    if (areaSelected === null) {
+      alert("Please select an area.");
+      return;
+    }
+
+    if (costPerUnit.length === 0) {
+      alert("Please enter a cost per unit.");
+      return;
+    }
+
+    const selectedTagIds = tags
+      .filter((tag) => tag.selected)
+      .map((tag) => tag.id);
+    const selectedProviderIds = providers
+      .filter((provider) => provider.selected)
+      .map((provider) => provider.id);
+
+    const formData = new FormData();
+    formData.append("name", itemName);
+    formData.append("description", description);
+    formData.append("areaId", areaSelected.id);
+    formData.append("measureUnitId", measureUnitSelected.id);
+    formData.append("costPerUnit", costPerUnit);
+    formData.append("tagIds", JSON.stringify(selectedTagIds));
+    formData.append("providerIds", JSON.stringify(selectedProviderIds));
+    formData.append("locationItems", JSON.stringify(locationItems));
+
+    itemImages.forEach((image) => {
+      if (image.file.size < 10000000) {
+        // less than 10MB
+        formData.append("photo", image.file);
+      }
+    });
+
+    setLoading(true);
+
+    try {
+      await api.createItem(formData);
+
+      setCreateItemMessage("Item created!");
+    } catch (err) {
+      toast.error("Unable to create item");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <AnimatedPage>
@@ -204,7 +260,6 @@ const CreateItem = () => {
             <p className="text-md font-medium text-gray-900 mt-2">
               Item created!
             </p>
-            <p className="mt-2 text-sm text-gray-500">{createItemMessage}</p>
           </div>
           <div className=" mt-6 flex justify-center gap-6">
             <button
@@ -225,7 +280,7 @@ const CreateItem = () => {
                                     text-sm font-medium text-white shadow-sm hover:bg-red-600
                                     focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
             >
-              Add another Job
+              Create another Item
             </button>
           </div>
         </div>

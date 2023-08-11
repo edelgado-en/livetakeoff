@@ -68,10 +68,44 @@ function classNames(...classes) {
 }
 
 const InventoryList = () => {
+  const [loading, setLoading] = useState(true);
   const currentUser = useAppSelector(selectUser);
   const [totalItems, setTotalItems] = useState(0);
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    setLoading(true);
+
+    const request = {
+      searchText,
+    };
+
+    try {
+      const { data } = await api.getItems(request, currentPage);
+
+      setTotalItems(data.count);
+      setItems(data.results);
+    } catch (err) {
+      setItems([]);
+      setTotalItems(0);
+    }
+
+    setLoading(false);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      fetchItems();
+    }
+  };
 
   return (
     <AnimatedPage>
@@ -120,6 +154,53 @@ const InventoryList = () => {
               )}
             </div>
           </div>
+          <div className="">
+            <div className="w-full">
+              <div className="relative border-b border-gray-200">
+                <div
+                  onClick={() => fetchItems()}
+                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                >
+                  <MagnifyingGlassIcon
+                    className="h-4 w-4 text-gray-400 cursor-pointer"
+                    aria-hidden="true"
+                  />
+                </div>
+                <input
+                  type="search"
+                  name="search"
+                  id="search"
+                  value={searchText}
+                  onChange={(event) => setSearchText(event.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="block w-full  pl-10 focus:border-sky-500 border-none py-4 
+                                  focus:ring-sky-500 text-sm"
+                  placeholder="search by tail or P.O"
+                />
+              </div>
+            </div>
+          </div>
+
+          {loading && <Loader />}
+
+          {!loading && (
+            <div className="overflow-hidden bg-white shadow sm:rounded-md mt-2 mb-4">
+              <ul className="divide-y divide-gray-200">
+                {items.map((item) => (
+                  <li key={item.id}>
+                    <Link
+                      to={`/${item.id}/details`}
+                      className="block hover:bg-gray-50"
+                    >
+                      <div className="flex items-center px-4 py-4 sm:px-6">
+                        {item.name}
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </AnimatedPage>
