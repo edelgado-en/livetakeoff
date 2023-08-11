@@ -86,6 +86,7 @@ const CreateItem = () => {
           minimumRequired: "",
           alertAt: "",
           brandSelected: null,
+          groups: location.groups,
         };
       });
 
@@ -116,6 +117,7 @@ const CreateItem = () => {
         minimumRequired: "",
         alertAt: "",
         brandSelected: null,
+        groups: location.groups,
       };
     });
 
@@ -762,8 +764,20 @@ const CreateItem = () => {
                     <tbody className="divide-y divide-gray-200">
                       {locationItems.map((locationItem, index) => (
                         <tr key={index}>
-                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-0">
-                            {locationItem.location.name}
+                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
+                            <div className="font-medium text-gray-700">
+                              {locationItem.location.name}
+                            </div>
+                            <div className="flex justify-start my-2 gap-2">
+                              {locationItem.groups?.map((group) => (
+                                <div
+                                  key={group.id}
+                                  className={`text-xs inline-block rounded-md px-2 py-1 border bg-gray-100 border-gray-200 text-gray-500`}
+                                >
+                                  {group.name}
+                                </div>
+                              ))}
+                            </div>
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                             <input
