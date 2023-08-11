@@ -209,6 +209,20 @@ const CreateItem = () => {
       return;
     }
 
+    const atLeastOneLocationItemHasQuantity = locationItems.some(
+      (locationItem) => locationItem.quantity > 0
+    );
+
+    if (!atLeastOneLocationItemHasQuantity) {
+      alert("Please enter a quantity bigger than 0 for at least one location.");
+      return;
+    }
+
+    //only include the locationItems that have a quantity bigger than 0
+    const locationItemsWithQuantity = locationItems.filter(
+      (locationItem) => locationItem.quantity > 0
+    );
+
     const selectedTagIds = tags
       .filter((tag) => tag.selected)
       .map((tag) => tag.id);
@@ -224,7 +238,7 @@ const CreateItem = () => {
     formData.append("costPerUnit", costPerUnit);
     formData.append("tagIds", JSON.stringify(selectedTagIds));
     formData.append("providerIds", JSON.stringify(selectedProviderIds));
-    formData.append("locationItems", JSON.stringify(locationItems));
+    formData.append("locationItems", JSON.stringify(locationItemsWithQuantity));
 
     itemImages.forEach((image) => {
       if (image.file.size < 10000000) {
@@ -246,6 +260,12 @@ const CreateItem = () => {
     setLoading(false);
   };
 
+  const handleSetCostPerUnit = (value) => {
+    const cost = value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+
+    setCostPerUnit(cost);
+  };
+
   return (
     <AnimatedPage>
       {loading && <Loader />}
@@ -254,7 +274,7 @@ const CreateItem = () => {
         <div className="mx-auto max-w-lg px-4 pb-16 lg:pb-12 mt-40 text-center">
           <div className=" flex justify-center">
             <CheckCircleIcon
-              className="h-8 w-8 text-green-400"
+              className="h-20 w-20 text-green-400"
               aria-hidden="true"
             />
           </div>
@@ -266,7 +286,7 @@ const CreateItem = () => {
           <div className=" mt-6 flex justify-center gap-6">
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/inventory")}
               className="inline-flex items-center rounded-md border
                                          border-gray-300 bg-white px-3 py-2 text-sm leading-4
                                           text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
@@ -392,9 +412,9 @@ const CreateItem = () => {
                             leaveTo="opacity-0"
                           >
                             <Listbox.Options
-                              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
-                                                                                rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                                                ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                              className="absolute z-10 mt-1 max-h-72 w-full overflow-auto
+                                        rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                        ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                             >
                               {measureUnits.map((measureUnit) => (
                                 <Listbox.Option
@@ -458,7 +478,7 @@ const CreateItem = () => {
                     <input
                       type="text"
                       value={costPerUnit}
-                      onChange={(e) => setCostPerUnit(e.target.value)}
+                      onChange={(e) => handleSetCostPerUnit(e.target.value)}
                       name="costPerUnit"
                       id="costPerUnit"
                       className="block w-full rounded-md border-gray-300 shadow-sm
