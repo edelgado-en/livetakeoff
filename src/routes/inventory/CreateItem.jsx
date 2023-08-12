@@ -118,7 +118,7 @@ const CreateItem = () => {
           quantity: "",
           minimumRequired: "",
           alertAt: "",
-          brandSelected: null,
+          brandsSelected: [],
           groups: location.groups,
         };
       });
@@ -149,7 +149,7 @@ const CreateItem = () => {
         quantity: "",
         minimumRequired: "",
         alertAt: "",
-        brandSelected: null,
+        brandsSelected: [],
         groups: location.groups,
       };
     });
@@ -177,13 +177,13 @@ const CreateItem = () => {
     setProviders(newProviders);
   };
 
-  const setLocationItemBrandSelected = (brand, locationItem) => {
+  const setLocationItemBrandSelected = (selectedBrands, locationItem) => {
     const newLocationItems = [...locationItems];
     const index = newLocationItems.findIndex(
       (item) => item.location.id === locationItem.location.id
     );
 
-    newLocationItems[index].brandSelected = brand;
+    newLocationItems[index].brandsSelected = selectedBrands;
 
     setLocationItems(newLocationItems);
   };
@@ -368,7 +368,10 @@ const CreateItem = () => {
                   htmlFor="itemName"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Name
+                  Name{" "}
+                  <span className=" text-gray-400 text-sm">
+                    (Must be unique)
+                  </span>
                 </label>
                 <div className="mt-1">
                   <input
@@ -381,7 +384,7 @@ const CreateItem = () => {
                                 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
                   {itemAlreadyExistsId && (
-                    <p className="text-red-500 text-xs font-semibold mt-2">
+                    <p className="text-red-500 text-sm font-semibold mt-2">
                       Item already exists. Check it out here:{" "}
                       {itemAlreadyExistsId}
                     </p>
@@ -880,10 +883,11 @@ const CreateItem = () => {
                                          font-medium sm:pr-0"
                           >
                             <Listbox
-                              value={locationItem.brandSelected}
-                              onChange={(brand) =>
+                              value={locationItem.brandsSelected}
+                              multiple
+                              onChange={(brands) =>
                                 setLocationItemBrandSelected(
-                                  brand,
+                                  brands,
                                   locationItem
                                 )
                               }
@@ -898,9 +902,14 @@ const CreateItem = () => {
                                                 focus:ring-1 focus:ring-sky-500 sm:text-sm"
                                     >
                                       <span className="block truncate">
-                                        {locationItem.brandSelected
-                                          ? locationItem.brandSelected.name
-                                          : "Select brand"}
+                                        {locationItem.brandsSelected.length >
+                                          0 &&
+                                          locationItem.brandsSelected
+                                            .map((brand) => brand.name)
+                                            .join(", ")}
+
+                                        {locationItem.brandsSelected.length ===
+                                          0 && "Select brands"}
                                       </span>
                                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronUpDownIcon
