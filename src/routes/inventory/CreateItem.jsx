@@ -312,7 +312,7 @@ const CreateItem = () => {
             />
           </div>
           <div className="">
-            <p className="text-md font-medium text-gray-900 mt-2">
+            <p className="text-xl font-medium text-gray-900 mt-2">
               Item created!
             </p>
           </div>

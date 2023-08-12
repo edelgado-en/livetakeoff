@@ -13,9 +13,13 @@ export const createItem = (formData: any) => {
 }
 
 export const getItems = (data: any, currentPage: Number) => {
-    return httpService.post(`/inventory/items/list?page=${currentPage}&size=${200}`, data);
+    return httpService.post(`/inventory/items/list?page=${currentPage}&size=${100}`, data);
 }
 
 export const getItemLookup = (name: string) => {
     return httpService.get(`/inventory/items/${name}/`);
+}
+
+export const getLocations = (data: any) => {
+    return httpService.post('/inventory/locations/list', data);
 }
