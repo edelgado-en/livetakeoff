@@ -47,6 +47,8 @@ const CreateItem = () => {
   const [itemName, setItemName] = useState("");
   const [itemNameErrorMessage, setItemNameErrorMessage] = useState(null);
 
+  const [itemAlreadyExistsId, setItemAlreadyExistsId] = useState(null);
+
   const [description, setDescription] = useState("");
   const [areaSelected, setAreaSelected] = useState(null);
   const [measureUnitSelected, setMeasureUnitSelected] = useState(null);
@@ -66,6 +68,37 @@ const CreateItem = () => {
   useEffect(() => {
     getItemFormInfo();
   }, []);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      getItemLookup();
+    }, 300);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [itemName]);
+
+  const getItemLookup = async () => {
+    if (itemName?.length > 3) {
+      try {
+        const { data } = await api.getItemLookup(itemName);
+
+        console.log(data.id);
+
+        if (data.id > 0) {
+          setItemAlreadyExistsId(data.id);
+        } else {
+          setItemAlreadyExistsId(null);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setItemAlreadyExistsId(null);
+    }
+  };
 
   const getItemFormInfo = async () => {
     try {
@@ -347,9 +380,10 @@ const CreateItem = () => {
                     className="block w-full rounded-md border-gray-300 shadow-sm
                                 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
-                  {itemNameErrorMessage && (
+                  {itemAlreadyExistsId && (
                     <p className="text-red-500 text-xs font-semibold mt-2">
-                      {itemNameErrorMessage}
+                      Item already exists. Check it out here:{" "}
+                      {itemAlreadyExistsId}
                     </p>
                   )}
                 </div>
