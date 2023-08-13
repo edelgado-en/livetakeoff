@@ -25,7 +25,6 @@ import * as api from "./apiService";
 import Pagination from "react-js-pagination";
 
 import { toast } from "react-toastify";
-import { current } from "immer";
 
 const ChevronUpDownIcon = () => {
   return (
@@ -143,6 +142,11 @@ const availableAreaOptions = [
   { id: "O", name: "Office" },
 ];
 
+const availableStatusOptions = [
+  { id: "C", name: "Confirmed" },
+  { id: "U", name: "Unconfirmed" },
+];
+
 const InventoryList = () => {
   const currentUser = useAppSelector(selectUser);
 
@@ -160,6 +164,8 @@ const InventoryList = () => {
   const [measureBySelected, setMeasureBySelected] = useState(null);
   const [areaSelected, setAreaSelected] = useState(null);
 
+  const [statusSelected, setStatusSelected] = useState(null);
+
   useEffect(() => {
     getLocations();
   }, []);
@@ -171,6 +177,7 @@ const InventoryList = () => {
     searchText,
     measureBySelected,
     areaSelected,
+    statusSelected,
     currentPage,
   ]);
 
@@ -194,6 +201,7 @@ const InventoryList = () => {
       location: locationSelected?.id,
       measureById: measureBySelected?.id,
       areaId: areaSelected?.id,
+      status: statusSelected?.id,
     };
 
     //set active filters
@@ -220,6 +228,13 @@ const InventoryList = () => {
       });
     }
 
+    if (request.status) {
+      activeFilters.push({
+        id: "status",
+        name: statusSelected?.name,
+      });
+    }
+
     setActiveFilters(activeFilters);
 
     try {
@@ -237,6 +252,7 @@ const InventoryList = () => {
 
           if (itemLocation) {
             item.quantityToDisplay = itemLocation.quantity;
+            item.statusToDisplay = itemLocation.status;
           } else {
             item.quantityToDisplay = null;
           }
@@ -260,6 +276,8 @@ const InventoryList = () => {
       setSearchText("");
     } else if (activeFilterId === "area") {
       setAreaSelected(null);
+    } else if (activeFilterId === "status") {
+      setStatusSelected(null);
     }
 
     setActiveFilters(
@@ -277,6 +295,14 @@ const InventoryList = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleSetLocationSelected = (location) => {
+    if (location.id === null) {
+      setStatusSelected(null);
+    }
+
+    setLocationSelected(location);
   };
 
   return (
@@ -331,7 +357,7 @@ const InventoryList = () => {
               <div>
                 <Listbox
                   value={locationSelected}
-                  onChange={setLocationSelected}
+                  onChange={(location) => handleSetLocationSelected(location)}
                 >
                   {({ open }) => (
                     <>
@@ -550,7 +576,13 @@ const InventoryList = () => {
                     </div>
                     <div className="mt-1 flex justify-between">
                       <div className="flex gap-1">
-                        <div className="flex-none rounded-full bg-green-400/10 p-1 text-green-400">
+                        <div
+                          className={`flex-none rounded-full ${
+                            item.statusToDisplay === "C"
+                              ? "bg-green-400/10 p-1 text-green-400"
+                              : "bg-red-400/10 p-1 text-red-400"
+                          }`}
+                        >
                           <div className="h-2 w-2 rounded-full bg-current" />
                         </div>
                         <h3
@@ -758,6 +790,35 @@ const InventoryList = () => {
               ))}
             </ul>
           </div>
+          {locationSelected && locationSelected.id !== null && (
+            <div className="hidden xl:block lg:block pb-4">
+              <h2 className="font-medium text-sm text-gray-900">Status</h2>
+              <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                {availableStatusOptions.map((status) => (
+                  <li key={status.id}>
+                    <div
+                      onClick={() =>
+                        setStatusSelected({
+                          id: status.id,
+                          name: status.name,
+                        })
+                      }
+                      className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                    hover:bg-gray-50"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="focus:outline-none">
+                          <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
+                            {status.name}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </AnimatedPage>
