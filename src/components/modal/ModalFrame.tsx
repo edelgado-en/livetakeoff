@@ -43,7 +43,7 @@ const ModalFrame = ({ isModalOpen, cancelButtonRef, children } : IProps) => {
               >
                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg
                                       bg-white px-4 pt-5 pb-4 text-left shadow-xl
-                                        transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                                        transition-all sm:my-8 w-full sm:max-w-lg sm:p-6">
                   {children}
                 </Dialog.Panel>
               </Transition.Child>

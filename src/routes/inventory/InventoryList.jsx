@@ -26,6 +26,7 @@ import Pagination from "react-js-pagination";
 
 import ConfirmItemModal from "./ConfirmItemModal";
 import AdjustItemModal from "./AdjustItemModal";
+import MoveItemModal from "./MoveItemModal";
 
 import { toast } from "react-toastify";
 
@@ -173,6 +174,7 @@ const InventoryList = () => {
 
   const [isConfirmItemModalOpen, setConfirmItemModalOpen] = useState(false);
   const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
+  const [isMoveItemModalOpen, setMoveItemModalOpen] = useState(false);
 
   useEffect(() => {
     getLocations();
@@ -289,6 +291,52 @@ const InventoryList = () => {
       setItemSelected(item);
     }
     setAdjustItemModalOpen(!isAdjustItemModalOpen);
+  };
+
+  const handleToggleMoveItemModal = (item) => {
+    if (item) {
+      setItemSelected(item);
+    }
+    setMoveItemModalOpen(!isMoveItemModalOpen);
+  };
+
+  const moveItem = async (quantity, destinationLocationId) => {
+    quantity = parseInt(quantity);
+
+    let location_item_id = null;
+    let adjustedQuantity = null;
+    const updatedItems = items.map((item) => {
+      if (item.id === itemSelected.id) {
+        adjustedQuantity = item.quantityToDisplay - quantity;
+        item.quantityToDisplay = adjustedQuantity;
+        item.statusToDisplay = "U";
+
+        location_item_id = item.location_items.find(
+          (locationItem) => locationItem.location.id === locationSelected.id
+        ).id;
+      }
+
+      return item;
+    });
+
+    const request = {
+      action: "move",
+      destinationLocationId,
+      adjustedQuantity,
+      movingQuantity: quantity,
+    };
+
+    try {
+      await api.updateLocationItem(location_item_id, request);
+
+      setMoveItemModalOpen(false);
+      setItems(updatedItems);
+      setItemSelected(null);
+
+      toast.success("Item moved!");
+    } catch (err) {
+      toast.error("Unable to update move item");
+    }
   };
 
   const adjustItemQuantity = async (quantity) => {
@@ -715,6 +763,8 @@ const InventoryList = () => {
                       <>
                         <div className="mt-3">
                           <button
+                            disabled={item.quantityToDisplay === 0}
+                            onClick={() => handleToggleMoveItemModal(item)}
                             className="w-full relative flex items-center justify-center rounded-md 
                                             border border-transparent bg-blue-500 px-8 py-2 text-sm
                                             font-medium text-white hover:bg-blue-600"
@@ -927,6 +977,17 @@ const InventoryList = () => {
             handleClose={handleToggleAdjustItemModal}
             adjustItemQuantity={adjustItemQuantity}
             locationSelected={locationSelected}
+          />
+        )}
+
+        {isMoveItemModalOpen && (
+          <MoveItemModal
+            isOpen={isMoveItemModalOpen}
+            item={itemSelected}
+            handleClose={handleToggleMoveItemModal}
+            moveItem={moveItem}
+            locationSelected={locationSelected}
+            locations={locations}
           />
         )}
       </div>
