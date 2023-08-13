@@ -549,8 +549,14 @@ const InventoryList = () => {
                       )}
                     </div>
                     <div className="mt-1 flex justify-between">
-                      <div>
-                        <h3 className="text-sm text-gray-900 font-medium truncate">
+                      <div className="flex gap-1">
+                        <div className="flex-none rounded-full bg-green-400/10 p-1 text-green-400">
+                          <div className="h-2 w-2 rounded-full bg-current" />
+                        </div>
+                        <h3
+                          className="text-sm text-gray-900 font-medium truncate"
+                          style={{ maxWidth: "170px" }}
+                        >
                           {item.name}
                         </h3>
                       </div>
@@ -587,15 +593,37 @@ const InventoryList = () => {
                         <span>{item.measure_by === "T" && "Other"}</span>
                       </div>
                     </div>
-                    <div className="mt-3">
-                      <button
-                        className="w-full relative flex items-center justify-center rounded-md 
-                                         border border-transparent bg-gray-100 px-8 py-2 text-sm
-                                         font-medium text-gray-900 hover:bg-gray-200"
-                      >
-                        Move
-                      </button>
-                    </div>
+                    {locationSelected && locationSelected.id !== null && (
+                      <>
+                        <div className="mt-3">
+                          <button
+                            className="w-full relative flex items-center justify-center rounded-md 
+                                            border border-transparent bg-blue-500 px-8 py-2 text-sm
+                                            font-medium text-white hover:bg-blue-600"
+                          >
+                            Move
+                          </button>
+                        </div>
+                        <div className="mt-3">
+                          <button
+                            className="w-full relative flex items-center justify-center rounded-md 
+                                            border border-transparent bg-gray-100 px-8 py-2 text-sm
+                                            font-medium text-gray-900 hover:bg-gray-200"
+                          >
+                            Adjust
+                          </button>
+                        </div>
+                        <div className="mt-3">
+                          <button
+                            className="w-full relative flex items-center justify-center rounded-md 
+                                            border border-transparent bg-gray-100 px-8 py-2 text-sm
+                                            font-medium text-gray-900 hover:bg-gray-200"
+                          >
+                            Confirm
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))}
               </div>
