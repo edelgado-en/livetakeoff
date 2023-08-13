@@ -226,6 +226,23 @@ const InventoryList = () => {
       const { data } = await api.getItems(request, currentPage);
 
       setTotalItems(data.count);
+      //setItems(data.results);
+
+      // set quantityToDisplay in each item. The quantity to display is the quantity of the item in the location selected
+      if (locationSelected) {
+        data.results.forEach((item) => {
+          const itemLocation = item.location_items.find(
+            (locationItem) => locationItem.location.id === locationSelected.id
+          );
+
+          if (itemLocation) {
+            item.quantityToDisplay = itemLocation.quantity;
+          } else {
+            item.quantityToDisplay = null;
+          }
+        });
+      }
+
       setItems(data.results);
     } catch (err) {
       setItems([]);
@@ -537,8 +554,20 @@ const InventoryList = () => {
                           {item.name}
                         </h3>
                       </div>
-                      <p className="text-sm font-medium text-gray-900">100</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {item.quantityToDisplay}
+                      </p>
                     </div>
+                    {!locationSelected ||
+                      (locationSelected.id === null && (
+                        <div className="mt-2 text-gray-500 text-sm">
+                          Found in{" "}
+                          <span className="font-semibold">
+                            {item.location_items.length}
+                          </span>{" "}
+                          location(s)
+                        </div>
+                      ))}
                     <div className="mt-2 text-sm text-gray-500 flex justify-between gap-2 italic">
                       <div>
                         <span>{item.area === "I" && "Interior"}</span>
