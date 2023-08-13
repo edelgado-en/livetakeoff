@@ -189,34 +189,42 @@ const CreateItem = () => {
   };
 
   const setLocationItemQuantity = (quantity, locationItem) => {
+    const value = quantity.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+
     const newLocationItems = [...locationItems];
     const index = newLocationItems.findIndex(
       (item) => item.location.id === locationItem.location.id
     );
 
-    newLocationItems[index].quantity = quantity;
+    newLocationItems[index].quantity = value;
 
     setLocationItems(newLocationItems);
   };
 
   const setLocationItemMinimumRequired = (minimumRequired, locationItem) => {
+    const value = minimumRequired
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1");
+
     const newLocationItems = [...locationItems];
     const index = newLocationItems.findIndex(
       (item) => item.location.id === locationItem.location.id
     );
 
-    newLocationItems[index].minimumRequired = minimumRequired;
+    newLocationItems[index].minimumRequired = value;
 
     setLocationItems(newLocationItems);
   };
 
   const setLocationItemAlertAt = (alertAt, locationItem) => {
+    const value = alertAt.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
+
     const newLocationItems = [...locationItems];
     const index = newLocationItems.findIndex(
       (item) => item.location.id === locationItem.location.id
     );
 
-    newLocationItems[index].alertAt = alertAt;
+    newLocationItems[index].alertAt = value;
 
     setLocationItems(newLocationItems);
   };
