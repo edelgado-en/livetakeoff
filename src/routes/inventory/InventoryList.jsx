@@ -24,6 +24,8 @@ import * as api from "./apiService";
 
 import Pagination from "react-js-pagination";
 
+import ConfirmItemModal from "./ConfirmItemModal";
+
 import { toast } from "react-toastify";
 
 const ChevronUpDownIcon = () => {
@@ -166,6 +168,10 @@ const InventoryList = () => {
 
   const [statusSelected, setStatusSelected] = useState(null);
 
+  const [itemSelected, setItemSelected] = useState(null);
+
+  const [isConfirmItemModalOpen, setConfirmItemModalOpen] = useState(false);
+
   useEffect(() => {
     getLocations();
   }, []);
@@ -267,6 +273,44 @@ const InventoryList = () => {
     }
 
     setLoading(false);
+  };
+
+  const handleToggleConfirmItemModal = (item) => {
+    if (item) {
+      setItemSelected(item);
+    }
+    setConfirmItemModalOpen(!isConfirmItemModalOpen);
+  };
+
+  const updateItemStatus = async (status) => {
+    let location_item_id = null;
+    const updatedItems = items.map((item) => {
+      if (item.id === itemSelected.id) {
+        item.statusToDisplay = status;
+
+        location_item_id = item.location_items.find(
+          (locationItem) => locationItem.location.id === locationSelected.id
+        ).id;
+      }
+
+      return item;
+    });
+
+    const request = {
+      status,
+    };
+
+    try {
+      await api.updateLocationItem(location_item_id, request);
+
+      setConfirmItemModalOpen(false);
+      setItems(updatedItems);
+      setItemSelected(null);
+
+      toast.success("Item confirmed!");
+    } catch (err) {
+      toast.error("Unable to update item status");
+    }
   };
 
   const removeActiveFilter = (activeFilterId) => {
@@ -647,6 +691,7 @@ const InventoryList = () => {
                         </div>
                         <div className="mt-3">
                           <button
+                            onClick={() => handleToggleConfirmItemModal(item)}
                             className="w-full relative flex items-center justify-center rounded-md 
                                             border border-transparent bg-gray-100 px-8 py-2 text-sm
                                             font-medium text-gray-900 hover:bg-gray-200"
@@ -820,6 +865,16 @@ const InventoryList = () => {
             </div>
           )}
         </div>
+
+        {isConfirmItemModalOpen && (
+          <ConfirmItemModal
+            isOpen={isConfirmItemModalOpen}
+            item={itemSelected}
+            handleClose={handleToggleConfirmItemModal}
+            updateItemStatus={updateItemStatus}
+            locationSelected={locationSelected}
+          />
+        )}
       </div>
     </AnimatedPage>
   );
