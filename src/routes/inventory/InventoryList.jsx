@@ -25,6 +25,7 @@ import * as api from "./apiService";
 import Pagination from "react-js-pagination";
 
 import ConfirmItemModal from "./ConfirmItemModal";
+import AdjustItemModal from "./AdjustItemModal";
 
 import { toast } from "react-toastify";
 
@@ -171,6 +172,7 @@ const InventoryList = () => {
   const [itemSelected, setItemSelected] = useState(null);
 
   const [isConfirmItemModalOpen, setConfirmItemModalOpen] = useState(false);
+  const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
 
   useEffect(() => {
     getLocations();
@@ -282,6 +284,46 @@ const InventoryList = () => {
     setConfirmItemModalOpen(!isConfirmItemModalOpen);
   };
 
+  const handleToggleAdjustItemModal = (item) => {
+    if (item) {
+      setItemSelected(item);
+    }
+    setAdjustItemModalOpen(!isAdjustItemModalOpen);
+  };
+
+  const adjustItemQuantity = async (quantity) => {
+    let location_item_id = null;
+    const updatedItems = items.map((item) => {
+      if (item.id === itemSelected.id) {
+        item.quantityToDisplay = quantity;
+        item.statusToDisplay = "U";
+
+        location_item_id = item.location_items.find(
+          (locationItem) => locationItem.location.id === locationSelected.id
+        ).id;
+      }
+
+      return item;
+    });
+
+    const request = {
+      action: "adjust",
+      quantity,
+    };
+
+    try {
+      await api.updateLocationItem(location_item_id, request);
+
+      setAdjustItemModalOpen(false);
+      setItems(updatedItems);
+      setItemSelected(null);
+
+      toast.success("Item adjusted!");
+    } catch (err) {
+      toast.error("Unable to update adjust quantity");
+    }
+  };
+
   const updateItemStatus = async (status) => {
     let location_item_id = null;
     const updatedItems = items.map((item) => {
@@ -297,7 +339,7 @@ const InventoryList = () => {
     });
 
     const request = {
-      status,
+      action: "confirm",
     };
 
     try {
@@ -682,6 +724,7 @@ const InventoryList = () => {
                         </div>
                         <div className="mt-3">
                           <button
+                            onClick={() => handleToggleAdjustItemModal(item)}
                             className="w-full relative flex items-center justify-center rounded-md 
                                             border border-transparent bg-gray-100 px-8 py-2 text-sm
                                             font-medium text-gray-900 hover:bg-gray-200"
@@ -692,6 +735,7 @@ const InventoryList = () => {
                         <div className="mt-3">
                           <button
                             onClick={() => handleToggleConfirmItemModal(item)}
+                            disabled={item.statusToDisplay === "C"}
                             className="w-full relative flex items-center justify-center rounded-md 
                                             border border-transparent bg-gray-100 px-8 py-2 text-sm
                                             font-medium text-gray-900 hover:bg-gray-200"
@@ -872,6 +916,16 @@ const InventoryList = () => {
             item={itemSelected}
             handleClose={handleToggleConfirmItemModal}
             updateItemStatus={updateItemStatus}
+            locationSelected={locationSelected}
+          />
+        )}
+
+        {isAdjustItemModalOpen && (
+          <AdjustItemModal
+            isOpen={isAdjustItemModalOpen}
+            item={itemSelected}
+            handleClose={handleToggleAdjustItemModal}
+            adjustItemQuantity={adjustItemQuantity}
             locationSelected={locationSelected}
           />
         )}
