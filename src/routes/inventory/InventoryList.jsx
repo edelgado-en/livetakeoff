@@ -696,9 +696,7 @@ const InventoryList = () => {
                     <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-100 lg:aspect-none group-hover:opacity-75 lg:h-80">
                       {item.photo && (
                         <img
-                          src={
-                            "https://res.cloudinary.com/datidxeqm/image/upload/v1691851444/Paper_towels_dprc8t.jpg"
-                          }
+                          src={item.photo}
                           alt={item.name}
                           className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                         />
