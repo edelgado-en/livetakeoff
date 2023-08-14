@@ -722,7 +722,7 @@ const InventoryList = () => {
                         <img
                           src={item.photo}
                           alt={item.name}
-                          className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                          className="h-full w-full object-contain lg:h-full lg:w-full"
                         />
                       )}
 
