@@ -40,3 +40,10 @@ export const createLocation = (data: any) => {
     return httpService.post('/inventory/location', data);
 }
 
+export const createTag = (data: any) => {
+    return httpService.post('/inventory/tag', data);
+}
+
+export const createBrand = (data: any) => {
+    return httpService.post('/inventory/brand', data);
+}

@@ -14,6 +14,8 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import CreateProviderModal from "./CreateProviderModal";
 import CreateLocationModal from "./CreateLocationModal";
+import CreateBrandModal from "./CreateBrandModal";
+import CreateTagModal from "./CreateTagModal";
 
 import * as api from "./apiService";
 
@@ -72,6 +74,9 @@ const CreateItem = () => {
     useState(false);
   const [isCreateLocationModalOpen, setCreateLocationModalOpen] =
     useState(false);
+  const [isCreateBrandModalOpen, setCreateBrandModalOpen] = useState(false);
+
+  const [isCreateTagModalOpen, setCreateTagModalOpen] = useState(false);
 
   useEffect(() => {
     getItemFormInfo();
@@ -114,6 +119,14 @@ const CreateItem = () => {
 
   const handleToggleCreateLocationModal = () => {
     setCreateLocationModalOpen(!isCreateLocationModalOpen);
+  };
+
+  const handleToggleCreateBrandModal = () => {
+    setCreateBrandModalOpen(!isCreateBrandModalOpen);
+  };
+
+  const handleToggleCreateTagModal = () => {
+    setCreateTagModalOpen(!isCreateTagModalOpen);
   };
 
   const getItemFormInfo = async () => {
@@ -339,6 +352,24 @@ const CreateItem = () => {
 
     setCreateLocationModalOpen(false);
     setLocationItems(newLocationItems);
+  };
+
+  const handleAddBrand = (data) => {
+    const newBrands = [...brands];
+
+    newBrands.push(data);
+
+    setCreateBrandModalOpen(false);
+    setBrands(newBrands);
+  };
+
+  const handleAddTag = (data) => {
+    const newTags = [...tags];
+
+    newTags.push(data);
+
+    setCreateTagModalOpen(false);
+    setTags(newTags);
   };
 
   return (
@@ -765,7 +796,12 @@ const CreateItem = () => {
                   </div>
                   <p className="text-gray-500 text-sm">
                     You don't see the tag you are looking for? Create a new one{" "}
-                    <button className="text-blue-500">here</button>
+                    <button
+                      onClick={() => handleToggleCreateTagModal()}
+                      className="text-blue-500"
+                    >
+                      here
+                    </button>
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-4">
@@ -881,7 +917,12 @@ const CreateItem = () => {
                           Brand
                           <span className="text-gray-500 font-normal ml-4">
                             Create new brand{" "}
-                            <button className="text-blue-500">here</button>
+                            <button
+                              onClick={() => handleToggleCreateBrandModal()}
+                              className="text-blue-500"
+                            >
+                              here
+                            </button>
                           </span>
                         </th>
                       </tr>
@@ -1098,6 +1139,22 @@ const CreateItem = () => {
           isOpen={isCreateLocationModalOpen}
           handleClose={handleToggleCreateLocationModal}
           addLocationItem={handleAddLocationItem}
+        />
+      )}
+
+      {isCreateBrandModalOpen && (
+        <CreateBrandModal
+          isOpen={isCreateBrandModalOpen}
+          handleClose={handleToggleCreateBrandModal}
+          addBrand={handleAddBrand}
+        />
+      )}
+
+      {isCreateTagModalOpen && (
+        <CreateTagModal
+          isOpen={isCreateTagModalOpen}
+          handleClose={handleToggleCreateTagModal}
+          addTag={handleAddTag}
         />
       )}
     </AnimatedPage>
