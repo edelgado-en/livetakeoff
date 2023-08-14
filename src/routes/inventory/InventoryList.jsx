@@ -714,7 +714,7 @@ const InventoryList = () => {
               <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
                 {items.map((item) => (
                   <div key={item.id} className="group relative">
-                    <div
+                    {/* <div
                       className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md
                                      bg-gray-100 lg:aspect-none group-hover:opacity-75 lg:h-48"
                     >
@@ -722,12 +722,25 @@ const InventoryList = () => {
                         <img
                           src={item.photo}
                           alt={item.name}
-                          className="h-full w-full object-contain lg:h-full lg:w-full"
+                          className="h-60 w-72 rounded-lg"
                         />
                       )}
 
                       {!item.photo && (
                         <PhotographIcon className="h-52 w-52 text-gray-200 items-center m-auto align-middle" />
+                      )}
+                    </div> */}
+                    <div className="flex-shrink-0 cursor-pointer">
+                      {item.photo && (
+                        <img
+                          src={item.photo}
+                          alt={item.name}
+                          className="h-60 w-72 rounded-lg"
+                        />
+                      )}
+
+                      {!item.photo && (
+                        <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
                       )}
                     </div>
                     <div className="mt-1 flex justify-between">
