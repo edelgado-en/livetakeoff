@@ -6,29 +6,36 @@ import { CheckIcon } from "@heroicons/react/outline";
 import * as api from "./apiService";
 import { toast } from "react-toastify";
 
-const CreateProviderModal = ({ isOpen, handleClose, addProvider }) => {
-  const [providerName, setProviderName] = useState("");
+const CreateLocationModal = ({ isOpen, handleClose, addLocationItem }) => {
+  const [locationName, setLocationName] = useState("");
   const [description, setDescription] = useState("");
-  const [providerUrl, setProviderUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const createProvider = async () => {
-    if (providerName.length === 0) {
-      alert("Enter a provider name");
+  const createLocation = async () => {
+    if (locationName.length === 0) {
+      alert("Enter a location name");
     }
 
     setLoading(true);
 
     const request = {
-      name: providerName,
+      name: locationName,
       description: description,
-      url: providerUrl,
     };
 
     try {
-      const { data } = await api.createProvider(request);
+      const { data } = await api.createLocation(request);
 
-      addProvider(data);
+      const locationItem = {
+        location: data,
+        quantity: "",
+        minimumRequired: "",
+        alertAt: "",
+        brandsSelected: [],
+        groups: [],
+      };
+
+      addLocationItem(locationItem);
     } catch (err) {
       toast.error("Unable to create provider");
     }
@@ -45,13 +52,13 @@ const CreateProviderModal = ({ isOpen, handleClose, addProvider }) => {
               as="h3"
               className="text-xl m-auto flex justify-center text-center font-medium leading-6 text-gray-900 relative top-1"
             >
-              Create Provider
+              Create Location
             </Dialog.Title>
 
             <div className="mt-8 px-2">
               <div>
                 <label
-                  htmlFor="providerName"
+                  htmlFor="locationName"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Name{" "}
@@ -62,10 +69,10 @@ const CreateProviderModal = ({ isOpen, handleClose, addProvider }) => {
                 <div className="mt-1">
                   <input
                     type="text"
-                    value={providerName}
-                    onChange={(e) => setProviderName(e.target.value)}
-                    name="providerName"
-                    id="providerName"
+                    value={locationName}
+                    onChange={(e) => setLocationName(e.target.value)}
+                    name="locationName"
+                    id="locationName"
                     className="block w-full rounded-md border-gray-300 shadow-sm
                                 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
@@ -90,25 +97,6 @@ const CreateProviderModal = ({ isOpen, handleClose, addProvider }) => {
                   />
                 </div>
               </div>
-              <div className="mt-4">
-                <label
-                  htmlFor="providerName"
-                  className="block text-sm text-gray-500"
-                >
-                  Url
-                </label>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    value={providerUrl}
-                    onChange={(e) => setProviderUrl(e.target.value)}
-                    name="providerName"
-                    id="providerName"
-                    className="block w-full rounded-md border-gray-300 shadow-sm
-                                focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                  />
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -116,7 +104,7 @@ const CreateProviderModal = ({ isOpen, handleClose, addProvider }) => {
           <button
             type="button"
             disabled={loading}
-            onClick={() => createProvider()}
+            onClick={() => createLocation()}
             className="inline-flex w-full justify-center rounded-md border border-transparent
                               bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700
                                 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
@@ -141,4 +129,4 @@ const CreateProviderModal = ({ isOpen, handleClose, addProvider }) => {
   );
 };
 
-export default CreateProviderModal;
+export default CreateLocationModal;

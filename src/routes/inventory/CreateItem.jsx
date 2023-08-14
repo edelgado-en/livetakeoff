@@ -12,6 +12,9 @@ import { Listbox, Transition } from "@headlessui/react";
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
+import CreateProviderModal from "./CreateProviderModal";
+import CreateLocationModal from "./CreateLocationModal";
+
 import * as api from "./apiService";
 
 import { toast } from "react-toastify";
@@ -65,6 +68,11 @@ const CreateItem = () => {
 
   const [itemImages, setItemImages] = useState([]);
 
+  const [isCreateProviderModalOpen, setCreateProviderModalOpen] =
+    useState(false);
+  const [isCreateLocationModalOpen, setCreateLocationModalOpen] =
+    useState(false);
+
   useEffect(() => {
     getItemFormInfo();
   }, []);
@@ -98,6 +106,14 @@ const CreateItem = () => {
     } else {
       setItemAlreadyExistsId(null);
     }
+  };
+
+  const handleToggleCreateProviderModal = () => {
+    setCreateProviderModalOpen(!isCreateProviderModalOpen);
+  };
+
+  const handleToggleCreateLocationModal = () => {
+    setCreateLocationModalOpen(!isCreateLocationModalOpen);
   };
 
   const getItemFormInfo = async () => {
@@ -305,6 +321,24 @@ const CreateItem = () => {
     const cost = value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
 
     setCostPerUnit(cost);
+  };
+
+  const handleAddProvider = (data) => {
+    const newProviders = [...providers];
+
+    newProviders.push(data);
+
+    setCreateProviderModalOpen(false);
+    setProviders(newProviders);
+  };
+
+  const handleAddLocationItem = (data) => {
+    const newLocationItems = [...locationItems];
+
+    newLocationItems.push(data);
+
+    setCreateLocationModalOpen(false);
+    setLocationItems(newLocationItems);
   };
 
   return (
@@ -765,7 +799,12 @@ const CreateItem = () => {
               <p className="mt-1 text-sm text-gray-500">
                 Select which providers you are using for this product. You don't
                 see the provider you are looking for? Create a new one{" "}
-                <button className="text-blue-500">here</button>
+                <button
+                  onClick={() => handleToggleCreateProviderModal()}
+                  className="text-blue-500"
+                >
+                  here
+                </button>
               </p>
             </div>
             <div className="flex flex-wrap gap-4 pb-10">
@@ -798,7 +837,12 @@ const CreateItem = () => {
             </p>
             <p className="mt-1 text-sm text-gray-500">
               You don't see the location you are looking for? Create a new one{" "}
-              <button className="text-blue-500">here</button>
+              <button
+                className="text-blue-500"
+                onClick={() => handleToggleCreateLocationModal()}
+              >
+                here
+              </button>
             </p>
             <div className="mt-6 flow-root">
               <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -1039,6 +1083,22 @@ const CreateItem = () => {
             </button>
           </div>
         </main>
+      )}
+
+      {isCreateProviderModalOpen && (
+        <CreateProviderModal
+          isOpen={isCreateProviderModalOpen}
+          handleClose={handleToggleCreateProviderModal}
+          addProvider={handleAddProvider}
+        />
+      )}
+
+      {isCreateLocationModalOpen && (
+        <CreateLocationModal
+          isOpen={isCreateLocationModalOpen}
+          handleClose={handleToggleCreateLocationModal}
+          addLocationItem={handleAddLocationItem}
+        />
       )}
     </AnimatedPage>
   );

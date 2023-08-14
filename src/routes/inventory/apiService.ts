@@ -32,3 +32,11 @@ export const getUserDetails = () => {
     return httpService.get('/api/users/me');
 }
 
+export const createProvider = (data: any) => {
+    return httpService.post('/inventory/provider', data);
+}
+
+export const createLocation = (data: any) => {
+    return httpService.post('/inventory/location', data);
+}
+
