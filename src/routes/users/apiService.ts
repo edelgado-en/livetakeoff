@@ -16,10 +16,18 @@ export const getUserAvailableAirports = (id: number) => {
     return httpService.get(`/api/users/available-airports/${id}/`);
 }
 
-export const addUserAvailableAirport = (request: any) => {
+export const updateUserAvailableAirport = (request: any) => {
     return httpService.post(`/api/users/available-airports`, request);
 }
 
-export const deleteUserAvailableAirport = (request: any) => {
-    return httpService.delete(`/api/users/available-airports`, request);
+export const getLocations = (data: any) => {
+    return httpService.post('/inventory/locations/list', data);
+}
+
+export const getLocationsForUser = (id: number) => {
+    return httpService.get(`/inventory/location-users/${id}/`);
+}
+
+export const updateUserAvailableLocation = (id: number, request: any) => {
+    return httpService.post(`/inventory/location-users/${id}/`, request);
 }

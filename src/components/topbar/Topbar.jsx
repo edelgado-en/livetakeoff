@@ -245,6 +245,33 @@ const Topbar = () => {
                   style={{ top: "12px" }}
                 >
                   <div className="flex space-x-4">
+                    {currentUser.isProjectManager && (
+                      <>
+                        <Link
+                          to="/jobs"
+                          className={classNames(
+                            location.pathname.includes("jobs")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Jobs
+                        </Link>
+                        <Link
+                          to="inventory"
+                          className={classNames(
+                            location.pathname.includes("inventory")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Inventory
+                        </Link>
+                      </>
+                    )}
+
                     {currentUser.isCustomer && (
                       <>
                         <Link

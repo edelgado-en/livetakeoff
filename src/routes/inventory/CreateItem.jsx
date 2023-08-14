@@ -725,8 +725,14 @@ const CreateItem = () => {
               </ImageUploading>
 
               <div className="mt-8">
-                <div className="text-lg font-semibold text-gray-600 mb-4">
-                  Tags
+                <div className="mb-4">
+                  <div className="text-lg font-semibold text-gray-600">
+                    Tags
+                  </div>
+                  <p className="text-gray-500 text-sm">
+                    You don't see the provider you are looking for? Create a new
+                    one <button className="text-blue-500">here</button>
+                  </p>
                 </div>
                 <div className="flex flex-wrap gap-4">
                   {tags.map((tag, index) => (
@@ -756,8 +762,10 @@ const CreateItem = () => {
               <div className="text-lg font-semibold text-gray-600">
                 Providers
               </div>
-              <p className="mt-1 text-md text-gray-500">
-                Select which providers you are using for this product.
+              <p className="mt-1 text-sm text-gray-500">
+                Select which providers you are using for this product. You don't
+                see the provider you are looking for? Create a new one{" "}
+                <button className="text-blue-500">here</button>
               </p>
             </div>
             <div className="flex flex-wrap gap-4 pb-10">
@@ -783,10 +791,14 @@ const CreateItem = () => {
 
           <div>
             <div className="text-lg font-semibold text-gray-600">Locations</div>
-            <p className="mt-1 text-md text-gray-500">
+            <p className="mt-1 text-sm text-gray-500">
               Add quantities and minimum required values for the locations you
               want. You can also specify at which quantity the system will alert
               you.
+            </p>
+            <p className="mt-1 text-sm text-gray-500">
+              You don't see the location you are looking for? Create a new one{" "}
+              <button className="text-blue-500">here</button>
             </p>
             <div className="mt-6 flow-root">
               <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -823,6 +835,10 @@ const CreateItem = () => {
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-600"
                         >
                           Brand
+                          <span className="text-gray-500 font-normal ml-4">
+                            Create new brand{" "}
+                            <button className="text-blue-500">here</button>
+                          </span>
                         </th>
                       </tr>
                     </thead>

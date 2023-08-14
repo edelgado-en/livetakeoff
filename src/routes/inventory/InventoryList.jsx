@@ -154,7 +154,7 @@ const availableStatusOptions = [
 const InventoryList = () => {
   const currentUser = useAppSelector(selectUser);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   const [items, setItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -195,88 +195,101 @@ const InventoryList = () => {
     try {
       const { data } = await api.getLocations();
 
-      data.results.unshift({ id: null, name: "All My locations" });
+      if (
+        currentUser.isAdmin ||
+        currentUser.isSuperUser ||
+        currentUser.isAccountManager ||
+        currentUser.isInternalCoordinator
+      ) {
+        data.results.unshift({ id: null, name: "All My locations" });
+      }
 
       setLocations(data.results);
+
+      if (data.results.length > 0) {
+        setLocationSelected(data.results[0]);
+      }
     } catch (err) {
       toast.error("Unable to get locations");
     }
   };
 
   const fetchItems = async () => {
-    setLoading(true);
+    if (locations.length > 0) {
+      setLoading(true);
 
-    const request = {
-      searchText,
-      location: locationSelected?.id,
-      measureById: measureBySelected?.id,
-      areaId: areaSelected?.id,
-      status: statusSelected?.id,
-    };
+      const request = {
+        searchText,
+        location: locationSelected?.id,
+        measureById: measureBySelected?.id,
+        areaId: areaSelected?.id,
+        status: statusSelected?.id,
+      };
 
-    //set active filters
-    let activeFilters = [];
+      //set active filters
+      let activeFilters = [];
 
-    if (request.searchText) {
-      activeFilters.push({
-        id: "searchText",
-        name: request.searchText,
-      });
-    }
-
-    if (request.measureById) {
-      activeFilters.push({
-        id: "measureBy",
-        name: measureBySelected?.name,
-      });
-    }
-
-    if (request.areaId) {
-      activeFilters.push({
-        id: "area",
-        name: areaSelected?.name,
-      });
-    }
-
-    if (request.status) {
-      activeFilters.push({
-        id: "status",
-        name: statusSelected?.name,
-      });
-    }
-
-    setActiveFilters(activeFilters);
-
-    try {
-      const { data } = await api.getItems(request, currentPage);
-
-      setTotalItems(data.count);
-      //setItems(data.results);
-
-      // set quantityToDisplay in each item. The quantity to display is the quantity of the item in the location selected
-      if (locationSelected) {
-        data.results.forEach((item) => {
-          const itemLocation = item.location_items.find(
-            (locationItem) => locationItem.location.id === locationSelected.id
-          );
-
-          if (itemLocation) {
-            item.quantityToDisplay = itemLocation.quantity;
-            item.statusToDisplay = itemLocation.status;
-          } else {
-            item.quantityToDisplay = null;
-          }
+      if (request.searchText) {
+        activeFilters.push({
+          id: "searchText",
+          name: request.searchText,
         });
       }
 
-      setItems(data.results);
-    } catch (err) {
-      setItems([]);
-      setTotalItems(0);
-      toast.error("Unable to get items");
-    }
+      if (request.measureById) {
+        activeFilters.push({
+          id: "measureBy",
+          name: measureBySelected?.name,
+        });
+      }
 
-    setLoading(false);
+      if (request.areaId) {
+        activeFilters.push({
+          id: "area",
+          name: areaSelected?.name,
+        });
+      }
+
+      if (request.status) {
+        activeFilters.push({
+          id: "status",
+          name: statusSelected?.name,
+        });
+      }
+
+      setActiveFilters(activeFilters);
+
+      try {
+        const { data } = await api.getItems(request, currentPage);
+
+        setTotalItems(data.count);
+        //setItems(data.results);
+
+        // set quantityToDisplay in each item. The quantity to display is the quantity of the item in the location selected
+        if (locationSelected) {
+          data.results.forEach((item) => {
+            const itemLocation = item.location_items.find(
+              (locationItem) => locationItem.location.id === locationSelected.id
+            );
+
+            if (itemLocation) {
+              item.quantityToDisplay = itemLocation.quantity;
+              item.statusToDisplay = itemLocation.status;
+            } else {
+              item.quantityToDisplay = null;
+            }
+          });
+        }
+
+        setItems(data.results);
+      } catch (err) {
+        setItems([]);
+        setTotalItems(0);
+        toast.error("Unable to get items");
+      }
+
+      setLoading(false);
+    }
   };
 
   const handleToggleConfirmItemModal = (item) => {
@@ -681,10 +694,18 @@ const InventoryList = () => {
           {!loading && items.length === 0 && (
             <div className=" text-gray-500 mt-32 m-auto w-96 text-center">
               <div className="font-semibold text-gray-700">No items found.</div>
-              <p className=" text-gray-500 mt-2">
-                We can’t find anything with those filters at the moment, try
-                searching something else.
-              </p>
+              {locations.length > 0 && (
+                <p className=" text-gray-500 mt-2">
+                  We can’t find anything with those filters at the moment, try
+                  searching something else.
+                </p>
+              )}
+              {locations.length === 0 && (
+                <p className=" text-gray-500 mt-2">
+                  You don't have any locations available. Contact your
+                  administrator to setup your locations.
+                </p>
+              )}
             </div>
           )}
 
@@ -693,7 +714,10 @@ const InventoryList = () => {
               <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
                 {items.map((item) => (
                   <div key={item.id} className="group relative">
-                    <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-100 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                    <div
+                      className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md
+                                     bg-gray-100 lg:aspect-none group-hover:opacity-75 lg:h-48"
+                    >
                       {item.photo && (
                         <img
                           src={item.photo}
