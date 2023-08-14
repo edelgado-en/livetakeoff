@@ -28,3 +28,7 @@ export const updateLocationItem = (id: number, data: any) => {
     return httpService.patch(`/inventory/location-items/${id}/`, data);
 }
 
+export const getUserDetails = () => {
+    return httpService.get('/api/users/me');
+}
+

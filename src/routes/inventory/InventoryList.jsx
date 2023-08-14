@@ -152,8 +152,6 @@ const availableStatusOptions = [
 ];
 
 const InventoryList = () => {
-  const currentUser = useAppSelector(selectUser);
-
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   const [items, setItems] = useState([]);
@@ -176,9 +174,7 @@ const InventoryList = () => {
   const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
   const [isMoveItemModalOpen, setMoveItemModalOpen] = useState(false);
 
-  useEffect(() => {
-    getLocations();
-  }, []);
+  const currentUser = useAppSelector(selectUser);
 
   useEffect(() => {
     fetchItems();
@@ -194,12 +190,13 @@ const InventoryList = () => {
   const getLocations = async () => {
     try {
       const { data } = await api.getLocations();
+      const response = await api.getUserDetails();
 
       if (
-        currentUser.isAdmin ||
-        currentUser.isSuperUser ||
-        currentUser.isAccountManager ||
-        currentUser.isInternalCoordinator
+        response.data.isAdmin ||
+        response.data.isSuperUser ||
+        response.data.isAccountManager ||
+        response.data.isInternalCoordinator
       ) {
         data.results.unshift({ id: null, name: "All My locations" });
       }
@@ -213,6 +210,10 @@ const InventoryList = () => {
       toast.error("Unable to get locations");
     }
   };
+
+  useEffect(() => {
+    getLocations();
+  }, []);
 
   const fetchItems = async () => {
     if (locations.length > 0) {
