@@ -730,8 +730,8 @@ const CreateItem = () => {
                     Tags
                   </div>
                   <p className="text-gray-500 text-sm">
-                    You don't see the provider you are looking for? Create a new
-                    one <button className="text-blue-500">here</button>
+                    You don't see the tag you are looking for? Create a new one{" "}
+                    <button className="text-blue-500">here</button>
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-4">

@@ -536,7 +536,7 @@ const InventoryList = () => {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-96 w-72 overflow-auto
+                            className="absolute z-10 mt-1 max-h-96 w-96 overflow-auto
                                             rounded-md bg-white py-1 text-base shadow-lg ring-1
                                             ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                           >
