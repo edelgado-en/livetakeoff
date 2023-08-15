@@ -188,7 +188,9 @@ const InventoryList = () => {
 
   const [itemSelected, setItemSelected] = useState(null);
 
-  const [isGridView, setGridView] = useState(true);
+  const [isGridView, setGridView] = useState(
+    JSON.parse(localStorage.getItem("inventoryGridView"))
+  );
 
   const [isConfirmItemModalOpen, setConfirmItemModalOpen] = useState(false);
   const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
@@ -473,6 +475,11 @@ const InventoryList = () => {
     setLocationSelected(location);
   };
 
+  const handleGridView = (value) => {
+    setGridView(value);
+    localStorage.setItem("inventoryGridView", JSON.stringify(value));
+  };
+
   return (
     <AnimatedPage>
       <div
@@ -641,7 +648,7 @@ const InventoryList = () => {
             <div className="mt-3">Total Items: {totalItems}</div>
             <div className="ml-6 items-center rounded-lg bg-gray-100 p-0.5 flex">
               <button
-                onClick={() => setGridView(false)}
+                onClick={() => handleGridView(true)}
                 type="button"
                 className="rounded-md p-1.5 text-gray-500 hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               >
@@ -649,7 +656,7 @@ const InventoryList = () => {
                 <span className="sr-only">Use list view</span>
               </button>
               <button
-                onClick={() => setGridView(true)}
+                onClick={() => handleGridView(false)}
                 type="button"
                 className="ml-0.5 rounded-md bg-white p-1.5 text-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               >
@@ -734,7 +741,7 @@ const InventoryList = () => {
 
           {!loading && items.length > 0 && (
             <div className="overflow-hidden bg-white shadow sm:rounded-md mb-4">
-              {isGridView && (
+              {!isGridView && (
                 <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
                   {items.map((item) => (
                     <div key={item.id} className="group relative">
@@ -843,7 +850,7 @@ const InventoryList = () => {
                 </div>
               )}
 
-              {!isGridView && (
+              {isGridView && (
                 <ul className="mt-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
                   {items.map((item) => (
                     <li key={item.id}>
