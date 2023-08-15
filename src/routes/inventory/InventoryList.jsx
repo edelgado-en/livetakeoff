@@ -15,7 +15,6 @@ import {
   Disclosure,
   Dialog,
 } from "@headlessui/react";
-import { UserIcon } from "@heroicons/react/solid";
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../userProfile/userSlice";
 import Loader from "../../components/loader/Loader";
@@ -29,6 +28,25 @@ import AdjustItemModal from "./AdjustItemModal";
 import MoveItemModal from "./MoveItemModal";
 
 import { toast } from "react-toastify";
+
+const EllipsisVerticalIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-6 h-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+      />
+    </svg>
+  );
+};
 
 const ChevronUpDownIcon = () => {
   return (
@@ -169,6 +187,8 @@ const InventoryList = () => {
   const [statusSelected, setStatusSelected] = useState(null);
 
   const [itemSelected, setItemSelected] = useState(null);
+
+  const [isGridView, setGridView] = useState(true);
 
   const [isConfirmItemModalOpen, setConfirmItemModalOpen] = useState(false);
   const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
@@ -619,8 +639,9 @@ const InventoryList = () => {
 
           <div className="flex justify-between gap-4 mt-2">
             <div className="mt-3">Total Items: {totalItems}</div>
-            <div className="ml-6 hidden items-center rounded-lg bg-gray-100 p-0.5 sm:flex">
+            <div className="ml-6 items-center rounded-lg bg-gray-100 p-0.5 flex">
               <button
+                onClick={() => setGridView(false)}
                 type="button"
                 className="rounded-md p-1.5 text-gray-500 hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               >
@@ -628,6 +649,7 @@ const InventoryList = () => {
                 <span className="sr-only">Use list view</span>
               </button>
               <button
+                onClick={() => setGridView(true)}
                 type="button"
                 className="ml-0.5 rounded-md bg-white p-1.5 text-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
               >
@@ -712,183 +734,255 @@ const InventoryList = () => {
 
           {!loading && items.length > 0 && (
             <div className="overflow-hidden bg-white shadow sm:rounded-md mb-4">
-              <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
-                {items.map((item) => (
-                  <div key={item.id} className="group relative">
-                    {/* <div
-                      className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md
-                                     bg-gray-100 lg:aspect-none group-hover:opacity-75 lg:h-48"
-                    >
-                      {item.photo && (
-                        <img
-                          src={item.photo}
-                          alt={item.name}
-                          className="h-60 w-72 rounded-lg"
-                        />
-                      )}
+              {isGridView && (
+                <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
+                  {items.map((item) => (
+                    <div key={item.id} className="group relative">
+                      <div className="flex-shrink-0 cursor-pointer">
+                        {item.photo && (
+                          <img
+                            src={item.photo}
+                            alt={item.name}
+                            className="h-60 w-72 rounded-lg"
+                          />
+                        )}
 
-                      {!item.photo && (
-                        <PhotographIcon className="h-52 w-52 text-gray-200 items-center m-auto align-middle" />
-                      )}
-                    </div> */}
-                    <div className="flex-shrink-0 cursor-pointer">
-                      {item.photo && (
-                        <img
-                          src={item.photo}
-                          alt={item.name}
-                          className="h-60 w-72 rounded-lg"
-                        />
-                      )}
-
-                      {!item.photo && (
-                        <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
-                      )}
-                    </div>
-                    <div className="mt-1 flex justify-between">
-                      <div className="flex gap-1">
-                        <div
-                          className={`flex-none rounded-full ${
-                            item.statusToDisplay === "C"
-                              ? "bg-green-400/10 p-1 text-green-400"
-                              : "bg-red-400/10 p-1 text-red-400"
-                          }`}
-                        >
-                          <div className="h-2 w-2 rounded-full bg-current" />
-                        </div>
-                        <h3
-                          className="text-sm text-gray-900 font-medium truncate"
-                          style={{ maxWidth: "170px" }}
-                        >
-                          {item.name}
-                        </h3>
+                        {!item.photo && (
+                          <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
+                        )}
                       </div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {item.quantityToDisplay}
-                      </p>
-                    </div>
-                    {!locationSelected ||
-                      (locationSelected.id === null && (
-                        <div className="mt-2 text-gray-500 text-sm">
-                          Found in{" "}
-                          <span className="font-semibold">
-                            {item.location_items.length}
-                          </span>{" "}
-                          location(s)
-                        </div>
-                      ))}
-                    <div className="mt-2 text-sm text-gray-500 flex justify-between gap-2 italic">
-                      <div>
-                        <span>{item.area === "I" && "Interior"}</span>
-                        <span>{item.area === "E" && "Exterior"}</span>
-                        <span>
-                          {item.area === "B" && "Interior and Exterior"}
-                        </span>
-                      </div>
-                      <div>
-                        <span>{item.area === "O" && "Office"}</span>
-                        <span>{item.measure_by === "U" && "Unit"}</span>
-                        <span>{item.measure_by === "G" && "Gallons"}</span>
-                        <span>{item.measure_by === "B" && "Bottle"}</span>
-                        <span>{item.measure_by === "O" && "Box"}</span>
-                        <span>{item.measure_by === "L" && "Lb"}</span>
-                        <span>{item.measure_by === "J" && "Jar"}</span>
-                        <span>{item.measure_by === "T" && "Other"}</span>
-                      </div>
-                    </div>
-                    {locationSelected && locationSelected.id !== null && (
-                      <>
-                        <div className="mt-3">
-                          <button
-                            disabled={item.quantityToDisplay === 0}
-                            onClick={() => handleToggleMoveItemModal(item)}
-                            className="w-full relative flex items-center justify-center rounded-md 
-                                            border border-transparent bg-blue-500 px-8 py-2 text-sm
-                                            font-medium text-white hover:bg-blue-600"
+                      <div className="mt-1 flex justify-between">
+                        <div className="flex gap-1">
+                          <div
+                            className={`flex-none rounded-full ${
+                              item.statusToDisplay === "C"
+                                ? "bg-green-400/10 p-1 text-green-400"
+                                : "bg-red-400/10 p-1 text-red-400"
+                            }`}
                           >
-                            Move
-                          </button>
-                        </div>
-                        <div className="mt-3">
-                          <button
-                            onClick={() => handleToggleAdjustItemModal(item)}
-                            className="w-full relative flex items-center justify-center rounded-md 
-                                            border border-transparent bg-gray-100 px-8 py-2 text-sm
-                                            font-medium text-gray-900 hover:bg-gray-200"
-                          >
-                            Adjust
-                          </button>
-                        </div>
-                        <div className="mt-3">
-                          <button
-                            onClick={() => handleToggleConfirmItemModal(item)}
-                            disabled={item.statusToDisplay === "C"}
-                            className="w-full relative flex items-center justify-center rounded-md 
-                                            border border-transparent bg-gray-100 px-8 py-2 text-sm
-                                            font-medium text-gray-900 hover:bg-gray-200"
-                          >
-                            Confirm
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {/* <ul className="mt-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
-                {items.map((item) => (
-                  <li key={item.id}>
-                    <Link
-                      to={`/inventory/items/${item.id}/details`}
-                      className="group block"
-                    >
-                      <div className="flex items-center px-4 py-5">
-                        <div className="flex min-w-0 flex-1 items-center">
-                          <div className="flex-shrink-0">
-                            <img
-                              className="h-36 w-48 rounded-full group-hover:opacity-75"
-                              src={item.photo}
-                              alt=""
-                            />
+                            <div className="h-2 w-2 rounded-full bg-current" />
                           </div>
-                          <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                            <div className="flex gap-4">
-                              <div className="truncate text-sm font-medium">
-                                {item.name}
-                              </div>
-                              <div
-                                className={`text-xs inline-block rounded-md px-2 border
-                                             bg-gray-100 border-gray-200 text-gray-500`}
-                                style={{
-                                  paddingTop: "1px",
-                                  paddingBottom: "1px",
-                                }}
-                              >
-                                {item.measure_by}
-                              </div>
-                              <div
-                                className={`text-xs inline-block rounded-md px-2 border
-                                             bg-gray-100 border-gray-200 text-gray-500`}
-                                style={{
-                                  paddingTop: "1px",
-                                  paddingBottom: "1px",
-                                }}
-                              >
-                                {item.area}
+                          <h3
+                            className="text-sm text-gray-900 font-medium truncate"
+                            style={{ maxWidth: "170px" }}
+                          >
+                            {item.name}
+                          </h3>
+                        </div>
+                        <p className="text-sm font-medium text-gray-900">
+                          {item.quantityToDisplay}
+                        </p>
+                      </div>
+                      {!locationSelected ||
+                        (locationSelected.id === null && (
+                          <div className="mt-2 text-gray-500 text-sm">
+                            Found in{" "}
+                            <span className="font-semibold">
+                              {item.location_items.length}
+                            </span>{" "}
+                            location(s)
+                          </div>
+                        ))}
+                      <div className="mt-2 text-sm text-gray-500 flex justify-between gap-2 italic">
+                        <div>
+                          <span>{item.area === "I" && "Interior"}</span>
+                          <span>{item.area === "E" && "Exterior"}</span>
+                          <span>
+                            {item.area === "B" && "Interior and Exterior"}
+                          </span>
+                        </div>
+                        <div>
+                          <span>{item.area === "O" && "Office"}</span>
+                          <span>{item.measure_by === "U" && "Unit"}</span>
+                          <span>{item.measure_by === "G" && "Gallons"}</span>
+                          <span>{item.measure_by === "B" && "Bottle"}</span>
+                          <span>{item.measure_by === "O" && "Box"}</span>
+                          <span>{item.measure_by === "L" && "Lb"}</span>
+                          <span>{item.measure_by === "J" && "Jar"}</span>
+                          <span>{item.measure_by === "T" && "Other"}</span>
+                        </div>
+                      </div>
+                      {locationSelected && locationSelected.id !== null && (
+                        <>
+                          <div className="mt-3">
+                            <button
+                              disabled={item.quantityToDisplay === 0}
+                              onClick={() => handleToggleMoveItemModal(item)}
+                              className="w-full relative flex items-center justify-center rounded-md 
+                                                border border-transparent bg-blue-500 px-8 py-2 text-sm
+                                                font-medium text-white hover:bg-blue-600"
+                            >
+                              Move
+                            </button>
+                          </div>
+                          <div className="mt-3">
+                            <button
+                              onClick={() => handleToggleAdjustItemModal(item)}
+                              className="w-full relative flex items-center justify-center rounded-md 
+                                                border border-transparent bg-gray-100 px-8 py-2 text-sm
+                                                font-medium text-gray-900 hover:bg-gray-200"
+                            >
+                              Adjust
+                            </button>
+                          </div>
+                          <div className="mt-3">
+                            <button
+                              onClick={() => handleToggleConfirmItemModal(item)}
+                              disabled={item.statusToDisplay === "C"}
+                              className="w-full relative flex items-center justify-center rounded-md 
+                                                border border-transparent bg-gray-100 px-8 py-2 text-sm
+                                                font-medium text-gray-900 hover:bg-gray-200"
+                            >
+                              Confirm
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {!isGridView && (
+                <ul className="mt-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
+                  {items.map((item) => (
+                    <li key={item.id}>
+                      <div className="group block hover:bg-gray-50">
+                        <div className="flex items-center pr-4 pl-1 py-1">
+                          <div className="flex min-w-0 flex-1 items-center">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="h-20 w-28 rounded-full group-hover:opacity-75"
+                                src={item.photo}
+                                alt=""
+                              />
+                            </div>
+                            <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                              <div className="flex gap-4 justify-between">
+                                <div className="text-sm font-medium">
+                                  <div className="flex gap-1">
+                                    <div
+                                      className={`flex-none rounded-full ${
+                                        item.statusToDisplay === "C"
+                                          ? "bg-green-400/10 p-1 text-green-400"
+                                          : "bg-red-400/10 p-1 text-red-400"
+                                      }`}
+                                    >
+                                      <div className="h-2 w-2 rounded-full bg-current" />
+                                    </div>
+                                    <div>{item.name}</div>
+                                  </div>
+
+                                  <div className=" italic text-gray-500 text-sm">
+                                    <span>
+                                      {item.area === "I" && "Interior"}
+                                    </span>
+                                    <span>
+                                      {item.area === "E" && "Exterior"}
+                                    </span>
+                                    <span>
+                                      {item.area === "B" &&
+                                        "Interior and Exterior"}
+                                    </span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div>
-                          <ChevronRightIcon
-                            className="h-5 w-5 text-gray-400 group-hover:text-gray-700"
-                            aria-hidden="true"
-                          />
+                          <div>
+                            {locationSelected &&
+                              locationSelected.id !== null && (
+                                <>
+                                  <div className="flex gap-4">
+                                    <div>{item.quantityToDisplay}</div>
+                                    <Menu as="div" className="relative ml-auto">
+                                      <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
+                                        <span className="sr-only">
+                                          Open options
+                                        </span>
+                                        <EllipsisVerticalIcon
+                                          className="h-5 w-5"
+                                          aria-hidden="true"
+                                        />
+                                      </Menu.Button>
+                                      <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-100"
+                                        enterFrom="transform opacity-0 scale-95"
+                                        enterTo="transform opacity-100 scale-100"
+                                        leave="transition ease-in duration-75"
+                                        leaveFrom="transform opacity-100 scale-100"
+                                        leaveTo="transform opacity-0 scale-95"
+                                      >
+                                        <Menu.Items
+                                          className="absolute right-0 z-10 mt-0.5 w-32 origin-top-right
+                                                             rounded-md bg-white py-2 shadow-lg ring-1
+                                                              ring-gray-900/5 focus:outline-none"
+                                        >
+                                          <Menu.Item>
+                                            {({ active }) => (
+                                              <button
+                                                onClick={() =>
+                                                  handleToggleMoveItemModal(
+                                                    item
+                                                  )
+                                                }
+                                                className={classNames(
+                                                  active ? "bg-gray-50" : "",
+                                                  "block px-3 py-1 text-sm leading-6 text-gray-900"
+                                                )}
+                                              >
+                                                Move
+                                              </button>
+                                            )}
+                                          </Menu.Item>
+                                          <Menu.Item>
+                                            {({ active }) => (
+                                              <button
+                                                onClick={() =>
+                                                  handleToggleAdjustItemModal(
+                                                    item
+                                                  )
+                                                }
+                                                className={classNames(
+                                                  active ? "bg-gray-50" : "",
+                                                  "block px-3 py-1 text-sm leading-6 text-gray-900"
+                                                )}
+                                              >
+                                                Adjust
+                                              </button>
+                                            )}
+                                          </Menu.Item>
+                                          <Menu.Item>
+                                            {({ active }) => (
+                                              <button
+                                                onClick={() =>
+                                                  handleToggleConfirmItemModal(
+                                                    item
+                                                  )
+                                                }
+                                                className={classNames(
+                                                  active ? "bg-gray-50" : "",
+                                                  "block px-3 py-1 text-sm leading-6 text-gray-900"
+                                                )}
+                                              >
+                                                Confirm
+                                              </button>
+                                            )}
+                                          </Menu.Item>
+                                        </Menu.Items>
+                                      </Transition>
+                                    </Menu>
+                                  </div>
+                                </>
+                              )}
+                          </div>
                         </div>
                       </div>
-                    </Link>
-                  </li>
-                ))}
-              </ul> */}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
 

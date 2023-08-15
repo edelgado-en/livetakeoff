@@ -915,7 +915,7 @@ const CreateItem = () => {
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-600"
                         >
                           Brand
-                          <span className="text-gray-500 font-normal ml-4">
+                          <span className="text-gray-500 font-normal ml-2">
                             Create new brand{" "}
                             <button
                               onClick={() => handleToggleCreateBrandModal()}
