@@ -16,8 +16,16 @@ export const getItems = (data: any, currentPage: Number) => {
     return httpService.post(`/inventory/items/list?page=${currentPage}&size=${100}`, data);
 }
 
+export const getItemActivity = (data: any, currentPage: Number) => {
+    return httpService.post(`/inventory/location-items/activity?page=${currentPage}&size=${100}`, data);
+}
+
 export const getItemLookup = (name: string) => {
     return httpService.get(`/inventory/items/${name}/`);
+}
+
+export const getItemDetails = (id: number) => {
+    return httpService.get(`/inventory/items/details/${id}/`);
 }
 
 export const getLocations = (data: any) => {
@@ -46,4 +54,12 @@ export const createTag = (data: any) => {
 
 export const createBrand = (data: any) => {
     return httpService.post('/inventory/brand', data);
+}
+
+export const uploadItemPhoto = (formData: any) => {
+    return httpService.patch('/inventory/items/photo', formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
 }

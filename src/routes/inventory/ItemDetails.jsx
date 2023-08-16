@@ -21,6 +21,21 @@ import * as api from "./apiService";
 
 import { toast } from "react-toastify";
 
+import ReactTimeAgo from "react-time-ago";
+
+const people = [
+  {
+    name: "Lindsay Walton",
+    title: "Front-end Developer",
+    department: "Optimization",
+    email: "lindsay.walton@example.com",
+    role: "Member",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+  },
+  // More people...
+];
+
 const ChevronUpDownIcon = () => {
   return (
     <svg
@@ -44,7 +59,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const CreateItem = () => {
+const ItemDetails = () => {
+  const { itemId } = useParams();
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [createItemMessage, setCreateItemMessage] = useState(null);
@@ -78,12 +95,17 @@ const CreateItem = () => {
 
   const [isCreateTagModalOpen, setCreateTagModalOpen] = useState(false);
 
-  useEffect(() => {
-    getItemFormInfo();
-  }, []);
+  const [itemPhoto, setItemPhoto] = useState(null);
+
+  const [itemActivities, setItemActivities] = useState([]);
+  const [totalItemActivities, setTotalItemActivities] = useState(0);
 
   useEffect(() => {
-    //Basic throttling
+    getItemFormInfo();
+    getItemActivity();
+  }, []);
+
+  /* useEffect(() => {
     let timeoutID = setTimeout(() => {
       getItemLookup();
     }, 300);
@@ -91,7 +113,21 @@ const CreateItem = () => {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [itemName]);
+  }, [itemName]); */
+
+  const getItemActivity = async () => {
+    const request = {
+      item_id: itemId,
+    };
+
+    try {
+      const { data } = await api.getItemActivity(request, 1);
+
+      console.log(data);
+      setItemActivities(data.results);
+      setTotalItemActivities(data.count);
+    } catch (err) {}
+  };
 
   const getItemLookup = async () => {
     if (itemName?.length > 3) {
@@ -153,6 +189,96 @@ const CreateItem = () => {
       });
 
       setLocationItems(locationItems);
+
+      const response = await api.getItemDetails(itemId);
+
+      setItemName(response.data.name);
+      setDescription(response.data.description);
+      setItemPhoto(response.data.photo);
+
+      if (response.data.measure_by === "U") {
+        setMeasureUnitSelected({ id: "U", name: "Unit" });
+      } else if (response.data.measure_by === "G") {
+        setMeasureUnitSelected({ id: "G", name: "Gallons" });
+      } else if (response.data.measure_by === "B") {
+        setMeasureUnitSelected({ id: "B", name: "Bottle" });
+      } else if (response.data.measure_by === "O") {
+        setMeasureUnitSelected({ id: "O", name: "Box" });
+      } else if (response.data.measure_by === "L") {
+        setMeasureUnitSelected({ id: "L", name: "Lb" });
+      } else if (response.data.measure_by === "J") {
+        setMeasureUnitSelected({ id: "J", name: "Jar" });
+      } else if (response.data.measure_by === "T") {
+        setMeasureUnitSelected({ id: "T", name: "Other" });
+      }
+
+      setCostPerUnit(response.data.cost_per_unit);
+
+      if (response.data.area === "I") {
+        setAreaSelected({ id: "I", name: "Interior" });
+      } else if (response.data.area === "E") {
+        setAreaSelected({ id: "E", name: "Exterior" });
+      } else if (response.data.area === "B") {
+        setAreaSelected({ id: "B", name: "Interior and Exterior" });
+      } else if (response.data.area === "O") {
+        setAreaSelected({ id: "O", name: "Office" });
+      }
+
+      //compare data.tags with tags and set selected = True if id matches
+      const tagsSelected = data.tags.map((tag) => {
+        const tagSelected = response.data.tags.find((t) => t.id === tag.id);
+        if (tagSelected) {
+          return { ...tag, selected: true };
+        } else {
+          return { ...tag, selected: false };
+        }
+      });
+
+      setTags(tagsSelected);
+
+      //compare data.providers with providers and set selected = True if id matches
+      const providersSelected = data.providers.map((provider) => {
+        const providerSelected = response.data.providers.find(
+          (p) => p.id === provider.id
+        );
+        if (providerSelected) {
+          return { ...provider, selected: true };
+        } else {
+          return { ...provider, selected: false };
+        }
+      });
+
+      setProviders(providersSelected);
+
+      //compare data.location_items with locationItems, if location_item.location.id matches locationItem.location.id, then set locationItem.quantity, locationItem.minimumRequired, locationItem.alertAt and locationItem.brandsSelected
+      const locationItemsWithValues = locationItems.map((locationItem) => {
+        const locationItemWithValues = response.data.location_items.find(
+          (li) => li.location.id === locationItem.location.id
+        );
+        if (locationItemWithValues) {
+          const brandsSelected =
+            locationItemWithValues.location_item_brands.map(
+              (location_item_brand) => {
+                return {
+                  id: location_item_brand.brand.id,
+                  name: location_item_brand.brand.name,
+                };
+              }
+            );
+
+          return {
+            ...locationItem,
+            quantity: locationItemWithValues.quantity,
+            minimumRequired: locationItemWithValues.minimum_required,
+            alertAt: locationItemWithValues.threshold,
+            brandsSelected: brandsSelected,
+          };
+        } else {
+          return locationItem;
+        }
+      });
+
+      setLocationItems(locationItemsWithValues);
     } catch (err) {
       console.log(err);
       toast.error("Unable to get item form info.");
@@ -372,6 +498,23 @@ const CreateItem = () => {
     setTags(newTags);
   };
 
+  const updateItemPhoto = async (imageList, addUpdateIndex) => {
+    const formData = new FormData();
+
+    formData.append("photo", imageList[0].file);
+
+    try {
+      await api.uploadItemPhoto(formData);
+
+      //save whatever other data we have
+      //handleSubmit(onSubmit)();
+
+      navigate(0);
+    } catch (error) {
+      toast.error("Unable to update avatar");
+    }
+  };
+
   return (
     <AnimatedPage>
       {loading && <Loader />}
@@ -419,11 +562,10 @@ const CreateItem = () => {
           <div className="space-y-6 mb-6">
             <div>
               <h1 className="text-3xl font-semibold text-gray-600">
-                Create Item
+                Item Details
               </h1>
               <p className="mt-1 text-md text-gray-500">
-                Let’s get started by filling in the information below to create
-                a new inventory item.
+                You can update any information associated with this item.
               </p>
             </div>
           </div>
@@ -690,104 +832,98 @@ const CreateItem = () => {
               <div className="text-lg font-semibold text-gray-600 mb-4">
                 Upload Photo
               </div>
-              <ImageUploading
-                acceptType={["jpg", "gif", "png", "jpeg"]}
-                value={itemImages}
-                onChange={onChangePhoto}
-                maxNumber={1}
-                dataURLKey="data_url"
-              >
-                {({
-                  imageList,
-                  onImageUpload,
-                  onImageRemoveAll,
-                  onImageUpdate,
-                  onImageRemove,
-                  isDragging,
-                  dragProps,
-                  errors,
-                }) => (
-                  <>
-                    {imageList.length === 0 && (
-                      <div
-                        className="flex w-full justify-center rounded-md border-2 border-dashed
-                                            border-gray-300 px-6 pt-5 pb-6 m-auto"
-                        {...dragProps}
-                      >
-                        <div className="space-y-1 text-center">
-                          <svg
-                            className="mx-auto h-32 w-32 text-gray-300"
-                            stroke="currentColor"
-                            fill="none"
-                            viewBox="0 0 48 48"
-                            aria-hidden="true"
-                          >
-                            <path
-                              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4
-                                                    4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                          <div
-                            className="flex text-sm text-gray-600"
-                            onClick={onImageUpload}
-                          >
-                            <label
-                              htmlFor="file-upload"
-                              className="relative cursor-pointer rounded-md bg-white font-medium text-red-600
-                                                                focus-within:outline-none focus-within:ring-2 focus-within:ring-red-500
-                                                                focus-within:ring-offset-2 hover:text-red-500"
-                            >
-                              <span>Upload a file</span>
-                            </label>
-                            <p className="pl-1">or drag and drop</p>
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            PNG, JPG, GIF up to 10MB.
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {errors && (
-                      <div className="text-red-500 font-medium mt-6 m-auto text-center text-sm">
-                        {errors.acceptType && (
-                          <span>Your selected file type is not allow</span>
-                        )}
-                      </div>
-                    )}
-
-                    <div className="w-full">
-                      {imageList.map((image, index) => (
-                        <div
-                          key={index}
-                          className="py-4 flex flex-col items-center"
+              <div className="mt-1 lg:hidden">
+                <div className="flex items-center">
+                  <div
+                    className="inline-block h-48 w-48 flex-shrink-0 overflow-hidden rounded-full"
+                    aria-hidden="true"
+                  >
+                    {itemPhoto ? (
+                      <img
+                        className="h-full w-full rounded-full"
+                        src={itemPhoto}
+                        alt=""
+                      />
+                    ) : (
+                      <span className="h-28 w-28 overflow-hidden rounded-full bg-gray-100">
+                        <svg
+                          className="h-full w-full text-gray-300"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          <div className="flex-shrink-0 cursor-pointer">
-                            <img
-                              className="h-60 w-full rounded-lg"
-                              src={image["data_url"]}
-                              alt=""
-                            />
-                          </div>
-                          <div className="w-full flex justify-end text-gray-500 text-sm pt-2">
-                            <PencilIcon
-                              onClick={() => onImageUpdate(index)}
-                              className="flex-shrink-0 h-6 w-6 mr-3 cursor-pointer"
-                            />
-                            <TrashIcon
-                              onClick={() => onImageRemove(index)}
-                              className="flex-shrink-0 h-6 w-6 mr-2 cursor-pointer"
-                            />
-                          </div>
+                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </span>
+                    )}
+                  </div>
+                  <div className="ml-5 rounded-md shadow-sm">
+                    <ImageUploading
+                      value={itemImages}
+                      acceptType={["jpg", "gif", "png", "jpeg"]}
+                      onChange={updateItemPhoto}
+                      maxNumber={1}
+                      dataURLKey="data_url"
+                    >
+                      {({ onImageUpload }) => (
+                        <div
+                          onClick={onImageUpload}
+                          className="group relative flex items-center justify-center
+                                                rounded-md border border-gray-300 py-2 px-3 focus-within:ring-2
+                                                    focus-within:ring-sky-500 focus-within:ring-offset-2 hover:bg-gray-50"
+                        >
+                          <label
+                            htmlFor="mobile-user-photo"
+                            className="pointer-events-none relative text-sm font-medium
+                                                    leading-4 text-gray-700"
+                          >
+                            <span>Change small</span>
+                            <span className="sr-only"> user photo</span>
+                          </label>
                         </div>
-                      ))}
+                      )}
+                    </ImageUploading>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative hidden overflow-hidden rounded-full lg:block">
+                <ImageUploading
+                  value={itemImages}
+                  acceptType={["jpg", "gif", "png", "jpeg"]}
+                  onChange={updateItemPhoto}
+                  maxNumber={1}
+                  dataURLKey="data_url"
+                >
+                  {({ onImageUpload }) => (
+                    <div onClick={onImageUpload}>
+                      {itemPhoto ? (
+                        <img
+                          className="relative h-40 w-40 rounded-full"
+                          src={itemPhoto}
+                          alt=""
+                        />
+                      ) : (
+                        <span className=" overflow-hidden rounded-full">
+                          <svg
+                            className="h-full w-full text-gray-300"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                          </svg>
+                        </span>
+                      )}
+                      <label
+                        htmlFor="desktop-user-photo"
+                        className="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
+                      >
+                        <span className="cursor-pointer">Change</span>
+                        <span className="sr-only"> user photo</span>
+                      </label>
                     </div>
-                  </>
-                )}
-              </ImageUploading>
+                  )}
+                </ImageUploading>
+              </div>
 
               <div className="mt-8">
                 <div className="mb-4">
@@ -1114,14 +1250,132 @@ const CreateItem = () => {
             </button>
             <button
               type="button"
-              onClick={() => createItem()}
               className="ml-3 inline-flex justify-center rounded-md border
                               border-transparent bg-red-600 py-2 px-4 text-md font-medium
                                 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
                                 focus:ring-red-500 focus:ring-offset-2"
             >
-              Create Item
+              Update Item
             </button>
+          </div>
+
+          <div className="w-full border-t border-gray-300 py-3"></div>
+
+          <div className="mt-2">
+            <div className="text-lg font-semibold text-gray-600">
+              Item Activity
+            </div>
+            <p className="mt-1 text-sm text-gray-500">
+              Checkout the item activity across all locations.
+            </p>
+            <div className="mt-2 flow-root">
+              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <table className="min-w-full divide-y divide-gray-300">
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-3.5 pl-4 pr-3 text-left text-sm
+                                    font-semibold text-gray-900 sm:pl-0"
+                        >
+                          User
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Type
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Quantity
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        >
+                          Date
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                      {itemActivities.map((activity) => (
+                        <tr key={activity.id}>
+                          <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                            <div className="flex items-center">
+                              <div className="h-11 w-11 flex-shrink-0">
+                                <img
+                                  className="h-11 w-11 rounded-full"
+                                  src={activity.user?.profile?.avatar}
+                                  alt=""
+                                />
+                              </div>
+                              <div className="ml-4">
+                                <div className=" text-gray-700">
+                                  {activity.user.first_name}{" "}
+                                  {activity.user.last_name}
+                                </div>
+                                <div className="mt-1 text-gray-500">
+                                  {activity.email}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700">
+                            <div
+                              className={`inline-flex items-center rounded-md
+                                          px-2 py-1 text-xs font-medium ring-1 ring-inset
+                                       ${
+                                         activity.activity_type === "A" &&
+                                         "text-green-700 bg-green-50 ring-green-600/20"
+                                       }
+                                       ${
+                                         activity.activity_type === "C" &&
+                                         "text-blue-700 bg-blue-50 ring-blue-600/20"
+                                       }
+                                       ${
+                                         activity.activity_type === "S" &&
+                                         "text-red-700 bg-red-50 ring-red-600/20"
+                                       }
+                                       ${
+                                         activity.activity_type === "M" &&
+                                         "text-fuchsia-700 bg-fuchsia-50 ring-fuchsia-600/20"
+                                       } `}
+                            >
+                              {activity.activity_type === "C" && "Confirmed"}
+                              {activity.activity_type === "A" && "Added"}
+                              {activity.activity_type === "M" && "Moved"}
+                              {activity.activity_type === "S" && "Removed"}
+                            </div>
+
+                            {activity.activity_type === "M" && (
+                              <div className="flex gap-2 mt-2">
+                                <div>{activity.moved_from?.name}</div>
+                                <div>{"->"}</div>
+                                <div>{activity.moved_to?.name}</div>
+                              </div>
+                            )}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700">
+                            {activity.quantity}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <ReactTimeAgo
+                              date={new Date(activity.timestamp)}
+                              locale="en-US"
+                              timeStyle="twitter"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       )}
@@ -1161,4 +1415,4 @@ const CreateItem = () => {
   );
 };
 
-export default CreateItem;
+export default ItemDetails;

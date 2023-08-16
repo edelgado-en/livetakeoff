@@ -483,7 +483,7 @@ const InventoryList = () => {
   return (
     <AnimatedPage>
       <div
-        className={`px-4 m-auto ${
+        className={`px-2 m-auto ${
           currentUser.isAdmin ||
           currentUser.isSuperUser ||
           currentUser.isAccountManager ||
@@ -745,19 +745,41 @@ const InventoryList = () => {
                 <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
                   {items.map((item) => (
                     <div key={item.id} className="group relative">
-                      <div className="flex-shrink-0 cursor-pointer">
-                        {item.photo && (
-                          <img
-                            src={item.photo}
-                            alt={item.name}
-                            className="h-60 w-72 rounded-lg"
-                          />
-                        )}
+                      {!currentUser.isProjectManager && (
+                        <Link
+                          to={`/inventory/${item.id}/details`}
+                          className="flex-shrink-0 cursor-pointer"
+                        >
+                          {item.photo && (
+                            <img
+                              src={item.photo}
+                              alt={item.name}
+                              className="h-60 w-72 rounded-lg"
+                            />
+                          )}
 
-                        {!item.photo && (
-                          <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
-                        )}
-                      </div>
+                          {!item.photo && (
+                            <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
+                          )}
+                        </Link>
+                      )}
+
+                      {currentUser.isProjectManager && (
+                        <div className="flex-shrink-0 cursor-pointer">
+                          {item.photo && (
+                            <img
+                              src={item.photo}
+                              alt={item.name}
+                              className="h-60 w-72 rounded-lg"
+                            />
+                          )}
+
+                          {!item.photo && (
+                            <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
+                          )}
+                        </div>
+                      )}
+
                       <div className="mt-1 flex justify-between">
                         <div className="flex gap-1">
                           <div
@@ -857,13 +879,28 @@ const InventoryList = () => {
                       <div className="group block hover:bg-gray-50">
                         <div className="flex items-center pr-4 pl-1 py-1">
                           <div className="flex min-w-0 flex-1 items-center">
-                            <div className="flex-shrink-0">
-                              <img
-                                className="h-20 w-28 rounded-full group-hover:opacity-75"
-                                src={item.photo}
-                                alt=""
-                              />
-                            </div>
+                            {!currentUser.isProjectManager && (
+                              <Link
+                                to={`/inventory/${item.id}/details`}
+                                className="flex-shrink-0"
+                              >
+                                <img
+                                  className="h-20 w-28 rounded-full group-hover:opacity-75"
+                                  src={item.photo}
+                                  alt=""
+                                />
+                              </Link>
+                            )}
+                            {currentUser.isProjectManager && (
+                              <div className="flex-shrink-0">
+                                <img
+                                  className="h-20 w-28 rounded-full group-hover:opacity-75"
+                                  src={item.photo}
+                                  alt=""
+                                />
+                              </div>
+                            )}
+
                             <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                               <div className="flex gap-4 justify-between">
                                 <div className="text-sm font-medium">
@@ -901,7 +938,9 @@ const InventoryList = () => {
                               locationSelected.id !== null && (
                                 <>
                                   <div className="flex gap-4">
-                                    <div>{item.quantityToDisplay}</div>
+                                    <div className="font-medium">
+                                      {item.quantityToDisplay}
+                                    </div>
                                     <Menu as="div" className="relative ml-auto">
                                       <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
                                         <span className="sr-only">
