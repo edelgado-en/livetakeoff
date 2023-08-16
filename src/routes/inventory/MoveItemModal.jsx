@@ -46,7 +46,7 @@ const MoveItemModal = ({
   const handleSetQuantity = (value) => {
     const v = value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
 
-    if (v > item.quantityToDisplay) {
+    if (Number(v) > Number(item.quantityToDisplay)) {
       alert("Quantity cannot be greater than the item's quantity");
     } else {
       setMoveQuantity(v);
