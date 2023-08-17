@@ -876,7 +876,7 @@ const ItemDetails = () => {
                             className="pointer-events-none relative text-sm font-medium
                                                     leading-4 text-gray-700"
                           >
-                            <span>Change small</span>
+                            <span>Change</span>
                             <span className="sr-only"> user photo</span>
                           </label>
                         </div>
@@ -1313,7 +1313,7 @@ const ItemDetails = () => {
                                   alt=""
                                 />
                               </div>
-                              <div className="ml-4">
+                              <div className="ml-3">
                                 <div className=" text-gray-700">
                                   {activity.user.first_name}{" "}
                                   {activity.user.last_name}
@@ -1359,7 +1359,7 @@ const ItemDetails = () => {
                               </div>
                             )}
                           </td>
-                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700">
+                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700 font-medium">
                             {activity.quantity}
                           </td>
                           <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">

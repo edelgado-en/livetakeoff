@@ -538,7 +538,7 @@ const InventoryList = () => {
                     <>
                       <div className="relative mt-1">
                         <Listbox.Button
-                          className="relative w-96 cursor-default rounded-md border
+                          className="relative w-11/12 cursor-default rounded-md border
                                         border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                         shadow-sm focus:border-sky-500 focus:outline-none
                                         focus:ring-1 focus:ring-sky-500 sm:text-sm"
@@ -564,7 +564,7 @@ const InventoryList = () => {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-96 w-96 overflow-auto
+                            className="absolute z-10 mt-1 max-h-96 w-11/12 overflow-auto
                                             rounded-md bg-white py-1 text-base shadow-lg ring-1
                                             ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                           >
