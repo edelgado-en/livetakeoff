@@ -23,18 +23,7 @@ import { toast } from "react-toastify";
 
 import ReactTimeAgo from "react-time-ago";
 
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    department: "Optimization",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-    image:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  // More people...
-];
+import Pagination from "react-js-pagination";
 
 const ChevronUpDownIcon = () => {
   return (
@@ -100,10 +89,15 @@ const ItemDetails = () => {
   const [itemActivities, setItemActivities] = useState([]);
   const [totalItemActivities, setTotalItemActivities] = useState(0);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     getItemFormInfo();
-    getItemActivity();
   }, []);
+
+  useEffect(() => {
+    getItemActivity();
+  }, [currentPage]);
 
   /* useEffect(() => {
     let timeoutID = setTimeout(() => {
@@ -121,12 +115,15 @@ const ItemDetails = () => {
     };
 
     try {
-      const { data } = await api.getItemActivity(request, 1);
+      const { data } = await api.getItemActivity(request, currentPage);
 
-      console.log(data);
       setItemActivities(data.results);
       setTotalItemActivities(data.count);
     } catch (err) {}
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   const getItemLookup = async () => {
@@ -1233,6 +1230,23 @@ const ItemDetails = () => {
                   </table>
                 </div>
               </div>
+              {!loading && totalItemActivities > 100 && (
+                <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
+                  <div>
+                    <Pagination
+                      innerClass="pagination pagination-custom"
+                      activePage={currentPage}
+                      hideDisabled
+                      itemClass="page-item page-item-custom"
+                      linkClass="page-link page-link-custom"
+                      itemsCountPerPage={100}
+                      totalItemsCount={totalItemActivities}
+                      pageRangeDisplayed={3}
+                      onChange={handlePageChange}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
