@@ -39,7 +39,12 @@ const MoveItemModal = ({
   const [filteredLocations, setFilteredLocations] = useState([]);
 
   useEffect(() => {
-    const filtered = locations.filter((location) => location.id !== null);
+    let filtered = locations.filter((location) => location.id !== null);
+    //remove locationSelected from filtered
+    filtered = filtered.filter(
+      (location) => location.id !== locationSelected.id
+    );
+
     setFilteredLocations(filtered);
   }, []);
 

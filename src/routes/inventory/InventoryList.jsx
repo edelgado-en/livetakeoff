@@ -196,7 +196,7 @@ const InventoryList = () => {
   const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
   const [isMoveItemModalOpen, setMoveItemModalOpen] = useState(false);
 
-  const currentUser = useAppSelector(selectUser);
+  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
     fetchItems();
@@ -222,6 +222,8 @@ const InventoryList = () => {
       ) {
         data.results.unshift({ id: null, name: "All My locations" });
       }
+
+      setCurrentUser(response.data);
 
       setLocations(data.results);
 
@@ -291,9 +293,18 @@ const InventoryList = () => {
         // set quantityToDisplay in each item. The quantity to display is the quantity of the item in the location selected
         if (locationSelected) {
           data.results.forEach((item) => {
-            const itemLocation = item.location_items.find(
+            /* const itemLocation = item.location_items.find(
               (locationItem) => locationItem.location.id === locationSelected.id
-            );
+            ); */
+            let itemLocation = null;
+            let totalItemQuantity = 0;
+            // iterate through item.location_items and sum quantities and find locationItem matching locationSelected.id
+            item.location_items.forEach((locationItem) => {
+              totalItemQuantity += locationItem.quantity;
+              if (locationItem.location.id === locationSelected.id) {
+                itemLocation = locationItem;
+              }
+            });
 
             if (itemLocation) {
               item.quantityToDisplay = itemLocation.quantity;
@@ -301,6 +312,8 @@ const InventoryList = () => {
             } else {
               item.quantityToDisplay = null;
             }
+
+            item.totalItemQuantity = totalItemQuantity;
           });
         }
 
@@ -344,6 +357,7 @@ const InventoryList = () => {
     const updatedItems = items.map((item) => {
       if (item.id === itemSelected.id) {
         adjustedQuantity = item.quantityToDisplay - quantity;
+        console.log("adjustedQuantity", adjustedQuantity);
         item.quantityToDisplay = adjustedQuantity;
         item.statusToDisplay = "U";
 
@@ -482,16 +496,7 @@ const InventoryList = () => {
 
   return (
     <AnimatedPage>
-      <div
-        className={`px-2 m-auto ${
-          currentUser.isAdmin ||
-          currentUser.isSuperUser ||
-          currentUser.isAccountManager ||
-          currentUser.isInternalCoordinator
-            ? "max-w-7xl"
-            : "max-w-5xl"
-        } -mt-3 flex flex-wrap`}
-      >
+      <div className={`px-2 m-auto -mt-3 flex flex-wrap max-w-7xl`}>
         <div className="flex-1 xl:px-10 lg:px-10 md:px-10">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
@@ -799,7 +804,9 @@ const InventoryList = () => {
                           </h3>
                         </div>
                         <p className="text-sm font-medium text-gray-900">
-                          {item.quantityToDisplay}
+                          {locationSelected && locationSelected.id !== null
+                            ? item.quantityToDisplay
+                            : item.totalItemQuantity}
                         </p>
                       </div>
                       {!locationSelected ||
@@ -835,7 +842,10 @@ const InventoryList = () => {
                         <>
                           <div className="mt-3">
                             <button
-                              disabled={item.quantityToDisplay === 0}
+                              disabled={
+                                item.quantityToDisplay === 0 ||
+                                locations.length === 1
+                              }
                               onClick={() => handleToggleMoveItemModal(item)}
                               className="w-full relative flex items-center justify-center rounded-md 
                                                 border border-transparent bg-blue-500 px-8 py-2 text-sm
@@ -1022,6 +1032,12 @@ const InventoryList = () => {
                                   </div>
                                 </>
                               )}
+                            {!locationSelected ||
+                              (locationSelected.id === null && (
+                                <div className="font-medium">
+                                  {item.totalItemQuantity}
+                                </div>
+                              ))}
                           </div>
                         </div>
                       </div>
