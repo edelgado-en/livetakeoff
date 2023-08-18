@@ -12,6 +12,10 @@ export const createItem = (formData: any) => {
     })
 }
 
+export const updateItem = (data: any) => {
+    return httpService.patch('/inventory/items/update', data);
+}
+
 export const getItems = (data: any, currentPage: Number) => {
     return httpService.post(`/inventory/items/list?page=${currentPage}&size=${100}`, data);
 }

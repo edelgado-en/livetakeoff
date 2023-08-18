@@ -53,7 +53,6 @@ const ItemDetails = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [createItemMessage, setCreateItemMessage] = useState(null);
 
   const [itemName, setItemName] = useState("");
   const [itemNameErrorMessage, setItemNameErrorMessage] = useState(null);
@@ -185,8 +184,6 @@ const ItemDetails = () => {
         };
       });
 
-      setLocationItems(locationItems);
-
       const response = await api.getItemDetails(itemId);
 
       setItemName(response.data.name);
@@ -223,20 +220,20 @@ const ItemDetails = () => {
 
       //compare data.tags with tags and set selected = True if id matches
       const tagsSelected = data.tags.map((tag) => {
-        const tagSelected = response.data.tags.find((t) => t.id === tag.id);
+        const tagSelected = response.data.tags.find((t) => t.name === tag.name);
         if (tagSelected) {
           return { ...tag, selected: true };
         } else {
           return { ...tag, selected: false };
         }
       });
-
+      console.log("item tags", tagsSelected);
       setTags(tagsSelected);
 
       //compare data.providers with providers and set selected = True if id matches
       const providersSelected = data.providers.map((provider) => {
         const providerSelected = response.data.providers.find(
-          (p) => p.id === provider.id
+          (p) => p.name === provider.name
         );
         if (providerSelected) {
           return { ...provider, selected: true };
@@ -282,35 +279,6 @@ const ItemDetails = () => {
     }
 
     setLoading(false);
-  };
-
-  const addAnotherItem = () => {
-    setItemName("");
-    setDescription("");
-    setAreaSelected(null);
-    setMeasureUnitSelected(null);
-    setCostPerUnit("");
-    setCreateItemMessage(null);
-    setItemImages([]);
-    setLocationItems([]);
-    setLoading(false);
-
-    const locationItems = locations.map((location) => {
-      return {
-        location,
-        quantity: "",
-        minimumRequired: "",
-        alertAt: "",
-        brandsSelected: [],
-        groups: location.groups,
-      };
-    });
-
-    setLocationItems(locationItems);
-  };
-
-  const onChangePhoto = (imageList, addUpdateIndex) => {
-    setItemImages(imageList);
   };
 
   const handleToggleTag = (tag) => {
@@ -381,7 +349,7 @@ const ItemDetails = () => {
     setLocationItems(newLocationItems);
   };
 
-  const createItem = async () => {
+  const updateItem = async () => {
     if (itemName.length === 0) {
       alert("Please enter an item name.");
       return;
@@ -423,31 +391,25 @@ const ItemDetails = () => {
       .filter((provider) => provider.selected)
       .map((provider) => provider.id);
 
-    const formData = new FormData();
-    formData.append("name", itemName);
-    formData.append("description", description);
-    formData.append("areaId", areaSelected.id);
-    formData.append("measureUnitId", measureUnitSelected.id);
-    formData.append("costPerUnit", costPerUnit);
-    formData.append("tagIds", JSON.stringify(selectedTagIds));
-    formData.append("providerIds", JSON.stringify(selectedProviderIds));
-    formData.append("locationItems", JSON.stringify(locationItemsWithQuantity));
-
-    itemImages.forEach((image) => {
-      if (image.file.size < 10000000) {
-        // less than 10MB
-        formData.append("photo", image.file);
-      }
-    });
+    const request = {
+      itemId: itemId,
+      name: itemName,
+      description: description,
+      areaId: areaSelected.id,
+      measureUnitId: measureUnitSelected.id,
+      costPerUnit: costPerUnit,
+      tagIds: selectedTagIds,
+      providerIds: selectedProviderIds,
+      locationItems: locationItemsWithQuantity,
+    };
 
     setLoading(true);
 
     try {
-      await api.createItem(formData);
-
-      setCreateItemMessage("Item created!");
+      await api.updateItem(request);
+      toast.success("Item updated!");
     } catch (err) {
-      toast.error("Unable to create item");
+      toast.error("Unable to update item");
     }
 
     setLoading(false);
@@ -517,45 +479,7 @@ const ItemDetails = () => {
     <AnimatedPage>
       {loading && <Loader />}
 
-      {!loading && createItemMessage && (
-        <div className="mx-auto max-w-lg px-4 pb-16 lg:pb-12 mt-40 text-center">
-          <div className=" flex justify-center">
-            <CheckCircleIcon
-              className="h-20 w-20 text-green-400"
-              aria-hidden="true"
-            />
-          </div>
-          <div className="">
-            <p className="text-xl font-medium text-gray-900 mt-2">
-              Item created!
-            </p>
-          </div>
-          <div className=" mt-6 flex justify-center gap-6">
-            <button
-              type="button"
-              onClick={() => navigate("/inventory")}
-              className="inline-flex items-center rounded-md border
-                                         border-gray-300 bg-white px-3 py-2 text-sm leading-4
-                                          text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
-                                           focus:ring-red-500 focus:ring-offset-2"
-            >
-              Back to Inventory
-            </button>
-            <button
-              type="button"
-              onClick={() => addAnotherItem()}
-              className="inline-flex justify-center rounded-md
-                                    border border-transparent bg-red-600 py-2 px-4
-                                    text-sm font-medium text-white shadow-sm hover:bg-red-600
-                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-            >
-              Create another Item
-            </button>
-          </div>
-        </div>
-      )}
-
-      {!loading && createItemMessage == null && (
+      {!loading && (
         <main className="mx-auto max-w-7xl px-4 pb-16 lg:pb-12">
           <div className="space-y-6 mb-6">
             <div>
@@ -582,7 +506,7 @@ const ItemDetails = () => {
                   className="block text-sm font-medium text-gray-700"
                 >
                   Name{" "}
-                  <span className=" text-gray-400 text-sm">
+                  <span className=" text-red-400 text-sm">
                     (Must be unique)
                   </span>
                 </label>
@@ -1014,7 +938,29 @@ const ItemDetails = () => {
             </div>
           </div>
 
-          <div className="w-full border-t border-gray-300 py-2"></div>
+          <div className="flex justify-end my-4">
+            <button
+              onClick={() => navigate(-1)}
+              type="button"
+              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-md font-medium
+                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                              focus:ring-red-500 focus:ring-offset-2"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => updateItem()}
+              className="ml-3 inline-flex justify-center rounded-md border
+                              border-transparent bg-red-600 py-2 px-4 text-md font-medium
+                                text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
+                                focus:ring-red-500 focus:ring-offset-2"
+            >
+              Update Item
+            </button>
+          </div>
+
+          <div className="w-full border-t border-gray-300 py-2 mt-8"></div>
 
           <div>
             <div className="text-lg font-semibold text-gray-600">Locations</div>
@@ -1023,7 +969,7 @@ const ItemDetails = () => {
               want. You can also specify at which quantity the system will alert
               you.
             </p>
-            <p className="mt-1 text-sm text-gray-500">
+            {/* <p className="mt-1 text-sm text-gray-500">
               You don't see the location you are looking for? Create a new one{" "}
               <button
                 className="text-blue-500"
@@ -1031,8 +977,8 @@ const ItemDetails = () => {
               >
                 here
               </button>
-            </p>
-            <div className="mt-6 flow-root">
+            </p> */}
+            {/* <div className="mt-6 flow-root">
               <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                   <table className="min-w-full divide-y divide-gray-300 table-auto">
@@ -1249,6 +1195,215 @@ const ItemDetails = () => {
                   </table>
                 </div>
               </div>
+              
+            </div> */}
+            <div className="mx-auto max-w-2xl py-8 lg:max-w-7xl">
+              <div
+                className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10
+                              lg:grid-cols-4 lg:gap-x-8"
+              >
+                {locationItems.map((locationItem) => (
+                  <div
+                    key={locationItem.id}
+                    className="group relative flex flex-col overflow-hidden
+                               rounded-lg border border-gray-200 bg-white"
+                  >
+                    <div className="flex flex-1 flex-col space-y-2 p-4">
+                      <h3 className="text-sm font-medium text-gray-900">
+                        {locationItem.location?.name}
+                      </h3>
+                      <div>
+                        <div className="flex justify-between gap-x-4 py-1">
+                          <dt className="text-gray-500">Quantity</dt>
+                          <dd className="text-gray-700">
+                            {locationItem.quantity}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between gap-x-4 py-1">
+                          <dt className="text-gray-500">Minimum required</dt>
+                          <dd className="text-gray-700">
+                            {locationItem.minimumRequired}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between gap-x-4 py-1">
+                          <dt className="text-gray-500">Alert at</dt>
+                          <dd className="text-gray-700">
+                            {locationItem.alertAt}
+                          </dd>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="px-4">
+                      <div className="mt-3">
+                        <button
+                          className="w-full relative flex items-center justify-center rounded-md 
+                                                    border border-transparent bg-blue-500 px-8 py-2 text-sm
+                                                    font-medium text-white hover:bg-blue-600"
+                        >
+                          Move
+                        </button>
+                      </div>
+                      <div className="mt-3">
+                        <button
+                          className="w-full relative flex items-center justify-center rounded-md 
+                                                    border border-transparent bg-gray-100 px-8 py-2 text-sm
+                                                    font-medium text-gray-900 hover:bg-gray-200"
+                        >
+                          Adjust
+                        </button>
+                      </div>
+                      <div className="mt-3">
+                        <button
+                          className="w-full relative flex items-center justify-center rounded-md 
+                                                    border border-transparent bg-gray-100 px-8 py-2 text-sm
+                                                    font-medium text-gray-900 hover:bg-gray-200"
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                      <div className="mt-3">
+                        <button
+                          className="w-full relative flex items-center justify-center rounded-md 
+                                                    border border-transparent bg-gray-100 px-8 py-2 text-sm
+                                                    font-medium text-gray-900 hover:bg-gray-200"
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full border-t border-gray-300 py-3"></div>
+
+          <div className="mt-2">
+            <div className="text-lg font-semibold text-gray-600">
+              Item Activity
+            </div>
+            <p className="mt-1 text-sm text-gray-500">
+              Checkout the item activity across all locations.
+            </p>
+            <div className="mt-2 flow-root">
+              {itemActivities.length === 0 && (
+                <div className="flex justify-center items-center mt-16">
+                  <div className="text-gray-500 text-lg font-medium">
+                    No activity yet
+                  </div>
+                </div>
+              )}
+
+              {itemActivities.length > 0 && (
+                <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm
+                                        font-semibold text-gray-900 sm:pl-0"
+                          >
+                            User
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Type
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Quantity
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Date
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
+                        {itemActivities.map((activity) => (
+                          <tr key={activity.id}>
+                            <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                              <div className="flex items-center">
+                                <div className="h-11 w-11 flex-shrink-0">
+                                  <img
+                                    className="h-11 w-11 rounded-full"
+                                    src={activity.user?.profile?.avatar}
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="ml-3">
+                                  <div className=" text-gray-700">
+                                    {activity.user.first_name}{" "}
+                                    {activity.user.last_name}
+                                  </div>
+                                  <div className="mt-1 text-gray-500">
+                                    {activity.email}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700">
+                              <div
+                                className={`inline-flex items-center rounded-md
+                                            px-2 py-1 text-xs font-medium ring-1 ring-inset
+                                        ${
+                                          activity.activity_type === "A" &&
+                                          "text-green-700 bg-green-50 ring-green-600/20"
+                                        }
+                                        ${
+                                          activity.activity_type === "C" &&
+                                          "text-blue-700 bg-blue-50 ring-blue-600/20"
+                                        }
+                                        ${
+                                          activity.activity_type === "S" &&
+                                          "text-red-700 bg-red-50 ring-red-600/20"
+                                        }
+                                        ${
+                                          activity.activity_type === "M" &&
+                                          "text-fuchsia-700 bg-fuchsia-50 ring-fuchsia-600/20"
+                                        } `}
+                              >
+                                {activity.activity_type === "C" && "Confirmed"}
+                                {activity.activity_type === "A" && "Added"}
+                                {activity.activity_type === "M" && "Moved"}
+                                {activity.activity_type === "S" && "Removed"}
+                              </div>
+
+                              {activity.activity_type === "M" && (
+                                <div className="flex gap-2 mt-2">
+                                  <div>{activity.moved_from?.name}</div>
+                                  <div>{"->"}</div>
+                                  <div>{activity.moved_to?.name}</div>
+                                </div>
+                              )}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700 font-medium">
+                              {activity.quantity}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                              <ReactTimeAgo
+                                date={new Date(activity.timestamp)}
+                                locale="en-US"
+                                timeStyle="twitter"
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
               {!loading && totalItemActivities > 100 && (
                 <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
                   <div>
@@ -1266,148 +1421,6 @@ const ItemDetails = () => {
                   </div>
                 </div>
               )}
-            </div>
-          </div>
-
-          <div className="w-full border-t border-gray-300 py-3"></div>
-
-          <div className="flex justify-end my-6">
-            <button
-              onClick={() => navigate(-1)}
-              type="button"
-              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-md font-medium
-                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
-                              focus:ring-red-500 focus:ring-offset-2"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              className="ml-3 inline-flex justify-center rounded-md border
-                              border-transparent bg-red-600 py-2 px-4 text-md font-medium
-                                text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
-                                focus:ring-red-500 focus:ring-offset-2"
-            >
-              Update Item
-            </button>
-          </div>
-
-          <div className="w-full border-t border-gray-300 py-3"></div>
-
-          <div className="mt-2">
-            <div className="text-lg font-semibold text-gray-600">
-              Item Activity
-            </div>
-            <p className="mt-1 text-sm text-gray-500">
-              Checkout the item activity across all locations.
-            </p>
-            <div className="mt-2 flow-root">
-              <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                  <table className="min-w-full divide-y divide-gray-300">
-                    <thead>
-                      <tr>
-                        <th
-                          scope="col"
-                          className="py-3.5 pl-4 pr-3 text-left text-sm
-                                    font-semibold text-gray-900 sm:pl-0"
-                        >
-                          User
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Type
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Quantity
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Date
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
-                      {itemActivities.map((activity) => (
-                        <tr key={activity.id}>
-                          <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
-                            <div className="flex items-center">
-                              <div className="h-11 w-11 flex-shrink-0">
-                                <img
-                                  className="h-11 w-11 rounded-full"
-                                  src={activity.user?.profile?.avatar}
-                                  alt=""
-                                />
-                              </div>
-                              <div className="ml-3">
-                                <div className=" text-gray-700">
-                                  {activity.user.first_name}{" "}
-                                  {activity.user.last_name}
-                                </div>
-                                <div className="mt-1 text-gray-500">
-                                  {activity.email}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700">
-                            <div
-                              className={`inline-flex items-center rounded-md
-                                          px-2 py-1 text-xs font-medium ring-1 ring-inset
-                                       ${
-                                         activity.activity_type === "A" &&
-                                         "text-green-700 bg-green-50 ring-green-600/20"
-                                       }
-                                       ${
-                                         activity.activity_type === "C" &&
-                                         "text-blue-700 bg-blue-50 ring-blue-600/20"
-                                       }
-                                       ${
-                                         activity.activity_type === "S" &&
-                                         "text-red-700 bg-red-50 ring-red-600/20"
-                                       }
-                                       ${
-                                         activity.activity_type === "M" &&
-                                         "text-fuchsia-700 bg-fuchsia-50 ring-fuchsia-600/20"
-                                       } `}
-                            >
-                              {activity.activity_type === "C" && "Confirmed"}
-                              {activity.activity_type === "A" && "Added"}
-                              {activity.activity_type === "M" && "Moved"}
-                              {activity.activity_type === "S" && "Removed"}
-                            </div>
-
-                            {activity.activity_type === "M" && (
-                              <div className="flex gap-2 mt-2">
-                                <div>{activity.moved_from?.name}</div>
-                                <div>{"->"}</div>
-                                <div>{activity.moved_to?.name}</div>
-                              </div>
-                            )}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700 font-medium">
-                            {activity.quantity}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                            <ReactTimeAgo
-                              date={new Date(activity.timestamp)}
-                              locale="en-US"
-                              timeStyle="twitter"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
             </div>
           </div>
         </main>
