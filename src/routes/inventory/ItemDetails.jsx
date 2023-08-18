@@ -227,7 +227,7 @@ const ItemDetails = () => {
           return { ...tag, selected: false };
         }
       });
-      console.log("item tags", tagsSelected);
+
       setTags(tagsSelected);
 
       //compare data.providers with providers and set selected = True if id matches
@@ -266,6 +266,7 @@ const ItemDetails = () => {
             minimumRequired: locationItemWithValues.minimum_required,
             alertAt: locationItemWithValues.threshold,
             brandsSelected: brandsSelected,
+            status: locationItemWithValues.status,
           };
         } else {
           return locationItem;
@@ -969,234 +970,7 @@ const ItemDetails = () => {
               want. You can also specify at which quantity the system will alert
               you.
             </p>
-            {/* <p className="mt-1 text-sm text-gray-500">
-              You don't see the location you are looking for? Create a new one{" "}
-              <button
-                className="text-blue-500"
-                onClick={() => handleToggleCreateLocationModal()}
-              >
-                here
-              </button>
-            </p> */}
-            {/* <div className="mt-6 flow-root">
-              <div className=" overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                  <table className="min-w-full divide-y divide-gray-300 table-auto">
-                    <thead>
-                      <tr>
-                        <th
-                          scope="col"
-                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-600 sm:pl-0"
-                        >
-                          Location
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-600"
-                        >
-                          Quantity
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-600"
-                        >
-                          Min Required
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-600"
-                        >
-                          Alert At
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-600"
-                        >
-                          Brand
-                          <span className="text-gray-500 font-normal ml-2">
-                            Create new brand{" "}
-                            <button
-                              onClick={() => handleToggleCreateBrandModal()}
-                              className="text-blue-500"
-                            >
-                              here
-                            </button>
-                          </span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {locationItems.map((locationItem, index) => (
-                        <tr key={index}>
-                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 sm:pl-0">
-                            <div className="font-medium text-gray-700">
-                              {locationItem.location.name}
-                            </div>
-                            <div className="flex justify-start my-2 gap-2">
-                              {locationItem.groups?.map((group) => (
-                                <div
-                                  key={group.id}
-                                  className={`text-xs inline-block rounded-md px-2 py-1 border bg-gray-100 border-gray-200 text-gray-500`}
-                                >
-                                  {group.name}
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <input
-                              type="text"
-                              value={locationItem.quantity}
-                              onChange={(e) =>
-                                setLocationItemQuantity(
-                                  e.target.value,
-                                  locationItem
-                                )
-                              }
-                              className="block w-16 rounded-md border-gray-300 shadow-sm
-                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            />
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <input
-                              type="text"
-                              value={locationItem.minimumRequired}
-                              onChange={(e) =>
-                                setLocationItemMinimumRequired(
-                                  e.target.value,
-                                  locationItem
-                                )
-                              }
-                              className="block w-16 rounded-md border-gray-300 shadow-sm
-                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            />
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <input
-                              type="text"
-                              value={locationItem.alertAt}
-                              onChange={(e) =>
-                                setLocationItemAlertAt(
-                                  e.target.value,
-                                  locationItem
-                                )
-                              }
-                              className="block w-16 rounded-md border-gray-300 shadow-sm
-                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                            />
-                          </td>
-                          <td
-                            className="relative whitespace-nowrap py-4 pl-3 pr-4 text-sm
-                                         font-medium sm:pr-0"
-                          >
-                            <Listbox
-                              value={locationItem.brandsSelected}
-                              multiple
-                              onChange={(brands) =>
-                                setLocationItemBrandSelected(
-                                  brands,
-                                  locationItem
-                                )
-                              }
-                            >
-                              {({ open }) => (
-                                <>
-                                  <div className="relative mt-1">
-                                    <Listbox.Button
-                                      className="relative w-52 cursor-default rounded-md border
-                                                border-gray-300 bg-white py-2 pl-3 pr-10 text-left
-                                                shadow-sm focus:border-sky-500 focus:outline-none
-                                                focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                                    >
-                                      <span className="block truncate">
-                                        {locationItem.brandsSelected.length >
-                                          0 &&
-                                          locationItem.brandsSelected
-                                            .map((brand) => brand.name)
-                                            .join(", ")}
 
-                                        {locationItem.brandsSelected.length ===
-                                          0 && "Select brands"}
-                                      </span>
-                                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                        <ChevronUpDownIcon
-                                          className="h-5 w-5 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    </Listbox.Button>
-
-                                    <Transition
-                                      show={open}
-                                      as={Fragment}
-                                      leave="transition ease-in duration-100"
-                                      leaveFrom="opacity-100"
-                                      leaveTo="opacity-0"
-                                    >
-                                      <Listbox.Options
-                                        className="absolute z-10 mt-1 max-h-96 w-52 overflow-auto
-                                                    rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                    ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                                      >
-                                        {brands.map((brand) => (
-                                          <Listbox.Option
-                                            key={brand.id}
-                                            className={({ active }) =>
-                                              classNames(
-                                                active
-                                                  ? "text-white bg-red-600"
-                                                  : "text-gray-900",
-                                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                                              )
-                                            }
-                                            value={brand}
-                                          >
-                                            {({ selected, active }) => (
-                                              <>
-                                                <span
-                                                  className={classNames(
-                                                    selected
-                                                      ? "font-semibold"
-                                                      : "font-normal",
-                                                    "block truncate"
-                                                  )}
-                                                >
-                                                  {brand.name}
-                                                </span>
-                                                {selected ? (
-                                                  <span
-                                                    className={classNames(
-                                                      active
-                                                        ? "text-white"
-                                                        : "text-red-600",
-                                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                    )}
-                                                  >
-                                                    <CheckIcon
-                                                      className="h-5 w-5"
-                                                      aria-hidden="true"
-                                                    />
-                                                  </span>
-                                                ) : null}
-                                              </>
-                                            )}
-                                          </Listbox.Option>
-                                        ))}
-                                      </Listbox.Options>
-                                    </Transition>
-                                  </div>
-                                </>
-                              )}
-                            </Listbox>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              
-            </div> */}
             <div className="mx-auto max-w-2xl py-8 lg:max-w-7xl">
               <div
                 className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10
@@ -1215,20 +989,29 @@ const ItemDetails = () => {
                       <div>
                         <div className="flex justify-between gap-x-4 py-1">
                           <dt className="text-gray-500">Quantity</dt>
-                          <dd className="text-gray-700">
-                            {locationItem.quantity}
+                          <dd className="text-gray-700 flex gap-2">
+                            <div
+                              className={`flex-none rounded-full ${
+                                locationItem.status === "C"
+                                  ? "bg-green-400/10 p-1 text-green-400"
+                                  : "bg-red-400/10 p-1.5 text-red-400"
+                              }`}
+                            >
+                              <div className="h-2 w-2 rounded-full bg-current" />
+                            </div>
+                            <div>{locationItem.quantity || 0}</div>
                           </dd>
                         </div>
                         <div className="flex justify-between gap-x-4 py-1">
                           <dt className="text-gray-500">Minimum required</dt>
                           <dd className="text-gray-700">
-                            {locationItem.minimumRequired}
+                            {locationItem.minimumRequired || 0}
                           </dd>
                         </div>
                         <div className="flex justify-between gap-x-4 py-1">
                           <dt className="text-gray-500">Alert at</dt>
                           <dd className="text-gray-700">
-                            {locationItem.alertAt}
+                            {locationItem.alertAt || 0}
                           </dd>
                         </div>
                       </div>
