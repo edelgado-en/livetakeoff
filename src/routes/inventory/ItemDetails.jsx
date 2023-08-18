@@ -1016,7 +1016,7 @@ const ItemDetails = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="px-4">
+                    <div className="px-4 mb-4">
                       <div className="mt-3">
                         <button
                           className="w-full relative flex items-center justify-center rounded-md 
