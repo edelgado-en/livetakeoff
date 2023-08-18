@@ -499,6 +499,7 @@ const ItemDetails = () => {
     const formData = new FormData();
 
     formData.append("photo", imageList[0].file);
+    formData.append("itemId", itemId);
 
     try {
       await api.uploadItemPhoto(formData);
@@ -508,7 +509,7 @@ const ItemDetails = () => {
 
       navigate(0);
     } catch (error) {
-      toast.error("Unable to update avatar");
+      toast.error("Unable to update photo");
     }
   };
 
@@ -829,6 +830,8 @@ const ItemDetails = () => {
               <div className="text-lg font-semibold text-gray-600 mb-4">
                 Upload Photo
               </div>
+
+              {/* Mobile */}
               <div className="mt-1 lg:hidden">
                 <div className="flex items-center">
                   <div
@@ -883,43 +886,59 @@ const ItemDetails = () => {
                 </div>
               </div>
 
+              {/* desktop */}
               <div className="relative hidden overflow-hidden rounded-full lg:block">
-                <ImageUploading
-                  value={itemImages}
-                  acceptType={["jpg", "gif", "png", "jpeg"]}
-                  onChange={updateItemPhoto}
-                  maxNumber={1}
-                  dataURLKey="data_url"
-                >
-                  {({ onImageUpload }) => (
-                    <div onClick={onImageUpload}>
-                      {itemPhoto ? (
-                        <img
-                          className="relative h-40 w-40 rounded-full"
-                          src={itemPhoto}
-                          alt=""
-                        />
-                      ) : (
-                        <span className=" overflow-hidden rounded-full">
-                          <svg
-                            className="h-full w-full text-gray-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                <div className="flex items-center">
+                  <div
+                    className="inline-block h-48 w-48 flex-shrink-0 overflow-hidden rounded-full"
+                    aria-hidden="true"
+                  >
+                    {itemPhoto ? (
+                      <img
+                        className="h-full w-full rounded-full"
+                        src={itemPhoto}
+                        alt=""
+                      />
+                    ) : (
+                      <span className="h-28 w-28 overflow-hidden rounded-full bg-gray-100">
+                        <svg
+                          className="h-full w-full text-gray-300"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                      </span>
+                    )}
+                  </div>
+                  <div className="ml-5 rounded-md shadow-sm">
+                    <ImageUploading
+                      value={itemImages}
+                      acceptType={["jpg", "gif", "png", "jpeg"]}
+                      onChange={updateItemPhoto}
+                      maxNumber={1}
+                      dataURLKey="data_url"
+                    >
+                      {({ onImageUpload }) => (
+                        <div
+                          onClick={onImageUpload}
+                          className="group relative flex items-center justify-center
+                                                rounded-md border border-gray-300 py-2 px-3 focus-within:ring-2
+                                                    focus-within:ring-sky-500 focus-within:ring-offset-2 hover:bg-gray-50"
+                        >
+                          <label
+                            htmlFor="mobile-user-photo"
+                            className="pointer-events-none relative text-sm font-medium
+                                                    leading-4 text-gray-700"
                           >
-                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                          </svg>
-                        </span>
+                            <span>Change</span>
+                            <span className="sr-only"> user photo</span>
+                          </label>
+                        </div>
                       )}
-                      <label
-                        htmlFor="desktop-user-photo"
-                        className="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
-                      >
-                        <span className="cursor-pointer">Change</span>
-                        <span className="sr-only"> user photo</span>
-                      </label>
-                    </div>
-                  )}
-                </ImageUploading>
+                    </ImageUploading>
+                  </div>
+                </div>
               </div>
 
               <div className="mt-8">
