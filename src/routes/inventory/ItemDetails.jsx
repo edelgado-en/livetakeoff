@@ -264,35 +264,6 @@ const ItemDetails = () => {
 
       setProviders(providersSelected);
 
-      //compare data.location_items with locationItems, if location_item.location.id matches locationItem.location.id, then set locationItem.quantity, locationItem.minimumRequired, locationItem.alertAt and locationItem.brandsSelected
-      /* const locationItemsWithValues = locationItems.map((locationItem) => {
-        const locationItemWithValues = response.data.location_items.find(
-          (li) => li.location.id === locationItem.location.id
-        );
-        if (locationItemWithValues) {
-          const brandsSelected =
-            locationItemWithValues.location_item_brands.map(
-              (location_item_brand) => {
-                return {
-                  id: location_item_brand.brand.id,
-                  name: location_item_brand.brand.name,
-                };
-              }
-            );
-
-          return {
-            ...locationItem,
-            quantity: locationItemWithValues.quantity,
-            minimumRequired: locationItemWithValues.minimum_required,
-            alertAt: locationItemWithValues.threshold,
-            brandsSelected: brandsSelected,
-            status: locationItemWithValues.status,
-          };
-        } else {
-          return locationItem;
-        }
-      }); */
-
       const locationItemsWithValues = response.data.location_items.map(
         (locationItem) => {
           const brandsSelected = locationItem.location_item_brands.map(

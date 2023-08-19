@@ -198,6 +198,9 @@ const InventoryList = () => {
 
   const [currentUser, setCurrentUser] = useState({});
 
+  const [thresholdMet, setThresholdMet] = useState(false);
+  const [minimumRequiredMet, setMinimumRequiredMet] = useState(false);
+
   useEffect(() => {
     fetchItems();
   }, [
@@ -207,6 +210,8 @@ const InventoryList = () => {
     areaSelected,
     statusSelected,
     currentPage,
+    thresholdMet,
+    minimumRequiredMet,
   ]);
 
   const getLocations = async () => {
@@ -249,6 +254,8 @@ const InventoryList = () => {
         measureById: measureBySelected?.id,
         areaId: areaSelected?.id,
         status: statusSelected?.id,
+        thresholdMet,
+        minimumRequiredMet,
       };
 
       //set active filters
@@ -282,6 +289,20 @@ const InventoryList = () => {
         });
       }
 
+      if (request.thresholdMet) {
+        activeFilters.push({
+          id: "thresholdMet",
+          name: "Threshold Met",
+        });
+      }
+
+      if (request.minimumRequiredMet) {
+        activeFilters.push({
+          id: "minimumRequiredMet",
+          name: "Minimum Required Met",
+        });
+      }
+
       setActiveFilters(activeFilters);
 
       try {
@@ -309,8 +330,12 @@ const InventoryList = () => {
             if (itemLocation) {
               item.quantityToDisplay = itemLocation.quantity;
               item.statusToDisplay = itemLocation.status;
+              item.minimumRequired = itemLocation.minimum_required || 0;
+              item.threshold = itemLocation.threshold || 0;
             } else {
               item.quantityToDisplay = null;
+              item.minimumRequired = null;
+              item.threshold = null;
             }
 
             item.totalItemQuantity = totalItemQuantity;
@@ -462,6 +487,10 @@ const InventoryList = () => {
       setAreaSelected(null);
     } else if (activeFilterId === "status") {
       setStatusSelected(null);
+    } else if (activeFilterId === "thresholdMet") {
+      setThresholdMet(false);
+    } else if (activeFilterId === "minimumRequiredMet") {
+      setMinimumRequiredMet(false);
     }
 
     setActiveFilters(
@@ -492,6 +521,16 @@ const InventoryList = () => {
   const handleGridView = (value) => {
     setGridView(value);
     localStorage.setItem("inventoryGridView", JSON.stringify(value));
+  };
+
+  const handleToggleThresholdMet = () => {
+    setThresholdMet(!thresholdMet);
+    setMinimumRequiredMet(false);
+  };
+
+  const handleToggleMinimumRequiredMet = () => {
+    setMinimumRequiredMet(!minimumRequiredMet);
+    setThresholdMet(false);
   };
 
   return (
@@ -809,9 +848,25 @@ const InventoryList = () => {
                             : item.totalItemQuantity}
                         </p>
                       </div>
+                      {locationSelected && locationSelected.id !== null && (
+                        <>
+                          {thresholdMet && (
+                            <div className="flex justify-between text-gray-500 italic text-sm mt-1">
+                              <div>Threshold</div>
+                              <div>{item.threshold}</div>
+                            </div>
+                          )}
+                          {minimumRequiredMet && (
+                            <div className="flex justify-between text-gray-500 italic text-sm mt-1">
+                              <div>Minimum Required</div>
+                              <div>{item.minimumRequired}</div>
+                            </div>
+                          )}
+                        </>
+                      )}
                       {!locationSelected ||
                         (locationSelected.id === null && (
-                          <div className="mt-2 text-gray-500 text-sm">
+                          <div className="mt-1 text-gray-500 text-sm">
                             Found in{" "}
                             <span className="font-semibold">
                               {item.location_items.length}
@@ -927,7 +982,7 @@ const InventoryList = () => {
                                     <div>{item.name}</div>
                                   </div>
 
-                                  <div className=" italic text-gray-500 text-sm">
+                                  <div className="mt-1 italic text-gray-500 text-sm">
                                     <span>
                                       {item.area === "I" && "Interior"}
                                     </span>
@@ -948,8 +1003,18 @@ const InventoryList = () => {
                               locationSelected.id !== null && (
                                 <>
                                   <div className="flex gap-4">
-                                    <div className="font-medium">
+                                    <div className="font-medium text-right">
                                       {item.quantityToDisplay}
+                                      {minimumRequiredMet && (
+                                        <div className=" text-gray-500 italic font-normal text-sm">
+                                          Min Required: {item.minimumRequired}
+                                        </div>
+                                      )}
+                                      {thresholdMet && (
+                                        <div className=" text-gray-500 italic font-normal text-sm">
+                                          Threshold: {item.threshold}
+                                        </div>
+                                      )}
                                     </div>
                                     <Menu as="div" className="relative ml-auto">
                                       <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
@@ -1122,33 +1187,64 @@ const InventoryList = () => {
             </ul>
           </div>
           {locationSelected && locationSelected.id !== null && (
-            <div className="hidden xl:block lg:block pb-4">
-              <h2 className="font-medium text-sm text-gray-900">Status</h2>
-              <ul className="relative z-0 divide-y divide-gray-200 mt-2">
-                {availableStatusOptions.map((status) => (
-                  <li key={status.id}>
-                    <div
-                      onClick={() =>
-                        setStatusSelected({
-                          id: status.id,
-                          name: status.name,
-                        })
-                      }
-                      className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+            <>
+              <div className="hidden xl:block lg:block pb-4">
+                <h2 className="font-medium text-sm text-gray-900">Status</h2>
+                <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                  {availableStatusOptions.map((status) => (
+                    <li key={status.id}>
+                      <div
+                        onClick={() =>
+                          setStatusSelected({
+                            id: status.id,
+                            name: status.name,
+                          })
+                        }
+                        className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
                                                     hover:bg-gray-50"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <div className="focus:outline-none">
-                          <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
-                            {status.name}
-                          </p>
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="focus:outline-none">
+                            <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
+                              {status.name}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="hidden xl:block lg:block pb-4">
+                <h2 className="font-medium text-sm text-gray-900">Alerts</h2>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <div
+                    onClick={() => handleToggleThresholdMet()}
+                    className={`${
+                      thresholdMet
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                        rounded-md border border-gray-200 cursor-pointer
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                  >
+                    <div>THRESHOLD MET</div>
+                  </div>
+                  <div
+                    onClick={() => handleToggleMinimumRequiredMet()}
+                    className={`${
+                      minimumRequiredMet
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                        rounded-md border border-gray-200 cursor-pointer
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                  >
+                    <div>MIN REQUIRED MET</div>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </div>
 
