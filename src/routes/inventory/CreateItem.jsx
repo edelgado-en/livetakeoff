@@ -280,17 +280,17 @@ const CreateItem = () => {
     }
 
     const atLeastOneLocationItemHasQuantity = locationItems.some(
-      (locationItem) => locationItem.quantity > 0
+      (locationItem) => locationItem.quantity.length > 0
     );
 
     if (!atLeastOneLocationItemHasQuantity) {
-      alert("Please enter a quantity bigger than 0 for at least one location.");
+      alert("Please enter a quantity for at least one location.");
       return;
     }
 
-    //only include the locationItems that have a quantity bigger than 0
+    //only include the locationItems that have a quantity
     const locationItemsWithQuantity = locationItems.filter(
-      (locationItem) => locationItem.quantity > 0
+      (locationItem) => locationItem.quantity.length > 0
     );
 
     const selectedTagIds = tags

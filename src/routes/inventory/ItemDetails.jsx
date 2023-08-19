@@ -265,7 +265,7 @@ const ItemDetails = () => {
       setProviders(providersSelected);
 
       //compare data.location_items with locationItems, if location_item.location.id matches locationItem.location.id, then set locationItem.quantity, locationItem.minimumRequired, locationItem.alertAt and locationItem.brandsSelected
-      const locationItemsWithValues = locationItems.map((locationItem) => {
+      /* const locationItemsWithValues = locationItems.map((locationItem) => {
         const locationItemWithValues = response.data.location_items.find(
           (li) => li.location.id === locationItem.location.id
         );
@@ -291,7 +291,29 @@ const ItemDetails = () => {
         } else {
           return locationItem;
         }
-      });
+      }); */
+
+      const locationItemsWithValues = response.data.location_items.map(
+        (locationItem) => {
+          const brandsSelected = locationItem.location_item_brands.map(
+            (location_item_brand) => {
+              return {
+                id: location_item_brand.brand.id,
+                name: location_item_brand.brand.name,
+              };
+            }
+          );
+
+          return {
+            ...locationItem,
+            quantity: locationItem.quantity,
+            minimumRequired: locationItem.minimum_required,
+            alertAt: locationItem.threshold,
+            brandsSelected: brandsSelected,
+            status: locationItem.status,
+          };
+        }
+      );
 
       setLocationItems(locationItemsWithValues);
     } catch (err) {
