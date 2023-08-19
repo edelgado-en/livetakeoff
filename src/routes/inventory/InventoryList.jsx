@@ -176,6 +176,8 @@ const InventoryList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
 
+  const [open, setOpen] = useState(false);
+
   const [locations, setLocations] = useState([]);
   const [locationSelected, setLocationSelected] = useState(null);
 
@@ -568,6 +570,176 @@ const InventoryList = () => {
               )}
             </div>
           </div>
+          {/* Mobile filter dialog */}
+          <Transition.Root show={open} as={Fragment}>
+            <Dialog as="div" className="relative z-40" onClose={setOpen}>
+              <Transition.Child
+                as={Fragment}
+                enter="transition-opacity ease-linear duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity ease-linear duration-300"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="fixed inset-0 bg-black bg-opacity-25" />
+              </Transition.Child>
+
+              <div className="fixed inset-0 z-40 flex">
+                <Transition.Child
+                  as={Fragment}
+                  enter="transition ease-in-out duration-300 transform"
+                  enterFrom="translate-x-full"
+                  enterTo="translate-x-0"
+                  leave="transition ease-in-out duration-300 transform"
+                  leaveFrom="translate-x-0"
+                  leaveTo="translate-x-full"
+                >
+                  <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+                    <div className="flex items-center justify-between px-4">
+                      <h2 className="text-lg font-medium text-gray-900">
+                        Filters
+                      </h2>
+                      <button
+                        type="button"
+                        className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span className="sr-only">Close menu</span>
+                        <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
+                    </div>
+
+                    {/* Filters */}
+                    <form className="mt-4 px-4">
+                      <div className="pb-4">
+                        <h2 className="font-medium text-sm text-gray-900">
+                          Measure By
+                        </h2>
+                        <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                          {availableMeasureByOptions.map((measureBy) => (
+                            <li key={measureBy.id}>
+                              <div
+                                onClick={() =>
+                                  setMeasureBySelected({
+                                    id: measureBy.id,
+                                    name: measureBy.name,
+                                  })
+                                }
+                                className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                                hover:bg-gray-50"
+                              >
+                                <div className="min-w-0 flex-1">
+                                  <div className="focus:outline-none">
+                                    <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
+                                      {measureBy.name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="pb-4">
+                        <h2 className="font-medium text-sm text-gray-900">
+                          Areas
+                        </h2>
+                        <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                          {availableAreaOptions.map((area) => (
+                            <li key={area.id}>
+                              <div
+                                onClick={() =>
+                                  setAreaSelected({
+                                    id: area.id,
+                                    name: area.name,
+                                  })
+                                }
+                                className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                                hover:bg-gray-50"
+                              >
+                                <div className="min-w-0 flex-1">
+                                  <div className="focus:outline-none">
+                                    <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
+                                      {area.name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      {locationSelected && locationSelected.id !== null && (
+                        <>
+                          <div className="pb-4">
+                            <h2 className="font-medium text-sm text-gray-900">
+                              Status
+                            </h2>
+                            <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                              {availableStatusOptions.map((status) => (
+                                <li key={status.id}>
+                                  <div
+                                    onClick={() =>
+                                      setStatusSelected({
+                                        id: status.id,
+                                        name: status.name,
+                                      })
+                                    }
+                                    className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                                    hover:bg-gray-50"
+                                  >
+                                    <div className="min-w-0 flex-1">
+                                      <div className="focus:outline-none">
+                                        <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
+                                          {status.name}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="pb-4">
+                            <h2 className="font-medium text-sm text-gray-900">
+                              Alerts
+                            </h2>
+                            <div className="grid grid-cols-2 gap-2 mt-2">
+                              <div
+                                onClick={() => handleToggleThresholdMet()}
+                                className={`${
+                                  thresholdMet
+                                    ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                    : "hover:bg-gray-50"
+                                }
+                                                        rounded-md border border-gray-200 cursor-pointer
+                                                    py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                              >
+                                <div>THRESHOLD MET</div>
+                              </div>
+                              <div
+                                onClick={() => handleToggleMinimumRequiredMet()}
+                                className={`${
+                                  minimumRequiredMet
+                                    ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                    : "hover:bg-gray-50"
+                                }
+                                                        rounded-md border border-gray-200 cursor-pointer
+                                                    py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                              >
+                                <div>MIN REQUIRED MET</div>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </form>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </Dialog>
+          </Transition.Root>
           <div className="mt-4">
             <div
               className="grid xl:grid-cols-2 lg:grid-cols-2
@@ -663,27 +835,38 @@ const InventoryList = () => {
                   )}
                 </Listbox>
               </div>
-              <div className="relative border-gray-200 mt-1">
-                <div
-                  onClick={() => fetchItems()}
-                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                >
-                  <MagnifyingGlassIcon
-                    className="h-4 w-4 text-gray-400 cursor-pointer"
-                    aria-hidden="true"
+              <div className="relative border-gray-200 mt-1 flex justify-between gap-10">
+                <div>
+                  <div
+                    onClick={() => fetchItems()}
+                    className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                  >
+                    <MagnifyingGlassIcon
+                      className="h-4 w-4 text-gray-400 cursor-pointer"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <input
+                    type="search"
+                    name="search"
+                    id="search"
+                    value={searchText}
+                    onChange={(event) => setSearchText(event.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="block w-full  pl-10 focus:border-sky-500 border border-gray-300 py-3 rounded-md 
+                                    focus:ring-sky-500 text-sm"
+                    placeholder="Search by name"
                   />
                 </div>
-                <input
-                  type="search"
-                  name="search"
-                  id="search"
-                  value={searchText}
-                  onChange={(event) => setSearchText(event.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="block w-full  pl-10 focus:border-sky-500 border border-gray-300 py-3 rounded-md 
-                                  focus:ring-sky-500 text-sm"
-                  placeholder="Search by name"
-                />
+                <div className="xl:hidden lg:hidden md:hidden">
+                  <button
+                    type="button"
+                    className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 relative top-2 mr-2"
+                    onClick={() => setOpen(true)}
+                  >
+                    Filters
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -766,7 +949,7 @@ const InventoryList = () => {
           {loading && <Loader />}
 
           {!loading && items.length === 0 && (
-            <div className=" text-gray-500 mt-32 m-auto w-96 text-center">
+            <div className=" text-gray-500 mt-32 m-auto w-96 text-center pb-20">
               <div className="font-semibold text-gray-700">No items found.</div>
               {locations.length > 0 && (
                 <p className=" text-gray-500 mt-2">
