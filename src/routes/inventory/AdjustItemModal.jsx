@@ -6,13 +6,14 @@ const AdjustItemModal = ({
   isOpen,
   handleClose,
   adjustItemQuantity,
-  item,
+  itemName,
+  quantityToDisplay,
   locationSelected,
 }) => {
   const [quantity, setQuantity] = useState("");
 
   useEffect(() => {
-    setQuantity(item.quantityToDisplay);
+    setQuantity(quantityToDisplay);
   }, []);
 
   const handleSetQuantity = (value) => {
@@ -36,15 +37,15 @@ const AdjustItemModal = ({
               <div className="font-semibold text-center m-auto flex flex-col justify-center gap-4">
                 <table>
                   <tbody>
-                    <tr key={item.id} className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100">
                       <td className="px-0 py-3 text-right">
                         <div className="text-gray-500">Item</div>
                       </td>
                       <td className="pl-5 py-3 text-left text-gray-700 table-cell">
-                        {item.name}
+                        {itemName}
                       </td>
                     </tr>
-                    <tr key={item.id} className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100">
                       <td className="px-0 py-3 text-right">
                         <div className="text-gray-500">Quantity</div>
                       </td>
@@ -60,7 +61,7 @@ const AdjustItemModal = ({
                         />
                       </td>
                     </tr>
-                    <tr key={item.id} className="border-b border-gray-100">
+                    <tr className="border-b border-gray-100">
                       <td className="px-0 py-3 text-right">
                         <div className="text-gray-500">Location</div>
                       </td>

@@ -1155,7 +1155,8 @@ const InventoryList = () => {
         {isConfirmItemModalOpen && (
           <ConfirmItemModal
             isOpen={isConfirmItemModalOpen}
-            item={itemSelected}
+            itemName={itemSelected?.name}
+            quantityToDisplay={itemSelected?.quantityToDisplay}
             handleClose={handleToggleConfirmItemModal}
             updateItemStatus={updateItemStatus}
             locationSelected={locationSelected}
@@ -1165,7 +1166,8 @@ const InventoryList = () => {
         {isAdjustItemModalOpen && (
           <AdjustItemModal
             isOpen={isAdjustItemModalOpen}
-            item={itemSelected}
+            itemName={itemSelected?.name}
+            quantityToDisplay={itemSelected?.quantityToDisplay}
             handleClose={handleToggleAdjustItemModal}
             adjustItemQuantity={adjustItemQuantity}
             locationSelected={locationSelected}
@@ -1175,7 +1177,8 @@ const InventoryList = () => {
         {isMoveItemModalOpen && (
           <MoveItemModal
             isOpen={isMoveItemModalOpen}
-            item={itemSelected}
+            itemName={itemSelected?.name}
+            quantityToDisplay={itemSelected?.quantityToDisplay}
             handleClose={handleToggleMoveItemModal}
             moveItem={moveItem}
             locationSelected={locationSelected}

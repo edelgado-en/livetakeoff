@@ -30,7 +30,8 @@ const MoveItemModal = ({
   isOpen,
   handleClose,
   moveItem,
-  item,
+  itemName,
+  quantityToDisplay,
   locationSelected,
   locations,
 }) => {
@@ -51,7 +52,7 @@ const MoveItemModal = ({
   const handleSetQuantity = (value) => {
     const v = value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
 
-    if (Number(v) > Number(item.quantityToDisplay)) {
+    if (Number(v) > Number(quantityToDisplay)) {
       alert("Quantity cannot be greater than the item's quantity");
     } else {
       setMoveQuantity(v);
@@ -190,7 +191,7 @@ const MoveItemModal = ({
                 <label className="block text-sm leading-6 text-gray-900 font-semibold">
                   Item
                 </label>
-                <div className="mt-1">{item.name}</div>
+                <div className="mt-1">{itemName}</div>
               </div>
 
               <div className="w-full border-t border-gray-300 py-2 mt-6"></div>
@@ -200,7 +201,7 @@ const MoveItemModal = ({
                   <label className="block text-sm leading-6 text-gray-900 font-semibold">
                     Current Quantity
                   </label>
-                  <div className="mt-2">{item.quantityToDisplay}</div>
+                  <div className="mt-2">{quantityToDisplay}</div>
                 </div>
                 <div>
                   <label className="block text-sm leading-6 text-gray-900 font-semibold">

@@ -25,6 +25,10 @@ import ReactTimeAgo from "react-time-ago";
 
 import Pagination from "react-js-pagination";
 
+import ConfirmItemModal from "./ConfirmItemModal";
+import AdjustItemModal from "./AdjustItemModal";
+import MoveItemModal from "./MoveItemModal";
+
 const ChevronUpDownIcon = () => {
   return (
     <svg
@@ -90,6 +94,10 @@ const ItemDetails = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [isConfirmItemModalOpen, setConfirmItemModalOpen] = useState(false);
+  const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
+  const [isMoveItemModalOpen, setMoveItemModalOpen] = useState(false);
+
   useEffect(() => {
     getItemFormInfo();
   }, []);
@@ -123,6 +131,18 @@ const ItemDetails = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleToggleConfirmItemModal = () => {
+    setConfirmItemModalOpen(!isConfirmItemModalOpen);
+  };
+
+  const handleToggleAdjustItemModal = () => {
+    setAdjustItemModalOpen(!isAdjustItemModalOpen);
+  };
+
+  const handleToggleMoveItemModal = () => {
+    setMoveItemModalOpen(!isMoveItemModalOpen);
   };
 
   const getItemLookup = async () => {
@@ -275,7 +295,6 @@ const ItemDetails = () => {
 
       setLocationItems(locationItemsWithValues);
     } catch (err) {
-      console.log(err);
       toast.error("Unable to get item form info.");
     }
 
