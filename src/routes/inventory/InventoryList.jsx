@@ -836,7 +836,7 @@ const InventoryList = () => {
                 </Listbox>
               </div>
               <div className="relative border-gray-200 mt-1 flex justify-between gap-10">
-                <div>
+                <div className="flex-1">
                   <div
                     onClick={() => fetchItems()}
                     className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
