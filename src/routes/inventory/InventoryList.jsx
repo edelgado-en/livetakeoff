@@ -784,7 +784,7 @@ const InventoryList = () => {
           )}
 
           {!loading && items.length > 0 && (
-            <div className="overflow-hidden bg-white shadow sm:rounded-md mb-4">
+            <div className="bg-white shadow sm:rounded-md mb-4">
               {!isGridView && (
                 <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
                   {items.map((item) => (
@@ -1017,7 +1017,10 @@ const InventoryList = () => {
                                       )}
                                     </div>
                                     <Menu as="div" className="relative ml-auto">
-                                      <Menu.Button className="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
+                                      <Menu.Button
+                                        className="-m-2.5 block p-2.5 text-gray-400
+                                                                 hover:text-gray-500"
+                                      >
                                         <span className="sr-only">
                                           Open options
                                         </span>
