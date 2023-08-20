@@ -981,7 +981,7 @@ const InventoryList = () => {
                             <img
                               src={item.photo}
                               alt={item.name}
-                              className="h-60 w-72 rounded-lg"
+                              className="h-60 rounded-lg"
                             />
                           )}
 
@@ -997,7 +997,7 @@ const InventoryList = () => {
                             <img
                               src={item.photo}
                               alt={item.name}
-                              className="h-60 w-72 rounded-lg"
+                              className="h-60 rounded-lg"
                             />
                           )}
 
@@ -1133,7 +1133,7 @@ const InventoryList = () => {
                                 className="flex-shrink-0"
                               >
                                 <img
-                                  className="h-20 w-28 rounded-full group-hover:opacity-75"
+                                  className="h-20 w-20 rounded-full group-hover:opacity-75"
                                   src={item.photo}
                                   alt=""
                                 />
@@ -1142,7 +1142,7 @@ const InventoryList = () => {
                             {currentUser.isProjectManager && (
                               <div className="flex-shrink-0">
                                 <img
-                                  className="h-20 w-28 rounded-full group-hover:opacity-75"
+                                  className="h-20 w-20 rounded-full group-hover:opacity-75"
                                   src={item.photo}
                                   alt=""
                                 />
