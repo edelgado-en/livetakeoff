@@ -871,7 +871,7 @@ const InventoryList = () => {
             </div>
           </div>
 
-          <div className="flex justify-between gap-4 mt-2">
+          <div className="flex justify-between gap-4 my-3">
             <div className="mt-3">Total Items: {totalItems}</div>
             <div className="ml-6 items-center rounded-lg bg-gray-100 p-0.5 flex">
               <button
@@ -971,7 +971,7 @@ const InventoryList = () => {
               {!isGridView && (
                 <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
                   {items.map((item) => (
-                    <div key={item.id} className="group relative">
+                    <div key={item.id} className="group relative pr-2">
                       {!currentUser.isProjectManager && (
                         <Link
                           to={`/inventory/${item.id}/details`}
@@ -1130,19 +1130,19 @@ const InventoryList = () => {
                             {!currentUser.isProjectManager && (
                               <Link
                                 to={`/inventory/${item.id}/details`}
-                                className="flex-shrink-0"
+                                className="flex-shrink-0 w-20"
                               >
                                 <img
-                                  className="h-20 w-20 rounded-full group-hover:opacity-75"
+                                  className="h-20 rounded-md group-hover:opacity-75"
                                   src={item.photo}
                                   alt=""
                                 />
                               </Link>
                             )}
                             {currentUser.isProjectManager && (
-                              <div className="flex-shrink-0">
+                              <div className="flex-shrink-0 w-20">
                                 <img
-                                  className="h-20 w-20 rounded-full group-hover:opacity-75"
+                                  className="h-20 rounded-md group-hover:opacity-75"
                                   src={item.photo}
                                   alt=""
                                 />
