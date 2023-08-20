@@ -202,6 +202,7 @@ const InventoryList = () => {
 
   const [thresholdMet, setThresholdMet] = useState(false);
   const [minimumRequiredMet, setMinimumRequiredMet] = useState(false);
+  const [outOfStockMet, setOutOfStockMet] = useState(false);
 
   useEffect(() => {
     fetchItems();
@@ -214,6 +215,7 @@ const InventoryList = () => {
     currentPage,
     thresholdMet,
     minimumRequiredMet,
+    outOfStockMet,
   ]);
 
   const getLocations = async () => {
@@ -258,6 +260,7 @@ const InventoryList = () => {
         status: statusSelected?.id,
         thresholdMet,
         minimumRequiredMet,
+        outOfStockMet,
       };
 
       //set active filters
@@ -305,13 +308,19 @@ const InventoryList = () => {
         });
       }
 
+      if (request.outOfStockMet) {
+        activeFilters.push({
+          id: "outOfStockMet",
+          name: "Out of Stock Met",
+        });
+      }
+
       setActiveFilters(activeFilters);
 
       try {
         const { data } = await api.getItems(request, currentPage);
 
         setTotalItems(data.count);
-        //setItems(data.results);
 
         // set quantityToDisplay in each item. The quantity to display is the quantity of the item in the location selected
         if (locationSelected) {
@@ -493,6 +502,8 @@ const InventoryList = () => {
       setThresholdMet(false);
     } else if (activeFilterId === "minimumRequiredMet") {
       setMinimumRequiredMet(false);
+    } else if (activeFilterId === "outOfStockMet") {
+      setOutOfStockMet(false);
     }
 
     setActiveFilters(
@@ -528,11 +539,19 @@ const InventoryList = () => {
   const handleToggleThresholdMet = () => {
     setThresholdMet(!thresholdMet);
     setMinimumRequiredMet(false);
+    setOutOfStockMet(false);
   };
 
   const handleToggleMinimumRequiredMet = () => {
     setMinimumRequiredMet(!minimumRequiredMet);
     setThresholdMet(false);
+    setOutOfStockMet(false);
+  };
+
+  const handleToggleOutOfStockMet = () => {
+    setOutOfStockMet(!outOfStockMet);
+    setThresholdMet(false);
+    setMinimumRequiredMet(false);
   };
 
   return (
@@ -1427,6 +1446,18 @@ const InventoryList = () => {
                                       py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
                   >
                     <div>MIN REQUIRED MET</div>
+                  </div>
+                  <div
+                    onClick={() => handleToggleOutOfStockMet()}
+                    className={`${
+                      outOfStockMet
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                        rounded-md border border-gray-200 cursor-pointer
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                  >
+                    <div>OUT OF STOCK</div>
                   </div>
                 </div>
               </div>
