@@ -483,6 +483,7 @@ const CreateItem = () => {
                   />
                 </div>
               </div>
+
               <div className="mt-4 grid xl:grid-cols-2 lg:grid-cols-2 sm:grid-cols-2 xs:grid-cols-2 gap-6">
                 <div className="">
                   <Listbox
