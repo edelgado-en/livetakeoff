@@ -20,6 +20,7 @@ import CompleteList from "./routes/job/CompleteList";
 import InventoryList from "./routes/inventory/InventoryList";
 import CreateItem from "./routes/inventory/CreateItem";
 import ItemDetails from "./routes/inventory/ItemDetails";
+import InventoryDashboard from "./routes/inventory/InventoryDashboard";
 
 import Customers from "./routes/customers/Customers";
 import CustomerDetails from "./routes/customers/CustomerDetails";
@@ -299,6 +300,11 @@ const App = () => {
                     <Route
                       path="inventory/:itemId/details"
                       element={<ItemDetails />}
+                    />
+
+                    <Route
+                      path="inventory/stats"
+                      element={<InventoryDashboard />}
                     />
 
                     <Route path="*" element={<NotFound />} />

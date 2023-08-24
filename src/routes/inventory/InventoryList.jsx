@@ -150,7 +150,7 @@ function classNames(...classes) {
 const availableMeasureByOptions = [
   { id: "U", name: "Unit" },
   { id: "G", name: "Gallons" },
-  { id: "B", name: "Bottle" },
+  { id: "B", name: "Bottle/Sprayer" },
   { id: "O", name: "Box" },
   { id: "L", name: "Lb" },
   { id: "J", name: "Jar" },
