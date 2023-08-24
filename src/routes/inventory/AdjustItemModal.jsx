@@ -59,6 +59,12 @@ const AdjustItemModal = ({
                           className="block w-20 rounded-md border-gray-300 shadow-sm
                                     focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                         />
+                        {/* <div className="mt-1 text-sm text-gray-500">
+                          Specify the total quantity left. Ex: if you have 10
+                          items, and you are taking 2, then you the quantity
+                          sepcified should be 8.
+                           
+                        </div> */}
                       </td>
                     </tr>
                     <tr className="border-b border-gray-100">

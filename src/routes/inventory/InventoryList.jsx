@@ -393,7 +393,6 @@ const InventoryList = () => {
     const updatedItems = items.map((item) => {
       if (item.id === itemSelected.id) {
         adjustedQuantity = item.quantityToDisplay - quantity;
-        console.log("adjustedQuantity", adjustedQuantity);
         item.quantityToDisplay = adjustedQuantity;
         item.statusToDisplay = "U";
 
@@ -988,9 +987,9 @@ const InventoryList = () => {
           {!loading && items.length > 0 && (
             <div className="bg-white shadow sm:rounded-md mb-4">
               {!isGridView && (
-                <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6">
+                <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6 px-1">
                   {items.map((item) => (
-                    <div key={item.id} className="group relative pr-2">
+                    <div key={item.id} className="group relative pr-2 pb-4">
                       {!currentUser.isProjectManager && (
                         <Link
                           to={`/inventory/${item.id}/details`}
