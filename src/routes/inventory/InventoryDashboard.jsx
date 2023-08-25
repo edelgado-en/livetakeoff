@@ -188,7 +188,7 @@ const InventoryDashboard = () => {
                     <CashIcon className="h-6 w-6 text-green-500" />
                   </div>
                   <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Value in Stock
+                    Inventory Value
                   </p>
                 </dt>
                 <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
@@ -223,7 +223,7 @@ const InventoryDashboard = () => {
                 </dt>
                 <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
-                    {currentStats.total_out_of_stock}
+                    {currentStats.total_low_stock}
                   </p>
                 </dd>
               </div>
@@ -238,7 +238,7 @@ const InventoryDashboard = () => {
                 </dt>
                 <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
-                    {currentStats.total_low_stock}
+                    {currentStats.total_out_of_stock}
                   </p>
                 </dd>
               </div>
