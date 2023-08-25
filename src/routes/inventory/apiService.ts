@@ -68,6 +68,10 @@ export const uploadItemPhoto = (formData: any) => {
     })
 }
 
-export const getInventoryStats = (data: any) => {
-    return httpService.post('/inventory/stats', data)
+export const getInventoryCurrentStats = () => {
+    return httpService.get('/inventory/stats')
+}
+
+export const getInventoryHistoryStats = (data: any) => {
+    return httpService.post('/inventory/history-stats', data)
 }
