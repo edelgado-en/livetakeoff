@@ -271,7 +271,7 @@ const InventoryDashboard = () => {
                   </div>
                   <div>
                     <div className="text-lg font-medium tracking-tight">
-                      Locations with Lowest Accuracy
+                      Top 5 Locations with Lowest Accuracy
                     </div>
                     <div className="pr-2 text-gray-500">
                       {currentStats.location_accuracy_stats.map(
