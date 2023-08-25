@@ -193,7 +193,7 @@ const InventoryDashboard = () => {
                 </dt>
                 <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
-                    {currentStats.total_value_in_stock}
+                    ${currentStats.total_value_in_stock}
                   </p>
                 </dd>
               </div>
@@ -258,15 +258,23 @@ const InventoryDashboard = () => {
                                 grid xl:grid-cols-2 xs:grid-cols-1 py-12"
                 >
                   <div className="flex flex-col items-center justify-center">
-                    <div className=" text-5xl">96%</div>
+                    <div className=" text-5xl">
+                      {currentStats.inventory_accuracy}%
+                    </div>
                     <div className="text-md text-gray-500 mt-1">
                       Across all locations
                     </div>
                     <div className="text-md text-gray-500 mt-1">
-                      Confirmed: 156
+                      Confirmed:{" "}
+                      <span className="font-semibold">
+                        {currentStats.total_confirmed}
+                      </span>
                     </div>
                     <div className="text-md text-gray-500 mt-1">
-                      Unconfirmed: 56
+                      Unconfirmed:{" "}
+                      <span className="font-semibold">
+                        {currentStats.total_unconfirmed}
+                      </span>
                     </div>
                   </div>
                   <div>
