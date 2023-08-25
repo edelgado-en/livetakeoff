@@ -19,6 +19,7 @@ import {
   ExclamationCircleIcon,
   PresentationChartBarIcon,
   ViewGridIcon,
+  ArchiveIcon,
 } from "@heroicons/react/outline";
 import logo from "../../images/logo_2618936_web.png";
 import whiteLogo from "../../images/logo_white-no-text.png";
@@ -64,6 +65,12 @@ const dashboards = [
     description: "Find out which project manager is the most productive.",
     href: "/team-productivity",
     icon: ChartBarIcon,
+  },
+  {
+    name: "Inventory Stats",
+    description: "Checkout your inventory current statistics and across time.",
+    href: "/inventory/stats",
+    icon: ArchiveIcon,
   },
 ];
 
