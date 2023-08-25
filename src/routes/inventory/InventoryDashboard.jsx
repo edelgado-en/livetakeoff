@@ -193,7 +193,7 @@ const InventoryDashboard = () => {
                 </dt>
                 <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
-                    ${currentStats.total_value_in_stock}
+                    ${currentStats?.total_value_in_stock.toLocaleString()}
                   </p>
                 </dd>
               </div>
