@@ -221,10 +221,13 @@ const InventoryDashboard = () => {
                     Low in Stock
                   </p>
                 </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                <dd className="ml-16 flex justify-between items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
                     {currentStats.total_low_stock}
                   </p>
+                  <div className="text-sm text-gray-500 cursor-pointer">
+                    Show Locations
+                  </div>
                 </dd>
               </div>
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
@@ -236,10 +239,13 @@ const InventoryDashboard = () => {
                     Out of Stock
                   </p>
                 </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                <dd className="ml-16 flex justify-between items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
                     {currentStats.total_out_of_stock}
                   </p>
+                  <div className="text-sm text-gray-500 cursor-pointer">
+                    Show Locations
+                  </div>
                 </dd>
               </div>
             </dl>
