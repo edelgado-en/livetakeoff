@@ -23,6 +23,7 @@ import ItemDetails from "./routes/inventory/ItemDetails";
 import InventoryDashboard from "./routes/inventory/InventoryDashboard";
 import InventoryCurrentStats from "./routes/inventory/InventoryCurrentStats";
 import InventoryHistoricalStats from "./routes/inventory/InventoryHistoricalStats";
+import InventoryGrowth from "./routes/inventory/InventoryGrowth";
 
 import Customers from "./routes/customers/Customers";
 import CustomerDetails from "./routes/customers/CustomerDetails";
@@ -317,6 +318,7 @@ const App = () => {
                         path="historical"
                         element={<InventoryHistoricalStats />}
                       />
+                      <Route path="growth" element={<InventoryGrowth />} />
                     </Route>
 
                     <Route path="*" element={<NotFound />} />
