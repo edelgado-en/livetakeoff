@@ -21,6 +21,8 @@ import InventoryList from "./routes/inventory/InventoryList";
 import CreateItem from "./routes/inventory/CreateItem";
 import ItemDetails from "./routes/inventory/ItemDetails";
 import InventoryDashboard from "./routes/inventory/InventoryDashboard";
+import InventoryCurrentStats from "./routes/inventory/InventoryCurrentStats";
+import InventoryHistoricalStats from "./routes/inventory/InventoryHistoricalStats";
 
 import Customers from "./routes/customers/Customers";
 import CustomerDetails from "./routes/customers/CustomerDetails";
@@ -305,7 +307,17 @@ const App = () => {
                     <Route
                       path="inventory/stats"
                       element={<InventoryDashboard />}
-                    />
+                    >
+                      <Route index element={<InventoryCurrentStats />} />
+                      <Route
+                        path="current"
+                        element={<InventoryCurrentStats />}
+                      />
+                      <Route
+                        path="historical"
+                        element={<InventoryHistoricalStats />}
+                      />
+                    </Route>
 
                     <Route path="*" element={<NotFound />} />
                   </Route>
