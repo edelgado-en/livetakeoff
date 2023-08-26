@@ -153,17 +153,86 @@ const InventoryHistoricalStats = () => {
                   {historyStats.total_inventory_expense?.toLocaleString()}
                 </div>
 
-                <div
-                  className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
-                          gap-8 gap-y-8 gap-x-28 my-8 mb-12"
-                >
-                  <div className="">
-                    <div className="text-lg font-medium tracking-tight">
-                      Expenses by Items
+                {historyStats.total_inventory_expense > 0 && (
+                  <div
+                    className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2
+                                     sm:grid-cols-1 xs:grid-cols-1 gap-8 gap-y-8 gap-x-28 my-8"
+                  >
+                    <div className="">
+                      <div className="text-lg font-medium tracking-tight">
+                        Expenses by Items
+                      </div>
+                      <div className="pr-2 text-gray-500">
+                        {historyStats.items_with_highest_expense.map(
+                          (item, index) => (
+                            <div key={index}>
+                              <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                <div className="truncate overflow-ellipsis w-64">
+                                  {item.name}
+                                </div>
+                                <div className="text-right">
+                                  <div>
+                                    <span>${item.cost?.toLocaleString()}</span>
+                                  </div>
+                                  <div>{item.percentage + "%"}</div>
+                                </div>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                                <div
+                                  className="h-1.5 rounded-full bg-blue-500"
+                                  style={{ width: item.percentage + "%" }}
+                                ></div>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
                     </div>
-                    <div className="pr-2 text-gray-500">
-                      {historyStats.items_with_highest_expense.map(
-                        (item, index) => (
+
+                    <div className="">
+                      <div className="text-lg font-medium tracking-tight">
+                        Expenses by Location
+                      </div>
+                      <div className="pr-2 text-gray-500">
+                        {historyStats.locations_with_expense.map(
+                          (location, index) => (
+                            <div key={index}>
+                              <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                                <div className="truncate overflow-ellipsis w-64">
+                                  {location.name}
+                                </div>
+                                <div className="text-right">
+                                  <div>
+                                    <span>
+                                      $
+                                      {location.total_expense?.toLocaleString()}
+                                    </span>
+                                  </div>
+                                  <div>{location.percentage + "%"}</div>
+                                </div>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                                <div
+                                  className="h-1.5 rounded-full bg-blue-500"
+                                  style={{ width: location.percentage + "%" }}
+                                ></div>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {historyStats.popular_items?.length > 0 && (
+                  <div className="mt-8">
+                    <div className="">
+                      <div className="text-lg font-medium tracking-tight">
+                        Most Popular Items
+                      </div>
+                      <div className="pr-2 text-gray-500">
+                        {historyStats.popular_items.map((item, index) => (
                           <div key={index}>
                             <div className="flex justify-between py-3 pb-1 text-sm gap-3">
                               <div className="truncate overflow-ellipsis w-64">
@@ -171,7 +240,10 @@ const InventoryHistoricalStats = () => {
                               </div>
                               <div className="text-right">
                                 <div>
-                                  <span>${item.cost?.toLocaleString()}</span>
+                                  <span>{item.total_transactions}</span>
+                                  <span className="text-xs ml-1">
+                                    transactions
+                                  </span>
                                 </div>
                                 <div>{item.percentage + "%"}</div>
                               </div>
@@ -183,144 +255,84 @@ const InventoryHistoricalStats = () => {
                               ></div>
                             </div>
                           </div>
-                        )
-                      )}
+                        ))}
+                      </div>
                     </div>
                   </div>
+                )}
 
-                  <div className="">
-                    <div className="text-lg font-medium tracking-tight">
-                      Expenses by Location
-                    </div>
-                    <div className="pr-2 text-gray-500">
-                      {historyStats.locations_with_expense.map(
-                        (location, index) => (
-                          <div key={index}>
-                            <div className="flex justify-between py-3 pb-1 text-sm gap-3">
-                              <div className="truncate overflow-ellipsis w-64">
-                                {location.name}
-                              </div>
-                              <div className="text-right">
-                                <div>
-                                  <span>
-                                    ${location.total_expense?.toLocaleString()}
-                                  </span>
+                {historyStats?.users_with_stats?.length > 0 && (
+                  <div className="space-y-8 mt-12">
+                    <h2 className="text-lg font-medium tracking-tight">
+                      Project Managers
+                      <span
+                        className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
+                                                    rounded-full text-xs font-medium md:inline-block"
+                      >
+                        {historyStats?.users_with_stats?.length}
+                      </span>
+                    </h2>
+
+                    <ul className="space-y-12 lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
+                      {historyStats?.users_with_stats?.map((user, index) => (
+                        <li key={index}>
+                          <div className="flex gap-4 flex-start">
+                            <div className="flex-shrink-0">
+                              <img
+                                className="rounded-lg h-40 w-40"
+                                src={user.avatar}
+                                alt=""
+                              />
+                            </div>
+                            <div className="w-full">
+                              <div className="space-y-2">
+                                <div className="space-y-1 text-md font-medium leading-6">
+                                  <h3>
+                                    {user.first_name} {user.last_name}
+                                  </h3>
                                 </div>
-                                <div>{location.percentage + "%"}</div>
+                                <div className="flex justify-between text-gray-500 text-sm">
+                                  <div className="flex-1">
+                                    Total Transactions
+                                  </div>
+                                  <div className="text-right">
+                                    {user.total_transactions}
+                                  </div>
+                                </div>
+                                <div className="flex justify-between text-gray-500 text-sm">
+                                  <div className="flex-1">Total Additions</div>
+                                  <div className="text-right">
+                                    {user.total_additions}
+                                  </div>
+                                </div>
+                                <div className="flex justify-between text-gray-500 text-sm">
+                                  <div className="flex-1">
+                                    Total Substractions
+                                  </div>
+                                  <div className="text-right font-medium">
+                                    {user.total_subtractions}
+                                  </div>
+                                </div>
+                                <div className="flex justify-between text-gray-500 text-sm">
+                                  <div className="flex-1">Total Moves</div>
+                                  <div className="text-right font-medium">
+                                    {user.total_moves}
+                                  </div>
+                                </div>
+                                <div className="flex justify-between text-gray-500 text-sm">
+                                  <div className="flex-1">Total Expense</div>
+                                  <div className="text-right font-medium">
+                                    ${user.inventory_expense?.toLocaleString()}
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
-                              <div
-                                className="h-1.5 rounded-full bg-blue-500"
-                                style={{ width: location.percentage + "%" }}
-                              ></div>
-                            </div>
                           </div>
-                        )
-                      )}
-                    </div>
-                  </div>
-                  <div className="">
-                    <div className="text-lg font-medium tracking-tight">
-                      Most Popular Items
-                    </div>
-                    <div className="pr-2 text-gray-500">
-                      {historyStats.popular_items.map((item, index) => (
-                        <div key={index}>
-                          <div className="flex justify-between py-3 pb-1 text-sm gap-3">
-                            <div className="truncate overflow-ellipsis w-64">
-                              {item.name}
-                            </div>
-                            <div className="text-right">
-                              <div>
-                                <span>{item.total_transactions}</span>
-                                <span className="text-xs ml-1">
-                                  transactions
-                                </span>
-                              </div>
-                              <div>{item.percentage + "%"}</div>
-                            </div>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
-                            <div
-                              className="h-1.5 rounded-full bg-blue-500"
-                              style={{ width: item.percentage + "%" }}
-                            ></div>
-                          </div>
-                        </div>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
-                </div>
-
-                <div className="space-y-8">
-                  <h2 className="text-lg font-medium tracking-tight">
-                    Project Managers
-                    <span
-                      className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
-                                                rounded-full text-xs font-medium md:inline-block"
-                    >
-                      {historyStats?.users_with_stats?.length}
-                    </span>
-                  </h2>
-
-                  <ul className="space-y-12 lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
-                    {historyStats?.users_with_stats?.map((user, index) => (
-                      <li key={index}>
-                        <div className="flex gap-4 flex-start">
-                          <div className="flex-shrink-0">
-                            <img
-                              className="rounded-lg h-40 w-40"
-                              src={user.avatar}
-                              alt=""
-                            />
-                          </div>
-                          <div className="w-full">
-                            <div className="space-y-2">
-                              <div className="space-y-1 text-md font-medium leading-6">
-                                <h3>
-                                  {user.first_name} {user.last_name}
-                                </h3>
-                              </div>
-                              <div className="flex justify-between text-gray-500 text-sm">
-                                <div className="flex-1">Total Transactions</div>
-                                <div className="text-right">
-                                  {user.total_transactions}
-                                </div>
-                              </div>
-                              <div className="flex justify-between text-gray-500 text-sm">
-                                <div className="flex-1">Total Additions</div>
-                                <div className="text-right">
-                                  {user.total_additions}
-                                </div>
-                              </div>
-                              <div className="flex justify-between text-gray-500 text-sm">
-                                <div className="flex-1">
-                                  Total Substractions
-                                </div>
-                                <div className="text-right font-medium">
-                                  {user.total_subtractions}
-                                </div>
-                              </div>
-                              <div className="flex justify-between text-gray-500 text-sm">
-                                <div className="flex-1">Total Moves</div>
-                                <div className="text-right font-medium">
-                                  {user.total_moves}
-                                </div>
-                              </div>
-                              <div className="flex justify-between text-gray-500 text-sm">
-                                <div className="flex-1">Total Expense</div>
-                                <div className="text-right font-medium">
-                                  ${user.inventory_expense?.toLocaleString()}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                )}
               </div>
             </div>
           </>
