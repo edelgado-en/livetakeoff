@@ -279,7 +279,7 @@ const InventoryHistoricalStats = () => {
                           <div className="flex gap-4 flex-start">
                             <div className="flex-shrink-0">
                               <img
-                                className="rounded-lg h-40 w-40"
+                                className="rounded-lg h-40 w-40 mt-5"
                                 src={user.avatar}
                                 alt=""
                               />
@@ -290,14 +290,6 @@ const InventoryHistoricalStats = () => {
                                   <h3>
                                     {user.first_name} {user.last_name}
                                   </h3>
-                                </div>
-                                <div className="flex justify-between text-gray-500 text-sm">
-                                  <div className="flex-1">
-                                    Total Transactions
-                                  </div>
-                                  <div className="text-right">
-                                    {user.total_transactions}
-                                  </div>
                                 </div>
                                 <div className="flex justify-between text-gray-500 text-sm">
                                   <div className="flex-1">Total Additions</div>
@@ -317,6 +309,22 @@ const InventoryHistoricalStats = () => {
                                   <div className="flex-1">Total Moves</div>
                                   <div className="text-right font-medium">
                                     {user.total_moves}
+                                  </div>
+                                </div>
+                                <div className="flex justify-between text-gray-500 text-sm">
+                                  <div className="flex-1">
+                                    Total Confirmations
+                                  </div>
+                                  <div className="text-right font-medium">
+                                    {user.total_confirmations}
+                                  </div>
+                                </div>
+                                <div className="flex justify-between text-gray-500 text-sm border-t border-gray-200 pt-2">
+                                  <div className="flex-1">
+                                    Total Transactions
+                                  </div>
+                                  <div className="text-right">
+                                    {user.total_transactions}
                                   </div>
                                 </div>
                                 <div className="flex justify-between text-gray-500 text-sm">
