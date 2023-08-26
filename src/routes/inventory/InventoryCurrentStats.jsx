@@ -104,7 +104,7 @@ const InventoryCurrentStats = () => {
 
   return (
     <AnimatedPage>
-      <div className="px-4 max-w-7xl m-auto">
+      <div className="px-2 max-w-7xl m-auto">
         {loading && <Loader />}
 
         {!loading && (

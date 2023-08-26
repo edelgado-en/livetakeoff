@@ -27,7 +27,7 @@ function classNames(...classes) {
 
 const InventoryHistoricalStats = () => {
   const [historyLoading, setHistoryLoading] = useState(true);
-  const [dateSelected, setDateSelected] = useState(dateOptions[0]);
+  const [dateSelected, setDateSelected] = useState(dateOptions[4]);
 
   const [historyStats, setHistoryStats] = useState(null);
 
@@ -53,7 +53,7 @@ const InventoryHistoricalStats = () => {
 
   return (
     <AnimatedPage>
-      <div className="px-4 max-w-7xl m-auto">
+      <div className="px-2 max-w-7xl m-auto">
         {historyLoading && <Loader />}
 
         {!historyLoading && (
@@ -148,6 +148,111 @@ const InventoryHistoricalStats = () => {
 
             <div className="pb-32 mt-8">
               <div className="mx-auto max-w-7xl">
+                <div className="text-2xl font-semibold tracking-tight">
+                  Total Expense: $
+                  {historyStats.total_inventory_expense?.toLocaleString()}
+                </div>
+
+                <div
+                  className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
+                          gap-8 gap-y-8 gap-x-28 my-8 mb-12"
+                >
+                  <div className="">
+                    <div className="text-lg font-medium tracking-tight">
+                      Expenses by Items
+                    </div>
+                    <div className="pr-2 text-gray-500">
+                      {historyStats.items_with_highest_expense.map(
+                        (item, index) => (
+                          <div key={index}>
+                            <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                              <div className="truncate overflow-ellipsis w-64">
+                                {item.name}
+                              </div>
+                              <div className="text-right">
+                                <div>
+                                  <span>${item.cost?.toLocaleString()}</span>
+                                </div>
+                                <div>{item.percentage + "%"}</div>
+                              </div>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                              <div
+                                className="h-1.5 rounded-full bg-blue-500"
+                                style={{ width: item.percentage + "%" }}
+                              ></div>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="">
+                    <div className="text-lg font-medium tracking-tight">
+                      Expenses by Location
+                    </div>
+                    <div className="pr-2 text-gray-500">
+                      {historyStats.locations_with_expense.map(
+                        (location, index) => (
+                          <div key={index}>
+                            <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                              <div className="truncate overflow-ellipsis w-64">
+                                {location.name}
+                              </div>
+                              <div className="text-right">
+                                <div>
+                                  <span>
+                                    ${location.total_expense?.toLocaleString()}
+                                  </span>
+                                </div>
+                                <div>{location.percentage + "%"}</div>
+                              </div>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                              <div
+                                className="h-1.5 rounded-full bg-blue-500"
+                                style={{ width: location.percentage + "%" }}
+                              ></div>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="text-lg font-medium tracking-tight">
+                      Most Popular Items
+                    </div>
+                    <div className="pr-2 text-gray-500">
+                      {historyStats.popular_items.map((item, index) => (
+                        <div key={index}>
+                          <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                            <div className="truncate overflow-ellipsis w-64">
+                              {item.name}
+                            </div>
+                            <div className="text-right">
+                              <div>
+                                <span>{item.total_transactions}</span>
+                                <span className="text-xs ml-1">
+                                  transactions
+                                </span>
+                              </div>
+                              <div>{item.percentage + "%"}</div>
+                            </div>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                            <div
+                              className="h-1.5 rounded-full bg-blue-500"
+                              style={{ width: item.percentage + "%" }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="space-y-8">
                   <h2 className="text-lg font-medium tracking-tight">
                     Project Managers

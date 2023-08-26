@@ -69,7 +69,7 @@ const dashboards = [
   {
     name: "Inventory Stats",
     description: "Checkout your inventory current statistics and across time.",
-    href: "/inventory/stats",
+    href: "/inventory/stats/current",
     icon: ArchiveIcon,
   },
 ];
