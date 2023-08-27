@@ -354,58 +354,6 @@ const ItemDetails = () => {
     setProviders(newProviders);
   };
 
-  const setLocationItemBrandSelected = (selectedBrands, locationItem) => {
-    const newLocationItems = [...locationItems];
-    const index = newLocationItems.findIndex(
-      (item) => item.location.id === locationItem.location.id
-    );
-
-    newLocationItems[index].brandsSelected = selectedBrands;
-
-    setLocationItems(newLocationItems);
-  };
-
-  const setLocationItemQuantity = (quantity, locationItem) => {
-    const value = quantity.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
-
-    const newLocationItems = [...locationItems];
-    const index = newLocationItems.findIndex(
-      (item) => item.location.id === locationItem.location.id
-    );
-
-    newLocationItems[index].quantity = value;
-
-    setLocationItems(newLocationItems);
-  };
-
-  const setLocationItemMinimumRequired = (minimumRequired, locationItem) => {
-    const value = minimumRequired
-      .replace(/[^0-9.]/g, "")
-      .replace(/(\..*)\./g, "$1");
-
-    const newLocationItems = [...locationItems];
-    const index = newLocationItems.findIndex(
-      (item) => item.location.id === locationItem.location.id
-    );
-
-    newLocationItems[index].minimumRequired = value;
-
-    setLocationItems(newLocationItems);
-  };
-
-  const setLocationItemAlertAt = (alertAt, locationItem) => {
-    const value = alertAt.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
-
-    const newLocationItems = [...locationItems];
-    const index = newLocationItems.findIndex(
-      (item) => item.location.id === locationItem.location.id
-    );
-
-    newLocationItems[index].alertAt = value;
-
-    setLocationItems(newLocationItems);
-  };
-
   const updateItem = async () => {
     if (itemName.length === 0) {
       alert("Please enter an item name.");
@@ -568,6 +516,30 @@ const ItemDetails = () => {
       setLocationItems(newLocationItems);
     } catch (err) {
       toast.error("Unable to update location item status");
+    }
+  };
+
+  const handleAdjustLocationItemQuantity = async (quantity) => {
+    const request = {
+      action: "adjust",
+      quantity,
+    };
+
+    try {
+      await api.updateLocationItem(locationItemSelected.id, request);
+      toast.success("Location Item Updated!");
+      handleToggleAdjustItemModal();
+
+      const newLocationItems = [...locationItems];
+      const index = newLocationItems.findIndex(
+        (locationItem) => locationItem.id === locationItemSelected.id
+      );
+
+      newLocationItems[index].quantity = quantity;
+
+      setLocationItems(newLocationItems);
+    } catch (err) {
+      toast.error("Unable to adjust quantity");
     }
   };
 
@@ -1137,6 +1109,9 @@ const ItemDetails = () => {
                       </div>
                       <div className="mt-3">
                         <button
+                          onClick={() =>
+                            handleToggleAdjustItemModal(locationItem)
+                          }
                           className="w-full relative flex items-center justify-center rounded-md 
                                                     border border-transparent bg-gray-100 px-8 py-2 text-sm
                                                     font-medium text-gray-900 hover:bg-gray-200"
@@ -1371,6 +1346,16 @@ const ItemDetails = () => {
           updateItemStatus={handleUpdateLocationItemStatus}
           quantityToDisplay={locationItemSelected?.quantity}
           locationSelected={locationItemSelected?.location}
+        />
+      )}
+
+      {isAdjustItemModalOpen && (
+        <AdjustItemModal
+          isOpen={isAdjustItemModalOpen}
+          handleClose={handleToggleAdjustItemModal}
+          quantityToDisplay={locationItemSelected?.quantity}
+          locationSelected={locationItemSelected?.location}
+          adjustItemQuantity={handleAdjustLocationItemQuantity}
         />
       )}
     </AnimatedPage>
