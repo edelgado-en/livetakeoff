@@ -1,22 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, Fragment } from "react";
-import {
-  ChevronRightIcon,
-  PlusIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  PhotographIcon,
-} from "@heroicons/react/outline";
-import {
-  Listbox,
-  Transition,
-  Menu,
-  Popover,
-  Disclosure,
-  Dialog,
-} from "@headlessui/react";
-import { useAppSelector } from "../../app/hooks";
-import { selectUser } from "../userProfile/userSlice";
+import { CheckIcon, PhotographIcon } from "@heroicons/react/outline";
+import { Listbox, Transition, Menu, Dialog } from "@headlessui/react";
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import * as api from "./apiService";
@@ -27,26 +12,10 @@ import ConfirmItemModal from "./ConfirmItemModal";
 import AdjustItemModal from "./AdjustItemModal";
 import MoveItemModal from "./MoveItemModal";
 
-import { toast } from "react-toastify";
+import LocationItemListing from "./LocationItemListing";
+import ItemListing from "./ItemListing";
 
-const EllipsisVerticalIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-6 h-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-      />
-    </svg>
-  );
-};
+import { toast } from "react-toastify";
 
 const ChevronUpDownIcon = () => {
   return (
@@ -172,7 +141,9 @@ const availableStatusOptions = [
 const InventoryList = () => {
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
+  const [locationItems, setLocationItems] = useState([]);
   const [items, setItems] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
 
@@ -188,7 +159,7 @@ const InventoryList = () => {
 
   const [statusSelected, setStatusSelected] = useState(null);
 
-  const [itemSelected, setItemSelected] = useState(null);
+  const [locationItemSelected, setLocationItemSelected] = useState(null);
 
   const [isGridView, setGridView] = useState(
     JSON.parse(localStorage.getItem("inventoryGridView"))
@@ -318,44 +289,19 @@ const InventoryList = () => {
       setActiveFilters(activeFilters);
 
       try {
-        const { data } = await api.getItems(request, currentPage);
+        if (locationSelected?.id === null) {
+          const { data } = await api.getItems(request, currentPage);
 
-        setTotalItems(data.count);
+          setTotalItems(data.count);
+          setItems(data.results);
+        } else {
+          const { data } = await api.getLocationItems(request, currentPage);
 
-        // set quantityToDisplay in each item. The quantity to display is the quantity of the item in the location selected
-        if (locationSelected) {
-          data.results.forEach((item) => {
-            /* const itemLocation = item.location_items.find(
-              (locationItem) => locationItem.location.id === locationSelected.id
-            ); */
-            let itemLocation = null;
-            let totalItemQuantity = 0;
-            // iterate through item.location_items and sum quantities and find locationItem matching locationSelected.id
-            item.location_items.forEach((locationItem) => {
-              totalItemQuantity += locationItem.quantity;
-              if (locationItem.location.id === locationSelected.id) {
-                itemLocation = locationItem;
-              }
-            });
-
-            if (itemLocation) {
-              item.quantityToDisplay = itemLocation.quantity;
-              item.statusToDisplay = itemLocation.status;
-              item.minimumRequired = itemLocation.minimum_required || 0;
-              item.threshold = itemLocation.threshold || 0;
-            } else {
-              item.quantityToDisplay = null;
-              item.minimumRequired = null;
-              item.threshold = null;
-            }
-
-            item.totalItemQuantity = totalItemQuantity;
-          });
+          setTotalItems(data.count);
+          setLocationItems(data.results);
         }
-
-        setItems(data.results);
       } catch (err) {
-        setItems([]);
+        setLocationItems([]);
         setTotalItems(0);
         toast.error("Unable to get items");
       }
@@ -366,21 +312,21 @@ const InventoryList = () => {
 
   const handleToggleConfirmItemModal = (item) => {
     if (item) {
-      setItemSelected(item);
+      setLocationItemSelected(item);
     }
     setConfirmItemModalOpen(!isConfirmItemModalOpen);
   };
 
   const handleToggleAdjustItemModal = (item) => {
     if (item) {
-      setItemSelected(item);
+      setLocationItemSelected(item);
     }
     setAdjustItemModalOpen(!isAdjustItemModalOpen);
   };
 
   const handleToggleMoveItemModal = (item) => {
     if (item) {
-      setItemSelected(item);
+      setLocationItemSelected(item);
     }
     setMoveItemModalOpen(!isMoveItemModalOpen);
   };
@@ -388,20 +334,15 @@ const InventoryList = () => {
   const moveItem = async (quantity, destinationLocationId) => {
     quantity = parseInt(quantity);
 
-    let location_item_id = null;
     let adjustedQuantity = null;
-    const updatedItems = items.map((item) => {
-      if (item.id === itemSelected.id) {
-        adjustedQuantity = item.quantityToDisplay - quantity;
-        item.quantityToDisplay = adjustedQuantity;
-        item.statusToDisplay = "U";
-
-        location_item_id = item.location_items.find(
-          (locationItem) => locationItem.location.id === locationSelected.id
-        ).id;
+    const updatedItems = locationItems.map((locationItem) => {
+      if (locationItem.id === locationItemSelected.id) {
+        adjustedQuantity = locationItem.quantity - quantity;
+        locationItem.quantity = adjustedQuantity;
+        locationItem.status = "U";
       }
 
-      return item;
+      return locationItem;
     });
 
     const request = {
@@ -412,11 +353,11 @@ const InventoryList = () => {
     };
 
     try {
-      await api.updateLocationItem(location_item_id, request);
+      await api.updateLocationItem(locationItemSelected.id, request);
 
       setMoveItemModalOpen(false);
-      setItems(updatedItems);
-      setItemSelected(null);
+      setLocationItems(updatedItems);
+      setLocationItemSelected(null);
 
       toast.success("Item moved!");
     } catch (err) {
@@ -425,31 +366,27 @@ const InventoryList = () => {
   };
 
   const adjustItemQuantity = async (quantity) => {
-    let location_item_id = null;
-    const updatedItems = items.map((item) => {
-      if (item.id === itemSelected.id) {
-        item.quantityToDisplay = quantity;
-        item.statusToDisplay = "U";
-
-        location_item_id = item.location_items.find(
-          (locationItem) => locationItem.location.id === locationSelected.id
-        ).id;
-      }
-
-      return item;
-    });
-
     const request = {
       action: "adjust",
       quantity,
     };
 
     try {
-      await api.updateLocationItem(location_item_id, request);
+      await api.updateLocationItem(locationItemSelected.id, request);
 
       setAdjustItemModalOpen(false);
-      setItems(updatedItems);
-      setItemSelected(null);
+
+      const updatedItems = locationItems.map((locationItem) => {
+        if (locationItem.id === locationItemSelected.id) {
+          locationItem.quantity = quantity;
+          locationItem.status = "U";
+        }
+
+        return locationItem;
+      });
+
+      setLocationItems(updatedItems);
+      setLocationItemSelected(null);
 
       toast.success("Item adjusted!");
     } catch (err) {
@@ -458,29 +395,25 @@ const InventoryList = () => {
   };
 
   const updateItemStatus = async (status) => {
-    let location_item_id = null;
-    const updatedItems = items.map((item) => {
-      if (item.id === itemSelected.id) {
-        item.statusToDisplay = status;
-
-        location_item_id = item.location_items.find(
-          (locationItem) => locationItem.location.id === locationSelected.id
-        ).id;
-      }
-
-      return item;
-    });
-
     const request = {
       action: "confirm",
     };
 
     try {
-      await api.updateLocationItem(location_item_id, request);
+      await api.updateLocationItem(locationItemSelected.id, request);
 
       setConfirmItemModalOpen(false);
-      setItems(updatedItems);
-      setItemSelected(null);
+
+      const updatedItems = locationItems.map((locationItem) => {
+        if (locationItem.id === locationItemSelected.id) {
+          locationItem.status = status;
+        }
+
+        return locationItem;
+      });
+
+      setLocationItems(updatedItems);
+      setLocationItemSelected(null);
 
       toast.success("Item confirmed!");
     } catch (err) {
@@ -966,355 +899,49 @@ const InventoryList = () => {
 
           {loading && <Loader />}
 
-          {!loading && items.length === 0 && (
-            <div className=" text-gray-500 mt-32 m-auto w-96 text-center pb-20">
-              <div className="font-semibold text-gray-700">No items found.</div>
-              {locations.length > 0 && (
-                <p className=" text-gray-500 mt-2">
-                  We can’t find anything with those filters at the moment, try
-                  searching something else.
-                </p>
-              )}
-              {locations.length === 0 && (
-                <p className=" text-gray-500 mt-2">
-                  You don't have any locations available. Contact your
-                  administrator to setup your locations.
-                </p>
-              )}
-            </div>
-          )}
-
-          {!loading && items.length > 0 && (
-            <div className="bg-white shadow sm:rounded-md mb-4">
-              {!isGridView && (
-                <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6 px-1">
-                  {items.map((item) => (
-                    <div key={item.id} className="group relative pr-2 pb-4">
-                      {!currentUser.isProjectManager && (
-                        <Link
-                          to={`/inventory/${item.id}/details`}
-                          className="flex-shrink-0 cursor-pointer"
-                        >
-                          {item.photo && (
-                            <img
-                              src={item.photo}
-                              alt={item.name}
-                              className="h-60 rounded-lg"
-                            />
-                          )}
-
-                          {!item.photo && (
-                            <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
-                          )}
-                        </Link>
-                      )}
-
-                      {currentUser.isProjectManager && (
-                        <div className="flex-shrink-0 cursor-pointer">
-                          {item.photo && (
-                            <img
-                              src={item.photo}
-                              alt={item.name}
-                              className="h-60 rounded-lg"
-                            />
-                          )}
-
-                          {!item.photo && (
-                            <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
-                          )}
-                        </div>
-                      )}
-
-                      <div className="mt-1 flex justify-between">
-                        <div className="flex gap-1">
-                          <div
-                            className={`flex-none rounded-full ${
-                              item.statusToDisplay === "C"
-                                ? "bg-green-400/10 p-1 text-green-400"
-                                : "bg-red-400/10 p-1 text-red-400"
-                            }`}
-                          >
-                            <div className="h-2 w-2 rounded-full bg-current" />
-                          </div>
-                          <h3
-                            className="text-sm text-gray-900 font-medium truncate"
-                            style={{ maxWidth: "170px" }}
-                          >
-                            {item.name}
-                          </h3>
-                        </div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {locationSelected && locationSelected.id !== null
-                            ? item.quantityToDisplay
-                            : item.totalItemQuantity}
-                        </p>
-                      </div>
-                      {locationSelected && locationSelected.id !== null && (
-                        <>
-                          {thresholdMet && (
-                            <div className="flex justify-between text-gray-500 italic text-sm mt-1">
-                              <div>Threshold</div>
-                              <div>{item.threshold}</div>
-                            </div>
-                          )}
-                          {minimumRequiredMet && (
-                            <div className="flex justify-between text-gray-500 italic text-sm mt-1">
-                              <div>Minimum Required</div>
-                              <div>{item.minimumRequired}</div>
-                            </div>
-                          )}
-                        </>
-                      )}
-                      {!locationSelected ||
-                        (locationSelected.id === null && (
-                          <div className="mt-1 text-gray-500 text-sm">
-                            Found in{" "}
-                            <span className="font-semibold">
-                              {item.location_items.length}
-                            </span>{" "}
-                            location(s)
-                          </div>
-                        ))}
-                      <div className="mt-2 text-sm text-gray-500 flex justify-between gap-2 italic">
-                        <div>
-                          <span>{item.area === "I" && "Interior"}</span>
-                          <span>{item.area === "E" && "Exterior"}</span>
-                          <span>
-                            {item.area === "B" && "Interior and Exterior"}
-                          </span>
-                        </div>
-                        <div>
-                          <span>{item.area === "O" && "Office"}</span>
-                          <span>{item.measure_by === "U" && "Unit"}</span>
-                          <span>{item.measure_by === "G" && "Gallons"}</span>
-                          <span>{item.measure_by === "B" && "Bottle"}</span>
-                          <span>{item.measure_by === "O" && "Box"}</span>
-                          <span>{item.measure_by === "L" && "Lb"}</span>
-                          <span>{item.measure_by === "J" && "Jar"}</span>
-                          <span>{item.measure_by === "T" && "Other"}</span>
-                        </div>
-                      </div>
-                      {locationSelected && locationSelected.id !== null && (
-                        <>
-                          <div className="mt-3">
-                            <button
-                              disabled={
-                                item.quantityToDisplay === 0 ||
-                                locations.length === 1
-                              }
-                              onClick={() => handleToggleMoveItemModal(item)}
-                              className="w-full relative flex items-center justify-center rounded-md 
-                                                border border-transparent bg-blue-500 px-8 py-2 text-sm
-                                                font-medium text-white hover:bg-blue-600"
-                            >
-                              Move
-                            </button>
-                          </div>
-                          <div className="mt-3">
-                            <button
-                              onClick={() => handleToggleAdjustItemModal(item)}
-                              className="w-full relative flex items-center justify-center rounded-md 
-                                                border border-transparent bg-gray-100 px-8 py-2 text-sm
-                                                font-medium text-gray-900 hover:bg-gray-200"
-                            >
-                              Adjust
-                            </button>
-                          </div>
-                          <div className="mt-3">
-                            <button
-                              onClick={() => handleToggleConfirmItemModal(item)}
-                              disabled={item.statusToDisplay === "C"}
-                              className="w-full relative flex items-center justify-center rounded-md 
-                                                border border-transparent bg-gray-100 px-8 py-2 text-sm
-                                                font-medium text-gray-900 hover:bg-gray-200"
-                            >
-                              Confirm
-                            </button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  ))}
+          {!loading &&
+            ((locationItems.length === 0 && locationSelected?.id !== null) ||
+              (items.length === 0 && locationSelected?.id === null)) && (
+              <div className=" text-gray-500 mt-32 m-auto w-96 text-center pb-20">
+                <div className="font-semibold text-gray-700">
+                  No items found.
                 </div>
-              )}
+                {locations.length > 0 && (
+                  <p className=" text-gray-500 mt-2">
+                    We can’t find anything with those filters at the moment, try
+                    searching something else.
+                  </p>
+                )}
+                {locations.length === 0 && (
+                  <p className=" text-gray-500 mt-2">
+                    You don't have any locations available. Contact your
+                    administrator to setup your locations.
+                  </p>
+                )}
+              </div>
+            )}
 
-              {isGridView && (
-                <ul className="mt-1 divide-y divide-gray-200 border-t border-gray-200 sm:mt-0 sm:border-t-0">
-                  {items.map((item) => (
-                    <li key={item.id}>
-                      <div className="group block hover:bg-gray-50">
-                        <div className="flex items-center pr-4 pl-1 py-1">
-                          <div className="flex min-w-0 flex-1 items-center">
-                            {!currentUser.isProjectManager && (
-                              <Link
-                                to={`/inventory/${item.id}/details`}
-                                className="flex-shrink-0 w-20"
-                              >
-                                <img
-                                  className="h-20 rounded-md group-hover:opacity-75"
-                                  src={item.photo}
-                                  alt=""
-                                />
-                              </Link>
-                            )}
-                            {currentUser.isProjectManager && (
-                              <div className="flex-shrink-0 w-20">
-                                <img
-                                  className="h-20 rounded-md group-hover:opacity-75"
-                                  src={item.photo}
-                                  alt=""
-                                />
-                              </div>
-                            )}
+          {!loading &&
+            locationItems.length > 0 &&
+            locationSelected?.id !== null && (
+              <LocationItemListing
+                isGridView={isGridView}
+                locationItems={locationItems}
+                currentUser={currentUser}
+                thresholdMet={thresholdMet}
+                minimumRequiredMet={minimumRequiredMet}
+                handleToggleMoveItemModal={handleToggleMoveItemModal}
+                handleToggleAdjustItemModal={handleToggleAdjustItemModal}
+                handleToggleConfirmItemModal={handleToggleConfirmItemModal}
+              />
+            )}
 
-                            <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                              <div className="flex gap-4 justify-between">
-                                <div className="text-sm font-medium">
-                                  <div className="flex gap-1">
-                                    <div
-                                      className={`flex-none rounded-full ${
-                                        item.statusToDisplay === "C"
-                                          ? "bg-green-400/10 p-1 text-green-400"
-                                          : "bg-red-400/10 p-1 text-red-400"
-                                      }`}
-                                    >
-                                      <div className="h-2 w-2 rounded-full bg-current" />
-                                    </div>
-                                    <div>{item.name}</div>
-                                  </div>
-
-                                  <div className="mt-1 italic text-gray-500 text-sm">
-                                    <span>
-                                      {item.area === "I" && "Interior"}
-                                    </span>
-                                    <span>
-                                      {item.area === "E" && "Exterior"}
-                                    </span>
-                                    <span>
-                                      {item.area === "B" &&
-                                        "Interior and Exterior"}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div>
-                            {locationSelected &&
-                              locationSelected.id !== null && (
-                                <>
-                                  <div className="flex gap-4">
-                                    <div className="font-medium text-right">
-                                      {item.quantityToDisplay}
-                                      {minimumRequiredMet && (
-                                        <div className=" text-gray-500 italic font-normal text-sm">
-                                          Min Required: {item.minimumRequired}
-                                        </div>
-                                      )}
-                                      {thresholdMet && (
-                                        <div className=" text-gray-500 italic font-normal text-sm">
-                                          Threshold: {item.threshold}
-                                        </div>
-                                      )}
-                                    </div>
-                                    <Menu as="div" className="relative ml-auto">
-                                      <Menu.Button
-                                        className="-m-2.5 block p-2.5 text-gray-400
-                                                                 hover:text-gray-500"
-                                      >
-                                        <span className="sr-only">
-                                          Open options
-                                        </span>
-                                        <EllipsisVerticalIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </Menu.Button>
-                                      <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-100"
-                                        enterFrom="transform opacity-0 scale-95"
-                                        enterTo="transform opacity-100 scale-100"
-                                        leave="transition ease-in duration-75"
-                                        leaveFrom="transform opacity-100 scale-100"
-                                        leaveTo="transform opacity-0 scale-95"
-                                      >
-                                        <Menu.Items
-                                          className="absolute right-0 z-10 mt-0.5 w-32 origin-top-right
-                                                             rounded-md bg-white py-2 shadow-lg ring-1
-                                                              ring-gray-900/5 focus:outline-none"
-                                        >
-                                          <Menu.Item>
-                                            {({ active }) => (
-                                              <button
-                                                onClick={() =>
-                                                  handleToggleMoveItemModal(
-                                                    item
-                                                  )
-                                                }
-                                                className={classNames(
-                                                  active ? "bg-gray-50" : "",
-                                                  "block px-3 py-1 text-sm leading-6 text-gray-900"
-                                                )}
-                                              >
-                                                Move
-                                              </button>
-                                            )}
-                                          </Menu.Item>
-                                          <Menu.Item>
-                                            {({ active }) => (
-                                              <button
-                                                onClick={() =>
-                                                  handleToggleAdjustItemModal(
-                                                    item
-                                                  )
-                                                }
-                                                className={classNames(
-                                                  active ? "bg-gray-50" : "",
-                                                  "block px-3 py-1 text-sm leading-6 text-gray-900"
-                                                )}
-                                              >
-                                                Adjust
-                                              </button>
-                                            )}
-                                          </Menu.Item>
-                                          <Menu.Item>
-                                            {({ active }) => (
-                                              <button
-                                                onClick={() =>
-                                                  handleToggleConfirmItemModal(
-                                                    item
-                                                  )
-                                                }
-                                                className={classNames(
-                                                  active ? "bg-gray-50" : "",
-                                                  "block px-3 py-1 text-sm leading-6 text-gray-900"
-                                                )}
-                                              >
-                                                Confirm
-                                              </button>
-                                            )}
-                                          </Menu.Item>
-                                        </Menu.Items>
-                                      </Transition>
-                                    </Menu>
-                                  </div>
-                                </>
-                              )}
-                            {!locationSelected ||
-                              (locationSelected.id === null && (
-                                <div className="font-medium">
-                                  {item.totalItemQuantity}
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+          {!loading && items.length > 0 && locationSelected?.id === null && (
+            <ItemListing
+              isGridView={isGridView}
+              items={items}
+              currentUser={currentUser}
+            />
           )}
 
           {!loading && totalItems > 100 && (
@@ -1467,8 +1094,8 @@ const InventoryList = () => {
         {isConfirmItemModalOpen && (
           <ConfirmItemModal
             isOpen={isConfirmItemModalOpen}
-            itemName={itemSelected?.name}
-            quantityToDisplay={itemSelected?.quantityToDisplay}
+            itemName={locationItemSelected?.item.name}
+            quantityToDisplay={locationItemSelected?.quantity}
             handleClose={handleToggleConfirmItemModal}
             updateItemStatus={updateItemStatus}
             locationSelected={locationSelected}
@@ -1478,8 +1105,8 @@ const InventoryList = () => {
         {isAdjustItemModalOpen && (
           <AdjustItemModal
             isOpen={isAdjustItemModalOpen}
-            itemName={itemSelected?.name}
-            quantityToDisplay={itemSelected?.quantityToDisplay}
+            itemName={locationItemSelected?.item.name}
+            quantityToDisplay={locationItemSelected?.quantity}
             handleClose={handleToggleAdjustItemModal}
             adjustItemQuantity={adjustItemQuantity}
             locationSelected={locationSelected}
@@ -1489,8 +1116,8 @@ const InventoryList = () => {
         {isMoveItemModalOpen && (
           <MoveItemModal
             isOpen={isMoveItemModalOpen}
-            itemName={itemSelected?.name}
-            quantityToDisplay={itemSelected?.quantityToDisplay}
+            itemName={locationItemSelected?.item.name}
+            quantityToDisplay={locationItemSelected?.quantity}
             handleClose={handleToggleMoveItemModal}
             moveItem={moveItem}
             locationSelected={locationSelected}
