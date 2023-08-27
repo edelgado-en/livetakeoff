@@ -49,19 +49,21 @@ const ConfirmItemModal = ({
 
             <div className="mt-2">
               <p className="text-lg text-gray-500 py-3">
-                Are you sure you want to confirm this item?
+                Are you sure you want to confirm?
               </p>
               <div className="font-semibold text-center m-auto flex flex-col justify-center gap-4">
                 <table>
                   <tbody>
-                    <tr className="border-b border-gray-100">
-                      <td className="px-0 py-3 text-right">
-                        <div className="text-gray-500">Item</div>
-                      </td>
-                      <td className="pl-5 py-3 text-left text-gray-700 table-cell">
-                        {itemName}
-                      </td>
-                    </tr>
+                    {itemName && (
+                      <tr className="border-b border-gray-100">
+                        <td className="px-0 py-3 text-right">
+                          <div className="text-gray-500">Item</div>
+                        </td>
+                        <td className="pl-5 py-3 text-left text-gray-700 table-cell">
+                          {itemName}
+                        </td>
+                      </tr>
+                    )}
                     <tr className="border-b border-gray-100">
                       <td className="px-0 py-3 text-right">
                         <div className="text-gray-500">Quantity</div>

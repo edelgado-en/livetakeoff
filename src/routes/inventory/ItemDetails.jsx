@@ -158,14 +158,26 @@ const ItemDetails = () => {
   };
 
   const handleToggleConfirmItemModal = (locationItem) => {
+    if (locationItem) {
+      setLocationItemSelected(locationItem);
+    }
+
     setConfirmItemModalOpen(!isConfirmItemModalOpen);
   };
 
   const handleToggleAdjustItemModal = (locationItem) => {
+    if (locationItem) {
+      setLocationItemSelected(locationItem);
+    }
+
     setAdjustItemModalOpen(!isAdjustItemModalOpen);
   };
 
   const handleToggleMoveItemModal = (locationItem) => {
+    if (locationItem) {
+      setLocationItemSelected(locationItem);
+    }
+
     setMoveItemModalOpen(!isMoveItemModalOpen);
   };
 
@@ -533,6 +545,29 @@ const ItemDetails = () => {
       setLocationItems(newLocationItems);
     } catch (err) {
       toast.error("Unable to delete location item");
+    }
+  };
+
+  const handleUpdateLocationItemStatus = async (status) => {
+    const request = {
+      action: "confirm",
+    };
+
+    try {
+      await api.updateLocationItem(locationItemSelected.id, request);
+      toast.success("Location Item Updated!");
+      handleToggleConfirmItemModal();
+
+      const newLocationItems = [...locationItems];
+      const index = newLocationItems.findIndex(
+        (locationItem) => locationItem.id === locationItemSelected.id
+      );
+
+      newLocationItems[index].status = status;
+
+      setLocationItems(newLocationItems);
+    } catch (err) {
+      toast.error("Unable to update location item status");
     }
   };
 
@@ -1111,6 +1146,10 @@ const ItemDetails = () => {
                       </div>
                       <div className="mt-3">
                         <button
+                          disabled={locationItem.status === "C"}
+                          onClick={() =>
+                            handleToggleConfirmItemModal(locationItem)
+                          }
                           className="w-full relative flex items-center justify-center rounded-md 
                                                     border border-transparent bg-gray-100 px-8 py-2 text-sm
                                                     font-medium text-gray-900 hover:bg-gray-200"
@@ -1291,16 +1330,6 @@ const ItemDetails = () => {
         />
       )}
 
-      {isDeleteLocationItemModalOpen && (
-        <DeleteLocationItemModal
-          isOpen={isDeleteLocationItemModalOpen}
-          handleClose={handleToggleDeleteLocationItemModal}
-          quantityToDisplay={locationItemSelected?.quantity}
-          locationName={locationItemSelected?.location.name}
-          deleteLocationItem={handleDeleteLocationItem}
-        />
-      )}
-
       {isCreateLocationModalOpen && (
         <CreateLocationModal
           isOpen={isCreateLocationModalOpen}
@@ -1322,6 +1351,26 @@ const ItemDetails = () => {
           isOpen={isCreateTagModalOpen}
           handleClose={handleToggleCreateTagModal}
           addTag={handleAddTag}
+        />
+      )}
+
+      {isDeleteLocationItemModalOpen && (
+        <DeleteLocationItemModal
+          isOpen={isDeleteLocationItemModalOpen}
+          handleClose={handleToggleDeleteLocationItemModal}
+          quantityToDisplay={locationItemSelected?.quantity}
+          locationName={locationItemSelected?.location.name}
+          deleteLocationItem={handleDeleteLocationItem}
+        />
+      )}
+
+      {isConfirmItemModalOpen && (
+        <ConfirmItemModal
+          isOpen={isConfirmItemModalOpen}
+          handleClose={handleToggleConfirmItemModal}
+          updateItemStatus={handleUpdateLocationItemStatus}
+          quantityToDisplay={locationItemSelected?.quantity}
+          locationSelected={locationItemSelected?.location}
         />
       )}
     </AnimatedPage>
