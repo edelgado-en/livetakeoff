@@ -75,3 +75,7 @@ export const getInventoryCurrentStats = () => {
 export const getInventoryHistoryStats = (data: any) => {
     return httpService.post('/inventory/history-stats', data)
 }
+
+export const deleteLocationItem = (id:number) => {
+    return httpService.delete(`/inventory/location-items/${id}/`)
+}

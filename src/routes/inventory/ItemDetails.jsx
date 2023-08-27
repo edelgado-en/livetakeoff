@@ -28,6 +28,7 @@ import Pagination from "react-js-pagination";
 import ConfirmItemModal from "./ConfirmItemModal";
 import AdjustItemModal from "./AdjustItemModal";
 import MoveItemModal from "./MoveItemModal";
+import DeleteLocationItemModal from "./DeleteLocationItemModal";
 
 const ChevronUpDownIcon = () => {
   return (
@@ -43,6 +44,25 @@ const ChevronUpDownIcon = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+      />
+    </svg>
+  );
+};
+
+const XMarkIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6 18L18 6M6 6l12 12"
       />
     </svg>
   );
@@ -97,6 +117,10 @@ const ItemDetails = () => {
   const [isConfirmItemModalOpen, setConfirmItemModalOpen] = useState(false);
   const [isAdjustItemModalOpen, setAdjustItemModalOpen] = useState(false);
   const [isMoveItemModalOpen, setMoveItemModalOpen] = useState(false);
+  const [isDeleteLocationItemModalOpen, setDeleteLocationItemModalOpen] =
+    useState(false);
+
+  const [locationItemSelected, setLocationItemSelected] = useState(null);
 
   useEffect(() => {
     getItemFormInfo();
@@ -133,16 +157,24 @@ const ItemDetails = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handleToggleConfirmItemModal = () => {
+  const handleToggleConfirmItemModal = (locationItem) => {
     setConfirmItemModalOpen(!isConfirmItemModalOpen);
   };
 
-  const handleToggleAdjustItemModal = () => {
+  const handleToggleAdjustItemModal = (locationItem) => {
     setAdjustItemModalOpen(!isAdjustItemModalOpen);
   };
 
-  const handleToggleMoveItemModal = () => {
+  const handleToggleMoveItemModal = (locationItem) => {
     setMoveItemModalOpen(!isMoveItemModalOpen);
+  };
+
+  const handleToggleDeleteLocationItemModal = (locationItem) => {
+    if (locationItem) {
+      setLocationItemSelected(locationItem);
+    }
+
+    setDeleteLocationItemModalOpen(!isDeleteLocationItemModalOpen);
   };
 
   const getItemLookup = async () => {
@@ -485,6 +517,22 @@ const ItemDetails = () => {
       navigate(0);
     } catch (error) {
       toast.error("Unable to update photo");
+    }
+  };
+
+  const handleDeleteLocationItem = async () => {
+    try {
+      await api.deleteLocationItem(locationItemSelected.id);
+      toast.success("Location item deleted!");
+      handleToggleDeleteLocationItemModal();
+
+      const newLocationItems = locationItems.filter(
+        (locationItem) => locationItem.id !== locationItemSelected.id
+      );
+
+      setLocationItems(newLocationItems);
+    } catch (err) {
+      toast.error("Unable to delete location item");
     }
   };
 
@@ -995,9 +1043,23 @@ const ItemDetails = () => {
                                rounded-lg border border-gray-200 bg-white"
                   >
                     <div className="flex flex-1 flex-col space-y-2 p-4">
-                      <h3 className="text-sm font-medium text-gray-900">
+                      {/* <h3 className="text-sm font-medium text-gray-900">
                         {locationItem.location?.name}
-                      </h3>
+                      </h3> */}
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-sm font-medium text-gray-900">
+                          {locationItem.location?.name}
+                        </h2>
+                        <button
+                          type="button"
+                          className="-mr-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 border border-gray-400 hover:bg-gray-100"
+                          onClick={() =>
+                            handleToggleDeleteLocationItemModal(locationItem)
+                          }
+                        >
+                          <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      </div>
                       <div>
                         <div className="flex justify-between gap-x-4 py-1">
                           <dt className="text-gray-500">Quantity</dt>
@@ -1226,6 +1288,16 @@ const ItemDetails = () => {
           isOpen={isCreateProviderModalOpen}
           handleClose={handleToggleCreateProviderModal}
           addProvider={handleAddProvider}
+        />
+      )}
+
+      {isDeleteLocationItemModalOpen && (
+        <DeleteLocationItemModal
+          isOpen={isDeleteLocationItemModalOpen}
+          handleClose={handleToggleDeleteLocationItemModal}
+          quantityToDisplay={locationItemSelected?.quantity}
+          locationName={locationItemSelected?.location.name}
+          deleteLocationItem={handleDeleteLocationItem}
         />
       )}
 
