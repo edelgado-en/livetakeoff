@@ -3,6 +3,10 @@ import ModalFrame from "../../components/modal/ModalFrame";
 import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
 
+import { toast } from "react-toastify";
+
+import * as api from "./apiService";
+
 const ChevronUpDownIcon = () => {
   return (
     <svg
@@ -33,21 +37,30 @@ const MoveItemModal = ({
   itemName,
   quantityToDisplay,
   locationSelected,
-  locations,
 }) => {
   const [moveQuantity, setMoveQuantity] = useState("");
   const [destinationLocation, setDestinationLocation] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState([]);
 
   useEffect(() => {
-    let filtered = locations.filter((location) => location.id !== null);
-    //remove locationSelected from filtered
-    filtered = filtered.filter(
-      (location) => location.id !== locationSelected.id
-    );
-
-    setFilteredLocations(filtered);
+    getLocations();
   }, []);
+
+  const getLocations = async () => {
+    try {
+      const { data } = await api.getLocations();
+
+      let filtered = data.results.filter((location) => location.id !== null);
+      //remove locationSelected from filtered
+      filtered = filtered.filter(
+        (location) => location.id !== locationSelected.id
+      );
+
+      setFilteredLocations(filtered);
+    } catch (err) {
+      toast.error("Unable to get locations");
+    }
+  };
 
   const handleSetQuantity = (value) => {
     const v = value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
@@ -187,12 +200,14 @@ const MoveItemModal = ({
                   </Listbox>
                 </div>
               </div>
-              <div className="mt-4">
-                <label className="block text-sm leading-6 text-gray-900 font-semibold">
-                  Item
-                </label>
-                <div className="mt-1">{itemName}</div>
-              </div>
+              {itemName && (
+                <div className="mt-4">
+                  <label className="block text-sm leading-6 text-gray-900 font-semibold">
+                    Item
+                  </label>
+                  <div className="mt-1">{itemName}</div>
+                </div>
+              )}
 
               <div className="w-full border-t border-gray-300 py-2 mt-6"></div>
 

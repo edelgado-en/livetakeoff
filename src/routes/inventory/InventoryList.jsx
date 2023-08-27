@@ -1494,7 +1494,6 @@ const InventoryList = () => {
             handleClose={handleToggleMoveItemModal}
             moveItem={moveItem}
             locationSelected={locationSelected}
-            locations={locations}
           />
         )}
       </div>

@@ -543,6 +543,33 @@ const ItemDetails = () => {
     }
   };
 
+  const handleMoveItem = async (quantity, destinationLocationId) => {
+    quantity = parseInt(quantity);
+    const newLocationItems = [...locationItems];
+    const index = newLocationItems.findIndex(
+      (locationItem) => locationItem.id === locationItemSelected.id
+    );
+
+    const adjustedQuantity = newLocationItems[index].quantity - quantity;
+
+    const request = {
+      action: "move",
+      destinationLocationId,
+      adjustedQuantity,
+      movingQuantity: quantity,
+    };
+
+    try {
+      await api.updateLocationItem(locationItemSelected.id, request);
+      toast.success("Item moved!");
+      handleToggleMoveItemModal();
+
+      navigate(0);
+    } catch (err) {
+      toast.error("Unable to move item");
+    }
+  };
+
   return (
     <AnimatedPage>
       {loading && <Loader />}
@@ -1100,6 +1127,9 @@ const ItemDetails = () => {
                     <div className="px-4 mb-4">
                       <div className="mt-3">
                         <button
+                          onClick={() =>
+                            handleToggleMoveItemModal(locationItem)
+                          }
                           className="w-full relative flex items-center justify-center rounded-md 
                                                     border border-transparent bg-blue-500 px-8 py-2 text-sm
                                                     font-medium text-white hover:bg-blue-600"
@@ -1356,6 +1386,16 @@ const ItemDetails = () => {
           quantityToDisplay={locationItemSelected?.quantity}
           locationSelected={locationItemSelected?.location}
           adjustItemQuantity={handleAdjustLocationItemQuantity}
+        />
+      )}
+
+      {isMoveItemModalOpen && (
+        <MoveItemModal
+          isOpen={isMoveItemModalOpen}
+          handleClose={handleToggleMoveItemModal}
+          quantityToDisplay={locationItemSelected?.quantity}
+          moveItem={handleMoveItem}
+          locationSelected={locationItemSelected?.location}
         />
       )}
     </AnimatedPage>
