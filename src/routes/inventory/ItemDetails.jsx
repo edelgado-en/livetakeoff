@@ -29,6 +29,7 @@ import ConfirmItemModal from "./ConfirmItemModal";
 import AdjustItemModal from "./AdjustItemModal";
 import MoveItemModal from "./MoveItemModal";
 import DeleteLocationItemModal from "./DeleteLocationItemModal";
+import EditItemModal from "./EditItemModal";
 
 const ChevronUpDownIcon = () => {
   return (
@@ -119,6 +120,7 @@ const ItemDetails = () => {
   const [isMoveItemModalOpen, setMoveItemModalOpen] = useState(false);
   const [isDeleteLocationItemModalOpen, setDeleteLocationItemModalOpen] =
     useState(false);
+  const [isEditItemModalOpen, setEditItemModalOpen] = useState(false);
 
   const [locationItemSelected, setLocationItemSelected] = useState(null);
 
@@ -189,6 +191,14 @@ const ItemDetails = () => {
     setDeleteLocationItemModalOpen(!isDeleteLocationItemModalOpen);
   };
 
+  const handleToggleEditItemModal = (locationItem) => {
+    if (locationItem) {
+      setLocationItemSelected(locationItem);
+    }
+
+    setEditItemModalOpen(!isEditItemModalOpen);
+  };
+
   const getItemLookup = async () => {
     if (itemName?.length > 3) {
       try {
@@ -235,18 +245,6 @@ const ItemDetails = () => {
       setAreas(data.areas);
       setLocations(data.locations);
       setBrands(data.brands);
-
-      // iterate through data.locations and create locationItems. A locationItem is ab object containing the location and other values like quantity, minimumRequired, alertAt and brandSelected
-      const locationItems = data.locations.map((location) => {
-        return {
-          location,
-          quantity: "",
-          minimumRequired: "",
-          alertAt: "",
-          brandsSelected: [],
-          groups: location.groups,
-        };
-      });
 
       const response = await api.getItemDetails(itemId);
 
@@ -516,6 +514,32 @@ const ItemDetails = () => {
       setLocationItems(newLocationItems);
     } catch (err) {
       toast.error("Unable to update location item status");
+    }
+  };
+
+  const handleUpdateLocationItem = async (minimumRequired, threshold) => {
+    const request = {
+      action: "update",
+      minimumRequired,
+      threshold,
+    };
+
+    try {
+      await api.updateLocationItem(locationItemSelected.id, request);
+      toast.success("Location Item Updated!");
+      handleToggleEditItemModal();
+
+      const newLocationItems = [...locationItems];
+      const index = newLocationItems.findIndex(
+        (locationItem) => locationItem.id === locationItemSelected.id
+      );
+
+      newLocationItems[index].minimumRequired = minimumRequired;
+      newLocationItems[index].alertAt = threshold;
+
+      setLocationItems(newLocationItems);
+    } catch (err) {
+      toast.error("Unable to update location item");
     }
   };
 
@@ -1164,6 +1188,9 @@ const ItemDetails = () => {
                       </div>
                       <div className="mt-3">
                         <button
+                          onClick={() =>
+                            handleToggleEditItemModal(locationItem)
+                          }
                           className="w-full relative flex items-center justify-center rounded-md 
                                                     border border-transparent bg-gray-100 px-8 py-2 text-sm
                                                     font-medium text-gray-900 hover:bg-gray-200"
@@ -1395,6 +1422,17 @@ const ItemDetails = () => {
           handleClose={handleToggleMoveItemModal}
           quantityToDisplay={locationItemSelected?.quantity}
           moveItem={handleMoveItem}
+          locationSelected={locationItemSelected?.location}
+        />
+      )}
+
+      {isEditItemModalOpen && (
+        <EditItemModal
+          isOpen={isEditItemModalOpen}
+          handleClose={handleToggleEditItemModal}
+          updateLocationItem={handleUpdateLocationItem}
+          minimumRequiredToDisplay={locationItemSelected?.minimumRequired}
+          thresholdToDisplay={locationItemSelected?.alertAt}
           locationSelected={locationItemSelected?.location}
         />
       )}
