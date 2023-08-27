@@ -52,6 +52,17 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
                     {item.name}
                   </h3>
                 </div>
+                <p className="text-sm font-medium text-gray-900">
+                  {item.total_quantity}
+                </p>
+              </div>
+
+              <div className="mt-2 text-sm text-gray-500 flex italic">
+                Found in{" "}
+                <span className="font-semibold mx-1">
+                  {item.total_locations_found}
+                </span>{" "}
+                locations
               </div>
 
               <div className="mt-2 text-sm text-gray-500 flex justify-between gap-2 italic">
@@ -59,9 +70,9 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
                   <span>{item.area === "I" && "Interior"}</span>
                   <span>{item.area === "E" && "Exterior"}</span>
                   <span>{item.area === "B" && "Interior and Exterior"}</span>
+                  <span>{item.area === "O" && "Office"}</span>
                 </div>
                 <div>
-                  <span>{item.area === "O" && "Office"}</span>
                   <span>{item.measure_by === "U" && "Unit"}</span>
                   <span>{item.measure_by === "G" && "Gallons"}</span>
                   <span>{item.measure_by === "B" && "Bottle"}</span>
@@ -124,7 +135,11 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
                     </div>
                   </div>
                   <div>
-                    <div className="flex gap-4"></div>
+                    <div className="flex gap-4">
+                      <div className="font-medium text-right">
+                        {item.total_quantity}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
