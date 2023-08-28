@@ -94,11 +94,9 @@ const CreateItem = () => {
   }, [itemName]);
 
   const getItemLookup = async () => {
-    if (itemName?.length > 3) {
+    if (itemName?.length > 2) {
       try {
         const { data } = await api.getItemLookup(itemName);
-
-        console.log(data.id);
 
         if (data.id > 0) {
           setItemAlreadyExistsId(data.id);
@@ -457,9 +455,14 @@ const CreateItem = () => {
                                 focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
                   {itemAlreadyExistsId && (
-                    <p className="text-red-500 text-sm font-semibold mt-2">
-                      Item already exists. Check it out here:{" "}
-                      {itemAlreadyExistsId}
+                    <p className="text-gray-500 text-md mt-2">
+                      Item already exists. Check it out
+                      <Link
+                        to={`/inventory/${itemAlreadyExistsId}/details`}
+                        className="text-blue-500 font-semibold ml-1"
+                      >
+                        here
+                      </Link>
                     </p>
                   )}
                 </div>
