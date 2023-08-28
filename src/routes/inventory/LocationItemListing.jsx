@@ -120,9 +120,9 @@ const LocationItemListing = ({
                   <span>
                     {locationItem.item.area === "B" && "Interior and Exterior"}
                   </span>
+                  <span>{locationItem.item.area === "O" && "Office"}</span>
                 </div>
                 <div>
-                  <span>{locationItem.item.area === "O" && "Office"}</span>
                   <span>{locationItem.item.measure_by === "U" && "Unit"}</span>
                   <span>
                     {locationItem.item.measure_by === "G" && "Gallons"}
