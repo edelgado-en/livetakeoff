@@ -195,7 +195,7 @@ const JobReview = () => {
                                 </button>
                             )}
 
-                            <button
+                            {/* <button
                                 type="button"
                                 disabled={downloadLoading}
                                 onClick={() => getJobCloseout()}
@@ -206,7 +206,7 @@ const JobReview = () => {
                                             focus:ring-offset-2 sm:w-auto"
                             >
                                 {downloadLoading ? 'generating...' : 'Closeout'}
-                            </button> 
+                            </button>  */}
                             </>   
                         )}
                         
