@@ -24,6 +24,10 @@ export const getLocationItems = (data: any, currentPage: Number) => {
     return httpService.post(`/inventory/location-items/list?page=${currentPage}&size=${100}`, data);
 }
 
+export const getLocationItemsTotalQuantity = (data: any) => {
+    return httpService.post('/inventory/location-items/total-quantity', data);
+}
+
 export const getItemActivity = (data: any, currentPage: Number) => {
     return httpService.post(`/inventory/location-items/activity?page=${currentPage}&size=${100}`, data);
 }

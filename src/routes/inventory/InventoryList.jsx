@@ -144,6 +144,9 @@ const InventoryList = () => {
   const [locationItems, setLocationItems] = useState([]);
   const [items, setItems] = useState([]);
 
+  const [totalLocationItemsQuantity, setTotalLocationItemsQuantity] =
+    useState(0);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
 
@@ -307,6 +310,11 @@ const InventoryList = () => {
       }
 
       setLoading(false);
+
+      try {
+        const response = await api.getLocationItemsTotalQuantity(request);
+        setTotalLocationItemsQuantity(response.data.totalQuantity || 0);
+      } catch (err) {}
     }
   };
 
@@ -823,7 +831,11 @@ const InventoryList = () => {
           </div>
 
           <div className="flex justify-between gap-4 my-3">
-            <div className="mt-3">Total Items: {totalItems}</div>
+            <div className="mt-3 flex gap-2">
+              <div>Total Items: {totalItems}</div>
+              <div className="h-4 w-px bg-gray-300 relative top-1"></div>
+              <div>Total Quantity: {totalLocationItemsQuantity}</div>
+            </div>
             <div className="ml-6 items-center rounded-lg bg-gray-100 p-0.5 flex">
               <button
                 onClick={() => handleGridView(true)}
