@@ -817,7 +817,7 @@ const InventoryList = () => {
                     placeholder="Search by name"
                   />
                 </div>
-                <div className="xl:hidden lg:hidden md:hidden">
+                <div className="xl:hidden lg:hidden">
                   <button
                     type="button"
                     className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 relative top-2 mr-2"
@@ -840,7 +840,7 @@ const InventoryList = () => {
               <button
                 onClick={() => handleGridView(true)}
                 type="button"
-                className="rounded-md p-1.5 text-gray-500 hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                className="rounded-md p-1.5 text-gray-500 hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
               >
                 <Bars4Icon className="h-5 w-5" aria-hidden="true" />
                 <span className="sr-only">Use list view</span>
@@ -848,7 +848,7 @@ const InventoryList = () => {
               <button
                 onClick={() => handleGridView(false)}
                 type="button"
-                className="ml-0.5 rounded-md bg-white p-1.5 text-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                className="ml-0.5 rounded-md bg-white p-1.5 text-gray-500 shadow-sm focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500"
               >
                 <SquaresIcon className="h-5 w-5" aria-hidden="true" />
                 <span className="sr-only">Use grid view</span>
