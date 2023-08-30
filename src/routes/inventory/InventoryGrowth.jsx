@@ -797,7 +797,7 @@ const InventoryGrowth = () => {
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
                         {stat.total_quantity}
                       </td>
-                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold">
+                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold bg-green-100">
                         ${stat.total_cost}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
@@ -818,7 +818,7 @@ const InventoryGrowth = () => {
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                         {stat.total_subtractions}
                       </td>
-                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold">
+                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold bg-rose-50">
                         ${stat.total_expense}
                       </td>
                       <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-0">
