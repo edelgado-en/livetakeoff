@@ -387,7 +387,7 @@ const InventoryList = () => {
       const updatedItems = locationItems.map((locationItem) => {
         if (locationItem.id === locationItemSelected.id) {
           locationItem.quantity = quantity;
-          locationItem.status = "U";
+          locationItem.status = "C";
         }
 
         return locationItem;

@@ -68,7 +68,8 @@ const dashboards = [
   },
   {
     name: "Inventory Stats",
-    description: "Checkout your inventory current statistics and across time.",
+    description:
+      "Never lose track of what's in stock with accurate inventory tracking",
     href: "/inventory/stats/current",
     icon: ArchiveIcon,
   },
