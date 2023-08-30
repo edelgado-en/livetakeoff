@@ -373,20 +373,6 @@ const ItemDetails = () => {
       return;
     }
 
-    const atLeastOneLocationItemHasQuantity = locationItems.some(
-      (locationItem) => locationItem.quantity > 0
-    );
-
-    if (!atLeastOneLocationItemHasQuantity) {
-      alert("Please enter a quantity bigger than 0 for at least one location.");
-      return;
-    }
-
-    //only include the locationItems that have a quantity bigger than 0
-    const locationItemsWithQuantity = locationItems.filter(
-      (locationItem) => locationItem.quantity > 0
-    );
-
     const selectedTagIds = tags
       .filter((tag) => tag.selected)
       .map((tag) => tag.id);
@@ -403,7 +389,6 @@ const ItemDetails = () => {
       costPerUnit: costPerUnit,
       tagIds: selectedTagIds,
       providerIds: selectedProviderIds,
-      locationItems: locationItemsWithQuantity,
     };
 
     setLoading(true);
@@ -560,6 +545,7 @@ const ItemDetails = () => {
       );
 
       newLocationItems[index].quantity = quantity;
+      newLocationItems[index].status = "C";
 
       setLocationItems(newLocationItems);
     } catch (err) {
