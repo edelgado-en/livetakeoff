@@ -215,7 +215,12 @@ const LocationItemListing = ({
                             >
                               <div className="h-2 w-2 rounded-full bg-current" />
                             </div>
-                            <div>{locationItem.item.name}</div>
+                            <h3
+                              className="text-sm text-gray-900 font-medium truncate"
+                              style={{ maxWidth: "170px" }}
+                            >
+                              {locationItem?.item.name}
+                            </h3>
                           </div>
 
                           <div className="mt-1 italic text-gray-500 text-sm font-normal">

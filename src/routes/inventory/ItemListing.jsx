@@ -120,7 +120,12 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
                       <div className="flex gap-4 justify-between">
                         <div className="text-sm font-medium">
                           <div className="flex gap-1">
-                            <div>{item.name}</div>
+                            <h3
+                              className="text-sm text-gray-900 font-medium truncate"
+                              style={{ maxWidth: "170px" }}
+                            >
+                              {item.name}
+                            </h3>
                           </div>
 
                           <div className="mt-1 italic text-gray-500 text-sm font-normal">
