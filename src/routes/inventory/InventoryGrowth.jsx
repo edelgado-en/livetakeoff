@@ -735,7 +735,7 @@ const InventoryGrowth = () => {
                       scope="col"
                       className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Cost
+                      Value
                     </th>
                     <th
                       scope="col"
@@ -753,7 +753,7 @@ const InventoryGrowth = () => {
                       scope="col"
                       className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Moved Cost
+                      Moved Value
                     </th>
                     <th
                       scope="col"
@@ -765,7 +765,7 @@ const InventoryGrowth = () => {
                       scope="col"
                       className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Added Cost
+                      Added Value
                     </th>
                     <th
                       scope="col"
@@ -798,7 +798,7 @@ const InventoryGrowth = () => {
                         {stat.total_quantity}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold">
-                        {stat.total_cost}
+                        ${stat.total_cost}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                         {stat.total_moving_items}
@@ -807,19 +807,19 @@ const InventoryGrowth = () => {
                         {stat.total_moving_quantity}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                        {stat.total_moving_cost}
+                        ${stat.total_moving_cost}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                         {stat.total_additions}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                        {stat.total_add_cost}
+                        ${stat.total_add_cost}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                         {stat.total_subtractions}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold">
-                        {stat.total_expense}
+                        ${stat.total_expense}
                       </td>
                       <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-0">
                         <ChevronRightIcon className="h-5 w-5 text-gray-400 cursor-pointer" />
