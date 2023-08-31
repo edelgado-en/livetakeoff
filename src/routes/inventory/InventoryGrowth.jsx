@@ -55,7 +55,6 @@ const timeBreakdowns = [
   { id: 1, name: "Daily" },
   { id: 2, name: "Weekly" },
   { id: 3, name: "Monthly" },
-  { id: 4, name: "Yearly" },
 ];
 
 const InventoryGrowth = () => {
@@ -64,10 +63,11 @@ const InventoryGrowth = () => {
   const [locationSelected, setLocationSelected] = useState(null);
   const [yearSelected, setYearSelected] = useState(years[0]);
   const [timeBreakdownSelected, setTimeBreakdownSelected] = useState(
-    timeBreakdowns[0]
+    timeBreakdowns[2]
   );
 
   const [dailyStats, setDailyStats] = useState([]);
+  const [generalStats, setGeneralStats] = useState([]);
 
   const [lineGraphData, setLineGraphData] = useState([]);
 
@@ -99,7 +99,7 @@ const InventoryGrowth = () => {
     const request = {
       year: yearSelected.id,
       location_id: locationSelected?.id,
-      time_breakdown: timeBreakdownSelected.name,
+      date_grouping: timeBreakdownSelected.name,
     };
 
     setLoading(true);
@@ -107,13 +107,16 @@ const InventoryGrowth = () => {
     try {
       const { data } = await api.getDailyGeneralStats(request);
 
-      // convert data.results array to an array of objects that look like this: name: date, total_value: total_cost, total_expense: total_expense
-      // you get date, total_cost and total_expense from iterating through data.results
-      // then you set the lineGraphData state to the array of objects you created
+      //const response = await api.getGeneralStats(request);
+
+      setDailyStats(data.results);
+
+      // Make a clone of data.results and revert the order of data.results
+      const reversedData = [...data.results].reverse();
 
       let graphData = [];
 
-      data.results.forEach((result) => {
+      reversedData.forEach((result) => {
         graphData.push({
           name: result.date,
           total_value: result.total_cost,
@@ -122,8 +125,6 @@ const InventoryGrowth = () => {
       });
 
       setLineGraphData(graphData);
-
-      setDailyStats(data.results);
     } catch (err) {
       toast.error("Unable to get general stats");
     }
@@ -437,10 +438,10 @@ const InventoryGrowth = () => {
       <div className="mt-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-lg font-medium">Inventory Statistics</h1>
+            <h1 className="text-lg font-medium">Inventory Tracking</h1>
             <p className="mt-2 text-sm text-gray-700">
               Checkout your inventory statistics across all locations or at a
-              specific location using different time groupings.
+              specific location.
             </p>
           </div>
           <div className="mt-4">
@@ -797,8 +798,8 @@ const InventoryGrowth = () => {
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
                         {stat.total_quantity}
                       </td>
-                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold bg-green-100">
-                        ${stat.total_cost}
+                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 bg-green-100">
+                        ${stat.total_cost.toLocaleString()}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                         {stat.total_moving_items}
@@ -807,19 +808,19 @@ const InventoryGrowth = () => {
                         {stat.total_moving_quantity}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                        ${stat.total_moving_cost}
+                        ${stat.total_moving_cost.toLocaleString()}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                         {stat.total_additions}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                        ${stat.total_add_cost}
+                        ${stat.total_add_cost.toLocaleString()}
                       </td>
                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                         {stat.total_subtractions}
                       </td>
-                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 font-semibold bg-rose-50">
-                        ${stat.total_expense}
+                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500 bg-rose-50 ">
+                        ${stat.total_expense.toLocaleString()}
                       </td>
                       <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-0">
                         <ChevronRightIcon className="h-5 w-5 text-gray-400 cursor-pointer" />
