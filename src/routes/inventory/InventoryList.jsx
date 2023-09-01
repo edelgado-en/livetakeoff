@@ -177,8 +177,13 @@ const InventoryList = () => {
   const [currentUser, setCurrentUser] = useState({});
 
   const [thresholdMet, setThresholdMet] = useState(false);
-  const [minimumRequiredMet, setMinimumRequiredMet] = useState(false);
-  const [outOfStockMet, setOutOfStockMet] = useState(false);
+
+  const [minimumRequiredMet, setMinimumRequiredMet] = useState(
+    JSON.parse(localStorage.getItem("lowStockMet")) || false
+  );
+  const [outOfStockMet, setOutOfStockMet] = useState(
+    JSON.parse(localStorage.getItem("outOfStockMet")) || false
+  );
 
   useEffect(() => {
     fetchItems();
@@ -288,7 +293,7 @@ const InventoryList = () => {
 
       if (request.minimumRequiredMet) {
         activeFilters.push({
-          id: "lowStock",
+          id: "lowStockMet",
           name: "Low Stock",
         });
       }
@@ -296,7 +301,7 @@ const InventoryList = () => {
       if (request.outOfStockMet) {
         activeFilters.push({
           id: "outOfStockMet",
-          name: "Out of Stock Met",
+          name: "Out of Stock",
         });
       }
 
@@ -306,6 +311,9 @@ const InventoryList = () => {
         "locationSelected",
         JSON.stringify(locationSelected)
       );
+
+      localStorage.setItem("outOfStockMet", JSON.stringify(outOfStockMet));
+      localStorage.setItem("lowStockMet", JSON.stringify(minimumRequiredMet));
 
       try {
         if (locationSelected?.id === null) {
@@ -456,7 +464,7 @@ const InventoryList = () => {
       setStatusSelected(null);
     } else if (activeFilterId === "thresholdMet") {
       setThresholdMet(false);
-    } else if (activeFilterId === "lockStock") {
+    } else if (activeFilterId === "lowStockMet") {
       setMinimumRequiredMet(false);
     } else if (activeFilterId === "outOfStockMet") {
       setOutOfStockMet(false);

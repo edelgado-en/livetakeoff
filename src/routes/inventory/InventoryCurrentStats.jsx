@@ -1,7 +1,7 @@
 import { useEffect, useState, Fragment } from "react";
 import { CashIcon, ArchiveIcon } from "@heroicons/react/outline";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as api from "./apiService";
 
@@ -48,6 +48,8 @@ const QuantityIcon = () => {
 };
 
 const InventoryCurrentStats = () => {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
   const [currentStats, setCurrentStats] = useState(null);
   const [locationStatsLoading, setLocationStatsLoading] = useState(false);
@@ -128,6 +130,22 @@ const InventoryCurrentStats = () => {
     }
 
     setShowLowStockLocations(!showLowStockLocations);
+  };
+
+  const handleOutOfStockGoToInventory = (location) => {
+    localStorage.setItem("locationSelected", JSON.stringify(location));
+    localStorage.setItem("outOfStockMet", JSON.stringify(true));
+    localStorage.setItem("lowStockMet", JSON.stringify(false));
+
+    navigate("/inventory");
+  };
+
+  const handleLowStockGoToInventory = (location) => {
+    localStorage.setItem("locationSelected", JSON.stringify(location));
+    localStorage.setItem("lowStockMet", JSON.stringify(true));
+    localStorage.setItem("outOfStockMet", JSON.stringify(false));
+
+    navigate("/inventory");
   };
 
   return (
@@ -247,23 +265,28 @@ const InventoryCurrentStats = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200 bg-white">
-                        {lowStockLocations.map((stat, index) => (
-                          <tr key={index} className="hover:bg-gray-50">
+                        {lowStockLocations.map((location) => (
+                          <tr key={location.id} className="hover:bg-gray-50">
                             <td className="whitespace-nowrap py-2  pr-3 text-sm text-gray-500 sm:pl-0">
-                              {stat.name}
+                              {location.name}
                             </td>
                             <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-                              {stat.count}
+                              {location.count}
                             </td>
                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-0">
-                              <Link to="/inventory" className="text-blue-500">
+                              <button
+                                onClick={() =>
+                                  handleLowStockGoToInventory(location)
+                                }
+                                className="text-blue-500"
+                              >
                                 <div className="hidden xl:block lg:block md:block">
                                   Go to Inventory
                                 </div>
                                 <div className="xl:hidden lg:hidden md:hidden">
                                   Go
                                 </div>
-                              </Link>
+                              </button>
                             </td>
                           </tr>
                         ))}
@@ -305,23 +328,28 @@ const InventoryCurrentStats = () => {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200 bg-white">
-                        {outOfStockLocations.map((stat, index) => (
-                          <tr key={index} className="hover:bg-gray-50">
+                        {outOfStockLocations.map((location) => (
+                          <tr key={location.id} className="hover:bg-gray-50">
                             <td className="whitespace-nowrap py-2 pr-3 text-sm text-gray-500 sm:pl-0">
-                              {stat.name}
+                              {location.name}
                             </td>
                             <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
-                              {stat.count}
+                              {location.count}
                             </td>
                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-0">
-                              <Link to="/inventory" className="text-blue-500">
+                              <button
+                                onClick={() =>
+                                  handleOutOfStockGoToInventory(location)
+                                }
+                                className="text-blue-500"
+                              >
                                 <div className="hidden xl:block lg:block md:block">
                                   Go to Inventory
                                 </div>
                                 <div className="xl:hidden lg:hidden md:hidden">
                                   Go
                                 </div>
-                              </Link>
+                              </button>
                             </td>
                           </tr>
                         ))}
