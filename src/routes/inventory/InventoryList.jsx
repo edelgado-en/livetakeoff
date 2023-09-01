@@ -153,7 +153,9 @@ const InventoryList = () => {
   const [open, setOpen] = useState(false);
 
   const [locations, setLocations] = useState([]);
-  const [locationSelected, setLocationSelected] = useState(null);
+  const [locationSelected, setLocationSelected] = useState(
+    JSON.parse(localStorage.getItem("locationSelected")) || null
+  );
 
   const [activeFilters, setActiveFilters] = useState([]);
 
@@ -211,7 +213,16 @@ const InventoryList = () => {
       setLocations(data.results);
 
       if (data.results.length > 0) {
-        setLocationSelected(data.results[0]);
+        //Check if locationSelected is on the local storage
+        const locationSelectedInLocalStorage = JSON.parse(
+          localStorage.getItem("locationSelected")
+        );
+
+        if (locationSelectedInLocalStorage) {
+          setLocationSelected(locationSelectedInLocalStorage);
+        } else {
+          setLocationSelected(data.results[0]);
+        }
       }
     } catch (err) {
       toast.error("Unable to get locations");
@@ -277,8 +288,8 @@ const InventoryList = () => {
 
       if (request.minimumRequiredMet) {
         activeFilters.push({
-          id: "minimumRequiredMet",
-          name: "Minimum Required Met",
+          id: "lowStock",
+          name: "Low Stock",
         });
       }
 
@@ -290,6 +301,11 @@ const InventoryList = () => {
       }
 
       setActiveFilters(activeFilters);
+
+      localStorage.setItem(
+        "locationSelected",
+        JSON.stringify(locationSelected)
+      );
 
       try {
         if (locationSelected?.id === null) {
@@ -440,7 +456,7 @@ const InventoryList = () => {
       setStatusSelected(null);
     } else if (activeFilterId === "thresholdMet") {
       setThresholdMet(false);
-    } else if (activeFilterId === "minimumRequiredMet") {
+    } else if (activeFilterId === "lockStock") {
       setMinimumRequiredMet(false);
     } else if (activeFilterId === "outOfStockMet") {
       setOutOfStockMet(false);
@@ -687,7 +703,19 @@ const InventoryList = () => {
                                                         rounded-md border border-gray-200 cursor-pointer
                                                     py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
                               >
-                                <div>MIN REQUIRED MET</div>
+                                <div>LOW STOCK</div>
+                              </div>
+                              <div
+                                onClick={() => handleToggleOutOfStockMet()}
+                                className={`${
+                                  outOfStockMet
+                                    ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                    : "hover:bg-gray-50"
+                                }
+                                                        rounded-md border border-gray-200 cursor-pointer
+                                                    py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                              >
+                                <div>OUT OF STOCK</div>
                               </div>
                             </div>
                           </div>
@@ -1083,7 +1111,7 @@ const InventoryList = () => {
                                         rounded-md border border-gray-200 cursor-pointer
                                       py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
                   >
-                    <div>MIN REQUIRED MET</div>
+                    <div>LOW STOCK</div>
                   </div>
                   <div
                     onClick={() => handleToggleOutOfStockMet()}
