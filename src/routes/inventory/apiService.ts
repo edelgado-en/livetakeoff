@@ -95,3 +95,7 @@ export const getDailyGeneralStats = (data: any) => {
 export const getGeneralStats = (data: any) => {
     return httpService.post('/inventory/general-stats', data)
 }
+
+export const getLocationsStats = (data: any) => {
+    return httpService.post('/inventory/locations/stats', data)
+}

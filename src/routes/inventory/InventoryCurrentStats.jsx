@@ -1,21 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
-import {
-  UsersIcon,
-  CashIcon,
-  BriefcaseIcon,
-  ArrowSmRightIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  ArchiveIcon,
-} from "@heroicons/react/outline";
-import {
-  Listbox,
-  Transition,
-  Menu,
-  Popover,
-  Disclosure,
-  Dialog,
-} from "@headlessui/react";
+import { CashIcon, ArchiveIcon } from "@heroicons/react/outline";
 
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -23,25 +7,7 @@ import * as api from "./apiService";
 
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import Loader from "../../components/loader/Loader";
-
-const WrenchIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-6 h-6 text-blue-400"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"
-      />
-    </svg>
-  );
-};
+import { set } from "react-hook-form";
 
 const LowStockIcon = () => {
   return (
@@ -84,6 +50,12 @@ const QuantityIcon = () => {
 const InventoryCurrentStats = () => {
   const [loading, setLoading] = useState(true);
   const [currentStats, setCurrentStats] = useState(null);
+  const [locationStatsLoading, setLocationStatsLoading] = useState(false);
+  const [locationStats, setLocationStats] = useState([]);
+  const [outOfStockLocations, setOutOfStockLocations] = useState([]);
+  const [lowStockLocations, setLowStockLocations] = useState([]);
+  const [showOutofStockLocations, setShowOutofStockLocations] = useState(false);
+  const [showLowStockLocations, setShowLowStockLocations] = useState(false);
 
   useEffect(() => {
     getInventoryStats();
@@ -100,6 +72,62 @@ const InventoryCurrentStats = () => {
       toast.error("Unable to get current stats");
     }
     setLoading(false);
+  };
+
+  const getOutOfStockLocationStats = async () => {
+    setLocationStatsLoading(true);
+
+    const request = {
+      outOfStock: true,
+    };
+
+    try {
+      const { data } = await api.getLocationsStats(request);
+
+      setOutOfStockLocations(data);
+    } catch (err) {
+      toast.error("Unable to get location stats");
+    }
+
+    setLocationStatsLoading(false);
+  };
+
+  const getLowInStockLocationStats = async () => {
+    setLocationStatsLoading(true);
+
+    const request = {
+      lowStock: true,
+    };
+
+    try {
+      const { data } = await api.getLocationsStats(request);
+
+      setLowStockLocations(data);
+    } catch (err) {
+      toast.error("Unable to get location stats");
+    }
+
+    setLocationStatsLoading(false);
+  };
+
+  const handleShowOutofStockLocations = () => {
+    if (!showOutofStockLocations) {
+      getOutOfStockLocationStats();
+    } else {
+      setLocationStats([]);
+    }
+
+    setShowOutofStockLocations(!showOutofStockLocations);
+  };
+
+  const handleShowLowStockLocations = () => {
+    if (!showLowStockLocations) {
+      getLowInStockLocationStats();
+    } else {
+      setLocationStats([]);
+    }
+
+    setShowLowStockLocations(!showLowStockLocations);
   };
 
   return (
@@ -153,9 +181,14 @@ const InventoryCurrentStats = () => {
                   <p className="text-2xl font-semibold text-gray-900">
                     {currentStats.total_low_stock}
                   </p>
-                  <div className="text-sm text-gray-500 cursor-pointer">
-                    Show Locations
-                  </div>
+                  <button
+                    onClick={() => handleShowLowStockLocations()}
+                    className="text-sm text-gray-500 cursor-pointer"
+                  >
+                    {showLowStockLocations
+                      ? "Hide Locations"
+                      : "Show Locations"}
+                  </button>
                 </dd>
               </div>
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
@@ -171,12 +204,133 @@ const InventoryCurrentStats = () => {
                   <p className="text-2xl font-semibold text-gray-900">
                     {currentStats.total_out_of_stock}
                   </p>
-                  <div className="text-sm text-gray-500 cursor-pointer">
-                    Show Locations
-                  </div>
+                  <button
+                    onClick={() => handleShowOutofStockLocations()}
+                    className="text-sm text-gray-500 cursor-pointer"
+                  >
+                    {showOutofStockLocations
+                      ? "Hide Locations"
+                      : "Show Locations"}
+                  </button>
                 </dd>
               </div>
             </dl>
+
+            {showLowStockLocations && (
+              <div className="mt-6">
+                <div className="flex justify-between">
+                  <div className="text-lg font-medium tracking-tight">
+                    Low Stock Locations
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <div className="inline-block min-w-full align-middle">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                          >
+                            Location
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Items
+                          </th>
+                          <th
+                            scope="col"
+                            className="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-0"
+                          ></th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
+                        {lowStockLocations.map((stat, index) => (
+                          <tr key={index} className="hover:bg-gray-50">
+                            <td className="whitespace-nowrap py-2  pr-3 text-sm text-gray-500 sm:pl-0">
+                              {stat.name}
+                            </td>
+                            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+                              {stat.count}
+                            </td>
+                            <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-0">
+                              <Link to="/inventory" className="text-blue-500">
+                                <div className="hidden xl:block lg:block md:block">
+                                  Go to Inventory
+                                </div>
+                                <div className="xl:hidden lg:hidden md:hidden">
+                                  Go
+                                </div>
+                              </Link>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {showOutofStockLocations && (
+              <div className="mt-6">
+                <div className="flex justify-between">
+                  <div className="text-lg font-medium tracking-tight">
+                    Out of Stock Locations
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <div className="inline-block min-w-full align-middle">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                          >
+                            Location
+                          </th>
+                          <th
+                            scope="col"
+                            className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Items
+                          </th>
+                          <th
+                            scope="col"
+                            className="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-0"
+                          ></th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
+                        {outOfStockLocations.map((stat, index) => (
+                          <tr key={index} className="hover:bg-gray-50">
+                            <td className="whitespace-nowrap py-2 pr-3 text-sm text-gray-500 sm:pl-0">
+                              {stat.name}
+                            </td>
+                            <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-900">
+                              {stat.count}
+                            </td>
+                            <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm sm:pr-0">
+                              <Link to="/inventory" className="text-blue-500">
+                                <div className="hidden xl:block lg:block md:block">
+                                  Go to Inventory
+                                </div>
+                                <div className="xl:hidden lg:hidden md:hidden">
+                                  Go
+                                </div>
+                              </Link>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div
               className="grid grid-cols-1

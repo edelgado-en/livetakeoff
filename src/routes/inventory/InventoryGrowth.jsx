@@ -420,8 +420,17 @@ const InventoryGrowth = () => {
             margin={{}}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis
+              dataKey="name"
+              style={{
+                fontSize: "13px",
+              }}
+            />
+            <YAxis
+              style={{
+                fontSize: "13px",
+              }}
+            />
             <Tooltip />
             <Legend />
             <Line
