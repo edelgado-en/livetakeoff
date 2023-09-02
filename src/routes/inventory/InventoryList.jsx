@@ -866,7 +866,7 @@ const InventoryList = () => {
             </div>
           </div>
 
-          <div className="flex justify-between gap-4 my-3">
+          <div className="flex justify-between gap-1 my-3">
             <div className="mt-3 flex gap-2">
               <div>Total Items: {totalItems}</div>
               <div className="h-4 w-px bg-gray-300 relative top-1"></div>
