@@ -67,7 +67,7 @@ const dashboards = [
     icon: ChartBarIcon,
   },
   {
-    name: "Inventory Stats",
+    name: "Inventory Tracking",
     description:
       "Never lose track of what's in stock with accurate inventory tracking",
     href: "/inventory/stats/current",

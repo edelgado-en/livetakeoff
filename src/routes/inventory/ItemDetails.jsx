@@ -1232,7 +1232,19 @@ const ItemDetails = () => {
                             scope="col"
                             className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                           >
+                            Location
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
                             Quantity
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Cost
                           </th>
                           <th
                             scope="col"
@@ -1244,8 +1256,8 @@ const ItemDetails = () => {
                       </thead>
                       <tbody className="divide-y divide-gray-200 bg-white">
                         {itemActivities.map((activity) => (
-                          <tr key={activity.id}>
-                            <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                          <tr key={activity.id} className="hover:bg-gray-50">
+                            <td className="whitespace-nowrap py-3 pl-4 pr-3 text-sm sm:pl-0">
                               <div className="flex items-center">
                                 <div className="h-11 w-11 flex-shrink-0">
                                   <img
@@ -1265,7 +1277,7 @@ const ItemDetails = () => {
                                 </div>
                               </div>
                             </td>
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700">
+                            <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-700">
                               <div
                                 className={`inline-flex items-center rounded-md
                                             px-2 py-1 text-xs font-medium ring-1 ring-inset
@@ -1300,10 +1312,16 @@ const ItemDetails = () => {
                                 </div>
                               )}
                             </td>
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-700 font-medium">
+                            <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
+                              {activity.location_item?.location?.name}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-700 font-medium">
                               {activity.quantity}
                             </td>
-                            <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                            <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-700 font-medium">
+                              ${activity.cost?.toLocaleString()}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">
                               <ReactTimeAgo
                                 date={new Date(activity.timestamp)}
                                 locale="en-US"

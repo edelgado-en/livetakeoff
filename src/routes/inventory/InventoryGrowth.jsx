@@ -425,6 +425,8 @@ const InventoryGrowth = () => {
               style={{
                 fontSize: "13px",
               }}
+              /* angle={-45}
+              textAnchor="end" */
             />
             <YAxis
               style={{
