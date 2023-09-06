@@ -46,6 +46,8 @@ const JobAssignments = () => {
   const [services, setServices] = useState([]);
   const [retainerServices, setRetainerServices] = useState([]);
 
+  const [assignmentCompleted, setAssignmentCompleted] = useState(false);
+
   const [isAddServiceModalOpen, setAddServiceModalOpen] = useState(false);
   const [isDeleteServiceModalOpen, setDeleteServiceModalOpen] = useState(false);
 
@@ -165,7 +167,9 @@ const JobAssignments = () => {
     try {
       await api.assignServices(jobId, request);
 
-      toast.success("Assignment successful!");
+      if (!location.pathname.includes("review")) {
+        setAssignmentCompleted(true);
+      }
     } catch (error) {
       toast.error("Unable to assign");
     }
@@ -311,7 +315,35 @@ const JobAssignments = () => {
 
         {loading && <Loader />}
 
-        {!loading && (
+        {!loading && assignmentCompleted && (
+          <div className="mx-auto max-w-lg px-4 pb-16 lg:pb-12 mt-40 text-center">
+            <div className=" flex justify-center">
+              <CheckCircleIcon
+                className="h-14 w-14 text-green-400"
+                aria-hidden="true"
+              />
+            </div>
+            <div className="">
+              <p className="text-xl font-medium text-gray-900 mt-2">
+                Assignment completed!
+              </p>
+            </div>
+            <div className=" mt-6 flex justify-center gap-6">
+              <button
+                type="button"
+                onClick={() => navigate("/jobs")}
+                className="inline-flex items-center rounded-md border
+                                            border-gray-300 bg-white px-3 py-2 text-sm leading-4
+                                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                            focus:ring-red-500 focus:ring-offset-2"
+              >
+                Back to Jobs Queue
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!loading && !assignmentCompleted && (
           <>
             {!location.pathname.includes("review") && (
               <div className="mt-8 max-w-sm">
