@@ -740,7 +740,9 @@ const CreateJob = () => {
                   <input
                     type="text"
                     value={tailNumber}
-                    onChange={(e) => setTailNumber(e.target.value)}
+                    onChange={(e) =>
+                      setTailNumber(e.target.value.toLocaleUpperCase())
+                    }
                     name="tailNumber"
                     id="tailNumber"
                     className="block w-full rounded-md border-gray-300 shadow-sm
