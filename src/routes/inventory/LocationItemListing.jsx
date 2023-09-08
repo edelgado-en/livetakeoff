@@ -115,12 +115,27 @@ const LocationItemListing = ({
 
               <div className="mt-2 text-sm text-gray-500 flex justify-between gap-2 italic">
                 <div>
-                  <span>{locationItem.item.area === "I" && "Interior"}</span>
-                  <span>{locationItem.item.area === "E" && "Exterior"}</span>
-                  <span>
-                    {locationItem.item.area === "B" && "Interior and Exterior"}
-                  </span>
-                  <span>{locationItem.item.area === "O" && "Office"}</span>
+                  {locationItem.on_hold && (
+                    <div className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                      ON HOLD
+                    </div>
+                  )}
+
+                  {!locationItem.on_hold && (
+                    <>
+                      <span>
+                        {locationItem.item.area === "I" && "Interior"}
+                      </span>
+                      <span>
+                        {locationItem.item.area === "E" && "Exterior"}
+                      </span>
+                      <span>
+                        {locationItem.item.area === "B" &&
+                          "Interior and Exterior"}
+                      </span>
+                      <span>{locationItem.item.area === "O" && "Office"}</span>
+                    </>
+                  )}
                 </div>
                 <div>
                   <span>{locationItem.item.measure_by === "U" && "Unit"}</span>
@@ -223,18 +238,26 @@ const LocationItemListing = ({
                             </h3>
                           </div>
 
-                          <div className="mt-1 italic text-gray-500 text-sm font-normal">
-                            <span>
-                              {locationItem.item.area === "I" && "Interior"}
-                            </span>
-                            <span>
-                              {locationItem.item.area === "E" && "Exterior"}
-                            </span>
-                            <span>
-                              {locationItem.item.area === "B" &&
-                                "Interior and Exterior"}
-                            </span>
-                          </div>
+                          {locationItem.on_hold && (
+                            <div className="mt-1 inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">
+                              ON HOLD
+                            </div>
+                          )}
+
+                          {!locationItem.on_hold && (
+                            <div className="mt-1 italic text-gray-500 text-sm font-normal">
+                              <span>
+                                {locationItem.item.area === "I" && "Interior"}
+                              </span>
+                              <span>
+                                {locationItem.item.area === "E" && "Exterior"}
+                              </span>
+                              <span>
+                                {locationItem.item.area === "B" &&
+                                  "Interior and Exterior"}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
