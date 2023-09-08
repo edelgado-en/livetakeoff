@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/outline";
 import ImageUploading from "react-images-uploading";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Listbox, Transition } from "@headlessui/react";
+import { Listbox, Transition, Switch } from "@headlessui/react";
 
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -199,6 +199,30 @@ const ItemDetails = () => {
     setEditItemModalOpen(!isEditItemModalOpen);
   };
 
+  const handleToggleOnHoldLocationItem = async (locationItem) => {
+    const request = {
+      action: "update",
+      toggleOnHold: true,
+    };
+
+    try {
+      await api.updateLocationItem(locationItem.id, request);
+
+      const newLocationItems = [...locationItems];
+      const index = newLocationItems.findIndex(
+        (item) => item.id === locationItem.id
+      );
+
+      newLocationItems[index].on_hold = !newLocationItems[index].on_hold;
+
+      setLocationItems(newLocationItems);
+
+      toast.success("Location Item Updated!");
+    } catch (err) {
+      toast.error("Unable to update location item");
+    }
+  };
+
   const getItemLookup = async () => {
     if (itemName?.length > 3) {
       try {
@@ -251,7 +275,6 @@ const ItemDetails = () => {
       setItemName(response.data.name);
       setDescription(response.data.description);
       setItemPhoto(response.data.photo);
-
       if (response.data.measure_by === "U") {
         setMeasureUnitSelected({ id: "U", name: "Unit" });
       } else if (response.data.measure_by === "G") {
@@ -1132,6 +1155,44 @@ const ItemDetails = () => {
                             {locationItem.alertAt || 0}
                           </dd>
                         </div>
+                        <ul className="mt-1 divide-y divide-gray-200">
+                          <Switch.Group
+                            as="li"
+                            className="flex items-center justify-between"
+                          >
+                            <div className="flex flex-col">
+                              <Switch.Label
+                                as="p"
+                                className="mb-1 block text-md text-gray-500 w-full"
+                                passive
+                              >
+                                On Hold
+                              </Switch.Label>
+                            </div>
+                            <Switch
+                              checked={locationItem.on_hold}
+                              onChange={() =>
+                                handleToggleOnHoldLocationItem(locationItem)
+                              }
+                              className={classNames(
+                                locationItem.on_hold
+                                  ? "bg-blue-500"
+                                  : "bg-gray-200",
+                                "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                              )}
+                            >
+                              <span
+                                aria-hidden="true"
+                                className={classNames(
+                                  locationItem.on_hold
+                                    ? "translate-x-5"
+                                    : "translate-x-0",
+                                  "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                )}
+                              />
+                            </Switch>
+                          </Switch.Group>
+                        </ul>
                       </div>
                     </div>
                     <div className="px-4 mb-4">
