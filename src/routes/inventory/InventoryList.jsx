@@ -185,6 +185,10 @@ const InventoryList = () => {
     JSON.parse(localStorage.getItem("outOfStockMet")) || false
   );
 
+  const [onHold, setOnHold] = useState(
+    JSON.parse(localStorage.getItem("onHold")) || false
+  );
+
   useEffect(() => {
     fetchItems();
   }, [
@@ -197,6 +201,7 @@ const InventoryList = () => {
     thresholdMet,
     minimumRequiredMet,
     outOfStockMet,
+    onHold,
   ]);
 
   const getLocations = async () => {
@@ -251,6 +256,7 @@ const InventoryList = () => {
         thresholdMet,
         minimumRequiredMet,
         outOfStockMet,
+        onHold,
       };
 
       //set active filters
@@ -305,6 +311,13 @@ const InventoryList = () => {
         });
       }
 
+      if (request.onHold) {
+        activeFilters.push({
+          id: "onHold",
+          name: "On Hold",
+        });
+      }
+
       setActiveFilters(activeFilters);
 
       localStorage.setItem(
@@ -314,6 +327,7 @@ const InventoryList = () => {
 
       localStorage.setItem("outOfStockMet", JSON.stringify(outOfStockMet));
       localStorage.setItem("lowStockMet", JSON.stringify(minimumRequiredMet));
+      localStorage.setItem("onHold", JSON.stringify(onHold));
 
       try {
         if (locationSelected?.id === null) {
@@ -468,6 +482,8 @@ const InventoryList = () => {
       setMinimumRequiredMet(false);
     } else if (activeFilterId === "outOfStockMet") {
       setOutOfStockMet(false);
+    } else if (activeFilterId === "onHold") {
+      setOnHold(false);
     }
 
     setActiveFilters(
@@ -504,18 +520,28 @@ const InventoryList = () => {
     setThresholdMet(!thresholdMet);
     setMinimumRequiredMet(false);
     setOutOfStockMet(false);
+    setOnHold(false);
   };
 
   const handleToggleMinimumRequiredMet = () => {
     setMinimumRequiredMet(!minimumRequiredMet);
     setThresholdMet(false);
     setOutOfStockMet(false);
+    setOnHold(false);
   };
 
   const handleToggleOutOfStockMet = () => {
     setOutOfStockMet(!outOfStockMet);
     setThresholdMet(false);
     setMinimumRequiredMet(false);
+    setOnHold(false);
+  };
+
+  const handleToggleOnHold = () => {
+    setOnHold(!onHold);
+    setThresholdMet(false);
+    setMinimumRequiredMet(false);
+    setOutOfStockMet(false);
   };
 
   return (
@@ -724,6 +750,18 @@ const InventoryList = () => {
                                                     py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
                               >
                                 <div>OUT OF STOCK</div>
+                              </div>
+                              <div
+                                onClick={() => handleToggleOnHold()}
+                                className={`${
+                                  onHold
+                                    ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                    : "hover:bg-gray-50"
+                                }
+                                                        rounded-md border border-gray-200 cursor-pointer
+                                                    py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                              >
+                                <div>ON HOLD</div>
                               </div>
                             </div>
                           </div>
@@ -1132,6 +1170,18 @@ const InventoryList = () => {
                                       py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
                   >
                     <div>OUT OF STOCK</div>
+                  </div>
+                  <div
+                    onClick={() => handleToggleOnHold()}
+                    className={`${
+                      onHold
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                        rounded-md border border-gray-200 cursor-pointer
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                  >
+                    <div>ON HOLD</div>
                   </div>
                 </div>
               </div>
