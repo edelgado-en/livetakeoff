@@ -59,6 +59,8 @@ const JobInfo = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [showMore, setShowMore] = useState(false);
+
   useEffect(() => {
     getJobDetails();
   }, []);
@@ -365,7 +367,7 @@ const JobInfo = () => {
 
           <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide tracking-wide">
+              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Tail Number
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -373,7 +375,7 @@ const JobInfo = () => {
               </dd>
             </div>
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide tracking-wide">
+              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Status
               </dt>
               <dd>
@@ -444,7 +446,7 @@ const JobInfo = () => {
             </div>
 
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide tracking-wide">
+              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Purchase Order
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -471,89 +473,6 @@ const JobInfo = () => {
 
             <div className="sm:col-span-1">
               <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Request Date
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.requestDate}
-              </dd>
-            </div>
-            <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Arrival
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.on_site
-                  ? "On site"
-                  : jobDetails.estimatedETA
-                  ? jobDetails.estimatedETA
-                  : "No ETA yet"}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Requested By
-              </dt>
-              <dd className="mt-1 space-y-5 text-xl text-gray-900 truncate overflow-ellipsis max-w-sm">
-                {jobDetails.requested_by
-                  ? jobDetails.requested_by
-                  : jobDetails.created_by?.first_name +
-                    " " +
-                    jobDetails.created_by?.last_name}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Departure
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.estimatedETD
-                  ? jobDetails.estimatedETD
-                  : "No ETD yet"}
-              </dd>
-            </div>
-            {currentUser.canSeePrice && (
-              <div className="sm:col-span-1">
-                <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                  Price
-                </dt>
-                <dd className="mt-1 text-xl text-gray-900 flex gap-1">
-                  {!jobDetails.is_auto_priced && (
-                    <div
-                      className="inline-flex items-center rounded border
-                                                  border-gray-300 bg-gray-50 px-1 text-xs
-                                                    text-gray-600 shadow-sm hover:bg-gray-50"
-                    >
-                      M
-                    </div>
-                  )}
-                  <div>
-                    {"$"}
-                    {jobDetails.price
-                      ? jobDetails.price.toLocaleString()
-                      : "0.00"}
-                  </div>
-                  {jobDetails.is_auto_priced &&
-                    location.pathname.includes("jobs") && (
-                      <Link
-                        to={`/jobs/${jobDetails.id}/price-breakdown`}
-                        className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
-                        style={{ top: "2px" }}
-                      >
-                        breakdown
-                        <ArrowRightIcon
-                          className="h-5 w-5 relative"
-                          style={{ top: "3px" }}
-                        />
-                      </Link>
-                    )}
-                </dd>
-              </div>
-            )}
-
-            <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Complete Before
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -572,123 +491,208 @@ const JobInfo = () => {
                 )}
               </dd>
             </div>
-
             <div className="sm:col-span-1">
               <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Special Instructions
-              </dt>
-              <dd className="mt-1 max-w-prose space-y-5 text-xl text-gray-900">
-                {!jobDetails.special_instructions && "None provided"}
-
-                {jobDetails.special_instructions}
-              </dd>
-            </div>
-
-            {jobDetails.completion_date && (
-              <div className="sm:col-span-1">
-                <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                  Completion Date
-                </dt>
-                <dd className="mt-1 text-xl text-gray-900">
-                  {jobDetails.completion_date}
-                </dd>
-              </div>
-            )}
-
-            <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Customer Purchase Order
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
-                {jobDetails.customer_purchase_order
-                  ? jobDetails.customer_purchase_order
-                  : "Not provided"}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Tags
+                Arrival
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.tags?.length === 0 && (
-                  <span className="text-gray-900">None</span>
-                )}
+                {jobDetails.on_site
+                  ? "On site"
+                  : jobDetails.estimatedETA
+                  ? jobDetails.estimatedETA
+                  : "No ETA yet"}
+              </dd>
+            </div>
 
-                {jobDetails.tags?.map((tag) => (
-                  <div
-                    key={tag.id}
-                    className={`text-xl inline-block rounded-md px-2 py-1 mr-1 border
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "red" &&
-                                                              "border-red-500 text-red-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "orange" &&
-                                                              "border-orange-500 text-orange-500 "
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "amber" &&
-                                                              "border-amber-500 text-amber-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "indigo" &&
-                                                              " border-indigo-500 text-indigo-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "violet" &&
-                                                              " border-violet-500 text-violet-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "fuchsia" &&
-                                                              "border-fuchsia-500 text-fuchsia-500"
-                                                            } 
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "pink" &&
-                                                              "border-pink-500 text-pink-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "slate" &&
-                                                              "border-slate-500 text-gray-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "lime" &&
-                                                              "border-lime-500 text-lime-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "emerald" &&
-                                                              "border-emerald-500 text-emerald-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "cyan" &&
-                                                              "border-cyan-500 text-cyan-500"
-                                                            }
-                                                            ${
-                                                              tag.tag_color ===
-                                                                "blue" &&
-                                                              "border-blue-500 text-blue-500"
-                                                            }
-                                                        `}
-                  >
-                    {tag.tag_name}
-                  </div>
-                ))}
+            <div className="sm:col-span-1">
+              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                Departure
+              </dt>
+              <dd className="mt-1 text-xl text-gray-900">
+                {jobDetails.estimatedETD
+                  ? jobDetails.estimatedETD
+                  : "No ETD yet"}
               </dd>
             </div>
           </dl>
 
-          <div className="border-t-2 border-gray-300 mt-6"></div>
+          <div className="flex justify-end text-xl text-sky-500 cursor-pointer font-semibold">
+            <div onClick={() => setShowMore(!showMore)}>
+              {showMore ? "Show less" : "Show more"}
+            </div>
+          </div>
+
+          {showMore && (
+            <>
+              <div className="border-t-2 border-gray-300 my-8"></div>
+              <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
+                <div className="sm:col-span-1">
+                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    Requested By
+                  </dt>
+                  <dd className="mt-1 space-y-5 text-xl text-gray-900 truncate overflow-ellipsis max-w-sm">
+                    {jobDetails.requested_by
+                      ? jobDetails.requested_by
+                      : jobDetails.created_by?.first_name +
+                        " " +
+                        jobDetails.created_by?.last_name}
+                  </dd>
+                </div>
+
+                {currentUser.canSeePrice && (
+                  <div className="sm:col-span-1">
+                    <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                      Price
+                    </dt>
+                    <dd className="mt-1 text-xl text-gray-900 flex gap-1">
+                      {!jobDetails.is_auto_priced && (
+                        <div
+                          className="inline-flex items-center rounded border
+                                                  border-gray-300 bg-gray-50 px-1 text-xs
+                                                    text-gray-600 shadow-sm hover:bg-gray-50"
+                        >
+                          M
+                        </div>
+                      )}
+                      <div>
+                        {"$"}
+                        {jobDetails.price
+                          ? jobDetails.price.toLocaleString()
+                          : "0.00"}
+                      </div>
+                      {jobDetails.is_auto_priced &&
+                        location.pathname.includes("jobs") && (
+                          <Link
+                            to={`/jobs/${jobDetails.id}/price-breakdown`}
+                            className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
+                            style={{ top: "2px" }}
+                          >
+                            breakdown
+                            <ArrowRightIcon
+                              className="h-5 w-5 relative"
+                              style={{ top: "3px" }}
+                            />
+                          </Link>
+                        )}
+                    </dd>
+                  </div>
+                )}
+
+                <div className="sm:col-span-1">
+                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    Request Date
+                  </dt>
+                  <dd className="mt-1 text-xl text-gray-900">
+                    {jobDetails.requestDate}
+                  </dd>
+                </div>
+
+                <div className="sm:col-span-1">
+                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    Special Instructions
+                  </dt>
+                  <dd className="mt-1 max-w-prose space-y-5 text-xl text-gray-900">
+                    {!jobDetails.special_instructions && "None provided"}
+
+                    {jobDetails.special_instructions}
+                  </dd>
+                </div>
+
+                {jobDetails.completion_date && (
+                  <div className="sm:col-span-1">
+                    <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                      Completion Date
+                    </dt>
+                    <dd className="mt-1 text-xl text-gray-900">
+                      {jobDetails.completion_date}
+                    </dd>
+                  </div>
+                )}
+
+                <div className="sm:col-span-1">
+                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    Customer Purchase Order
+                  </dt>
+                  <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
+                    {jobDetails.customer_purchase_order
+                      ? jobDetails.customer_purchase_order
+                      : "Not provided"}
+                  </dd>
+                </div>
+
+                <div className="sm:col-span-1">
+                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    Tags
+                  </dt>
+                  <dd className="mt-1 text-xl text-gray-900">
+                    {jobDetails.tags?.length === 0 && (
+                      <span className="text-gray-900">None</span>
+                    )}
+
+                    {jobDetails.tags?.map((tag) => (
+                      <div
+                        key={tag.id}
+                        className={`text-xl inline-block rounded-md px-2 py-1 mr-1 border
+                                    ${
+                                      tag.tag_color === "red" &&
+                                      "border-red-500 text-red-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "orange" &&
+                                      "border-orange-500 text-orange-500 "
+                                    }
+                                    ${
+                                      tag.tag_color === "amber" &&
+                                      "border-amber-500 text-amber-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "indigo" &&
+                                      " border-indigo-500 text-indigo-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "violet" &&
+                                      " border-violet-500 text-violet-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "fuchsia" &&
+                                      "border-fuchsia-500 text-fuchsia-500"
+                                    } 
+                                    ${
+                                      tag.tag_color === "pink" &&
+                                      "border-pink-500 text-pink-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "slate" &&
+                                      "border-slate-500 text-gray-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "lime" &&
+                                      "border-lime-500 text-lime-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "emerald" &&
+                                      "border-emerald-500 text-emerald-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "cyan" &&
+                                      "border-cyan-500 text-cyan-500"
+                                    }
+                                    ${
+                                      tag.tag_color === "blue" &&
+                                      "border-blue-500 text-blue-500"
+                                    }
+                                `}
+                      >
+                        {tag.tag_name}
+                      </div>
+                    ))}
+                  </dd>
+                </div>
+              </dl>
+            </>
+          )}
+
+          <div className="border-t-2 border-gray-300 my-8"></div>
 
           <div className="mx-auto mt-8 max-w-5xl pb-8">
             <div className="flex justify-between">
