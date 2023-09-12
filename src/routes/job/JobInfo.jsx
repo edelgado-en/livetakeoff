@@ -587,17 +587,6 @@ const JobInfo = () => {
                   </dd>
                 </div>
 
-                <div className="sm:col-span-1">
-                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
-                    Special Instructions
-                  </dt>
-                  <dd className="mt-1 max-w-prose space-y-5 text-xl text-gray-900">
-                    {!jobDetails.special_instructions && "None provided"}
-
-                    {jobDetails.special_instructions}
-                  </dd>
-                </div>
-
                 {jobDetails.completion_date && (
                   <div className="sm:col-span-1">
                     <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
@@ -691,6 +680,16 @@ const JobInfo = () => {
               </dl>
             </>
           )}
+
+          <div className="border-t-2 border-gray-300 my-8"></div>
+          <h2 className="text-2xl font-bold text-gray-700 uppercase tracking-wide">
+            Special Instructions
+          </h2>
+          <dd className="mt-4 space-y-5 text-xl text-gray-900">
+            {!jobDetails.special_instructions && "None provided"}
+
+            {jobDetails.special_instructions}
+          </dd>
 
           <div className="border-t-2 border-gray-300 my-8"></div>
 
