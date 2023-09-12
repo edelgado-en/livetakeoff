@@ -694,7 +694,7 @@ const JobInfo = () => {
           <div className="border-t-2 border-gray-300 my-8"></div>
 
           <div className="mx-auto mt-8 max-w-5xl pb-8">
-            <div className="flex justify-between">
+            <div className="flex flex-wrap justify-between">
               <h2 className="text-2xl font-bold text-gray-700 uppercase tracking-wide">
                 Services
               </h2>
@@ -703,7 +703,7 @@ const JobInfo = () => {
                   <div className="flex flex-col">
                     <Switch.Label
                       as="p"
-                      className="text-xl font-bold text-gray-500"
+                      className="text-lg font-bold text-gray-500"
                       passive
                     >
                       {showActions ? "Hide Actions" : "Show Actions"}
@@ -732,7 +732,7 @@ const JobInfo = () => {
                       type="button"
                       onClick={handleToggleAddServiceModal}
                       className="inline-flex items-center rounded-md border border-gray-300
-                                            bg-white px-4 py-2 text-xl font-bold text-gray-700 shadow-sm
+                                            bg-white px-4 py-2 text-lg font-bold text-gray-700 shadow-sm
                                             hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     >
                       <PlusIcon
