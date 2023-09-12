@@ -2151,7 +2151,7 @@ const CreateJob = () => {
                 </>
               )}
 
-              <div className="flex gap-6 mt-10 m-auto text-center justify-center">
+              <div className="flex flex-wrap gap-6 mt-10 m-auto text-center justify-center">
                 <button
                   onClick={() => handleGotoPreviousStep(steps[2])}
                   className="inline-flex items-center justify-center rounded-md border
