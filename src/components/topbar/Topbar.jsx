@@ -266,17 +266,19 @@ const Topbar = () => {
                         >
                           Jobs
                         </Link>
-                        <Link
-                          to="inventory"
-                          className={classNames(
-                            location.pathname.includes("inventory")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Inventory
-                        </Link>
+                        {currentUser.showInventory && (
+                          <Link
+                            to="inventory"
+                            className={classNames(
+                              location.pathname.includes("inventory")
+                                ? "bg-red-700"
+                                : " hover:bg-red-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium text-white"
+                            )}
+                          >
+                            Inventory
+                          </Link>
+                        )}
                       </>
                     )}
 
@@ -836,18 +838,20 @@ const Topbar = () => {
                       Jobs
                     </Disclosure.Button>
                   </Link>
-                  <Link to="inventory">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("inventory")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      Inventory
-                    </Disclosure.Button>
-                  </Link>
+                  {currentUser.showInventory && (
+                    <Link to="inventory">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("inventory")
+                            ? "bg-red-700"
+                            : "hover:bg-red-700 hover:text-white",
+                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                        )}
+                      >
+                        Inventory
+                      </Disclosure.Button>
+                    </Link>
+                  )}
                 </>
               )}
 
