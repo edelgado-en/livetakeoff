@@ -88,7 +88,7 @@ const LocationNotifications = () => {
         {loading && <Loader />}
 
         {!loading && (
-          <ul className="divide-y divide-gray-100 mt-10 ">
+          <ul className="divide-y divide-gray-100 mt-8">
             {locations.map((location) => (
               <li
                 key={location.id}
