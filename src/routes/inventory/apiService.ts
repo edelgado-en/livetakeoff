@@ -44,6 +44,10 @@ export const getLocations = (data: any) => {
     return httpService.post('/inventory/locations/list', data);
 }
 
+export const updateLocation = (data: any) => {
+    return httpService.patch('/inventory/location', data);
+}
+
 export const updateLocationItem = (id: number, data: any) => {
     return httpService.patch(`/inventory/location-items/${id}/`, data);
 }

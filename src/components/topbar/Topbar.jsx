@@ -20,6 +20,7 @@ import {
   PresentationChartBarIcon,
   ViewGridIcon,
   ArchiveIcon,
+  BellIcon,
 } from "@heroicons/react/outline";
 import logo from "../../images/logo_2618936_web.png";
 import whiteLogo from "../../images/logo_white-no-text.png";
@@ -126,6 +127,12 @@ const moreOptions = [
     description: "Setup indiviual prices for aircrafts and services.",
     href: "/price-plans",
     icon: CurrencyDollarIcon,
+  },
+  {
+    name: "Inventory Locations",
+    description: "Setup inventory notifications for each location.",
+    href: "/location-notifications",
+    icon: BellIcon,
   },
 ];
 

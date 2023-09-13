@@ -24,6 +24,7 @@ import InventoryDashboard from "./routes/inventory/InventoryDashboard";
 import InventoryCurrentStats from "./routes/inventory/InventoryCurrentStats";
 import InventoryHistoricalStats from "./routes/inventory/InventoryHistoricalStats";
 import InventoryGrowth from "./routes/inventory/InventoryGrowth";
+import LocationNotifications from "./routes/inventory/LocationNotifications";
 
 import Customers from "./routes/customers/Customers";
 import CustomerDetails from "./routes/customers/CustomerDetails";
@@ -303,6 +304,11 @@ const App = () => {
                     <Route
                       path="inventory/:itemId/details"
                       element={<ItemDetails />}
+                    />
+
+                    <Route
+                      path="location-notifications"
+                      element={<LocationNotifications />}
                     />
 
                     <Route
