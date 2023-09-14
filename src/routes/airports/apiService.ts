@@ -5,7 +5,7 @@ export const searchAirports = (data: any) => {
 }
 
 export const searchFbos = (data: any) => {
-    return httpService.get(`/api/fbo-search`, data);
+    return httpService.post(`/api/fbo-search`, data);
 }
 
 export const getAirportDetails = (id: number) => {

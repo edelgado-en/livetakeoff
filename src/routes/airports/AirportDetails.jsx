@@ -195,7 +195,7 @@ const AirportDetails = () => {
                         </div>
                         <div>
                           {fboAlreadyAdded && (
-                            <div className="text-red-500 text-xs relative top-1">
+                            <div className="text-red-500 text-md relative top-1">
                               FBO already added
                             </div>
                           )}
