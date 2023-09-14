@@ -17,6 +17,9 @@ import EditJob from "./routes/job/EditJob";
 import JobAssignments from "./routes/job/JobAssignments";
 import CompleteList from "./routes/job/CompleteList";
 
+import Airports from "./routes/airports/Airports";
+import AirportDetails from "./routes/airports/AirportDetails";
+
 import InventoryList from "./routes/inventory/InventoryList";
 import CreateItem from "./routes/inventory/CreateItem";
 import ItemDetails from "./routes/inventory/ItemDetails";
@@ -209,6 +212,10 @@ const App = () => {
                         path=":id/productivity"
                         element={<UserProductivity />}
                       />
+                    </Route>
+
+                    <Route path="airports" element={<Airports />}>
+                      <Route path=":airportId" element={<AirportDetails />} />
                     </Route>
 
                     <Route
