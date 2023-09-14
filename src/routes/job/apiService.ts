@@ -155,3 +155,7 @@ export const getEstimateDetail = (id: any) => {
 export const deleteTailAlert = (id: number) => {
     return httpService.delete(`/api/tail-alerts/${id}/`);
 }
+
+export const searchFbos = (data: any) => {
+    return httpService.post(`/api/fbo-search`, data);
+}

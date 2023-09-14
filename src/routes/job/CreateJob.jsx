@@ -73,6 +73,7 @@ const CreateJob = () => {
   const [aircraftTypes, setAircraftTypes] = useState([]);
   const [airports, setAirports] = useState([]);
   const [fbos, setFbos] = useState([]);
+  const [allFbos, setAllFbos] = useState([]);
 
   const [services, setServices] = useState([]);
   const [retainerServices, setRetainerServices] = useState([]);
@@ -315,6 +316,7 @@ const CreateJob = () => {
       setCustomers(data.customers);
       setAircraftTypes(data.aircraft_types);
       setAirports(data.airports);
+      setAllFbos(data.fbos);
       setFbos(data.fbos);
       setTags(data.tags);
 
@@ -790,6 +792,26 @@ const CreateJob = () => {
     setSteps(newSteps);
 
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
+
+  const handleAirportSelectedChange = async (airport) => {
+    setAirportSelected(airport);
+
+    const request = {
+      airport_id: airport.id,
+    };
+
+    try {
+      const { data } = await api.searchFbos(request);
+
+      if (data.results.length > 0) {
+        setFbos(data.results);
+      } else {
+        setFbos(allFbos);
+      }
+    } catch (err) {
+      toast.error("Unable to get Fbos");
+    }
   };
 
   return (
@@ -1286,7 +1308,7 @@ const CreateJob = () => {
                   <div className="mt-1">
                     <Listbox
                       value={airportSelected}
-                      onChange={setAirportSelected}
+                      onChange={handleAirportSelectedChange}
                     >
                       {({ open }) => (
                         <>
