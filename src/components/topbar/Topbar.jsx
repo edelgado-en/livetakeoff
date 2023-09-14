@@ -994,6 +994,18 @@ const Topbar = () => {
                       Inventory Locations
                     </Disclosure.Button>
                   </Link>
+                  <Link to="airports">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("airports")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      Airports
+                    </Disclosure.Button>
+                  </Link>
                   <div className="mt-4 border-t border-white py-2">
                     <nav className="grid">
                       {dashboards.map((item) => (
