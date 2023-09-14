@@ -180,7 +180,7 @@ const AirportDetails = () => {
                 <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
                   <div
                     className="border border-gray-200 rounded-md p-4"
-                    style={{ height: "800px" }}
+                    style={{ height: "950px" }}
                   >
                     <div className="font-medium text-lg">
                       <div className="flex justify-between">
@@ -234,7 +234,7 @@ const AirportDetails = () => {
                       </div>
                       <div
                         className="overflow-y-auto"
-                        style={{ maxHeight: "800px" }}
+                        style={{ maxHeight: "950px" }}
                       >
                         {fbos.map((fbo) => (
                           <div key={fbo.id} className="relative">
@@ -269,7 +269,7 @@ const AirportDetails = () => {
                   </div>
                   <div
                     className="border border-gray-200 rounded-md p-4"
-                    style={{ height: "800px" }}
+                    style={{ height: "950px" }}
                   >
                     <div className="font-medium text-lg">
                       Available FBOs
@@ -289,7 +289,7 @@ const AirportDetails = () => {
 
                       <div
                         className="overflow-y-auto"
-                        style={{ maxHeight: "800px" }}
+                        style={{ maxHeight: "950px" }}
                       >
                         {availableFbos.map((fbo) => (
                           <div key={fbo.id} className="relative">

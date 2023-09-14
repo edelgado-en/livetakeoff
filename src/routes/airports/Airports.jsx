@@ -258,7 +258,7 @@ const Airports = () => {
                                       className="absolute inset-0"
                                       aria-hidden="true"
                                     />
-                                    <p className="text-sm font-medium text-gray-900">
+                                    <p className="text-sm text-gray-900">
                                       {airport.name}
                                     </p>
                                   </div>
@@ -320,7 +320,7 @@ const Airports = () => {
                     </h2>
                     <span
                       className="bg-gray-100 text-gray-700 ml-2 py-2 px-2
-                                            rounded-full text-xs font-medium inline-block"
+                                            rounded-full text-md font-medium inline-block"
                     >
                       {totalAirports}
                     </span>
@@ -365,7 +365,7 @@ const Airports = () => {
                 {loading && <Loader />}
 
                 {!loading && totalAirports === 0 && (
-                  <div className="text-gray-500 text-sm flex flex-col mt-20 text-center">
+                  <div className="text-gray-500 text-md flex flex-col mt-20 text-center">
                     <p className="font-semibold">No airports found.</p>
                   </div>
                 )}
@@ -388,7 +388,7 @@ const Airports = () => {
                                 className="absolute inset-0"
                                 aria-hidden="true"
                               />
-                              <p className="text-lg font-medium text-gray-900">
+                              <p className="text-lg text-gray-900">
                                 {airport.name}
                               </p>
                             </div>

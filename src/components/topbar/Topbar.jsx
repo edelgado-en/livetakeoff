@@ -21,6 +21,7 @@ import {
   ViewGridIcon,
   ArchiveIcon,
   BellIcon,
+  PaperAirplaneIcon,
 } from "@heroicons/react/outline";
 import logo from "../../images/logo_2618936_web.png";
 import whiteLogo from "../../images/logo_white-no-text.png";
@@ -133,6 +134,12 @@ const moreOptions = [
     description: "Setup inventory notifications for each location.",
     href: "/location-notifications",
     icon: BellIcon,
+  },
+  {
+    name: "Airports",
+    description: "Associate FBOs with airports.",
+    href: "/airports",
+    icon: PaperAirplaneIcon,
   },
 ];
 
