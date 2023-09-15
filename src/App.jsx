@@ -20,6 +20,8 @@ import CompleteList from "./routes/job/CompleteList";
 import Airports from "./routes/airports/Airports";
 import AirportDetails from "./routes/airports/AirportDetails";
 
+import CustomerServiceReport from "./routes/home/dashboard/CustomerServiceReport";
+
 import InventoryList from "./routes/inventory/InventoryList";
 import CreateItem from "./routes/inventory/CreateItem";
 import ItemDetails from "./routes/inventory/ItemDetails";
@@ -168,6 +170,11 @@ const App = () => {
                     <Route path="estimates/:id" element={<EstimateDetail />} />
 
                     <Route path="jobs" element={<Jobs />} />
+
+                    <Route
+                      path="service-report"
+                      element={<CustomerServiceReport />}
+                    />
 
                     <Route
                       path="team-productivity"

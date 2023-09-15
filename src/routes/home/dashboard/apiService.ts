@@ -13,6 +13,10 @@ export const getServicesByAirport = () => {
     return httpService.get('/api/services-by-airport')
 }
 
+export const getServices = () => {
+    return httpService.get('/api/services');
+}
+
 export const searchRetainerCustomers = (data: any, currentPage: Number) => {
     return httpService.post(`/api/customers/retainers?page=${currentPage}&size=${100}`, data);
 } 
@@ -23,4 +27,24 @@ export const getTeamProductivityStats = (data: any) => {
 
 export const getUserProductivityStats = (id: number, data: any) => {
     return httpService.post(`/api/user-productivity/${id}/`, data)
+}
+
+export const generateServiceReport = (data: any) => {
+    return httpService.post('/api/service-report', data)
+}
+
+export const searchServiceActivities = (data: any, currentPage: Number) => {
+    return httpService.post(`/api/service-activities?page=${currentPage}&size=${200}`, data);
+}
+
+export const getAirports = () => {
+    return httpService.post('/api/airports', { name: '' });
+}
+
+export const getFbos = () => {
+    return httpService.get(`/api/fbos`);
+}
+
+export const searchFbos = (data: any) => {
+    return httpService.post(`/api/fbo-search`, data);
 }
