@@ -75,6 +75,12 @@ const dashboards = [
     href: "/inventory/stats/current",
     icon: ArchiveIcon,
   },
+  {
+    name: "Service Report",
+    description: "See detailed information about a service across time.",
+    href: "/service-report",
+    icon: ChartBarIcon,
+  },
 ];
 
 const internalCoordinatorDashboards = [
