@@ -535,7 +535,7 @@ export default function CustomerServiceReport() {
                                                         flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl"
                 >
                   <div className="flex items-center justify-between px-4">
-                    <h2 className="text-lg font-medium text-gray-900">
+                    <h2 className="text-2xl font-medium text-gray-900">
                       Services
                     </h2>
                     <button
@@ -574,7 +574,7 @@ export default function CustomerServiceReport() {
                         </ul>
                       </li>
                       <li>
-                        <div className="text-sm font-semibold leading-6 text-gray-400">
+                        <div className="text-md font-semibold leading-6 text-gray-400 uppercase tracking-wide">
                           Service Types
                         </div>
                         <ul className="-mx-2 mt-2 space-y-1">
@@ -655,14 +655,6 @@ export default function CustomerServiceReport() {
                             ))}
                           </ul>
                         )}
-                      </li>
-
-                      <li>
-                        <div className="text-sm font-semibold leading-6 text-gray-400">
-                          {selectedServiceType.type === "E" && "Exterior"}
-                          {selectedServiceType.type === "I" && "Interior"}
-                          {selectedServiceType.type === "O" && "Other"} Services
-                        </div>
                       </li>
                       <li>
                         <div className="py-10"></div>
@@ -1110,7 +1102,7 @@ export default function CustomerServiceReport() {
                     </p>
                     <p className="mt-2 flex items-baseline gap-x-2">
                       <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {numberOfServices}
+                        {numberOfServices.toLocaleString()}
                       </span>
                     </p>
                   </div>
@@ -1120,7 +1112,7 @@ export default function CustomerServiceReport() {
                     </p>
                     <p className="mt-2 flex items-baseline gap-x-2">
                       <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {numberOfTails}
+                        {numberOfTails.toLocaleString()}
                       </span>
                     </p>
                   </div>
@@ -1131,7 +1123,7 @@ export default function CustomerServiceReport() {
                     </p>
                     <p className="mt-2 flex items-baseline gap-x-2">
                       <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {numberOfLocations}
+                        {numberOfLocations.toLocaleString()}
                       </span>
                     </p>
                   </div>
@@ -1235,14 +1227,18 @@ export default function CustomerServiceReport() {
                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                                   {service.tail_number}
                                 </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                  {service.airport_name}
+                                <td className="px-2 py-2 text-sm text-gray-500">
+                                  <div className="truncate overflow-ellipsis w-52">
+                                    {service.airport_name}
+                                  </div>
                                 </td>
                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                                   {service.fbo_name}
                                 </td>
                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                  {service.service_name}
+                                  <div className=" truncate overflow-ellipsis w-96">
+                                    {service.service_name}
+                                  </div>
                                 </td>
                                 <td className="px-2 py-2 text-sm text-gray-900">
                                   ${service.price.toLocaleString()}
