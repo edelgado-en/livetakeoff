@@ -213,6 +213,18 @@ const App = () => {
                       <Route path="services" element={<JobAssignments />} />
                     </Route>
 
+                    <Route path="report/review/:jobId" element={<JobReview />}>
+                      <Route path="photos" element={<JobPhotos />}>
+                        <Route index element={<JobPhotoListing />} />
+                        <Route path="listing" element={<JobPhotoListing />} />
+                        <Route path="upload" element={<JobPhotoUpload />} />
+                      </Route>
+                      <Route path="edit" element={<EditJob />} />
+                      <Route path="activity" element={<JobActivityFeed />} />
+                      <Route path="comments" element={<JobComments />} />
+                      <Route path="services" element={<JobAssignments />} />
+                    </Route>
+
                     <Route path="users" element={<Users />}>
                       <Route path=":userId" element={<UserDetails />} />
                       <Route

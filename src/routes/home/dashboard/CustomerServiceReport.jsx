@@ -1396,10 +1396,8 @@ export default function CustomerServiceReport() {
                                 <td className="px-2 py-2 text-sm text-gray-500 sm:pl-0">
                                   {service.timestamp}
                                 </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                  <Link
-                                    to={`/completed/review/${service.job_id}`}
-                                  >
+                                <td className="whitespace-nowrap px-2 py-2 text-sm text-sky-500 font-semibold cursor-pointer">
+                                  <Link to={`/report/review/${service.job_id}`}>
                                     {service.purchase_order}
                                   </Link>
                                 </td>
