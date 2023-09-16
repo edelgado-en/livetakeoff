@@ -1162,7 +1162,7 @@ export default function CustomerServiceReport() {
                                         setCustomerSearchTerm(e.target.value)
                                       }
                                       className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
-                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-lg
+                                                                        focus:border-sky-500 block w-full py-2 pr-12 sm:text-md
                                                                         border-gray-300 rounded-md"
                                     />
                                     <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
