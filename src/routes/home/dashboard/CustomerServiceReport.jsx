@@ -1310,7 +1310,7 @@ export default function CustomerServiceReport() {
             </header>
 
             <div className="px-2 sm:px-6 lg:px-8 mt-6">
-              {totalServiceActivities === 0 && (
+              {totalServiceActivities === 0 && !activitiesLoading && (
                 <div className="text-center m-auto mt-14">
                   <div className="font-medium text-xl">No services found.</div>
                   <div className="text-gray-500 text-md">
