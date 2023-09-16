@@ -12,6 +12,9 @@ import Loader from "../../../components/loader/Loader";
 import { toast } from "react-toastify";
 import AnimatedPage from "../../../components/animatedPage/AnimatedPage";
 
+import { selectUser } from "../../../routes/userProfile/userSlice";
+import { useAppSelector } from "../../../app/hooks";
+
 const MagnifyingGlassIcon = () => {
   return (
     <svg
@@ -110,6 +113,7 @@ function classNames(...classes) {
 }
 
 export default function CustomerServiceReport() {
+  const currentUser = useAppSelector(selectUser);
   const [activitiesLoading, setActivitiesLoading] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -376,7 +380,7 @@ export default function CustomerServiceReport() {
         style={{ maxWidth: "1800px" }}
       >
         {/* Static sidebar for desktop */}
-        <div className="hidden xl:flex w-96 xl:flex-col min-h-full">
+        <div className="hidden xl:flex w-80 xl:flex-col min-h-full">
           <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-6 ring-1 ring-white/5">
             <div className="flex h-16 shrink-0 items-center text-3xl font-semibold tracking-tight text-gray-700 mt-1">
               Service Report
@@ -1176,6 +1180,14 @@ export default function CustomerServiceReport() {
                             >
                               Purchase Order
                             </th>
+                            {!currentUser.isCustomer && (
+                              <th
+                                scope="col"
+                                className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                              >
+                                Customer
+                              </th>
+                            )}
                             <th
                               scope="col"
                               className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
@@ -1224,11 +1236,18 @@ export default function CustomerServiceReport() {
                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                                   {service.purchase_order}
                                 </td>
+                                {!currentUser.isCustomer && (
+                                  <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                    <div className="truncate overflow-ellipsis w-40">
+                                      {service.customer_name}
+                                    </div>
+                                  </td>
+                                )}
                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                                   {service.tail_number}
                                 </td>
                                 <td className="px-2 py-2 text-sm text-gray-500">
-                                  <div className="truncate overflow-ellipsis w-52">
+                                  <div className="truncate overflow-ellipsis w-40">
                                     {service.airport_name}
                                   </div>
                                 </td>
@@ -1236,7 +1255,7 @@ export default function CustomerServiceReport() {
                                   {service.fbo_name}
                                 </td>
                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                  <div className=" truncate overflow-ellipsis w-96">
+                                  <div className=" truncate overflow-ellipsis w-80">
                                     {service.service_name}
                                   </div>
                                 </td>
