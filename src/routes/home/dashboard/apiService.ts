@@ -37,6 +37,10 @@ export const searchServiceActivities = (data: any, currentPage: Number) => {
     return httpService.post(`/api/service-activities?page=${currentPage}&size=${200}`, data);
 }
 
+export const getCustomers = (request: any) => {
+    return httpService.post('/api/customers', request);
+}
+
 export const getAirports = () => {
     return httpService.post('/api/airports', { name: '' });
 }

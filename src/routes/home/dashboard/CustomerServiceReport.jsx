@@ -147,11 +147,14 @@ export default function CustomerServiceReport() {
 
   const [airports, setAirports] = useState([]);
 
+  const [customers, setCustomers] = useState([]);
+
   const [fbos, setFbos] = useState([]);
   const [allFbos, setAllFbos] = useState([]);
 
   const [airportSearchTerm, setAirportSearchTerm] = useState("");
   const [fboSearchTerm, setFboSearchTerm] = useState("");
+  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
 
   const [sortByPriceDesc, setSortByPriceDesc] = useState(false);
   const [sortByPriceAsc, setSortByPriceAsc] = useState(false);
@@ -170,6 +173,12 @@ export default function CustomerServiceReport() {
       )
     : fbos;
 
+  const filteredCustomers = customerSearchTerm
+    ? customers.filter((item) =>
+        item.name.toLowerCase().includes(customerSearchTerm.toLowerCase())
+      )
+    : customers;
+
   useEffect(() => {
     getServices();
     setSelectedService({ id: null, name: "All Services" });
@@ -181,6 +190,12 @@ export default function CustomerServiceReport() {
 
   useEffect(() => {
     getFbos();
+  }, []);
+
+  useEffect(() => {
+    if (!currentUser.isCustomer) {
+      console.log("fetch customers");
+    }
   }, []);
 
   useEffect(() => {
@@ -227,6 +242,13 @@ export default function CustomerServiceReport() {
     } catch (err) {
       toast.error("Unable to get fbos");
     }
+  };
+
+  const getCustomers = async () => {
+    const { data } = await api.getCustomers({ name: "" });
+
+    data.results.unshift({ id: "All", name: "All" });
+    setCustomers(data.results);
   };
 
   const getServices = async () => {
@@ -278,7 +300,7 @@ export default function CustomerServiceReport() {
       const { data } = await api.generateServiceReport(request);
 
       setNumberOfServices(data.number_of_services_completed);
-      setTotalSpent(data.total_price ? data.total_price : 0);
+      setTotalSpent(data.total_jobs_revenue);
       setNumberOfTails(data.number_of_unique_tail_numbers);
       setNumberOfLocations(data.number_of_unique_locations);
     } catch (err) {
