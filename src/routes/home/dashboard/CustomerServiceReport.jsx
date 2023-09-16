@@ -1234,7 +1234,7 @@ export default function CustomerServiceReport() {
                             >
                               Service
                             </th>
-                            <th
+                            {/* <th
                               scope="col"
                               className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
                             >
@@ -1244,7 +1244,7 @@ export default function CustomerServiceReport() {
                               >
                                 Price <ChevronUpDownIcon />
                               </div>
-                            </th>
+                            </th> */}
                           </tr>
                         </thead>
                         {activitiesLoading && <Loader />}
@@ -1281,9 +1281,9 @@ export default function CustomerServiceReport() {
                                     {service.service_name}
                                   </div>
                                 </td>
-                                <td className="px-2 py-2 text-sm text-gray-900">
+                                {/* <td className="px-2 py-2 text-sm text-gray-900">
                                   ${service.price.toLocaleString()}
-                                </td>
+                                </td> */}
                               </tr>
                             ))}
                           </tbody>
