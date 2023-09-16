@@ -710,7 +710,7 @@ export default function CustomerServiceReport() {
                 {selectedService?.name}
               </div>
             </div>
-            <div className="xs:p-0 xl:px-8 grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 mt-2">
+            <div className="xs:p-0 xl:px-8 grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 mt-4">
               <div>
                 <Listbox value={dateSelected} onChange={setDateSelected}>
                   {({ open }) => (
