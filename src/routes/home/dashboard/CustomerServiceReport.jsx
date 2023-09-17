@@ -1446,9 +1446,11 @@ export default function CustomerServiceReport() {
                         {serviceActivities.map((service) => (
                           <li key={service.id}>
                             <div className="px-2 py-4">
-                              <div>{service.service_name}</div>
+                              <div className="font-semibold">
+                                {service.service_name}
+                              </div>
                               <div className="flex justify-between gap-2 mt-2">
-                                <div className="text-sky-500 font-semibold">
+                                <div className="text-sky-500">
                                   <Link to={`/report/review/${service.job_id}`}>
                                     {service.purchase_order}
                                   </Link>
