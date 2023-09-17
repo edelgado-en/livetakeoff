@@ -1466,7 +1466,7 @@ export default function CustomerServiceReport() {
                                 <div className="relative top-1">
                                   {service.fbo_name}
                                 </div>
-                                <div className="relative top-1 italic">
+                                <div className="relative top-1 italic text-right flex justify-end">
                                   {service.tail_number}
                                 </div>
                               </div>
