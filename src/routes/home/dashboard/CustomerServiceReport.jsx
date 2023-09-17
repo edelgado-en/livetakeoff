@@ -1448,21 +1448,16 @@ export default function CustomerServiceReport() {
                             <div className="px-2 py-4">
                               <div className="flex justify-between gap-2">
                                 <div>{service.timestamp}</div>
-                              </div>
-                              <div className="font-semibold mt-2">
-                                {service.service_name}
-                              </div>
-                              <div className="flex justify-between gap-2 mt-2">
                                 <div className="text-sky-500">
                                   <Link to={`/report/review/${service.job_id}`}>
                                     {service.purchase_order}
                                   </Link>
                                 </div>
-                                <div className="italic">
-                                  {service.tail_number}
-                                </div>
                               </div>
-                              <div className="flex gap-2 mt-1">
+                              <div className="font-semibold mt-2">
+                                {service.service_name}
+                              </div>
+                              <div className="flex justify-between gap-2 mt-1">
                                 <div>
                                   <div className="bg-gray-100 p-1 rounded-md">
                                     {service.airport_name}
@@ -1470,6 +1465,9 @@ export default function CustomerServiceReport() {
                                 </div>
                                 <div className="relative top-1">
                                   {service.fbo_name}
+                                </div>
+                                <div className="italic relative top-1">
+                                  {service.tail_number}
                                 </div>
                               </div>
                             </div>
