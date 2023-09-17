@@ -1446,6 +1446,9 @@ export default function CustomerServiceReport() {
                         {serviceActivities.map((service) => (
                           <li key={service.id}>
                             <div className="px-2 py-4">
+                              <div className="flex justify-between gap-2">
+                                <div>{service.timestamp}</div>
+                              </div>
                               <div className="font-semibold">
                                 {service.service_name}
                               </div>
@@ -1455,7 +1458,9 @@ export default function CustomerServiceReport() {
                                     {service.purchase_order}
                                   </Link>
                                 </div>
-                                <div>{service.timestamp}</div>
+                                <div className="italic">
+                                  {service.tail_number}
+                                </div>
                               </div>
                               <div className="flex gap-2 mt-1">
                                 <div>
@@ -1465,9 +1470,6 @@ export default function CustomerServiceReport() {
                                 </div>
                                 <div className="relative top-1">
                                   {service.fbo_name}
-                                </div>
-                                <div className="relative top-1 italic text-right flex justify-end">
-                                  {service.tail_number}
                                 </div>
                               </div>
                             </div>
