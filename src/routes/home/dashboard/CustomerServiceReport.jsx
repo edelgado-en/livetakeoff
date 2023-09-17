@@ -121,6 +121,8 @@ export default function CustomerServiceReport() {
 
   const [open, setOpen] = useState(false);
 
+  const [showSpendingInfo, setShowSpendingInfo] = useState(false);
+
   const [selectedServiceType, setSelectedServiceType] = useState(
     serviceTypes[0]
   );
@@ -312,6 +314,7 @@ export default function CustomerServiceReport() {
       setTotalSpent(data.total_jobs_revenue);
       setNumberOfTails(data.number_of_unique_tail_numbers);
       setNumberOfLocations(data.number_of_unique_locations);
+      setShowSpendingInfo(data.show_spending_info);
     } catch (err) {
       toast.error("Unable to generate service report");
     }
@@ -1264,16 +1267,18 @@ export default function CustomerServiceReport() {
               {loading && <Loader />}
               {!loading && (
                 <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-4">
-                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                    <p className="text-lg font-medium leading-6 text-gray-400">
-                      Total Spent
-                    </p>
-                    <p className="mt-2 flex items-baseline gap-x-2">
-                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        ${totalSpent.toLocaleString()}
-                      </span>
-                    </p>
-                  </div>
+                  {showSpendingInfo && (
+                    <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
+                      <p className="text-lg font-medium leading-6 text-gray-400">
+                        Total Spent
+                      </p>
+                      <p className="mt-2 flex items-baseline gap-x-2">
+                        <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                          ${totalSpent.toLocaleString()}
+                        </span>
+                      </p>
+                    </div>
+                  )}
                   <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
                     <p className="text-lg font-medium leading-6 text-gray-400">
                       Number of Services
