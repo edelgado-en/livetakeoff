@@ -1449,7 +1449,7 @@ export default function CustomerServiceReport() {
                               <div className="flex justify-between gap-2">
                                 <div>{service.timestamp}</div>
                               </div>
-                              <div className="font-semibold">
+                              <div className="font-semibold mt-2">
                                 {service.service_name}
                               </div>
                               <div className="flex justify-between gap-2 mt-2">
