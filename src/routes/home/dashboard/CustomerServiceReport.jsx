@@ -1337,7 +1337,8 @@ export default function CustomerServiceReport() {
                       </p>
                     </div>
                   </div>
-                  <div className="max-w-screen-xl mt-2">
+                  {/* DESKTOP */}
+                  <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
                     <div className="overflow-x-auto w-80 xl:w-full lg:w-full md:w-full sm:w-80">
                       <table className="min-w-full table-auto divide-y divide-gray-300">
                         <thead>
@@ -1435,25 +1436,60 @@ export default function CustomerServiceReport() {
                         )}
                       </table>
                     </div>
-                    {!activitiesLoading && totalServiceActivities > 200 && (
-                      <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
-                        <div>
-                          <Pagination
-                            innerClass="pagination pagination-custom"
-                            activePage={currentPage}
-                            hideDisabled
-                            itemClass="page-item page-item-custom"
-                            linkClass="page-link page-link-custom"
-                            itemsCountPerPage={200}
-                            totalItemsCount={totalServiceActivities}
-                            pageRangeDisplayed={3}
-                            onChange={handlePageChange}
-                          />
-                        </div>
-                      </div>
+                  </div>
+
+                  {/* MOBILE */}
+                  <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
+                    {activitiesLoading && <Loader />}
+                    {!activitiesLoading && (
+                      <ul className="divide-y divide-gray-200 text-md text-gray-500">
+                        {serviceActivities.map((service) => (
+                          <li key={service.id}>
+                            <div className="px-2 py-4">
+                              <div>{service.service_name}</div>
+                              <div className="flex justify-between gap-2 mt-2">
+                                <div className="text-sky-500 font-semibold">
+                                  <Link to={`/report/review/${service.job_id}`}>
+                                    {service.purchase_order}
+                                  </Link>
+                                </div>
+                                <div>{service.timestamp}</div>
+                              </div>
+                              <div className="flex gap-2 mt-1">
+                                <div>
+                                  <div className="bg-gray-100 p-1 rounded-md">
+                                    {service.airport_name}
+                                  </div>
+                                </div>
+                                <div className="relative top-1">
+                                  {service.fbo_name}
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
                     )}
                   </div>
                 </>
+              )}
+
+              {!activitiesLoading && totalServiceActivities > 200 && (
+                <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
+                  <div>
+                    <Pagination
+                      innerClass="pagination pagination-custom"
+                      activePage={currentPage}
+                      hideDisabled
+                      itemClass="page-item page-item-custom"
+                      linkClass="page-link page-link-custom"
+                      itemsCountPerPage={200}
+                      totalItemsCount={totalServiceActivities}
+                      pageRangeDisplayed={3}
+                      onChange={handlePageChange}
+                    />
+                  </div>
+                </div>
               )}
             </div>
           </main>
