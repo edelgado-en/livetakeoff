@@ -1445,7 +1445,7 @@ export default function CustomerServiceReport() {
                       <ul className="divide-y divide-gray-200 text-md text-gray-500">
                         {serviceActivities.map((service) => (
                           <li key={service.id}>
-                            <div className="px-2 py-4">
+                            <div className="px-2 py-8">
                               <div className="flex justify-between gap-2">
                                 <div>{service.timestamp}</div>
                                 <div className="text-sky-500">
