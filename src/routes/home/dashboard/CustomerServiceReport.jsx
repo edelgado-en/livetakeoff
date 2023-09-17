@@ -321,10 +321,10 @@ export default function CustomerServiceReport() {
 
     setLoading(false);
 
-    searchServiceActivities();
+    searchServiceActivities(1);
   };
 
-  const searchServiceActivities = async () => {
+  const searchServiceActivities = async (page) => {
     setActivitiesLoading(true);
 
     const request = {
@@ -340,8 +340,14 @@ export default function CustomerServiceReport() {
       sort_by_timestamp_desc: sortByTimestampDesc,
     };
 
+    let cPage = currentPage;
+
+    if (page) {
+      cPage = page;
+    }
+
     try {
-      const { data } = await api.searchServiceActivities(request, currentPage);
+      const { data } = await api.searchServiceActivities(request, cPage);
 
       setServiceActivities(data.results);
       setTotalServiceActivities(data.count);
