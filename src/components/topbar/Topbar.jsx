@@ -56,12 +56,12 @@ const dashboards = [
     href: "/tail-report",
     icon: PresentationChartBarIcon,
   },
-  {
+  /*  {
     name: "Services by Airport",
     description: "A breakdown of open services by airport.",
     href: "/services-by-airport",
     icon: ViewGridIcon,
-  },
+  }, */
   {
     name: "Team Productivity",
     description: "Find out which project manager is the most productive.",
@@ -90,12 +90,12 @@ const internalCoordinatorDashboards = [
     href: "/tail-report",
     icon: PresentationChartBarIcon,
   },
-  {
+  /*   {
     name: "Services by Airport",
     description: "A breakdown of open services by airport.",
     href: "/services-by-airport",
     icon: ViewGridIcon,
-  },
+  }, */
 ];
 
 const moreOptions = [
