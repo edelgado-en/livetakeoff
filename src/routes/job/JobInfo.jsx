@@ -271,7 +271,9 @@ const JobInfo = () => {
         <div className="mt-6 max-w-5xl px-2">
           <div className="flex justify-between">
             <div className="">
-              <h1 className="text-3xl font-bold text-gray-700">Job Details</h1>
+              <h1 className="text-2xl xl:text-3xl font-bold text-gray-700">
+                Job Details
+              </h1>
             </div>
             <div>
               {currentUser.isCustomer &&
@@ -367,7 +369,7 @@ const JobInfo = () => {
 
           <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Tail Number
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -375,7 +377,7 @@ const JobInfo = () => {
               </dd>
             </div>
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Status
               </dt>
               <dd>
@@ -428,7 +430,7 @@ const JobInfo = () => {
             </div>
             {!currentUser.isProjectManager && !currentUser.isCustomer && (
               <div className="sm:col-span-1">
-                <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                   Customer
                 </dt>
                 <dd className="mt-1 text-xl text-gray-900">
@@ -437,7 +439,7 @@ const JobInfo = () => {
               </div>
             )}
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Airport
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -446,7 +448,7 @@ const JobInfo = () => {
             </div>
 
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Purchase Order
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -455,7 +457,7 @@ const JobInfo = () => {
             </div>
 
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 FBO
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -463,7 +465,7 @@ const JobInfo = () => {
               </dd>
             </div>
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Aircraft Type
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -472,7 +474,7 @@ const JobInfo = () => {
             </div>
 
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Complete Before
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -486,13 +488,15 @@ const JobInfo = () => {
                     <div className="absolute flex flex-shrink-0 items-center justify-center">
                       <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
                     </div>
-                    <div className="ml-3 text-xl text-gray-700">TBD</div>
+                    <div className="ml-3 text-md xl:text-xl text-gray-700">
+                      TBD
+                    </div>
                   </span>
                 )}
               </dd>
             </div>
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Arrival
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -505,7 +509,7 @@ const JobInfo = () => {
             </div>
 
             <div className="sm:col-span-1">
-              <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Departure
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -516,7 +520,7 @@ const JobInfo = () => {
             </div>
           </dl>
 
-          <div className="flex justify-end text-xl text-sky-500 cursor-pointer font-semibold">
+          <div className="flex justify-end text-md xl:text-xl text-sky-500 cursor-pointer font-semibold">
             <div onClick={() => setShowMore(!showMore)}>
               {showMore ? "Show less" : "Show more"}
             </div>
@@ -527,7 +531,7 @@ const JobInfo = () => {
               <div className="border-t-2 border-gray-300 my-8"></div>
               <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
                 <div className="sm:col-span-1">
-                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                     Requested By
                   </dt>
                   <dd className="mt-1 space-y-5 text-xl text-gray-900 truncate overflow-ellipsis max-w-sm">
@@ -541,7 +545,7 @@ const JobInfo = () => {
 
                 {currentUser.canSeePrice && (
                   <div className="sm:col-span-1">
-                    <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                       Price
                     </dt>
                     <dd className="mt-1 text-xl text-gray-900 flex gap-1">
@@ -579,7 +583,7 @@ const JobInfo = () => {
                 )}
 
                 <div className="sm:col-span-1">
-                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                     Request Date
                   </dt>
                   <dd className="mt-1 text-xl text-gray-900">
@@ -589,7 +593,7 @@ const JobInfo = () => {
 
                 {jobDetails.completion_date && (
                   <div className="sm:col-span-1">
-                    <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                       Completion Date
                     </dt>
                     <dd className="mt-1 text-xl text-gray-900">
@@ -599,7 +603,7 @@ const JobInfo = () => {
                 )}
 
                 <div className="sm:col-span-1">
-                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                     Customer Purchase Order
                   </dt>
                   <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
@@ -610,7 +614,7 @@ const JobInfo = () => {
                 </div>
 
                 <div className="sm:col-span-1">
-                  <dt className="text-xl font-bold text-gray-600 uppercase tracking-wide">
+                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                     Tags
                   </dt>
                   <dd className="mt-1 text-xl text-gray-900">
@@ -682,7 +686,7 @@ const JobInfo = () => {
           )}
 
           <div className="border-t-2 border-gray-300 my-8"></div>
-          <h2 className="text-2xl font-bold text-gray-700 uppercase tracking-wide">
+          <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
             Special Instructions
           </h2>
           <dd className="mt-4 space-y-5 text-xl text-gray-900">
@@ -695,7 +699,7 @@ const JobInfo = () => {
 
           <div className="mx-auto mt-8 max-w-5xl pb-8">
             <div className="flex flex-wrap justify-between">
-              <h2 className="text-2xl font-bold text-gray-700 uppercase tracking-wide">
+              <h2 className="text-md xl:text-xl font-bold text-gray-700 uppercase tracking-wide">
                 Services
               </h2>
               <div className="flex gap-4 text-right">
@@ -703,7 +707,7 @@ const JobInfo = () => {
                   <div className="flex flex-col">
                     <Switch.Label
                       as="p"
-                      className="text-lg font-bold text-gray-500"
+                      className="text-md xl:text-lg text-gray-500"
                       passive
                     >
                       {showActions ? "Hide Actions" : "Show Actions"}
@@ -759,7 +763,7 @@ const JobInfo = () => {
                 >
                   <div className="min-w-0 flex-1">
                     <div className="focus:outline-none">
-                      <div className="grid grid-cols-3 text-xl pb-2">
+                      <div className="grid grid-cols-3 text-md xl:text-xl pb-2">
                         <div className="col-span-2 font-bold text-gray-900 relative top-1">
                           {service.name}
                         </div>
@@ -800,28 +804,10 @@ const JobInfo = () => {
 
                       {!currentUser.isProjectManager && (
                         <div
-                          className="text-xl mb-4 relative inline-flex items-center
+                          className="text-sm xl:text-xl mb-4 relative inline-flex items-center
                                                             rounded-full border border-gray-300 px-3 py-0.5"
                         >
                           {service.project_manager}
-                          {/* TODO: show project manager avatar, and first name, last name, email, vendor in popover */}
-                          {/* <Popover className="relative">
-                                                    <Popover.Button>
-                                                        {service.project_manager}
-                                                    </Popover.Button>
-
-                                                    <Popover.Panel className="absolute z-10">
-                                                        <div className="absolute top-full left-0 mt-2 w-60 origin-top-right
-                                                                         divide-y divide-gray-100 rounded-lg bg-white text-xl font-normal
-                                                                        text-slate-900 shadow-md ring-1 ring-slate-900/5 focus:outline-none
-                                                                        transform opacity-100 scale-100">
-                                                            <p class="truncate py-3 px-3.5 text-xl">
-                                                                <span class="block text-gray-500">Signed in as</span>
-                                                                <span class="mt-1 font-semibold">enriquedelgado806@gmail.com</span>
-                                                            </p>
-                                                        </div>
-                                                    </Popover.Panel>
-                                                </Popover> */}
                         </div>
                       )}
 
@@ -829,7 +815,7 @@ const JobInfo = () => {
                         service.checklist_actions?.map((action) => (
                           <div
                             key={action.id}
-                            className="text-xl text-gray-500 py-1"
+                            className="text-sm xl:text-xl text-gray-500 py-1"
                           >
                             {action.name}
                           </div>
@@ -848,7 +834,7 @@ const JobInfo = () => {
             (currentUser.isCustomer && currentUser.isPremiumMember)) && (
             <div className="mx-auto max-w-5xl pb-12">
               <div className="flex justify-between">
-                <h2 className="text-2xl font-bold text-gray-700 uppercase tracking-wide">
+                <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
                   Retainer Services
                 </h2>
                 {currentUser.isCustomer &&
