@@ -421,8 +421,6 @@ export default function CustomerServiceReport() {
       setIsRetainerServicesSelected(true);
       setIsStandardServicesSelected(false);
       searchRetainerServiceActivities(1);
-
-      searchRetainerServiceActivities(1);
     }
   };
 
@@ -464,7 +462,7 @@ export default function CustomerServiceReport() {
     setActivitiesLoading(true);
 
     const request = {
-      service_id: selectedRetainerService.id,
+      service_id: selectedRetainerService?.id,
       dateSelected: dateSelected.id,
       tail_number: searchText,
       airport_id: airportSelected?.id,
