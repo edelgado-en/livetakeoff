@@ -56,12 +56,6 @@ const dashboards = [
     href: "/tail-report",
     icon: PresentationChartBarIcon,
   },
-  /*  {
-    name: "Services by Airport",
-    description: "A breakdown of open services by airport.",
-    href: "/services-by-airport",
-    icon: ViewGridIcon,
-  }, */
   {
     name: "Team Productivity",
     description: "Find out which project manager is the most productive.",
@@ -90,12 +84,6 @@ const internalCoordinatorDashboards = [
     href: "/tail-report",
     icon: PresentationChartBarIcon,
   },
-  /*   {
-    name: "Services by Airport",
-    description: "A breakdown of open services by airport.",
-    href: "/services-by-airport",
-    icon: ViewGridIcon,
-  }, */
 ];
 
 const moreOptions = [
@@ -351,6 +339,17 @@ const Topbar = () => {
                           )}
                         >
                           Tail Report
+                        </Link>
+                        <Link
+                          to="/service-report"
+                          className={classNames(
+                            location.pathname.includes("service-report")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Service Report
                         </Link>
                         <Link
                           to="/contact"

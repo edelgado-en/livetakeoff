@@ -3,6 +3,7 @@ import { Dialog, Transition, Listbox } from "@headlessui/react";
 import {
   CheckIcon,
   ChevronDownIcon,
+  ChevronUpIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/outline";
 
@@ -16,6 +17,7 @@ import AnimatedPage from "../../../components/animatedPage/AnimatedPage";
 
 import { selectUser } from "../../../routes/userProfile/userSlice";
 import { useAppSelector } from "../../../app/hooks";
+import { set } from "react-hook-form";
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -121,13 +123,19 @@ export default function CustomerServiceReport() {
 
   const [open, setOpen] = useState(false);
 
+  const [showRetainers, setShowRetainers] = useState(false);
+
   const [showSpendingInfo, setShowSpendingInfo] = useState(false);
 
-  const [selectedServiceType, setSelectedServiceType] = useState(
-    serviceTypes[0]
-  );
+  const [isStandardServicesSelected, setIsStandardServicesSelected] =
+    useState(true);
+  const [isRetainerServicesSelected, setIsRetainerServicesSelected] =
+    useState(false);
+
+  const [selectedServiceType, setSelectedServiceType] = useState({});
 
   const [selectedService, setSelectedService] = useState();
+  const [selectedRetainerService, setSelectedRetainerService] = useState();
 
   const [dateSelected, setDateSelected] = useState(dateOptions[4]);
   const [searchText, setSearchText] = useState("");
@@ -135,11 +143,18 @@ export default function CustomerServiceReport() {
   const [interiorServices, setInteriorServices] = useState([]);
   const [exteriorServices, setExteriorServices] = useState([]);
   const [otherServices, setOtherServices] = useState([]);
+  const [retainerServices, setRetainerServices] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const [serviceActivities, setServiceActivities] = useState([]);
   const [totalServiceActivities, setTotalServiceActivities] = useState(0);
+
+  const [retainerServiceActivities, setRetainerServiceActivities] = useState(
+    []
+  );
+  const [totalRetainerServiceActivities, setTotalRetainerServiceActivities] =
+    useState(0);
 
   const [numberOfServices, setNumberOfServices] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
@@ -190,6 +205,10 @@ export default function CustomerServiceReport() {
   }, []);
 
   useEffect(() => {
+    getRetainerServices();
+  }, []);
+
+  useEffect(() => {
     getAirports();
   }, []);
 
@@ -212,6 +231,24 @@ export default function CustomerServiceReport() {
     };
   }, [
     selectedService,
+    dateSelected,
+    searchText,
+    airportSelected,
+    fboSelected,
+    customerSelected,
+  ]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      generateRetainerServiceReport();
+    }, 300);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [
+    selectedRetainerService,
     dateSelected,
     searchText,
     airportSelected,
@@ -279,6 +316,16 @@ export default function CustomerServiceReport() {
     }
   };
 
+  const getRetainerServices = async () => {
+    try {
+      const { data } = await api.getRetainerServices();
+
+      setRetainerServices(data.results);
+    } catch (err) {
+      toast.error("Unable to get retainers");
+    }
+  };
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -288,11 +335,26 @@ export default function CustomerServiceReport() {
   };
 
   const handleServiceTypeChange = (serviceType) => {
-    setSelectedServiceType(serviceType);
+    //if serviceType is the same as the selected one, then clear it
+    if (selectedServiceType.type === serviceType.type) {
+      setSelectedServiceType({});
+    } else {
+      setSelectedServiceType(serviceType);
+    }
   };
 
   const handleServiceChange = (service) => {
     setSelectedService(service);
+    setSelectedRetainerService(null);
+    setIsRetainerServicesSelected(false);
+    setIsStandardServicesSelected(true);
+  };
+
+  const handleRetainerServiceChange = (service) => {
+    setSelectedRetainerService(service);
+    setSelectedService(null);
+    setIsStandardServicesSelected(false);
+    setIsRetainerServicesSelected(true);
   };
 
   const generateServiceReport = async () => {
@@ -315,6 +377,14 @@ export default function CustomerServiceReport() {
       setNumberOfTails(data.number_of_unique_tail_numbers);
       setNumberOfLocations(data.number_of_unique_locations);
       setShowSpendingInfo(data.show_spending_info);
+      setShowRetainers(data.show_retainers);
+
+      if (data.show_retainers) {
+        //only add it if it doesn't exist
+        if (!serviceTypes.find((serviceType) => serviceType.type === "R")) {
+          serviceTypes.push({ type: "R", name: "Retainer" });
+        }
+      }
     } catch (err) {
       toast.error("Unable to generate service report");
     }
@@ -322,6 +392,38 @@ export default function CustomerServiceReport() {
     setLoading(false);
 
     searchServiceActivities(1);
+  };
+
+  const generateRetainerServiceReport = async () => {
+    if (selectedRetainerService) {
+      setLoading(true);
+
+      const request = {
+        service_id: selectedRetainerService.id,
+        dateSelected: dateSelected.id,
+        tail_number: searchText,
+        airport_id: airportSelected?.id,
+        fbo_id: fboSelected?.id,
+        customer_id: customerSelected?.id,
+      };
+
+      try {
+        const { data } = await api.generateRetainerServiceReport(request);
+
+        setNumberOfServices(data.number_of_services_completed);
+        setNumberOfTails(data.number_of_unique_tail_numbers);
+        setNumberOfLocations(data.number_of_unique_locations);
+      } catch (err) {
+        toast.error("Unable to generate service report");
+      }
+
+      setLoading(false);
+      setIsRetainerServicesSelected(true);
+      setIsStandardServicesSelected(false);
+      searchRetainerServiceActivities(1);
+
+      searchRetainerServiceActivities(1);
+    }
   };
 
   const searchServiceActivities = async (page) => {
@@ -353,6 +455,43 @@ export default function CustomerServiceReport() {
       setTotalServiceActivities(data.count);
     } catch (err) {
       toast.error("Unable to search service activities");
+    }
+
+    setActivitiesLoading(false);
+  };
+
+  const searchRetainerServiceActivities = async (page) => {
+    setActivitiesLoading(true);
+
+    const request = {
+      service_id: selectedService?.id,
+      dateSelected: dateSelected.id,
+      tail_number: searchText,
+      airport_id: airportSelected?.id,
+      fbo_id: fboSelected?.id,
+      customer_id: customerSelected?.id,
+      sort_by_price_asc: sortByPriceAsc,
+      sort_by_price_desc: sortByPriceDesc,
+      sort_by_timestamp_asc: sortByTimestampAsc,
+      sort_by_timestamp_desc: sortByTimestampDesc,
+    };
+
+    let cPage = currentPage;
+
+    if (page) {
+      cPage = page;
+    }
+
+    try {
+      const { data } = await api.searchRetainerServiceActivities(
+        request,
+        cPage
+      );
+
+      setRetainerServiceActivities(data.results);
+      setTotalRetainerServiceActivities(data.count);
+    } catch (err) {
+      toast.error("Unable to search retainer service activities");
     }
 
     setActivitiesLoading(false);
@@ -414,6 +553,20 @@ export default function CustomerServiceReport() {
     }
   };
 
+  const handleSelectStandServices = () => {
+    setCurrentPage(1);
+    setIsStandardServicesSelected(true);
+    setIsRetainerServicesSelected(false);
+    searchServiceActivities(1);
+  };
+
+  const handleSelectRetainerServices = () => {
+    setCurrentPage(1);
+    setIsStandardServicesSelected(false);
+    setIsRetainerServicesSelected(true);
+    searchRetainerServiceActivities(1);
+  };
+
   return (
     <AnimatedPage>
       <div
@@ -439,7 +592,8 @@ export default function CustomerServiceReport() {
                           })
                         }
                         className={classNames(
-                          selectedService?.id === null
+                          selectedService?.id === null &&
+                            !selectedRetainerService
                             ? "bg-red-600 text-white font-semibold"
                             : "text-gray-600 hover:text-red-700 hover:border-red-600",
                           "group flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer border border-transparent"
@@ -465,10 +619,18 @@ export default function CustomerServiceReport() {
                             selectedServiceType.type === serviceType.type
                               ? "border border-red-600 text-red-600"
                               : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                            "group flex gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer"
+                            " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer"
                           )}
                         >
-                          {serviceType.name}
+                          <div>{serviceType.name}</div>
+                          <div>
+                            {selectedServiceType.type !== serviceType.type && (
+                              <ChevronDownIcon className="h-4 w-4" />
+                            )}
+                            {selectedServiceType.type === serviceType.type && (
+                              <ChevronUpIcon className="h-4 w-4" />
+                            )}
+                          </div>
                         </div>
                       </li>
                     ))}
@@ -476,11 +638,14 @@ export default function CustomerServiceReport() {
                 </li>
 
                 <li>
-                  <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide">
-                    {selectedServiceType.type === "E" && "Exterior"}
-                    {selectedServiceType.type === "I" && "Interior"}
-                    {selectedServiceType.type === "O" && "Other"} Services
-                  </div>
+                  {selectedServiceType.type && (
+                    <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide">
+                      {selectedServiceType.type === "E" && "Exterior"}
+                      {selectedServiceType.type === "I" && "Interior"}
+                      {selectedServiceType.type === "O" && "Other"}
+                      {selectedServiceType.type === "R" && "Retainer"} Services
+                    </div>
+                  )}
 
                   {selectedServiceType.type === "E" && (
                     <ul className="mt-2 space-y-1">
@@ -536,6 +701,30 @@ export default function CustomerServiceReport() {
                             )}
                           >
                             <div className="truncate">{service.name}</div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {selectedServiceType.type === "R" && (
+                    <ul className="mt-2 space-y-1">
+                      {retainerServices.map((retainerService) => (
+                        <li key={retainerService.id}>
+                          <div
+                            onClick={() =>
+                              handleRetainerServiceChange(retainerService)
+                            }
+                            className={classNames(
+                              retainerService.id === selectedRetainerService?.id
+                                ? "bg-red-600 text-white font-semibold"
+                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                              "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                            )}
+                          >
+                            <div className="truncate">
+                              {retainerService.name}
+                            </div>
                           </div>
                         </li>
                       ))}
@@ -619,7 +808,7 @@ export default function CustomerServiceReport() {
                         </ul>
                       </li>
                       <li>
-                        <div className="text-md font-semibold leading-6 text-gray-400 uppercase tracking-wide">
+                        <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide">
                           Service Types
                         </div>
                         <ul className="-mx-2 mt-2 space-y-1">
@@ -641,6 +830,18 @@ export default function CustomerServiceReport() {
                             </li>
                           ))}
                         </ul>
+
+                        {selectedServiceType.type && (
+                          <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide mt-3">
+                            {selectedServiceType.type === "E" && "Exterior"}
+                            {selectedServiceType.type === "I" && "Interior"}
+                            {selectedServiceType.type === "O" && "Other"}
+                            {selectedServiceType.type === "R" &&
+                              "Retainer"}{" "}
+                            Services
+                          </div>
+                        )}
+
                         {selectedServiceType.type === "E" && (
                           <ul className="mt-2 space-y-1">
                             {exteriorServices.map((service) => (
@@ -726,7 +927,8 @@ export default function CustomerServiceReport() {
           <main>
             <div className="flex w-full ml-0 xl:ml-8 mt-2">
               <div className="text-2xl tracking-wide font-semibold relative top-1">
-                {selectedService?.name}
+                {selectedService && selectedService.name}
+                {selectedRetainerService && selectedRetainerService.name}
               </div>
             </div>
             <div className="xs:p-0 xl:px-8 grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 mt-4">
@@ -1273,7 +1475,7 @@ export default function CustomerServiceReport() {
               {loading && <Loader />}
               {!loading && (
                 <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-4">
-                  {showSpendingInfo && (
+                  {showSpendingInfo && !selectedRetainerService && (
                     <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
                       <p className="text-lg font-medium leading-6 text-gray-400">
                         Total Spent
@@ -1320,189 +1522,441 @@ export default function CustomerServiceReport() {
               )}
             </header>
 
-            <div className="px-2 sm:px-6 lg:px-8 mt-6">
-              {totalServiceActivities === 0 && !activitiesLoading && (
-                <div className="text-center m-auto mt-14">
-                  <div className="font-medium text-xl">No services found.</div>
-                  <div className="text-gray-500 text-md">
-                    Try changing your search criteria.
-                  </div>
-                </div>
-              )}
-
-              {totalServiceActivities > 0 && (
-                <>
-                  <div className="sm:flex sm:items-center">
-                    <div className="sm:flex-auto">
-                      <h1 className="text-xl font-semibold leading-6 text-gray-600 tracking-wide">
-                        Services Completed
-                      </h1>
-                      <p className="mt-2 text-md text-gray-500">
-                        Checkout all services completed during the time period
-                        selected.
-                      </p>
+            {selectedService?.name === "All Services" && (
+              <div className="px-2 xl:px-6 lg:px-6 md:px-4 mt-2">
+                <div className="border-b border-gray-200">
+                  <nav className="-mb-px flex space-x-8">
+                    <div
+                      onClick={() => handleSelectStandServices()}
+                      className={classNames(
+                        isStandardServicesSelected
+                          ? "border-red-500 text-red-600"
+                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                        "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase tracking-wide cursor-pointer"
+                      )}
+                    >
+                      Standard Services
                     </div>
-                  </div>
-                  {/* DESKTOP */}
-                  <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
-                    <div className="overflow-x-auto w-80 xl:w-full lg:w-full md:w-full sm:w-80">
-                      <table className="min-w-full table-auto divide-y divide-gray-300">
-                        <thead>
-                          <tr>
-                            <th
-                              scope="col"
-                              className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
-                            >
-                              <div
-                                className="flex gap-1"
-                                onClick={() => handleSortByTimestamp()}
-                              >
-                                Date <ChevronUpDownIcon />
-                              </div>
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                            >
-                              Purchase Order
-                            </th>
-                            {!currentUser.isCustomer && (
-                              <th
-                                scope="col"
-                                className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                              >
-                                Customer
-                              </th>
+                    <div
+                      onClick={() => handleSelectRetainerServices()}
+                      className={classNames(
+                        isRetainerServicesSelected
+                          ? "border-red-500 text-red-600"
+                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                        "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase tracking-wide cursor-pointer"
+                      )}
+                    >
+                      Retainer Services
+                    </div>
+                  </nav>
+                </div>
+              </div>
+            )}
+
+            {isStandardServicesSelected && (
+              <>
+                <div className="px-2 sm:px-6 lg:px-8 mt-6">
+                  {totalServiceActivities === 0 && !activitiesLoading && (
+                    <div className="text-center m-auto mt-14">
+                      <div className="font-medium text-xl">
+                        No services found.
+                      </div>
+                      <div className="text-gray-500 text-md">
+                        Try changing your search criteria.
+                      </div>
+                    </div>
+                  )}
+
+                  {totalServiceActivities > 0 && (
+                    <>
+                      <div className="sm:flex sm:items-center">
+                        <div className="sm:flex-auto">
+                          <h1 className="text-xl font-semibold leading-6 text-gray-600 tracking-wide">
+                            Services Completed
+                          </h1>
+                          <p className="mt-2 text-md text-gray-500">
+                            Checkout all services completed during the time
+                            period selected.
+                          </p>
+                        </div>
+                      </div>
+                      {/* DESKTOP */}
+                      <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
+                        <div className="overflow-x-auto w-80 xl:w-full lg:w-full md:w-full sm:w-80">
+                          <table className="min-w-full table-auto divide-y divide-gray-300">
+                            <thead>
+                              <tr>
+                                <th
+                                  scope="col"
+                                  className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
+                                >
+                                  <div
+                                    className="flex gap-1"
+                                    onClick={() => handleSortByTimestamp()}
+                                  >
+                                    Date <ChevronUpDownIcon />
+                                  </div>
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Purchase Order
+                                </th>
+                                {!currentUser.isCustomer && (
+                                  <th
+                                    scope="col"
+                                    className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                  >
+                                    Customer
+                                  </th>
+                                )}
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Tail
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Airport
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  FBO
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Service
+                                </th>
+                              </tr>
+                            </thead>
+                            {activitiesLoading && <Loader />}
+                            {!activitiesLoading && (
+                              <tbody className="divide-y divide-gray-200 bg-white">
+                                {serviceActivities.map((service) => (
+                                  <tr key={service.id}>
+                                    <td className="px-2 py-2 text-sm text-gray-500 sm:pl-0">
+                                      {service.timestamp}
+                                    </td>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-sky-500 font-semibold cursor-pointer">
+                                      <Link
+                                        to={`/report/review/${service.job_id}`}
+                                      >
+                                        {service.purchase_order}
+                                      </Link>
+                                    </td>
+                                    {!currentUser.isCustomer && (
+                                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                        <div className="truncate overflow-ellipsis w-40">
+                                          {service.customer_name}
+                                        </div>
+                                      </td>
+                                    )}
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                      {service.tail_number}
+                                    </td>
+                                    <td className="px-2 py-2 text-sm text-gray-500">
+                                      <div className="truncate overflow-ellipsis w-40">
+                                        {service.airport_name}
+                                      </div>
+                                    </td>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                      {service.fbo_name}
+                                    </td>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                      <div className=" truncate overflow-ellipsis w-80">
+                                        {service.service_name}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
                             )}
-                            <th
-                              scope="col"
-                              className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                            >
-                              Tail
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                            >
-                              Airport
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                            >
-                              FBO
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                            >
-                              Service
-                            </th>
-                          </tr>
-                        </thead>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* MOBILE */}
+                      <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
                         {activitiesLoading && <Loader />}
                         {!activitiesLoading && (
-                          <tbody className="divide-y divide-gray-200 bg-white">
+                          <ul className="divide-y divide-gray-200 text-md text-gray-500">
                             {serviceActivities.map((service) => (
-                              <tr key={service.id}>
-                                <td className="px-2 py-2 text-sm text-gray-500 sm:pl-0">
-                                  {service.timestamp}
-                                </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-sm text-sky-500 font-semibold cursor-pointer">
-                                  <Link to={`/report/review/${service.job_id}`}>
-                                    {service.purchase_order}
-                                  </Link>
-                                </td>
-                                {!currentUser.isCustomer && (
-                                  <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                    <div className="truncate overflow-ellipsis w-40">
-                                      {service.customer_name}
+                              <li key={service.id}>
+                                <div className="px-2 py-8">
+                                  <div className="flex justify-between gap-2">
+                                    <div>{service.timestamp}</div>
+                                    <div className="text-sky-500">
+                                      <Link
+                                        to={`/report/review/${service.job_id}`}
+                                      >
+                                        {service.purchase_order}
+                                      </Link>
                                     </div>
-                                  </td>
-                                )}
-                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                  {service.tail_number}
-                                </td>
-                                <td className="px-2 py-2 text-sm text-gray-500">
-                                  <div className="truncate overflow-ellipsis w-40">
-                                    {service.airport_name}
                                   </div>
-                                </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                  {service.fbo_name}
-                                </td>
-                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                  <div className=" truncate overflow-ellipsis w-80">
+                                  <div className="font-semibold mt-2">
                                     {service.service_name}
                                   </div>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        )}
-                      </table>
-                    </div>
-                  </div>
-
-                  {/* MOBILE */}
-                  <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
-                    {activitiesLoading && <Loader />}
-                    {!activitiesLoading && (
-                      <ul className="divide-y divide-gray-200 text-md text-gray-500">
-                        {serviceActivities.map((service) => (
-                          <li key={service.id}>
-                            <div className="px-2 py-8">
-                              <div className="flex justify-between gap-2">
-                                <div>{service.timestamp}</div>
-                                <div className="text-sky-500">
-                                  <Link to={`/report/review/${service.job_id}`}>
-                                    {service.purchase_order}
-                                  </Link>
-                                </div>
-                              </div>
-                              <div className="font-semibold mt-2">
-                                {service.service_name}
-                              </div>
-                              <div className="flex justify-between gap-2 mt-1">
-                                <div>
-                                  <div className="bg-gray-100 p-1 rounded-md">
-                                    {service.airport_name}
+                                  <div className="flex justify-between gap-2 mt-1">
+                                    <div>
+                                      <div className="bg-gray-100 p-1 rounded-md">
+                                        {service.airport_name}
+                                      </div>
+                                    </div>
+                                    <div className="relative top-1">
+                                      {service.fbo_name}
+                                    </div>
+                                    <div className="italic relative top-1">
+                                      {service.tail_number}
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="relative top-1">
-                                  {service.fbo_name}
-                                </div>
-                                <div className="italic relative top-1">
-                                  {service.tail_number}
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </>
-              )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </>
+                  )}
 
-              {!activitiesLoading && totalServiceActivities > 200 && (
-                <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
-                  <div>
-                    <Pagination
-                      innerClass="pagination pagination-custom"
-                      activePage={currentPage}
-                      hideDisabled
-                      itemClass="page-item page-item-custom"
-                      linkClass="page-link page-link-custom"
-                      itemsCountPerPage={200}
-                      totalItemsCount={totalServiceActivities}
-                      pageRangeDisplayed={3}
-                      onChange={handlePageChange}
-                    />
-                  </div>
+                  {!activitiesLoading && totalServiceActivities > 200 && (
+                    <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
+                      <div>
+                        <Pagination
+                          innerClass="pagination pagination-custom"
+                          activePage={currentPage}
+                          hideDisabled
+                          itemClass="page-item page-item-custom"
+                          linkClass="page-link page-link-custom"
+                          itemsCountPerPage={200}
+                          totalItemsCount={totalServiceActivities}
+                          pageRangeDisplayed={3}
+                          onChange={handlePageChange}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+                {!activitiesLoading && totalServiceActivities > 200 && (
+                  <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
+                    <div>
+                      <Pagination
+                        innerClass="pagination pagination-custom"
+                        activePage={currentPage}
+                        hideDisabled
+                        itemClass="page-item page-item-custom"
+                        linkClass="page-link page-link-custom"
+                        itemsCountPerPage={200}
+                        totalItemsCount={totalServiceActivities}
+                        pageRangeDisplayed={3}
+                        onChange={handlePageChange}
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {isRetainerServicesSelected && (
+              <>
+                <div className="px-2 sm:px-6 lg:px-8 mt-6">
+                  {totalRetainerServiceActivities === 0 &&
+                    !activitiesLoading && (
+                      <div className="text-center m-auto mt-14">
+                        <div className="font-medium text-xl">
+                          No retainer services found.
+                        </div>
+                        <div className="text-gray-500 text-md">
+                          Try changing your search criteria.
+                        </div>
+                      </div>
+                    )}
+
+                  {totalRetainerServiceActivities > 0 && (
+                    <>
+                      <div className="sm:flex sm:items-center">
+                        <div className="sm:flex-auto">
+                          <h1 className="text-xl font-semibold leading-6 text-gray-600 tracking-wide">
+                            Retainer Services Completed
+                          </h1>
+                          <p className="mt-2 text-md text-gray-500">
+                            Checkout all retainer services completed during the
+                            time period selected.
+                          </p>
+                        </div>
+                      </div>
+                      {/* DESKTOP */}
+                      <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
+                        <div className="overflow-x-auto w-80 xl:w-full lg:w-full md:w-full sm:w-80">
+                          <table className="min-w-full table-auto divide-y divide-gray-300">
+                            <thead>
+                              <tr>
+                                <th
+                                  scope="col"
+                                  className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
+                                >
+                                  <div
+                                    className="flex gap-1"
+                                    onClick={() => handleSortByTimestamp()}
+                                  >
+                                    Date <ChevronUpDownIcon />
+                                  </div>
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Purchase Order
+                                </th>
+                                {!currentUser.isCustomer && (
+                                  <th
+                                    scope="col"
+                                    className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                  >
+                                    Customer
+                                  </th>
+                                )}
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Tail
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Airport
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  FBO
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                >
+                                  Service
+                                </th>
+                              </tr>
+                            </thead>
+                            {activitiesLoading && <Loader />}
+                            {!activitiesLoading && (
+                              <tbody className="divide-y divide-gray-200 bg-white">
+                                {retainerServiceActivities.map((service) => (
+                                  <tr key={service.id}>
+                                    <td className="px-2 py-2 text-sm text-gray-500 sm:pl-0">
+                                      {service.timestamp}
+                                    </td>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-sky-500 font-semibold cursor-pointer">
+                                      <Link
+                                        to={`/report/review/${service.job_id}`}
+                                      >
+                                        {service.purchase_order}
+                                      </Link>
+                                    </td>
+                                    {!currentUser.isCustomer && (
+                                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                        <div className="truncate overflow-ellipsis w-40">
+                                          {service.customer_name}
+                                        </div>
+                                      </td>
+                                    )}
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                      {service.tail_number}
+                                    </td>
+                                    <td className="px-2 py-2 text-sm text-gray-500">
+                                      <div className="truncate overflow-ellipsis w-40">
+                                        {service.airport_name}
+                                      </div>
+                                    </td>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                      {service.fbo_name}
+                                    </td>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                      <div className=" truncate overflow-ellipsis w-80">
+                                        {service.service_name}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            )}
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* MOBILE */}
+                      <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
+                        {activitiesLoading && <Loader />}
+                        {!activitiesLoading && (
+                          <ul className="divide-y divide-gray-200 text-md text-gray-500">
+                            {retainerServiceActivities.map((service) => (
+                              <li key={service.id}>
+                                <div className="px-2 py-8">
+                                  <div className="flex justify-between gap-2">
+                                    <div>{service.timestamp}</div>
+                                    <div className="text-sky-500">
+                                      <Link
+                                        to={`/report/review/${service.job_id}`}
+                                      >
+                                        {service.purchase_order}
+                                      </Link>
+                                    </div>
+                                  </div>
+                                  <div className="font-semibold mt-2">
+                                    {service.service_name}
+                                  </div>
+                                  <div className="flex justify-between gap-2 mt-1">
+                                    <div>
+                                      <div className="bg-gray-100 p-1 rounded-md">
+                                        {service.airport_name}
+                                      </div>
+                                    </div>
+                                    <div className="relative top-1">
+                                      {service.fbo_name}
+                                    </div>
+                                    <div className="italic relative top-1">
+                                      {service.tail_number}
+                                    </div>
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+                {!activitiesLoading && totalRetainerServiceActivities > 200 && (
+                  <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
+                    <div>
+                      <Pagination
+                        innerClass="pagination pagination-custom"
+                        activePage={currentPage}
+                        hideDisabled
+                        itemClass="page-item page-item-custom"
+                        linkClass="page-link page-link-custom"
+                        itemsCountPerPage={200}
+                        totalItemsCount={totalRetainerServiceActivities}
+                        pageRangeDisplayed={3}
+                        onChange={handlePageChange}
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
           </main>
         </div>
       </div>

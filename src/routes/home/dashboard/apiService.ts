@@ -17,6 +17,10 @@ export const getServices = () => {
     return httpService.get('/api/services');
 }
 
+export const getRetainerServices = () => {
+    return httpService.get('/api/retainer-services');
+}
+
 export const searchRetainerCustomers = (data: any, currentPage: Number) => {
     return httpService.post(`/api/customers/retainers?page=${currentPage}&size=${100}`, data);
 } 
@@ -33,8 +37,16 @@ export const generateServiceReport = (data: any) => {
     return httpService.post('/api/service-report', data)
 }
 
+export const generateRetainerServiceReport = (data: any) => {
+    return httpService.post('/api/retainer-service-report', data)
+}
+
 export const searchServiceActivities = (data: any, currentPage: Number) => {
     return httpService.post(`/api/service-activities?page=${currentPage}&size=${200}`, data);
+}
+
+export const searchRetainerServiceActivities = (data: any, currentPage: Number) => {
+    return httpService.post(`/api/retainer-service-activities?page=${currentPage}&size=${200}`, data);
 }
 
 export const getCustomers = (request: any) => {
