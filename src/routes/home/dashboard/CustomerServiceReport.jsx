@@ -1581,7 +1581,7 @@ export default function CustomerServiceReport() {
                       {/* DESKTOP */}
                       <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
                         <div className="overflow-x-auto w-80 xl:w-full lg:w-full md:w-full sm:w-80">
-                          <table className="min-w-full table-auto divide-y divide-gray-300">
+                          <table className="min-w-full table-auto">
                             <thead>
                               <tr>
                                 <th
@@ -1793,7 +1793,7 @@ export default function CustomerServiceReport() {
                       {/* DESKTOP */}
                       <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
                         <div className="overflow-x-auto w-80 xl:w-full lg:w-full md:w-full sm:w-80">
-                          <table className="min-w-full table-auto divide-y divide-gray-300">
+                          <table className="min-w-full table-auto">
                             <thead>
                               <tr>
                                 <th
