@@ -1814,20 +1814,15 @@ const CreateJob = () => {
                     <div
                       key={index}
                       onClick={() => handleServiceChange(service)}
-                      className={`relative flex justify-between cursor-pointer hover:bg-gray-50 border 
+                      className={`relative cursor-pointer hover:bg-gray-50 border 
                                     ${
                                       service.selected
-                                        ? "border-green-500"
+                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
                                         : "border-gray-300"
                                     }           
                       rounded-lg p-4 py-7 focus:outline-none`}
                     >
-                      <div className="flex-1 text-md">{service.name}</div>
-                      <div className="text-right flex justify-end">
-                        {service.selected && (
-                          <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                        )}
-                      </div>
+                      <div className="text-md">{service.name}</div>
                     </div>
                   ))}
                 </div>
@@ -1840,20 +1835,15 @@ const CreateJob = () => {
                     <div
                       key={index}
                       onClick={() => handleServiceChange(service)}
-                      className={`relative flex justify-between cursor-pointer hover:bg-gray-50 border 
+                      className={`relative cursor-pointer hover:bg-gray-50 border 
                                     ${
                                       service.selected
-                                        ? "border-green-500"
+                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
                                         : "border-gray-300"
                                     }           
                       rounded-lg p-4 py-7 focus:outline-none`}
                     >
-                      <div className="flex-1 text-md">{service.name}</div>
-                      <div className="text-right flex justify-end">
-                        {service.selected && (
-                          <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                        )}
-                      </div>
+                      <div className="text-md">{service.name}</div>
                     </div>
                   ))}
                 </div>
@@ -1867,20 +1857,15 @@ const CreateJob = () => {
                         <div
                           key={index}
                           onClick={() => handleServiceChange(service)}
-                          className={`relative flex justify-between cursor-pointer hover:bg-gray-50 border 
+                          className={`relative cursor-pointer hover:bg-gray-50 border 
                                             ${
                                               service.selected
-                                                ? "border-green-500"
+                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
                                                 : "border-gray-300"
                                             }           
                             rounded-lg p-4 py-7 focus:outline-none`}
                         >
                           <div className="flex-1 text-md">{service.name}</div>
-                          <div className="text-right flex justify-end">
-                            {service.selected && (
-                              <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                            )}
-                          </div>
                         </div>
                       ))}
                     </div>
@@ -1906,20 +1891,15 @@ const CreateJob = () => {
                         <div
                           key={index}
                           onClick={() => handleRetainerServiceChange(service)}
-                          className={`relative flex justify-between cursor-pointer hover:bg-gray-50 border 
+                          className={`relative cursor-pointer hover:bg-gray-50 border 
                                     ${
                                       service.selected
-                                        ? "border-green-500"
+                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
                                         : "border-gray-300"
                                     }           
                                     rounded-lg p-4 py-7 focus:outline-none`}
                         >
                           <div className="flex-1 text-md">{service.name}</div>
-                          <div className="text-right flex justify-end">
-                            {service.selected && (
-                              <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                            )}
-                          </div>
                         </div>
                       ))}
                     </div>
@@ -1929,20 +1909,15 @@ const CreateJob = () => {
                         <div
                           key={index}
                           onClick={() => handleRetainerServiceChange(service)}
-                          className={`relative flex justify-between cursor-pointer hover:bg-gray-50 border 
+                          className={`relative cursor-pointer hover:bg-gray-50 border 
                                     ${
                                       service.selected
-                                        ? "border-green-500"
+                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
                                         : "border-gray-300"
                                     }           
                                     rounded-lg p-4 py-7 focus:outline-none`}
                         >
                           <div className="flex-1 text-md">{service.name}</div>
-                          <div className="text-right flex justify-end">
-                            {service.selected && (
-                              <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                            )}
-                          </div>
                         </div>
                       ))}
                     </div>
@@ -1952,20 +1927,15 @@ const CreateJob = () => {
                         <div
                           key={index}
                           onClick={() => handleRetainerServiceChange(service)}
-                          className={`relative flex justify-between cursor-pointer hover:bg-gray-50 border 
+                          className={`relative cursor-pointer hover:bg-gray-50 border 
                                     ${
                                       service.selected
-                                        ? "border-green-500"
+                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
                                         : "border-gray-300"
                                     }           
                                     rounded-lg p-4 py-7 focus:outline-none`}
                         >
                           <div className="flex-1 text-md">{service.name}</div>
-                          <div className="text-right flex justify-end">
-                            {service.selected && (
-                              <CheckCircleIcon className="h-8 w-8 text-green-500" />
-                            )}
-                          </div>
                         </div>
                       ))}
                     </div>
