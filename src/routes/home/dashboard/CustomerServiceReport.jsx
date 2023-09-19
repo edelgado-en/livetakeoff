@@ -340,7 +340,7 @@ export default function CustomerServiceReport() {
   };
 
   const handleServiceChange = (service) => {
-    //setSelectedService(service);
+    setCurrentPage(1);
     setSelectedRetainerService(null);
     setIsRetainerServicesSelected(false);
     setIsStandardServicesSelected(true);
@@ -349,7 +349,7 @@ export default function CustomerServiceReport() {
   };
 
   const handleRetainerServiceChange = (service) => {
-    //setSelectedRetainerService(service);
+    setCurrentRetainerPage(1);
     setSelectedService(null);
     setIsStandardServicesSelected(false);
     setIsRetainerServicesSelected(true);
