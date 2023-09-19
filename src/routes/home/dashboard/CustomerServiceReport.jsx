@@ -623,126 +623,194 @@ export default function CustomerServiceReport() {
                     Service Types
                   </div>
                   <ul className="-mx-2 mt-2 space-y-1">
-                    {serviceTypes.map((serviceType) => (
-                      <li key={serviceType.name}>
-                        <div
-                          onClick={() => handleServiceTypeChange(serviceType)}
-                          className={classNames(
-                            selectedServiceType.type === serviceType.type
-                              ? "border border-red-600 text-red-600"
-                              : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                            " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer"
+                    <li>
+                      <div
+                        onClick={() =>
+                          handleServiceTypeChange({
+                            type: "E",
+                            name: "Exterior",
+                          })
+                        }
+                        className={classNames(
+                          selectedServiceType.type === "E"
+                            ? "border border-red-600 text-red-600"
+                            : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                          " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                        )}
+                      >
+                        <div>Exterior</div>
+                        <div>
+                          {selectedServiceType.type !== "E" && (
+                            <ChevronDownIcon className="h-4 w-4" />
                           )}
-                        >
-                          <div>{serviceType.name}</div>
-                          <div>
-                            {selectedServiceType.type !== serviceType.type && (
-                              <ChevronDownIcon className="h-4 w-4" />
-                            )}
-                            {selectedServiceType.type === serviceType.type && (
-                              <ChevronUpIcon className="h-4 w-4" />
-                            )}
-                          </div>
+                          {selectedServiceType.type === "E" && (
+                            <ChevronUpIcon className="h-4 w-4" />
+                          )}
                         </div>
-                      </li>
-                    ))}
+                      </div>
+                      {selectedServiceType.type === "E" && (
+                        <ul className="mt-2 space-y-1 pl-4">
+                          {exteriorServices.map((service) => (
+                            <li key={service.id}>
+                              <div
+                                onClick={() => handleServiceChange(service)}
+                                className={classNames(
+                                  service.id === selectedService?.id
+                                    ? "bg-red-600 text-white font-semibold"
+                                    : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                  "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                )}
+                              >
+                                <div className="truncate">{service.name}</div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                    <li>
+                      <div
+                        onClick={() =>
+                          handleServiceTypeChange({
+                            type: "I",
+                            name: "Interior",
+                          })
+                        }
+                        className={classNames(
+                          selectedServiceType.type === "I"
+                            ? "border border-red-600 text-red-600"
+                            : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                          " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                        )}
+                      >
+                        <div>Interior</div>
+                        <div>
+                          {selectedServiceType.type !== "I" && (
+                            <ChevronDownIcon className="h-4 w-4" />
+                          )}
+                          {selectedServiceType.type === "I" && (
+                            <ChevronUpIcon className="h-4 w-4" />
+                          )}
+                        </div>
+                      </div>
+                      {selectedServiceType.type === "I" && (
+                        <ul className="mt-2 space-y-1 pl-4">
+                          {interiorServices.map((service) => (
+                            <li key={service.id}>
+                              <div
+                                onClick={() => handleServiceChange(service)}
+                                className={classNames(
+                                  service.id === selectedService?.id
+                                    ? "bg-red-600 text-white font-semibold"
+                                    : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                  "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                )}
+                              >
+                                <div className="truncate">{service.name}</div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                    <li>
+                      <div
+                        onClick={() =>
+                          handleServiceTypeChange({
+                            type: "O",
+                            name: "Other",
+                          })
+                        }
+                        className={classNames(
+                          selectedServiceType.type === "O"
+                            ? "border border-red-600 text-red-600"
+                            : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                          " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                        )}
+                      >
+                        <div>Other</div>
+                        <div>
+                          {selectedServiceType.type !== "O" && (
+                            <ChevronDownIcon className="h-4 w-4" />
+                          )}
+                          {selectedServiceType.type === "O" && (
+                            <ChevronUpIcon className="h-4 w-4" />
+                          )}
+                        </div>
+                      </div>
+                      {selectedServiceType.type === "O" && (
+                        <ul className="mt-2 space-y-1 pl-4">
+                          {otherServices.map((service) => (
+                            <li key={service.id}>
+                              <div
+                                onClick={() => handleServiceChange(service)}
+                                className={classNames(
+                                  service.id === selectedService?.id
+                                    ? "bg-red-600 text-white font-semibold"
+                                    : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                  "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                )}
+                              >
+                                <div className="truncate">{service.name}</div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                    <li>
+                      <div
+                        onClick={() =>
+                          handleServiceTypeChange({
+                            type: "R",
+                            name: "Retainer",
+                          })
+                        }
+                        className={classNames(
+                          selectedServiceType.type === "R"
+                            ? "border border-red-600 text-red-600"
+                            : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                          " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                        )}
+                      >
+                        <div>Retainer</div>
+                        <div>
+                          {selectedServiceType.type !== "R" && (
+                            <ChevronDownIcon className="h-4 w-4" />
+                          )}
+                          {selectedServiceType.type === "R" && (
+                            <ChevronUpIcon className="h-4 w-4" />
+                          )}
+                        </div>
+                      </div>
+                      {selectedServiceType.type === "R" && (
+                        <ul className="mt-2 space-y-1 pl-4">
+                          {retainerServices.map((retainerService) => (
+                            <li key={retainerService.id}>
+                              <div
+                                onClick={() =>
+                                  handleRetainerServiceChange(retainerService)
+                                }
+                                className={classNames(
+                                  retainerService.id ===
+                                    selectedRetainerService?.id
+                                    ? "bg-red-600 text-white font-semibold"
+                                    : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                  "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                )}
+                              >
+                                <div className="truncate">
+                                  {retainerService.name}
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
                   </ul>
                 </li>
 
-                <li>
-                  {selectedServiceType.type && (
-                    <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide">
-                      {selectedServiceType.type === "E" && "Exterior"}
-                      {selectedServiceType.type === "I" && "Interior"}
-                      {selectedServiceType.type === "O" && "Other"}
-                      {selectedServiceType.type === "R" && "Retainer"} Services
-                    </div>
-                  )}
-
-                  {selectedServiceType.type === "E" && (
-                    <ul className="mt-2 space-y-1">
-                      {exteriorServices.map((service) => (
-                        <li key={service.id}>
-                          <div
-                            onClick={() => handleServiceChange(service)}
-                            className={classNames(
-                              service.id === selectedService?.id
-                                ? "bg-red-600 text-white font-semibold"
-                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                              "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
-                            )}
-                          >
-                            <div className="truncate">{service.name}</div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {selectedServiceType.type === "I" && (
-                    <ul className="mt-2 space-y-1">
-                      {interiorServices.map((service) => (
-                        <li key={service.id}>
-                          <div
-                            onClick={() => handleServiceChange(service)}
-                            className={classNames(
-                              service.id === selectedService?.id
-                                ? "bg-red-600 text-white font-semibold"
-                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                              "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
-                            )}
-                          >
-                            <div className="truncate">{service.name}</div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {selectedServiceType.type === "O" && (
-                    <ul className="mt-2 space-y-1">
-                      {otherServices.map((service) => (
-                        <li key={service.id}>
-                          <div
-                            onClick={() => handleServiceChange(service)}
-                            className={classNames(
-                              service.id === selectedService?.id
-                                ? "bg-red-600 text-white font-semibold"
-                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                              "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
-                            )}
-                          >
-                            <div className="truncate">{service.name}</div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {selectedServiceType.type === "R" && (
-                    <ul className="mt-2 space-y-1">
-                      {retainerServices.map((retainerService) => (
-                        <li key={retainerService.id}>
-                          <div
-                            onClick={() =>
-                              handleRetainerServiceChange(retainerService)
-                            }
-                            className={classNames(
-                              retainerService.id === selectedRetainerService?.id
-                                ? "bg-red-600 text-white font-semibold"
-                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                              "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
-                            )}
-                          >
-                            <div className="truncate">
-                              {retainerService.name}
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
                 <li>
                   <div className="py-10"></div>
                 </li>
