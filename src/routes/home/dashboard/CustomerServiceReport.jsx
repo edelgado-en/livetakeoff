@@ -1509,74 +1509,36 @@ export default function CustomerServiceReport() {
                 )}
               </div>
             </div>
-            <header>
-              <div className="bg-gray-50 px-4 pt-4 sm:items-center sm:px-6 lg:px-8 flex flex-wrap justify-between mt-4">
-                <div className="text-2xl leading-6 text-gray-500 mb-3">
-                  {dateSelected.name}
-                </div>
-                <div></div>
-              </div>
-
-              {loading && <Loader />}
-              {!loading && (
-                <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-4">
-                  {showSpendingInfo && !selectedRetainerService && (
-                    <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                      <p className="text-xl font-medium leading-6 text-gray-400">
-                        Total
-                        {selectedService?.name === "All Services" &&
-                          showRetainers && (
-                            <span className="ml-1 font-normal text-sm">
-                              (Standard & Retainers)
-                            </span>
-                          )}
-                      </p>
-                      <p className="mt-2 flex items-baseline gap-x-2">
-                        <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                          ${totalSpent.toLocaleString()}
-                        </span>
-                      </p>
-                    </div>
-                  )}
-                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                    <p className="text-xl font-medium leading-6 text-gray-400">
-                      Number of Services
-                    </p>
-                    <p className="mt-2 flex items-baseline gap-x-2">
-                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {numberOfServices.toLocaleString()}
-                      </span>
-                    </p>
-                  </div>
-                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                    <p className="text-xl font-medium leading-6 text-gray-400">
-                      Number of Tails
-                    </p>
-                    <p className="mt-2 flex items-baseline gap-x-2">
-                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {numberOfTails.toLocaleString()}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                    <p className="text-xl font-medium leading-6 text-gray-400">
-                      Number of Airports
-                    </p>
-                    <p className="mt-2 flex items-baseline gap-x-2">
-                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {numberOfLocations.toLocaleString()}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              )}
-            </header>
-
             {selectedService?.name === "All Services" &&
-              showRetainers &&
-              selectedRetainerService == null && (
-                <div className="px-2 xl:px-6 lg:px-6 md:px-4 mt-2">
+            showRetainers &&
+            selectedRetainerService == null ? (
+              <header>
+                {showSpendingInfo && (
+                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4 bg-gray-50">
+                    <div className="text-2xl leading-6 text-gray-500 mb-3">
+                      {dateSelected.name}
+                    </div>
+                    <div className="flex justify-center text-center items-center">
+                      <div className="text-center items-center flex flex-col">
+                        <p className="text-xl font-medium leading-6 text-gray-400">
+                          Total
+                          {selectedService?.name === "All Services" &&
+                            showRetainers && (
+                              <span className="ml-1 font-normal text-sm">
+                                (Standard & Retainers)
+                              </span>
+                            )}
+                        </p>
+                        <p className="mt-2 flex items-baseline gap-x-2">
+                          <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                            ${totalSpent.toLocaleString()}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="px-2 xl:px-6 lg:px-6 md:px-4 bg-gray-50">
                   <div className="border-b border-gray-200">
                     <nav className="-mb-px flex space-x-8">
                       <div
@@ -1604,7 +1566,105 @@ export default function CustomerServiceReport() {
                     </nav>
                   </div>
                 </div>
-              )}
+                <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-3">
+                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
+                    <p className="text-xl font-medium leading-6 text-gray-400">
+                      Number of Services
+                    </p>
+                    <p className="mt-2 flex items-baseline gap-x-2">
+                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                        {numberOfServices.toLocaleString()}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
+                    <p className="text-xl font-medium leading-6 text-gray-400">
+                      Number of Tails
+                    </p>
+                    <p className="mt-2 flex items-baseline gap-x-2">
+                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                        {numberOfTails.toLocaleString()}
+                      </span>
+                    </p>
+                  </div>
+
+                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
+                    <p className="text-xl font-medium leading-6 text-gray-400">
+                      Number of Airports
+                    </p>
+                    <p className="mt-2 flex items-baseline gap-x-2">
+                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                        {numberOfLocations.toLocaleString()}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </header>
+            ) : (
+              <header>
+                <div className="bg-gray-50 px-4 pt-4 sm:items-center sm:px-6 lg:px-8 flex flex-wrap justify-between mt-4">
+                  <div className="text-2xl leading-6 text-gray-500 mb-3">
+                    {dateSelected.name}
+                  </div>
+                  <div></div>
+                </div>
+
+                {loading && <Loader />}
+                {!loading && (
+                  <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-4">
+                    {showSpendingInfo && !selectedRetainerService && (
+                      <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
+                        <p className="text-xl font-medium leading-6 text-gray-400">
+                          Total
+                          {selectedService?.name === "All Services" &&
+                            showRetainers && (
+                              <span className="ml-1 font-normal text-sm">
+                                (Standard & Retainers)
+                              </span>
+                            )}
+                        </p>
+                        <p className="mt-2 flex items-baseline gap-x-2">
+                          <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                            ${totalSpent.toLocaleString()}
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                    <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
+                      <p className="text-xl font-medium leading-6 text-gray-400">
+                        Number of Services
+                      </p>
+                      <p className="mt-2 flex items-baseline gap-x-2">
+                        <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                          {numberOfServices.toLocaleString()}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
+                      <p className="text-xl font-medium leading-6 text-gray-400">
+                        Number of Tails
+                      </p>
+                      <p className="mt-2 flex items-baseline gap-x-2">
+                        <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                          {numberOfTails.toLocaleString()}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
+                      <p className="text-xl font-medium leading-6 text-gray-400">
+                        Number of Airports
+                      </p>
+                      <p className="mt-2 flex items-baseline gap-x-2">
+                        <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                          {numberOfLocations.toLocaleString()}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </header>
+            )}
 
             {isStandardServicesSelected && (
               <>
