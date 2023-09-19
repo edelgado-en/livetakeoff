@@ -17,7 +17,6 @@ import AnimatedPage from "../../../components/animatedPage/AnimatedPage";
 
 import { selectUser } from "../../../routes/userProfile/userSlice";
 import { useAppSelector } from "../../../app/hooks";
-import { set } from "react-hook-form";
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -255,7 +254,7 @@ export default function CustomerServiceReport() {
   ]);
 
   useEffect(() => {
-    searchServiceActivities(selectedService);
+    searchServiceActivities(null, selectedService);
   }, [currentPage, sortByTimestampAsc, sortByTimestampDesc]);
 
   const getAirports = async () => {
@@ -1789,23 +1788,6 @@ export default function CustomerServiceReport() {
                     </div>
                   )}
                 </div>
-                {!activitiesLoading && totalServiceActivities > 200 && (
-                  <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
-                    <div>
-                      <Pagination
-                        innerClass="pagination pagination-custom"
-                        activePage={currentPage}
-                        hideDisabled
-                        itemClass="page-item page-item-custom"
-                        linkClass="page-link page-link-custom"
-                        itemsCountPerPage={200}
-                        totalItemsCount={totalServiceActivities}
-                        pageRangeDisplayed={3}
-                        onChange={handlePageChange}
-                      />
-                    </div>
-                  </div>
-                )}
               </>
             )}
 
