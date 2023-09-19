@@ -147,8 +147,6 @@ export default function CustomerServiceReport() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [currentRetainerPage, setCurrentRetainerPage] = useState(1);
-
   const [serviceActivities, setServiceActivities] = useState([]);
   const [totalServiceActivities, setTotalServiceActivities] = useState(0);
 
@@ -259,10 +257,6 @@ export default function CustomerServiceReport() {
   useEffect(() => {
     searchServiceActivities(selectedService);
   }, [currentPage, sortByTimestampAsc, sortByTimestampDesc]);
-
-  useEffect(() => {
-    searchRetainerServiceActivities(selectedRetainerService);
-  }, [currentRetainerPage, sortByTimestampAsc, sortByTimestampDesc]);
 
   const getAirports = async () => {
     try {
@@ -482,7 +476,7 @@ export default function CustomerServiceReport() {
       sort_by_timestamp_desc: sortByTimestampDesc,
     };
 
-    let cPage = currentRetainerPage;
+    let cPage = currentPage;
 
     if (page) {
       cPage = page;
@@ -505,10 +499,6 @@ export default function CustomerServiceReport() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-  };
-
-  const handleRetainerPageChange = (page) => {
-    setCurrentRetainerPage(page);
   };
 
   const handleSortByPrice = () => {
@@ -1998,14 +1988,14 @@ export default function CustomerServiceReport() {
                     <div>
                       <Pagination
                         innerClass="pagination pagination-custom"
-                        activePage={currentRetainerPage}
+                        activePage={currentPage}
                         hideDisabled
                         itemClass="page-item page-item-custom"
                         linkClass="page-link page-link-custom"
                         itemsCountPerPage={200}
                         totalItemsCount={totalRetainerServiceActivities}
                         pageRangeDisplayed={3}
-                        onChange={handleRetainerPageChange}
+                        onChange={handlePageChange}
                       />
                     </div>
                   </div>
