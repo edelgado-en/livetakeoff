@@ -320,7 +320,7 @@ const JobInfo = () => {
                     type="button"
                     onClick={() => updateJobStatus("W")}
                     className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-600 px-4 py-2 text-xl
+                                        border border-transparent bg-red-600 px-4 py-2 text-lg
                                         font-bold text-white shadow-sm hover:bg-red-700
                                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
                   >
@@ -330,7 +330,7 @@ const JobInfo = () => {
                     <button
                       type="button"
                       onClick={() => handleToggleJobReturnModal()}
-                      className="rounded bg-white px-4 py-2 text-xl text-gray-900
+                      className="rounded bg-white px-4 py-2 text-lg text-gray-900
                                                  shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                     >
                       Return Job
@@ -344,7 +344,7 @@ const JobInfo = () => {
                   type="button"
                   onClick={() => updateJobStatus("A")}
                   className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-600 px-4 py-2 text-xl
+                                        border border-transparent bg-red-600 px-4 py-2 text-lg
                                         font-bold text-white shadow-sm hover:bg-red-700
                                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
                 >
@@ -357,7 +357,7 @@ const JobInfo = () => {
                   type="button"
                   onClick={() => handleToggleJobCompleteModal()}
                   className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-500 px-4 py-2 text-xl
+                                        border border-transparent bg-red-500 px-4 py-2 text-lg
                                         font-bold text-white shadow-sm hover:bg-red-700
                                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
                 >
@@ -440,6 +440,24 @@ const JobInfo = () => {
 
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                Aircraft Type
+              </dt>
+              <dd className="mt-1 text-xl text-gray-900">
+                {jobDetails.aircraftType?.name}
+              </dd>
+            </div>
+
+            <div className="sm:col-span-1">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                FBO
+              </dt>
+              <dd className="mt-1 text-xl text-gray-900">
+                {jobDetails.fbo?.name}
+              </dd>
+            </div>
+
+            <div className="sm:col-span-1">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Tags
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -509,10 +527,14 @@ const JobInfo = () => {
 
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                FBO
+                Arrival
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.fbo?.name}
+                {jobDetails.on_site
+                  ? "On site"
+                  : jobDetails.estimatedETA
+                  ? jobDetails.estimatedETA
+                  : "No ETA yet"}
               </dd>
             </div>
 
@@ -529,14 +551,12 @@ const JobInfo = () => {
 
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Arrival
+                Departure
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.on_site
-                  ? "On site"
-                  : jobDetails.estimatedETA
-                  ? jobDetails.estimatedETA
-                  : "No ETA yet"}
+                {jobDetails.estimatedETD
+                  ? jobDetails.estimatedETD
+                  : "No ETD yet"}
               </dd>
             </div>
 
@@ -578,19 +598,6 @@ const JobInfo = () => {
                 </dd>
               </div>
             )}
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Departure
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.estimatedETD
-                  ? jobDetails.estimatedETD
-                  : "No ETD yet"}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1"></div>
 
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-red-600 uppercase tracking-wide">
@@ -636,14 +643,7 @@ const JobInfo = () => {
                       : "None"}
                   </dd>
                 </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                    Aircraft Type
-                  </dt>
-                  <dd className="mt-1 text-xl text-gray-900">
-                    {jobDetails.aircraftType?.name}
-                  </dd>
-                </div>
+
                 <div className="sm:col-span-1">
                   <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                     Requested By
