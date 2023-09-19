@@ -440,24 +440,6 @@ const JobInfo = () => {
 
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Aircraft Type
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.aircraftType?.name}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                FBO
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.fbo?.name}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Tags
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -522,6 +504,24 @@ const JobInfo = () => {
                     {tag.tag_name}
                   </div>
                 ))}
+              </dd>
+            </div>
+
+            <div className="sm:col-span-1">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                FBO
+              </dt>
+              <dd className="mt-1 text-xl text-gray-900">
+                {jobDetails.fbo?.name}
+              </dd>
+            </div>
+
+            <div className="sm:col-span-1">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                Aircraft Type
+              </dt>
+              <dd className="mt-1 text-xl text-gray-900">
+                {jobDetails.aircraftType?.name}
               </dd>
             </div>
 
