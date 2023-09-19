@@ -357,7 +357,7 @@ const JobInfo = () => {
                   type="button"
                   onClick={() => handleToggleJobCompleteModal()}
                   className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-600 px-4 py-2 text-xl
+                                        border border-transparent bg-red-500 px-4 py-2 text-xl
                                         font-bold text-white shadow-sm hover:bg-red-700
                                         focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
                 >
@@ -428,16 +428,7 @@ const JobInfo = () => {
                 </div>
               </dd>
             </div>
-            {!currentUser.isProjectManager && !currentUser.isCustomer && (
-              <div className="sm:col-span-1">
-                <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                  Customer
-                </dt>
-                <dd className="mt-1 text-xl text-gray-900">
-                  {jobDetails.customer?.name}
-                </dd>
-              </div>
-            )}
+
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Airport
@@ -449,10 +440,70 @@ const JobInfo = () => {
 
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Purchase Order
+                Tags
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.purchase_order ? jobDetails.purchase_order : "None"}
+                {jobDetails.tags?.length === 0 && (
+                  <span className="text-gray-900">None</span>
+                )}
+
+                {jobDetails.tags?.map((tag) => (
+                  <div
+                    key={tag.id}
+                    className={`text-lg inline-block rounded-md px-2 py-1 mr-2 border mb-2
+                                ${
+                                  tag.tag_color === "red" &&
+                                  "border-red-500 text-red-500"
+                                }
+                                ${
+                                  tag.tag_color === "orange" &&
+                                  "border-orange-500 text-orange-500 "
+                                }
+                                ${
+                                  tag.tag_color === "amber" &&
+                                  "border-amber-500 text-amber-500"
+                                }
+                                ${
+                                  tag.tag_color === "indigo" &&
+                                  " border-indigo-500 text-indigo-500"
+                                }
+                                ${
+                                  tag.tag_color === "violet" &&
+                                  " border-violet-500 text-violet-500"
+                                }
+                                ${
+                                  tag.tag_color === "fuchsia" &&
+                                  "border-fuchsia-500 text-fuchsia-500"
+                                } 
+                                ${
+                                  tag.tag_color === "pink" &&
+                                  "border-pink-500 text-pink-500"
+                                }
+                                ${
+                                  tag.tag_color === "slate" &&
+                                  "border-slate-500 text-gray-500"
+                                }
+                                ${
+                                  tag.tag_color === "lime" &&
+                                  "border-lime-500 text-lime-500"
+                                }
+                                ${
+                                  tag.tag_color === "emerald" &&
+                                  "border-emerald-500 text-emerald-500"
+                                }
+                                ${
+                                  tag.tag_color === "cyan" &&
+                                  "border-cyan-500 text-cyan-500"
+                                }
+                                ${
+                                  tag.tag_color === "blue" &&
+                                  "border-blue-500 text-blue-500"
+                                }
+                            `}
+                  >
+                    {tag.tag_name}
+                  </div>
+                ))}
               </dd>
             </div>
 
@@ -464,17 +515,85 @@ const JobInfo = () => {
                 {jobDetails.fbo?.name}
               </dd>
             </div>
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Aircraft Type
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.aircraftType?.name}
-              </dd>
-            </div>
+
+            {!currentUser.isProjectManager && !currentUser.isCustomer && (
+              <div className="sm:col-span-1">
+                <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                  Customer
+                </dt>
+                <dd className="mt-1 text-xl text-gray-900">
+                  {jobDetails.customer?.name}
+                </dd>
+              </div>
+            )}
 
             <div className="sm:col-span-1">
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                Arrival
+              </dt>
+              <dd className="mt-1 text-xl text-gray-900">
+                {jobDetails.on_site
+                  ? "On site"
+                  : jobDetails.estimatedETA
+                  ? jobDetails.estimatedETA
+                  : "No ETA yet"}
+              </dd>
+            </div>
+
+            {currentUser.canSeePrice && (
+              <div className="sm:col-span-1">
+                <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                  Price
+                </dt>
+                <dd className="mt-1 text-xl text-gray-900 flex gap-1">
+                  {!jobDetails.is_auto_priced && (
+                    <div
+                      className="inline-flex items-center rounded border
+                                                border-gray-300 bg-gray-50 px-1 text-xs
+                                                text-gray-600 shadow-sm hover:bg-gray-50"
+                    >
+                      M
+                    </div>
+                  )}
+                  <div>
+                    {"$"}
+                    {jobDetails.price
+                      ? jobDetails.price.toLocaleString()
+                      : "0.00"}
+                  </div>
+                  {jobDetails.is_auto_priced &&
+                    location.pathname.includes("jobs") && (
+                      <Link
+                        to={`/jobs/${jobDetails.id}/price-breakdown`}
+                        className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
+                        style={{ top: "2px" }}
+                      >
+                        breakdown
+                        <ArrowRightIcon
+                          className="h-5 w-5 relative"
+                          style={{ top: "3px" }}
+                        />
+                      </Link>
+                    )}
+                </dd>
+              </div>
+            )}
+
+            <div className="sm:col-span-1">
+              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                Departure
+              </dt>
+              <dd className="mt-1 text-xl text-gray-900">
+                {jobDetails.estimatedETD
+                  ? jobDetails.estimatedETD
+                  : "No ETD yet"}
+              </dd>
+            </div>
+
+            <div className="sm:col-span-1"></div>
+
+            <div className="sm:col-span-1">
+              <dt className="text-md xl:text-xl font-bold text-red-600 uppercase tracking-wide">
                 Complete Before
               </dt>
               <dd className="mt-1 text-xl text-gray-900">
@@ -495,29 +614,6 @@ const JobInfo = () => {
                 )}
               </dd>
             </div>
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Arrival
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.on_site
-                  ? "On site"
-                  : jobDetails.estimatedETA
-                  ? jobDetails.estimatedETA
-                  : "No ETA yet"}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Departure
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.estimatedETD
-                  ? jobDetails.estimatedETD
-                  : "No ETD yet"}
-              </dd>
-            </div>
           </dl>
 
           <div className="flex justify-end text-md xl:text-xl text-sky-500 cursor-pointer font-semibold">
@@ -532,6 +628,24 @@ const JobInfo = () => {
               <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
                 <div className="sm:col-span-1">
                   <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    Purchase Order
+                  </dt>
+                  <dd className="mt-1 text-xl text-gray-900">
+                    {jobDetails.purchase_order
+                      ? jobDetails.purchase_order
+                      : "None"}
+                  </dd>
+                </div>
+                <div className="sm:col-span-1">
+                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                    Aircraft Type
+                  </dt>
+                  <dd className="mt-1 text-xl text-gray-900">
+                    {jobDetails.aircraftType?.name}
+                  </dd>
+                </div>
+                <div className="sm:col-span-1">
+                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                     Requested By
                   </dt>
                   <dd className="mt-1 space-y-5 text-xl text-gray-900 truncate overflow-ellipsis max-w-sm">
@@ -542,45 +656,6 @@ const JobInfo = () => {
                         jobDetails.created_by?.last_name}
                   </dd>
                 </div>
-
-                {currentUser.canSeePrice && (
-                  <div className="sm:col-span-1">
-                    <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                      Price
-                    </dt>
-                    <dd className="mt-1 text-xl text-gray-900 flex gap-1">
-                      {!jobDetails.is_auto_priced && (
-                        <div
-                          className="inline-flex items-center rounded border
-                                                  border-gray-300 bg-gray-50 px-1 text-xs
-                                                    text-gray-600 shadow-sm hover:bg-gray-50"
-                        >
-                          M
-                        </div>
-                      )}
-                      <div>
-                        {"$"}
-                        {jobDetails.price
-                          ? jobDetails.price.toLocaleString()
-                          : "0.00"}
-                      </div>
-                      {jobDetails.is_auto_priced &&
-                        location.pathname.includes("jobs") && (
-                          <Link
-                            to={`/jobs/${jobDetails.id}/price-breakdown`}
-                            className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
-                            style={{ top: "2px" }}
-                          >
-                            breakdown
-                            <ArrowRightIcon
-                              className="h-5 w-5 relative"
-                              style={{ top: "3px" }}
-                            />
-                          </Link>
-                        )}
-                    </dd>
-                  </div>
-                )}
 
                 <div className="sm:col-span-1">
                   <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
@@ -610,75 +685,6 @@ const JobInfo = () => {
                     {jobDetails.customer_purchase_order
                       ? jobDetails.customer_purchase_order
                       : "Not provided"}
-                  </dd>
-                </div>
-
-                <div className="sm:col-span-1">
-                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                    Tags
-                  </dt>
-                  <dd className="mt-1 text-xl text-gray-900">
-                    {jobDetails.tags?.length === 0 && (
-                      <span className="text-gray-900">None</span>
-                    )}
-
-                    {jobDetails.tags?.map((tag) => (
-                      <div
-                        key={tag.id}
-                        className={`text-xl inline-block rounded-md px-2 py-1 mr-1 border
-                                    ${
-                                      tag.tag_color === "red" &&
-                                      "border-red-500 text-red-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "orange" &&
-                                      "border-orange-500 text-orange-500 "
-                                    }
-                                    ${
-                                      tag.tag_color === "amber" &&
-                                      "border-amber-500 text-amber-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "indigo" &&
-                                      " border-indigo-500 text-indigo-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "violet" &&
-                                      " border-violet-500 text-violet-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "fuchsia" &&
-                                      "border-fuchsia-500 text-fuchsia-500"
-                                    } 
-                                    ${
-                                      tag.tag_color === "pink" &&
-                                      "border-pink-500 text-pink-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "slate" &&
-                                      "border-slate-500 text-gray-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "lime" &&
-                                      "border-lime-500 text-lime-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "emerald" &&
-                                      "border-emerald-500 text-emerald-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "cyan" &&
-                                      "border-cyan-500 text-cyan-500"
-                                    }
-                                    ${
-                                      tag.tag_color === "blue" &&
-                                      "border-blue-500 text-blue-500"
-                                    }
-                                `}
-                      >
-                        {tag.tag_name}
-                      </div>
-                    ))}
                   </dd>
                 </div>
               </dl>
