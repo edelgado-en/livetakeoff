@@ -223,14 +223,13 @@ export default function CustomerServiceReport() {
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
-      generateServiceReport();
+      generateServiceReport(selectedService);
     }, 300);
 
     return () => {
       clearTimeout(timeoutID);
     };
   }, [
-    selectedService,
     dateSelected,
     searchText,
     airportSelected,
@@ -241,14 +240,13 @@ export default function CustomerServiceReport() {
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
-      generateRetainerServiceReport();
+      generateRetainerServiceReport(selectedRetainerService);
     }, 300);
 
     return () => {
       clearTimeout(timeoutID);
     };
   }, [
-    selectedRetainerService,
     dateSelected,
     searchText,
     airportSelected,
@@ -257,14 +255,8 @@ export default function CustomerServiceReport() {
   ]);
 
   useEffect(() => {
-    searchServiceActivities();
-  }, [
-    currentPage,
-    sortByPriceAsc,
-    sortByPriceDesc,
-    sortByTimestampAsc,
-    sortByTimestampDesc,
-  ]);
+    searchServiceActivities(selectedService);
+  }, [currentPage, sortByTimestampAsc, sortByTimestampDesc]);
 
   const getAirports = async () => {
     try {
@@ -344,30 +336,38 @@ export default function CustomerServiceReport() {
   };
 
   const handleServiceChange = (service) => {
-    setSelectedService(service);
+    //setSelectedService(service);
     setSelectedRetainerService(null);
     setIsRetainerServicesSelected(false);
     setIsStandardServicesSelected(true);
+
+    generateServiceReport(service);
   };
 
   const handleRetainerServiceChange = (service) => {
-    setSelectedRetainerService(service);
+    //setSelectedRetainerService(service);
     setSelectedService(null);
     setIsStandardServicesSelected(false);
     setIsRetainerServicesSelected(true);
+
+    generateRetainerServiceReport(service);
   };
 
-  const generateServiceReport = async () => {
+  const generateServiceReport = async (service) => {
     setLoading(true);
 
     const request = {
-      service_id: selectedService?.id,
+      service_id: service?.id,
       dateSelected: dateSelected.id,
       tail_number: searchText,
       airport_id: airportSelected?.id,
       fbo_id: fboSelected?.id,
       customer_id: customerSelected?.id,
     };
+
+    if (service) {
+      setSelectedService(service);
+    }
 
     try {
       const { data } = await api.generateServiceReport(request);
@@ -380,7 +380,6 @@ export default function CustomerServiceReport() {
       setShowRetainers(data.show_retainers);
 
       if (data.show_retainers) {
-        console.log("data.show_retainers", data.show_retainers);
         //only add it if it doesn't exist
         if (!serviceTypes.find((serviceType) => serviceType.type === "R")) {
           serviceTypes.push({ type: "R", name: "Retainer" });
@@ -392,20 +391,24 @@ export default function CustomerServiceReport() {
 
     setLoading(false);
 
-    searchServiceActivities(1);
+    searchServiceActivities(1, service);
   };
 
-  const generateRetainerServiceReport = async () => {
+  const generateRetainerServiceReport = async (retainerService) => {
     setLoading(true);
 
     const request = {
-      service_id: selectedRetainerService?.id,
+      service_id: retainerService?.id,
       dateSelected: dateSelected.id,
       tail_number: searchText,
       airport_id: airportSelected?.id,
       fbo_id: fboSelected?.id,
       customer_id: customerSelected?.id,
     };
+
+    if (retainerService) {
+      setSelectedRetainerService(retainerService);
+    }
 
     try {
       const { data } = await api.generateRetainerServiceReport(request);
@@ -420,14 +423,14 @@ export default function CustomerServiceReport() {
     setLoading(false);
     //setIsRetainerServicesSelected(true);
     //setIsStandardServicesSelected(false);
-    searchRetainerServiceActivities(1);
+    searchRetainerServiceActivities(1, retainerService);
   };
 
-  const searchServiceActivities = async (page) => {
+  const searchServiceActivities = async (page, service) => {
     setActivitiesLoading(true);
 
     const request = {
-      service_id: selectedService?.id,
+      service_id: service?.id,
       dateSelected: dateSelected.id,
       tail_number: searchText,
       airport_id: airportSelected?.id,
@@ -457,11 +460,11 @@ export default function CustomerServiceReport() {
     setActivitiesLoading(false);
   };
 
-  const searchRetainerServiceActivities = async (page) => {
+  const searchRetainerServiceActivities = async (page, retainerService) => {
     setActivitiesLoading(true);
 
     const request = {
-      service_id: selectedRetainerService?.id,
+      service_id: retainerService?.id,
       dateSelected: dateSelected.id,
       tail_number: searchText,
       airport_id: airportSelected?.id,
@@ -1562,36 +1565,38 @@ export default function CustomerServiceReport() {
               )}
             </header>
 
-            {selectedService?.name === "All Services" && showRetainers && (
-              <div className="px-2 xl:px-6 lg:px-6 md:px-4 mt-2">
-                <div className="border-b border-gray-200">
-                  <nav className="-mb-px flex space-x-8">
-                    <div
-                      onClick={() => handleSelectStandServices()}
-                      className={classNames(
-                        isStandardServicesSelected
-                          ? "border-red-500 text-red-600"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                        "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase tracking-wide cursor-pointer"
-                      )}
-                    >
-                      Standard Services
-                    </div>
-                    <div
-                      onClick={() => handleSelectRetainerServices()}
-                      className={classNames(
-                        isRetainerServicesSelected
-                          ? "border-red-500 text-red-600"
-                          : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
-                        "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase tracking-wide cursor-pointer"
-                      )}
-                    >
-                      Retainer Services
-                    </div>
-                  </nav>
+            {selectedService?.name === "All Services" &&
+              showRetainers &&
+              selectedRetainerService == null && (
+                <div className="px-2 xl:px-6 lg:px-6 md:px-4 mt-2">
+                  <div className="border-b border-gray-200">
+                    <nav className="-mb-px flex space-x-8">
+                      <div
+                        onClick={() => handleSelectStandServices()}
+                        className={classNames(
+                          isStandardServicesSelected
+                            ? "border-red-500 text-red-600"
+                            : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                          "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase tracking-wide cursor-pointer"
+                        )}
+                      >
+                        Standard Services
+                      </div>
+                      <div
+                        onClick={() => handleSelectRetainerServices()}
+                        className={classNames(
+                          isRetainerServicesSelected
+                            ? "border-red-500 text-red-600"
+                            : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                          "whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase tracking-wide cursor-pointer"
+                        )}
+                      >
+                        Retainer Services
+                      </div>
+                    </nav>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {isStandardServicesSelected && (
               <>
