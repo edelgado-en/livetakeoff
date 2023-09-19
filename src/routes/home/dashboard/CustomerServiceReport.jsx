@@ -76,7 +76,7 @@ const ChevronUpDownIcon = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="w-5 h-5 text-gray-500 cursor-pointer"
+      className="w-5 h-5 cursor-pointer"
     >
       <path
         strokeLinecap="round"
@@ -395,33 +395,31 @@ export default function CustomerServiceReport() {
   };
 
   const generateRetainerServiceReport = async () => {
-    if (selectedRetainerService) {
-      setLoading(true);
+    setLoading(true);
 
-      const request = {
-        service_id: selectedRetainerService.id,
-        dateSelected: dateSelected.id,
-        tail_number: searchText,
-        airport_id: airportSelected?.id,
-        fbo_id: fboSelected?.id,
-        customer_id: customerSelected?.id,
-      };
+    const request = {
+      service_id: selectedRetainerService?.id,
+      dateSelected: dateSelected.id,
+      tail_number: searchText,
+      airport_id: airportSelected?.id,
+      fbo_id: fboSelected?.id,
+      customer_id: customerSelected?.id,
+    };
 
-      try {
-        const { data } = await api.generateRetainerServiceReport(request);
+    try {
+      const { data } = await api.generateRetainerServiceReport(request);
 
-        setNumberOfServices(data.number_of_services_completed);
-        setNumberOfTails(data.number_of_unique_tail_numbers);
-        setNumberOfLocations(data.number_of_unique_locations);
-      } catch (err) {
-        toast.error("Unable to generate service report");
-      }
-
-      setLoading(false);
-      setIsRetainerServicesSelected(true);
-      setIsStandardServicesSelected(false);
-      searchRetainerServiceActivities(1);
+      setNumberOfServices(data.number_of_services_completed);
+      setNumberOfTails(data.number_of_unique_tail_numbers);
+      setNumberOfLocations(data.number_of_unique_locations);
+    } catch (err) {
+      toast.error("Unable to generate service report");
     }
+
+    setLoading(false);
+    setIsRetainerServicesSelected(true);
+    setIsStandardServicesSelected(false);
+    searchRetainerServiceActivities(1);
   };
 
   const searchServiceActivities = async (page) => {
@@ -555,14 +553,14 @@ export default function CustomerServiceReport() {
     setCurrentPage(1);
     setIsStandardServicesSelected(true);
     setIsRetainerServicesSelected(false);
-    searchServiceActivities(1);
+    generateServiceReport();
   };
 
   const handleSelectRetainerServices = () => {
     setCurrentPage(1);
     setIsStandardServicesSelected(false);
     setIsRetainerServicesSelected(true);
-    searchRetainerServiceActivities(1);
+    generateRetainerServiceReport();
   };
 
   return (
@@ -574,10 +572,10 @@ export default function CustomerServiceReport() {
         {/* Static sidebar for desktop */}
         <div className="hidden xl:flex w-80 xl:flex-col min-h-full">
           <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-6 ring-1 ring-white/5">
-            <div className="flex h-16 shrink-0 items-center text-3xl font-semibold tracking-tight text-gray-700 mt-1">
+            <div className="flex h-16 shrink-0 items-center text-3xl font-semibold tracking-tight text-gray-700">
               Service Report
             </div>
-            <nav className="flex flex-1 flex-col mt-2">
+            <nav className="flex flex-1 flex-col mt-1">
               <ul className="flex flex-1 flex-col gap-y-4">
                 <li>
                   <ul className="-mx-2 space-y-1">
@@ -923,12 +921,13 @@ export default function CustomerServiceReport() {
             </button>
           </div>
           <main>
-            <div className="flex w-full ml-0 xl:ml-8 mt-2">
+            <div className="flex w-full ml-0 xl:ml-8 mt-5">
               <div className="text-2xl tracking-wide font-semibold relative top-1">
                 {selectedService && selectedService.name}
                 {selectedRetainerService && selectedRetainerService.name}
               </div>
             </div>
+
             <div className="xs:p-0 xl:px-8 grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-4 mt-4">
               <div>
                 <Listbox value={dateSelected} onChange={setDateSelected}>
@@ -1036,8 +1035,12 @@ export default function CustomerServiceReport() {
                     value={searchText}
                     onChange={(event) => setSearchText(event.target.value)}
                     onKeyDown={handleKeyDown}
-                    className="block w-full rounded-md border-gray-200 pl-10 focus:border-sky-500
-                                 focus:ring-sky-500 text-md"
+                    className={`block w-full rounded-md pl-10 text-md ${
+                      searchText.length > 0
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500 border-2"
+                        : "border-gray-200  focus:border-sky-500 focus:ring-sky-500"
+                    } 
+                                 `}
                     placeholder="Search by tail..."
                   />
                 </div>
@@ -1051,21 +1054,30 @@ export default function CustomerServiceReport() {
                     <>
                       <div className="relative">
                         <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border text-gray-500
-                                                                    border-gray-200 bg-white py-2 pl-3 pr-10 text-left
-                                                                    shadow-sm focus:border-sky-500 focus:outline-none
-                                                                    focus:ring-1 focus:ring-sky-500 sm:text-md"
+                          className={`relative w-full cursor-default rounded-md border 
+                          ${
+                            airportSelected &&
+                            airportSelected.name !== "All Airports"
+                              ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                              : " border-gray-200 bg-white text-gray-500"
+                          }                          
+                                    py-2 pl-3 pr-10 text-left
+                                      shadow-sm  sm:text-md`}
                         >
                           <span className="block truncate">
                             {airportSelected
                               ? airportSelected.name
                               : "Select airport"}
                           </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
+                          <span
+                            className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ${
+                              airportSelected &&
+                              airportSelected.name !== "All Airports"
+                                ? "text-white"
+                                : "text-gray-400"
+                            }`}
+                          >
+                            <ChevronUpDownIcon aria-hidden="true" />
                           </span>
                         </Listbox.Button>
 
@@ -1189,17 +1201,27 @@ export default function CustomerServiceReport() {
                     <>
                       <div className="relative">
                         <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border text-gray-500
-                                                                    border-gray-200 bg-white py-2 pl-3 pr-10 text-left
-                                                                    shadow-sm focus:border-sky-500 focus:outline-none
-                                                                    focus:ring-1 focus:ring-sky-500 sm:text-md"
+                          className={`relative w-full cursor-default rounded-md border 
+                          ${
+                            fboSelected && fboSelected.name !== "All FBOs"
+                              ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                              : " border-gray-200 bg-white text-gray-500"
+                          }                          
+                                    py-2 pl-3 pr-10 text-left
+                                      shadow-sm  sm:text-md`}
                         >
                           <span className="block truncate">
                             {fboSelected ? fboSelected.name : "Select FBO"}
                           </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                          <span
+                            className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ${
+                              fboSelected && fboSelected.name !== "All FBOs"
+                                ? "text-white"
+                                : "text-gray-400"
+                            }`}
+                          >
                             <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
+                              className="h-5 w-5"
                               aria-hidden="true"
                             />
                           </span>
@@ -1329,19 +1351,31 @@ export default function CustomerServiceReport() {
                       <>
                         <div className="relative">
                           <Listbox.Button
-                            className="relative w-full cursor-default rounded-md border text-gray-500
-                                                                    border-gray-200 bg-white py-2 pl-3 pr-10 text-left
-                                                                    shadow-sm focus:border-sky-500 focus:outline-none
-                                                                    focus:ring-1 focus:ring-sky-500 sm:text-md"
+                            className={`relative w-full cursor-default rounded-md border 
+                            ${
+                              customerSelected &&
+                              customerSelected.name !== "All Customers"
+                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                : " border-gray-200 bg-white text-gray-500"
+                            }                          
+                                      py-2 pl-3 pr-10 text-left
+                                        shadow-sm  sm:text-md`}
                           >
                             <span className="block truncate">
                               {customerSelected
                                 ? customerSelected.name
                                 : "Select customer"}
                             </span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                            <span
+                              className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ${
+                                customerSelected &&
+                                customerSelected.name !== "All Customers"
+                                  ? "text-white"
+                                  : "text-gray-400"
+                              }`}
+                            >
                               <ChevronUpDownIcon
-                                className="h-5 w-5 text-gray-400"
+                                className="h-5 w-5"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1470,13 +1504,14 @@ export default function CustomerServiceReport() {
                 </div>
                 <div></div>
               </div>
+
               {loading && <Loader />}
               {!loading && (
                 <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-4">
                   {showSpendingInfo && !selectedRetainerService && (
                     <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
                       <p className="text-lg font-medium leading-6 text-gray-400">
-                        Total Spent
+                        Total
                       </p>
                       <p className="mt-2 flex items-baseline gap-x-2">
                         <span className="text-4xl font-semibold tracking-tight text-gray-500">
@@ -1573,8 +1608,8 @@ export default function CustomerServiceReport() {
                             Services Completed
                           </h1>
                           <p className="mt-2 text-md text-gray-500">
-                            Checkout all services completed during the time
-                            period selected.
+                            All services completed during the time period
+                            selected.
                           </p>
                         </div>
                       </div>
@@ -1785,8 +1820,8 @@ export default function CustomerServiceReport() {
                             Retainer Services Completed
                           </h1>
                           <p className="mt-2 text-md text-gray-500">
-                            Checkout all retainer services completed during the
-                            time period selected.
+                            All retainer services completed during the time
+                            period selected.
                           </p>
                         </div>
                       </div>
