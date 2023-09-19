@@ -145,6 +145,7 @@ export default function CustomerServiceReport() {
   const [retainerServices, setRetainerServices] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentRetainerPage, setCurrentRetainerPage] = useState(1);
 
   const [serviceActivities, setServiceActivities] = useState([]);
   const [totalServiceActivities, setTotalServiceActivities] = useState(0);
@@ -256,6 +257,10 @@ export default function CustomerServiceReport() {
   useEffect(() => {
     searchServiceActivities(null, selectedService);
   }, [currentPage, sortByTimestampAsc, sortByTimestampDesc]);
+
+  useEffect(() => {
+    searchRetainerServiceActivities(null, selectedService);
+  }, [currentRetainerPage]);
 
   const getAirports = async () => {
     try {
@@ -475,7 +480,7 @@ export default function CustomerServiceReport() {
       sort_by_timestamp_desc: sortByTimestampDesc,
     };
 
-    let cPage = currentPage;
+    let cPage = currentRetainerPage;
 
     if (page) {
       cPage = page;
@@ -500,19 +505,8 @@ export default function CustomerServiceReport() {
     setCurrentPage(page);
   };
 
-  const handleSortByPrice = () => {
-    //toggle sort by price
-    if (sortByPriceDesc) {
-      setSortByPriceDesc(false);
-      setSortByPriceAsc(true);
-    } else {
-      setSortByPriceDesc(true);
-      setSortByPriceAsc(false);
-    }
-
-    //set alll other sorts to false
-    setSortByTimestampAsc(false);
-    setSortByTimestampDesc(false);
+  const handleRetainerPageChange = (page) => {
+    setCurrentRetainerPage(page);
   };
 
   const handleSortByTimestamp = () => {
@@ -1970,14 +1964,14 @@ export default function CustomerServiceReport() {
                     <div>
                       <Pagination
                         innerClass="pagination pagination-custom"
-                        activePage={currentPage}
+                        activePage={currentRetainerPage}
                         hideDisabled
                         itemClass="page-item page-item-custom"
                         linkClass="page-link page-link-custom"
                         itemsCountPerPage={200}
                         totalItemsCount={totalRetainerServiceActivities}
                         pageRangeDisplayed={3}
-                        onChange={handlePageChange}
+                        onChange={handleRetainerPageChange}
                       />
                     </div>
                   </div>
