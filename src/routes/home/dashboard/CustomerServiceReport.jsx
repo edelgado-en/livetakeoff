@@ -1511,8 +1511,14 @@ export default function CustomerServiceReport() {
                 <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-4">
                   {showSpendingInfo && !selectedRetainerService && (
                     <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                      <p className="text-lg font-medium leading-6 text-gray-400">
+                      <p className="text-xl font-medium leading-6 text-gray-400">
                         Total
+                        {selectedService?.name === "All Services" &&
+                          showRetainers && (
+                            <span className="ml-1 font-normal text-sm">
+                              (Standard & Retainers)
+                            </span>
+                          )}
                       </p>
                       <p className="mt-2 flex items-baseline gap-x-2">
                         <span className="text-4xl font-semibold tracking-tight text-gray-500">
@@ -1522,7 +1528,7 @@ export default function CustomerServiceReport() {
                     </div>
                   )}
                   <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                    <p className="text-lg font-medium leading-6 text-gray-400">
+                    <p className="text-xl font-medium leading-6 text-gray-400">
                       Number of Services
                     </p>
                     <p className="mt-2 flex items-baseline gap-x-2">
@@ -1532,7 +1538,7 @@ export default function CustomerServiceReport() {
                     </p>
                   </div>
                   <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                    <p className="text-lg font-medium leading-6 text-gray-400">
+                    <p className="text-xl font-medium leading-6 text-gray-400">
                       Number of Tails
                     </p>
                     <p className="mt-2 flex items-baseline gap-x-2">
@@ -1543,7 +1549,7 @@ export default function CustomerServiceReport() {
                   </div>
 
                   <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8">
-                    <p className="text-lg font-medium leading-6 text-gray-400">
+                    <p className="text-xl font-medium leading-6 text-gray-400">
                       Number of Airports
                     </p>
                     <p className="mt-2 flex items-baseline gap-x-2">
