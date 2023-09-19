@@ -633,7 +633,7 @@ export default function CustomerServiceReport() {
                         }
                         className={classNames(
                           selectedServiceType.type === "E"
-                            ? "border border-red-600 text-red-600"
+                            ? "border text-red-600 bg-red-100"
                             : "text-gray-600 hover:text-red-700 hover:border-red-700",
                           " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
                         )}
@@ -678,7 +678,7 @@ export default function CustomerServiceReport() {
                         }
                         className={classNames(
                           selectedServiceType.type === "I"
-                            ? "border border-red-600 text-red-600"
+                            ? "border text-red-600 bg-red-100"
                             : "text-gray-600 hover:text-red-700 hover:border-red-700",
                           " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
                         )}
@@ -723,7 +723,7 @@ export default function CustomerServiceReport() {
                         }
                         className={classNames(
                           selectedServiceType.type === "O"
-                            ? "border border-red-600 text-red-600"
+                            ? "border text-red-600 bg-red-100"
                             : "text-gray-600 hover:text-red-700 hover:border-red-700",
                           " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
                         )}
@@ -768,7 +768,7 @@ export default function CustomerServiceReport() {
                         }
                         className={classNames(
                           selectedServiceType.type === "R"
-                            ? "border border-red-600 text-red-600"
+                            ? "border text-red-600 bg-red-100"
                             : "text-gray-600 hover:text-red-700 hover:border-red-700",
                           " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
                         )}
