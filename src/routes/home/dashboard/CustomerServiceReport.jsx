@@ -560,6 +560,21 @@ export default function CustomerServiceReport() {
     generateRetainerServiceReport();
   };
 
+  const handleClearCustomerSearchFilter = () => {
+    setCustomerSearchTerm("");
+    setCustomerSelected(null);
+  };
+
+  const handleClearAirportSearchFilter = () => {
+    setAirportSearchTerm("");
+    setAirportSelected(null);
+  };
+
+  const handleClearFboSearchFilter = () => {
+    setFboSearchTerm("");
+    setFboSelected(null);
+  };
+
   return (
     <AnimatedPage>
       <div
@@ -1113,7 +1128,7 @@ export default function CustomerServiceReport() {
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
                                         onClick={() => {
-                                          setAirportSearchTerm("");
+                                          handleClearAirportSearchFilter();
                                         }}
                                       >
                                         <path
@@ -1259,7 +1274,7 @@ export default function CustomerServiceReport() {
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
                                         onClick={() => {
-                                          setFboSearchTerm("");
+                                          handleClearFboSearchFilter();
                                         }}
                                       >
                                         <path
@@ -1413,7 +1428,7 @@ export default function CustomerServiceReport() {
                                           viewBox="0 0 20 20"
                                           fill="currentColor"
                                           onClick={() => {
-                                            setCustomerSearchTerm("");
+                                            handleClearCustomerSearchFilter();
                                           }}
                                         >
                                           <path
