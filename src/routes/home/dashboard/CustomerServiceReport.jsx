@@ -361,7 +361,7 @@ export default function CustomerServiceReport() {
     setLoading(true);
 
     const request = {
-      service_id: selectedService.id,
+      service_id: selectedService?.id,
       dateSelected: dateSelected.id,
       tail_number: searchText,
       airport_id: airportSelected?.id,
@@ -380,6 +380,7 @@ export default function CustomerServiceReport() {
       setShowRetainers(data.show_retainers);
 
       if (data.show_retainers) {
+        console.log("data.show_retainers", data.show_retainers);
         //only add it if it doesn't exist
         if (!serviceTypes.find((serviceType) => serviceType.type === "R")) {
           serviceTypes.push({ type: "R", name: "Retainer" });
@@ -417,8 +418,8 @@ export default function CustomerServiceReport() {
     }
 
     setLoading(false);
-    setIsRetainerServicesSelected(true);
-    setIsStandardServicesSelected(false);
+    //setIsRetainerServicesSelected(true);
+    //setIsStandardServicesSelected(false);
     searchRetainerServiceActivities(1);
   };
 
@@ -1555,7 +1556,7 @@ export default function CustomerServiceReport() {
               )}
             </header>
 
-            {selectedService?.name === "All Services" && (
+            {selectedService?.name === "All Services" && showRetainers && (
               <div className="px-2 xl:px-6 lg:px-6 md:px-4 mt-2">
                 <div className="border-b border-gray-200">
                   <nav className="-mb-px flex space-x-8">
