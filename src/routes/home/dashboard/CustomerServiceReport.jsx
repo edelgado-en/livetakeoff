@@ -1823,12 +1823,7 @@ export default function CustomerServiceReport() {
                                   scope="col"
                                   className="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
                                 >
-                                  <div
-                                    className="flex gap-1"
-                                    onClick={() => handleSortByTimestamp()}
-                                  >
-                                    Date <ChevronUpDownIcon />
-                                  </div>
+                                  <div className="flex gap-1">Date</div>
                                 </th>
                                 <th
                                   scope="col"
