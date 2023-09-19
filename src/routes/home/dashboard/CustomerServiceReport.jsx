@@ -457,6 +457,8 @@ export default function CustomerServiceReport() {
 
       setServiceActivities(data.results);
       setTotalServiceActivities(data.count);
+
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     } catch (err) {
       toast.error("Unable to search service activities");
     }
@@ -494,6 +496,8 @@ export default function CustomerServiceReport() {
 
       setRetainerServiceActivities(data.results);
       setTotalRetainerServiceActivities(data.count);
+
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     } catch (err) {
       toast.error("Unable to search retainer service activities");
     }
