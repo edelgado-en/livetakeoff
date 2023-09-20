@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { Switch } from "@headlessui/react";
@@ -77,12 +77,25 @@ const LocationNotifications = () => {
   return (
     <AnimatedPage>
       <div className="m-auto max-w-4xl px-4">
-        <div className="text-3xl font-bold text-gray-700 tracking-wide">
-          Inventory Locations
-        </div>
-        <div className="text-lg text-gray-500 mt-1">
-          Enable notifications for each location. Admins must also enable the
-          user inventory notification in order to get notifications.
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto">
+            <h1 className="text-3xl font-semibold leading-6 text-gray-900">
+              Inventory Locations
+            </h1>
+            <p className="mt-2 text-lg text-gray-500">
+              Enable notifications for each location. Admins must also enable
+              the user inventory notification in order to get notifications.
+            </p>
+          </div>
+          <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+            <Link
+              to="/create-location"
+              className="block rounded-md bg-red-600 px-3 py-2 text-center text-md
+                         font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Add Location
+            </Link>
+          </div>
         </div>
 
         {loading && <Loader />}

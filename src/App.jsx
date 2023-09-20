@@ -30,6 +30,7 @@ import InventoryCurrentStats from "./routes/inventory/InventoryCurrentStats";
 import InventoryHistoricalStats from "./routes/inventory/InventoryHistoricalStats";
 import InventoryGrowth from "./routes/inventory/InventoryGrowth";
 import LocationNotifications from "./routes/inventory/LocationNotifications";
+import CreateLocation from "./routes/inventory/CreateLocation";
 
 import Customers from "./routes/customers/Customers";
 import CustomerDetails from "./routes/customers/CustomerDetails";
@@ -335,6 +336,11 @@ const App = () => {
                     <Route
                       path="location-notifications"
                       element={<LocationNotifications />}
+                    />
+
+                    <Route
+                      path="create-location"
+                      element={<CreateLocation />}
                     />
 
                     <Route

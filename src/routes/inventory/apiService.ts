@@ -44,6 +44,10 @@ export const getLocations = (data: any) => {
     return httpService.post('/inventory/locations/list', data);
 }
 
+export const createLocation = (data: any) => {
+    return httpService.post('/inventory/location', data);
+}
+
 export const updateLocation = (data: any) => {
     return httpService.patch('/inventory/location', data);
 }
@@ -58,10 +62,6 @@ export const getUserDetails = () => {
 
 export const createProvider = (data: any) => {
     return httpService.post('/inventory/provider', data);
-}
-
-export const createLocation = (data: any) => {
-    return httpService.post('/inventory/location', data);
 }
 
 export const createTag = (data: any) => {
