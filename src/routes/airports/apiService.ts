@@ -19,3 +19,7 @@ export const updateAirportAvailableFbo = (data: any) => {
 export const getAirportAvailableFbos = (id: number) => {
     return httpService.get(`/api/airports/available-fbos/${id}/`);
 }
+
+export const createAirport = (data: any) => {
+    return httpService.post(`/api/airports/create`, data);
+}

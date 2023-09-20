@@ -187,16 +187,37 @@ const Airports = () => {
                   </Transition.Child>
 
                   <div className="flex-shrink-0 border-t border-gray-200 p-4">
-                    <div className="flex">
+                    <div className="flex justify-between">
                       <h2 className="text-2xl font-medium text-gray-900">
                         Airports
                       </h2>
-                      <span
-                        className="bg-gray-100 text-gray-700 ml-2 py-2 px-2
-                                            rounded-full text-md font-medium inline-block"
-                      >
-                        {totalAirports}
-                      </span>
+                      <div>
+                        <Link to="/create-airport">
+                          <button
+                            type="button"
+                            className="flex items-center justify-center rounded-full bg-red-600 p-1
+                                                text-white hover:bg-red-700 focus:outline-none focus:ring-2
+                                                    focus:ring-red-500 focus:ring-offset-2"
+                          >
+                            <svg
+                              className="h-6 w-6"
+                              x-description="Heroicon name: outline/plus"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.5"
+                              stroke="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 4.5v15m7.5-7.5h-15"
+                              ></path>
+                            </svg>
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                     {/* MOBILE */}
                     <form className="mt-2 w-full" action="#">
@@ -223,8 +244,8 @@ const Airports = () => {
                               setSearchText(event.target.value)
                             }
                             onKeyDown={handleKeyDown}
-                            className="block w-full rounded-md border-gray-500 pl-10 focus:border-sky-500
-                                    focus:ring-sky-500 text-xs"
+                            className="block w-full rounded-md border-gray-300 pl-10 focus:border-sky-500
+                                    focus:ring-sky-500 text-sm mt-4"
                             placeholder="Search name..."
                           />
                         </div>
@@ -248,7 +269,7 @@ const Airports = () => {
                           <ul className="relative z-0 divide-y divide-gray-200">
                             <li onClick={() => getAirportDetails(airport.id)}>
                               <div
-                                className="relative flex items-center space-x-3 py-5 focus-within:ring-2
+                                className="relative flex items-center space-x-3 py-3 focus-within:ring-2
                                                  focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50"
                               >
                                 <div className="min-w-0 flex-1">
@@ -314,19 +335,40 @@ const Airports = () => {
             <aside className="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
               <div className="px-6 pr-4 pt-6 pb-4">
                 <div className="flex justify-between">
-                  <div className="flex gap-2">
-                    <h2 className="text-3xl font-medium text-gray-900">
-                      Airports
-                    </h2>
-                    <span
-                      className="bg-gray-100 text-gray-700 ml-2 py-2 px-2
-                                            rounded-full text-md font-medium inline-block"
-                    >
-                      {totalAirports}
-                    </span>
+                  <h2 className="text-2xl font-medium text-gray-900">
+                    Airports
+                  </h2>
+                  <div>
+                    <Link to="/create-airport">
+                      <button
+                        type="button"
+                        className="flex items-center justify-center rounded-full bg-red-600 p-1
+                                                text-white hover:bg-red-700 focus:outline-none focus:ring-2
+                                                    focus:ring-red-500 focus:ring-offset-2"
+                      >
+                        <svg
+                          className="h-6 w-6"
+                          x-description="Heroicon name: outline/plus"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          ></path>
+                        </svg>
+                      </button>
+                    </Link>
                   </div>
-                  <div></div>
                 </div>
+                <p className="mt-1 text-md text-gray-600">
+                  Search directory of {totalAirports} airports
+                </p>
                 <form className="mt-3 w-full" action="#">
                   <div className="">
                     <label htmlFor="search" className="sr-only">
@@ -350,7 +392,7 @@ const Airports = () => {
                         onChange={(event) => setSearchText(event.target.value)}
                         onKeyDown={handleKeyDown}
                         className="block w-full rounded-md border-gray-300 pl-10 focus:border-sky-500
-                                 focus:ring-sky-500 sm:text-lg"
+                                 focus:ring-sky-500 sm:text-md"
                         placeholder="Search name..."
                       />
                     </div>
@@ -388,7 +430,7 @@ const Airports = () => {
                                 className="absolute inset-0"
                                 aria-hidden="true"
                               />
-                              <p className="text-lg text-gray-900">
+                              <p className="text-md text-gray-900">
                                 {airport.name}
                               </p>
                             </div>

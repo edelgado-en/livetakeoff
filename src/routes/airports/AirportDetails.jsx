@@ -164,7 +164,7 @@ const AirportDetails = () => {
         <div className=" max-w-7xl m-auto">
           <div className="xl:grid xl:grid-cols-8">
             <div className="xl:col-span-6 xl:pr-8">
-              <h3 className="mt-4 text-2xl font-bold text-center text-gray-900">
+              <h3 className="mt-4 text-3xl font-bold text-center text-gray-900">
                 {airportDetails.name}
               </h3>
               <div className="mt-1 text-xl text-gray-500 text-center">
@@ -172,7 +172,7 @@ const AirportDetails = () => {
               </div>
 
               <div className="mt-8">
-                <div className="text-lg text-gray-500 px-4 text-center">
+                <div className="text-md text-gray-500 px-4 text-center">
                   Associate FBOs to this airport. Only associated FBOs will be
                   shown when selecting this airport at the creation job view.
                 </div>
@@ -182,7 +182,7 @@ const AirportDetails = () => {
                     className="border border-gray-200 rounded-md p-4"
                     style={{ height: "1100px" }}
                   >
-                    <div className="font-medium text-lg">
+                    <div className="font-medium text-md">
                       <div className="flex justify-between">
                         <div>
                           All FBOs
@@ -226,7 +226,7 @@ const AirportDetails = () => {
                             }
                             onKeyDown={handleKeyDown}
                             className="block w-full rounded-md border-gray-300 pl-10
-                                                            focus:border-sky-500 text-lg
+                                                            focus:border-sky-500 text-md
                                                             focus:ring-sky-500  font-normal"
                             placeholder="Search name..."
                           />
@@ -242,7 +242,7 @@ const AirportDetails = () => {
                               <li className="">
                                 <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
                                   <div className="min-w-0 flex-1">
-                                    <p className="text-lg text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                    <p className="text-md text-gray-900 font-normal truncate overflow-ellipsis w-60">
                                       {fbo.name}
                                     </p>
                                   </div>
@@ -271,7 +271,7 @@ const AirportDetails = () => {
                     className="border border-gray-200 rounded-md p-4"
                     style={{ height: "1100px" }}
                   >
-                    <div className="font-medium text-lg">
+                    <div className="font-medium text-md">
                       Available FBOs
                       <span
                         className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
@@ -280,9 +280,9 @@ const AirportDetails = () => {
                         {availableFbos.length}
                       </span>
                     </div>
-                    <div className="text-xs">
+                    <div className="text-md">
                       {availableFbos.length === 0 && (
-                        <div className="text-center m-auto mt-24 text-lg">
+                        <div className="text-center m-auto mt-24 text-md">
                           No available FBOs set.
                         </div>
                       )}
@@ -306,10 +306,10 @@ const AirportDetails = () => {
                                       type="button"
                                       onClick={() => deleteAvailableFbo(fbo.id)}
                                       className="inline-flex items-center rounded border
-                                                                                        border-gray-300 bg-white px-2 py-1 text-lg
-                                                                                        text-gray-700 shadow-sm
-                                                                                        hover:bg-gray-100 focus:outline-none focus:ring-2
-                                                                                        "
+                                      border-gray-300 bg-white px-2 py-1 text-md
+                                      text-gray-700 shadow-sm
+                                      hover:bg-gray-50 focus:outline-none focus:ring-2
+                                      "
                                     >
                                       Remove
                                     </button>
