@@ -132,6 +132,8 @@ export default function CustomerServiceReport() {
     useState(false);
 
   const [selectedServiceType, setSelectedServiceType] = useState({});
+  const [selectedRetainerServiceType, setSelectedRetainerServiceType] =
+    useState({});
 
   const [selectedService, setSelectedService] = useState();
   const [selectedRetainerService, setSelectedRetainerService] = useState();
@@ -143,6 +145,10 @@ export default function CustomerServiceReport() {
   const [exteriorServices, setExteriorServices] = useState([]);
   const [otherServices, setOtherServices] = useState([]);
   const [retainerServices, setRetainerServices] = useState([]);
+
+  const [retainerInteriorServices, setRetainerInteriorServices] = useState([]);
+  const [retainerExteriorServices, setRetainerExteriorServices] = useState([]);
+  const [retainerOtherServices, setRetainerOtherServices] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [currentRetainerPage, setCurrentRetainerPage] = useState(1);
@@ -316,6 +322,16 @@ export default function CustomerServiceReport() {
     try {
       const { data } = await api.getRetainerServices();
 
+      setRetainerInteriorServices(
+        data.results.filter((service) => service.category === "I")
+      );
+      setRetainerExteriorServices(
+        data.results.filter((service) => service.category === "E")
+      );
+      setRetainerOtherServices(
+        data.results.filter((service) => service.category === "O")
+      );
+
       setRetainerServices(data.results);
     } catch (err) {
       toast.error("Unable to get retainers");
@@ -337,6 +353,19 @@ export default function CustomerServiceReport() {
     } else {
       setSelectedServiceType(serviceType);
     }
+
+    setSelectedRetainerServiceType({});
+  };
+
+  const handleRetainerServiceTypeChange = (serviceType) => {
+    //if serviceType is the same as the selected one, then clear it
+    if (selectedRetainerServiceType.type === serviceType.type) {
+      setSelectedRetainerServiceType({});
+    } else {
+      setSelectedRetainerServiceType(serviceType);
+    }
+
+    setSelectedServiceType({});
   };
 
   const handleServiceChange = (service) => {
@@ -383,12 +412,11 @@ export default function CustomerServiceReport() {
       setShowSpendingInfo(data.show_spending_info);
       setShowRetainers(data.show_retainers);
 
-      if (data.show_retainers) {
-        //only add it if it doesn't exist
+      /* if (data.show_retainers) {
         if (!serviceTypes.find((serviceType) => serviceType.type === "R")) {
           serviceTypes.push({ type: "R", name: "Retainer" });
         }
-      }
+      } */
     } catch (err) {
       toast.error("Unable to generate service report");
     }
@@ -620,7 +648,7 @@ export default function CustomerServiceReport() {
                 </li>
                 <li>
                   <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide mt-4">
-                    Service Types
+                    Standard Services
                   </div>
                   <ul className="-mx-2 mt-2 space-y-1">
                     <li>
@@ -758,58 +786,168 @@ export default function CustomerServiceReport() {
                         </ul>
                       )}
                     </li>
-                    <li>
-                      <div
-                        onClick={() =>
-                          handleServiceTypeChange({
-                            type: "R",
-                            name: "Retainer",
-                          })
-                        }
-                        className={classNames(
-                          selectedServiceType.type === "R"
-                            ? "border text-red-600 bg-red-100"
-                            : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                          " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
-                        )}
-                      >
-                        <div>Retainer</div>
-                        <div>
-                          {selectedServiceType.type !== "R" && (
-                            <ChevronDownIcon className="h-4 w-4" />
-                          )}
-                          {selectedServiceType.type === "R" && (
-                            <ChevronUpIcon className="h-4 w-4" />
-                          )}
-                        </div>
-                      </div>
-                      {selectedServiceType.type === "R" && (
-                        <ul className="mt-2 space-y-1 pl-4">
-                          {retainerServices.map((retainerService) => (
-                            <li key={retainerService.id}>
-                              <div
-                                onClick={() =>
-                                  handleRetainerServiceChange(retainerService)
-                                }
-                                className={classNames(
-                                  retainerService.id ===
-                                    selectedRetainerService?.id
-                                    ? "bg-red-600 text-white font-semibold"
-                                    : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                                  "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
-                                )}
-                              >
-                                <div className="truncate">
-                                  {retainerService.name}
-                                </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
                   </ul>
                 </li>
+
+                {showRetainers && (
+                  <>
+                    <div className="border-t-2 border-gray-300"></div>
+                    <li>
+                      <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide mt-4">
+                        Retainer Services
+                      </div>
+                      <ul className="-mx-2 mt-2 space-y-1">
+                        <li>
+                          <div
+                            onClick={() =>
+                              handleRetainerServiceTypeChange({
+                                type: "E",
+                                name: "Exterior",
+                              })
+                            }
+                            className={classNames(
+                              selectedRetainerServiceType.type === "E"
+                                ? "border text-red-600 bg-red-100"
+                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                              " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                            )}
+                          >
+                            <div>Exterior</div>
+                            <div>
+                              {selectedRetainerServiceType.type !== "E" && (
+                                <ChevronDownIcon className="h-4 w-4" />
+                              )}
+                              {selectedRetainerServiceType.type === "E" && (
+                                <ChevronUpIcon className="h-4 w-4" />
+                              )}
+                            </div>
+                          </div>
+                          {selectedRetainerServiceType.type === "E" && (
+                            <ul className="mt-2 space-y-1 pl-4">
+                              {retainerExteriorServices.map((service) => (
+                                <li key={service.id}>
+                                  <div
+                                    onClick={() =>
+                                      handleRetainerServiceChange(service)
+                                    }
+                                    className={classNames(
+                                      service.id === selectedRetainerService?.id
+                                        ? "bg-red-600 text-white font-semibold"
+                                        : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                      "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                    )}
+                                  >
+                                    <div className="truncate">
+                                      {service.name}
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                        <li>
+                          <div
+                            onClick={() =>
+                              handleRetainerServiceTypeChange({
+                                type: "I",
+                                name: "Interior",
+                              })
+                            }
+                            className={classNames(
+                              selectedRetainerServiceType.type === "I"
+                                ? "border text-red-600 bg-red-100"
+                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                              " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                            )}
+                          >
+                            <div>Interior</div>
+                            <div>
+                              {selectedRetainerServiceType.type !== "I" && (
+                                <ChevronDownIcon className="h-4 w-4" />
+                              )}
+                              {selectedRetainerServiceType.type === "I" && (
+                                <ChevronUpIcon className="h-4 w-4" />
+                              )}
+                            </div>
+                          </div>
+                          {selectedRetainerServiceType.type === "I" && (
+                            <ul className="mt-2 space-y-1 pl-4">
+                              {retainerInteriorServices.map((service) => (
+                                <li key={service.id}>
+                                  <div
+                                    onClick={() =>
+                                      handleRetainerServiceChange(service)
+                                    }
+                                    className={classNames(
+                                      service.id === selectedRetainerService?.id
+                                        ? "bg-red-600 text-white font-semibold"
+                                        : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                      "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                    )}
+                                  >
+                                    <div className="truncate">
+                                      {service.name}
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                        <li>
+                          <div
+                            onClick={() =>
+                              handleRetainerServiceTypeChange({
+                                type: "O",
+                                name: "Other",
+                              })
+                            }
+                            className={classNames(
+                              selectedRetainerServiceType.type === "O"
+                                ? "border text-red-600 bg-red-100"
+                                : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                              " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                            )}
+                          >
+                            <div>Other</div>
+                            <div>
+                              {selectedRetainerServiceType.type !== "O" && (
+                                <ChevronDownIcon className="h-4 w-4" />
+                              )}
+                              {selectedRetainerServiceType.type === "O" && (
+                                <ChevronUpIcon className="h-4 w-4" />
+                              )}
+                            </div>
+                          </div>
+                          {selectedRetainerServiceType.type === "O" && (
+                            <ul className="mt-2 space-y-1 pl-4">
+                              {retainerOtherServices.map((service) => (
+                                <li key={service.id}>
+                                  <div
+                                    onClick={() =>
+                                      handleRetainerServiceChange(service)
+                                    }
+                                    className={classNames(
+                                      service.id === selectedRetainerService?.id
+                                        ? "bg-red-600 text-white font-semibold"
+                                        : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                      "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                    )}
+                                  >
+                                    <div className="truncate">
+                                      {service.name}
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      </ul>
+                    </li>
+                  </>
+                )}
 
                 <li>
                   <div className="py-10"></div>
@@ -888,100 +1026,328 @@ export default function CustomerServiceReport() {
                         </ul>
                       </li>
                       <li>
-                        <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide">
-                          Service Types
+                        <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide mt-4">
+                          Standard Services
                         </div>
                         <ul className="-mx-2 mt-2 space-y-1">
-                          {serviceTypes.map((serviceType) => (
-                            <li key={serviceType.name}>
-                              <div
-                                onClick={() =>
-                                  handleServiceTypeChange(serviceType)
-                                }
-                                className={classNames(
-                                  selectedServiceType.type === serviceType.type
-                                    ? "border border-red-600 text-red-600"
-                                    : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                                  "group flex gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer"
+                          <li>
+                            <div
+                              onClick={() =>
+                                handleServiceTypeChange({
+                                  type: "E",
+                                  name: "Exterior",
+                                })
+                              }
+                              className={classNames(
+                                selectedServiceType.type === "E"
+                                  ? "border text-red-600 bg-red-100"
+                                  : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                              )}
+                            >
+                              <div>Exterior</div>
+                              <div>
+                                {selectedServiceType.type !== "E" && (
+                                  <ChevronDownIcon className="h-4 w-4" />
                                 )}
-                              >
-                                {serviceType.name}
+                                {selectedServiceType.type === "E" && (
+                                  <ChevronUpIcon className="h-4 w-4" />
+                                )}
                               </div>
-                            </li>
-                          ))}
+                            </div>
+                            {selectedServiceType.type === "E" && (
+                              <ul className="mt-2 space-y-1 pl-4">
+                                {exteriorServices.map((service) => (
+                                  <li key={service.id}>
+                                    <div
+                                      onClick={() =>
+                                        handleServiceChange(service)
+                                      }
+                                      className={classNames(
+                                        service.id === selectedService?.id
+                                          ? "bg-red-600 text-white font-semibold"
+                                          : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                        "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                      )}
+                                    >
+                                      <div className="truncate">
+                                        {service.name}
+                                      </div>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                          <li>
+                            <div
+                              onClick={() =>
+                                handleServiceTypeChange({
+                                  type: "I",
+                                  name: "Interior",
+                                })
+                              }
+                              className={classNames(
+                                selectedServiceType.type === "I"
+                                  ? "border text-red-600 bg-red-100"
+                                  : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                              )}
+                            >
+                              <div>Interior</div>
+                              <div>
+                                {selectedServiceType.type !== "I" && (
+                                  <ChevronDownIcon className="h-4 w-4" />
+                                )}
+                                {selectedServiceType.type === "I" && (
+                                  <ChevronUpIcon className="h-4 w-4" />
+                                )}
+                              </div>
+                            </div>
+                            {selectedServiceType.type === "I" && (
+                              <ul className="mt-2 space-y-1 pl-4">
+                                {interiorServices.map((service) => (
+                                  <li key={service.id}>
+                                    <div
+                                      onClick={() =>
+                                        handleServiceChange(service)
+                                      }
+                                      className={classNames(
+                                        service.id === selectedService?.id
+                                          ? "bg-red-600 text-white font-semibold"
+                                          : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                        "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                      )}
+                                    >
+                                      <div className="truncate">
+                                        {service.name}
+                                      </div>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
+                          <li>
+                            <div
+                              onClick={() =>
+                                handleServiceTypeChange({
+                                  type: "O",
+                                  name: "Other",
+                                })
+                              }
+                              className={classNames(
+                                selectedServiceType.type === "O"
+                                  ? "border text-red-600 bg-red-100"
+                                  : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                              )}
+                            >
+                              <div>Other</div>
+                              <div>
+                                {selectedServiceType.type !== "O" && (
+                                  <ChevronDownIcon className="h-4 w-4" />
+                                )}
+                                {selectedServiceType.type === "O" && (
+                                  <ChevronUpIcon className="h-4 w-4" />
+                                )}
+                              </div>
+                            </div>
+                            {selectedServiceType.type === "O" && (
+                              <ul className="mt-2 space-y-1 pl-4">
+                                {otherServices.map((service) => (
+                                  <li key={service.id}>
+                                    <div
+                                      onClick={() =>
+                                        handleServiceChange(service)
+                                      }
+                                      className={classNames(
+                                        service.id === selectedService?.id
+                                          ? "bg-red-600 text-white font-semibold"
+                                          : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                        "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                      )}
+                                    >
+                                      <div className="truncate">
+                                        {service.name}
+                                      </div>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </li>
                         </ul>
-
-                        {selectedServiceType.type && (
-                          <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide mt-3">
-                            {selectedServiceType.type === "E" && "Exterior"}
-                            {selectedServiceType.type === "I" && "Interior"}
-                            {selectedServiceType.type === "O" && "Other"}
-                            {selectedServiceType.type === "R" &&
-                              "Retainer"}{" "}
-                            Services
-                          </div>
-                        )}
-
-                        {selectedServiceType.type === "E" && (
-                          <ul className="mt-2 space-y-1">
-                            {exteriorServices.map((service) => (
-                              <li key={service.id}>
-                                <div
-                                  onClick={() => handleServiceChange(service)}
-                                  className={classNames(
-                                    service.id === selectedService?.id
-                                      ? "bg-red-600 text-white font-semibold"
-                                      : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                                    "group flex justify-between gap-x-3 rounded-md p-2 text-sm leading-6 cursor-pointer border border-transparent"
-                                  )}
-                                >
-                                  <div className="truncate">{service.name}</div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-
-                        {selectedServiceType.type === "I" && (
-                          <ul className="mt-2 space-y-1">
-                            {interiorServices.map((service) => (
-                              <li key={service.id}>
-                                <div
-                                  onClick={() => handleServiceChange(service)}
-                                  className={classNames(
-                                    service.id === selectedService?.id
-                                      ? "bg-red-600 text-white font-semibold"
-                                      : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                                    "group flex justify-between gap-x-3 rounded-md p-2 text-sm leading-6 cursor-pointer border border-transparent"
-                                  )}
-                                >
-                                  <div className="truncate">{service.name}</div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-
-                        {selectedServiceType.type === "O" && (
-                          <ul className="mt-2 space-y-1">
-                            {otherServices.map((service) => (
-                              <li key={service.id}>
-                                <div
-                                  onClick={() => handleServiceChange(service)}
-                                  className={classNames(
-                                    service.id === selectedService?.id
-                                      ? "bg-red-600 text-white font-semibold"
-                                      : "text-gray-600 hover:text-red-700 hover:border-red-700",
-                                    "group flex justify-between gap-x-3 rounded-md p-2 text-sm leading-6 cursor-pointer border border-transparent"
-                                  )}
-                                >
-                                  <div className="truncate">{service.name}</div>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
                       </li>
+
+                      {showRetainers && (
+                        <>
+                          <div className="border-t-2 border-gray-300"></div>
+                          <li>
+                            <div className="text-md font-semibold leading-6 text-gray-500 uppercase tracking-wide mt-4">
+                              Retainer Services
+                            </div>
+                            <ul className="-mx-2 mt-2 space-y-1">
+                              <li>
+                                <div
+                                  onClick={() =>
+                                    handleRetainerServiceTypeChange({
+                                      type: "E",
+                                      name: "Exterior",
+                                    })
+                                  }
+                                  className={classNames(
+                                    selectedRetainerServiceType.type === "E"
+                                      ? "border text-red-600 bg-red-100"
+                                      : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                    " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                                  )}
+                                >
+                                  <div>Exterior</div>
+                                  <div>
+                                    {selectedRetainerServiceType.type !==
+                                      "E" && (
+                                      <ChevronDownIcon className="h-4 w-4" />
+                                    )}
+                                    {selectedRetainerServiceType.type ===
+                                      "E" && (
+                                      <ChevronUpIcon className="h-4 w-4" />
+                                    )}
+                                  </div>
+                                </div>
+                                {selectedRetainerServiceType.type === "E" && (
+                                  <ul className="mt-2 space-y-1 pl-4">
+                                    {retainerExteriorServices.map((service) => (
+                                      <li key={service.id}>
+                                        <div
+                                          onClick={() =>
+                                            handleRetainerServiceChange(service)
+                                          }
+                                          className={classNames(
+                                            service.id ===
+                                              selectedRetainerService?.id
+                                              ? "bg-red-600 text-white font-semibold"
+                                              : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                            "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                          )}
+                                        >
+                                          <div className="truncate">
+                                            {service.name}
+                                          </div>
+                                        </div>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </li>
+                              <li>
+                                <div
+                                  onClick={() =>
+                                    handleRetainerServiceTypeChange({
+                                      type: "I",
+                                      name: "Interior",
+                                    })
+                                  }
+                                  className={classNames(
+                                    selectedRetainerServiceType.type === "I"
+                                      ? "border text-red-600 bg-red-100"
+                                      : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                    " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                                  )}
+                                >
+                                  <div>Interior</div>
+                                  <div>
+                                    {selectedRetainerServiceType.type !==
+                                      "I" && (
+                                      <ChevronDownIcon className="h-4 w-4" />
+                                    )}
+                                    {selectedRetainerServiceType.type ===
+                                      "I" && (
+                                      <ChevronUpIcon className="h-4 w-4" />
+                                    )}
+                                  </div>
+                                </div>
+                                {selectedRetainerServiceType.type === "I" && (
+                                  <ul className="mt-2 space-y-1 pl-4">
+                                    {retainerInteriorServices.map((service) => (
+                                      <li key={service.id}>
+                                        <div
+                                          onClick={() =>
+                                            handleRetainerServiceChange(service)
+                                          }
+                                          className={classNames(
+                                            service.id ===
+                                              selectedRetainerService?.id
+                                              ? "bg-red-600 text-white font-semibold"
+                                              : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                            "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                          )}
+                                        >
+                                          <div className="truncate">
+                                            {service.name}
+                                          </div>
+                                        </div>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </li>
+                              <li>
+                                <div
+                                  onClick={() =>
+                                    handleRetainerServiceTypeChange({
+                                      type: "O",
+                                      name: "Other",
+                                    })
+                                  }
+                                  className={classNames(
+                                    selectedRetainerServiceType.type === "O"
+                                      ? "border text-red-600 bg-red-100"
+                                      : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                    " flex justify-between gap-x-3 rounded-md p-2 text-lg leading-6 cursor-pointer font-semibold"
+                                  )}
+                                >
+                                  <div>Other</div>
+                                  <div>
+                                    {selectedRetainerServiceType.type !==
+                                      "O" && (
+                                      <ChevronDownIcon className="h-4 w-4" />
+                                    )}
+                                    {selectedRetainerServiceType.type ===
+                                      "O" && (
+                                      <ChevronUpIcon className="h-4 w-4" />
+                                    )}
+                                  </div>
+                                </div>
+                                {selectedRetainerServiceType.type === "O" && (
+                                  <ul className="mt-2 space-y-1 pl-4">
+                                    {retainerOtherServices.map((service) => (
+                                      <li key={service.id}>
+                                        <div
+                                          onClick={() =>
+                                            handleRetainerServiceChange(service)
+                                          }
+                                          className={classNames(
+                                            service.id ===
+                                              selectedRetainerService?.id
+                                              ? "bg-red-600 text-white font-semibold"
+                                              : "text-gray-600 hover:text-red-700 hover:border-red-700",
+                                            "group flex justify-between gap-x-3 rounded-md p-2 text-md leading-6 cursor-pointer border border-transparent"
+                                          )}
+                                        >
+                                          <div className="truncate">
+                                            {service.name}
+                                          </div>
+                                        </div>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </li>
+                            </ul>
+                          </li>
+                        </>
+                      )}
                       <li>
                         <div className="py-10"></div>
                       </li>
