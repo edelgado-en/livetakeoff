@@ -7,24 +7,7 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import * as api from "./apiService";
 import { toast } from "react-toastify";
 
-const MagnifyingGlassIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-5 h-5"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-      />
-    </svg>
-  );
-};
+import CreateFBOModal from "./CreateFBOModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -37,59 +20,43 @@ const CreateAirport = () => {
   const [name, setName] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [isPublic, setisPublic] = useState(false);
-
   const [fbos, setFbos] = useState([]);
-  const [totalFbos, setTotalFbos] = useState(0);
-  const [loadingFbos, setLoadingFbos] = useState(false);
-  const [fboSearchText, setFboSearchText] = useState("");
-  const [fboAlreadyAdded, setFboAlreadyAdded] = useState(false);
 
-  const [availableFbos, setAvailableFbos] = useState([]);
+  const [isCreateFboModalOpen, setCreateFboModalOpen] = useState(false);
 
-  useEffect(() => {
-    //Basic throttling
-    let timeoutID = setTimeout(() => {
-      searchFbos();
-    }, 500);
+  const handleToggleCreateFboModal = () => {
+    setCreateFboModalOpen(!isCreateFboModalOpen);
+  };
 
-    return () => {
-      clearTimeout(timeoutID);
-    };
-  }, [fboSearchText]);
+  const handleAddFbo = async (fbo) => {
+    //check that the fbo.name is unique
+    const fboExists = fbos.find((item) => item.name === fbo.name);
 
-  const searchFbos = async () => {
-    setLoadingFbos(true);
+    if (fboExists) {
+      alert("FBO name must be unique");
+      return;
+    }
+
     try {
-      const request = {
-        name: fboSearchText,
-      };
+      const { data } = await api.searchFbos({ name: fbo.name });
 
-      const { data } = await api.searchFbos(request);
-
-      setFbos(data.results);
-      setTotalFbos(data.count);
-      setFboAlreadyAdded(false);
-
-      setLoadingFbos(false);
-    } catch (error) {
-      setLoadingFbos(false);
+      if (data.results.length > 0) {
+        alert("FBO name must be unique");
+        return;
+      }
+    } catch (err) {
+      alert("Error checking FBO name");
+      return;
     }
+
+    setFbos([...fbos, fbo]);
+
+    setCreateFboModalOpen(false);
   };
 
-  const addAvailableFbo = (fbo) => {
-    setAvailableFbos([...availableFbos, fbo]);
-  };
-
-  const removeAvailableFbo = (fbo) => {
-    setAvailableFbos(availableFbos.filter((f) => f.id !== fbo.id));
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-
-      searchFbos();
-    }
+  const handleRemoveFbo = (fbo) => {
+    const newFbos = fbos.filter((item) => item.name !== fbo.name);
+    setFbos(newFbos);
   };
 
   const addAirport = async () => {
@@ -108,13 +75,10 @@ const CreateAirport = () => {
       return;
     }
 
-    if (availableFbos.length === 0) {
+    if (fbos.length === 0) {
       alert("Please add at least one FBO");
       return;
     }
-
-    // get the available fbo ids
-    const fboIds = availableFbos.map((fbo) => fbo.id);
 
     setLoading(true);
 
@@ -123,7 +87,7 @@ const CreateAirport = () => {
       name: name,
       active: isActive,
       public: isPublic,
-      available_fbo_ids: fboIds,
+      available_fbos: fbos,
     };
 
     try {
@@ -288,163 +252,66 @@ const CreateAirport = () => {
               </div>
             </div>
 
-            <div className="pt-8 sm:pt-10">
-              <div>
-                <h3 className="text-lg font-medium leading-6 text-gray-900 mt-2">
-                  Available FBOs
-                </h3>
+            <div className="pt-8 sm:pt-10 sm:flex sm:items-center">
+              <div className="sm:flex-auto">
+                <h1 className="text-lg font-medium leading-6 text-gray-900">
+                  Create FBOs
+                </h1>
+                <p className="mt-2 text-md text-gray-500">
+                  Create FBOs for this airport. Only associated FBOs will be
+                  shown when selecting this airport at the creation job view.
+                </p>
               </div>
-              <div className="text-md text-gray-500">
-                Associate FBOs to this airport. Only associated FBOs will be
-                shown when selecting this airport at the creation job view.
-              </div>
-
-              <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
-                <div
-                  className="border border-gray-200 rounded-md p-4"
-                  style={{ height: "900px" }}
+              <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                <button
+                  type="button"
+                  onClick={() => handleToggleCreateFboModal()}
+                  className="block rounded-md bg-red-600 px-3 py-2 text-center text-sm
+                              font-semibold text-white shadow-sm hover:bg-red-500
+                              focus-visible:outline focus-visible:outline-2
+                               focus-visible:outline-offset-2 focus-visible:outline-red-600"
                 >
-                  <div className="font-medium text-md">
-                    <div className="flex justify-between">
-                      <div>
-                        All FBOs
-                        <span
-                          className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                    rounded-full text-md font-medium inline-block"
-                        >
-                          {totalFbos}
-                        </span>
-                      </div>
-                      <div>
-                        {fboAlreadyAdded && (
-                          <div className="text-red-500 text-md relative top-1">
-                            FBO already added
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="min-w-0 flex-1 my-2">
-                      <label htmlFor="search" className="sr-only">
-                        Search
-                      </label>
-                      <div className="relative rounded-md shadow-sm">
-                        <div
-                          onClick={() => searchFbos()}
-                          className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                        >
-                          <MagnifyingGlassIcon
-                            className="h-5 w-5 text-gray-400 cursor-pointer"
-                            aria-hidden="true"
-                          />
-                        </div>
-                        <input
-                          type="search"
-                          name="search"
-                          id="search"
-                          value={fboSearchText}
-                          onChange={(event) =>
-                            setFboSearchText(event.target.value)
-                          }
-                          onKeyDown={handleKeyDown}
-                          className="block w-full rounded-md border-gray-300 pl-10
-                                                            focus:border-sky-500 text-md
-                                                            focus:ring-sky-500  font-normal"
-                          placeholder="Search name..."
-                        />
-                      </div>
-                    </div>
-                    <div
-                      className="overflow-y-auto"
-                      style={{ maxHeight: "700px" }}
-                    >
-                      {fbos.map((fbo) => (
-                        <div key={fbo.id} className="relative">
-                          <ul className="">
-                            <li className="">
-                              <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                <div className="min-w-0 flex-1">
-                                  <p className="text-md text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                    {fbo.name}
-                                  </p>
-                                </div>
-                                <div>
-                                  <button
-                                    type="button"
-                                    onClick={() => addAvailableFbo(fbo)}
-                                    className="inline-flex items-center rounded border
-                                                                                    border-gray-300 bg-white px-2 py-1 text-md
-                                                                                    text-gray-700 shadow-sm
-                                                                                    hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                                                    "
-                                  >
-                                    Add
-                                  </button>
-                                </div>
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className="border border-gray-200 rounded-md p-4"
-                  style={{ height: "900px" }}
-                >
-                  <div className="font-medium text-md">
-                    Available FBOs
-                    <span
-                      className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                            rounded-full text-md font-medium inline-block"
-                    >
-                      {availableFbos.length}
-                    </span>
-                  </div>
-                  <div className="text-md">
-                    {availableFbos.length === 0 && (
-                      <div className="text-center m-auto mt-24 text-md">
-                        No available FBOs set.
-                      </div>
-                    )}
-
-                    <div
-                      className="overflow-y-auto"
-                      style={{ maxHeight: "700px" }}
-                    >
-                      {availableFbos.map((fbo) => (
-                        <div key={fbo.id} className="relative">
-                          <ul className="">
-                            <li className="">
-                              <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                <div className="min-w-0 flex-1">
-                                  <p className="text-lg text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                    {fbo.name}
-                                  </p>
-                                </div>
-                                <div>
-                                  <button
-                                    type="button"
-                                    onClick={() => removeAvailableFbo(fbo)}
-                                    className="inline-flex items-center rounded border
-                                      border-gray-300 bg-white px-2 py-1 text-md
-                                      text-gray-700 shadow-sm
-                                      hover:bg-gray-50 focus:outline-none focus:ring-2
-                                      "
-                                  >
-                                    Remove
-                                  </button>
-                                </div>
-                              </div>
-                            </li>
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                  Create FBO
+                </button>
               </div>
+            </div>
+
+            <div className="m-auto max-w-xl">
+              <ul className="divide-y divide-gray-100 mt-4">
+                {fbos.map((fbo, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center justify-between gap-x-6 py-5"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap gap-y-2 items-start gap-x-3">
+                        <p className="text-md leading-6 font-medium text-gray-500">
+                          {fbo.name}
+                        </p>
+                        <p
+                          className={`${
+                            fbo.public
+                              ? "bg-green-50 text-green-700"
+                              : "bg-red-50 text-red-700 border-red-700"
+                          } rounded-md whitespace-nowrap mt-0.5 px-1.5 py-0.5 text-sm ring-1 ring-inset`}
+                        >
+                          {fbo.public ? "Public" : "Private"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex flex-none items-center gap-x-4">
+                      <button
+                        onClick={() => handleRemoveFbo(fbo)}
+                        className="rounded-md bg-white px-2.5 py-1.5
+                         text-sm text-gray-700 shadow-sm ring-1
+                        ring-inset ring-gray-300 hover:bg-gray-50 sm:block"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
@@ -453,7 +320,7 @@ const CreateAirport = () => {
               <button
                 onClick={() => navigate(-1)}
                 type="button"
-                className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium
+                className="rounded-md border border-gray-300 bg-white py-2 px-4 text-md font-medium
                             text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
                               focus:ring-red-500 focus:ring-offset-2"
               >
@@ -463,7 +330,7 @@ const CreateAirport = () => {
                 type="button"
                 onClick={() => addAirport()}
                 className="ml-3 inline-flex justify-center rounded-md border
-                              border-transparent bg-red-600 py-2 px-4 text-sm font-medium
+                              border-transparent bg-red-600 py-2 px-4 text-md font-medium
                                 text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2
                                 focus:ring-red-500 focus:ring-offset-2"
               >
@@ -473,6 +340,14 @@ const CreateAirport = () => {
           </div>
         </form>
       </div>
+
+      {isCreateFboModalOpen && (
+        <CreateFBOModal
+          isOpen={isCreateFboModalOpen}
+          handleClose={handleToggleCreateFboModal}
+          addFBO={handleAddFbo}
+        />
+      )}
     </AnimatedPage>
   );
 };
