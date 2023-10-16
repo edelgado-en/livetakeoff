@@ -138,7 +138,7 @@ export default function CustomerServiceReport() {
   const [selectedService, setSelectedService] = useState();
   const [selectedRetainerService, setSelectedRetainerService] = useState();
 
-  const [dateSelected, setDateSelected] = useState(dateOptions[4]);
+  const [dateSelected, setDateSelected] = useState(dateOptions[3]);
   const [searchText, setSearchText] = useState("");
 
   const [interiorServices, setInteriorServices] = useState([]);
@@ -610,11 +610,11 @@ export default function CustomerServiceReport() {
   return (
     <AnimatedPage>
       <div
-        className={`px-4 m-auto max-w-7xl flex flex-wrap -mt-6`}
+        className={`px-4 m-auto max-w-7xl flex -mt-6`}
         style={{ maxWidth: "1800px" }}
       >
         {/* Static sidebar for desktop */}
-        <div className="hidden xl:flex w-80 xl:flex-col min-h-full">
+        <div className="hidden xl:flex xl:flex-col w-80  min-h-full">
           <div className="flex grow flex-col overflow-y-auto bg-gray-100 px-6 ring-1 ring-white/5">
             <div className="flex h-16 shrink-0 items-center text-3xl font-semibold tracking-tight text-gray-700">
               Service Report
@@ -1359,7 +1359,7 @@ export default function CustomerServiceReport() {
           </Dialog>
         </Transition.Root>
 
-        <div className=" flex-1">
+        <div className="grow">
           <div className="xl:hidden  mb-5">
             <button
               type="button"
