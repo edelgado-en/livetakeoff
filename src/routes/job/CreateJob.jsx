@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
+import { set } from "react-hook-form";
 
 const ChevronUpDownIcon = () => {
   return (
@@ -74,6 +75,8 @@ const CreateJob = () => {
   const [airports, setAirports] = useState([]);
   const [fbos, setFbos] = useState([]);
   const [allFbos, setAllFbos] = useState([]);
+
+  const [serviceActivities, setServiceActivities] = useState([]);
 
   const [services, setServices] = useState([]);
   const [retainerServices, setRetainerServices] = useState([]);
@@ -304,6 +307,14 @@ const CreateJob = () => {
           setShowTailAlert(false);
           setTailAlert(null);
         }
+
+        const request = {
+          tail_number: tailNumber,
+        };
+
+        const response2 = await api.getTailServiceHistory(request);
+
+        setServiceActivities(response2.data.results);
       }
     }
   };
@@ -1010,6 +1021,52 @@ const CreateJob = () => {
                         </p>
                       )}
                     </div>
+
+                    {/* MOBILE TAIL HISTORY */}
+                    {serviceActivities.length > 0 && (
+                      <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
+                        <div className="font-medium tracking-wide text-lg">
+                          Tail History
+                          <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
+                            (Last 2 jobs completed)
+                          </span>
+                        </div>
+                        <ul className="divide-y divide-gray-200 text-md text-gray-500">
+                          {serviceActivities.map((service) => (
+                            <li key={service.id}>
+                              <div className="px-2 py-4">
+                                <div className="flex justify-between gap-2">
+                                  <div>{service.timestamp}</div>
+                                  <div className="text-sky-500">
+                                    <Link
+                                      to={`/report/review/${service.job_id}`}
+                                    >
+                                      {service.purchase_order}
+                                    </Link>
+                                  </div>
+                                </div>
+                                <div className="font-semibold mt-2">
+                                  {service.service_name}
+                                </div>
+                                <div className="flex justify-between gap-2 mt-1">
+                                  <div>
+                                    <div className="bg-gray-100 p-1 rounded-md">
+                                      {service.airport_name}
+                                    </div>
+                                  </div>
+                                  <div className="relative top-1">
+                                    {service.fbo_name}
+                                  </div>
+                                  <div className="italic relative top-1">
+                                    {service.tail_number}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
 
                   {!currentUser.isCustomer && (
@@ -1798,6 +1855,107 @@ const CreateJob = () => {
                   Next
                 </button>
               </div>
+
+              {/* DESKTOP TAIL HISTORY */}
+              {serviceActivities.length > 0 && (
+                <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-8">
+                  <div className="text-lg font-bold text-gray-600 uppercase tracking-wide">
+                    Tail History
+                    <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
+                      (Last 2 jobs completed)
+                    </span>
+                  </div>
+                  <div className="">
+                    <table className="min-w-full table-auto">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
+                          >
+                            <div className="flex gap-1">Date</div>
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                          >
+                            P.O
+                          </th>
+                          {!currentUser.isCustomer && (
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                            >
+                              Customer
+                            </th>
+                          )}
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                          >
+                            Tail
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                          >
+                            Airport
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                          >
+                            FBO
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                          >
+                            Service
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
+                        {serviceActivities.map((service) => (
+                          <tr key={service.id}>
+                            <td className="px-2 py-2 text-md text-gray-500 sm:pl-0">
+                              {service.timestamp}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-2 text-md text-sky-500 font-semibold cursor-pointer">
+                              <Link to={`/report/review/${service.job_id}`}>
+                                {service.purchase_order}
+                              </Link>
+                            </td>
+                            {!currentUser.isCustomer && (
+                              <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                                <div className="truncate overflow-ellipsis w-60">
+                                  {service.customer_name}
+                                </div>
+                              </td>
+                            )}
+                            <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                              {service.tail_number}
+                            </td>
+                            <td className="px-3 py-2 text-md text-gray-500">
+                              <div className="truncate overflow-ellipsis w-40">
+                                {service.airport_name}
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                              {service.fbo_name}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                              <div className=" truncate overflow-ellipsis w-96">
+                                {service.service_name}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </>
           )}
 
