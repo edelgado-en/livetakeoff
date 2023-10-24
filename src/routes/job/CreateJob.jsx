@@ -500,6 +500,29 @@ const CreateJob = () => {
       return;
     }
 
+    //Add validation so if a estimatedDepartureDate date is entered on a date BEFORE the estimatedArrivalDate, then the estimatedDepartureDate is not Valid. Add message "ETD Date/Time is before ETA Date/Time
+    if (estimatedArrivalDate && estimatedDepartureDate) {
+      if (estimatedArrivalDate > estimatedDepartureDate) {
+        alert("ETD Date/Time is before ETA Date/Time");
+        return;
+      }
+    }
+
+    //Add validation when estimatedArrivalDate or estimatedDepartureDate is a date before today's date
+    /* if (estimatedArrivalDate) {
+      if (estimatedArrivalDate < new Date()) {
+        alert("ETA Date/Time is before today's date");
+        return;
+      }
+    } */
+
+    if (estimatedDepartureDate) {
+      if (estimatedDepartureDate < new Date()) {
+        alert("ETD Date/Time is before today's date");
+        return;
+      }
+    }
+
     const selectedServiceIds = selectedServices.map((service) => service.id);
     const selectedRetainerServiceIds = selectedRetainerServices.map(
       (service) => service.id
@@ -1049,7 +1072,7 @@ const CreateJob = () => {
                                     <div>{service.timestamp}</div>
                                     <div className="text-sky-500">
                                       <Link
-                                        to={`/report/review/${service.job_id}`}
+                                        to={`/create-job/review/${service.job_id}`}
                                       >
                                         {service.purchase_order}
                                       </Link>
@@ -1933,7 +1956,7 @@ const CreateJob = () => {
                               {service.timestamp}
                             </td>
                             <td className="whitespace-nowrap px-3 py-2 text-md text-sky-500 font-semibold cursor-pointer">
-                              <Link to={`/report/review/${service.job_id}`}>
+                              <Link to={`/create-job/review/${service.job_id}`}>
                                 {service.purchase_order}
                               </Link>
                             </td>

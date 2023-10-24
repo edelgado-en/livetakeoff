@@ -165,6 +165,8 @@ const JobReview = () => {
       location.pathname.includes("completed")
     ) {
       navigate("/completed");
+    } else if (location.pathname.includes("create-job")) {
+      navigate("/create-job");
     } else {
       navigate(-1);
     }
