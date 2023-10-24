@@ -20,3 +20,7 @@ export const getEstimateDetail = (id: any) => {
 export const deleteEstimate = (id: number) => {
     return httpService.delete(`/api/estimates/${id}/`);
 }
+
+export const searchFbos = (data: any) => {
+    return httpService.post(`/api/fbo-search`, data);
+}
