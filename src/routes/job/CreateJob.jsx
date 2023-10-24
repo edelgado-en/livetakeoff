@@ -60,6 +60,8 @@ const CreateJob = () => {
   const isStepTwoSelected = steps[1].selected;
   const isStepThreeSelected = steps[2].selected;
 
+  const [showMobileServices, setShowMobileServices] = useState(false);
+
   const [showTailAlert, setShowTailAlert] = useState(false);
   const [tailAlert, setTailAlert] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -1025,46 +1027,55 @@ const CreateJob = () => {
                     {/* MOBILE TAIL HISTORY */}
                     {serviceActivities.length > 0 && (
                       <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
-                        <div className="font-medium tracking-wide text-lg">
-                          Tail History
-                          <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
-                            (Last 2 jobs completed)
-                          </span>
+                        <div className="flex justify-between font-medium tracking-wide text-lg pb-4">
+                          <div>
+                            Found {serviceActivities.length} previous services
+                          </div>
+                          <div
+                            onClick={() =>
+                              setShowMobileServices(!showMobileServices)
+                            }
+                            className="text-sky-500 text-lg ml-2 tracking-normal"
+                          >
+                            {showMobileServices ? "Hide" : "Show"}
+                          </div>
                         </div>
-                        <ul className="divide-y divide-gray-200 text-md text-gray-500">
-                          {serviceActivities.map((service) => (
-                            <li key={service.id}>
-                              <div className="px-2 py-4">
-                                <div className="flex justify-between gap-2">
-                                  <div>{service.timestamp}</div>
-                                  <div className="text-sky-500">
-                                    <Link
-                                      to={`/report/review/${service.job_id}`}
-                                    >
-                                      {service.purchase_order}
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="font-semibold mt-2">
-                                  {service.service_name}
-                                </div>
-                                <div className="flex justify-between gap-2 mt-1">
-                                  <div>
-                                    <div className="bg-gray-100 p-1 rounded-md">
-                                      {service.airport_name}
+                        {showMobileServices && (
+                          <ul className="divide-y divide-gray-200 text-md text-gray-500">
+                            {serviceActivities.map((service) => (
+                              <li key={service.id}>
+                                <div className="px-2 py-4">
+                                  <div className="flex justify-between gap-2">
+                                    <div>{service.timestamp}</div>
+                                    <div className="text-sky-500">
+                                      <Link
+                                        to={`/report/review/${service.job_id}`}
+                                      >
+                                        {service.purchase_order}
+                                      </Link>
                                     </div>
                                   </div>
-                                  <div className="relative top-1">
-                                    {service.fbo_name}
+                                  <div className="font-semibold mt-2">
+                                    {service.service_name}
                                   </div>
-                                  <div className="italic relative top-1">
-                                    {service.tail_number}
+                                  <div className="flex justify-between gap-2 mt-1">
+                                    <div>
+                                      <div className="bg-gray-100 p-1 rounded-md">
+                                        {service.airport_name}
+                                      </div>
+                                    </div>
+                                    <div className="relative top-1">
+                                      {service.fbo_name}
+                                    </div>
+                                    <div className="italic relative top-1">
+                                      {service.tail_number}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                       </div>
                     )}
                   </div>
