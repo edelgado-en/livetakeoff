@@ -67,6 +67,7 @@ const EditJob = () => {
   const [aircraftTypes, setAircraftTypes] = useState([]);
   const [airports, setAirports] = useState([]);
   const [fbos, setFbos] = useState([]);
+  const [allFbos, setAllFbos] = useState([]);
   const [services, setServices] = useState([]);
   const [retainerServices, setRetainerServices] = useState([]);
 
@@ -136,6 +137,7 @@ const EditJob = () => {
       setAircraftTypes(data.aircraft_types);
       setAirports(data.airports);
       setFbos(data.fbos);
+      setAllFbos(data.fbos);
       setServices(data.services);
       setRetainerServices(data.retainer_services);
       setTags(data.tags);
@@ -292,6 +294,26 @@ const EditJob = () => {
     });
 
     setTags(tagsUpdated);
+  };
+
+  const handleAirportSelectedChange = async (airport) => {
+    setAirportSelected(airport);
+
+    const request = {
+      airport_id: airport.id,
+    };
+
+    try {
+      const { data } = await api.searchFbos(request);
+
+      if (data.results.length > 0) {
+        setFbos(data.results);
+      } else {
+        setFbos(allFbos);
+      }
+    } catch (err) {
+      toast.error("Unable to get Fbos");
+    }
   };
 
   return (
@@ -747,7 +769,10 @@ const EditJob = () => {
               </div>
 
               <div className="mt-1">
-                <Listbox value={airportSelected} onChange={setAirportSelected}>
+                <Listbox
+                  value={airportSelected}
+                  onChange={handleAirportSelectedChange}
+                >
                   {({ open }) => (
                     <>
                       <Listbox.Label className="block text-sm font-medium text-gray-700">
