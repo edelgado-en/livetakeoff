@@ -94,11 +94,13 @@ const JobInfo = () => {
 
       setLoading(false);
 
+      const response = await api.getUserDetails();
+
       if (
-        currentUser.isAdmin ||
-        currentUser.isSuperUser ||
-        currentUser.isAccountManager ||
-        currentUser.isInternalCoordinator
+        response.data.isAdmin ||
+        response.data.isSuperUser ||
+        response.data.isAccountManager ||
+        response.data.isInternalCoordinator
       ) {
         const request = {
           tail_number: data.tailNumber,

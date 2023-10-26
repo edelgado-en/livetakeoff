@@ -163,3 +163,7 @@ export const searchFbos = (data: any) => {
 export const getTailServiceHistory = (data: any) => {
     return httpService.post('/api/tail-service-history', data)
 }
+
+export const getUserDetails = () => {
+    return httpService.get('/api/users/me');
+}
