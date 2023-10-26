@@ -62,6 +62,7 @@ const JobInfo = () => {
   const location = useLocation();
 
   const [showMore, setShowMore] = useState(false);
+  const [showMobileServices, setShowMobileServices] = useState(false);
 
   useEffect(() => {
     getJobDetails();
@@ -1073,6 +1074,55 @@ const JobInfo = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
+
+          {/* MOBILE TAIL HISTORY */}
+          {serviceActivities.length > 0 && (
+            <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
+              <div className="flex justify-between font-medium tracking-wide text-xl pb-4">
+                <div>Found {serviceActivities.length} previous services</div>
+                <div
+                  onClick={() => setShowMobileServices(!showMobileServices)}
+                  className="text-sky-500 text-lg ml-2 tracking-normal"
+                >
+                  {showMobileServices ? "Hide" : "Show"}
+                </div>
+              </div>
+              {showMobileServices && (
+                <ul className="divide-y divide-gray-200 text-md text-gray-500">
+                  {serviceActivities.map((service) => (
+                    <li key={service.id}>
+                      <div className="px-2 py-4">
+                        <div className="flex justify-between gap-2">
+                          <div>{service.timestamp}</div>
+                          <div className="text-sky-500">
+                            <Link to={`/create-job/review/${service.job_id}`}>
+                              {service.purchase_order}
+                            </Link>
+                          </div>
+                        </div>
+                        <div className="font-semibold mt-2">
+                          {service.service_name}
+                        </div>
+                        <div className="flex justify-between gap-2 mt-1">
+                          <div>
+                            <div className="bg-gray-100 p-1 rounded-md">
+                              {service.airport_name}
+                            </div>
+                          </div>
+                          <div className="relative top-1">
+                            {service.fbo_name}
+                          </div>
+                          <div className="italic relative top-1">
+                            {service.tail_number}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
         </div>
