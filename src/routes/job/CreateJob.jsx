@@ -1912,7 +1912,7 @@ const CreateJob = () => {
                   <div className="text-lg font-bold text-gray-600 uppercase tracking-wide">
                     Tail History
                     <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
-                      (Last 2 jobs completed)
+                      (Last 10 services completed)
                     </span>
                   </div>
                   <div className="">
