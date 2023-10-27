@@ -524,13 +524,13 @@ const CreateJob = () => {
       }
     }
 
-    //Add validation when estimatedArrivalDate or estimatedDepartureDate is a date before today's date
-    /* if (estimatedArrivalDate) {
-      if (estimatedArrivalDate < new Date()) {
-        alert("ETA Date/Time is before today's date");
+    //Add validation when completeByDate is a date before estimatedArrivalDate
+    if (estimatedArrivalDate && completeByDate) {
+      if (completeByDate < estimatedArrivalDate) {
+        alert("Complete By Date/Time is before ETA Date/Time");
         return;
       }
-    } */
+    }
 
     if (estimatedDepartureDate) {
       if (estimatedDepartureDate < new Date()) {
