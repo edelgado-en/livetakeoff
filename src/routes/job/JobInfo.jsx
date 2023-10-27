@@ -62,7 +62,7 @@ const JobInfo = () => {
   const location = useLocation();
 
   const [showMore, setShowMore] = useState(false);
-  const [showMobileServices, setShowMobileServices] = useState(false);
+  const [showServiceActivity, setShowServiceActivity] = useState(false);
 
   useEffect(() => {
     getJobDetails();
@@ -981,101 +981,111 @@ const JobInfo = () => {
           {/* DESKTOP TAIL HISTORY */}
           {serviceActivities.length > 0 && (
             <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
-              <div className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
-                Tail History
-                <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
-                  (Last 10 services completed)
-                </span>
+              <div className="flex justify-between">
+                <div className="text-2xl font-bold text-gray-600 uppercase tracking-wide">
+                  Tail History
+                  <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
+                    (Last 10 services completed)
+                  </span>
+                </div>
+                <div
+                  onClick={() => setShowServiceActivity(!showServiceActivity)}
+                  className="text-sky-500 text-lg ml-2 tracking-normal cursor-pointer font-semibold"
+                >
+                  {showServiceActivity ? "Hide" : "Show"}
+                </div>
               </div>
-              <div className="">
-                <table className="min-w-full table-auto">
-                  <thead>
-                    <tr>
-                      <th
-                        scope="col"
-                        className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
-                      >
-                        <div className="flex gap-1">Date</div>
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                      >
-                        P.O
-                      </th>
-                      {!currentUser.isCustomer && (
+              {showServiceActivity && (
+                <div className="">
+                  <table className="min-w-full table-auto">
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
+                        >
+                          <div className="flex gap-1">Date</div>
+                        </th>
                         <th
                           scope="col"
                           className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
                         >
-                          Customer
+                          P.O
                         </th>
-                      )}
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                      >
-                        Tail
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                      >
-                        Airport
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                      >
-                        FBO
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                      >
-                        Service
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
-                    {serviceActivities.map((service) => (
-                      <tr key={service.id}>
-                        <td className="px-2 py-2 text-md text-gray-500 sm:pl-0">
-                          {service.timestamp}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-2 text-md text-sky-500 font-semibold cursor-pointer">
-                          <Link to={`/create-job/review/${service.job_id}`}>
-                            {service.purchase_order}
-                          </Link>
-                        </td>
                         {!currentUser.isCustomer && (
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                          >
+                            Customer
+                          </th>
+                        )}
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                        >
+                          Tail
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                        >
+                          Airport
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                        >
+                          FBO
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                        >
+                          Service
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 bg-white">
+                      {serviceActivities.map((service) => (
+                        <tr key={service.id}>
+                          <td className="px-2 py-2 text-md text-gray-500 sm:pl-0">
+                            {service.timestamp}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-2 text-md text-sky-500 font-semibold cursor-pointer">
+                            <Link to={`/create-job/review/${service.job_id}`}>
+                              {service.purchase_order}
+                            </Link>
+                          </td>
+                          {!currentUser.isCustomer && (
+                            <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                              <div className="truncate overflow-ellipsis w-60">
+                                {service.customer_name}
+                              </div>
+                            </td>
+                          )}
                           <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                            <div className="truncate overflow-ellipsis w-60">
-                              {service.customer_name}
+                            {service.tail_number}
+                          </td>
+                          <td className="px-3 py-2 text-md text-gray-500">
+                            <div className="truncate overflow-ellipsis w-40">
+                              {service.airport_name}
                             </div>
                           </td>
-                        )}
-                        <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                          {service.tail_number}
-                        </td>
-                        <td className="px-3 py-2 text-md text-gray-500">
-                          <div className="truncate overflow-ellipsis w-40">
-                            {service.airport_name}
-                          </div>
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                          {service.fbo_name}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                          <div className=" truncate overflow-ellipsis w-96">
-                            {service.service_name}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                            {service.fbo_name}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                            <div className=" truncate overflow-ellipsis w-96">
+                              {service.service_name}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           )}
 
@@ -1085,13 +1095,13 @@ const JobInfo = () => {
               <div className="flex justify-between font-medium tracking-wide text-xl pb-4">
                 <div>Found {serviceActivities.length} previous services</div>
                 <div
-                  onClick={() => setShowMobileServices(!showMobileServices)}
+                  onClick={() => setShowServiceActivity(!showServiceActivity)}
                   className="text-sky-500 text-lg ml-2 tracking-normal"
                 >
-                  {showMobileServices ? "Hide" : "Show"}
+                  {showServiceActivity ? "Hide" : "Show"}
                 </div>
               </div>
-              {showMobileServices && (
+              {showServiceActivity && (
                 <ul className="divide-y divide-gray-200 text-md text-gray-500">
                   {serviceActivities.map((service) => (
                     <li key={service.id}>
