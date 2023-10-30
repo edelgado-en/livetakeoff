@@ -116,6 +116,10 @@ export const getTailAlertLookup = (tail: string) => {
     return httpService.get(`/api/tail-alert-lookup/${tail}/`);
 }
 
+export const getTailOpenJobLookup = (tail: string) => {
+    return httpService.get(`/api/tail-open-job-lookup/${tail}/`);
+}
+
 export const getRetainerServices = () => {
     return httpService.get('/api/retainer-services');
 }
