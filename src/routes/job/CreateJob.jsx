@@ -2513,7 +2513,7 @@ const CreateJob = () => {
                         to={`/jobs/${tailOpenJobAlert?.jobId}/details`}
                         className="text-blue-500 font-medium"
                       >
-                        {tailOpenJobAlert?.jobId}
+                        {tailOpenJobAlert?.purchaseOrder}
                       </Link>
                     </p>
                     <div className="mt-3 flex space-x-7">
