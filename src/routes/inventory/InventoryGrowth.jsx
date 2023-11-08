@@ -440,6 +440,7 @@ const InventoryGrowth = () => {
               dataKey="total_expense"
               stroke="#8884d8"
               activeDot={{ r: 8 }}
+              strokeWidth={2}
             />
             <Line type="monotone" dataKey="total_value" stroke="#82ca9d" />
           </LineChart>
