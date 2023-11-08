@@ -54,31 +54,31 @@ const JobPriceBreakdown = () => {
             </div>
           </div>
           {breakdown.manuallySet ? (
-            <div className="mt-4 text-gray-500 text-sm">
+            <div className="mt-4 text-gray-500 text-md">
               Price was manually set
             </div>
           ) : (
             <div className="mt-4">
-              <div className="flex justify-between text-sm">
-                <div className="text-sm text-gray-700">
+              <div className="flex justify-between text-md">
+                <div className="text-lg text-gray-700">
                   {breakdown.aircraftType}
                 </div>
                 <div>
                   <span
-                    className="relative bg-teal-50 text-teal-500 rounded-md p-1"
+                    className="relative bg-teal-100 text-teal-500 rounded-md p-1 font-medium"
                     style={{ top: "2px" }}
                   >
                     {breakdown.priceListType}
                   </span>
                 </div>
               </div>
-              <div className="mt-4">
-                <h3 className="text-sm text-gray-700">Services</h3>
+              <div className="mt-6">
+                <h3 className="text-xl text-gray-700 font-medium">Services</h3>
                 <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                   {breakdown.services?.map((service) => (
                     <div
                       key={service.id}
-                      className="flex justify-between py-2 text-sm hover:bg-gray-50"
+                      className="flex justify-between py-2 text-md hover:bg-gray-50"
                     >
                       <dt className="text-gray-500 pr-2 truncate">
                         {service.name}
@@ -89,7 +89,7 @@ const JobPriceBreakdown = () => {
                     </div>
                   ))}
                 </dl>
-                <div className="flex justify-end py-2 text-sm mt-1">
+                <div className="flex justify-end py-2 text-md mt-1">
                   <dt className="text-gray-500 pr-2 text-right font-medium">
                     Subtotal
                   </dt>
@@ -101,12 +101,12 @@ const JobPriceBreakdown = () => {
 
               {breakdown.discounts?.length > 0 && (
                 <div className="mt-2">
-                  <h3 className="text-sm text-gray-700">Discounts Applied</h3>
+                  <h3 className="text-md text-gray-700">Discounts Applied</h3>
                   <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                     {breakdown.discounts.map((discount) => (
                       <div
                         key={discount.id}
-                        className="flex justify-between py-2 text-sm hover:bg-gray-50"
+                        className="flex justify-between py-2 text-md hover:bg-gray-50"
                       >
                         <dt className="text-gray-500 pr-2 truncate">
                           {discount.name === "S" ? "By Service" : ""}
@@ -121,7 +121,7 @@ const JobPriceBreakdown = () => {
                       </div>
                     ))}
                   </dl>
-                  <div className="flex justify-end py-2 text-sm mt-1">
+                  <div className="flex justify-end py-2 text-md mt-1">
                     <dt className="text-gray-500 pr-2 text-right font-medium">
                       Subtotal
                     </dt>
@@ -134,14 +134,14 @@ const JobPriceBreakdown = () => {
 
               {breakdown.additionalFees?.length > 0 && (
                 <div className="mt-2">
-                  <h3 className="text-sm text-gray-700">
+                  <h3 className="text-md text-gray-700">
                     Additional Fees Applied
                   </h3>
                   <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                     {breakdown.additionalFees.map((fee) => (
                       <div
                         key={fee.id}
-                        className="flex justify-between py-2 text-sm hover:bg-gray-50"
+                        className="flex justify-between py-2 text-md hover:bg-gray-50"
                       >
                         <dt className="text-gray-500 pr-2 truncate">
                           {fee.name === "A" ? "By Airport" : ""}
@@ -159,7 +159,7 @@ const JobPriceBreakdown = () => {
                 </div>
               )}
 
-              <div className="flex justify-end py-4 text-sm">
+              <div className="flex justify-end py-4 text-md">
                 <dt className="text-gray-500 pr-2 text-right font-medium">
                   Total
                 </dt>
