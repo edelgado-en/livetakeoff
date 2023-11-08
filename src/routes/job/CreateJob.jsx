@@ -544,6 +544,29 @@ const CreateJob = () => {
       }
     }
 
+    //add validation when completeByDate is a date after estimatedDepartureDate. Departure must be before complete by date
+    if (estimatedDepartureDate && completeByDate) {
+      if (completeByDate > estimatedDepartureDate) {
+        alert("Complete By Date/Time is after ETD Date/Time");
+        return;
+      }
+    }
+
+    //Add validation when completeByDate must be after before estimatedArrivalDate if present. If onSite is true, then completeByBefore cannot be before today's date
+    if (estimatedArrivalDate && completeByDate) {
+      if (completeByDate < estimatedArrivalDate) {
+        alert("Complete By Date/Time is before ETA Date/Time");
+        return;
+      }
+    }
+
+    if (onSite && completeByDate) {
+      if (completeByDate < new Date()) {
+        alert("Complete By Date/Time is before today's date");
+        return;
+      }
+    }
+
     if (estimatedDepartureDate) {
       if (estimatedDepartureDate < new Date()) {
         alert("ETD Date/Time is before today's date");
