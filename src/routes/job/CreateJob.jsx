@@ -321,31 +321,32 @@ const CreateJob = () => {
           setShowTailOpenJobAlert(false);
           setTailOpenJobAlert(null);
         }
-
-        const request = {
-          tail_number: tailNumber,
-        };
-
-        const response2 = await api.getTailServiceHistory(request);
-
-        //iterate through response2.data.results and remove duplicates entry. A duplicate entry has the same service name and the same purchase order number
-        const uniqueServiceActivities = [];
-
-        for (let i = 0; i < response2.data.results.length; i++) {
-          const serviceActivity = response2.data.results[i];
-          const found = uniqueServiceActivities.some(
-            (el) =>
-              el.service_name === serviceActivity.service_name &&
-              el.purchase_order === serviceActivity.purchase_order
-          );
-
-          if (!found) {
-            uniqueServiceActivities.push(serviceActivity);
-          }
-        }
-
-        setServiceActivities(uniqueServiceActivities);
       }
+
+      const request = {
+        tail_number: tailNumber,
+      };
+
+      const response2 = await api.getTailServiceHistory(request);
+
+      //iterate through response2.data.results and remove duplicates entry.
+      //A duplicate entry has the same service name and the same purchase order number
+      const uniqueServiceActivities = [];
+
+      for (let i = 0; i < response2.data.results.length; i++) {
+        const serviceActivity = response2.data.results[i];
+        const found = uniqueServiceActivities.some(
+          (el) =>
+            el.service_name === serviceActivity.service_name &&
+            el.purchase_order === serviceActivity.purchase_order
+        );
+
+        if (!found) {
+          uniqueServiceActivities.push(serviceActivity);
+        }
+      }
+
+      setServiceActivities(uniqueServiceActivities);
     }
   };
 
