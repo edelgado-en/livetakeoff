@@ -305,6 +305,8 @@ const UserDetails = () => {
 
       setAdditionalEmails([...additionalEmails, data]);
       setAdditionalEmailOpen(false);
+
+      toast.success("Additional email added");
     } catch (err) {
       toast.error("Email already exists");
     }
