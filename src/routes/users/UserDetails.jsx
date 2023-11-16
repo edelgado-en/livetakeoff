@@ -18,6 +18,7 @@ import Loader from "../../components/loader/Loader";
 import * as api from "./apiService";
 
 import { toast } from "react-toastify";
+import { set } from "react-hook-form";
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -57,6 +58,12 @@ const UserDetails = () => {
   const [locationAlreadyAdded, setLocationAlreadyAdded] = useState(false);
 
   const [availableLocations, setAvailableLocations] = useState([]);
+
+  const [defaultEmail, setDefaultEmail] = useState("");
+  const [additionalEmails, setAdditionalEmails] = useState([]);
+
+  const [additionalEmailOpen, setAdditionalEmailOpen] = useState(false);
+  const [newAdditionalEmail, setNewAdditionalEmail] = useState("");
 
   const navigate = useNavigate();
 
@@ -136,6 +143,8 @@ const UserDetails = () => {
       const { data } = await api.getUserDetails(userId);
 
       setUserDetails(data);
+      setAdditionalEmails(data.additional_emails);
+      setDefaultEmail(data.email);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -250,6 +259,20 @@ const UserDetails = () => {
     }
   };
 
+  const saveDefaultEmail = async () => {
+    try {
+      const request = {
+        email: defaultEmail,
+      };
+
+      await api.updateUser(userId, request);
+
+      toast.success("Default email saved");
+    } catch (err) {
+      toast.error("Unable to save default email");
+    }
+  };
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -263,6 +286,56 @@ const UserDetails = () => {
       event.preventDefault();
 
       getLocations();
+    }
+  };
+
+  const handleAdditionalEmailOpen = () => {
+    setAdditionalEmailOpen(true);
+    setNewAdditionalEmail("");
+  };
+
+  const handleAddAdditionalEmail = async () => {
+    try {
+      const request = {
+        new_additional_email: newAdditionalEmail,
+        user_id: userId,
+      };
+
+      const { data } = await api.addNewAdditionalEmail(request);
+
+      setAdditionalEmails([...additionalEmails, data]);
+      setAdditionalEmailOpen(false);
+    } catch (err) {
+      toast.error("Email already exists");
+    }
+  };
+
+  const updateAdditionalEmail = async (additionalEmail) => {
+    try {
+      const request = {
+        user_id: userId,
+        email: additionalEmail.email,
+      };
+
+      await api.updateAdditionalEmail(additionalEmail.id, request);
+
+      toast.success("Additional email updated");
+    } catch (err) {
+      toast.error("Unable to update additional email");
+    }
+  };
+
+  const deleteAdditionalEmail = async (userEmailId) => {
+    try {
+      await api.deleteAdditionalEmail(userEmailId);
+
+      setAdditionalEmails(
+        additionalEmails.filter((email) => email.id !== userEmailId)
+      );
+
+      toast.success("Additional email deleted");
+    } catch (err) {
+      toast.error("Unable to delete additional email");
     }
   };
 
@@ -284,34 +357,6 @@ const UserDetails = () => {
               </h3>
               <div className="mt-1 text-sm text-gray-500 text-center">
                 {userDetails.email}
-              </div>
-
-              <div className="mt-4 flex gap-6 justify-center">
-                <div className="text-center">
-                  <button
-                    onClick={() =>
-                      navigate("/users/" + userId + "/productivity")
-                    }
-                    className="text-xs leading-5 font-semibold bg-slate-400/20 w-9
-                                                        rounded-full p-2 text-slate-500 m-auto text-center
-                                                        flex items-center space-x-2 hover:bg-slate-400/40
-                                                        dark:highlight-white/5"
-                  >
-                    <ChartBarIcon className=" h-5 w-5 cursor-pointer" />
-                  </button>
-                  <div className="text-sm font-medium mt-1">Stats</div>
-                </div>
-                <div className="text-center">
-                  <button
-                    className="text-xs leading-5 font-semibold bg-slate-400/20 w-9
-                                                        rounded-full p-2 text-slate-500 m-auto text-center
-                                                        flex items-center space-x-2 hover:bg-slate-400/40
-                                                        dark:highlight-white/5"
-                  >
-                    <PencilIcon className=" h-5 w-5 cursor-pointer" />
-                  </button>
-                  <div className="text-sm font-medium mt-1">Edit</div>
-                </div>
               </div>
 
               {/* Mobile */}
@@ -377,11 +422,143 @@ const UserDetails = () => {
                 </div>
               </aside>
 
+              <div className="mt-8 px-4">
+                <div className="font-medium text-xl">Emails</div>
+                <div className="text-md text-gray-500">
+                  Configure default and additional emails. Customers will
+                  receive notifications to all emails listed here.
+                </div>
+
+                <div className="text-lg  mt-6">Default Email</div>
+                <div className="mt-2 flex justify-between gap-2">
+                  <input
+                    type="email"
+                    value={defaultEmail}
+                    onChange={(event) => setDefaultEmail(event.target.value)}
+                    name="defaultEmail"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                                ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                focus:ring-blue-600 text-md sm:leading-6"
+                    placeholder="you@example.com"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => saveDefaultEmail()}
+                    className="rounded bg-white py-2 text-md
+                                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                  >
+                    Save
+                  </button>
+                </div>
+
+                <div className="flex justify-between text-lg mt-12">
+                  <div>Additional Emails</div>
+                  <div
+                    onClick={() => handleAdditionalEmailOpen()}
+                    className="flex items-center justify-center rounded-full bg-red-600 p-1
+                                                    text-white hover:bg-red-700 focus:outline-none focus:ring-2
+                                                        focus:ring-red-500 focus:ring-offset-2 cursor-pointer"
+                  >
+                    <svg
+                      className="h-6 w-6"
+                      x-description="Heroicon name: outline/plus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+
+                {additionalEmailOpen && (
+                  <div className="mt-6 flex justify-between gap-2">
+                    <input
+                      type="email"
+                      value={newAdditionalEmail}
+                      onChange={(event) =>
+                        setNewAdditionalEmail(event.target.value)
+                      }
+                      name="newAdditionalEmail"
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                                  ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                  focus:ring-blue-600 text-md sm:leading-6"
+                      placeholder="you@example.com"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setAdditionalEmailOpen(false)}
+                      className="rounded bg-white py-2 text-md
+                                  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddAdditionalEmail()}
+                      className="rounded bg-white py-2 text-md
+                                  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                    >
+                      Save
+                    </button>
+                  </div>
+                )}
+
+                {additionalEmails.map((additionalEmail, index) => (
+                  <div key={index} className="mt-4 flex justify-between gap-3">
+                    <input
+                      type="email"
+                      value={additionalEmail.email}
+                      onChange={(event) =>
+                        setAdditionalEmails(
+                          additionalEmails.map((email) =>
+                            email.id === additionalEmail.id
+                              ? { ...email, email: event.target.value }
+                              : email
+                          )
+                        )
+                      }
+                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                                        ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                        focus:ring-blue-600 text-md sm:leading-6"
+                      placeholder="you@example.com"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => deleteAdditionalEmail(additionalEmail.id)}
+                      className="rounded bg-white py-2 text-md
+                                        text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                    >
+                      Remove
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateAdditionalEmail(additionalEmail)}
+                      className="rounded bg-white py-2 text-md
+                                        text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                    >
+                      Save
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-b text-gray-400 py-8"></div>
+
               {userDetails.is_project_manager && (
                 <>
                   <div className="mt-8">
-                    <div className="font-medium px-4">Inventory Locations</div>
-                    <div className="text-sm text-gray-500 px-4">
+                    <div className="font-medium px-4 text-xl">
+                      Inventory Locations
+                    </div>
+                    <div className="text-md text-gray-500 px-4">
                       Manage inventory locations. This user will only be manage
                       items for the locations specify here.
                     </div>
@@ -397,14 +574,14 @@ const UserDetails = () => {
                               All Inventory Locations
                               <span
                                 className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                        rounded-full text-xs font-medium inline-block"
+                                                        rounded-full text-sm font-medium inline-block"
                               >
                                 {totalLocations}
                               </span>
                             </div>
                             <div>
                               {locationAlreadyAdded && (
-                                <div className="text-red-500 text-xs relative top-1">
+                                <div className="text-red-500 text-sm relative top-1">
                                   Location already added
                                 </div>
                               )}
@@ -435,7 +612,7 @@ const UserDetails = () => {
                                 }
                                 onKeyDown={handleKeyDownLocations}
                                 className="block w-full rounded-md border-gray-300 pl-10
-                                                                focus:border-sky-500 text-xs
+                                                                focus:border-sky-500 text-sm
                                                                 focus:ring-sky-500  font-normal"
                                 placeholder="Search name..."
                               />
@@ -451,7 +628,7 @@ const UserDetails = () => {
                                   <li className="">
                                     <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
                                       <div className="min-w-0 flex-1">
-                                        <p className="text-xs text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
                                           {location.name}
                                         </p>
                                       </div>
@@ -462,7 +639,7 @@ const UserDetails = () => {
                                             addAvailableLocation(location.id)
                                           }
                                           className="inline-flex items-center rounded border
-                                                                                        border-gray-300 bg-white px-2 py-1 text-xs
+                                                                                        border-gray-300 bg-white px-2 py-1 text-sm
                                                                                         text-gray-700 shadow-sm
                                                                                         hover:bg-gray-50 focus:outline-none focus:ring-2
                                                                                         "
@@ -486,12 +663,12 @@ const UserDetails = () => {
                           Available Locations
                           <span
                             className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                rounded-full text-xs font-medium inline-block"
+                                                rounded-full text-sm font-medium inline-block"
                           >
                             {availableLocations.length}
                           </span>
                         </div>
-                        <div className="text-xs">
+                        <div className="text-sm">
                           {availableLocations.length === 0 && (
                             <div className="text-center m-auto mt-24 text-sm">
                               No available inventory locations set.
@@ -508,7 +685,7 @@ const UserDetails = () => {
                                   <li className="">
                                     <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
                                       <div className="min-w-0 flex-1">
-                                        <p className="text-xs text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
                                           {location.name}
                                         </p>
                                       </div>
@@ -519,7 +696,7 @@ const UserDetails = () => {
                                             deleteAvailableLocation(location.id)
                                           }
                                           className="inline-flex items-center rounded border
-                                                                                            border-gray-300 bg-white px-2 py-1 text-xs
+                                                                                            border-gray-300 bg-white px-2 py-1 text-sm
                                                                                             text-gray-700 shadow-sm
                                                                                             hover:bg-gray-100 focus:outline-none focus:ring-2
                                                                                             "
@@ -538,9 +715,11 @@ const UserDetails = () => {
                     </div>
                   </div>
 
+                  <div className="border-b text-gray-400 py-8"></div>
+
                   <div className="mt-8">
-                    <div className="font-medium px-4">Airports</div>
-                    <div className="text-sm text-gray-500 px-4">
+                    <div className="font-medium px-4 text-xl">Airports</div>
+                    <div className="text-md text-gray-500 px-4">
                       Manage airports. This user will only be available for job
                       assignment if the job is in any of the airports in the
                       available list.
@@ -557,14 +736,14 @@ const UserDetails = () => {
                               All Airports
                               <span
                                 className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                        rounded-full text-xs font-medium inline-block"
+                                                        rounded-full text-sm font-medium inline-block"
                               >
                                 {totalAirports}
                               </span>
                             </div>
                             <div>
                               {airportAlreadyAdded && (
-                                <div className="text-red-500 text-xs relative top-1">
+                                <div className="text-red-500 text-sm relative top-1">
                                   Airport already added
                                 </div>
                               )}
@@ -595,7 +774,7 @@ const UserDetails = () => {
                                 }
                                 onKeyDown={handleKeyDown}
                                 className="block w-full rounded-md border-gray-300 pl-10
-                                                                focus:border-sky-500 text-xs
+                                                                focus:border-sky-500 text-sm
                                                                 focus:ring-sky-500  font-normal"
                                 placeholder="Search name..."
                               />
@@ -610,11 +789,11 @@ const UserDetails = () => {
                                 <ul className="">
                                   <li className="">
                                     <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="flex-shrink-0 text-xs w-6">
+                                      <div className="flex-shrink-0 text-sm w-6">
                                         {airport.initials}
                                       </div>
                                       <div className="min-w-0 flex-1">
-                                        <p className="text-xs text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
                                           {airport.name}
                                         </p>
                                       </div>
@@ -625,7 +804,7 @@ const UserDetails = () => {
                                             addAvailableAirport(airport.id)
                                           }
                                           className="inline-flex items-center rounded border
-                                                                                        border-gray-300 bg-white px-2 py-1 text-xs
+                                                                                        border-gray-300 bg-white px-2 py-1 text-sm
                                                                                         text-gray-700 shadow-sm
                                                                                         hover:bg-gray-50 focus:outline-none focus:ring-2
                                                                                         "
@@ -649,12 +828,12 @@ const UserDetails = () => {
                           Available Airports
                           <span
                             className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                rounded-full text-xs font-medium inline-block"
+                                                rounded-full text-sm font-medium inline-block"
                           >
                             {availableAirports.length}
                           </span>
                         </div>
-                        <div className="text-xs">
+                        <div className="text-sm">
                           {availableAirports.length === 0 && (
                             <div className="text-center m-auto mt-24 text-sm">
                               No available airports set.
@@ -670,11 +849,11 @@ const UserDetails = () => {
                                 <ul className="">
                                   <li className="">
                                     <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="flex-shrink-0 text-xs w-6 font-medium">
+                                      <div className="flex-shrink-0 text-sm w-6 font-medium">
                                         {airport.initials}
                                       </div>
                                       <div className="min-w-0 flex-1">
-                                        <p className="text-xs text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
                                           {airport.name}
                                         </p>
                                       </div>
@@ -685,7 +864,7 @@ const UserDetails = () => {
                                             deleteAvailableAirport(airport.id)
                                           }
                                           className="inline-flex items-center rounded border
-                                                                                            border-gray-300 bg-white px-2 py-1 text-xs
+                                                                                            border-gray-300 bg-white px-2 py-1 text-sm
                                                                                             text-gray-700 shadow-sm
                                                                                             hover:bg-gray-100 focus:outline-none focus:ring-2
                                                                                             "
