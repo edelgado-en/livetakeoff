@@ -69,7 +69,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const availableStatuses = [
+const statuses = [
   { id: "All", name: "All Open Jobs" },
   { id: "U", name: "Submitted" },
   { id: "A", name: "Accepted" },
@@ -143,6 +143,8 @@ const JobsQueue = () => {
   );
 
   const [tags, setTags] = useState([]);
+
+  const [availableStatuses, setAvailableStatuses] = useState(statuses);
 
   const filteredCustomers = customerSearchTerm
     ? customers.filter((item) =>
@@ -469,6 +471,23 @@ const JobsQueue = () => {
     setTags(newTags);
   };
 
+  const handleToggleStatus = (status) => {
+    const newStatuses = [...availableStatuses];
+    const index = newStatuses.findIndex((item) => item.id === status.id);
+    newStatuses[index].selected = !newStatuses[index].selected;
+
+    //set the others to false
+    newStatuses.forEach((item) => {
+      if (item.id !== status.id) {
+        item.selected = false;
+      }
+    });
+
+    setStatusSelected(newStatuses[index]);
+
+    setAvailableStatuses(newStatuses);
+  };
+
   const handleToggleDueToday = () => {
     setOverdue(false);
     setDueToday(!dueToday);
@@ -579,30 +598,23 @@ const JobsQueue = () => {
                             <h2 className="font-medium text-sm text-gray-900">
                               Status
                             </h2>
-                            <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                            <div className="grid grid-cols-2 gap-2 mt-2">
                               {availableStatuses.map((status) => (
-                                <li key={status.id}>
-                                  <div
-                                    onClick={() =>
-                                      setStatusSelected({
-                                        id: status.id,
-                                        name: status.name,
-                                      })
-                                    }
-                                    className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
-                                                        hover:bg-gray-50"
-                                  >
-                                    <div className="min-w-0 flex-1">
-                                      <div className="focus:outline-none">
-                                        <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">
-                                          {status.name}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </li>
+                                <div
+                                  key={status.id}
+                                  onClick={() => handleToggleStatus(status)}
+                                  className={`${
+                                    status.selected
+                                      ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                      : "hover:bg-gray-50"
+                                  }
+                                                          rounded-md border border-gray-200 cursor-pointer
+                                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                                >
+                                  {status.name}
+                                </div>
                               ))}
-                            </ul>
+                            </div>
                           </div>
 
                           {!currentUser.isCustomer && (
@@ -1313,28 +1325,24 @@ const JobsQueue = () => {
           currentUser.isCustomer) && (
           <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
             <div className="hidden xl:block lg:block pb-4">
-              <h2 className="font-medium text-md text-gray-900">Status</h2>
-              <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+              <h2 className="font-medium text-sm text-gray-900">Status</h2>
+              <div className="grid grid-cols-2 gap-2 mt-2">
                 {availableStatuses.map((status) => (
-                  <li key={status.id}>
-                    <div
-                      onClick={() =>
-                        setStatusSelected({ id: status.id, name: status.name })
-                      }
-                      className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
-                                              hover:bg-gray-50"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <div className="focus:outline-none">
-                          <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
-                            {status.name}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                  <div
+                    key={status.id}
+                    onClick={() => handleToggleStatus(status)}
+                    className={`${
+                      status.selected
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                                          rounded-md border border-gray-200 cursor-pointer
+                                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                  >
+                    {status.name}
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {!currentUser.isCustomer && (
