@@ -112,8 +112,8 @@ const moreOptions = [
     icon: UsersIcon,
   },
   {
-    name: "Tail Alerts",
-    description: "Manage tail number alerts.",
+    name: "Tail Details",
+    description: "Manage tail number alerts and notes",
     href: "/tail-alerts",
     icon: ExclamationCircleIcon,
   },
