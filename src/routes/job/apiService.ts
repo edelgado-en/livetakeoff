@@ -64,6 +64,22 @@ export const uploadPhotos = (jobId: number, formData: any) => {
     })
 }
 
+export const uploadFile = (jobId: number, formData: any) => {
+    return httpService.post(`/api/job-files/upload/${jobId}/`, formData,  {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+}
+
+export const updateJobFile = (fileId: number, request: any) => {
+    return httpService.patch(`/api/job-files/${fileId}/`, request);
+}
+
+export const deleteJobFile = (fileId: number) => {
+    return httpService.delete(`/api/job-files/${fileId}/`);
+}
+
 export const getJobComments = (jobId: number) => {
     return httpService.get(`/api/job-comments/${jobId}/`)
 }
