@@ -95,8 +95,8 @@ const TailAlerts = () => {
     }
   };
 
-  const handleAddTailAlert = (newTailAlert) => {
-    setAlerts([newTailAlert, ...alerts]);
+  const handleAddTailDetails = (newTailDetails) => {
+    setAlerts([newTailDetails, ...alerts]);
     setAddTailAlertModalOpen(false);
     setTotalAlerts(totalAlerts + 1);
   };
@@ -347,7 +347,7 @@ const TailAlerts = () => {
         <AddTailAlertModal
           isOpen={isAddTailAlertModalOpen}
           handleClose={handleToggleAddTailAlertModal}
-          handleAddTailAlert={handleAddTailAlert}
+          handleAddTailDetails={handleAddTailDetails}
         />
       )}
 
