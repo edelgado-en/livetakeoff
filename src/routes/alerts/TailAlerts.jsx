@@ -1,8 +1,9 @@
 import { useState, useEffect, Fragment } from "react";
-import { PlusIcon } from "@heroicons/react/outline";
-import { PencilIcon, TrashIcon } from "@heroicons/react/solid";
+import { PlusIcon, PaperClipIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import Loader from "../../components/loader/Loader";
+
+import { Switch } from "@headlessui/react";
 
 import AddTailAlertModal from "./AddTailAlert";
 import DeleteTailAlertModal from "./DeleteTailAlert";
@@ -12,6 +13,10 @@ import ReactTimeAgo from "react-time-ago";
 import * as api from "./apiService";
 
 import { toast } from "react-toastify";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -149,13 +154,37 @@ const TailAlerts = () => {
     setAlerts(updatedAlerts);
   };
 
+  const downloadFile = (file) => {
+    const fileUrl =
+      "https://res.cloudinary.com/datidxeqm/" + file.file + "?dl=true";
+    window.open(fileUrl, "_blank");
+  };
+
+  const handleDeleteAlertFile = async (selectedAlert, file) => {
+    try {
+      await api.deleteAlertFile(file.id);
+
+      const updatedAlerts = alerts.map((alert) => {
+        if (alert.id === selectedAlert.id) {
+          alert.files = alert.files.filter((f) => f.id !== file.id);
+        }
+
+        return alert;
+      });
+
+      setAlerts(updatedAlerts);
+    } catch (err) {
+      toast.error("Unable to delete file.");
+    }
+  };
+
   return (
     <AnimatedPage>
       <div className={`px-4 m-auto max-w-5xl -mt-3 flex flex-wrap`}>
         <div className="border-b border-gray-200 bg-white py-5 w-full">
           <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
             <div className="mt-4">
-              <h3 className="text-2xl font-medium leading-6 text-gray-900">
+              <h3 className="text-3xl font-medium leading-6 text-gray-900">
                 Tail Details
                 <span
                   className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
@@ -226,13 +255,13 @@ const TailAlerts = () => {
               {alerts.map((alert) => (
                 <li
                   key={alert.id}
-                  className="bg-white shadow rounded-lg p-6 border border-gray-200 mb-4"
+                  className="bg-white shadow rounded-lg p-6 border border-gray-200 mb-8"
                 >
                   <article aria-labelledby={"question-title-" + alert.id}>
                     <div>
                       <div className="flex space-x-3">
                         <div className="min-w-0 flex-1">
-                          <p className="text-lg font-medium text-gray-900">
+                          <p className="text-xl font-medium text-gray-900">
                             {alert.tailNumber}
                           </p>
                           <p className="text-md text-gray-500">
@@ -272,17 +301,110 @@ const TailAlerts = () => {
                       </div>
                     </div>
                     {!alert.editMode && (
-                      <div className=" flex justify-between mt-2 space-y-4 text-md text-gray-700">
-                        <div className="px-4 mt-4 pb-6">
+                      <div className="mt-2 space-y-4 text-md text-gray-700">
+                        <div className="px-4 mt-6 pb-6">
                           <div className="font-medium">Alert</div>
                           <div className="flex-1">
-                            {alert.message ? alert.message : "Not specified"}
+                            {alert.message ? alert.message : "None"}
                           </div>
 
-                          <div className="font-medium mt-4 ">Notes</div>
+                          <div className="font-medium mt-6">Notes</div>
                           <div className="flex-1">
-                            {alert.notes ? alert.notes : "Not specified"}
+                            {alert.notes ? alert.notes : "None"}
                           </div>
+
+                          <div className="font-medium mt-8">Attachments</div>
+                          {alert.files?.length === 0 && (
+                            <div className="mt-2">None</div>
+                          )}
+
+                          {alert.files?.length > 0 && (
+                            <ul className="divide-y divide-gray-200 rounded-md border border-gray-200 mt-4">
+                              {alert.files?.map((file) => (
+                                <li
+                                  key={file.id}
+                                  className="py-3 pl-3 pr-4 text-md"
+                                >
+                                  <div className="flex flex-wrap justify-between gap-4">
+                                    <div className="flex gap-1">
+                                      <PaperClipIcon
+                                        className="h-5 w-5 flex-shrink-0 text-gray-400 relative top-1"
+                                        aria-hidden="true"
+                                      />
+                                      <div className="text-lg">{file.name}</div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleDeleteAlertFile(file)
+                                        }
+                                        className="inline-flex w-full justify-center rounded-md border
+                                                                        border-gray-300 bg-white px-2 py-1 text-base 
+                                                                        text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                                                        focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                                      >
+                                        Delete
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => downloadFile(file)}
+                                        className="inline-flex w-full justify-center rounded-md border font-medium
+                                                                        border-gray-300 bg-white px-2 py-1 text-base 
+                                                                        text-blue-500 shadow-sm focus:outline-none focus:ring-2
+                                                                        focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                                      >
+                                        Download
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-wrap justify-between gap-4 mt-1">
+                                    <div className="text-gray-500 relative top-2 text-md">
+                                      Uploaded on: {file.created_at}
+                                    </div>
+                                    <div>
+                                      {/*  <Switch.Group
+                                        as="li"
+                                        className="flex items-center justify-between py-2"
+                                      >
+                                        <div className="flex flex-col">
+                                          <Switch.Label
+                                            as="p"
+                                            className="text-sm font-medium text-gray-900"
+                                            passive
+                                          >
+                                            Public
+                                          </Switch.Label>
+                                        </div>
+                                        <Switch
+                                          checked={file.is_public}
+                                          onChange={() =>
+                                            handleToggleFilePublic(file)
+                                            } 
+                                          className={classNames(
+                                            file.is_public
+                                              ? "bg-red-500"
+                                              : "bg-gray-200",
+                                            "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                          )}
+                                        >
+                                          <span
+                                            aria-hidden="true"
+                                            className={classNames(
+                                              file.is_public
+                                                ? "translate-x-5"
+                                                : "translate-x-0",
+                                              "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                            )}
+                                          />
+                                        </Switch>
+                                      </Switch.Group> */}
+                                    </div>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                       </div>
                     )}

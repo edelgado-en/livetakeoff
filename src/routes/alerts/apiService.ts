@@ -5,7 +5,11 @@ export const searchTailAlerts = (data: any) => {
 }
 
 export const addTailAlert = (data: any) => {
-    return httpService.post(`/api/create-tail-alert`, data);
+    return httpService.post(`/api/create-tail-alert`, data,  {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
 }
 
 export const deleteTailAlert = (id: number) => {
@@ -14,4 +18,8 @@ export const deleteTailAlert = (id: number) => {
 
 export const updateTailAlert = (id: number, data: any) => {
     return httpService.patch(`/api/tail-alerts/${id}/`, data);
+}
+
+export const deleteAlertFile = (fileId: number) => {
+    return httpService.delete(`/api/alert-files/${fileId}/`);
 }
