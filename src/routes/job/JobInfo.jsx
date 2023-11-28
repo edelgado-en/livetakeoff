@@ -1204,7 +1204,12 @@ const JobInfo = () => {
                         className="h-5 w-5 flex-shrink-0 text-gray-400 relative top-1"
                         aria-hidden="true"
                       />
-                      <div className="text-lg">{file.name}</div>
+                      <div
+                        className="text-lg truncate overflow-ellipsis"
+                        style={{ maxWidth: "250px" }}
+                      >
+                        {file.name}
+                      </div>
                     </div>
                     <div className="flex gap-2">
                       <button
