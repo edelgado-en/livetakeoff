@@ -190,7 +190,7 @@ const JobReview = () => {
           <div className="pb-4">
             <h1 className="text-2xl font-semibold text-gray-600">Job Review</h1>
             {!currentUser.isCustomer && (
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-lg text-gray-500">
                 Ensure all the photos and details are correct before creating a
                 closeout.
               </p>
@@ -201,7 +201,7 @@ const JobReview = () => {
               type="button"
               onClick={() => handleCopyClick()}
               className="inline-flex items-center rounded-md border mr-2
-                                    border-gray-300 bg-white px-3 py-2 text-xs font-medium 
+                                    border-gray-300 bg-white px-3 py-2 text-md font-medium 
                                     text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
                                     focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 "
             >
