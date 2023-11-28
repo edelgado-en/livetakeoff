@@ -48,7 +48,7 @@ const JobPriceBreakdown = () => {
         <div className="mt-6 max-w-5xl px-2 pb-10">
           <div className="flex flex-row">
             <div className="flex-1">
-              <h1 className="text-2xl font-semibold text-gray-600">
+              <h1 className="text-2xl xl:text-3xl font-bold text-gray-700">
                 Price Breakdown
               </h1>
             </div>
@@ -73,7 +73,7 @@ const JobPriceBreakdown = () => {
                 </div>
               </div>
               <div className="mt-6">
-                <h3 className="text-xl text-gray-700 font-medium">Services</h3>
+                <h3 className="text-2xl text-gray-700 font-medium">Services</h3>
                 <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                   {breakdown.services?.map((service) => (
                     <div

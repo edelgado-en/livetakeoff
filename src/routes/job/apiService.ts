@@ -176,6 +176,10 @@ export const deleteTailAlert = (id: number) => {
     return httpService.delete(`/api/tail-alerts/${id}/`);
 }
 
+export const getTailDetails = (id: number) => {
+    return httpService.get(`/api/tail-alerts/${id}/`);
+}
+
 export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }

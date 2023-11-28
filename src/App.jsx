@@ -54,6 +54,8 @@ import ServicePrices from "./routes/pricePlans/ServicePrices";
 import PricePlans from "./routes/pricePlans/PricePlans";
 import CreatePricePlan from "./routes/pricePlans/CreatePricePlan";
 
+import JobTailDetails from "./routes/job/JobTailDetails";
+
 import NotFound from "./routes/notfound/NotFound";
 import Login from "./routes/login/Login";
 import Signup from "./routes/signup/Signup";
@@ -316,6 +318,7 @@ const App = () => {
                         path="price-breakdown"
                         element={<JobPriceBreakdown />}
                       />
+                      <Route path="tail-details" element={<JobTailDetails />} />
                       <Route path="photos" element={<JobPhotos />}>
                         <Route
                           index

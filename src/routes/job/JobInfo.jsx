@@ -63,6 +63,8 @@ const JobInfo = () => {
 
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const [tailDetailsFound, setTailDetailsFound] = useState(false);
+
   useEffect(() => {
     getJobDetails();
   }, []);
@@ -145,6 +147,14 @@ const JobInfo = () => {
       } else {
         setErrorMessage("Unable to load job details.");
       }
+    }
+
+    try {
+      await api.getTailDetails(jobId);
+
+      setTailDetailsFound(true);
+    } catch (err) {
+      setTailDetailsFound(false);
     }
   };
 
@@ -476,8 +486,20 @@ const JobInfo = () => {
               <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
                 Tail Number
               </dt>
-              <dd className="mt-1 text-xl text-gray-900">
+              <dd className="mt-1 text-xl text-gray-900 flex gap-1">
                 {jobDetails.tailNumber}
+                {tailDetailsFound && (
+                  <Link
+                    to={`/jobs/${jobDetails.id}/tail-details`}
+                    className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
+                  >
+                    details
+                    <ArrowRightIcon
+                      className="h-5 w-5 relative"
+                      style={{ top: "3px" }}
+                    />
+                  </Link>
+                )}
               </dd>
             </div>
             <div className="sm:col-span-1">
@@ -690,7 +712,6 @@ const JobInfo = () => {
                       <Link
                         to={`/jobs/${jobDetails.id}/price-breakdown`}
                         className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
-                        style={{ top: "2px" }}
                       >
                         breakdown
                         <ArrowRightIcon
