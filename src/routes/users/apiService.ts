@@ -12,12 +12,24 @@ export const getAirports = (request: any) => {
     return httpService.post(`/api/airports`, request);
 }
 
+export const getCustomers = (request: any) => {
+    return httpService.post('/api/customers', request);
+}
+
+export const getUserCustomers = (id: number) => {
+    return httpService.get(`/api/users/customers/${id}/`);
+}
+
 export const getUserAvailableAirports = (id: number) => {
     return httpService.get(`/api/users/available-airports/${id}/`);
 }
 
 export const updateUserAvailableAirport = (request: any) => {
     return httpService.post(`/api/users/available-airports`, request);
+}
+
+export const updateUserCustomer = (request: any) => {
+    return httpService.post(`/api/users/customers`, request);
 }
 
 export const getLocations = (data: any) => {

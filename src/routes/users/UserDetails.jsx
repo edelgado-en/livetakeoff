@@ -43,13 +43,20 @@ const UserDetails = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState({});
   const [loading, setLoading] = useState(true);
+
   const [airports, setAirports] = useState([]);
   const [totalAirports, setTotalAirports] = useState(0);
   const [loadingAirports, setLoadingAirports] = useState(false);
   const [airportSearchText, setAirportSearchText] = useState("");
   const [airportAlreadyAdded, setAirportAlreadyAdded] = useState(false);
-
   const [availableAirports, setAvailableAirports] = useState([]);
+
+  const [customers, setCustomers] = useState([]);
+  const [totalCustomers, setTotalCustomers] = useState(0);
+  const [loadingCustomers, setLoadingCustomers] = useState(false);
+  const [customerSearchText, setCustomerSearchText] = useState("");
+  const [customerAlreadyAdded, setCustomerAlreadyAdded] = useState(false);
+  const [availableCustomers, setAvailableCustomers] = useState([]);
 
   const [loadingLocations, setLoadingLocations] = useState(false);
   const [locations, setLocations] = useState([]);
@@ -81,6 +88,17 @@ const UserDetails = () => {
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
+      getCustomers();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [customerSearchText]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
       getLocations();
     }, 500);
 
@@ -92,6 +110,7 @@ const UserDetails = () => {
   useEffect(() => {
     getUserDetails();
     getAvailableAirports();
+    getUserCustomers();
     getLocationsForUser();
     setAirportAlreadyAdded(false);
     setLocationAlreadyAdded(false);
@@ -109,11 +128,29 @@ const UserDetails = () => {
       setAirports(data.results);
       setTotalAirports(data.count);
       setAirportAlreadyAdded(false);
-
-      setLoadingAirports(false);
     } catch (error) {
-      setLoadingAirports(false);
+      toast.error("Unable to get airports");
     }
+    setLoadingAirports(false);
+  };
+
+  const getCustomers = async () => {
+    setLoadingCustomers(true);
+    try {
+      const request = {
+        name: customerSearchText,
+      };
+
+      const { data } = await api.getCustomers(request);
+
+      setCustomers(data.results);
+      setTotalCustomers(data.count);
+      setCustomerAlreadyAdded(false);
+    } catch (error) {
+      toast.error("Unable to get customers");
+    }
+
+    setLoadingCustomers(false);
   };
 
   const getLocations = async () => {
@@ -157,7 +194,17 @@ const UserDetails = () => {
 
       setAvailableAirports(data);
     } catch (err) {
-      console.log(err);
+      toast.error("Unable to get airports for user");
+    }
+  };
+
+  const getUserCustomers = async () => {
+    try {
+      const { data } = await api.getUserCustomers(userId);
+
+      setAvailableCustomers(data);
+    } catch (err) {
+      toast.error("Unable to get customers for user");
     }
   };
 
@@ -196,6 +243,33 @@ const UserDetails = () => {
     }
   };
 
+  const addUserCustomer = async (customerId) => {
+    const request = {
+      user_id: userId,
+      customer_id: customerId,
+      action: "add",
+    };
+
+    try {
+      // check if customerId already exists in available customers array
+      const customerExists = availableCustomers.find(
+        (customer) => customer.id === customerId
+      );
+
+      if (customerExists) {
+        setCustomerAlreadyAdded(true);
+      } else {
+        const { data } = await api.updateUserCustomer(request);
+        setCustomerAlreadyAdded(false);
+        setAvailableCustomers([...availableCustomers, data]);
+
+        toast.success("Customer added");
+      }
+    } catch (error) {
+      setCustomerAlreadyAdded(false);
+    }
+  };
+
   const addAvailableLocation = async (locationId) => {
     const request = {
       user_id: userId,
@@ -215,6 +289,8 @@ const UserDetails = () => {
         const { data } = await api.updateUserAvailableLocation(userId, request);
         setLocationAlreadyAdded(false);
         setAvailableLocations([...availableLocations, data]);
+
+        toast.success("Location added");
       }
     } catch (err) {
       toast.error("Unable to add location");
@@ -236,7 +312,33 @@ const UserDetails = () => {
       setAvailableAirports(
         availableAirports.filter((airport) => airport.id !== airportId)
       );
-    } catch (error) {}
+
+      toast.success("Airport removed");
+    } catch (error) {
+      toast.error("Unable to remove airport");
+    }
+  };
+
+  const deleteUserCustomer = async (customerId) => {
+    try {
+      const request = {
+        user_id: userId,
+        customer_id: customerId,
+        action: "delete",
+      };
+
+      await api.updateUserCustomer(request);
+
+      setCustomerAlreadyAdded(false);
+
+      setAvailableCustomers(
+        availableCustomers.filter((customer) => customer.id !== customerId)
+      );
+
+      toast.success("Customer removed");
+    } catch (error) {
+      toast.error("Unable to remove customer");
+    }
   };
 
   const deleteAvailableLocation = async (locationId) => {
@@ -254,6 +356,8 @@ const UserDetails = () => {
       setAvailableLocations(
         availableLocations.filter((location) => location.id !== locationId)
       );
+
+      toast.success("Location removed");
     } catch (err) {
       toast.error("Unable to remove location");
     }
@@ -278,6 +382,14 @@ const UserDetails = () => {
       event.preventDefault();
 
       getAirports();
+    }
+  };
+
+  const handleKeyDownCustomers = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      getCustomers();
     }
   };
 
@@ -510,6 +622,12 @@ const UserDetails = () => {
                     >
                       Save
                     </button>
+                  </div>
+                )}
+
+                {additionalEmails.length === 0 && (
+                  <div className="text-center m-auto mt-8 text-md">
+                    No additional emails set.
                   </div>
                 )}
 
@@ -864,6 +982,171 @@ const UserDetails = () => {
                                           type="button"
                                           onClick={() =>
                                             deleteAvailableAirport(airport.id)
+                                          }
+                                          className="inline-flex items-center rounded border
+                                                                                            border-gray-300 bg-white px-2 py-1 text-sm
+                                                                                            text-gray-700 shadow-sm
+                                                                                            hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                            "
+                                        >
+                                          Remove
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {userDetails.is_internal_coordinator && (
+                <>
+                  <div className="mt-8">
+                    <div className="font-medium px-4 text-xl">Customers</div>
+                    <div className="text-md text-gray-500 px-4">
+                      Manage customers. This user will only be able to see and
+                      create jobs for the specified customers. If no
+                      customersare specified, then the user will be able to see
+                      and create jobs for all customers.
+                    </div>
+
+                    <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
+                      <div
+                        className="border border-gray-200 rounded-md p-4"
+                        style={{ height: "680px" }}
+                      >
+                        <div className="font-medium text-sm">
+                          <div className="flex justify-between">
+                            <div>
+                              All Customers
+                              <span
+                                className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                        rounded-full text-sm font-medium inline-block"
+                              >
+                                {totalCustomers}
+                              </span>
+                            </div>
+                            <div>
+                              {customerAlreadyAdded && (
+                                <div className="text-red-500 text-sm relative top-1">
+                                  Customer already added
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="min-w-0 flex-1 my-2">
+                            <label htmlFor="search" className="sr-only">
+                              Search
+                            </label>
+                            <div className="relative rounded-md shadow-sm">
+                              <div
+                                onClick={() => getCustomers()}
+                                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                              >
+                                <MagnifyingGlassIcon
+                                  className="h-5 w-5 text-gray-400 cursor-pointer"
+                                  aria-hidden="true"
+                                />
+                              </div>
+                              <input
+                                type="search"
+                                name="customerSearch"
+                                id="customerSearch"
+                                value={customerSearchText}
+                                onChange={(event) =>
+                                  setCustomerSearchText(event.target.value)
+                                }
+                                onKeyDown={handleKeyDownCustomers}
+                                className="block w-full rounded-md border-gray-300 pl-10
+                                                                focus:border-sky-500 text-sm
+                                                                focus:ring-sky-500  font-normal"
+                                placeholder="Search name..."
+                              />
+                            </div>
+                          </div>
+                          <div
+                            className="overflow-y-auto"
+                            style={{ maxHeight: "560px" }}
+                          >
+                            {customers.map((customer) => (
+                              <div key={customer.id} className="relative">
+                                <ul className="">
+                                  <li className="">
+                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                      <div className="min-w-0 flex-1">
+                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                          {customer.name}
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            addUserCustomer(customer.id)
+                                          }
+                                          className="inline-flex items-center rounded border
+                                                                                        border-gray-300 bg-white px-2 py-1 text-sm
+                                                                                        text-gray-700 shadow-sm
+                                                                                        hover:bg-gray-50 focus:outline-none focus:ring-2
+                                                                                        "
+                                        >
+                                          Add
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className="border border-gray-200 rounded-md p-4"
+                        style={{ height: "680px" }}
+                      >
+                        <div className="font-medium text-sm">
+                          Available Customers
+                          <span
+                            className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                rounded-full text-sm font-medium inline-block"
+                          >
+                            {availableCustomers.length}
+                          </span>
+                        </div>
+                        <div className="text-sm">
+                          {availableCustomers.length === 0 && (
+                            <div className="text-center m-auto mt-24 text-sm">
+                              No available customers set.
+                            </div>
+                          )}
+
+                          <div
+                            className="overflow-y-auto"
+                            style={{ maxHeight: "560px" }}
+                          >
+                            {availableCustomers.map((customer) => (
+                              <div key={customer.id} className="relative">
+                                <ul className="">
+                                  <li className="">
+                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                      <div className="min-w-0 flex-1">
+                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                          {customer.name}
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            deleteUserCustomer(customer.id)
                                           }
                                           className="inline-flex items-center rounded border
                                                                                             border-gray-300 bg-white px-2 py-1 text-sm
