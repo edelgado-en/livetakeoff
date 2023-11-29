@@ -6,19 +6,15 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { Dialog, Transition, Switch, Menu } from "@headlessui/react";
+
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
+
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
-
-import { PencilIcon, ChartBarIcon } from "@heroicons/react/solid";
-
 import ReactTimeAgo from "react-time-ago";
 
 import Loader from "../../components/loader/Loader";
-
 import * as api from "./apiService";
-
 import { toast } from "react-toastify";
-import { set } from "react-hook-form";
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -72,7 +68,10 @@ const UserDetails = () => {
   const [additionalEmailOpen, setAdditionalEmailOpen] = useState(false);
   const [newAdditionalEmail, setNewAdditionalEmail] = useState("");
 
-  const navigate = useNavigate();
+  const [showEmailSection, setShowEmailSection] = useState(false);
+  const [showLocationSection, setShowLocationSection] = useState(false);
+  const [showAirportSection, setShowAirportSection] = useState(false);
+  const [showCustomerSection, setShowCustomerSection] = useState(false);
 
   useEffect(() => {
     //Basic throttling
@@ -536,636 +535,722 @@ const UserDetails = () => {
                 </div>
               </aside>
 
-              <div className="mt-8 px-4">
-                <div className="font-medium text-xl">Emails</div>
-                <div className="text-md text-gray-500">
-                  Configure default and additional emails. Customers will
-                  receive notifications to all emails listed here.
-                </div>
-
-                <div className="text-lg  mt-6">Default Email</div>
-                <div className="mt-2 flex justify-between gap-2">
-                  <input
-                    type="email"
-                    value={defaultEmail}
-                    onChange={(event) => setDefaultEmail(event.target.value)}
-                    name="defaultEmail"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
-                                ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
-                                focus:ring-blue-600 text-md sm:leading-6"
-                    placeholder="you@example.com"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => saveDefaultEmail()}
-                    className="rounded bg-white py-2 text-md
-                                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
-                  >
-                    Save
-                  </button>
-                </div>
-
-                <div className="flex justify-between text-lg mt-12">
-                  <div>Additional Emails</div>
-                  <div
-                    onClick={() => handleAdditionalEmailOpen()}
-                    className="flex items-center justify-center rounded-full bg-red-600 p-1
-                                                    text-white hover:bg-red-700 focus:outline-none focus:ring-2
-                                                        focus:ring-red-500 focus:ring-offset-2 cursor-pointer"
-                  >
-                    <svg
-                      className="h-6 w-6"
-                      x-description="Heroicon name: outline/plus"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 4.5v15m7.5-7.5h-15"
-                      ></path>
-                    </svg>
+              <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                <div
+                  className="flex justify-between cursor-pointer"
+                  onClick={() => setShowEmailSection(!showEmailSection)}
+                >
+                  <div className="flex-1">
+                    <div className="font-medium text-xl">Emails</div>
+                    <div className="text-md text-gray-500 mt-1">
+                      Configure default and additional emails. Customers will
+                      receive notifications to all emails listed here.
+                    </div>
+                  </div>
+                  <div className="">
+                    {showEmailSection && (
+                      <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                    )}
+                    {!showEmailSection && (
+                      <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                    )}
                   </div>
                 </div>
 
-                {additionalEmailOpen && (
-                  <div className="mt-6 flex justify-between gap-2">
-                    <input
-                      type="email"
-                      value={newAdditionalEmail}
-                      onChange={(event) =>
-                        setNewAdditionalEmail(event.target.value)
-                      }
-                      name="newAdditionalEmail"
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
-                                  ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
-                                  focus:ring-blue-600 text-md sm:leading-6"
-                      placeholder="you@example.com"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setAdditionalEmailOpen(false)}
-                      className="rounded bg-white py-2 text-md
-                                  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleAddAdditionalEmail()}
-                      className="rounded bg-white py-2 text-md
-                                  text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
-                    >
-                      Save
-                    </button>
-                  </div>
-                )}
-
-                {additionalEmails.length === 0 && (
-                  <div className="text-center m-auto mt-8 text-md">
-                    No additional emails set.
-                  </div>
-                )}
-
-                {additionalEmails.map((additionalEmail, index) => (
-                  <div key={index} className="mt-4 flex justify-between gap-3">
-                    <input
-                      type="email"
-                      value={additionalEmail.email}
-                      onChange={(event) =>
-                        setAdditionalEmails(
-                          additionalEmails.map((email) =>
-                            email.id === additionalEmail.id
-                              ? { ...email, email: event.target.value }
-                              : email
-                          )
-                        )
-                      }
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                {showEmailSection && (
+                  <div>
+                    <div className="text-lg  mt-6">Default Email</div>
+                    <div className="mt-2 flex justify-between gap-2">
+                      <input
+                        type="email"
+                        value={defaultEmail}
+                        onChange={(event) =>
+                          setDefaultEmail(event.target.value)
+                        }
+                        name="defaultEmail"
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
                                         ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
                                         focus:ring-blue-600 text-md sm:leading-6"
-                      placeholder="you@example.com"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => deleteAdditionalEmail(additionalEmail.id)}
-                      className="rounded bg-white py-2 text-md
+                        placeholder="you@example.com"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => saveDefaultEmail()}
+                        className="rounded bg-white py-2 text-md
                                         text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
-                    >
-                      Remove
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => updateAdditionalEmail(additionalEmail)}
-                      className="rounded bg-white py-2 text-md
-                                        text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
-                    >
-                      Save
-                    </button>
-                  </div>
-                ))}
-              </div>
+                      >
+                        Save
+                      </button>
+                    </div>
 
-              <div className="border-b text-gray-400 py-8"></div>
+                    <div className="flex justify-between text-lg mt-12">
+                      <div>Additional Emails</div>
+                      <div
+                        onClick={() => handleAdditionalEmailOpen()}
+                        className="flex items-center justify-center rounded-full bg-red-600 p-1
+                                                            text-white hover:bg-red-700 focus:outline-none focus:ring-2
+                                                                focus:ring-red-500 focus:ring-offset-2 cursor-pointer"
+                      >
+                        <svg
+                          className="h-6 w-6"
+                          x-description="Heroicon name: outline/plus"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          ></path>
+                        </svg>
+                      </div>
+                    </div>
+
+                    {additionalEmailOpen && (
+                      <div className="mt-6 flex justify-between gap-2">
+                        <input
+                          type="email"
+                          value={newAdditionalEmail}
+                          onChange={(event) =>
+                            setNewAdditionalEmail(event.target.value)
+                          }
+                          name="newAdditionalEmail"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                                        ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                        focus:ring-blue-600 text-md sm:leading-6"
+                          placeholder="you@example.com"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setAdditionalEmailOpen(false)}
+                          className="rounded bg-white py-2 text-md
+                                        text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleAddAdditionalEmail()}
+                          className="rounded bg-white py-2 text-md
+                                        text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    )}
+
+                    {additionalEmails.length === 0 && (
+                      <div className="text-center m-auto mt-8 text-md">
+                        No additional emails set.
+                      </div>
+                    )}
+
+                    {additionalEmails.map((additionalEmail, index) => (
+                      <div
+                        key={index}
+                        className="mt-4 flex justify-between gap-3"
+                      >
+                        <input
+                          type="email"
+                          value={additionalEmail.email}
+                          onChange={(event) =>
+                            setAdditionalEmails(
+                              additionalEmails.map((email) =>
+                                email.id === additionalEmail.id
+                                  ? { ...email, email: event.target.value }
+                                  : email
+                              )
+                            )
+                          }
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+                                                ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+                                                focus:ring-blue-600 text-md sm:leading-6"
+                          placeholder="you@example.com"
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            deleteAdditionalEmail(additionalEmail.id)
+                          }
+                          className="rounded bg-white py-2 text-md
+                                                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                        >
+                          Remove
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => updateAdditionalEmail(additionalEmail)}
+                          className="rounded bg-white py-2 text-md
+                                                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 px-4"
+                        >
+                          Save
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {userDetails.is_project_manager && (
                 <>
-                  <div className="mt-8">
-                    <div className="font-medium px-4 text-xl">
-                      Inventory Locations
-                    </div>
-                    <div className="text-md text-gray-500 px-4">
-                      Manage inventory locations. This user will only be manage
-                      items for the locations specify here.
+                  <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                    <div
+                      className="flex justify-between cursor-pointer"
+                      onClick={() =>
+                        setShowLocationSection(!showLocationSection)
+                      }
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium text-xl">
+                          Inventory Locations
+                        </div>
+                        <div className="text-md text-gray-500 mt-1">
+                          Manage inventory locations. This user will only be
+                          manage items for the locations specify here.
+                        </div>
+                      </div>
+                      <div>
+                        {showLocationSection && (
+                          <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                        )}
+                        {!showLocationSection && (
+                          <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                        )}
+                      </div>
                     </div>
 
-                    <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
-                      <div
-                        className="border border-gray-200 rounded-md p-4"
-                        style={{ height: "680px" }}
-                      >
-                        <div className="font-medium text-sm">
-                          <div className="flex justify-between">
-                            <div>
-                              All Inventory Locations
-                              <span
-                                className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                        rounded-full text-sm font-medium inline-block"
-                              >
-                                {totalLocations}
-                              </span>
+                    {showLocationSection && (
+                      <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
+                        <div
+                          className="border border-gray-200 rounded-md p-4"
+                          style={{ height: "680px" }}
+                        >
+                          <div className="font-medium text-sm">
+                            <div className="flex justify-between">
+                              <div>
+                                All Inventory Locations
+                                <span
+                                  className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                            rounded-full text-sm font-medium inline-block"
+                                >
+                                  {totalLocations}
+                                </span>
+                              </div>
+                              <div>
+                                {locationAlreadyAdded && (
+                                  <div className="text-red-500 text-sm relative top-1">
+                                    Location already added
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                            <div>
-                              {locationAlreadyAdded && (
-                                <div className="text-red-500 text-sm relative top-1">
-                                  Location already added
+
+                            <div className="min-w-0 flex-1 my-2">
+                              <label
+                                htmlFor="searchLocation"
+                                className="sr-only"
+                              >
+                                Search
+                              </label>
+                              <div className="relative rounded-md shadow-sm">
+                                <div
+                                  onClick={() => getAirports()}
+                                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                                >
+                                  <MagnifyingGlassIcon
+                                    className="h-5 w-5 text-gray-400 cursor-pointer"
+                                    aria-hidden="true"
+                                  />
                                 </div>
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="min-w-0 flex-1 my-2">
-                            <label htmlFor="searchLocation" className="sr-only">
-                              Search
-                            </label>
-                            <div className="relative rounded-md shadow-sm">
-                              <div
-                                onClick={() => getAirports()}
-                                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                              >
-                                <MagnifyingGlassIcon
-                                  className="h-5 w-5 text-gray-400 cursor-pointer"
-                                  aria-hidden="true"
+                                <input
+                                  type="search"
+                                  name="searchLocation"
+                                  id="searchLocation"
+                                  value={locationSearchText}
+                                  onChange={(event) =>
+                                    setLocationSearchText(event.target.value)
+                                  }
+                                  onKeyDown={handleKeyDownLocations}
+                                  className="block w-full rounded-md border-gray-300 pl-10
+                                                                    focus:border-sky-500 text-sm
+                                                                    focus:ring-sky-500  font-normal"
+                                  placeholder="Search name..."
                                 />
                               </div>
-                              <input
-                                type="search"
-                                name="searchLocation"
-                                id="searchLocation"
-                                value={locationSearchText}
-                                onChange={(event) =>
-                                  setLocationSearchText(event.target.value)
-                                }
-                                onKeyDown={handleKeyDownLocations}
-                                className="block w-full rounded-md border-gray-300 pl-10
-                                                                focus:border-sky-500 text-sm
-                                                                focus:ring-sky-500  font-normal"
-                                placeholder="Search name..."
-                              />
                             </div>
-                          </div>
-                          <div
-                            className="overflow-y-auto"
-                            style={{ maxHeight: "560px" }}
-                          >
-                            {locations.map((location) => (
-                              <div key={location.id} className="relative">
-                                <ul className="">
-                                  <li className="">
-                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="min-w-0 flex-1">
-                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                          {location.name}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            addAvailableLocation(location.id)
-                                          }
-                                          className="inline-flex items-center rounded border
-                                                                                        border-gray-300 bg-white px-2 py-1 text-sm
-                                                                                        text-gray-700 shadow-sm
-                                                                                        hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                                                        "
-                                        >
-                                          Add
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="border border-gray-200 rounded-md p-4"
-                        style={{ height: "680px" }}
-                      >
-                        <div className="font-medium text-sm">
-                          Available Locations
-                          <span
-                            className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                rounded-full text-sm font-medium inline-block"
-                          >
-                            {availableLocations.length}
-                          </span>
-                        </div>
-                        <div className="text-sm">
-                          {availableLocations.length === 0 && (
-                            <div className="text-center m-auto mt-24 text-sm">
-                              No available inventory locations set.
-                            </div>
-                          )}
-
-                          <div
-                            className="overflow-y-auto"
-                            style={{ maxHeight: "560px" }}
-                          >
-                            {availableLocations.map((location) => (
-                              <div key={location.id} className="relative">
-                                <ul className="">
-                                  <li className="">
-                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="min-w-0 flex-1">
-                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                          {location.name}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            deleteAvailableLocation(location.id)
-                                          }
-                                          className="inline-flex items-center rounded border
+                            <div
+                              className="overflow-y-auto"
+                              style={{ maxHeight: "560px" }}
+                            >
+                              {locations.map((location) => (
+                                <div key={location.id} className="relative">
+                                  <ul className="">
+                                    <li className="">
+                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                            {location.name}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              addAvailableLocation(location.id)
+                                            }
+                                            className="inline-flex items-center rounded border
                                                                                             border-gray-300 bg-white px-2 py-1 text-sm
                                                                                             text-gray-700 shadow-sm
-                                                                                            hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                            hover:bg-gray-50 focus:outline-none focus:ring-2
                                                                                             "
-                                        >
-                                          Remove
-                                        </button>
+                                          >
+                                            Add
+                                          </button>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </li>
-                                </ul>
+                                    </li>
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="border border-gray-200 rounded-md p-4"
+                          style={{ height: "680px" }}
+                        >
+                          <div className="font-medium text-sm">
+                            Available Locations
+                            <span
+                              className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                    rounded-full text-sm font-medium inline-block"
+                            >
+                              {availableLocations.length}
+                            </span>
+                          </div>
+                          <div className="text-sm">
+                            {availableLocations.length === 0 && (
+                              <div className="text-center m-auto mt-24 text-sm">
+                                No available inventory locations set.
                               </div>
-                            ))}
+                            )}
+
+                            <div
+                              className="overflow-y-auto"
+                              style={{ maxHeight: "560px" }}
+                            >
+                              {availableLocations.map((location) => (
+                                <div key={location.id} className="relative">
+                                  <ul className="">
+                                    <li className="">
+                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                            {location.name}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              deleteAvailableLocation(
+                                                location.id
+                                              )
+                                            }
+                                            className="inline-flex items-center rounded border
+                                                                                                border-gray-300 bg-white px-2 py-1 text-sm
+                                                                                                text-gray-700 shadow-sm
+                                                                                                hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                                "
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
-                  <div className="border-b text-gray-400 py-8"></div>
-
-                  <div className="mt-8">
-                    <div className="font-medium px-4 text-xl">Airports</div>
-                    <div className="text-md text-gray-500 px-4">
-                      Manage airports. This user will only be available for job
-                      assignment if the job is in any of the airports in the
-                      available list.
+                  <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                    <div
+                      className="flex justify-between cursor-pointer"
+                      onClick={() => setShowAirportSection(!showAirportSection)}
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium text-xl">Airports</div>
+                        <div className="text-md text-gray-500 mt-1">
+                          Manage airports. This user will only be available for
+                          job assignment if the job is in any of the airports in
+                          the available list.
+                        </div>
+                      </div>
+                      <div>
+                        {showAirportSection && (
+                          <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                        )}
+                        {!showAirportSection && (
+                          <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                        )}
+                      </div>
                     </div>
 
-                    <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
-                      <div
-                        className="border border-gray-200 rounded-md p-4"
-                        style={{ height: "680px" }}
-                      >
-                        <div className="font-medium text-sm">
-                          <div className="flex justify-between">
-                            <div>
-                              All Airports
-                              <span
-                                className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                        rounded-full text-sm font-medium inline-block"
-                              >
-                                {totalAirports}
-                              </span>
+                    {showAirportSection && (
+                      <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
+                        <div
+                          className="border border-gray-200 rounded-md p-4"
+                          style={{ height: "680px" }}
+                        >
+                          <div className="font-medium text-sm">
+                            <div className="flex justify-between">
+                              <div>
+                                All Airports
+                                <span
+                                  className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                            rounded-full text-sm font-medium inline-block"
+                                >
+                                  {totalAirports}
+                                </span>
+                              </div>
+                              <div>
+                                {airportAlreadyAdded && (
+                                  <div className="text-red-500 text-sm relative top-1">
+                                    Airport already added
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                            <div>
-                              {airportAlreadyAdded && (
-                                <div className="text-red-500 text-sm relative top-1">
-                                  Airport already added
-                                </div>
-                              )}
-                            </div>
-                          </div>
 
-                          <div className="min-w-0 flex-1 my-2">
-                            <label htmlFor="search" className="sr-only">
-                              Search
-                            </label>
-                            <div className="relative rounded-md shadow-sm">
-                              <div
-                                onClick={() => getAirports()}
-                                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                              >
-                                <MagnifyingGlassIcon
-                                  className="h-5 w-5 text-gray-400 cursor-pointer"
-                                  aria-hidden="true"
+                            <div className="min-w-0 flex-1 my-2">
+                              <label htmlFor="search" className="sr-only">
+                                Search
+                              </label>
+                              <div className="relative rounded-md shadow-sm">
+                                <div
+                                  onClick={() => getAirports()}
+                                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                                >
+                                  <MagnifyingGlassIcon
+                                    className="h-5 w-5 text-gray-400 cursor-pointer"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <input
+                                  type="search"
+                                  name="search"
+                                  id="search"
+                                  value={airportSearchText}
+                                  onChange={(event) =>
+                                    setAirportSearchText(event.target.value)
+                                  }
+                                  onKeyDown={handleKeyDown}
+                                  className="block w-full rounded-md border-gray-300 pl-10
+                                                                    focus:border-sky-500 text-sm
+                                                                    focus:ring-sky-500  font-normal"
+                                  placeholder="Search name..."
                                 />
                               </div>
-                              <input
-                                type="search"
-                                name="search"
-                                id="search"
-                                value={airportSearchText}
-                                onChange={(event) =>
-                                  setAirportSearchText(event.target.value)
-                                }
-                                onKeyDown={handleKeyDown}
-                                className="block w-full rounded-md border-gray-300 pl-10
-                                                                focus:border-sky-500 text-sm
-                                                                focus:ring-sky-500  font-normal"
-                                placeholder="Search name..."
-                              />
                             </div>
-                          </div>
-                          <div
-                            className="overflow-y-auto"
-                            style={{ maxHeight: "560px" }}
-                          >
-                            {airports.map((airport) => (
-                              <div key={airport.id} className="relative">
-                                <ul className="">
-                                  <li className="">
-                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="flex-shrink-0 text-sm w-6">
-                                        {airport.initials}
-                                      </div>
-                                      <div className="min-w-0 flex-1">
-                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                          {airport.name}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            addAvailableAirport(airport.id)
-                                          }
-                                          className="inline-flex items-center rounded border
-                                                                                        border-gray-300 bg-white px-2 py-1 text-sm
-                                                                                        text-gray-700 shadow-sm
-                                                                                        hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                                                        "
-                                        >
-                                          Add
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="border border-gray-200 rounded-md p-4"
-                        style={{ height: "680px" }}
-                      >
-                        <div className="font-medium text-sm">
-                          Available Airports
-                          <span
-                            className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                rounded-full text-sm font-medium inline-block"
-                          >
-                            {availableAirports.length}
-                          </span>
-                        </div>
-                        <div className="text-sm">
-                          {availableAirports.length === 0 && (
-                            <div className="text-center m-auto mt-24 text-sm">
-                              No available airports set.
-                            </div>
-                          )}
-
-                          <div
-                            className="overflow-y-auto"
-                            style={{ maxHeight: "560px" }}
-                          >
-                            {availableAirports.map((airport) => (
-                              <div key={airport.id} className="relative">
-                                <ul className="">
-                                  <li className="">
-                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="flex-shrink-0 text-sm w-6 font-medium">
-                                        {airport.initials}
-                                      </div>
-                                      <div className="min-w-0 flex-1">
-                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                          {airport.name}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            deleteAvailableAirport(airport.id)
-                                          }
-                                          className="inline-flex items-center rounded border
+                            <div
+                              className="overflow-y-auto"
+                              style={{ maxHeight: "560px" }}
+                            >
+                              {airports.map((airport) => (
+                                <div key={airport.id} className="relative">
+                                  <ul className="">
+                                    <li className="">
+                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                        <div className="flex-shrink-0 text-sm w-6">
+                                          {airport.initials}
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                            {airport.name}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              addAvailableAirport(airport.id)
+                                            }
+                                            className="inline-flex items-center rounded border
                                                                                             border-gray-300 bg-white px-2 py-1 text-sm
                                                                                             text-gray-700 shadow-sm
-                                                                                            hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                            hover:bg-gray-50 focus:outline-none focus:ring-2
                                                                                             "
-                                        >
-                                          Remove
-                                        </button>
+                                          >
+                                            Add
+                                          </button>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </li>
-                                </ul>
+                                    </li>
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="border border-gray-200 rounded-md p-4"
+                          style={{ height: "680px" }}
+                        >
+                          <div className="font-medium text-sm">
+                            Available Airports
+                            <span
+                              className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                    rounded-full text-sm font-medium inline-block"
+                            >
+                              {availableAirports.length}
+                            </span>
+                          </div>
+                          <div className="text-sm">
+                            {availableAirports.length === 0 && (
+                              <div className="text-center m-auto mt-24 text-sm">
+                                No available airports set.
                               </div>
-                            ))}
+                            )}
+
+                            <div
+                              className="overflow-y-auto"
+                              style={{ maxHeight: "560px" }}
+                            >
+                              {availableAirports.map((airport) => (
+                                <div key={airport.id} className="relative">
+                                  <ul className="">
+                                    <li className="">
+                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                        <div className="flex-shrink-0 text-sm w-6 font-medium">
+                                          {airport.initials}
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                            {airport.name}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              deleteAvailableAirport(airport.id)
+                                            }
+                                            className="inline-flex items-center rounded border
+                                                                                                border-gray-300 bg-white px-2 py-1 text-sm
+                                                                                                text-gray-700 shadow-sm
+                                                                                                hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                                "
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </>
               )}
 
               {userDetails.is_internal_coordinator && (
                 <>
-                  <div className="mt-8">
-                    <div className="font-medium px-4 text-xl">Customers</div>
-                    <div className="text-md text-gray-500 px-4">
-                      Manage customers. This user will only be able to see and
-                      create jobs for the specified customers. If no
-                      customersare specified, then the user will be able to see
-                      and create jobs for all customers.
+                  <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                    <div
+                      className="flex justify-between cursor-pointer"
+                      onClick={() =>
+                        setShowCustomerSection(!showCustomerSection)
+                      }
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium text-xl">Customers</div>
+                        <div className="text-md text-gray-500 mt-1">
+                          <p>
+                            Manage customers. This user will only be able to see
+                            and create jobs for the specified customers.
+                          </p>
+                          <p>
+                            If no customers are specified, then the user will be
+                            able to see and create jobs for all customers.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="">
+                        {showCustomerSection && (
+                          <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                        )}
+                        {!showCustomerSection && (
+                          <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                        )}
+                      </div>
                     </div>
 
-                    <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
-                      <div
-                        className="border border-gray-200 rounded-md p-4"
-                        style={{ height: "680px" }}
-                      >
-                        <div className="font-medium text-sm">
-                          <div className="flex justify-between">
-                            <div>
-                              All Customers
-                              <span
-                                className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                        rounded-full text-sm font-medium inline-block"
-                              >
-                                {totalCustomers}
-                              </span>
+                    {showCustomerSection && (
+                      <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
+                        <div
+                          className="border border-gray-200 rounded-md p-4"
+                          style={{ height: "680px" }}
+                        >
+                          <div className="font-medium text-sm">
+                            <div className="flex justify-between">
+                              <div>
+                                All Customers
+                                <span
+                                  className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                            rounded-full text-sm font-medium inline-block"
+                                >
+                                  {totalCustomers}
+                                </span>
+                              </div>
+                              <div>
+                                {customerAlreadyAdded && (
+                                  <div className="text-red-500 text-sm relative top-1">
+                                    Customer already added
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                            <div>
-                              {customerAlreadyAdded && (
-                                <div className="text-red-500 text-sm relative top-1">
-                                  Customer already added
-                                </div>
-                              )}
-                            </div>
-                          </div>
 
-                          <div className="min-w-0 flex-1 my-2">
-                            <label htmlFor="search" className="sr-only">
-                              Search
-                            </label>
-                            <div className="relative rounded-md shadow-sm">
-                              <div
-                                onClick={() => getCustomers()}
-                                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                              >
-                                <MagnifyingGlassIcon
-                                  className="h-5 w-5 text-gray-400 cursor-pointer"
-                                  aria-hidden="true"
+                            <div className="min-w-0 flex-1 my-2">
+                              <label htmlFor="search" className="sr-only">
+                                Search
+                              </label>
+                              <div className="relative rounded-md shadow-sm">
+                                <div
+                                  onClick={() => getCustomers()}
+                                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                                >
+                                  <MagnifyingGlassIcon
+                                    className="h-5 w-5 text-gray-400 cursor-pointer"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                                <input
+                                  type="search"
+                                  name="customerSearch"
+                                  id="customerSearch"
+                                  value={customerSearchText}
+                                  onChange={(event) =>
+                                    setCustomerSearchText(event.target.value)
+                                  }
+                                  onKeyDown={handleKeyDownCustomers}
+                                  className="block w-full rounded-md border-gray-300 pl-10
+                                                                    focus:border-sky-500 text-sm
+                                                                    focus:ring-sky-500  font-normal"
+                                  placeholder="Search name..."
                                 />
                               </div>
-                              <input
-                                type="search"
-                                name="customerSearch"
-                                id="customerSearch"
-                                value={customerSearchText}
-                                onChange={(event) =>
-                                  setCustomerSearchText(event.target.value)
-                                }
-                                onKeyDown={handleKeyDownCustomers}
-                                className="block w-full rounded-md border-gray-300 pl-10
-                                                                focus:border-sky-500 text-sm
-                                                                focus:ring-sky-500  font-normal"
-                                placeholder="Search name..."
-                              />
                             </div>
-                          </div>
-                          <div
-                            className="overflow-y-auto"
-                            style={{ maxHeight: "560px" }}
-                          >
-                            {customers.map((customer) => (
-                              <div key={customer.id} className="relative">
-                                <ul className="">
-                                  <li className="">
-                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="min-w-0 flex-1">
-                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                          {customer.name}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            addUserCustomer(customer.id)
-                                          }
-                                          className="inline-flex items-center rounded border
-                                                                                        border-gray-300 bg-white px-2 py-1 text-sm
-                                                                                        text-gray-700 shadow-sm
-                                                                                        hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                                                        "
-                                        >
-                                          Add
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </li>
-                                </ul>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className="border border-gray-200 rounded-md p-4"
-                        style={{ height: "680px" }}
-                      >
-                        <div className="font-medium text-sm">
-                          Available Customers
-                          <span
-                            className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                rounded-full text-sm font-medium inline-block"
-                          >
-                            {availableCustomers.length}
-                          </span>
-                        </div>
-                        <div className="text-sm">
-                          {availableCustomers.length === 0 && (
-                            <div className="text-center m-auto mt-24 text-sm">
-                              No available customers set.
-                            </div>
-                          )}
-
-                          <div
-                            className="overflow-y-auto"
-                            style={{ maxHeight: "560px" }}
-                          >
-                            {availableCustomers.map((customer) => (
-                              <div key={customer.id} className="relative">
-                                <ul className="">
-                                  <li className="">
-                                    <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                      <div className="min-w-0 flex-1">
-                                        <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                          {customer.name}
-                                        </p>
-                                      </div>
-                                      <div>
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            deleteUserCustomer(customer.id)
-                                          }
-                                          className="inline-flex items-center rounded border
+                            <div
+                              className="overflow-y-auto"
+                              style={{ maxHeight: "560px" }}
+                            >
+                              {customers.map((customer) => (
+                                <div key={customer.id} className="relative">
+                                  <ul className="">
+                                    <li className="">
+                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                            {customer.name}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              addUserCustomer(customer.id)
+                                            }
+                                            className="inline-flex items-center rounded border
                                                                                             border-gray-300 bg-white px-2 py-1 text-sm
                                                                                             text-gray-700 shadow-sm
-                                                                                            hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                            hover:bg-gray-50 focus:outline-none focus:ring-2
                                                                                             "
-                                        >
-                                          Remove
-                                        </button>
+                                          >
+                                            Add
+                                          </button>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </li>
-                                </ul>
+                                    </li>
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="border border-gray-200 rounded-md p-4"
+                          style={{ height: "680px" }}
+                        >
+                          <div className="font-medium text-sm">
+                            Available Customers
+                            <span
+                              className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                    rounded-full text-sm font-medium inline-block"
+                            >
+                              {availableCustomers.length}
+                            </span>
+                          </div>
+                          <div className="text-sm">
+                            {availableCustomers.length === 0 && (
+                              <div className="text-center m-auto mt-24 text-sm">
+                                No available customers set.
                               </div>
-                            ))}
+                            )}
+
+                            <div
+                              className="overflow-y-auto"
+                              style={{ maxHeight: "560px" }}
+                            >
+                              {availableCustomers.map((customer) => (
+                                <div key={customer.id} className="relative">
+                                  <ul className="">
+                                    <li className="">
+                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                        <div className="min-w-0 flex-1">
+                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                            {customer.name}
+                                          </p>
+                                        </div>
+                                        <div>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              deleteUserCustomer(customer.id)
+                                            }
+                                            className="inline-flex items-center rounded border
+                                                                                                border-gray-300 bg-white px-2 py-1 text-sm
+                                                                                                text-gray-700 shadow-sm
+                                                                                                hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                                "
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </>
               )}
