@@ -695,7 +695,8 @@ const UserDetails = () => {
                 )}
               </div>
 
-              {userDetails.is_project_manager && (
+              {(userDetails.is_project_manager ||
+                userDetails.is_internal_coordinator) && (
                 <>
                   <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
                     <div
@@ -1064,194 +1065,192 @@ const UserDetails = () => {
                       </div>
                     )}
                   </div>
-                </>
-              )}
 
-              {userDetails.is_internal_coordinator && (
-                <>
-                  <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
-                    <div
-                      className="flex justify-between cursor-pointer"
-                      onClick={() =>
-                        setShowCustomerSection(!showCustomerSection)
-                      }
-                    >
-                      <div className="flex-1">
-                        <div className="font-medium text-xl">Customers</div>
-                        <div className="text-md text-gray-500 mt-1">
-                          <p>
-                            Manage customers. This user will only be able to see
-                            and create jobs for the specified customers.
-                          </p>
-                          <p>
-                            If no customers are specified, then the user will be
-                            able to see and create jobs for all customers.
-                          </p>
+                  {userDetails.is_internal_coordinator && (
+                    <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                      <div
+                        className="flex justify-between cursor-pointer"
+                        onClick={() =>
+                          setShowCustomerSection(!showCustomerSection)
+                        }
+                      >
+                        <div className="flex-1">
+                          <div className="font-medium text-xl">Customers</div>
+                          <div className="text-md text-gray-500 mt-1">
+                            <p>
+                              Manage customers. This user will only be able to
+                              see and create jobs for the specified customers.
+                            </p>
+                            <p>
+                              If no customers are specified, then the user will
+                              be able to see and create jobs for all customers.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="">
+                          {showCustomerSection && (
+                            <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                          )}
+                          {!showCustomerSection && (
+                            <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                          )}
                         </div>
                       </div>
-                      <div className="">
-                        {showCustomerSection && (
-                          <ChevronUpIcon className="h-5 w-5 relative top-4" />
-                        )}
-                        {!showCustomerSection && (
-                          <ChevronDownIcon className="h-5 w-5 relative top-4" />
-                        )}
-                      </div>
-                    </div>
 
-                    {showCustomerSection && (
-                      <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
-                        <div
-                          className="border border-gray-200 rounded-md p-4"
-                          style={{ height: "680px" }}
-                        >
-                          <div className="font-medium text-sm">
-                            <div className="flex justify-between">
-                              <div>
-                                All Customers
-                                <span
-                                  className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                      {showCustomerSection && (
+                        <div className="mt-8 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
+                          <div
+                            className="border border-gray-200 rounded-md p-4"
+                            style={{ height: "680px" }}
+                          >
+                            <div className="font-medium text-sm">
+                              <div className="flex justify-between">
+                                <div>
+                                  All Customers
+                                  <span
+                                    className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
                                                             rounded-full text-sm font-medium inline-block"
-                                >
-                                  {totalCustomers}
-                                </span>
-                              </div>
-                              <div>
-                                {customerAlreadyAdded && (
-                                  <div className="text-red-500 text-sm relative top-1">
-                                    Customer already added
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-
-                            <div className="min-w-0 flex-1 my-2">
-                              <label htmlFor="search" className="sr-only">
-                                Search
-                              </label>
-                              <div className="relative rounded-md shadow-sm">
-                                <div
-                                  onClick={() => getCustomers()}
-                                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                                >
-                                  <MagnifyingGlassIcon
-                                    className="h-5 w-5 text-gray-400 cursor-pointer"
-                                    aria-hidden="true"
-                                  />
+                                  >
+                                    {totalCustomers}
+                                  </span>
                                 </div>
-                                <input
-                                  type="search"
-                                  name="customerSearch"
-                                  id="customerSearch"
-                                  value={customerSearchText}
-                                  onChange={(event) =>
-                                    setCustomerSearchText(event.target.value)
-                                  }
-                                  onKeyDown={handleKeyDownCustomers}
-                                  className="block w-full rounded-md border-gray-300 pl-10
+                                <div>
+                                  {customerAlreadyAdded && (
+                                    <div className="text-red-500 text-sm relative top-1">
+                                      Customer already added
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="min-w-0 flex-1 my-2">
+                                <label htmlFor="search" className="sr-only">
+                                  Search
+                                </label>
+                                <div className="relative rounded-md shadow-sm">
+                                  <div
+                                    onClick={() => getCustomers()}
+                                    className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                                  >
+                                    <MagnifyingGlassIcon
+                                      className="h-5 w-5 text-gray-400 cursor-pointer"
+                                      aria-hidden="true"
+                                    />
+                                  </div>
+                                  <input
+                                    type="search"
+                                    name="customerSearch"
+                                    id="customerSearch"
+                                    value={customerSearchText}
+                                    onChange={(event) =>
+                                      setCustomerSearchText(event.target.value)
+                                    }
+                                    onKeyDown={handleKeyDownCustomers}
+                                    className="block w-full rounded-md border-gray-300 pl-10
                                                                     focus:border-sky-500 text-sm
                                                                     focus:ring-sky-500  font-normal"
-                                  placeholder="Search name..."
-                                />
+                                    placeholder="Search name..."
+                                  />
+                                </div>
                               </div>
-                            </div>
-                            <div
-                              className="overflow-y-auto"
-                              style={{ maxHeight: "560px" }}
-                            >
-                              {customers.map((customer) => (
-                                <div key={customer.id} className="relative">
-                                  <ul className="">
-                                    <li className="">
-                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                        <div className="min-w-0 flex-1">
-                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                            {customer.name}
-                                          </p>
-                                        </div>
-                                        <div>
-                                          <button
-                                            type="button"
-                                            onClick={() =>
-                                              addUserCustomer(customer.id)
-                                            }
-                                            className="inline-flex items-center rounded border
+                              <div
+                                className="overflow-y-auto"
+                                style={{ maxHeight: "560px" }}
+                              >
+                                {customers.map((customer) => (
+                                  <div key={customer.id} className="relative">
+                                    <ul className="">
+                                      <li className="">
+                                        <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                          <div className="min-w-0 flex-1">
+                                            <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                              {customer.name}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                addUserCustomer(customer.id)
+                                              }
+                                              className="inline-flex items-center rounded border
                                                                                             border-gray-300 bg-white px-2 py-1 text-sm
                                                                                             text-gray-700 shadow-sm
                                                                                             hover:bg-gray-50 focus:outline-none focus:ring-2
                                                                                             "
-                                          >
-                                            Add
-                                          </button>
+                                            >
+                                              Add
+                                            </button>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </li>
-                                  </ul>
-                                </div>
-                              ))}
+                                      </li>
+                                    </ul>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div
-                          className="border border-gray-200 rounded-md p-4"
-                          style={{ height: "680px" }}
-                        >
-                          <div className="font-medium text-sm">
-                            Available Customers
-                            <span
-                              className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                          <div
+                            className="border border-gray-200 rounded-md p-4"
+                            style={{ height: "680px" }}
+                          >
+                            <div className="font-medium text-sm">
+                              Available Customers
+                              <span
+                                className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
                                                     rounded-full text-sm font-medium inline-block"
-                            >
-                              {availableCustomers.length}
-                            </span>
-                          </div>
-                          <div className="text-sm">
-                            {availableCustomers.length === 0 && (
-                              <div className="text-center m-auto mt-24 text-sm">
-                                No available customers set.
-                              </div>
-                            )}
+                              >
+                                {availableCustomers.length}
+                              </span>
+                            </div>
+                            <div className="text-sm">
+                              {availableCustomers.length === 0 && (
+                                <div className="text-center m-auto mt-24 text-sm">
+                                  No available customers set.
+                                </div>
+                              )}
 
-                            <div
-                              className="overflow-y-auto"
-                              style={{ maxHeight: "560px" }}
-                            >
-                              {availableCustomers.map((customer) => (
-                                <div key={customer.id} className="relative">
-                                  <ul className="">
-                                    <li className="">
-                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                        <div className="min-w-0 flex-1">
-                                          <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                            {customer.name}
-                                          </p>
-                                        </div>
-                                        <div>
-                                          <button
-                                            type="button"
-                                            onClick={() =>
-                                              deleteUserCustomer(customer.id)
-                                            }
-                                            className="inline-flex items-center rounded border
+                              <div
+                                className="overflow-y-auto"
+                                style={{ maxHeight: "560px" }}
+                              >
+                                {availableCustomers.map((customer) => (
+                                  <div key={customer.id} className="relative">
+                                    <ul className="">
+                                      <li className="">
+                                        <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                          <div className="min-w-0 flex-1">
+                                            <p className="text-sm text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                              {customer.name}
+                                            </p>
+                                          </div>
+                                          <div>
+                                            <button
+                                              type="button"
+                                              onClick={() =>
+                                                deleteUserCustomer(customer.id)
+                                              }
+                                              className="inline-flex items-center rounded border
                                                                                                 border-gray-300 bg-white px-2 py-1 text-sm
                                                                                                 text-gray-700 shadow-sm
                                                                                                 hover:bg-gray-100 focus:outline-none focus:ring-2
                                                                                                 "
-                                          >
-                                            Remove
-                                          </button>
+                                            >
+                                              Remove
+                                            </button>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </li>
-                                  </ul>
-                                </div>
-                              ))}
+                                      </li>
+                                    </ul>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </>
               )}
             </div>
