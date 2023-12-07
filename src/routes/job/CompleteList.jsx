@@ -200,6 +200,8 @@ const CompleteList = () => {
           1
         );
       }
+
+      setStatusSelected({ id: "All", name: "All" });
     }
   }, [currentUser]);
 
