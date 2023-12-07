@@ -395,7 +395,7 @@ const JobInfo = () => {
                   jobDetails.status === "A" ||
                   jobDetails.status === "S") && (
                   <Link
-                    to="../customer-edit"
+                    to={`/jobs/${jobDetails.id}/customer-edit`}
                     className="text-xs leading-5 font-semibold bg-slate-400/10
                                 rounded-full p-2 text-slate-500
                                 flex items-center space-x-2 hover:bg-slate-400/20

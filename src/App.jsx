@@ -212,6 +212,10 @@ const App = () => {
                         <Route path="upload" element={<JobPhotoUpload />} />
                       </Route>
                       <Route path="edit" element={<EditJob />} />
+                      <Route
+                        path="customer-edit"
+                        element={<CustomerEditJob />}
+                      />
                       <Route path="activity" element={<JobActivityFeed />} />
                       <Route path="comments" element={<JobComments />} />
                       <Route path="services" element={<JobAssignments />} />

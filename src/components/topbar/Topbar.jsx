@@ -318,7 +318,9 @@ const Topbar = () => {
                             "px-3 py-2 rounded-md text-sm font-medium text-white"
                           )}
                         >
-                          Completed Jobs
+                          {currentUser.isCustomer
+                            ? "All Jobs"
+                            : "Completed Jobs"}
                         </Link>
 
                         {currentUser.enableEstimates && (
@@ -395,7 +397,9 @@ const Topbar = () => {
                             "px-3 py-2 rounded-md text-sm font-medium text-white"
                           )}
                         >
-                          Completed Jobs
+                          {currentUser.isCustomer
+                            ? "All Jobs"
+                            : "Completed Jobs"}
                         </Link>
                         <Link
                           to="inventory"
@@ -567,7 +571,9 @@ const Topbar = () => {
                             "px-3 py-2 rounded-md text-sm font-medium text-white"
                           )}
                         >
-                          Completed Jobs
+                          {currentUser.isCustomer
+                            ? "All Jobs"
+                            : "Completed Jobs"}
                         </Link>
                         <Link
                           to="inventory"
@@ -802,7 +808,7 @@ const Topbar = () => {
                         "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
                       )}
                     >
-                      Completed Jobs
+                      {currentUser.isCustomer ? "All Jobs" : "Completed Jobs"}
                     </Disclosure.Button>
                   </Link>
 
@@ -905,7 +911,7 @@ const Topbar = () => {
                         "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
                       )}
                     >
-                      Completed Jobs
+                      {currentUser.isCustomer ? "All Jobs" : "Completed Jobs"}
                     </Disclosure.Button>
                   </Link>
                   <Link to="inventory">
@@ -1073,7 +1079,7 @@ const Topbar = () => {
                         "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
                       )}
                     >
-                      Completed Jobs
+                      {currentUser.isCustomer ? "All Jobs" : "Completed Jobs"}
                     </Disclosure.Button>
                   </Link>
                   <Link to="inventory">

@@ -2036,25 +2036,23 @@ const CompleteList = () => {
                                   paddingBottom: "2px",
                                 }}
                                 className={`inline-flex text-xs text-white rounded-md px-1
-                                                                ${
-                                                                  job.status ===
-                                                                    "C" &&
-                                                                  "bg-green-500 "
-                                                                }
-                                                                ${
-                                                                  job.status ===
-                                                                    "T" &&
-                                                                  "bg-gray-600 "
-                                                                }
-                                                                ${
-                                                                  job.status ===
-                                                                    "I" &&
-                                                                  "bg-blue-500 "
-                                                                }
+                                ${job.status === "A" && "bg-blue-400 "}
+                                  ${job.status === "S" && "bg-yellow-500 "}
+                                  ${job.status === "U" && "bg-indigo-500 "}
+                                  ${job.status === "W" && "bg-green-500 "}
+                                  ${job.status === "C" && "bg-green-500 "}
+                                  ${job.status === "T" && "bg-gray-600 "}
+                                  ${job.status === "R" && "bg-purple-500 "}
+                                  ${job.status === "I" && "bg-blue-500 "}
                                                                 `}
                               >
+                                {job.status === "A" && "Accepted"}
+                                {job.status === "S" && "Assigned"}
+                                {job.status === "U" && "Submitted"}
+                                {job.status === "W" && "In Progress"}
                                 {job.status === "C" && "Completed"}
                                 {job.status === "T" && "Canceled"}
+                                {job.status === "R" && "Review"}
                                 {job.status === "I" && "Invoiced"}
                               </p>
                             </td>
