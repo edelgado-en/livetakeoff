@@ -891,9 +891,11 @@ const UserDetails = () => {
                       <div className="flex-1">
                         <div className="font-medium text-xl">Airports</div>
                         <div className="text-md text-gray-500 mt-1">
-                          Manage airports. This user will only be available for
-                          job assignment if the job is in any of the airports in
-                          the available list.
+                          Manage airports. For Internal Coordinators, only the
+                          specified airports will be taking into consideration
+                          when creating jobs, reports, and airport listings. If
+                          none specified, all airports will be taking into
+                          consideration.
                         </div>
                       </div>
                       <div>
