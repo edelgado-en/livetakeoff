@@ -147,25 +147,6 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const XMarkIcon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-6 h-6 text-white"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M6 18L18 6M6 6l12 12"
-      />
-    </svg>
-  );
-};
-
 const Bars3Icon = () => {
   return (
     <svg
@@ -267,112 +248,6 @@ const Topbar = () => {
                   style={{ top: "12px" }}
                 >
                   <div className="flex space-x-4">
-                    {currentUser.isProjectManager && (
-                      <>
-                        <Link
-                          to="/jobs"
-                          className={classNames(
-                            location.pathname.includes("jobs")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Jobs
-                        </Link>
-                        {currentUser.showInventory && (
-                          <Link
-                            to="inventory"
-                            className={classNames(
-                              location.pathname.includes("inventory")
-                                ? "bg-red-700"
-                                : " hover:bg-red-700 hover:text-white",
-                              "px-3 py-2 rounded-md text-sm font-medium text-white"
-                            )}
-                          >
-                            Inventory
-                          </Link>
-                        )}
-                      </>
-                    )}
-
-                    {currentUser.isCustomer && (
-                      <>
-                        <Link
-                          to="/home"
-                          className={classNames(
-                            location.pathname.includes("home")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Home
-                        </Link>
-                        <Link
-                          to="/completed"
-                          className={classNames(
-                            location.pathname.includes("completed")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          {currentUser.isCustomer
-                            ? "All Jobs"
-                            : "Completed Jobs"}
-                        </Link>
-
-                        {currentUser.enableEstimates && (
-                          <Link
-                            to="/estimates"
-                            className={classNames(
-                              location.pathname.includes("estimates")
-                                ? "bg-red-700"
-                                : " hover:bg-red-700 hover:text-white",
-                              "px-3 py-2 rounded-md text-sm font-medium text-white"
-                            )}
-                          >
-                            Estimates
-                          </Link>
-                        )}
-
-                        <Link
-                          to="/tail-report"
-                          className={classNames(
-                            location.pathname.includes("tail-report")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Tail Report
-                        </Link>
-                        <Link
-                          to="/service-report"
-                          className={classNames(
-                            location.pathname.includes("service-report")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Service Report
-                        </Link>
-                        <Link
-                          to="/contact"
-                          className={classNames(
-                            location.pathname.includes("contact")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Contact Us
-                        </Link>
-                      </>
-                    )}
-
                     {(currentUser.isAdmin ||
                       currentUser.isSuperUser ||
                       currentUser.isAccountManager) && (
@@ -657,6 +532,112 @@ const Topbar = () => {
                         </Popover>
                       </>
                     )}
+
+                    {currentUser.isProjectManager && (
+                      <>
+                        <Link
+                          to="/jobs"
+                          className={classNames(
+                            location.pathname.includes("jobs")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Jobs
+                        </Link>
+                        {currentUser.showInventory && (
+                          <Link
+                            to="inventory"
+                            className={classNames(
+                              location.pathname.includes("inventory")
+                                ? "bg-red-700"
+                                : " hover:bg-red-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium text-white"
+                            )}
+                          >
+                            Inventory
+                          </Link>
+                        )}
+                      </>
+                    )}
+
+                    {currentUser.isCustomer && (
+                      <>
+                        <Link
+                          to="/home"
+                          className={classNames(
+                            location.pathname.includes("home")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Home
+                        </Link>
+                        <Link
+                          to="/completed"
+                          className={classNames(
+                            location.pathname.includes("completed")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          {currentUser.isCustomer
+                            ? "All Jobs"
+                            : "Completed Jobs"}
+                        </Link>
+
+                        {currentUser.enableEstimates && (
+                          <Link
+                            to="/estimates"
+                            className={classNames(
+                              location.pathname.includes("estimates")
+                                ? "bg-red-700"
+                                : " hover:bg-red-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium text-white"
+                            )}
+                          >
+                            Estimates
+                          </Link>
+                        )}
+
+                        <Link
+                          to="/tail-report"
+                          className={classNames(
+                            location.pathname.includes("tail-report")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Tail Report
+                        </Link>
+                        <Link
+                          to="/service-report"
+                          className={classNames(
+                            location.pathname.includes("service-report")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Service Report
+                        </Link>
+                        <Link
+                          to="/contact"
+                          className={classNames(
+                            location.pathname.includes("contact")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          Contact Us
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -785,107 +766,6 @@ const Topbar = () => {
           {/* Mobile */}
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
-              {currentUser.isCustomer && (
-                <>
-                  <Link to="/home">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("home")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      Home
-                    </Disclosure.Button>
-                  </Link>
-                  <Link to="/completed">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("completed")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      {currentUser.isCustomer ? "All Jobs" : "Completed Jobs"}
-                    </Disclosure.Button>
-                  </Link>
-
-                  {currentUser.enableEstimates && (
-                    <Link to="/estimates">
-                      <Disclosure.Button
-                        className={classNames(
-                          location.pathname.includes("estimates")
-                            ? "bg-red-700"
-                            : "hover:bg-red-700 hover:text-white",
-                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                        )}
-                      >
-                        Estimates
-                      </Disclosure.Button>
-                    </Link>
-                  )}
-
-                  <Link to="/tail-report">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("tail-report")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      Tail Report
-                    </Disclosure.Button>
-                  </Link>
-
-                  <Link to="/contact">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("contact")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      Contact Us
-                    </Disclosure.Button>
-                  </Link>
-                </>
-              )}
-
-              {currentUser.isProjectManager && (
-                <>
-                  <Link to="jobs">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("jobs")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      Jobs
-                    </Disclosure.Button>
-                  </Link>
-                  {currentUser.showInventory && (
-                    <Link to="inventory">
-                      <Disclosure.Button
-                        className={classNames(
-                          location.pathname.includes("inventory")
-                            ? "bg-red-700"
-                            : "hover:bg-red-700 hover:text-white",
-                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                        )}
-                      >
-                        Inventory
-                      </Disclosure.Button>
-                    </Link>
-                  )}
-                </>
-              )}
-
               {(currentUser.isAdmin ||
                 currentUser.isSuperUser ||
                 currentUser.isAccountManager) && (
@@ -1124,6 +1004,107 @@ const Topbar = () => {
                       ))}
                     </nav>
                   </div>
+                </>
+              )}
+
+              {currentUser.isProjectManager && (
+                <>
+                  <Link to="jobs">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("jobs")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      Jobs
+                    </Disclosure.Button>
+                  </Link>
+                  {currentUser.showInventory && (
+                    <Link to="inventory">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("inventory")
+                            ? "bg-red-700"
+                            : "hover:bg-red-700 hover:text-white",
+                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                        )}
+                      >
+                        Inventory
+                      </Disclosure.Button>
+                    </Link>
+                  )}
+                </>
+              )}
+
+              {currentUser.isCustomer && (
+                <>
+                  <Link to="/home">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("home")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      Home
+                    </Disclosure.Button>
+                  </Link>
+                  <Link to="/completed">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("completed")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      {currentUser.isCustomer ? "All Jobs" : "Completed Jobs"}
+                    </Disclosure.Button>
+                  </Link>
+
+                  {currentUser.enableEstimates && (
+                    <Link to="/estimates">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("estimates")
+                            ? "bg-red-700"
+                            : "hover:bg-red-700 hover:text-white",
+                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                        )}
+                      >
+                        Estimates
+                      </Disclosure.Button>
+                    </Link>
+                  )}
+
+                  <Link to="/tail-report">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("tail-report")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      Tail Report
+                    </Disclosure.Button>
+                  </Link>
+
+                  <Link to="/contact">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("contact")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      Contact Us
+                    </Disclosure.Button>
+                  </Link>
                 </>
               )}
             </div>
