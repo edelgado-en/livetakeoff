@@ -150,7 +150,11 @@ const JobInfo = () => {
     }
 
     try {
-      await api.getTailDetails(jobId);
+      const r = {
+        jobId: jobId,
+      };
+
+      await api.getTailNoteLookup(r);
 
       setTailDetailsFound(true);
     } catch (err) {

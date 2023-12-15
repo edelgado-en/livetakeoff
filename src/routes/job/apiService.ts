@@ -180,6 +180,10 @@ export const getTailDetails = (id: number) => {
     return httpService.get(`/api/tail-alerts/${id}/`);
 }
 
+export const getTailNoteLookup = (data: any) => {
+    return httpService.post(`/api/tail-note-lookup`, data);
+}
+
 export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
