@@ -248,9 +248,9 @@ const Topbar = () => {
                   style={{ top: "12px" }}
                 >
                   <div className="flex space-x-4">
-                    {(currentUser.isAdmin ||
-                      currentUser.isSuperUser ||
-                      currentUser.isAccountManager) && (
+                    {currentUser.isAdmin ||
+                    currentUser.isSuperUser ||
+                    currentUser.isAccountManager ? (
                       <>
                         <Link
                           to="/jobs"
@@ -422,9 +422,7 @@ const Topbar = () => {
                           )}
                         </Popover>
                       </>
-                    )}
-
-                    {currentUser.isInternalCoordinator && (
+                    ) : currentUser.isInternalCoordinator ? (
                       <>
                         <Link
                           to="/jobs"
@@ -531,9 +529,7 @@ const Topbar = () => {
                           )}
                         </Popover>
                       </>
-                    )}
-
-                    {currentUser.isProjectManager && (
+                    ) : currentUser.isProjectManager ? (
                       <>
                         <Link
                           to="/jobs"
@@ -560,9 +556,7 @@ const Topbar = () => {
                           </Link>
                         )}
                       </>
-                    )}
-
-                    {currentUser.isCustomer && (
+                    ) : currentUser.isCustomer ? (
                       <>
                         <Link
                           to="/home"
@@ -637,7 +631,7 @@ const Topbar = () => {
                           Contact Us
                         </Link>
                       </>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -766,9 +760,9 @@ const Topbar = () => {
           {/* Mobile */}
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
-              {(currentUser.isAdmin ||
-                currentUser.isSuperUser ||
-                currentUser.isAccountManager) && (
+              {currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ? (
                 <>
                   <Link to="jobs">
                     <Disclosure.Button
@@ -934,9 +928,7 @@ const Topbar = () => {
                     </nav>
                   </div>
                 </>
-              )}
-
-              {currentUser.isInternalCoordinator && (
+              ) : currentUser.isInternalCoordinator ? (
                 <>
                   <Link to="jobs">
                     <Disclosure.Button
@@ -1005,9 +997,7 @@ const Topbar = () => {
                     </nav>
                   </div>
                 </>
-              )}
-
-              {currentUser.isProjectManager && (
+              ) : currentUser.isProjectManager ? (
                 <>
                   <Link to="jobs">
                     <Disclosure.Button
@@ -1036,9 +1026,7 @@ const Topbar = () => {
                     </Link>
                   )}
                 </>
-              )}
-
-              {currentUser.isCustomer && (
+              ) : currentUser.isCustomer ? (
                 <>
                   <Link to="/home">
                     <Disclosure.Button
@@ -1106,7 +1094,7 @@ const Topbar = () => {
                     </Disclosure.Button>
                   </Link>
                 </>
-              )}
+              ) : null}
             </div>
           </Disclosure.Panel>
         </>
