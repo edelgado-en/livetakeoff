@@ -372,25 +372,27 @@ const EditJob = () => {
                 </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Price
-                </label>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    value={price}
-                    onChange={(e) => handleSetPrice(e.target.value)}
-                    name="price"
-                    id="price"
-                    className="block w-full rounded-md border-gray-300 shadow-sm
-                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                  />
+              {currentUser.canSeePrice && (
+                <div>
+                  <label
+                    htmlFor="price"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Price
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      type="text"
+                      value={price}
+                      onChange={(e) => handleSetPrice(e.target.value)}
+                      name="price"
+                      id="price"
+                      className="block w-full rounded-md border-gray-300 shadow-sm
+                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="mt-1">
                 <Listbox value={selectedStatus} onChange={setSelectedStatus}>
