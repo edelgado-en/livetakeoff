@@ -162,6 +162,52 @@ const JobInfo = () => {
     }
   };
 
+  const completeJob = async (
+    status,
+    hoursWorked,
+    minutesWorked,
+    numberOfWorkers
+  ) => {
+    setCompleteJobModalOpen(false);
+    setIsCancelJobModalOpen(false);
+
+    setLoading(true);
+
+    const request = {
+      status,
+      hours_worked: hoursWorked,
+      minutes_worked: minutesWorked,
+      number_of_workers: numberOfWorkers,
+    };
+
+    try {
+      await api.completeJob(jobId, request);
+
+      const updatedJobDetails = {
+        ...jobDetails,
+        status,
+        service_assignments: jobDetails.service_assignments?.map((s) => {
+          s = { ...s, status };
+          return s;
+        }),
+        retainer_service_assignments:
+          jobDetails.retainer_service_assignments?.map((s) => {
+            s = { ...s, status };
+            return s;
+          }),
+      };
+
+      setJobDetails(updatedJobDetails);
+
+      setLoading(false);
+
+      navigate("/jobs");
+    } catch (e) {
+      toast.error("Unable to update job status.");
+      setLoading(false);
+    }
+  };
+
   // it could W(Work In Progress) or C(completed) or T(Cancelled)
   const updateJobStatus = async (status) => {
     setCompleteJobModalOpen(false);
@@ -816,6 +862,31 @@ const JobInfo = () => {
                       : "Not provided"}
                   </dd>
                 </div>
+
+                {(currentUser.isAdmin ||
+                  currentUser.isSuperUser ||
+                  currentUser.isAccountManager ||
+                  currentUser.isInternalCoordinator) && (
+                  <>
+                    <div className="sm:col-span-1">
+                      <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                        Time Spent
+                      </dt>
+                      <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
+                        {jobDetails.hours_worked} hours{" "}
+                        {jobDetails.minutes_worked} minutes
+                      </dd>
+                    </div>
+                    <div className="sm:col-span-1">
+                      <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
+                        Number of Workers
+                      </dt>
+                      <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
+                        {jobDetails.number_of_workers}
+                      </dd>
+                    </div>
+                  </>
+                )}
               </dl>
             </>
           )}
@@ -1379,7 +1450,7 @@ const JobInfo = () => {
           isOpen={isCompleteJobModalOpen}
           jobDetails={jobDetails}
           handleClose={handleToggleJobCompleteModal}
-          updateJobStatus={updateJobStatus}
+          completeJob={completeJob}
         />
       )}
 

@@ -1988,6 +1988,14 @@ const CompleteList = () => {
                                 Price
                               </th>
                             )}
+                          {(currentUser.isAdmin ||
+                            currentUser.isSuperUser ||
+                            currentUser.isAccountManager ||
+                            currentUser.isInternalCoordinator) && (
+                            <th className="whitespace-nowrap px-8 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                              Labor Time
+                            </th>
+                          )}
                           <th className="relative whitespace-nowrap py-2 pl-3 pr-4 sm:pr-6"></th>
                         </tr>
                       </thead>
@@ -2039,7 +2047,7 @@ const CompleteList = () => {
                                 ${job.status === "A" && "bg-blue-400 "}
                                   ${job.status === "S" && "bg-yellow-500 "}
                                   ${job.status === "U" && "bg-indigo-500 "}
-                                  ${job.status === "W" && "bg-green-500 "}
+                                  ${job.status === "W" && "bg-gr een-500 "}
                                   ${job.status === "C" && "bg-green-500 "}
                                   ${job.status === "T" && "bg-gray-600 "}
                                   ${job.status === "R" && "bg-purple-500 "}
@@ -2056,17 +2064,27 @@ const CompleteList = () => {
                                 {job.status === "I" && "Invoiced"}
                               </p>
                             </td>
-                            <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                              {!currentUser.isInternalCoordinator &&
-                                currentUser.canSeePrice && (
+                            {!currentUser.isInternalCoordinator &&
+                              currentUser.canSeePrice && (
+                                <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
                                   <div className="flex gap-1">
                                     {"$"}
                                     {job.price
                                       ? job.price.toLocaleString()
                                       : "0.00"}
                                   </div>
-                                )}
-                            </td>
+                                </td>
+                              )}
+
+                            {(currentUser.isAdmin ||
+                              currentUser.isSuperUser ||
+                              currentUser.isAccountManager ||
+                              currentUser.isInternalCoordinator) && (
+                              <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
+                                {job.labor_time} hr
+                              </td>
+                            )}
+
                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
                               <button
                                 type="button"

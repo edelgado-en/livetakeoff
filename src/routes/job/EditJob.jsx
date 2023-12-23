@@ -82,6 +82,10 @@ const EditJob = () => {
   const [estimatedDepartureDate, setEstimatedDepartureDate] = useState(null);
   const [completeByDate, setCompleteByDate] = useState(null);
 
+  const [hoursWorked, setHoursWorked] = useState(0);
+  const [minutesWorked, setMinutesWorked] = useState(0);
+  const [numberOfWorkers, setNumberOfWorkers] = useState(1);
+
   const [estimatedArrivalDateOpen, setEstimatedArrivalDateOpen] =
     useState(false);
   const [estimatedDepartureDateOpen, setEstimatedDepartureDateOpen] =
@@ -147,6 +151,9 @@ const EditJob = () => {
       setTailNumber(response.data.tailNumber);
       setPrice(response.data.price);
       setCustomerPurchaseOrder(response.data.customer_purchase_order);
+      setHoursWorked(response.data.hours_worked);
+      setMinutesWorked(response.data.minutes_worked);
+      setNumberOfWorkers(response.data.number_of_workers);
 
       if (response.data.requested_by) {
         setRequestedBy(response.data.requested_by);
@@ -238,6 +245,9 @@ const EditJob = () => {
       requested_by: requested_by,
       customer_purchase_order: customer_purchase_order,
       tags: selectedTagIds,
+      hours_worked: parseInt(hoursWorked),
+      minutes_worked: parseInt(minutesWorked),
+      number_of_workers: parseInt(numberOfWorkers),
     };
 
     try {
@@ -278,6 +288,27 @@ const EditJob = () => {
     const value = e.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
 
     setPrice(value);
+  };
+
+  const handleSetNumberOfWorkers = (value) => {
+    //it can only be a positive number
+    if (value >= 0) {
+      setNumberOfWorkers(value);
+    }
+  };
+
+  const handleSetHoursWorked = (value) => {
+    //it can only be a positive number
+    if (value >= 0) {
+      setHoursWorked(value);
+    }
+  };
+
+  const handleSetMinutesWorked = (value) => {
+    //it can only be a positive number
+    if (value >= 0) {
+      setMinutesWorked(value);
+    }
   };
 
   const handleSetOnSite = () => {
@@ -1248,6 +1279,66 @@ const EditJob = () => {
                 currentUser.isInternalCoordinator ||
                 currentUser.isAccountManager) && (
                 <>
+                  <div>
+                    <label
+                      htmlFor="tailNumber"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Hours Worked
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        value={hoursWorked}
+                        onChange={(e) => handleSetHoursWorked(e.target.value)}
+                        name="hours"
+                        id="hours"
+                        className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="tailNumber"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Minutes Worked
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        value={minutesWorked}
+                        onChange={(e) => handleSetMinutesWorked(e.target.value)}
+                        name="minutes"
+                        id="minutes"
+                        className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="tailNumber"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Number of Workers
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        value={numberOfWorkers}
+                        onChange={(e) =>
+                          handleSetNumberOfWorkers(e.target.value)
+                        }
+                        name="workers"
+                        id="workers"
+                        className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+
                   <div className="text-sm leading-5 font-medium text-gray-700">
                     Tags
                   </div>
