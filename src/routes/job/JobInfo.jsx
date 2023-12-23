@@ -873,8 +873,12 @@ const JobInfo = () => {
                         Time Spent
                       </dt>
                       <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
-                        {jobDetails.hours_worked} hours{" "}
-                        {jobDetails.minutes_worked} minutes
+                        {jobDetails.hours_worked ? jobDetails.hours_worked : 0}{" "}
+                        hours{" "}
+                        {jobDetails.minutes_worked
+                          ? jobDetails.minutes_worked
+                          : 0}{" "}
+                        minutes
                       </dd>
                     </div>
                     <div className="sm:col-span-1">
@@ -882,7 +886,9 @@ const JobInfo = () => {
                         Number of Workers
                       </dt>
                       <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
-                        {jobDetails.number_of_workers}
+                        {jobDetails.number_of_workers
+                          ? jobDetails.number_of_workers
+                          : 0}
                       </dd>
                     </div>
                   </>
