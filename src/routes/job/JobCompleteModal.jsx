@@ -84,6 +84,12 @@ const JobCompleteModal = ({ isOpen, handleClose, completeJob, jobDetails }) => {
       return;
     }
 
+    //if numberOfPeople is empty
+    if (numberOfPeople === "") {
+      alert("Please enter the number of people that worked on this job.");
+      return;
+    }
+
     completeJob("C", hoursWorked, minutesWorked, numberOfPeople);
   };
 
