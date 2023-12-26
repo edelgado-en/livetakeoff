@@ -90,7 +90,11 @@ const JobCompleteModal = ({ isOpen, handleClose, completeJob, jobDetails }) => {
       return;
     }
 
-    completeJob("C", hoursWorked, minutesWorked, numberOfPeople);
+    const totalMinutes = hoursWorked * 60 + minutesWorked;
+    const totalHours = totalMinutes / 60;
+    const laborTime = totalHours * numberOfPeople;
+
+    completeJob("C", hoursWorked, minutesWorked, numberOfPeople, laborTime);
   };
 
   return (

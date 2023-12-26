@@ -230,6 +230,10 @@ const EditJob = () => {
     const selectedTags = tags.filter((tag) => tag.selected === true);
     const selectedTagIds = selectedTags.map((tag) => tag.id);
 
+    const totalMinutes = parseInt(hoursWorked) * 60 + parseInt(minutesWorked);
+    const totalHours = totalMinutes / 60;
+    const laborTime = totalHours * numberOfWorkers;
+
     const request = {
       tailNumber,
       price,
@@ -248,6 +252,7 @@ const EditJob = () => {
       hours_worked: parseInt(hoursWorked),
       minutes_worked: parseInt(minutesWorked),
       number_of_workers: parseInt(numberOfWorkers),
+      labor_time: laborTime,
     };
 
     try {

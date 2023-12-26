@@ -166,7 +166,8 @@ const JobInfo = () => {
     status,
     hoursWorked,
     minutesWorked,
-    numberOfWorkers
+    numberOfWorkers,
+    laborTime
   ) => {
     setCompleteJobModalOpen(false);
     setIsCancelJobModalOpen(false);
@@ -178,6 +179,7 @@ const JobInfo = () => {
       hours_worked: hoursWorked,
       minutes_worked: minutesWorked,
       number_of_workers: numberOfWorkers,
+      labor_time: laborTime,
     };
 
     try {

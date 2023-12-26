@@ -2081,7 +2081,8 @@ const CompleteList = () => {
                               currentUser.isAccountManager ||
                               currentUser.isInternalCoordinator) && (
                               <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                                {job.labor_time} hr
+                                {job.labor_time ? job.labor_time.toFixed(1) : 0}{" "}
+                                hr
                               </td>
                             )}
 
