@@ -151,9 +151,15 @@ const EditJob = () => {
       setTailNumber(response.data.tailNumber);
       setPrice(response.data.price);
       setCustomerPurchaseOrder(response.data.customer_purchase_order);
-      setHoursWorked(response.data.hours_worked);
-      setMinutesWorked(response.data.minutes_worked);
-      setNumberOfWorkers(response.data.number_of_workers);
+      setHoursWorked(
+        response.data.hours_worked ? response.data.hours_worked : 0
+      );
+      setMinutesWorked(
+        response.data.minutes_worked ? response.data.minutes_worked : 0
+      );
+      setNumberOfWorkers(
+        response.data.number_of_workers ? response.data.number_of_workers : 0
+      );
 
       if (response.data.requested_by) {
         setRequestedBy(response.data.requested_by);
