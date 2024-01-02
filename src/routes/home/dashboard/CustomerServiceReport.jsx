@@ -246,7 +246,9 @@ export default function CustomerServiceReport() {
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
-      generateRetainerServiceReport(selectedRetainerService);
+      if (isRetainerServicesSelected) {
+        generateRetainerServiceReport(selectedRetainerService);
+      }
     }, 300);
 
     return () => {
