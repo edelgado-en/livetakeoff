@@ -2047,7 +2047,7 @@ const CompleteList = () => {
                                 ${job.status === "A" && "bg-blue-400 "}
                                   ${job.status === "S" && "bg-yellow-500 "}
                                   ${job.status === "U" && "bg-indigo-500 "}
-                                  ${job.status === "W" && "bg-gr een-500 "}
+                                  ${job.status === "W" && "bg-green-500 "}
                                   ${job.status === "C" && "bg-green-500 "}
                                   ${job.status === "T" && "bg-gray-600 "}
                                   ${job.status === "R" && "bg-purple-500 "}
