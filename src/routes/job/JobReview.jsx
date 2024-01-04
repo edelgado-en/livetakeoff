@@ -313,7 +313,8 @@ const JobReview = () => {
                     {(currentUser.isAdmin ||
                       currentUser.isSuperUser ||
                       currentUser.isAccountManager ||
-                      currentUser.isInternalCoordinator) && (
+                      (currentUser.isInternalCoordinator &&
+                        jobDetails.status !== "I")) && (
                       <>
                         <Menu.Item>
                           {({ active }) => (
