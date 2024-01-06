@@ -401,7 +401,7 @@ const TeamProductivity = () => {
 
         {!loading && (
           <>
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-blue-400 border-2">
@@ -450,6 +450,9 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
+            </dl>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2 m-auto xl:w-8/12 lg:w-8/12">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
