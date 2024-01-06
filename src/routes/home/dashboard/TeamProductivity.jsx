@@ -482,7 +482,11 @@ const TeamProductivity = () => {
                 </dt>
                 <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
                   <p className="text-2xl font-semibold text-gray-900">
-                    {productivityData.total_labor_time?.toLocaleString()} hr
+                    {productivityData.total_labor_time?.toLocaleString(
+                      "en-US",
+                      { minimumFractionDigits: 1, maximumFractionDigits: 1 }
+                    )}{" "}
+                    hr
                   </p>
                 </dd>
               </div>
@@ -623,7 +627,14 @@ const TeamProductivity = () => {
                               <div className="flex justify-between text-gray-500 text-sm">
                                 <div className="flex-1">Labor Time</div>
                                 <div className="text-right">
-                                  {user.total_labor_time?.toLocaleString()} hr
+                                  {user.total_labor_time?.toLocaleString(
+                                    "en-US",
+                                    {
+                                      minimumFractionDigits: 1,
+                                      maximumFractionDigits: 1,
+                                    }
+                                  )}{" "}
+                                  hr
                                 </div>
                               </div>
                               <div className="flex justify-between text-gray-500 text-sm">
