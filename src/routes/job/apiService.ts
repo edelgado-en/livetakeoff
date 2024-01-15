@@ -120,6 +120,10 @@ export const createJob = (formData: any) => {
     })
 }
 
+export const createJobSchedule = (data: any) => {
+    return httpService.post('/api/jobs/schedules/create', data)
+}
+
 export const getAirports = (request: any) => {
     return httpService.post(`/api/airports`, request);
 }

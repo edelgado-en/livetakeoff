@@ -526,22 +526,41 @@ const JobsQueue = () => {
                 currentUser.isAccountManager ||
                 currentUser.isCustomer ||
                 currentUser.isInternalCoordinator) && (
-                <Link to="/create-job">
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center 
+                <>
+                  {!currentUser.isCustomer && (
+                    <Link to="/create-schedule">
+                      <button
+                        type="button"
+                        className="items-center justify-center 
+                                    rounded-md bg-white px-4 py-2.5
+                                    text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                                    sm:w-auto mr-4 hidden xl:inline-flex lg:inline-flex md:inline-flex "
+                      >
+                        <PlusIcon
+                          className="-ml-1 mr-2 h-4 w-4"
+                          aria-hidden="true"
+                        />
+                        New Schedule
+                      </button>
+                    </Link>
+                  )}
+                  <Link to="/create-job">
+                    <button
+                      type="button"
+                      className="inline-flex items-center justify-center 
                               rounded-md border border-transparent bg-red-600 px-4 py-2
                               text-sm font-medium text-white shadow-sm hover:bg-red-700
                               focus:outline-none focus:ring-2 focus:ring-red-500
                               focus:ring-offset-2 sm:w-auto"
-                  >
-                    <PlusIcon
-                      className="-ml-1 mr-2 h-4 w-4"
-                      aria-hidden="true"
-                    />
-                    New Job
-                  </button>
-                </Link>
+                    >
+                      <PlusIcon
+                        className="-ml-1 mr-2 h-4 w-4"
+                        aria-hidden="true"
+                      />
+                      New Job
+                    </button>
+                  </Link>
+                </>
               )}
             </div>
           </div>

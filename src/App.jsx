@@ -82,6 +82,8 @@ import CreateEstimate from "./routes/estimates/CreateEstimate";
 import Estimates from "./routes/estimates/Estimates";
 import EstimateDetail from "./routes/estimates/EstimateDetail";
 
+import CreateJobSchedule from "./routes/job/CreateJobSchedule";
+
 import SharedLayout from "./routes/shared/SharedLayout";
 import SharedJob from "./routes/shared/SharedJob";
 import ShareJobEstimate from "./routes/shared/SharedJobEstimate";
@@ -196,6 +198,12 @@ const App = () => {
                     <Route path="retainers" element={<RetainerCustomers />} />
 
                     <Route path="create-job" element={<CreateJob />} />
+
+                    <Route
+                      path="create-schedule"
+                      element={<CreateJobSchedule />}
+                    />
+
                     <Route
                       path="create-job/:estimateId"
                       element={<CreateJob />}
