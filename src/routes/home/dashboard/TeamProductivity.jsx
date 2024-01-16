@@ -24,6 +24,25 @@ import * as api from "./apiService";
 import AnimatedPage from "../../../components/animatedPage/AnimatedPage";
 import Loader from "../../../components/loader/Loader";
 
+const MagnifyingGlassIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+      />
+    </svg>
+  );
+};
+
 const ChevronUpDownIcon = () => {
   return (
     <svg
@@ -106,6 +125,8 @@ const TeamProductivity = () => {
   const [productivityData, setProductivityData] = useState({});
   const [dateSelected, setDateSelected] = useState(dateOptions[3]);
 
+  const [searchText, setSearchText] = useState("");
+
   const [customers, setCustomers] = useState([]);
   const [customerSelected, setCustomerSelected] = useState(null);
   const [customerSearchTerm, setCustomerSearchTerm] = useState("");
@@ -122,7 +143,7 @@ const TeamProductivity = () => {
 
   useEffect(() => {
     getTeamProductivityStats();
-  }, [dateSelected, customerSelected]);
+  }, [dateSelected, customerSelected, searchText]);
 
   const getCustomers = async () => {
     try {
@@ -143,6 +164,7 @@ const TeamProductivity = () => {
       const { data } = await api.getTeamProductivityStats({
         dateSelected: dateSelected.id,
         customer_id: customerSelected ? customerSelected.id : null,
+        tailNumber: searchText,
       });
 
       setProductivityData(data);
@@ -157,6 +179,14 @@ const TeamProductivity = () => {
   const handleClearCustomerSearchFilter = () => {
     setCustomerSearchTerm("");
     setCustomerSelected(null);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      getTeamProductivityStats();
+    }
   };
 
   return (
@@ -394,7 +424,37 @@ const TeamProductivity = () => {
               )}
             </Listbox>
           </div>
-          <div></div>
+          <div>
+            <label htmlFor="search" className="sr-only">
+              Search
+            </label>
+            <div className="relative rounded-md shadow-sm">
+              <div
+                onClick={() => getTeamProductivityStats()}
+                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+              >
+                <MagnifyingGlassIcon
+                  className="h-5 w-5 text-gray-400 cursor-pointer"
+                  aria-hidden="true"
+                />
+              </div>
+              <input
+                type="search"
+                name="search"
+                id="search"
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+                onKeyDown={handleKeyDown}
+                className={`block w-full rounded-md pl-10 text-md ${
+                  searchText.length > 0
+                    ? "border-sky-500 focus:border-sky-500 focus:ring-sky-500 border-2"
+                    : "border-gray-200  focus:border-sky-500 focus:ring-sky-500"
+                } 
+                                 `}
+                placeholder="Search by tail..."
+              />
+            </div>
+          </div>
         </div>
 
         {loading && <Loader />}
