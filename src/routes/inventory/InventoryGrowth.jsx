@@ -48,7 +48,7 @@ const ChevronUpDownIcon = () => {
 
 const years = [
   { id: 2023, name: "2023" },
-  /* { id: 2024, name: "2024" }, */
+  { id: 2024, name: "2024" },
 ];
 
 const timeBreakdowns = [
