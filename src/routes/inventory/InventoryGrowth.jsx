@@ -61,7 +61,7 @@ const InventoryGrowth = () => {
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState([]);
   const [locationSelected, setLocationSelected] = useState(null);
-  const [yearSelected, setYearSelected] = useState(years[0]);
+  const [yearSelected, setYearSelected] = useState(years[1]);
   const [timeBreakdownSelected, setTimeBreakdownSelected] = useState(
     timeBreakdowns[2]
   );
