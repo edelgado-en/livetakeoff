@@ -8,7 +8,9 @@ import * as api from "./apiService";
 import ReactTimeAgo from "react-time-ago";
 import Pagination from "react-js-pagination";
 
-import DeleteEstimateModal from "./DeleteEstimateModal";
+import DeleteScheduleModal from "./DeleteScheduleModal";
+
+import { toast } from "react-toastify";
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -29,28 +31,19 @@ const MagnifyingGlassIcon = () => {
   );
 };
 
-const availableStatuses = [
-  { id: "All", name: "All" },
-  { id: "P", name: "Pending" },
-  { id: "A", name: "Accepted" },
-  { id: "R", name: "Rejected" },
-];
-
-const Estimates = () => {
+const JobSchedules = () => {
   const [loading, setLoading] = useState(true);
-  const [estimates, setEstimates] = useState([]);
-  const [searchText, setSearchText] = useState(
-    localStorage.getItem("estimateSearchText") || ""
-  );
-  const [totalEstimates, setTotalEstimates] = useState(0);
-  const [isDeleteEstimateModalOpen, setDeleteEstimateModalOpen] =
+  const [schedules, setSchedules] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [totalSchedules, setTotalSchedules] = useState(0);
+  const [isDeleteScheduleModalOpen, setDeleteScheduleModalOpen] =
     useState(false);
-  const [estimateToBeDeleted, setEstimateToBeDeleted] = useState(null);
+  const [scheduleToBeDeleted, setScheduleToBeDeleted] = useState(null);
 
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
-      searchEstimates();
+      searchSchedules();
     }, 300);
 
     return () => {
@@ -58,24 +51,18 @@ const Estimates = () => {
     };
   }, [searchText]);
 
-  useEffect(() => {
-    localStorage.setItem("estimateSearchText", searchText);
-  }, [searchText]);
-
-  const searchEstimates = async () => {
+  const searchSchedules = async () => {
     setLoading(true);
 
     const request = {
-      status: "All",
-      customer: "All",
-      searchText: localStorage.getItem("estimateSearchText"),
+      tailNumber: searchText,
     };
 
     try {
-      const { data } = await api.searchEstimates(request);
+      const { data } = await api.getJobSchedules(request);
 
-      setEstimates(data.results);
-      setTotalEstimates(data.count);
+      setSchedules(data.results);
+      setTotalSchedules(data.count);
 
       setLoading(false);
     } catch (error) {
@@ -87,26 +74,32 @@ const Estimates = () => {
     if (event.key === "Enter") {
       event.preventDefault();
 
-      searchEstimates();
+      searchSchedules();
     }
   };
 
-  const handleToggleDeleteEstimateModal = (estimate) => {
-    if (estimate) {
-      setEstimateToBeDeleted(estimate);
+  const handleToggleDeleteScheduleModal = (schedule) => {
+    if (schedule) {
+      setScheduleToBeDeleted(schedule);
     } else {
-      setEstimateToBeDeleted(null);
+      setScheduleToBeDeleted(null);
     }
 
-    setDeleteEstimateModalOpen(!isDeleteEstimateModalOpen);
+    setDeleteScheduleModalOpen(!isDeleteScheduleModalOpen);
   };
 
-  const deleteEstimate = async (estimate) => {
-    await api.deleteEstimate(estimate.id);
+  const deleteSchedule = async (schedule) => {
+    const request = {
+      is_deleted: true,
+    };
 
-    setDeleteEstimateModalOpen(false);
+    await api.updateJobSchedule(schedule.id, request);
 
-    searchEstimates();
+    toast.success("Schedule deleted!");
+
+    setDeleteScheduleModalOpen(false);
+
+    searchSchedules();
   };
 
   return (
@@ -115,14 +108,14 @@ const Estimates = () => {
         <div className="grid grid-cols-2">
           <div className="">
             <h1 className="text-2xl font-semibold text-gray-600">
-              Job Estimates
+              Job Schedules
             </h1>
             <p className="mt-1 text-sm text-gray-500">
-              Total: <span className="text-gray-900">{totalEstimates}</span>
+              Total: <span className="text-gray-900">{totalSchedules}</span>
             </p>
           </div>
           <div className="text-right">
-            <Link to="/create-estimate">
+            <Link to="/create-schedule">
               <button
                 type="button"
                 className="inline-flex items-center justify-center 
@@ -131,7 +124,7 @@ const Estimates = () => {
                                         focus:outline-none focus:ring-2 focus:ring-red-500
                                         focus:ring-offset-2 sm:w-auto"
               >
-                New Estimate
+                New Schedule
               </button>
             </Link>
           </div>
@@ -140,7 +133,7 @@ const Estimates = () => {
         <div className="w-full mt-4">
           <div className="relative border-b border-gray-200">
             <div
-              onClick={() => searchEstimates()}
+              onClick={() => searchSchedules()}
               className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
             >
               <MagnifyingGlassIcon
@@ -164,7 +157,7 @@ const Estimates = () => {
 
         {loading && <Loader />}
 
-        {!loading && estimates.length === 0 && (
+        {!loading && schedules.length === 0 && (
           <div className="text-center mt-14 ">
             <svg
               className="mx-auto h-12 w-12 text-gray-400"
@@ -182,10 +175,10 @@ const Estimates = () => {
               />
             </svg>
             <h3 className="mt-2 text-sm font-medium text-gray-900">
-              No estimates found
+              No schedules found
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              Get started by creating a new estimate.
+              Get started by creating a new job schedule.
             </p>
           </div>
         )}
@@ -193,44 +186,40 @@ const Estimates = () => {
         {!loading && (
           <div className="overflow-hidden bg-white shadow sm:rounded-md mt-2">
             <ul className="divide-y divide-gray-200">
-              {estimates.map((estimate) => (
-                <li key={estimate.id}>
+              {schedules.map((schedule) => (
+                <li key={schedule.id}>
                   <div className="block hover:bg-gray-50">
                     <div className="flex items-center px-4 py-4 sm:px-6">
                       <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                         <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
                           <div>
-                            <Link to={`/estimates/${estimate.id}`} className="">
+                            <Link to={`/schedules/${schedule.id}`} className="">
                               <span className="font-medium text-red-600 text-sm">
-                                {estimate.tailNumber}
+                                {schedule.tailNumber}
                               </span>
                               <span className="text-sm">
                                 {" "}
-                                - {estimate?.aircraftType?.name}
+                                - {schedule?.aircraftType?.name}
                               </span>
                               <span className="ml-2 text-xs text-gray-500">
-                                <ReactTimeAgo
-                                  date={new Date(estimate?.requested_at)}
-                                  locale="en-US"
-                                  timeStyle="twitter"
-                                />
+                                {schedule.created_at}
                               </span>
                             </Link>
 
                             <div className="text-sm text-gray-800 mt-2 flex gap-1">
-                              {estimate.customer.name}
+                              {schedule.customer?.name}
                             </div>
 
                             <div className="mt-2 text-sm text-gray-500 mb-1">
-                              {estimate?.airport?.initials} -{" "}
-                              {estimate?.fbo?.name}
+                              {schedule?.airport?.initials} -{" "}
+                              {schedule?.fbo?.name}
                             </div>
                           </div>
                           <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
-                            {estimate.status !== "A" && (
+                            {schedule.status !== "A" && (
                               <p
                                 onClick={() =>
-                                  handleToggleDeleteEstimateModal(estimate)
+                                  handleToggleDeleteScheduleModal(schedule)
                                 }
                                 className={`cursor-pointer mr-3 inline-flex text-xs text-gray-700 rounded-md py-1 px-2 border b-gray-700 hover:bg-gray-100`}
                               >
@@ -238,33 +227,26 @@ const Estimates = () => {
                               </p>
                             )}
                             <p
-                              className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                              className={`inline-flex text-xs text-white rounded-md py-1 px-2 font-medium
                                                                 ${
-                                                                  estimate.status ===
-                                                                    "P" &&
-                                                                  "bg-blue-400 "
+                                                                  schedule.is_recurrent &&
+                                                                  "bg-green-400 "
                                                                 }
                                                                 ${
-                                                                  estimate.status ===
-                                                                    "A" &&
-                                                                  "bg-green-500 "
+                                                                  !schedule.is_recurrent &&
+                                                                  "bg-blue-500 "
                                                                 }
-                                                                ${
-                                                                  estimate.status ===
-                                                                    "R" &&
-                                                                  "bg-gray-500 "
-                                                                }
+
                                                                 `}
                             >
-                              {estimate.status === "P" && "Pending"}
-                              {estimate.status === "A" && "Approved"}
-                              {estimate.status === "R" && "Rejected"}
+                              {schedule.is_recurrent && "Recurrent"}
+                              {!schedule.is_recurrent && "One Time"}
                             </p>
                             <div className="flex -space-x-1 overflow-hidden justify-start xl:justify-end lg:justify-end md:justify-end mt-2">
-                              {estimate?.requested_by?.profile?.avatar && (
+                              {schedule?.requested_by?.profile?.avatar && (
                                 <img
                                   className="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                                  src={estimate?.requested_by?.profile?.avatar}
+                                  src={schedule?.requested_by?.profile?.avatar}
                                   alt="requested by"
                                 />
                               )}
@@ -272,27 +254,22 @@ const Estimates = () => {
                                 className="text-gray-500 text-sm relative top-1"
                                 style={{ marginLeft: "6px" }}
                               >
-                                {estimate?.requested_by?.username}
+                                {schedule?.requested_by?.username}
                               </div>
                             </div>
-                            <div className="text-sm text-gray-500 mt-2 flex xl:justify-end xs:justify-start">
-                              {estimate.job && (
-                                <span>
-                                  <BriefcaseIcon
-                                    className="mr-2 h-4 w-4 text-gray-500 relative"
-                                    style={{ top: "2px" }}
-                                  />
-                                </span>
+                            <div className="text-sm text-gray-500 mt-2 flex-col xl:justify-end xs:justify-start">
+                              Starts on: {schedule.start_date}
+                              {schedule.is_recurrent && (
+                                <div>
+                                  Repeats every {schedule.repeat_every} days
+                                </div>
                               )}
-                              <span className="text-gray-700">
-                                ${estimate?.total_price.toLocaleString()}
-                              </span>
                             </div>
                           </div>
                         </div>
                       </div>
                       <Link
-                        to={`/estimates/${estimate.id}`}
+                        to={`/schedules/${schedule.id}`}
                         className="ml-5 flex-shrink-0"
                       >
                         <ChevronRightIcon
@@ -308,12 +285,12 @@ const Estimates = () => {
           </div>
         )}
 
-        {isDeleteEstimateModalOpen && (
-          <DeleteEstimateModal
-            isOpen={isDeleteEstimateModalOpen}
-            handleClose={handleToggleDeleteEstimateModal}
-            deleteEstimate={deleteEstimate}
-            fee={estimateToBeDeleted}
+        {isDeleteScheduleModalOpen && (
+          <DeleteScheduleModal
+            isOpen={isDeleteScheduleModalOpen}
+            handleClose={handleToggleDeleteScheduleModal}
+            deleteSchedule={deleteSchedule}
+            schedule={scheduleToBeDeleted}
           />
         )}
       </div>
@@ -321,4 +298,4 @@ const Estimates = () => {
   );
 };
 
-export default Estimates;
+export default JobSchedules;

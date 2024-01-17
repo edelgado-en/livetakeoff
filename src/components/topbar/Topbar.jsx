@@ -22,6 +22,7 @@ import {
   ArchiveIcon,
   BellIcon,
   PaperAirplaneIcon,
+  ClockIcon,
 } from "@heroicons/react/outline";
 import logo from "../../images/logo_2618936_web.png";
 import whiteLogo from "../../images/logo_white-no-text.png";
@@ -140,6 +141,12 @@ const moreOptions = [
     description: "Associate FBOs with airports.",
     href: "/airports",
     icon: PaperAirplaneIcon,
+  },
+  {
+    name: "Job Schedules",
+    description: "Create and manage job schedules.",
+    href: "/jobs/schedules",
+    icon: ClockIcon,
   },
 ];
 

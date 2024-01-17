@@ -83,6 +83,7 @@ import Estimates from "./routes/estimates/Estimates";
 import EstimateDetail from "./routes/estimates/EstimateDetail";
 
 import CreateJobSchedule from "./routes/job/CreateJobSchedule";
+import JobSchedules from "./routes/job/JobSchedules";
 
 import SharedLayout from "./routes/shared/SharedLayout";
 import SharedJob from "./routes/shared/SharedJob";
@@ -203,6 +204,8 @@ const App = () => {
                       path="create-schedule"
                       element={<CreateJobSchedule />}
                     />
+
+                    <Route path="jobs/schedules" element={<JobSchedules />} />
 
                     <Route
                       path="create-job/:estimateId"

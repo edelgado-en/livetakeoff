@@ -124,6 +124,14 @@ export const createJobSchedule = (data: any) => {
     return httpService.post('/api/jobs/schedules/create', data)
 }
 
+export const getJobSchedules = (data: any) => {
+    return httpService.post('/api/jobs/schedules', data)
+}
+
+export const updateJobSchedule = (id: number, data: any) => {
+    return httpService.patch(`/api/jobs/schedules/${id}/`, data)
+}
+
 export const getAirports = (request: any) => {
     return httpService.post(`/api/airports`, request);
 }
