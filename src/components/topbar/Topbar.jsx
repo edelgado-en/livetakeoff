@@ -819,6 +819,18 @@ const Topbar = () => {
                       Estimates
                     </Disclosure.Button>
                   </Link>
+                  <Link to="jobs/schedules">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("schedules")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      Job Schedules
+                    </Disclosure.Button>
+                  </Link>
                   <Link to="customers">
                     <Disclosure.Button
                       className={classNames(
