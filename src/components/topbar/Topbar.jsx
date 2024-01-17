@@ -394,10 +394,10 @@ const Topbar = () => {
                               >
                                 <Popover.Panel
                                   onMouseLeave={() => setShowMoreMenu(false)}
-                                  className="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2"
+                                  className="absolute z-10 -ml-4 mt-3 w-screen max-w-6xl transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2"
                                 >
                                   <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                                    <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                    <div className="relative grid grid-cols-3 gap-y-6 gap-x-24 bg-white px-5 py-12 sm:gap-8 sm:p-8">
                                       {moreOptions.map((item) => (
                                         <button
                                           key={item.name}
@@ -405,13 +405,13 @@ const Topbar = () => {
                                             handleMoreLink(item.href)
                                           }
                                           to={item.href}
-                                          className="-m-3 flex items-start rounded-lg px-3 py-4 hover:bg-gray-50"
+                                          className="-m-3 flex-col gap-6 items-start rounded-lg px-3 py-4 hover:bg-gray-50"
                                         >
                                           <item.icon
-                                            className="h-6 w-6 flex-shrink-0 text-red-600"
+                                            className="h-8 w-8 flex-shrink-0 text-red-500"
                                             aria-hidden="true"
                                           />
-                                          <div className="ml-4 text-left">
+                                          <div className="text-left mt-2">
                                             <p className="text-base font-medium text-gray-900">
                                               {item.name}
                                             </p>
