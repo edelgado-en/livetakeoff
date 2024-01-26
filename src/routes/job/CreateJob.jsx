@@ -202,7 +202,9 @@ const CreateJob = () => {
         if (
           data.services.length > 0 &&
           estimateId === undefined &&
-          !currentUser.isCustomer
+          (currentUser.isAdmin ||
+            currentUser.isSuperUser ||
+            currentUser.isAccountManager)
         ) {
           const updatedInteriorServices = interiorServices.map((s) => {
             if (
@@ -248,7 +250,12 @@ const CreateJob = () => {
         }
 
         // Do not update retainer services for customer users
-        if (data.retainer_services.length > 0 && !currentUser.isCustomer) {
+        if (
+          data.retainer_services.length > 0 &&
+          (currentUser.isAdmin ||
+            currentUser.isSuperUser ||
+            currentUser.isAccountManager)
+        ) {
           const updatedInteriorRetainerServices = interiorRetainerServices.map(
             (s) => {
               if (
