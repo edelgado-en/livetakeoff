@@ -124,6 +124,7 @@ const CreateJob = () => {
   const [aircraftSearchTerm, setAircraftSearchTerm] = useState("");
   const [airportSearchTerm, setAirportSearchTerm] = useState("");
   const [fboSearchTerm, setFboSearchTerm] = useState("");
+  const [customerPurchaseOrder, setCustomerPurchaseOrder] = useState("");
 
   const currentUser = useAppSelector(selectUser);
 
@@ -597,6 +598,7 @@ const CreateJob = () => {
     formData.append("comment", comment);
     formData.append("on_site", onSite);
     formData.append("requested_by", requestedBy);
+    formData.append("customer_purchase_order", customerPurchaseOrder);
 
     if (estimateId) {
       formData.append("estimate_id", estimateId);
@@ -1926,6 +1928,30 @@ const CreateJob = () => {
                             </div>
                           </div>
                         )}
+                      </div>
+                    </div>
+                  )}
+
+                  {!currentUser.isCustomer && (
+                    <div>
+                      <label
+                        htmlFor="customerPurchaseOrder"
+                        className={`text-lg font-bold text-gray-400 uppercase tracking-wide text--gray-500`}
+                      >
+                        Customer Purchase Order
+                      </label>
+                      <div className="mt-1">
+                        <input
+                          type="text"
+                          value={customerPurchaseOrder}
+                          onChange={(e) =>
+                            setCustomerPurchaseOrder(e.target.value)
+                          }
+                          name="customerPurchaseOrder"
+                          id="customerPurchaseOrder"
+                          className="block w-full rounded-md border-gray-300 shadow-sm
+                                            focus:border-sky-500 focus:ring-sky-500 sm:text-lg"
+                        />
                       </div>
                     </div>
                   )}
