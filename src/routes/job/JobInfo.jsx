@@ -60,6 +60,8 @@ const JobInfo = () => {
 
   const [showMore, setShowMore] = useState(false);
   const [showServiceActivity, setShowServiceActivity] = useState(false);
+  const [showServices, setShowServices] = useState(true);
+  const [showRetainers, setShowRetainers] = useState(true);
 
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -96,6 +98,11 @@ const JobInfo = () => {
       const { data } = await api.getJobDetails(jobId);
 
       setJobDetails(data);
+
+      if (data.status === "C" || data.status === "I") {
+        setShowServices(false);
+        setShowRetainers(false);
+      }
 
       setLoading(false);
 
@@ -911,144 +918,160 @@ const JobInfo = () => {
 
           <div className="border-t-2 border-gray-300 my-8"></div>
 
-          <div className="mx-auto mt-8 max-w-5xl pb-8">
+          <div className="mx-auto mt-8 max-w-5xl pb-4">
             <div className="flex flex-wrap justify-between">
               <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
                 Services
               </h2>
               <div className="flex gap-4 text-right">
-                <Switch.Group as="li" className="flex items-center">
-                  <div className="flex flex-col">
-                    <Switch.Label
-                      as="p"
-                      className="text-md xl:text-lg text-gray-500"
-                      passive
-                    >
-                      {showActions ? "Hide Actions" : "Show Actions"}
-                    </Switch.Label>
-                  </div>
-                  <Switch
-                    checked={showActions}
-                    onChange={setShowActions}
-                    className={classNames(
-                      showActions ? "bg-red-500" : "bg-gray-200",
-                      "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                    )}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={classNames(
-                        showActions ? "translate-x-5" : "translate-x-0",
-                        "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                {showServices && (
+                  <>
+                    <Switch.Group as="li" className="flex items-center">
+                      <div className="flex flex-col">
+                        <Switch.Label
+                          as="p"
+                          className="text-md xl:text-lg text-gray-500"
+                          passive
+                        >
+                          {showActions ? "Hide Actions" : "Show Actions"}
+                        </Switch.Label>
+                      </div>
+                      <Switch
+                        checked={showActions}
+                        onChange={setShowActions}
+                        className={classNames(
+                          showActions ? "bg-red-500" : "bg-gray-200",
+                          "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        )}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={classNames(
+                            showActions ? "translate-x-5" : "translate-x-0",
+                            "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                          )}
+                        />
+                      </Switch>
+                    </Switch.Group>
+                    {currentUser.isCustomer &&
+                      (jobDetails.status === "A" ||
+                        jobDetails.status === "U") && (
+                        <button
+                          type="button"
+                          onClick={handleToggleAddServiceModal}
+                          className="inline-flex items-center rounded-md border border-gray-300
+                                                    bg-white px-4 py-2 text-lg font-bold text-gray-700 shadow-sm
+                                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                        >
+                          <PlusIcon
+                            className="-ml-2 mr-1 h-4 w-4 text-gray-400"
+                            aria-hidden="true"
+                          />
+                          <span>Add</span>
+                        </button>
                       )}
-                    />
-                  </Switch>
-                </Switch.Group>
-                {currentUser.isCustomer &&
-                  (jobDetails.status === "A" || jobDetails.status === "U") && (
-                    <button
-                      type="button"
-                      onClick={handleToggleAddServiceModal}
-                      className="inline-flex items-center rounded-md border border-gray-300
-                                            bg-white px-4 py-2 text-lg font-bold text-gray-700 shadow-sm
-                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                    >
-                      <PlusIcon
-                        className="-ml-2 mr-1 h-4 w-4 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span>Add</span>
-                    </button>
-                  )}
+                  </>
+                )}
+                <div
+                  onClick={() => setShowServices(!showServices)}
+                  className="text-md xl:text-xl text-sky-500 cursor-pointer font-semibold"
+                >
+                  {showServices ? "Hide" : "Show"}
+                </div>
               </div>
             </div>
 
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-1">
-              {jobDetails.service_assignments?.length === 0 && (
-                <div className="text-xl text-gray-500">None</div>
-              )}
+            {showServices && (
+              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-1">
+                {jobDetails.service_assignments?.length === 0 && (
+                  <div className="text-xl text-gray-500">None</div>
+                )}
 
-              {jobDetails.service_assignments?.map((service) => (
-                <div
-                  key={service.id}
-                  className="relative flex space-x-3 rounded-lg
-                                        border border-gray-300 bg-white px-6 py-5 shadow-sm
-                                        hover:border-gray-400"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="focus:outline-none">
-                      <div className="grid grid-cols-3 text-md xl:text-xl pb-2">
-                        <div className="col-span-2 font-bold text-gray-900 relative top-1">
-                          {service.name}
-                        </div>
-                        <div className="text-right">
-                          {currentUser.isCustomer &&
-                            (jobDetails.status === "A" ||
-                              jobDetails.status === "U") && (
-                              <div className="flex justify-end">
-                                <TrashIcon
-                                  onClick={() => removeService(service)}
-                                  className="h-10 w-10 text-gray-400 cursor-pointer"
-                                />
+                {jobDetails.service_assignments?.map((service) => (
+                  <div
+                    key={service.id}
+                    className="relative flex space-x-3 rounded-lg
+                                            border border-gray-300 bg-white px-6 py-5 shadow-sm
+                                            hover:border-gray-400"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="focus:outline-none">
+                        <div className="grid grid-cols-3 text-md xl:text-xl pb-2">
+                          <div className="col-span-2 font-bold text-gray-900 relative top-1">
+                            {service.name}
+                          </div>
+                          <div className="text-right">
+                            {currentUser.isCustomer &&
+                              (jobDetails.status === "A" ||
+                                jobDetails.status === "U") && (
+                                <div className="flex justify-end">
+                                  <TrashIcon
+                                    onClick={() => removeService(service)}
+                                    className="h-10 w-10 text-gray-400 cursor-pointer"
+                                  />
+                                </div>
+                              )}
+
+                            {!currentUser.isCustomer &&
+                              service.status === "W" && (
+                                <button
+                                  type="button"
+                                  onClick={() => completeService(service.id)}
+                                  className="inline-flex items-center rounded border
+                                                                        border-gray-300 bg-white px-2.5 py-1.5 text-xl
+                                                                        font-bold text-sky-500 shadow-sm hover:bg-gray-50
+                                                                        focus:outline-none cursor-pointer focus:ring-2
+                                                                        focus:ring-red-500 focus:ring-offset-2"
+                                >
+                                  Complete
+                                </button>
+                              )}
+
+                            {service.status === "C" && (
+                              <div className="flex-shrink-0 flex justify-end">
+                                <CheckCircleIcon className="h-10 w-10 text-green-500" />
                               </div>
                             )}
-
-                          {!currentUser.isCustomer &&
-                            service.status === "W" && (
-                              <button
-                                type="button"
-                                onClick={() => completeService(service.id)}
-                                className="inline-flex items-center rounded border
-                                                                    border-gray-300 bg-white px-2.5 py-1.5 text-xl
-                                                                    font-bold text-sky-500 shadow-sm hover:bg-gray-50
-                                                                    focus:outline-none cursor-pointer focus:ring-2
-                                                                    focus:ring-red-500 focus:ring-offset-2"
-                              >
-                                Complete
-                              </button>
-                            )}
-
-                          {service.status === "C" && (
-                            <div className="flex-shrink-0 flex justify-end">
-                              <CheckCircleIcon className="h-10 w-10 text-green-500" />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {!currentUser.isProjectManager && (
-                        <div
-                          className="text-sm xl:text-xl mb-4 relative inline-flex items-center
-                                                            rounded-full border border-gray-300 px-3 py-0.5"
-                        >
-                          {service.project_manager}
-                        </div>
-                      )}
-
-                      {showActions &&
-                        service.checklist_actions?.map((action) => (
-                          <div
-                            key={action.id}
-                            className="text-sm xl:text-xl text-gray-500 py-1"
-                          >
-                            {action.name}
                           </div>
-                        ))}
+                        </div>
+
+                        {!currentUser.isProjectManager && (
+                          <div
+                            className="text-sm xl:text-xl mb-4 relative inline-flex items-center
+                                                                rounded-full border border-gray-300 px-3 py-0.5"
+                          >
+                            {service.project_manager}
+                          </div>
+                        )}
+
+                        {showActions &&
+                          service.checklist_actions?.map((action) => (
+                            <div
+                              key={action.id}
+                              className="text-sm xl:text-xl text-gray-500 py-1"
+                            >
+                              {action.name}
+                            </div>
+                          ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
+
+          <div className="border-t-2 border-gray-300 mb-4 mt-2"></div>
+
           {(currentUser.isAdmin ||
             currentUser.isProjectManager ||
             currentUser.isSuperUser ||
             currentUser.isAccountManager ||
             currentUser.isInternalCoordinator ||
             (currentUser.isCustomer && currentUser.isPremiumMember)) && (
-            <div className="mx-auto max-w-5xl pb-12">
-              <div className="flex justify-between">
-                <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
+            <div className="mx-auto max-w-5xl">
+              <div className="flex justify-between pb-4">
+                <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide mt-4">
                   Retainer Services
                 </h2>
                 {currentUser.isCustomer &&
@@ -1067,94 +1090,105 @@ const JobInfo = () => {
                       <span>Add</span>
                     </button>
                   )}
+                <div
+                  onClick={() => setShowRetainers(!showRetainers)}
+                  className="text-md xl:text-xl text-sky-500 cursor-pointer font-semibold relative top-2"
+                >
+                  {showRetainers ? "Hide" : "Show"}
+                </div>
               </div>
-              <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-1">
-                {jobDetails.retainer_service_assignments?.length === 0 && (
-                  <div className="text-xl text-gray-500">None</div>
-                )}
 
-                {jobDetails.retainer_service_assignments?.map((service) => (
-                  <div
-                    key={service.id}
-                    className="relative flex items-center space-x-3 rounded-lg
-                                            border border-gray-300 bg-white px-6 py-5 shadow-sm
-                                            hover:border-gray-400"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="">
-                        <div className="grid grid-cols-3 text-xl pb-2">
-                          <div className="col-span-2 font-bold text-gray-900 relative top-1">
-                            {service.name}
-                          </div>
-                          <div className="text-right">
-                            {currentUser.isCustomer &&
-                              (jobDetails.status === "A" ||
-                                jobDetails.status === "U") && (
-                                <div className="flex justify-end">
-                                  <TrashIcon
+              {showRetainers && (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 pb-8">
+                  {jobDetails.retainer_service_assignments?.length === 0 && (
+                    <div className="text-xl text-gray-500">None</div>
+                  )}
+
+                  {jobDetails.retainer_service_assignments?.map((service) => (
+                    <div
+                      key={service.id}
+                      className="relative flex items-center space-x-3 rounded-lg
+                                                border border-gray-300 bg-white px-6 py-5 shadow-sm
+                                                hover:border-gray-400"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="">
+                          <div className="grid grid-cols-3 text-xl pb-2">
+                            <div className="col-span-2 font-bold text-gray-900 relative top-1">
+                              {service.name}
+                            </div>
+                            <div className="text-right">
+                              {currentUser.isCustomer &&
+                                (jobDetails.status === "A" ||
+                                  jobDetails.status === "U") && (
+                                  <div className="flex justify-end">
+                                    <TrashIcon
+                                      onClick={() =>
+                                        removeRetainerService(service)
+                                      }
+                                      className="h-5 w-5 text-gray-400 cursor-pointer"
+                                    />
+                                  </div>
+                                )}
+
+                              {!currentUser.isCustomer &&
+                                service.status === "W" && (
+                                  <button
+                                    type="button"
                                     onClick={() =>
-                                      removeRetainerService(service)
+                                      completeRetainerService(service.id)
                                     }
-                                    className="h-5 w-5 text-gray-400 cursor-pointer"
-                                  />
+                                    className="inline-flex items-center rounded border
+                                                                        border-gray-300 bg-white px-2.5 py-1.5 text-xl
+                                                                        font-bold text-sky-500 shadow-sm hover:bg-gray-50
+                                                                        focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                  >
+                                    Complete
+                                  </button>
+                                )}
+
+                              {service.status === "C" && (
+                                <div className="flex-shrink-0 flex justify-end">
+                                  <CheckCircleIcon className="h-10 w-10 text-green-500" />
                                 </div>
                               )}
+                            </div>
+                          </div>
 
-                            {!currentUser.isCustomer &&
-                              service.status === "W" && (
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    completeRetainerService(service.id)
-                                  }
-                                  className="inline-flex items-center rounded border
-                                                                    border-gray-300 bg-white px-2.5 py-1.5 text-xl
-                                                                    font-bold text-sky-500 shadow-sm hover:bg-gray-50
-                                                                    focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                                >
-                                  Complete
-                                </button>
-                              )}
-
-                            {service.status === "C" && (
-                              <div className="flex-shrink-0 flex justify-end">
-                                <CheckCircleIcon className="h-10 w-10 text-green-500" />
+                          {!currentUser.isProjectManager &&
+                            !currentUser.isCustomer && (
+                              <div
+                                className="text-xl mb-4 relative inline-flex items-center
+                                                                    rounded-full border border-gray-300 px-3 py-0.5"
+                              >
+                                {service.project_manager}
                               </div>
                             )}
-                          </div>
+
+                          {showActions &&
+                            service.checklist_actions?.map((action) => (
+                              <div
+                                key={action.id}
+                                className="text-xl text-gray-500 py-1"
+                              >
+                                {action.name}
+                              </div>
+                            ))}
                         </div>
-
-                        {!currentUser.isProjectManager &&
-                          !currentUser.isCustomer && (
-                            <div
-                              className="text-xl mb-4 relative inline-flex items-center
-                                                                rounded-full border border-gray-300 px-3 py-0.5"
-                            >
-                              {service.project_manager}
-                            </div>
-                          )}
-
-                        {showActions &&
-                          service.checklist_actions?.map((action) => (
-                            <div
-                              key={action.id}
-                              className="text-xl text-gray-500 py-1"
-                            >
-                              {action.name}
-                            </div>
-                          ))}
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
+
+          <div className="border-t-2 border-gray-300 my-4"></div>
 
           {/* DESKTOP TAIL HISTORY */}
           {serviceActivities.length > 0 && (
             <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
-              <div className="flex justify-between">
+              <div className="flex justify-between mt-8">
                 <div className="text-2xl font-bold text-gray-600 uppercase tracking-wide">
                   Tail History
                   <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
@@ -1294,7 +1328,7 @@ const JobInfo = () => {
             </div>
 
             {jobDetails.files?.length === 0 && (
-              <div className="flex justify-center text-center mt-8">
+              <div className="flex justify-center text-center my-12 text-lg">
                 No file attachments found.
               </div>
             )}
