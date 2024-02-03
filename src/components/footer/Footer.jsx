@@ -128,7 +128,7 @@ const Footer = () => {
         src={logo}
         alt="Livetakeoff logo"
       />
-      <p className="mt-2 text-center text-sm leading-6 text-slate-500">
+      <p className="mt-2 text-center text-lg leading-6 text-slate-500">
         &#169; {getCurrentYear()} Livetakeoff. All rights reserved.
       </p>
       <div className="flex space-x-6 justify-center mt-6">
@@ -144,7 +144,7 @@ const Footer = () => {
         ))}
       </div>
       {!location.pathname.includes("shared") && (
-        <div className="mt-6 flex items-center justify-center space-x-4 text-sm font-medium leading-6 text-slate-700">
+        <div className="mt-6 flex items-center justify-center space-x-4 text-lg font-medium leading-6 text-slate-700">
           <Link to="/privacy-policy">Privacy policy</Link>
           <div className="h-4 w-px bg-slate-500/20"></div>
           <Link to="/terms-and-conditions">Terms and Conditions</Link>
