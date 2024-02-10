@@ -174,7 +174,10 @@ const JobReview = () => {
 
   return (
     <AnimatedPage>
-      <main className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl -mt-3">
+      <main
+        className="mx-auto px-4 pb-16 lg:pb-12 max-w-6xl -mt-3"
+        style={{ maxWidth: "1800px" }}
+      >
         <div className="flex flex-wrap gap-2">
           <div>
             <button
@@ -213,40 +216,6 @@ const JobReview = () => {
                 <>Share</>
               )}
             </button>
-
-            {jobDetails.status === "C" &&
-              (currentUser.isAdmin ||
-                currentUser.isSuperUser ||
-                currentUser.isAccountManager) && (
-                <>
-                  {currentUser.enableInvoices && (
-                    <button
-                      type="button"
-                      disabled={downloadLoading}
-                      onClick={() => invoiceJob()}
-                      className="inline-flex items-center rounded-md border mr-2
-                                            border-gray-300 bg-white px-3 py-2 text-xs font-medium 
-                                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
-                                            focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                    >
-                      Invoice
-                    </button>
-                  )}
-
-                  {/* <button
-                                type="button"
-                                disabled={downloadLoading}
-                                onClick={() => getJobCloseout()}
-                                className="inline-flex items-center justify-center 
-                                            rounded-md border border-transparent bg-red-600 px-3 py-2
-                                            text-xs font-medium text-white shadow-sm hover:bg-red-700
-                                            focus:outline-none focus:ring-2 focus:ring-red-500
-                                            focus:ring-offset-2 sm:w-auto"
-                            >
-                                {downloadLoading ? 'generating...' : 'Closeout'}
-                            </button>  */}
-                </>
-              )}
 
             <Menu
               as="div"
@@ -434,9 +403,9 @@ const JobReview = () => {
             <>
               <JobInfo />
 
-              {jobDetails.is_auto_priced && currentUser.canSeePrice && (
+              {/* {jobDetails.is_auto_priced && currentUser.canSeePrice && (
                 <JobPriceBreakdown />
-              )}
+              )} */}
             </>
           )}
 
@@ -450,7 +419,7 @@ const JobReview = () => {
             </div>
           </div>
         ) : (
-          <div className="max-w-5xl px-2">
+          <div className="max-w-7xl px-2" style={{ maxWidth: "2100px" }}>
             <Outlet />
           </div>
         )}

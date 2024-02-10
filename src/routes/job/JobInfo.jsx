@@ -7,6 +7,9 @@ import {
   PencilIcon,
   PlusIcon,
   PaperClipIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
 } from "@heroicons/react/outline";
 import { toast } from "react-toastify";
 import * as api from "./apiService";
@@ -56,16 +59,16 @@ const JobInfo = () => {
   const [showActions, setShowActions] = useState(false);
   const currentUser = useAppSelector(selectUser);
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const [showMore, setShowMore] = useState(false);
-  const [showServiceActivity, setShowServiceActivity] = useState(false);
-  const [showServices, setShowServices] = useState(true);
-  const [showRetainers, setShowRetainers] = useState(true);
+  const [showSpecialInstructions, setShowSpecialInstructions] = useState(false);
 
   const [isAdmin, setIsAdmin] = useState(false);
 
   const [tailDetailsFound, setTailDetailsFound] = useState(false);
+
+  const [priceBreakdown, setPriceBreakdown] = useState({});
+
+  const [steps, setSteps] = useState([]);
 
   useEffect(() => {
     getJobDetails();
@@ -77,6 +80,10 @@ const JobInfo = () => {
 
   const handleToggleJobCancelModal = () => {
     setIsCancelJobModalOpen(!isCancelJobModalOpen);
+  };
+
+  const handleToggleShowSpecialInstructions = () => {
+    setShowSpecialInstructions(!showSpecialInstructions);
   };
 
   const handleTogglePriceBreakdownModal = () => {
@@ -98,11 +105,6 @@ const JobInfo = () => {
       const { data } = await api.getJobDetails(jobId);
 
       setJobDetails(data);
-
-      if (data.status === "C" || data.status === "I") {
-        setShowServices(false);
-        setShowRetainers(false);
-      }
 
       setLoading(false);
 
@@ -154,6 +156,106 @@ const JobInfo = () => {
       } else {
         setErrorMessage("Unable to load job details.");
       }
+    }
+
+    try {
+      const { data } = await api.getJobPriceBreakdown(jobId);
+
+      setPriceBreakdown(data);
+    } catch (err) {
+      console.log(err);
+    }
+
+    try {
+      const { data } = await api.getJobActivities(jobId);
+
+      //get the data.results where the activity_type is "S"
+      const statusActivities = data.results.filter(
+        (s) => s.activity_type === "S"
+      );
+      const isSubmitted = statusActivities.some((s) => s.status === "U");
+      const isAccepted = statusActivities.some((s) => s.status === "A");
+      const isAssigned = statusActivities.some((s) => s.status === "S");
+      const isWIP = statusActivities.some((s) => s.status === "W");
+      const isCompleted = statusActivities.some((s) => s.status === "C");
+      const isInvoiced = statusActivities.some((s) => s.status === "I");
+
+      let statusSteps = [
+        { name: "Accepted", status: "upcoming", selected: false },
+        { name: "Assigned", status: "upcoming", selected: false },
+        { name: "WIP", status: "upcoming", selected: false },
+        { name: "Completed", status: "upcoming", selected: false },
+        { name: "Invoiced", status: "upcoming", selected: false },
+      ];
+
+      if (isSubmitted) {
+        //add the submitted step to the beginning of the steps array
+        statusSteps.unshift({
+          name: "Submitted",
+          status: "complete",
+          selected: false,
+        });
+      }
+
+      //if isInvoiced is true, all steps should have status complete and selected false
+      if (isInvoiced) {
+        statusSteps = statusSteps.map((s) => {
+          s = { ...s, status: "complete", selected: false };
+          return s;
+        });
+      } else if (isCompleted) {
+        // all the steps except the last one should have status complete and selected false
+        statusSteps = statusSteps.map((s, index) => {
+          if (index < statusSteps.length - 1) {
+            s = { ...s, status: "complete", selected: false };
+          }
+          return s;
+        });
+      } else if (isWIP) {
+        // all the steps except the last two should have status complete and selected false
+        statusSteps = statusSteps.map((s, index) => {
+          if (index < statusSteps.length - 3) {
+            s = { ...s, status: "complete", selected: false };
+          }
+          return s;
+        });
+
+        //search for step with name WIP and set status to current
+        statusSteps = statusSteps.map((s) => {
+          if (s.name === "WIP") {
+            s = { ...s, status: "current", selected: true };
+          }
+          return s;
+        });
+      } else if (isAssigned) {
+        // all the steps except the last three should have status complete and selected false
+        statusSteps = statusSteps.map((s, index) => {
+          if (index < statusSteps.length - 3) {
+            s = { ...s, status: "complete", selected: false };
+          }
+          return s;
+        });
+      } else if (isAccepted) {
+        // all the steps except the last four should have status complete and selected false
+        statusSteps = statusSteps.map((s, index) => {
+          if (index < statusSteps.length - 4) {
+            s = { ...s, status: "complete", selected: false };
+          }
+          return s;
+        });
+      } else if (isSubmitted) {
+        // all the steps except the last five should have status complete and selected false
+        statusSteps = statusSteps.map((s, index) => {
+          if (index < statusSteps.length - 5) {
+            s = { ...s, status: "complete", selected: false };
+          }
+          return s;
+        });
+      }
+
+      setSteps(statusSteps);
+    } catch (err) {
+      toast.error("Unable to get job status");
     }
 
     try {
@@ -247,6 +349,8 @@ const JobInfo = () => {
 
       if (status === "C") {
         navigate("/jobs");
+      } else {
+        navigate(0);
       }
     } catch (e) {
       toast.error("Unable to update job status.");
@@ -334,6 +438,8 @@ const JobInfo = () => {
       ),
     };
 
+    toast.success("Service removed!.");
+
     setJobDetails(updatedJobDetails);
   };
 
@@ -347,6 +453,8 @@ const JobInfo = () => {
           (s) => s.id !== service.id
         ),
     };
+
+    toast.success("Retainer removed!.");
 
     setJobDetails(updatedJobDetails);
   };
@@ -425,9 +533,17 @@ const JobInfo = () => {
       };
 
       setJobDetails(updatedJobDetails);
+
+      toast.success("File deleted!.");
     } catch (err) {
       toast.error("Unable to delete file.");
     }
+  };
+
+  const invoiceJob = async () => {
+    await api.invoiceJob(jobId, { status: "I" });
+
+    navigate(0);
   };
 
   return (
@@ -441,133 +557,17 @@ const JobInfo = () => {
       )}
 
       {!loading && errorMessage == null && (
-        <div className="mt-6 max-w-5xl px-2">
-          <div className="flex justify-between">
-            <div className="">
-              <h1 className="text-2xl xl:text-3xl font-bold text-gray-700">
-                Job Details
-              </h1>
-            </div>
-            <div>
-              {currentUser.isCustomer &&
-                (jobDetails.status === "U" ||
-                  jobDetails.status === "A" ||
-                  jobDetails.status === "S") && (
-                  <Link
-                    to={`/jobs/${jobDetails.id}/customer-edit`}
-                    className="text-xs leading-5 font-semibold bg-slate-400/10
-                                rounded-full p-2 text-slate-500
-                                flex items-center space-x-2 hover:bg-slate-400/20
-                                dark:highlight-white/5"
-                  >
-                    <PencilIcon className="h-5 w-5 cursor-pointer" />
-                  </Link>
-                )}
-            </div>
-          </div>
-
-          {currentUser.isCustomer &&
-            (jobDetails.status === "U" ||
-              jobDetails.status === "A" ||
-              jobDetails.status === "R" ||
-              jobDetails.status === "S") && (
-              <div className="mt-4 mb-4">
-                <button
-                  type="button"
-                  onClick={() => handleToggleJobCancelModal()}
-                  className="inline-flex items-center rounded-md border
-                                         border-gray-300 bg-white px-4 py-2 text-xl font-bold
-                                          text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
-                                           focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                >
-                  Cancel Job
-                </button>
-              </div>
-            )}
-
-          {!currentUser.isCustomer && (
-            <div className="mt-4 mb-4">
-              {jobDetails.status === "S" && (
-                <div className="flex gap-4">
-                  <button
-                    type="button"
-                    onClick={() => updateJobStatus("W")}
-                    className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-600 px-4 py-2 text-lg
-                                        font-bold text-white shadow-sm hover:bg-red-700
-                                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
-                  >
-                    Accept Job
-                  </button>
-                  {currentUser.isProjectManager && (
-                    <button
-                      type="button"
-                      onClick={() => handleToggleJobReturnModal()}
-                      className="rounded bg-white px-4 py-2 text-lg text-gray-900
-                                                 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      Return Job
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {jobDetails.status === "U" && (
-                <button
-                  type="button"
-                  onClick={() => updateJobStatus("A")}
-                  className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-600 px-4 py-2 text-lg
-                                        font-bold text-white shadow-sm hover:bg-red-700
-                                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
-                >
-                  Accept Job
-                </button>
-              )}
-
-              {jobDetails.status === "W" && (
-                <button
-                  type="button"
-                  onClick={() => handleToggleJobCompleteModal()}
-                  className="inline-flex items-center justify-center rounded-md
-                                        border border-transparent bg-red-500 px-4 py-2 text-lg
-                                        font-bold text-white shadow-sm hover:bg-red-700
-                                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
-                >
-                  Complete Job
-                </button>
-              )}
-            </div>
-          )}
-
-          <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Tail Number
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900 flex gap-1">
+        <div className="mt-6 w-full px-2">
+          <div className="flex flex-wrap justify-between gap-y-6 gap-x-14">
+            <div className=" w-72">
+              <h1 className="text-xl xl:text-2xl font-bold text-gray-700">
                 {jobDetails.tailNumber}
-                {tailDetailsFound && (
-                  <Link
-                    to={`/jobs/${jobDetails.id}/tail-details`}
-                    className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
-                  >
-                    details
-                    <ArrowRightIcon
-                      className="h-5 w-5 relative"
-                      style={{ top: "3px" }}
-                    />
-                  </Link>
-                )}
-              </dd>
+              </h1>
+              <div className="mt-1 text-md">{jobDetails.customer?.name}</div>
             </div>
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Status
-              </dt>
-              <dd>
-                <div
-                  className={`mt-1 text-xl text-white rounded-md py-1 px-2 inline-block
+            <div className="flex-1">
+              <div
+                className={`xs:block sm:block xl:hidden lg:hidden md:hidden mt-1 text-xl text-white rounded-md py-2 px-4 inline-block 
                                         ${
                                           jobDetails.status === "A" &&
                                           "bg-blue-500"
@@ -599,289 +599,784 @@ const JobInfo = () => {
                                         ${
                                           jobDetails.status === "T" &&
                                           "bg-gray-700"
-                                        }
-                                        `}
+                                        }`}
+              >
+                {jobDetails.status === "A" && "Accepted"}
+                {jobDetails.status === "S" && "Assigned"}
+                {jobDetails.status === "U" && "Submitted"}
+                {jobDetails.status === "W" && "WIP"}
+                {jobDetails.status === "C" && "Complete"}
+                {jobDetails.status === "T" && "Canceled"}
+                {jobDetails.status === "R" && "Review"}
+                {jobDetails.status === "I" && "Invoiced"}
+              </div>
+
+              {jobDetails.status !== "T" && (
+                <nav
+                  aria-label="Progress"
+                  className="hidden md:block lg:block xl:block"
                 >
-                  {jobDetails.status === "A" && "Accepted"}
-                  {jobDetails.status === "S" && "Assigned"}
-                  {jobDetails.status === "U" && "Submitted"}
-                  {jobDetails.status === "W" && "Work In Progress"}
-                  {jobDetails.status === "C" && "Complete"}
-                  {jobDetails.status === "T" && "Canceled"}
-                  {jobDetails.status === "R" && "Review"}
-                  {jobDetails.status === "I" && "Invoiced"}
+                  <ol className="divide-y divide-gray-300 rounded-md border border-gray-300 md:flex md:divide-y-0">
+                    {steps.map((step, stepIdx) => (
+                      <li key={stepIdx} className="relative md:flex md:flex-1">
+                        {step.status === "complete" ? (
+                          <button className="group flex w-full items-center">
+                            <span className="flex items-center py-2 px-6 text-sm font-medium">
+                              <span
+                                className="flex h-10 w-10 flex-shrink-0 items-center justify-center
+                                                rounded-full bg-green-500 group-hover:bg-green-700"
+                              >
+                                <CheckIcon
+                                  className="h-6 w-6 text-white"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                              <span className="ml-2 text-md font-medium text-gray-900">
+                                {step.name}
+                              </span>
+                            </span>
+                          </button>
+                        ) : step.status === "current" ? (
+                          <button
+                            className="flex items-center py-2 px-6 text-sm font-medium"
+                            aria-current="step"
+                          >
+                            <span
+                              className="flex h-10 w-10 flex-shrink-0 items-center justify-center
+                                                        rounded-full border-2 border-blue-600"
+                            >
+                              <span className="text-blue-600">
+                                {stepIdx + 1}
+                              </span>
+                            </span>
+                            <span className="ml-2 text-md font-medium text-blue-600">
+                              {step.name}
+                            </span>
+                          </button>
+                        ) : (
+                          <button className="group flex items-center">
+                            <span className="flex items-center py-2 px-6 text-sm font-medium">
+                              <span
+                                className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full
+                                                            border-2 border-gray-300 group-hover:border-gray-400"
+                              >
+                                <span className="text-gray-500 group-hover:text-gray-900">
+                                  {stepIdx + 1}
+                                </span>
+                              </span>
+                              <span className="ml-2 text-md font-medium text-gray-500 group-hover:text-gray-900">
+                                {step.name}
+                              </span>
+                            </span>
+                          </button>
+                        )}
+
+                        {stepIdx !== steps.length - 1 ? (
+                          <>
+                            <div
+                              className="absolute top-0 right-0 hidden h-full w-5 md:block"
+                              aria-hidden="true"
+                            >
+                              <svg
+                                className="h-full w-full text-gray-300"
+                                viewBox="0 0 22 80"
+                                fill="none"
+                                preserveAspectRatio="none"
+                              >
+                                <path
+                                  d="M0 -2L20 40L0 82"
+                                  vectorEffect="non-scaling-stroke"
+                                  stroke="currentcolor"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </div>
+                          </>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              )}
+
+              {jobDetails.status === "T" && (
+                <div className="hidden md:block lg:block xl:block bg-gray-700 mt-1 text-xl text-white rounded-md py-2 px-4 w-32">
+                  Cancelled
                 </div>
-              </dd>
+              )}
             </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Airport
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.airport?.name}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Tags
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.tags?.length === 0 && (
-                  <span className="text-gray-900">None</span>
+            <div className="relative top-1">
+              {currentUser.isCustomer &&
+                (jobDetails.status === "U" ||
+                  jobDetails.status === "A" ||
+                  jobDetails.status === "R" ||
+                  jobDetails.status === "S") && (
+                  <div className="text-left lg:text-right">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleJobCancelModal()}
+                      className="items-center rounded-md border
+                                                border-gray-300 bg-white px-4 py-2 text-md font-bold
+                                                text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
+                                                focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    >
+                      Cancel Job
+                    </button>
+                  </div>
                 )}
 
-                {jobDetails.tags?.map((tag) => (
-                  <div
-                    key={tag.id}
-                    className={`text-lg inline-block rounded-md px-2 py-1 mr-2 border mb-2
-                                ${
-                                  tag.tag_color === "red" &&
-                                  "border-red-500 text-red-500"
-                                }
-                                ${
-                                  tag.tag_color === "orange" &&
-                                  "border-orange-500 text-orange-500 "
-                                }
-                                ${
-                                  tag.tag_color === "amber" &&
-                                  "border-amber-500 text-amber-500"
-                                }
-                                ${
-                                  tag.tag_color === "indigo" &&
-                                  " border-indigo-500 text-indigo-500"
-                                }
-                                ${
-                                  tag.tag_color === "violet" &&
-                                  " border-violet-500 text-violet-500"
-                                }
-                                ${
-                                  tag.tag_color === "fuchsia" &&
-                                  "border-fuchsia-500 text-fuchsia-500"
-                                } 
-                                ${
-                                  tag.tag_color === "pink" &&
-                                  "border-pink-500 text-pink-500"
-                                }
-                                ${
-                                  tag.tag_color === "slate" &&
-                                  "border-slate-500 text-gray-500"
-                                }
-                                ${
-                                  tag.tag_color === "lime" &&
-                                  "border-lime-500 text-lime-500"
-                                }
-                                ${
-                                  tag.tag_color === "emerald" &&
-                                  "border-emerald-500 text-emerald-500"
-                                }
-                                ${
-                                  tag.tag_color === "cyan" &&
-                                  "border-cyan-500 text-cyan-500"
-                                }
-                                ${
-                                  tag.tag_color === "blue" &&
-                                  "border-blue-500 text-blue-500"
-                                }
-                            `}
-                  >
-                    {tag.tag_name}
-                  </div>
-                ))}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                FBO
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.fbo?.name}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Aircraft Type
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.aircraftType?.name}
-              </dd>
-            </div>
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Arrival
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.on_site
-                  ? "On site"
-                  : jobDetails.estimatedETA
-                  ? jobDetails.estimatedETA
-                  : "No ETA yet"}
-              </dd>
-            </div>
-
-            {!currentUser.isProjectManager && !currentUser.isCustomer && (
-              <div className="sm:col-span-1">
-                <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                  Customer
-                </dt>
-                <dd className="mt-1 text-xl text-gray-900">
-                  {jobDetails.customer?.name}
-                </dd>
-              </div>
-            )}
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                Departure
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.estimatedETD
-                  ? jobDetails.estimatedETD
-                  : "No ETD yet"}
-              </dd>
-            </div>
-
-            {currentUser.canSeePrice && (
-              <div className="sm:col-span-1">
-                <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                  Price
-                </dt>
-                <dd className="mt-1 text-xl text-gray-900 flex gap-1">
-                  {!jobDetails.is_auto_priced && (
-                    <div
-                      className="inline-flex items-center rounded border
-                                                border-gray-300 bg-gray-50 px-1 text-xs
-                                                text-gray-600 shadow-sm hover:bg-gray-50"
-                    >
-                      M
+              {!currentUser.isCustomer && (
+                <div className="text-left lg:text-right">
+                  {jobDetails.status === "S" && (
+                    <div className="flex gap-4">
+                      <button
+                        type="button"
+                        onClick={() => updateJobStatus("W")}
+                        className="inline-flex items-center justify-center rounded-md
+                                                border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                font-bold text-white shadow-sm hover:bg-red-700
+                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                      >
+                        Accept Job
+                      </button>
+                      {currentUser.isProjectManager && (
+                        <button
+                          type="button"
+                          onClick={() => handleToggleJobReturnModal()}
+                          className="rounded bg-white px-4 py-2 text-lg text-gray-900
+                                                        shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        >
+                          Return Job
+                        </button>
+                      )}
                     </div>
                   )}
-                  <div>
-                    {"$"}
-                    {jobDetails.price
-                      ? jobDetails.price.toLocaleString()
-                      : "0.00"}
-                  </div>
-                  {jobDetails.is_auto_priced &&
-                    location.pathname.includes("jobs") && (
-                      <Link
-                        to={`/jobs/${jobDetails.id}/price-breakdown`}
-                        className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative"
+
+                  {jobDetails.status === "U" && (
+                    <button
+                      type="button"
+                      onClick={() => updateJobStatus("A")}
+                      className="inline-flex items-center justify-center rounded-md
+                                                border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                font-bold text-white shadow-sm hover:bg-red-700
+                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                    >
+                      Accept Job
+                    </button>
+                  )}
+
+                  {jobDetails.status === "A" && (
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/jobs/${jobId}/assignments`)}
+                      className="inline-flex items-center justify-center rounded-md
+                                                border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                font-bold text-white shadow-sm hover:bg-red-700
+                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                    >
+                      Assign Job
+                    </button>
+                  )}
+
+                  {jobDetails.status === "W" && (
+                    <button
+                      type="button"
+                      onClick={() => handleToggleJobCompleteModal()}
+                      className="inline-flex items-center justify-center rounded-md
+                                                border border-transparent bg-red-500 px-4 py-2 text-lg
+                                                font-medium text-white shadow-sm hover:bg-red-700
+                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                    >
+                      Complete Job
+                    </button>
+                  )}
+
+                  {jobDetails.status === "C" &&
+                    currentUser.enableInvoices &&
+                    (currentUser.isAdmin ||
+                      currentUser.isSuperUser ||
+                      currentUser.isAccountManager) && (
+                      <button
+                        type="button"
+                        onClick={() => invoiceJob()}
+                        className="inline-flex items-center justify-center rounded-md
+                                                      border border-transparent bg-red-500 px-4 py-2 text-lg
+                                                      font-medium text-white shadow-sm hover:bg-red-700
+                                                      focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
                       >
-                        breakdown
-                        <ArrowRightIcon
-                          className="h-5 w-5 relative"
-                          style={{ top: "3px" }}
-                        />
-                      </Link>
+                        Invoice Job
+                      </button>
                     )}
-                </dd>
-              </div>
-            )}
-
-            <div className="sm:col-span-1">
-              <dt className="text-md xl:text-xl font-bold text-red-600 uppercase tracking-wide">
-                Complete Before
-              </dt>
-              <dd className="mt-1 text-xl text-gray-900">
-                {jobDetails.completeBy ? (
-                  jobDetails.completeBy
-                ) : (
-                  <span
-                    className="relative inline-flex items-center
-                                       rounded-full border border-gray-300 px-2 py-0.5"
-                  >
-                    <div className="absolute flex flex-shrink-0 items-center justify-center">
-                      <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-                    </div>
-                    <div className="ml-3 text-md xl:text-xl text-gray-700">
-                      TBD
-                    </div>
-                  </span>
-                )}
-              </dd>
-            </div>
-          </dl>
-
-          <div className="flex justify-end text-md xl:text-xl text-sky-500 cursor-pointer font-semibold">
-            <div onClick={() => setShowMore(!showMore)}>
-              {showMore ? "Show less" : "Show more"}
+                </div>
+              )}
             </div>
           </div>
+          {jobDetails.tags?.map((tag) => (
+            <div
+              key={tag.id}
+              className={`text-lg inline-block rounded-md px-2 py-1 mr-2 border mb-2 mt-4
+                            ${
+                              tag.tag_color === "red" &&
+                              "border-red-500 text-red-500"
+                            }
+                            ${
+                              tag.tag_color === "orange" &&
+                              "border-orange-500 text-orange-500 "
+                            }
+                            ${
+                              tag.tag_color === "amber" &&
+                              "border-amber-500 text-amber-500"
+                            }
+                            ${
+                              tag.tag_color === "indigo" &&
+                              " border-indigo-500 text-indigo-500"
+                            }
+                            ${
+                              tag.tag_color === "violet" &&
+                              " border-violet-500 text-violet-500"
+                            }
+                            ${
+                              tag.tag_color === "fuchsia" &&
+                              "border-fuchsia-500 text-fuchsia-500"
+                            } 
+                            ${
+                              tag.tag_color === "pink" &&
+                              "border-pink-500 text-pink-500"
+                            }
+                            ${
+                              tag.tag_color === "slate" &&
+                              "border-slate-500 text-gray-500"
+                            }
+                            ${
+                              tag.tag_color === "lime" &&
+                              "border-lime-500 text-lime-500"
+                            }
+                            ${
+                              tag.tag_color === "emerald" &&
+                              "border-emerald-500 text-emerald-500"
+                            }
+                            ${
+                              tag.tag_color === "cyan" &&
+                              "border-cyan-500 text-cyan-500"
+                            }
+                            ${
+                              tag.tag_color === "blue" &&
+                              "border-blue-500 text-blue-500"
+                            }
+                        `}
+            >
+              {tag.tag_name}
+            </div>
+          ))}
 
-          {showMore && (
-            <>
-              <div className="border-t-2 border-gray-300 my-8"></div>
-              <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 mt-4">
-                <div className="sm:col-span-1">
-                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                    Purchase Order
-                  </dt>
-                  <dd className="mt-1 text-xl text-gray-900">
-                    {jobDetails.purchase_order
-                      ? jobDetails.purchase_order
-                      : "None"}
-                  </dd>
-                </div>
-
-                <div className="sm:col-span-1">
-                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                    Requested By
-                  </dt>
-                  <dd className="mt-1 space-y-5 text-xl text-gray-900 truncate overflow-ellipsis max-w-sm">
-                    {jobDetails.requested_by
-                      ? jobDetails.requested_by
-                      : jobDetails.created_by?.first_name +
-                        " " +
-                        jobDetails.created_by?.last_name}
-                  </dd>
-                </div>
-
-                <div className="sm:col-span-1">
-                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                    Request Date
-                  </dt>
-                  <dd className="mt-1 text-xl text-gray-900">
-                    {jobDetails.requestDate}
-                  </dd>
-                </div>
-
-                {jobDetails.completion_date && (
-                  <div className="sm:col-span-1">
-                    <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                      Completion Date
+          <div className="grid 3xl:grid-cols-4 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 mt-6 gap-6">
+            {/* LOCATION AND TIMES */}
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="p-4 bg-gray-100">
+                <h3 className="text-base font-bold leading-7 text-gray-900 uppercase">
+                  Location and Times
+                </h3>
+              </div>
+              <div className="border-t border-gray-200">
+                <dl className="divide-y divide-gray-100">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Airport:
                     </dt>
-                    <dd className="mt-1 text-xl text-gray-900">
-                      {jobDetails.completion_date}
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.airport?.name}
                     </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">FBO:</dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.fbo?.name}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Arrival:
+                    </dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.on_site
+                        ? "On site"
+                        : jobDetails.estimatedETA
+                        ? jobDetails.estimatedETA
+                        : "No ETA yet"}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Departure:
+                    </dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.estimatedETD
+                        ? jobDetails.estimatedETD
+                        : "No ETD yet"}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Complete Before:
+                    </dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.completeBy ? (
+                        jobDetails.completeBy
+                      ) : (
+                        <span
+                          className="relative inline-flex items-center
+                                                rounded-full border border-gray-300 px-2 py-0.5"
+                        >
+                          <div className="absolute flex flex-shrink-0 items-center justify-center">
+                            <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+                          </div>
+                          <div className="ml-3 text-md text-gray-700">TBD</div>
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                  {jobDetails.completion_date && (
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Completed:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        {jobDetails.completion_date}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
+            </div>
+            {/* JOB INFO */}
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="px-4 py-3 bg-gray-100">
+                <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                  Job Info
+                </h3>
+              </div>
+              <div className="border-t border-gray-200">
+                <dl className="divide-y divide-gray-100">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Aircraft Type:
+                    </dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.aircraftType?.name}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Customer PO:
+                    </dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.customer_purchase_order
+                        ? jobDetails.customer_purchase_order
+                        : "Not provided"}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Requested By:
+                    </dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.requested_by
+                        ? jobDetails.requested_by
+                        : jobDetails.created_by?.first_name +
+                          " " +
+                          jobDetails.created_by?.last_name}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900">
+                      Request Date:
+                    </dt>
+                    <dd className="text-md text-gray-700">
+                      {jobDetails.requestDate}
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex flex-col gap-4">
+                    <dt className="text-md flex justify-between gap-4">
+                      <div className="font-bold text-gray-900">
+                        Special Instructions:
+                      </div>
+                      <div>
+                        {showSpecialInstructions ? (
+                          <ChevronUpIcon
+                            onClick={handleToggleShowSpecialInstructions}
+                            className="h-5 w-5 text-gray-500 cursor-pointer relative top-1"
+                          />
+                        ) : (
+                          <ChevronDownIcon
+                            onClick={handleToggleShowSpecialInstructions}
+                            className="h-5 w-5 text-gray-500 cursor-pointer relative top-1"
+                          />
+                        )}
+                      </div>
+                    </dt>
+                    {showSpecialInstructions && (
+                      <dd className="text-md text-gray-700">
+                        {!jobDetails.special_instructions && "None provided"}
+                        {jobDetails.special_instructions}
+                      </dd>
+                    )}
+                  </div>
+                </dl>
+              </div>
+            </div>
+
+            {/* SERVICES */}
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="px-4 py-3 bg-gray-100 flex justify-between gap-4">
+                <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                  Services
+                </h3>
+                <div className="flex gap-4">
+                  <Switch.Group as="li" className="flex items-center">
+                    <div className="flex flex-col">
+                      <Switch.Label
+                        as="p"
+                        className="text-sm text-gray-700"
+                        passive
+                      >
+                        {showActions ? "Hide Actions" : "Show Actions"}
+                      </Switch.Label>
+                    </div>
+                    <Switch
+                      checked={showActions}
+                      onChange={setShowActions}
+                      className={classNames(
+                        showActions ? "bg-sky-500" : "bg-gray-200",
+                        "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                      )}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={classNames(
+                          showActions ? "translate-x-5" : "translate-x-0",
+                          "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                        )}
+                      />
+                    </Switch>
+                  </Switch.Group>
+                  {currentUser.isCustomer &&
+                    (jobDetails.status === "A" ||
+                      jobDetails.status === "U") && (
+                      <button
+                        type="button"
+                        onClick={handleToggleAddServiceModal}
+                        className="inline-flex items-center rounded border
+                        border-sky-400 bg-white px-2 py-1 text-sm
+                        font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                        focus:outline-none cursor-pointer"
+                      >
+                        <span>Add</span>
+                      </button>
+                    )}
+                </div>
+              </div>
+              <div
+                className="border-t border-gray-200 overflow-y-auto "
+                style={{ maxHeight: "500px" }}
+              >
+                {jobDetails.service_assignments?.length === 0 && (
+                  <div className="mx-auto flex justify-center text-center my-8">
+                    No services found.
                   </div>
                 )}
 
-                <div className="sm:col-span-1">
-                  <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                    Customer Purchase Order
-                  </dt>
-                  <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
-                    {jobDetails.customer_purchase_order
-                      ? jobDetails.customer_purchase_order
-                      : "Not provided"}
-                  </dd>
-                </div>
-
-                {(currentUser.isAdmin ||
-                  currentUser.isSuperUser ||
-                  currentUser.isAccountManager ||
-                  currentUser.isInternalCoordinator) && (
-                  <>
-                    <div className="sm:col-span-1">
-                      <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                        Time Spent
+                {jobDetails.service_assignments?.map((service) => (
+                  <dl key={service.id} className="divide-y divide-gray-100">
+                    <div className="px-4 py-3 flex gap-4 hover:bg-gray-50 border-b border-gray-200">
+                      <dt className="text-md flex-1">
+                        <div className="text-gray-900">{service.name}</div>
+                        {service.project_manager && (
+                          <div className="text-gray-500">
+                            {service.project_manager}
+                          </div>
+                        )}
                       </dt>
-                      <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
+                      <dd className="text-md text-gray-700 text-right">
+                        {currentUser.isCustomer &&
+                          (jobDetails.status === "A" ||
+                            jobDetails.status === "U") && (
+                            <div className="flex justify-end">
+                              <button
+                                type="button"
+                                onClick={() => removeService(service)}
+                                className="inline-flex items-center rounded border
+                                                                            border-sky-400 bg-white px-2 py-1 text-sm
+                                                                            font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                                                                            focus:outline-none cursor-pointer"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          )}
+
+                        {!currentUser.isCustomer && service.status === "W" && (
+                          <button
+                            type="button"
+                            onClick={() => completeService(service.id)}
+                            className="inline-flex items-center rounded border
+                                                                        border-sky-400 bg-white px-2.5 py-1.5 text-md
+                                                                        font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                                                                        focus:outline-none cursor-pointer"
+                          >
+                            Complete
+                          </button>
+                        )}
+
+                        {service.status === "C" && (
+                          <div className="flex-shrink-0 flex justify-end">
+                            <CheckCircleIcon className="h-10 w-10 text-green-500" />
+                          </div>
+                        )}
+                      </dd>
+                    </div>
+                    {showActions &&
+                      service.checklist_actions?.map((action) => (
+                        <div
+                          key={action.id}
+                          className="text-sm text-gray-500 px-6 py-1"
+                        >
+                          {action.name}
+                        </div>
+                      ))}
+                  </dl>
+                ))}
+              </div>
+            </div>
+            {/* RETAINERS */}
+            {(currentUser.isAdmin ||
+              currentUser.isProjectManager ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ||
+              currentUser.isInternalCoordinator ||
+              (currentUser.isCustomer && currentUser.isPremiumMember)) && (
+              <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+                <div className="px-4 py-3 bg-gray-100 flex justify-between gap-4">
+                  <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                    Retainer Services
+                  </h3>
+                  {currentUser.isCustomer &&
+                    (jobDetails.status === "A" ||
+                      jobDetails.status === "U") && (
+                      <button
+                        type="button"
+                        onClick={handleToggleAddRetainerServiceModal}
+                        className="inline-flex items-center rounded border
+                        border-sky-400 bg-white px-2 py-1 text-sm
+                        font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                        focus:outline-none cursor-pointer"
+                      >
+                        <span>Add</span>
+                      </button>
+                    )}
+                </div>
+                <div
+                  className="border-t border-gray-200 overflow-y-auto"
+                  style={{ maxHeight: "500px" }}
+                >
+                  {jobDetails.retainer_service_assignments?.length === 0 && (
+                    <div className="mx-auto flex justify-center text-center my-12">
+                      No retainers found.
+                    </div>
+                  )}
+
+                  {jobDetails.retainer_service_assignments?.map((service) => (
+                    <dl key={service.id} className="divide-y divide-gray-100">
+                      <div className="px-4 py-3 flex gap-4 hover:bg-gray-50 border-b border-gray-200">
+                        <dt className="text-md flex-1">
+                          <div className="text-gray-900">{service.name}</div>
+                          {service.project_manager && (
+                            <div className="text-gray-500">
+                              {service.project_manager}
+                            </div>
+                          )}
+                        </dt>
+                        <dd className="text-md text-gray-700 text-right">
+                          {currentUser.isCustomer &&
+                            (jobDetails.status === "A" ||
+                              jobDetails.status === "U") && (
+                              <div className="flex justify-end">
+                                <button
+                                  type="button"
+                                  onClick={() => removeRetainerService(service)}
+                                  className="inline-flex items-center rounded border
+                                                                                border-sky-400 bg-white px-2 py-1 text-sm
+                                                                                font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                                                                                focus:outline-none cursor-pointer focus:ring-2
+                                                                                focus:ring-sky-500 focus:ring-offset-2"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                            )}
+
+                          {!currentUser.isCustomer &&
+                            service.status === "W" && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  completeRetainerService(service.id)
+                                }
+                                className="inline-flex items-center rounded border
+                                                                            border-sky-400 bg-white px-2.5 py-1.5 text-md
+                                                                            font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                                                                            focus:outline-none cursor-pointer focus:ring-2
+                                                                            focus:ring-red-500 focus:ring-offset-2"
+                              >
+                                Complete
+                              </button>
+                            )}
+
+                          {service.status === "C" && (
+                            <div className="flex-shrink-0 flex justify-end">
+                              <CheckCircleIcon className="h-10 w-10 text-green-500" />
+                            </div>
+                          )}
+                        </dd>
+                      </div>
+                    </dl>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* ATTACHMENTS */}
+            {(currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ||
+              currentUser.isCustomer) && (
+              <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+                <div className="px-4 py-3 bg-gray-100 flex justify-between border-b border-gray-200">
+                  <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                    Attachments
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={handleToggleJobFileUploadModal}
+                    className="inline-flex items-center rounded border
+                        border-sky-400 bg-white px-2 py-1 text-sm
+                        font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                        focus:outline-none cursor-pointer"
+                  >
+                    <span>Add</span>
+                  </button>
+                </div>
+                {jobDetails.files?.length === 0 && (
+                  <div className="flex justify-center text-center my-12 text-md">
+                    No file attachments found.
+                  </div>
+                )}
+
+                {jobDetails.files?.length > 0 && (
+                  <ul className="divide-y divide-gray-200 rounded-md border-b border-gray-200">
+                    {jobDetails.files?.map((file) => (
+                      <li key={file.id} className="p-6 text-md">
+                        <div className="flex flex-wrap justify-between gap-4">
+                          <div className="flex gap-1">
+                            <PaperClipIcon
+                              className="h-5 w-5 flex-shrink-0 text-gray-400 relative top-1"
+                              aria-hidden="true"
+                            />
+                            <div
+                              className="text-lg truncate overflow-ellipsis"
+                              style={{ maxWidth: "250px" }}
+                            >
+                              {file.name}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteJobFile(file)}
+                              className="inline-flex w-full justify-center rounded-md border
+                                                        border-gray-300 bg-white px-2 py-1 text-base 
+                                                        text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                                        focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                            >
+                              Delete
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => downloadFile(file)}
+                              className="inline-flex w-full justify-center rounded-md border font-medium
+                                                        border-gray-300 bg-white px-2 py-1 text-base 
+                                                        text-sky-500 shadow-sm focus:outline-none focus:ring-2
+                                                        focus:ring-sky-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                            >
+                              Download
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap justify-between gap-4 mt-1">
+                          <div className="text-gray-500 relative top-2 text-md">
+                            Uploaded on: {file.created_at}
+                          </div>
+                          <div>
+                            {isAdmin && (
+                              <Switch.Group
+                                as="li"
+                                className="flex items-center justify-between py-2"
+                              >
+                                <div className="flex flex-col">
+                                  <Switch.Label
+                                    as="p"
+                                    className="text-sm font-medium text-gray-900"
+                                    passive
+                                  >
+                                    Public
+                                  </Switch.Label>
+                                </div>
+                                <Switch
+                                  checked={file.is_public}
+                                  onChange={() => handleToggleFilePublic(file)}
+                                  className={classNames(
+                                    file.is_public
+                                      ? "bg-sky-500"
+                                      : "bg-gray-200",
+                                    "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                                  )}
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    className={classNames(
+                                      file.is_public
+                                        ? "translate-x-5"
+                                        : "translate-x-0",
+                                      "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                    )}
+                                  />
+                                </Switch>
+                              </Switch.Group>
+                            )}
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+            {/* LABOR */}
+            {(currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ||
+              currentUser.isInternalCoordinator) && (
+              <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+                <div className="p-4 bg-gray-100">
+                  <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                    Labor
+                  </h3>
+                </div>
+                <div className="border-t border-gray-200">
+                  <dl className="divide-y divide-gray-100">
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Time Spent:
+                      </dt>
+                      <dd className="text-md text-gray-700">
                         {jobDetails.hours_worked ? jobDetails.hours_worked : 0}{" "}
                         hours{" "}
                         {jobDetails.minutes_worked
@@ -890,585 +1385,272 @@ const JobInfo = () => {
                         minutes
                       </dd>
                     </div>
-                    <div className="sm:col-span-1">
-                      <dt className="text-md xl:text-xl font-bold text-gray-600 uppercase tracking-wide">
-                        Number of Workers
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Number of Workers:
                       </dt>
-                      <dd className="mt-1 text-xl text-gray-900 truncate overflow-ellipsis  max-w-sm">
+                      <dd className="text-md text-gray-700">
                         {jobDetails.number_of_workers
                           ? jobDetails.number_of_workers
                           : 0}
                       </dd>
                     </div>
-                  </>
-                )}
-              </dl>
-            </>
-          )}
-
-          <div className="border-t-2 border-gray-300 my-8"></div>
-          <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
-            Special Instructions
-          </h2>
-          <dd className="mt-4 space-y-5 text-xl text-gray-900">
-            {!jobDetails.special_instructions && "None provided"}
-
-            {jobDetails.special_instructions}
-          </dd>
-
-          <div className="border-t-2 border-gray-300 my-8"></div>
-
-          <div className="mx-auto mt-8 max-w-5xl pb-4">
-            <div className="flex flex-wrap justify-between">
-              <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
-                Services
-              </h2>
-              <div className="flex gap-4 text-right">
-                {showServices && (
-                  <>
-                    <Switch.Group as="li" className="flex items-center">
-                      <div className="flex flex-col">
-                        <Switch.Label
-                          as="p"
-                          className="text-md xl:text-lg text-gray-500"
-                          passive
-                        >
-                          {showActions ? "Hide Actions" : "Show Actions"}
-                        </Switch.Label>
-                      </div>
-                      <Switch
-                        checked={showActions}
-                        onChange={setShowActions}
-                        className={classNames(
-                          showActions ? "bg-red-500" : "bg-gray-200",
-                          "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                        )}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            showActions ? "translate-x-5" : "translate-x-0",
-                            "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                          )}
-                        />
-                      </Switch>
-                    </Switch.Group>
-                    {currentUser.isCustomer &&
-                      (jobDetails.status === "A" ||
-                        jobDetails.status === "U") && (
-                        <button
-                          type="button"
-                          onClick={handleToggleAddServiceModal}
-                          className="inline-flex items-center rounded-md border border-gray-300
-                                                    bg-white px-4 py-2 text-lg font-bold text-gray-700 shadow-sm
-                                                    hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                        >
-                          <PlusIcon
-                            className="-ml-2 mr-1 h-4 w-4 text-gray-400"
-                            aria-hidden="true"
-                          />
-                          <span>Add</span>
-                        </button>
-                      )}
-                  </>
-                )}
-                <div
-                  onClick={() => setShowServices(!showServices)}
-                  className="text-md xl:text-xl text-sky-500 cursor-pointer font-semibold"
-                >
-                  {showServices ? "Hide" : "Show"}
+                  </dl>
                 </div>
-              </div>
-            </div>
-
-            {showServices && (
-              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-1">
-                {jobDetails.service_assignments?.length === 0 && (
-                  <div className="text-xl text-gray-500">None</div>
-                )}
-
-                {jobDetails.service_assignments?.map((service) => (
-                  <div
-                    key={service.id}
-                    className="relative flex space-x-3 rounded-lg
-                                            border border-gray-300 bg-white px-6 py-5 shadow-sm
-                                            hover:border-gray-400"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="focus:outline-none">
-                        <div className="grid grid-cols-3 text-md xl:text-xl pb-2">
-                          <div className="col-span-2 font-bold text-gray-900 relative top-1">
-                            {service.name}
-                          </div>
-                          <div className="text-right">
-                            {currentUser.isCustomer &&
-                              (jobDetails.status === "A" ||
-                                jobDetails.status === "U") && (
-                                <div className="flex justify-end">
-                                  <TrashIcon
-                                    onClick={() => removeService(service)}
-                                    className="h-10 w-10 text-gray-400 cursor-pointer"
-                                  />
-                                </div>
-                              )}
-
-                            {!currentUser.isCustomer &&
-                              service.status === "W" && (
-                                <button
-                                  type="button"
-                                  onClick={() => completeService(service.id)}
-                                  className="inline-flex items-center rounded border
-                                                                        border-gray-300 bg-white px-2.5 py-1.5 text-xl
-                                                                        font-bold text-sky-500 shadow-sm hover:bg-gray-50
-                                                                        focus:outline-none cursor-pointer focus:ring-2
-                                                                        focus:ring-red-500 focus:ring-offset-2"
-                                >
-                                  Complete
-                                </button>
-                              )}
-
-                            {service.status === "C" && (
-                              <div className="flex-shrink-0 flex justify-end">
-                                <CheckCircleIcon className="h-10 w-10 text-green-500" />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {!currentUser.isProjectManager && (
-                          <div
-                            className="text-sm xl:text-xl mb-4 relative inline-flex items-center
-                                                                rounded-full border border-gray-300 px-3 py-0.5"
-                          >
-                            {service.project_manager}
-                          </div>
-                        )}
-
-                        {showActions &&
-                          service.checklist_actions?.map((action) => (
-                            <div
-                              key={action.id}
-                              className="text-sm xl:text-xl text-gray-500 py-1"
-                            >
-                              {action.name}
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </div>
 
-          <div className="border-t-2 border-gray-300 mb-4 mt-2"></div>
-
-          {(currentUser.isAdmin ||
-            currentUser.isProjectManager ||
-            currentUser.isSuperUser ||
-            currentUser.isAccountManager ||
-            currentUser.isInternalCoordinator ||
-            (currentUser.isCustomer && currentUser.isPremiumMember)) && (
-            <div className="mx-auto max-w-5xl">
-              <div className="flex justify-between pb-4">
-                <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide mt-4">
-                  Retainer Services
-                </h2>
-                {currentUser.isCustomer &&
-                  (jobDetails.status === "A" || jobDetails.status === "U") && (
-                    <button
-                      type="button"
-                      onClick={handleToggleAddRetainerServiceModal}
-                      className="inline-flex items-center rounded-md border border-gray-300
-                                            bg-white px-4 py-2 text-xl font-bold text-gray-700 shadow-sm
-                                            hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-                    >
-                      <PlusIcon
-                        className="-ml-2 mr-1 h-4 w-4 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span>Add</span>
-                    </button>
-                  )}
-                <div
-                  onClick={() => setShowRetainers(!showRetainers)}
-                  className="text-md xl:text-xl text-sky-500 cursor-pointer font-semibold relative top-2"
-                >
-                  {showRetainers ? "Hide" : "Show"}
+          {currentUser.canSeePrice && (
+            <div className="grid grid-cols-1 mt-6 gap-6">
+              <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+                <div className="p-4 bg-gray-100">
+                  <h3 className="text-base font-bold leading-7 text-gray-900 uppercase">
+                    Price Breakdown
+                  </h3>
                 </div>
-              </div>
-
-              {showRetainers && (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 pb-8">
-                  {jobDetails.retainer_service_assignments?.length === 0 && (
-                    <div className="text-xl text-gray-500">None</div>
+                <div className="border-t border-gray-200">
+                  {!jobDetails.is_auto_priced && (
+                    <div className="p-4 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Price (manually set):
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        {"$"}
+                        {jobDetails.price
+                          ? jobDetails.price.toLocaleString()
+                          : "0.00"}
+                      </dd>
+                    </div>
                   )}
 
-                  {jobDetails.retainer_service_assignments?.map((service) => (
-                    <div
-                      key={service.id}
-                      className="relative flex items-center space-x-3 rounded-lg
-                                                border border-gray-300 bg-white px-6 py-5 shadow-sm
-                                                hover:border-gray-400"
-                    >
-                      <div className="min-w-0 flex-1">
-                        <div className="">
-                          <div className="grid grid-cols-3 text-xl pb-2">
-                            <div className="col-span-2 font-bold text-gray-900 relative top-1">
-                              {service.name}
-                            </div>
-                            <div className="text-right">
-                              {currentUser.isCustomer &&
-                                (jobDetails.status === "A" ||
-                                  jobDetails.status === "U") && (
-                                  <div className="flex justify-end">
-                                    <TrashIcon
-                                      onClick={() =>
-                                        removeRetainerService(service)
-                                      }
-                                      className="h-5 w-5 text-gray-400 cursor-pointer"
-                                    />
-                                  </div>
-                                )}
-
-                              {!currentUser.isCustomer &&
-                                service.status === "W" && (
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      completeRetainerService(service.id)
-                                    }
-                                    className="inline-flex items-center rounded border
-                                                                        border-gray-300 bg-white px-2.5 py-1.5 text-xl
-                                                                        font-bold text-sky-500 shadow-sm hover:bg-gray-50
-                                                                        focus:outline-none cursor-pointer focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                                  >
-                                    Complete
-                                  </button>
-                                )}
-
-                              {service.status === "C" && (
-                                <div className="flex-shrink-0 flex justify-end">
-                                  <CheckCircleIcon className="h-10 w-10 text-green-500" />
-                                </div>
-                              )}
-                            </div>
+                  {jobDetails.is_auto_priced && (
+                    <div>
+                      <div className="p-4">
+                        <div className="flex justify-between text-md">
+                          <div className="text-xl text-gray-700">
+                            {priceBreakdown.aircraftType}
                           </div>
-
-                          {!currentUser.isProjectManager &&
-                            !currentUser.isCustomer && (
+                          <div>
+                            <span
+                              className="relative bg-sky-100 text-sky-500 rounded-md p-1 font-medium"
+                              style={{ top: "2px" }}
+                            >
+                              {priceBreakdown.priceListType}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <h3 className="text-lg text-gray-700 font-medium">
+                            Services
+                          </h3>
+                          <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
+                            {priceBreakdown.services?.map((service) => (
                               <div
-                                className="text-xl mb-4 relative inline-flex items-center
-                                                                    rounded-full border border-gray-300 px-3 py-0.5"
+                                key={service.id}
+                                className="flex justify-between py-2 text-lg hover:bg-gray-50"
                               >
-                                {service.project_manager}
-                              </div>
-                            )}
-
-                          {showActions &&
-                            service.checklist_actions?.map((action) => (
-                              <div
-                                key={action.id}
-                                className="text-xl text-gray-500 py-1"
-                              >
-                                {action.name}
+                                <dt className="text-gray-500 pr-2 truncate">
+                                  {service.name}
+                                </dt>
+                                <dd className="whitespace-nowrap text-gray-900">
+                                  ${service.price}
+                                </dd>
                               </div>
                             ))}
+                          </dl>
+                          <div className="flex justify-end pt-2 text-lg mt-1">
+                            <dt className="text-gray-500 pr-2 text-right font-medium">
+                              Subtotal
+                            </dt>
+                            <dd className="whitespace-nowrap text-gray-900">
+                              ${priceBreakdown.servicesPrice}
+                            </dd>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
 
-          <div className="border-t-2 border-gray-300 my-4"></div>
-
-          {/* DESKTOP TAIL HISTORY */}
-          {serviceActivities.length > 0 && (
-            <div className="hidden md:block lg:block xl:block max-w-screen-xl mt-2">
-              <div className="flex justify-between mt-8">
-                <div className="text-2xl font-bold text-gray-600 uppercase tracking-wide">
-                  Tail History
-                  <span className="text-gray-500 italic text-sm ml-2 tracking-normal">
-                    (Last 10 services completed)
-                  </span>
-                </div>
-                <div
-                  onClick={() => setShowServiceActivity(!showServiceActivity)}
-                  className="text-sky-500 text-lg ml-2 tracking-normal cursor-pointer font-semibold"
-                >
-                  {showServiceActivity ? "Hide" : "Show"}
-                </div>
-              </div>
-              {showServiceActivity && (
-                <div className="">
-                  <table className="min-w-full table-auto">
-                    <thead>
-                      <tr>
-                        <th
-                          scope="col"
-                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
-                        >
-                          <div className="flex gap-1">Date</div>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                        >
-                          P.O
-                        </th>
-                        {!currentUser.isCustomer && (
-                          <th
-                            scope="col"
-                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                          >
-                            Customer
-                          </th>
+                        {priceBreakdown.discounts?.length > 0 && (
+                          <div className="">
+                            <h3 className="text-lg text-gray-700 font-medium">
+                              Discounts Applied
+                            </h3>
+                            <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
+                              {priceBreakdown.discounts.map((discount) => (
+                                <div
+                                  key={discount.id}
+                                  className="flex justify-between py-2 text-lg hover:bg-gray-50"
+                                >
+                                  <dt className="text-gray-500 pr-2 truncate">
+                                    {discount.name === "S" ? "By Service" : ""}
+                                    {discount.name === "A" ? "By Airport" : ""}
+                                    {discount.name === "G" ? "General" : ""}
+                                  </dt>
+                                  <dd className="whitespace-nowrap text-gray-900">
+                                    {!discount.isPercentage ? "$" : ""}
+                                    {discount.discount}
+                                    {discount.isPercentage ? "%" : ""}
+                                  </dd>
+                                </div>
+                              ))}
+                            </dl>
+                            <div className="flex justify-end py-2 text-lg mt-1">
+                              <dt className="text-gray-500 pr-2 text-right font-medium">
+                                Subtotal
+                              </dt>
+                              <dd className="whitespace-nowrap text-gray-900">
+                                ${priceBreakdown.discountedPrice}
+                              </dd>
+                            </div>
+                          </div>
                         )}
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                        >
-                          Tail
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                        >
-                          Airport
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                        >
-                          FBO
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
-                        >
-                          Service
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
-                      {serviceActivities.map((service) => (
-                        <tr key={service.id}>
-                          <td className="px-2 py-2 text-md text-gray-500 sm:pl-0">
-                            {service.timestamp}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-2 text-md text-sky-500 font-semibold cursor-pointer">
-                            <Link to={`/create-job/review/${service.job_id}`}>
-                              {service.purchase_order}
-                            </Link>
-                          </td>
-                          {!currentUser.isCustomer && (
-                            <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                              <div className="truncate overflow-ellipsis w-60">
-                                {service.customer_name}
-                              </div>
-                            </td>
-                          )}
-                          <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                            {service.tail_number}
-                          </td>
-                          <td className="px-3 py-2 text-md text-gray-500">
-                            <div className="truncate overflow-ellipsis w-40">
-                              {service.airport_name}
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                            {service.fbo_name}
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
-                            <div className=" truncate overflow-ellipsis w-96">
-                              {service.service_name}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+
+                        {priceBreakdown.additionalFees?.length > 0 && (
+                          <div className="">
+                            <h3 className="text-lg text-gray-700">
+                              Additional Fees Applied
+                            </h3>
+                            <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
+                              {priceBreakdown.additionalFees.map((fee) => (
+                                <div
+                                  key={fee.id}
+                                  className="flex justify-between py-2 text-lg hover:bg-gray-50"
+                                >
+                                  <dt className="text-gray-500 pr-2 truncate">
+                                    {fee.name === "A" ? "By Airport" : ""}
+                                    {fee.name === "F" ? "By FBO" : ""}
+                                    {fee.name === "G" ? "General" : ""}
+                                  </dt>
+                                  <dd className="whitespace-nowrap text-gray-900">
+                                    {!fee.isPercentage ? "$" : ""}
+                                    {fee.fee}
+                                    {fee.isPercentage ? "%" : ""}
+                                  </dd>
+                                </div>
+                              ))}
+                            </dl>
+                          </div>
+                        )}
+
+                        <div className="flex justify-end pb-4 text-lg">
+                          <dt className="text-gray-500 pr-2 text-right font-medium">
+                            Total
+                          </dt>
+                          <dd className="whitespace-nowrap text-gray-900">
+                            ${priceBreakdown.totalPrice}
+                          </dd>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
-          {(currentUser.isAdmin ||
-            currentUser.isSuperUser ||
-            currentUser.isAccountManager ||
-            currentUser.isCustomer) && (
-            <div>
-              <div className="border-t-2 border-gray-300 my-8"></div>
-              <div className="flex justify-between gap-4">
-                <h2 className="text-md xl:text-2xl font-bold text-gray-700 uppercase tracking-wide">
-                  Attachments
-                </h2>
-                <div
-                  onClick={() => handleToggleJobFileUploadModal()}
-                  className="flex items-center justify-center rounded-full bg-red-600 p-1
-                                                        text-white hover:bg-red-700 focus:outline-none focus:ring-2
-                                                            focus:ring-red-500 focus:ring-offset-2 cursor-pointer"
-                >
-                  <svg
-                    className="h-6 w-6"
-                    x-description="Heroicon name: outline/plus"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    ></path>
-                  </svg>
+          {serviceActivities.length > 0 && (
+            <div className="mt-6">
+              <div className="relative overflow-hidden rounded-lg border border-gray-300">
+                <div className="p-4 bg-gray-100">
+                  <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                    Tail History
+                  </h3>
                 </div>
-              </div>
-
-              {jobDetails.files?.length === 0 && (
-                <div className="flex justify-center text-center my-12 text-lg">
-                  No file attachments found.
-                </div>
-              )}
-
-              <ul className="divide-y divide-gray-200 rounded-md border border-gray-200 mt-4">
-                {jobDetails.files?.map((file) => (
-                  <li key={file.id} className="py-3 pl-3 pr-4 text-md">
-                    <div className="flex flex-wrap justify-between gap-4">
-                      <div className="flex gap-1">
-                        <PaperClipIcon
-                          className="h-5 w-5 flex-shrink-0 text-gray-400 relative top-1"
-                          aria-hidden="true"
-                        />
-                        <div
-                          className="text-lg truncate overflow-ellipsis"
-                          style={{ maxWidth: "250px" }}
-                        >
-                          {file.name}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteJobFile(file)}
-                          className="inline-flex w-full justify-center rounded-md border
-                                                    border-gray-300 bg-white px-2 py-1 text-base 
-                                                    text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                    focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                        >
-                          Delete
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => downloadFile(file)}
-                          className="inline-flex w-full justify-center rounded-md border font-medium
-                                                    border-gray-300 bg-white px-2 py-1 text-base 
-                                                    text-blue-500 shadow-sm focus:outline-none focus:ring-2
-                                                    focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                        >
-                          Download
-                        </button>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap justify-between gap-4 mt-1">
-                      <div className="text-gray-500 relative top-2 text-md">
-                        Uploaded on: {file.created_at}
-                      </div>
-                      <div>
-                        {isAdmin && (
-                          <Switch.Group
-                            as="li"
-                            className="flex items-center justify-between py-2"
-                          >
-                            <div className="flex flex-col">
-                              <Switch.Label
-                                as="p"
-                                className="text-sm font-medium text-gray-900"
-                                passive
-                              >
-                                Public
-                              </Switch.Label>
-                            </div>
-                            <Switch
-                              checked={file.is_public}
-                              onChange={() => handleToggleFilePublic(file)}
-                              className={classNames(
-                                file.is_public ? "bg-red-500" : "bg-gray-200",
-                                "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                              )}
+                <div className="border-t border-gray-200">
+                  <div className="p-4">
+                    {serviceActivities.length > 0 && (
+                      <table className="min-w-full table-auto">
+                        <thead>
+                          <tr>
+                            <th
+                              scope="col"
+                              className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0 uppercase tracking-wide"
                             >
-                              <span
-                                aria-hidden="true"
-                                className={classNames(
-                                  file.is_public
-                                    ? "translate-x-5"
-                                    : "translate-x-0",
-                                  "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                                )}
-                              />
-                            </Switch>
-                          </Switch.Group>
-                        )}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* MOBILE TAIL HISTORY */}
-          {serviceActivities.length > 0 && (
-            <div className="xs:block sm:block xl:hidden lg:hidden md:hidden bg-white shadow sm:rounded-md my-4">
-              <div className="flex justify-between font-medium tracking-wide text-xl pb-4">
-                <div>Found {serviceActivities.length} previous services</div>
-                <div
-                  onClick={() => setShowServiceActivity(!showServiceActivity)}
-                  className="text-sky-500 text-lg ml-2 tracking-normal"
-                >
-                  {showServiceActivity ? "Hide" : "Show"}
+                              <div className="flex gap-1">Date</div>
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                            >
+                              P.O
+                            </th>
+                            {!currentUser.isCustomer && (
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                              >
+                                Customer
+                              </th>
+                            )}
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                            >
+                              Tail
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                            >
+                              Airport
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                            >
+                              FBO
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 uppercase tracking-wide"
+                            >
+                              Service
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 bg-white">
+                          {serviceActivities.map((service) => (
+                            <tr key={service.id}>
+                              <td className="px-2 py-2 text-md text-gray-500 sm:pl-0">
+                                {service.timestamp}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-2 text-md text-sky-500 font-semibold cursor-pointer">
+                                <Link
+                                  to={`/create-job/review/${service.job_id}`}
+                                >
+                                  {service.purchase_order}
+                                </Link>
+                              </td>
+                              {!currentUser.isCustomer && (
+                                <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                                  <div className="truncate overflow-ellipsis w-60">
+                                    {service.customer_name}
+                                  </div>
+                                </td>
+                              )}
+                              <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                                {service.tail_number}
+                              </td>
+                              <td className="px-3 py-2 text-md text-gray-500">
+                                <div className="truncate overflow-ellipsis w-40">
+                                  {service.airport_name}
+                                </div>
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                                {service.fbo_name}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-2 text-md text-gray-500">
+                                <div className=" truncate overflow-ellipsis w-96">
+                                  {service.service_name}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
                 </div>
               </div>
-              {showServiceActivity && (
-                <ul className="divide-y divide-gray-200 text-md text-gray-500">
-                  {serviceActivities.map((service) => (
-                    <li key={service.id}>
-                      <div className="px-2 py-4">
-                        <div className="flex justify-between gap-2">
-                          <div>{service.timestamp}</div>
-                          <div className="text-sky-500">
-                            <Link to={`/create-job/review/${service.job_id}`}>
-                              {service.purchase_order}
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="font-semibold mt-2">
-                          {service.service_name}
-                        </div>
-                        <div className="flex justify-between gap-2 mt-1">
-                          <div>
-                            <div className="bg-gray-100 p-1 rounded-md">
-                              {service.airport_name}
-                            </div>
-                          </div>
-                          <div className="relative top-1">
-                            {service.fbo_name}
-                          </div>
-                          <div className="italic relative top-1">
-                            {service.tail_number}
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
           )}
         </div>
