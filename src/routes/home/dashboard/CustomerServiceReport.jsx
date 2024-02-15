@@ -166,6 +166,7 @@ export default function CustomerServiceReport() {
   const [totalSpent, setTotalSpent] = useState(0);
   const [numberOfTails, setNumberOfTails] = useState(0);
   const [numberOfLocations, setNumberOfLocations] = useState(0);
+  const [totalLaborTime, setTotalLaborTime] = useState(0);
 
   const [airportSelected, setAirportSelected] = useState(null);
   const [fboSelected, setFboSelected] = useState(null);
@@ -229,7 +230,9 @@ export default function CustomerServiceReport() {
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
-      generateServiceReport(selectedService);
+      if (isStandardServicesSelected) {
+        generateServiceReport(selectedService);
+      }
     }, 300);
 
     return () => {
@@ -413,12 +416,7 @@ export default function CustomerServiceReport() {
       setNumberOfLocations(data.number_of_unique_locations);
       setShowSpendingInfo(data.show_spending_info);
       setShowRetainers(data.show_retainers);
-
-      /* if (data.show_retainers) {
-        if (!serviceTypes.find((serviceType) => serviceType.type === "R")) {
-          serviceTypes.push({ type: "R", name: "Retainer" });
-        }
-      } */
+      setTotalLaborTime(data.total_labor_time_only_services);
     } catch (err) {
       toast.error("Unable to generate service report");
     }
@@ -450,13 +448,12 @@ export default function CustomerServiceReport() {
       setNumberOfServices(data.number_of_services_completed);
       setNumberOfTails(data.number_of_unique_tail_numbers);
       setNumberOfLocations(data.number_of_unique_locations);
+      setTotalLaborTime(data.total_labor_time_only_retainer_services);
     } catch (err) {
       toast.error("Unable to generate service report");
     }
 
     setLoading(false);
-    //setIsRetainerServicesSelected(true);
-    //setIsStandardServicesSelected(false);
     searchRetainerServiceActivities(1, retainerService);
   };
 
@@ -1949,6 +1946,7 @@ export default function CustomerServiceReport() {
                 )}
               </div>
             </div>
+
             {selectedService?.name === "All Services" &&
             showRetainers &&
             selectedRetainerService == null ? (
@@ -2006,7 +2004,7 @@ export default function CustomerServiceReport() {
                     </nav>
                   </div>
                 </div>
-                <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 bg-gray-50 sm:grid-cols-2 lg:grid-cols-4">
                   <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
                     <p className="text-xl font-medium leading-6 text-gray-400">
                       Number of Services
@@ -2035,6 +2033,16 @@ export default function CustomerServiceReport() {
                     <p className="mt-2 flex items-baseline gap-x-2">
                       <span className="text-4xl font-semibold tracking-tight text-gray-500">
                         {numberOfLocations.toLocaleString()}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
+                    <p className="text-xl font-medium leading-6 text-gray-400">
+                      Labor Time
+                    </p>
+                    <p className="mt-2 flex items-baseline gap-x-2">
+                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                        {totalLaborTime} hr
                       </span>
                     </p>
                   </div>
