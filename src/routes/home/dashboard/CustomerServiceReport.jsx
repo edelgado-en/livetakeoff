@@ -2042,7 +2042,7 @@ export default function CustomerServiceReport() {
                     </p>
                     <p className="mt-2 flex items-baseline gap-x-2">
                       <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {totalLaborTime} hr
+                        {totalLaborTime.toFixed(1)} hr
                       </span>
                     </p>
                   </div>
