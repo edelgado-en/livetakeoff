@@ -560,8 +560,20 @@ const JobInfo = () => {
         <div className="mt-6 w-full px-2">
           <div className="flex flex-wrap justify-between gap-y-6 gap-x-14">
             <div className=" w-72">
-              <h1 className="text-xl xl:text-2xl font-bold text-gray-700">
+              <h1 className="text-xl xl:text-2xl font-bold text-gray-700 flex gap-2">
                 {jobDetails.tailNumber}
+                {tailDetailsFound && (
+                  <Link
+                    to={`/jobs/${jobDetails.id}/tail-details`}
+                    className="text-sky-600 ml-1 font-bold cursor-pointer text-xl flex gap-1 relative top-1"
+                  >
+                    details
+                    <ArrowRightIcon
+                      className="h-5 w-5 relative"
+                      style={{ top: "3px" }}
+                    />
+                  </Link>
+                )}
               </h1>
               <div className="mt-1 text-md">{jobDetails.customer?.name}</div>
             </div>
