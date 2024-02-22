@@ -204,6 +204,10 @@ export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
 
+export const getCustomerRetainerServices = (id: number) => {
+    return httpService.get(`/api/customers/retainers-services/${id}/`);
+}
+
 export const getTailServiceHistory = (data: any) => {
     return httpService.post('/api/tail-service-history', data)
 }

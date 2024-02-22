@@ -96,7 +96,6 @@ const CreateEstimate = () => {
     try {
       const { data } = await api.getJobEstimateFormInfo();
       setAircraftTypes(data.aircraft_types);
-      setServices(data.services);
       setAirports(data.airports);
       setAllFbos(data.fbos);
       setFbos(data.fbos);
@@ -194,6 +193,38 @@ const CreateEstimate = () => {
     }
   };
 
+  const handleCustomerSelectedChange = async (customer) => {
+    setCustomerSelected(customer);
+
+    try {
+      const { data } = await api.getCustomerRetainerServices(customer.id);
+
+      setServices(data.services);
+
+      /* const interior = [];
+      const exterior = [];
+      const other = []; */
+
+      /* data.services.forEach((service) => {
+        if (service.category === "I") {
+          interior.push(service);
+        } else if (service.category === "E") {
+          exterior.push(service);
+        } else {
+          other.push(service);
+        }
+      });
+
+      setInteriorServices(interior);
+      setExteriorServices(exterior);
+      setOtherServices(other); */
+
+      setServices(data.services);
+    } catch (err) {
+      toast.error("Unable to get customer services");
+    }
+  };
+
   return (
     <AnimatedPage>
       {loading && <Loader />}
@@ -245,7 +276,7 @@ const CreateEstimate = () => {
                 <div className="mt-1">
                   <Listbox
                     value={customerSelected}
-                    onChange={setCustomerSelected}
+                    onChange={handleCustomerSelectedChange}
                   >
                     {({ open }) => (
                       <>

@@ -370,45 +370,6 @@ const CreateJob = () => {
       setFbos(data.fbos);
       setTags(data.tags);
 
-      setServices(data.services);
-      setRetainerServices(data.retainer_services);
-
-      const interior = [];
-      const exterior = [];
-      const other = [];
-
-      data.services.forEach((service) => {
-        if (service.category === "I") {
-          interior.push(service);
-        } else if (service.category === "E") {
-          exterior.push(service);
-        } else {
-          other.push(service);
-        }
-      });
-
-      setInteriorServices(interior);
-      setExteriorServices(exterior);
-      setOtherServices(other);
-
-      const interiorRetainer = [];
-      const exteriorRetainer = [];
-      const otherRetainer = [];
-
-      data.retainer_services.forEach((retainerService) => {
-        if (retainerService.category === "I") {
-          interiorRetainer.push(retainerService);
-        } else if (retainerService.category === "E") {
-          exteriorRetainer.push(retainerService);
-        } else {
-          otherRetainer.push(retainerService);
-        }
-      });
-
-      setInteriorRetainerServices(interiorRetainer);
-      setExteriorRetainerServices(exteriorRetainer);
-      setOtherRetainerServices(otherRetainer);
-
       // if estimateId is passed in, get the estimate info and pre-populate the form
       if (estimateId) {
         const response = await api.getEstimateDetail(estimateId);
@@ -418,42 +379,23 @@ const CreateJob = () => {
         setAirportSelected(response.data.airport);
         setFboSelected(response.data.fbo);
 
-        //iterate through data.services and based on the service.category,
-        // update the selected field to true if there is a match by service name
-        // the match has to be done by name because the service id from an estimate is different than a regular service id
+        const interior = [];
+        const exterior = [];
+        const other = [];
+
         response.data.services.forEach((service) => {
           if (service.category === "I") {
-            const updatedInteriorServices = interior.map((s) => {
-              if (s.name === service.name) {
-                return { ...s, selected: true };
-              } else {
-                return { ...s, selected: false };
-              }
-            });
-
-            setInteriorServices(updatedInteriorServices);
+            interior.push(service);
           } else if (service.category === "E") {
-            const updatedExteriorServices = exterior.map((s) => {
-              if (s.name === service.name) {
-                return { ...s, selected: true };
-              } else {
-                return { ...s, selected: false };
-              }
-            });
-
-            setExteriorServices(updatedExteriorServices);
+            exterior.push(service);
           } else {
-            const updatedOtherServices = other.map((s) => {
-              if (s.name === service.name) {
-                return { ...s, selected: true };
-              } else {
-                return { ...s, selected: false };
-              }
-            });
-
-            setOtherServices(updatedOtherServices);
+            other.push(service);
           }
         });
+
+        setInteriorServices(interior);
+        setExteriorServices(exterior);
+        setOtherServices(other);
       }
 
       setLoading(false);
@@ -891,6 +833,55 @@ const CreateJob = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
+  const handleCustomerSelectedChange = async (customer) => {
+    setCustomerSelected(customer);
+
+    try {
+      const { data } = await api.getCustomerRetainerServices(customer.id);
+
+      setServices(data.services);
+      setRetainerServices(data.retainer_services);
+
+      const interior = [];
+      const exterior = [];
+      const other = [];
+
+      data.services.forEach((service) => {
+        if (service.category === "I") {
+          interior.push(service);
+        } else if (service.category === "E") {
+          exterior.push(service);
+        } else {
+          other.push(service);
+        }
+      });
+
+      setInteriorServices(interior);
+      setExteriorServices(exterior);
+      setOtherServices(other);
+
+      const interiorRetainer = [];
+      const exteriorRetainer = [];
+      const otherRetainer = [];
+
+      data.retainer_services.forEach((retainerService) => {
+        if (retainerService.category === "I") {
+          interiorRetainer.push(retainerService);
+        } else if (retainerService.category === "E") {
+          exteriorRetainer.push(retainerService);
+        } else {
+          otherRetainer.push(retainerService);
+        }
+      });
+
+      setInteriorRetainerServices(interiorRetainer);
+      setExteriorRetainerServices(exteriorRetainer);
+      setOtherRetainerServices(otherRetainer);
+    } catch (err) {
+      toast.error("Unable to get customer services");
+    }
+  };
+
   const handleAirportSelectedChange = async (airport) => {
     setAirportSelected(airport);
 
@@ -1168,7 +1159,7 @@ const CreateJob = () => {
                     <div className="mt-1">
                       <Listbox
                         value={customerSelected}
-                        onChange={setCustomerSelected}
+                        onChange={handleCustomerSelectedChange}
                       >
                         {({ open }) => (
                           <>
@@ -2099,45 +2090,53 @@ const CreateJob = () => {
                 <div className="text-xl text-gray-500 tracking-wide">
                   Click on the services you want to include
                 </div>
-                <div className="mt-6 font-bold text-xl mb-4">INTERIOR</div>
-                <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                  {interiorServices.map((service, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleServiceChange(service)}
-                      className={`relative cursor-pointer hover:bg-gray-50 border 
-                                    ${
-                                      service.selected
-                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                        : "border-gray-300"
-                                    }           
-                      rounded-lg p-4 py-7 focus:outline-none`}
-                    >
-                      <div className="text-md">{service.name}</div>
-                    </div>
-                  ))}
-                </div>
 
-                <div className="border-t-2 border-gray-300 my-8"></div>
-
-                <div className="mt-8 font-bold text-xl mb-4">EXTERIOR</div>
-                <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                  {exteriorServices.map((service, index) => (
-                    <div
-                      key={index}
-                      onClick={() => handleServiceChange(service)}
-                      className={`relative cursor-pointer hover:bg-gray-50 border 
-                                    ${
-                                      service.selected
-                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                        : "border-gray-300"
-                                    }           
-                      rounded-lg p-4 py-7 focus:outline-none`}
-                    >
-                      <div className="text-md">{service.name}</div>
+                {interiorServices.length > 0 && (
+                  <>
+                    <div className="mt-6 font-bold text-xl mb-4">INTERIOR</div>
+                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                      {interiorServices.map((service, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleServiceChange(service)}
+                          className={`relative cursor-pointer hover:bg-gray-50 border 
+                                            ${
+                                              service.selected
+                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                                : "border-gray-300"
+                                            }           
+                            rounded-lg p-4 py-7 focus:outline-none`}
+                        >
+                          <div className="text-md">{service.name}</div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </>
+                )}
+
+                {exteriorServices.length > 0 && (
+                  <>
+                    <div className="border-t-2 border-gray-300 my-8"></div>
+                    <div className="mt-8 font-bold text-xl mb-4">EXTERIOR</div>
+                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                      {exteriorServices.map((service, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleServiceChange(service)}
+                          className={`relative cursor-pointer hover:bg-gray-50 border 
+                                            ${
+                                              service.selected
+                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                                : "border-gray-300"
+                                            }           
+                            rounded-lg p-4 py-7 focus:outline-none`}
+                        >
+                          <div className="text-md">{service.name}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
 
                 {otherServices.length > 0 && (
                   <>
@@ -2169,67 +2168,104 @@ const CreateJob = () => {
                   currentUser.isInternalCoordinator ||
                   (currentUser.isCustomer && currentUser.isPremiumMember)) && (
                   <>
-                    <div className="border-t-2 border-gray-300 my-8"></div>
-                    <div className="text-3xl font-bold tracking-wide">
-                      Retainers
-                    </div>
-                    <div className="text-xl text-gray-500 tracking-wide">
-                      Click on the retainers you want to include
-                    </div>
-                    <div className="mt-6 font-bold text-xl mb-4">INTERIOR</div>
-                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                      {interiorRetainerServices.map((service, index) => (
-                        <div
-                          key={index}
-                          onClick={() => handleRetainerServiceChange(service)}
-                          className={`relative cursor-pointer hover:bg-gray-50 border 
-                                    ${
-                                      service.selected
-                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                        : "border-gray-300"
-                                    }           
-                                    rounded-lg p-4 py-7 focus:outline-none`}
-                        >
-                          <div className="flex-1 text-md">{service.name}</div>
+                    {(interiorRetainerServices.length > 0 ||
+                      exteriorRetainerServices.length > 0 ||
+                      otherRetainerServices.length > 0) && (
+                      <>
+                        <div className="border-t-2 border-gray-300 my-8"></div>
+                        <div className="text-3xl font-bold tracking-wide">
+                          Retainers
                         </div>
-                      ))}
-                    </div>
-                    <div className="mt-6 font-bold text-xl mb-4">EXTERIOR</div>
-                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                      {exteriorRetainerServices.map((service, index) => (
-                        <div
-                          key={index}
-                          onClick={() => handleRetainerServiceChange(service)}
-                          className={`relative cursor-pointer hover:bg-gray-50 border 
-                                    ${
-                                      service.selected
-                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                        : "border-gray-300"
-                                    }           
-                                    rounded-lg p-4 py-7 focus:outline-none`}
-                        >
-                          <div className="flex-1 text-md">{service.name}</div>
+                        <div className="text-xl text-gray-500 tracking-wide">
+                          Click on the retainers you want to include
                         </div>
-                      ))}
-                    </div>
-                    <div className="mt-6 font-bold text-xl mb-4">OTHER</div>
-                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                      {otherRetainerServices.map((service, index) => (
-                        <div
-                          key={index}
-                          onClick={() => handleRetainerServiceChange(service)}
-                          className={`relative cursor-pointer hover:bg-gray-50 border 
-                                    ${
-                                      service.selected
-                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                        : "border-gray-300"
-                                    }           
-                                    rounded-lg p-4 py-7 focus:outline-none`}
-                        >
-                          <div className="flex-1 text-md">{service.name}</div>
+                      </>
+                    )}
+
+                    {interiorRetainerServices.length > 0 && (
+                      <>
+                        <div className="mt-6 font-bold text-xl mb-4">
+                          INTERIOR
                         </div>
-                      ))}
-                    </div>
+                        <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                          {interiorRetainerServices.map((service, index) => (
+                            <div
+                              key={index}
+                              onClick={() =>
+                                handleRetainerServiceChange(service)
+                              }
+                              className={`relative cursor-pointer hover:bg-gray-50 border 
+                                            ${
+                                              service.selected
+                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                                : "border-gray-300"
+                                            }           
+                                            rounded-lg p-4 py-7 focus:outline-none`}
+                            >
+                              <div className="flex-1 text-md">
+                                {service.name}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {exteriorRetainerServices.length > 0 && (
+                      <>
+                        <div className="mt-6 font-bold text-xl mb-4">
+                          EXTERIOR
+                        </div>
+                        <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                          {exteriorRetainerServices.map((service, index) => (
+                            <div
+                              key={index}
+                              onClick={() =>
+                                handleRetainerServiceChange(service)
+                              }
+                              className={`relative cursor-pointer hover:bg-gray-50 border 
+                                            ${
+                                              service.selected
+                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                                : "border-gray-300"
+                                            }           
+                                            rounded-lg p-4 py-7 focus:outline-none`}
+                            >
+                              <div className="flex-1 text-md">
+                                {service.name}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {otherRetainerServices.length > 0 && (
+                      <>
+                        <div className="mt-6 font-bold text-xl mb-4">OTHER</div>
+                        <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                          {otherRetainerServices.map((service, index) => (
+                            <div
+                              key={index}
+                              onClick={() =>
+                                handleRetainerServiceChange(service)
+                              }
+                              className={`relative cursor-pointer hover:bg-gray-50 border 
+                                            ${
+                                              service.selected
+                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                                : "border-gray-300"
+                                            }           
+                                            rounded-lg p-4 py-7 focus:outline-none`}
+                            >
+                              <div className="flex-1 text-md">
+                                {service.name}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
 

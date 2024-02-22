@@ -13,6 +13,10 @@ export const searchEstimates = (data: any) => {
     return httpService.post('/api/estimates', data)
 }
 
+export const getCustomerRetainerServices = (id: number) => {
+    return httpService.get(`/api/customers/retainers-services/${id}/`);
+}
+
 export const getEstimateDetail = (id: any) => {
     return httpService.get(`/api/estimates/details/${id}`)
 }
