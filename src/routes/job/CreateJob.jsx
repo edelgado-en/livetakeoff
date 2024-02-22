@@ -194,12 +194,59 @@ const CreateJob = () => {
         });
         setAircraftSearchTerm(data.aircraft_name);
 
+        try {
+          const response = await api.getCustomerRetainerServices(
+            data.customer_id
+          );
+
+          setServices(response.data.services);
+          setRetainerServices(response.data.retainer_services);
+
+          const interior = [];
+          const exterior = [];
+          const other = [];
+
+          response.data.services.forEach((service) => {
+            if (service.category === "I") {
+              interior.push(service);
+            } else if (service.category === "E") {
+              exterior.push(service);
+            } else {
+              other.push(service);
+            }
+          });
+
+          setInteriorServices(interior);
+          setExteriorServices(exterior);
+          setOtherServices(other);
+
+          const interiorRetainer = [];
+          const exteriorRetainer = [];
+          const otherRetainer = [];
+
+          response.data.retainer_services.forEach((retainerService) => {
+            if (retainerService.category === "I") {
+              interiorRetainer.push(retainerService);
+            } else if (retainerService.category === "E") {
+              exteriorRetainer.push(retainerService);
+            } else {
+              otherRetainer.push(retainerService);
+            }
+          });
+
+          setInteriorRetainerServices(interiorRetainer);
+          setExteriorRetainerServices(exteriorRetainer);
+          setOtherRetainerServices(otherRetainer);
+        } catch (err) {
+          toast.error("Unable to get customer services");
+        }
+
         setCustomerSelected({ id: data.customer_id, name: data.customer_name });
         setCustomerSearchTerm(data.customer_name);
 
         // Do not update services if there there is an estimate id, just respect the services used in the estimate id
         // Do not update services for customer users
-        if (
+        /* if (
           data.services.length > 0 &&
           estimateId === undefined &&
           (currentUser.isAdmin ||
@@ -247,10 +294,10 @@ const CreateJob = () => {
           });
 
           setOtherServices(updatedOtherServices);
-        }
+        } */
 
         // Do not update retainer services for customer users
-        if (
+        /* if (
           data.retainer_services.length > 0 &&
           (currentUser.isAdmin ||
             currentUser.isSuperUser ||
@@ -303,7 +350,7 @@ const CreateJob = () => {
           );
 
           setOtherRetainerServices(updatedOtherRetainerServices);
-        }
+        } */
       }
 
       if (
