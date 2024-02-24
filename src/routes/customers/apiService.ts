@@ -20,8 +20,12 @@ export const getAirports = (request:any = { name: '', open_jobs:false }) => {
     return httpService.post(`/api/airports`, request);
 }
 
-export const getServices = () => {
-    return httpService.get(`/api/services`);
+export const getServices = (data: any) => {
+    return httpService.post('/api/services', data);
+}
+
+export const getRetainers = (data: any) => {
+    return httpService.post('/api/retainer-services', data);
 }
 
 export const getFbos = () => {
@@ -82,4 +86,20 @@ export const createCustomer = (formData: any) => {
 
 export const editCustomer = (id: number, request: any) => {
     return httpService.patch(`/api/customers/${id}/`, request)
+}
+
+export const getCustomerAvailableServices = (id: number) => {
+    return httpService.get(`/api/customers/available-services/${id}/`);
+}
+
+export const updateCustomerAvailableService = (request: any) => {
+    return httpService.post(`/api/customers/available-services`, request);
+}
+
+export const getCustomerAvailableRetainers = (id: number) => {
+    return httpService.get(`/api/customers/available-retainers/${id}/`);
+}
+
+export const updateCustomerAvailableRetainer = (request: any) => {
+    return httpService.post(`/api/customers/available-retainers`, request);
 }

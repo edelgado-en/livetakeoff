@@ -14,11 +14,11 @@ export const getServicesByAirport = () => {
 }
 
 export const getServices = () => {
-    return httpService.get('/api/services');
+    return httpService.post('/api/services', {});
 }
 
 export const getRetainerServices = () => {
-    return httpService.get('/api/retainer-services');
+    return httpService.post('/api/retainer-services', {});
 }
 
 export const searchRetainerCustomers = (data: any, currentPage: Number) => {

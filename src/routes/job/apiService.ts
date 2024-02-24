@@ -137,7 +137,7 @@ export const getAirports = (request: any) => {
 }
 
 export const getServices = () => {
-    return httpService.get('/api/services');
+    return httpService.post('/api/services', {});
 }
 
 export const getTailAircraftLookup = (tail: string) => {
@@ -153,7 +153,7 @@ export const getTailOpenJobLookup = (tail: string) => {
 }
 
 export const getRetainerServices = () => {
-    return httpService.get('/api/retainer-services');
+    return httpService.post('/api/retainer-services', {});
 }
 
 export const getCustomers = (request: any) => {

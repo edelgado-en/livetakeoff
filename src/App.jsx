@@ -35,6 +35,7 @@ import CreateLocation from "./routes/inventory/CreateLocation";
 
 import Customers from "./routes/customers/Customers";
 import CustomerDetails from "./routes/customers/CustomerDetails";
+import CustomerServices from "./routes/customers/CustomerServices";
 import CustomerDiscounts from "./routes/customers/CustomerDiscounts";
 import CustomerDiscountList from "./routes/customers/CustomerDiscountList";
 import CustomerAddDiscount from "./routes/customers/CustomerAddDiscount";
@@ -289,6 +290,8 @@ const App = () => {
                       >
                         <Route index element={<CustomerDetails />} />
                         <Route path="details" element={<CustomerDetails />} />
+
+                        <Route path="services" element={<CustomerServices />} />
 
                         <Route path="discounts" element={<CustomerDiscounts />}>
                           <Route index element={<CustomerDiscountList />} />
