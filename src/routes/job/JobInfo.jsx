@@ -1509,9 +1509,24 @@ const JobInfo = () => {
                                     {discount.name === "G" ? "General" : ""}
                                   </dt>
                                   <dd className="whitespace-nowrap text-gray-900">
-                                    {!discount.isPercentage ? "$" : ""}
-                                    {discount.discount}
-                                    {discount.isPercentage ? "%" : ""}
+                                    {discount.isPercentage && (
+                                      <>
+                                        {discount.discount}
+                                        {"%"}
+                                        <span className="text-gray-500">
+                                          {" ("}$
+                                          {discount.discount_dollar_amount}
+                                          {")"}
+                                        </span>
+                                      </>
+                                    )}
+
+                                    {!discount.isPercentage && (
+                                      <>
+                                        {"$"}
+                                        {discount.discount}
+                                      </>
+                                    )}
                                   </dd>
                                 </div>
                               ))}
@@ -1544,9 +1559,24 @@ const JobInfo = () => {
                                     {fee.name === "G" ? "General" : ""}
                                   </dt>
                                   <dd className="whitespace-nowrap text-gray-900">
-                                    {!fee.isPercentage ? "$" : ""}
-                                    {fee.fee}
-                                    {fee.isPercentage ? "%" : ""}
+                                    {fee.isPercentage && (
+                                      <>
+                                        {fee.fee}
+                                        {"%"}
+                                        <span className="text-gray-500">
+                                          {" ("}$
+                                          {fee.additional_fee_dollar_amount}
+                                          {")"}
+                                        </span>
+                                      </>
+                                    )}
+
+                                    {!fee.isPercentage && (
+                                      <>
+                                        {"$"}
+                                        {fee.fee}
+                                      </>
+                                    )}
                                   </dd>
                                 </div>
                               ))}
