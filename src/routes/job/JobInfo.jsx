@@ -1407,6 +1407,17 @@ const JobInfo = () => {
                           : 0}
                       </dd>
                     </div>
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Labor Time:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        {jobDetails.labor_time
+                          ? jobDetails.labor_time.toFixed(1)
+                          : 0}{" "}
+                        hr
+                      </dd>
+                    </div>
                   </dl>
                 </div>
               </div>
