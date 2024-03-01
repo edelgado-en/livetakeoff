@@ -546,7 +546,10 @@ const InventoryList = () => {
 
   return (
     <AnimatedPage>
-      <div className={`px-2 m-auto -mt-3 flex flex-wrap max-w-7xl`}>
+      <div
+        className={`px-2 m-auto -mt-3 flex flex-wrap max-w-7xl`}
+        style={{ maxWidth: "1900px" }}
+      >
         <div className="flex-1 xl:px-10 lg:px-10 md:px-10">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
