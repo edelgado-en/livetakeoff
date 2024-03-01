@@ -11,6 +11,25 @@ import Loader from "../../components/loader/Loader";
 import ReactTimeAgo from "react-time-ago";
 import Pagination from "react-js-pagination";
 
+const ChevronUpDownIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5 text-gray-400"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+      />
+    </svg>
+  );
+};
+
 const MagnifyingGlassIcon = () => {
   return (
     <svg
@@ -69,9 +88,16 @@ const InventoryHistoricalStats = () => {
   );
   const [searchItemName, setSearchItemName] = useState("");
 
+  const [locations, setLocations] = useState([]);
+  const [locationSelected, setLocationSelected] = useState(null);
+
   useEffect(() => {
     getInventoryHistoryStats();
   }, [dateSelected]);
+
+  useEffect(() => {
+    getLocations();
+  }, []);
 
   useEffect(() => {
     let timeoutID = setTimeout(() => {
@@ -81,7 +107,26 @@ const InventoryHistoricalStats = () => {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [dateSelected, currentPage, searchItemName, activityTypeSelected]);
+  }, [
+    dateSelected,
+    currentPage,
+    searchItemName,
+    activityTypeSelected,
+    locationSelected,
+  ]);
+
+  const getLocations = async () => {
+    try {
+      const { data } = await api.getLocations();
+
+      data.results.unshift({ id: null, name: "All My locations" });
+
+      setLocations(data.results);
+      setLocationSelected(data.results[0]);
+    } catch (err) {
+      toast.error("Unable to get locations");
+    }
+  };
 
   const getInventoryHistoryStats = async () => {
     setHistoryLoading(true);
@@ -106,6 +151,7 @@ const InventoryHistoricalStats = () => {
       dateSelected: dateSelected.id,
       item_name: searchItemName,
       activity_type: activityTypeSelected.id,
+      location_id: locationSelected?.id,
     };
 
     try {
@@ -130,6 +176,10 @@ const InventoryHistoricalStats = () => {
 
       getLocationItemActivities();
     }
+  };
+
+  const handleSetLocationSelected = (location) => {
+    setLocationSelected(location);
   };
 
   return (
@@ -434,7 +484,7 @@ const InventoryHistoricalStats = () => {
                     </span>
                   </h2>
                   <div className="mt-4">
-                    <div className="relative border-gray-200 flex gap-4">
+                    <div className="relative border-gray-200 flex flex-wrap gap-4">
                       <div className="">
                         <div
                           onClick={() => getLocationItemActivities()}
@@ -522,6 +572,97 @@ const InventoryHistoricalStats = () => {
                                             )}
                                           >
                                             {activityType.name}
+                                          </span>
+                                          {selected ? (
+                                            <span
+                                              className={classNames(
+                                                active
+                                                  ? "text-white"
+                                                  : "text-red-600",
+                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                              )}
+                                            >
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          </>
+                        )}
+                      </Listbox>
+
+                      <Listbox
+                        value={locationSelected}
+                        onChange={(location) =>
+                          handleSetLocationSelected(location)
+                        }
+                      >
+                        {({ open }) => (
+                          <>
+                            <div style={{ width: "300px" }}>
+                              <Listbox.Button
+                                className="relative w-full cursor-default rounded-md 
+                                bg-white py-2.5 px-3 pr-8 text-left
+                                shadow-sm border-gray-300 border focus:border-sky-500 focus:ring-sky-500
+                                text-md text-gray-500"
+                              >
+                                <span className="block truncate">
+                                  {locationSelected
+                                    ? locationSelected.name
+                                    : "Select a location"}
+                                </span>
+                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                  <ChevronDownIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </Listbox.Button>
+
+                              <Transition
+                                show={open}
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Listbox.Options
+                                  className="absolute z-10 mt-1 max-h-96 overflow-auto
+                                            rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                            ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                                >
+                                  {locations.map((location) => (
+                                    <Listbox.Option
+                                      key={location.id}
+                                      className={({ active }) =>
+                                        classNames(
+                                          active
+                                            ? "text-white bg-red-600"
+                                            : "text-gray-900",
+                                          "relative select-none py-2 pl-3 pr-9 cursor-pointer text-md"
+                                        )
+                                      }
+                                      value={location}
+                                    >
+                                      {({ selected, active }) => (
+                                        <>
+                                          <span
+                                            className={classNames(
+                                              selected
+                                                ? "font-semibold"
+                                                : "font-normal",
+                                              "block truncate"
+                                            )}
+                                          >
+                                            {location.name}
                                           </span>
                                           {selected ? (
                                             <span
