@@ -13,6 +13,7 @@ import { useAppDispatch } from "../../app/hooks";
 import { resetCommentsCount } from "./jobStats/jobStatsSlice";
 
 import * as api from "./apiService";
+import { toast } from "react-toastify";
 
 import DeleteCommentModal from "./DeleteJobCommentModal";
 
@@ -31,12 +32,24 @@ const JobComments = () => {
 
   const currentUser = useAppSelector(selectUser);
 
+  const [userEmails, setUserEmails] = useState([]);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     getComments();
     dispatch(resetCommentsCount());
   }, []);
+
+  const getUserEmails = async () => {
+    try {
+      const { data } = await api.getUserJobEmails(Number(jobId));
+
+      setUserEmails(data.emails);
+    } catch (err) {
+      toast.error("Unable to fetch user info");
+    }
+  };
 
   const getComments = async () => {
     setLoading(true);
@@ -83,15 +96,39 @@ const JobComments = () => {
   };
 
   const handleSetSendEmail = () => {
+    let fethEmails = !sendEmail;
     setSendEmail(!sendEmail);
+
+    if (fethEmails) {
+      getUserEmails();
+    }
+  };
+
+  const handleUserEmailChange = (email) => {
+    const tagsUpdated = userEmails.map((el) => {
+      if (el.email === email) {
+        el.selected = !el.selected;
+      }
+      return el;
+    });
+
+    setUserEmails(tagsUpdated);
   };
 
   const createJobComment = async () => {
+    const selectedEmails = userEmails.filter((el) => el.selected);
+
+    if (sendEmail && selectedEmails.length === 0) {
+      alert("Select at least one email to send the email to.");
+      return;
+    }
+
     const request = {
       comment,
       sendSMS,
       isPublic,
       sendEmail,
+      emails: selectedEmails.map((el) => el.email),
     };
 
     setCreateCommentLoading(true);
@@ -105,6 +142,8 @@ const JobComments = () => {
       setComment("");
 
       setCreateCommentLoading(false);
+
+      toast.success("Comment created!");
     } catch (error) {
       setCreateCommentLoading(false);
 
@@ -156,10 +195,10 @@ const JobComments = () => {
             >
               {comments.length === 0 && (
                 <>
-                  <div className="text-gray-700 font-medium text-sm flex justify-center mt-2">
+                  <div className="text-gray-700 font-medium text-md flex justify-center mt-2">
                     No comments found.
                   </div>
-                  <p className="text-gray-500 text-sm flex justify-center">
+                  <p className="text-gray-500 text-md flex justify-center">
                     Be the first to comment!
                   </p>
                 </>
@@ -269,7 +308,7 @@ const JobComments = () => {
                       value={comment}
                       onChange={handleCommentChange}
                       className="block w-full rounded-md border-gray-300 shadow-sm
-                                          focus:border-blue-400 focus:ring-sky-400 sm:text-sm max-h-20"
+                                          focus:border-blue-400 focus:ring-sky-400 text-md max-h-20"
                       placeholder="Add a comment..."
                     />
                   </div>
@@ -294,14 +333,14 @@ const JobComments = () => {
                                                   focus:ring-red-500"
                                 />
                               </div>
-                              <div className="ml-3 text-sm">
+                              <div className="ml-3">
                                 <label
                                   htmlFor="sendSMS"
-                                  className="font-medium text-gray-700"
+                                  className="font-medium text-gray-700 text-md"
                                 >
                                   Send SMS
                                 </label>
-                                <p className="text-gray-500">
+                                <p className="text-gray-500 text-sm">
                                   Notified assigned project managers.
                                 </p>
                               </div>
@@ -313,7 +352,7 @@ const JobComments = () => {
                           disabled={createCommentLoading}
                           onClick={() => createJobComment()}
                           className="inline-flex items-center justify-center rounded-md
-                                              border border-transparent bg-red-600 px-2 py-1 text-sm
+                                              border border-transparent bg-red-600 px-2 py-1 text-md
                                               text-white shadow-sm hover:bg-red-700 focus:outline-none
                                               focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                         >
@@ -336,7 +375,7 @@ const JobComments = () => {
                                                   focus:ring-red-500"
                               />
                             </div>
-                            <div className="ml-3 text-sm">
+                            <div className="ml-3 text-md">
                               <label
                                 htmlFor="public"
                                 className="font-medium text-gray-700"
@@ -350,33 +389,78 @@ const JobComments = () => {
                       {(currentUser.isAdmin ||
                         currentUser.isSuperUser ||
                         currentUser.isAccountManager) && (
-                        <div className="mt-3 flex items-center justify-between">
-                          <div className="flex">
-                            <div className="flex h-5 items-center">
-                              <input
-                                id="email"
-                                name="email"
-                                value={sendEmail}
-                                onClick={handleSetSendEmail}
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-gray-300 text-red-600
-                                                  focus:ring-red-500"
-                              />
-                            </div>
-                            <div className="ml-3 text-sm">
-                              <label
-                                htmlFor="email"
-                                className="font-medium text-gray-700"
-                              >
-                                Send Email
-                              </label>
-                              <p className="text-gray-500">
-                                Send an email notification to the customer's
-                                email.
-                              </p>
+                        <>
+                          <div className="mt-5 flex items-center justify-between">
+                            <div className="flex">
+                              <div className="flex h-5 items-center">
+                                <input
+                                  id="email"
+                                  name="email"
+                                  value={sendEmail}
+                                  onClick={handleSetSendEmail}
+                                  type="checkbox"
+                                  className="h-4 w-4 rounded border-gray-300 text-red-600
+                                                    focus:ring-red-500"
+                                />
+                              </div>
+                              <div className="ml-3">
+                                <label
+                                  htmlFor="email"
+                                  className="font-medium text-gray-700 text-md"
+                                >
+                                  Send Email
+                                </label>
+                                <p className="text-gray-500 text-sm">
+                                  Send an email notification to the customer
+                                  that created this job.
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
+
+                          {sendEmail && userEmails.length === 0 && (
+                            <div className="mt-3">
+                              <p className="text-gray-500 text-center m-auto text-sm">
+                                No emails specified for the user that created
+                                this job. You can add emails in the Team view.
+                              </p>
+                            </div>
+                          )}
+
+                          {sendEmail && userEmails.length > 0 && (
+                            <div className="mt-4 px-7">
+                              <div className="mb-3 text-md">
+                                Select which emails you want to use:
+                              </div>
+                              {userEmails.map((userEmail, index) => (
+                                <div
+                                  key={index}
+                                  className="relative flex items-start mb-3"
+                                >
+                                  <div className="flex h-5 items-center">
+                                    <input
+                                      id={"email" + index}
+                                      checked={userEmail.selected}
+                                      onChange={() =>
+                                        handleUserEmailChange(userEmail.email)
+                                      }
+                                      type="checkbox"
+                                      className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                    />
+                                  </div>
+                                  <div className="ml-3 text-sm cursor-pointer">
+                                    <label
+                                      htmlFor={"email" + index}
+                                      className="text-gray-700"
+                                    >
+                                      {userEmail.email}
+                                    </label>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </>
                       )}
                     </>
                   )}

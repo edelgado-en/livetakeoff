@@ -215,3 +215,11 @@ export const getTailServiceHistory = (data: any) => {
 export const getUserDetails = () => {
     return httpService.get('/api/users/me');
 }
+
+export const getUserInfo = (id: number) => {
+    return httpService.get(`/api/users/${id}/`);
+}
+
+export const getUserJobEmails = (id: number) => {
+    return httpService.get(`/api/user-job-email/${id}/`);
+}
