@@ -45,6 +45,11 @@ const JobComments = () => {
     try {
       const { data } = await api.getUserJobEmails(Number(jobId));
 
+      //keep the existing structure, just add selected: true to each object in data.emails
+      data.emails = data.emails.map((el) => {
+        return { ...el, selected: true };
+      });
+
       setUserEmails(data.emails);
     } catch (err) {
       toast.error("Unable to fetch user info");
