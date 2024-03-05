@@ -223,3 +223,7 @@ export const getUserInfo = (id: number) => {
 export const getUserJobEmails = (id: number) => {
     return httpService.get(`/api/user-job-email/${id}/`);
 }
+
+export const getFbos = () => {
+    return httpService.get(`/api/fbos`);
+}

@@ -27,6 +27,8 @@ import { selectUser } from "../../routes/userProfile/userSlice";
 
 import * as api from "./apiService";
 
+import { toast } from "react-toastify";
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -115,6 +117,14 @@ const CompleteList = () => {
       name: "All",
     }
   );
+
+  const [fboSelected, setFboSelected] = useState(
+    JSON.parse(localStorage.getItem("completedFboSelected")) || {
+      id: "All",
+      name: "All",
+    }
+  );
+
   const [airportSearchTerm, setAirportSearchTerm] = useState("");
 
   const [customerSelected, setCustomerSelected] = useState(
@@ -124,6 +134,7 @@ const CompleteList = () => {
     }
   );
   const [customerSearchTerm, setCustomerSearchTerm] = useState("");
+  const [fboSearchTerm, setFboSearchTerm] = useState("");
 
   const [activeFilters, setActiveFilters] = useState([]);
 
@@ -132,6 +143,9 @@ const CompleteList = () => {
     useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
   const [airports, setAirports] = useState([]);
+
+  const [fbos, setFbos] = useState([]);
+  const [allFbos, setAllFbos] = useState([]);
 
   const [customers, setCustomers] = useState([]);
 
@@ -181,6 +195,12 @@ const CompleteList = () => {
       )
     : customers;
 
+  const filteredFbos = fboSearchTerm
+    ? fbos.filter((item) =>
+        item.name.toLowerCase().includes(fboSearchTerm.toLowerCase())
+      )
+    : fbos;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -207,6 +227,7 @@ const CompleteList = () => {
 
   useEffect(() => {
     getAirports();
+    getFbos();
     getCustomers();
   }, []);
 
@@ -236,6 +257,10 @@ const CompleteList = () => {
   }, [airportSelected]);
 
   useEffect(() => {
+    localStorage.setItem("completedFboSelected", JSON.stringify(fboSelected));
+  }, [fboSelected]);
+
+  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       searchJobs();
@@ -250,6 +275,7 @@ const CompleteList = () => {
     currentPage,
     airportSelected,
     customerSelected,
+    fboSelected,
   ]);
 
   const searchJobs = async () => {
@@ -259,6 +285,7 @@ const CompleteList = () => {
       searchText: localStorage.getItem("completedSearchText"),
       status: JSON.parse(localStorage.getItem("completedStatusSelected")).id,
       airport: JSON.parse(localStorage.getItem("completedAirportSelected")).id,
+      fbo: JSON.parse(localStorage.getItem("completedFboSelected")).id,
       customer: JSON.parse(localStorage.getItem("completedCustomerSelected"))
         .id,
       requestedDateFrom,
@@ -312,6 +339,13 @@ const CompleteList = () => {
       });
     }
 
+    if (request.fbo !== "All") {
+      activeFilters.push({
+        id: "fbo",
+        name: fboSelected.name,
+      });
+    }
+
     setActiveFilters(activeFilters);
 
     try {
@@ -334,6 +368,8 @@ const CompleteList = () => {
       setCustomerSelected({ id: "All", name: "All" });
     } else if (activeFilterId === "airport") {
       setAirportSelected({ id: "All", name: "All" });
+    } else if (activeFilterId === "fbo") {
+      setFboSelected({ id: "All", name: "All" });
     }
 
     setActiveFilters(
@@ -352,6 +388,14 @@ const CompleteList = () => {
     data.results.unshift({ id: "All", name: "All" });
 
     setAirports(data.results);
+  };
+
+  const getFbos = async () => {
+    const { data } = await api.getFbos();
+
+    data.results.unshift({ id: "All", name: "All" });
+    setFbos(data.results);
+    setAllFbos(data.results);
   };
 
   const getCustomers = async () => {
@@ -537,6 +581,33 @@ const CompleteList = () => {
   const handleStatusFilter = (status) => {
     setCurrentPage(1);
     setStatusSelected({ id: status.id, name: status.name });
+  };
+
+  const handleAirportSelectedChange = async (airport) => {
+    setAirportSelected(airport);
+
+    if (airport.id === "All") {
+      setFbos(allFbos);
+      return;
+    }
+
+    const request = {
+      airport_id: airport.id,
+    };
+
+    try {
+      const { data } = await api.searchFbos(request);
+
+      if (data.results.length > 0) {
+        data.results.unshift({ id: "All", name: "All" });
+        setFbos(data.results);
+      } else {
+        data.results.unshift({ id: "All", name: "All" });
+        setFbos(allFbos);
+      }
+    } catch (err) {
+      toast.error("Unable to get Fbos");
+    }
   };
 
   return (
@@ -1306,7 +1377,7 @@ const CompleteList = () => {
                                       leaveTo="opacity-0"
                                     >
                                       <Listbox.Options
-                                        className="absolute z-10 mt-1 max-h-72 w-full overflow-auto
+                                        className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
                                                                                             rounded-md bg-white py-1 text-base ring-1
                                                                                             ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                                       >
@@ -1418,7 +1489,7 @@ const CompleteList = () => {
 
                         <div
                           className={`${
-                            !currentUser.isCustomer ? "mt-72" : ""
+                            !currentUser.isCustomer ? "mt-48" : ""
                           } px-4`}
                         >
                           <h2 className="font-medium text-sm text-gray-900">
@@ -1426,7 +1497,7 @@ const CompleteList = () => {
                           </h2>
                           <Listbox
                             value={airportSelected}
-                            onChange={setAirportSelected}
+                            onChange={handleAirportSelectedChange}
                           >
                             {({ open }) => (
                               <>
@@ -1439,7 +1510,7 @@ const CompleteList = () => {
                                     leaveTo="opacity-0"
                                   >
                                     <Listbox.Options
-                                      className="absolute z-10 mt-1 max-h-72 w-full overflow-auto
+                                      className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
                                                                                         rounded-md bg-white py-1 ring-1
                                                                                         ring-black ring-opacity-5 focus:outline-none text-xs"
                                     >
@@ -1520,6 +1591,136 @@ const CompleteList = () => {
                                                 )}
                                               >
                                                 {airport.name}
+                                              </div>
+                                              {selected ? (
+                                                <span
+                                                  className={classNames(
+                                                    active
+                                                      ? "text-white"
+                                                      : "text-red-600",
+                                                    "absolute inset-y-0 right-0 flex items-center pr-2"
+                                                  )}
+                                                >
+                                                  <CheckIcon
+                                                    className="h-5 w-5"
+                                                    aria-hidden="true"
+                                                  />
+                                                </span>
+                                              ) : null}
+                                            </>
+                                          )}
+                                        </Listbox.Option>
+                                      ))}
+                                    </Listbox.Options>
+                                  </Transition>
+                                </div>
+                              </>
+                            )}
+                          </Listbox>
+                        </div>
+
+                        <div
+                          className={`${
+                            !currentUser.isCustomer ? "mt-48" : ""
+                          } px-4`}
+                        >
+                          <h2 className="font-medium text-sm text-gray-900">
+                            Fbos
+                          </h2>
+                          <Listbox
+                            value={fboSelected}
+                            onChange={setFboSelected}
+                          >
+                            {({ open }) => (
+                              <>
+                                <div className="relative mt-1 w-full">
+                                  <Transition
+                                    show={true}
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                  >
+                                    <Listbox.Options
+                                      className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
+                                                                                        rounded-md bg-white py-1 ring-1
+                                                                                        ring-black ring-opacity-5 focus:outline-none text-xs"
+                                    >
+                                      <div className="relative">
+                                        <div className="sticky top-0 z-20  px-1">
+                                          <div className="mt-1 block  items-center">
+                                            <input
+                                              type="text"
+                                              name="search"
+                                              id="search"
+                                              value={fboSearchTerm}
+                                              onChange={(e) =>
+                                                setFboSearchTerm(e.target.value)
+                                              }
+                                              className="border px-2  focus:ring-sky-500
+                                                                                        focus:border-sky-500 block w-full py-1 pr-12 font-normal text-sm
+                                                                                        border-gray-300 rounded-md"
+                                            />
+                                            <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                              {fboSearchTerm && (
+                                                <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  className="h-4 w-4 text-blue-500 font-bold mr-1"
+                                                  viewBox="0 0 20 20"
+                                                  fill="currentColor"
+                                                  onClick={() => {
+                                                    setAirportSearchTerm("");
+                                                  }}
+                                                >
+                                                  <path
+                                                    fillRule="evenodd"
+                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                    clipRule="evenodd"
+                                                  />
+                                                </svg>
+                                              )}
+                                              <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="h-4 w-4 text-gray-500 mr-1"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                  strokeWidth="2"
+                                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                                />
+                                              </svg>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      {filteredFbos.map((fbo) => (
+                                        <Listbox.Option
+                                          key={fbo.id}
+                                          className={({ active }) =>
+                                            classNames(
+                                              active
+                                                ? "text-white bg-red-600"
+                                                : "text-gray-900",
+                                              "relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50"
+                                            )
+                                          }
+                                          value={fbo}
+                                        >
+                                          {({ selected, active }) => (
+                                            <>
+                                              <div
+                                                className={classNames(
+                                                  selected
+                                                    ? "font-semibold"
+                                                    : "font-normal",
+                                                  "block truncate w-36 overflow-ellipsis"
+                                                )}
+                                              >
+                                                {fbo.name}
                                               </div>
                                               {selected ? (
                                                 <span
@@ -1645,7 +1846,7 @@ const CompleteList = () => {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-72 w-full overflow-auto
+                            className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
                                                                             rounded-md bg-white py-1 text-base ring-1
                                                                             ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                           >
@@ -1753,11 +1954,14 @@ const CompleteList = () => {
               </div>
             )}
 
-            <div className={`${!currentUser.isCustomer ? "mt-72" : ""}  pt-8`}>
+            <div className={`${!currentUser.isCustomer ? "mt-48" : ""}  pt-8`}>
               <div className="text-sm font-medium text-gray-900 mb-2">
                 Airports
               </div>
-              <Listbox value={airportSelected} onChange={setAirportSelected}>
+              <Listbox
+                value={airportSelected}
+                onChange={handleAirportSelectedChange}
+              >
                 {({ open }) => (
                   <>
                     <div className="relative mt-1 w-full">
@@ -1769,7 +1973,7 @@ const CompleteList = () => {
                         leaveTo="opacity-0"
                       >
                         <Listbox.Options
-                          className="absolute z-10 mt-1 max-h-72 w-full overflow-auto
+                          className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
                                                                         rounded-md bg-white py-1 ring-1
                                                                         ring-black ring-opacity-5 focus:outline-none text-xs"
                         >
@@ -1848,6 +2052,125 @@ const CompleteList = () => {
                                     )}
                                   >
                                     {airport.name}
+                                  </div>
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active ? "text-white" : "text-red-600",
+                                        "absolute inset-y-0 right-0 flex items-center pr-2"
+                                      )}
+                                    >
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </>
+                )}
+              </Listbox>
+            </div>
+
+            <div className={`${!currentUser.isCustomer ? "mt-48" : ""} pt-8`}>
+              <div className="text-sm font-medium text-gray-900 mb-2">Fbos</div>
+              <Listbox value={fboSelected} onChange={setFboSelected}>
+                {({ open }) => (
+                  <>
+                    <div className="relative mt-1 w-full">
+                      <Transition
+                        show={true}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options
+                          className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
+                                                                        rounded-md bg-white py-1 ring-1
+                                                                        ring-black ring-opacity-5 focus:outline-none text-xs"
+                        >
+                          <div className="relative">
+                            <div className="sticky top-0 z-20  px-1">
+                              <div className="mt-1 block  items-center">
+                                <input
+                                  type="text"
+                                  name="search"
+                                  id="search"
+                                  value={fboSearchTerm}
+                                  onChange={(e) =>
+                                    setFboSearchTerm(e.target.value)
+                                  }
+                                  className="border px-2  focus:ring-sky-500
+                                                                        focus:border-sky-500 block w-full py-1 pr-12 font-normal text-sm
+                                                                        border-gray-300 rounded-md"
+                                />
+                                <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                  {fboSearchTerm && (
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-4 w-4 text-blue-500 font-bold mr-1"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                      onClick={() => {
+                                        setFboSearchTerm("");
+                                      }}
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4 text-gray-500 mr-1"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                    />
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {filteredFbos.map((fbo) => (
+                            <Listbox.Option
+                              key={fbo.id}
+                              className={({ active }) =>
+                                classNames(
+                                  active
+                                    ? "text-white bg-red-600"
+                                    : "text-gray-900",
+                                  "relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50"
+                                )
+                              }
+                              value={fbo}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <div
+                                    className={classNames(
+                                      selected
+                                        ? "font-semibold"
+                                        : "font-normal",
+                                      "block truncate w-36 overflow-ellipsis"
+                                    )}
+                                  >
+                                    {fbo.name}
                                   </div>
                                   {selected ? (
                                     <span
