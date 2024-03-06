@@ -417,6 +417,10 @@ const CreateJob = () => {
       setFbos(data.fbos);
       setTags(data.tags);
 
+      if (data.customer_id) {
+        getServicesAndRetainers(data.customer_id);
+      }
+
       // if estimateId is passed in, get the estimate info and pre-populate the form
       if (estimateId) {
         const response = await api.getEstimateDetail(estimateId);
@@ -880,11 +884,14 @@ const CreateJob = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
-  const handleCustomerSelectedChange = async (customer) => {
+  const handleCustomerSelectedChange = (customer) => {
     setCustomerSelected(customer);
+    getServicesAndRetainers(customer.id);
+  };
 
+  const getServicesAndRetainers = async (customerId) => {
     try {
-      const { data } = await api.getCustomerRetainerServices(customer.id);
+      const { data } = await api.getCustomerRetainerServices(customerId);
 
       setServices(data.services);
       setRetainerServices(data.retainer_services);
