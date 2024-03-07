@@ -987,18 +987,24 @@ const JobInfo = () => {
                         : "Not provided"}
                     </dd>
                   </div>
-                  <div className="px-4 py-3 flex gap-4">
-                    <dt className="text-md font-bold text-gray-900">
-                      Requested By:
-                    </dt>
-                    <dd className="text-md text-gray-700">
-                      {jobDetails.requested_by
-                        ? jobDetails.requested_by
-                        : jobDetails.created_by?.first_name +
-                          " " +
-                          jobDetails.created_by?.last_name}
-                    </dd>
-                  </div>
+                  {(currentUser.isAdmin ||
+                    currentUser.isSuperUser ||
+                    currentUser.isAccountManager ||
+                    currentUser.isInternalCoordinator ||
+                    currentUser.isCustomer) && (
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Requested By:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        {jobDetails.requested_by
+                          ? jobDetails.requested_by
+                          : jobDetails.created_by?.first_name +
+                            " " +
+                            jobDetails.created_by?.last_name}
+                      </dd>
+                    </div>
+                  )}
                   <div className="px-4 py-3 flex gap-4">
                     <dt className="text-md font-bold text-gray-900">
                       Request Date:
