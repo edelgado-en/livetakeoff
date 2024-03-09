@@ -2036,16 +2036,18 @@ export default function CustomerServiceReport() {
                       </span>
                     </p>
                   </div>
-                  <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
-                    <p className="text-xl font-medium leading-6 text-gray-400">
-                      Labor Time
-                    </p>
-                    <p className="mt-2 flex items-baseline gap-x-2">
-                      <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                        {totalLaborTime.toFixed(1)} hr
-                      </span>
-                    </p>
-                  </div>
+                  {!currentUser.isCustomer && (
+                    <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
+                      <p className="text-xl font-medium leading-6 text-gray-400">
+                        Labor Time
+                      </p>
+                      <p className="mt-2 flex items-baseline gap-x-2">
+                        <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                          {totalLaborTime.toFixed(1)} hr
+                        </span>
+                      </p>
+                    </div>
+                  )}
                 </div>
               </header>
             ) : (
