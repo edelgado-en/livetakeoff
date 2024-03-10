@@ -1954,7 +1954,7 @@ const CompleteList = () => {
               </div>
             )}
 
-            <div className={`${!currentUser.isCustomer ? "mt-48" : ""}  pt-8`}>
+            <div className={`${!currentUser.isCustomer ? "mt-48" : ""} pt-8`}>
               <div className="text-sm font-medium text-gray-900 mb-2">
                 Airports
               </div>
@@ -2078,7 +2078,7 @@ const CompleteList = () => {
               </Listbox>
             </div>
 
-            <div className={`${!currentUser.isCustomer ? "mt-48" : ""} pt-8`}>
+            <div className={` mt-48 pt-8`}>
               <div className="text-sm font-medium text-gray-900 mb-2">Fbos</div>
               <Listbox value={fboSelected} onChange={setFboSelected}>
                 {({ open }) => (
