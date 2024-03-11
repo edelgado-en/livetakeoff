@@ -546,6 +546,7 @@ const JobsQueue = () => {
             ? "max-w-7xl"
             : "max-w-5xl"
         } -mt-3 flex flex-wrap`}
+        style={{ maxWidth: "2100px" }}
       >
         <div className="flex-1 xl:px-10 lg:px-10 md:px-10">
           <div className="grid grid-cols-2">
@@ -974,7 +975,7 @@ const JobsQueue = () => {
                     </>
                   )}
                 </Listbox>
-                <div className="xl:hidden lg:hidden md:hidden">
+                <div className="xl:hidden">
                   <button
                     type="button"
                     className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900"
@@ -1415,8 +1416,8 @@ const JobsQueue = () => {
           currentUser.isAccountManager ||
           currentUser.isInternalCoordinator ||
           currentUser.isCustomer) && (
-          <div className="xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
-            <div className="hidden xl:block lg:block pb-4">
+          <div className="hidden xl:block xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
+            <div className="pb-4">
               <h2 className="font-medium text-sm text-gray-900">Status</h2>
               <div className="grid grid-cols-2 gap-2 mt-2">
                 {availableStatuses.map((status) => (
