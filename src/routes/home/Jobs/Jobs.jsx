@@ -132,7 +132,14 @@ const JobsQueue = () => {
       name: "All",
     }
   );
-  const [customerSearchTerm, setCustomerSearchTerm] = useState("");
+
+  const [vendors, setVendors] = useState([]);
+  const [vendorSelected, setVendorSelected] = useState(
+    JSON.parse(localStorage.getItem("vendorSelected")) || {
+      id: "All",
+      name: "All",
+    }
+  );
 
   const [projectManagers, setProjectManagers] = useState([]);
   const [projectManagerSelected, setProjectManagerSelected] = useState(
@@ -146,12 +153,6 @@ const JobsQueue = () => {
 
   const [availableStatuses, setAvailableStatuses] = useState(statuses);
 
-  const filteredCustomers = customerSearchTerm
-    ? customers.filter((item) =>
-        item.name.toLowerCase().includes(customerSearchTerm.toLowerCase())
-      )
-    : customers;
-
   const filteredAirports = airportSearchTerm
     ? airports.filter((item) =>
         item.name.toLowerCase().includes(airportSearchTerm.toLowerCase())
@@ -160,6 +161,10 @@ const JobsQueue = () => {
 
   useEffect(() => {
     getCustomers({ name: "", open_jobs: true });
+  }, []);
+
+  useEffect(() => {
+    getVendors();
   }, []);
 
   useEffect(() => {
@@ -243,6 +248,23 @@ const JobsQueue = () => {
     setAirports(data.results);
   };
 
+  const getVendors = async () => {
+    let request = {
+      name: "",
+      open_jobs: true,
+    };
+
+    try {
+      const { data } = await api.getVendors(request);
+
+      data.results.unshift({ id: "All", name: "All" });
+
+      setVendors(data.results);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     localStorage.setItem("searchText", searchText);
   }, [searchText]);
@@ -265,6 +287,10 @@ const JobsQueue = () => {
   useEffect(() => {
     localStorage.setItem("airportSelected", JSON.stringify(airportSelected));
   }, [airportSelected]);
+
+  useEffect(() => {
+    localStorage.setItem("vendorSelected", JSON.stringify(vendorSelected));
+  }, [vendorSelected]);
 
   useEffect(() => {
     localStorage.setItem("sortSelected", JSON.stringify(sortSelected));
@@ -290,6 +316,7 @@ const JobsQueue = () => {
     tags,
     dueToday,
     overdue,
+    vendorSelected,
   ]);
 
   const handleKeyDown = (event) => {
@@ -311,6 +338,8 @@ const JobsQueue = () => {
       setAirportSelected({ id: "All", name: "All" });
     } else if (activeFilterId === "projectManager") {
       setProjectManagerSelected({ id: "All", name: "All" });
+    } else if (activeFilterId === "vendor") {
+      setVendorSelected({ id: "All", name: "All" });
     }
 
     setActiveFilters(
@@ -331,6 +360,7 @@ const JobsQueue = () => {
       sortField: JSON.parse(localStorage.getItem("sortSelected")).id,
       customer: JSON.parse(localStorage.getItem("customerSelected")).id,
       airport: JSON.parse(localStorage.getItem("airportSelected")).id,
+      vendor: JSON.parse(localStorage.getItem("vendorSelected")).id,
       project_manager: JSON.parse(
         localStorage.getItem("projectManagerSelected")
       ).id,
@@ -380,6 +410,13 @@ const JobsQueue = () => {
       activeFilters.push({
         id: "airport",
         name: airportSelected.name,
+      });
+    }
+
+    if (request.vendor !== "All") {
+      activeFilters.push({
+        id: "vendor",
+        name: vendorSelected.name,
       });
     }
 
@@ -784,6 +821,42 @@ const JobsQueue = () => {
                               ))}
                             </ul>
                           </div>
+                          {(currentUser.isAdmin ||
+                            currentUser.isSuperUser ||
+                            currentUser.isAccountManager) && (
+                            <div className="px-4 py-4">
+                              <h2 className="font-medium text-sm text-gray-900">
+                                Vendors
+                                <span className="text-gray-500 text-sm ml-1 font-normal">
+                                  ({vendors.length - 1})
+                                </span>
+                              </h2>
+                              <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                                {vendors.map((vendor) => (
+                                  <li key={vendor.id}>
+                                    <div
+                                      onClick={() =>
+                                        setVendorSelected({
+                                          id: vendor.id,
+                                          name: vendor.name,
+                                        })
+                                      }
+                                      className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                                hover:bg-gray-50"
+                                    >
+                                      <div className="min-w-0 flex-1">
+                                        <div className="focus:outline-none">
+                                          <p className="text-xs text-gray-700 truncate overflow-ellipsis w-60">
+                                            {vendor.name}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                         </form>
                       </Dialog.Panel>
                     </Transition.Child>
@@ -1551,6 +1624,43 @@ const JobsQueue = () => {
                 ))}
               </ul>
             </div>
+
+            {(currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager) && (
+              <div className="pb-8">
+                <h2 className="font-medium text-sm text-gray-900">
+                  Vendors
+                  <span className="text-gray-500 text-sm ml-1 font-normal">
+                    ({vendors.length - 1})
+                  </span>
+                </h2>
+                <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                  {vendors.map((vendor) => (
+                    <li key={vendor.id}>
+                      <div
+                        onClick={() =>
+                          setVendorSelected({
+                            id: vendor.id,
+                            name: vendor.name,
+                          })
+                        }
+                        className="relative flex items-center space-x-3 px-3 py-2 focus-within:ring-2 cursor-pointer
+                                                hover:bg-gray-50"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <div className="focus:outline-none">
+                            <p className="text-sm text-gray-700 truncate overflow-ellipsis w-60">
+                              {vendor.name}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </div>

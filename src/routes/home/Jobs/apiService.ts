@@ -19,3 +19,7 @@ export const searchUsers = (data: any) => {
 export const getTags = () => {
     return httpService.get('/api/tags');
 }
+
+export const getVendors = (data: any) => {
+    return httpService.post('/api/vendors', data);
+}
