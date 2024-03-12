@@ -402,10 +402,6 @@ const JobReview = () => {
           !downloadLoading && (
             <>
               <JobInfo />
-
-              {/* {jobDetails.is_auto_priced && currentUser.canSeePrice && (
-                <JobPriceBreakdown />
-              )} */}
             </>
           )}
 

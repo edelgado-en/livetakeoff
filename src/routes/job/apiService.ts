@@ -227,3 +227,7 @@ export const getUserJobEmails = (id: number) => {
 export const getFbos = () => {
     return httpService.get(`/api/fbos`);
 }
+
+export const getJobInvoiceDetails = (id: number) => {
+    return httpService.get(`/api/jobs/invoice-details/${id}/`);
+}

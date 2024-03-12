@@ -70,6 +70,8 @@ const JobInfo = () => {
 
   const [steps, setSteps] = useState([]);
 
+  const [invoiceDetails, setInvoiceDetails] = useState(null);
+
   useEffect(() => {
     getJobDetails();
   }, []);
@@ -109,6 +111,19 @@ const JobInfo = () => {
       setLoading(false);
 
       const response = await api.getUserDetails();
+
+      if (
+        response.data.isAdmin ||
+        response.data.isSuperUser ||
+        response.data.isAccountManager
+      ) {
+        try {
+          const r = await api.getJobInvoiceDetails(Number(jobId));
+          setInvoiceDetails(r.data);
+        } catch (err) {
+          toast.error("Unable to get job invoice details.");
+        }
+      }
 
       if (
         response.data.isAdmin ||
