@@ -616,7 +616,7 @@ const CompleteList = () => {
         <div className="flex justify-between border-b border-gray-200 py-2">
           <div className="flex gap-2">
             <h1 className="text-lg font-semibold text-gray-700">
-              Completed Jobs
+              {currentUser.isCustomer ? "All jobs" : "Completed Jobs"}
             </h1>
             <p
               className="text-sm text-gray-700 relative"
