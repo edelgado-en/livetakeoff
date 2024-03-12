@@ -1625,7 +1625,7 @@ const CompleteList = () => {
                           } px-4`}
                         >
                           <h2 className="font-medium text-sm text-gray-900">
-                            Fbos
+                            FBOs
                           </h2>
                           <Listbox
                             value={fboSelected}
@@ -2079,7 +2079,7 @@ const CompleteList = () => {
             </div>
 
             <div className={` mt-48 pt-8`}>
-              <div className="text-sm font-medium text-gray-900 mb-2">Fbos</div>
+              <div className="text-sm font-medium text-gray-900 mb-2">FBOs</div>
               <Listbox value={fboSelected} onChange={setFboSelected}>
                 {({ open }) => (
                   <>
