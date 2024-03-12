@@ -546,7 +546,6 @@ const JobsQueue = () => {
             ? "max-w-7xl"
             : "max-w-5xl"
         } -mt-3 flex flex-wrap`}
-        style={{ maxWidth: "2100px" }}
       >
         <div className="flex-1 xl:px-10 lg:px-10 md:px-10">
           <div className="grid grid-cols-2">
@@ -1418,23 +1417,25 @@ const JobsQueue = () => {
           currentUser.isCustomer) && (
           <div className="hidden xl:block xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
             <div className="pb-4">
-              <h2 className="font-medium text-sm text-gray-900">Status</h2>
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                {availableStatuses.map((status) => (
-                  <div
-                    key={status.id}
-                    onClick={() => handleToggleStatus(status)}
-                    className={`${
-                      status.selected
-                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
-                        : "hover:bg-gray-50"
-                    }
-                                                          rounded-md border border-gray-200 cursor-pointer
-                                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
-                  >
-                    {status.name}
-                  </div>
-                ))}
+              <div>
+                <h2 className="font-medium text-sm text-gray-900">Status</h2>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  {availableStatuses.map((status) => (
+                    <div
+                      key={status.id}
+                      onClick={() => handleToggleStatus(status)}
+                      className={`${
+                        status.selected
+                          ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                          : "hover:bg-gray-50"
+                      }
+                                                            rounded-md border border-gray-200 cursor-pointer
+                                                            py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                    >
+                      {status.name}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
