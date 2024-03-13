@@ -26,6 +26,7 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import AddServiceModal from "./AddServiceModal";
 import AddRetainerServiceModal from "./AddRetainerServiceModal";
 import JobFileUploadModal from "./JobFileUploadModal";
+import JobInvoiceModal from "./JobInvoiceModal";
 
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
@@ -46,6 +47,7 @@ const JobInfo = () => {
   const [isCancelJobModalOpen, setIsCancelJobModalOpen] = useState(false);
   const [isReturnJobModalOpen, setReturnJobModalOpen] = useState(false);
   const [isJobFileUploadModalOpen, setJobFileUploadModalOpen] = useState(false);
+  const [isJobInvoiceModalOpen, setJobInvoiceModalOpen] = useState(false);
 
   const [serviceActivities, setServiceActivities] = useState([]);
 
@@ -482,6 +484,10 @@ const JobInfo = () => {
     setAddRetainerServiceModalOpen(!isAddRetainerServiceModalOpen);
   };
 
+  const handleToggleJobInvoiceModal = () => {
+    setJobInvoiceModalOpen(!isJobInvoiceModalOpen);
+  };
+
   const handleAddService = (updatedServices) => {
     setAddServiceModalOpen(false);
 
@@ -555,22 +561,14 @@ const JobInfo = () => {
     }
   };
 
-  const invoiceJob = async () => {
-    await api.invoiceJob(jobId, { status: "I" });
-
-    navigate(0);
-  };
-
   return (
     <AnimatedPage>
       {loading && <Loader />}
-
       {!loading && errorMessage && (
         <div className="text-gray-500 m-auto text-center mt-20">
           {errorMessage}
         </div>
       )}
-
       {!loading && errorMessage == null && (
         <div className="mt-6 w-full px-2">
           <div className="flex flex-wrap justify-between gap-y-6 gap-x-14">
@@ -825,7 +823,7 @@ const JobInfo = () => {
                       currentUser.isAccountManager) && (
                       <button
                         type="button"
-                        onClick={() => invoiceJob()}
+                        onClick={() => handleToggleJobInvoiceModal()}
                         className="inline-flex items-center justify-center rounded-md
                                                       border border-transparent bg-red-500 px-4 py-2 text-lg
                                                       font-medium text-white shadow-sm hover:bg-red-700
@@ -1443,6 +1441,78 @@ const JobInfo = () => {
                 </div>
               </div>
             )}
+
+            {/* INVOICE DETAILS */}
+            {(currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ||
+              currentUser.isInternalCoordinator) && (
+              <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+                <div className="p-4 bg-gray-100">
+                  <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                    Invoice Details
+                  </h3>
+                </div>
+                <div className="border-t border-gray-200">
+                  <dl className="divide-y divide-gray-100">
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Internal Additional Cost:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        $
+                        {invoiceDetails?.internal_additional_cost
+                          ? invoiceDetails?.internal_additional_cost
+                          : 0}
+                      </dd>
+                    </div>
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Vendor:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        {invoiceDetails?.vendor?.name
+                          ? invoiceDetails?.vendor?.name
+                          : "Not specified"}
+                      </dd>
+                    </div>
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Vendor Charge:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        $
+                        {invoiceDetails?.vendor?.charge
+                          ? invoiceDetails?.vendor?.charge
+                          : 0}
+                      </dd>
+                    </div>
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Vendor Additional Cost:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        $
+                        {invoiceDetails?.vendor?.additional_cost
+                          ? invoiceDetails?.vendor?.additional_cost
+                          : 0}
+                      </dd>
+                    </div>
+                    <div className="px-4 py-3 flex gap-4">
+                      <dt className="text-md font-bold text-gray-900">
+                        Subcontractor Profit:
+                      </dt>
+                      <dd className="text-md text-gray-700">
+                        $
+                        {invoiceDetails?.subcontractor_profit
+                          ? invoiceDetails?.subcontractor_profit
+                          : 0}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            )}
           </div>
 
           {currentUser.canSeePrice && (
@@ -1729,7 +1799,6 @@ const JobInfo = () => {
           )}
         </div>
       )}
-
       {isCancelJobModalOpen && (
         <JobCancelModal
           isOpen={isCancelJobModalOpen}
@@ -1738,7 +1807,6 @@ const JobInfo = () => {
           updateJobStatus={updateJobStatus}
         />
       )}
-
       {isReturnJobModalOpen && (
         <JobReturnModal
           isOpen={isReturnJobModalOpen}
@@ -1747,7 +1815,6 @@ const JobInfo = () => {
           returnJob={returnJob}
         />
       )}
-
       {isCompleteJobModalOpen && (
         <JobCompleteModal
           isOpen={isCompleteJobModalOpen}
@@ -1756,7 +1823,6 @@ const JobInfo = () => {
           completeJob={completeJob}
         />
       )}
-
       {isPriceBreakdownModalOpen && (
         <JobPriceBreakdownModal
           isOpen={isPriceBreakdownModalOpen}
@@ -1764,7 +1830,6 @@ const JobInfo = () => {
           handleClose={handleTogglePriceBreakdownModal}
         />
       )}
-
       {isAddServiceModalOpen && (
         <AddServiceModal
           isOpen={isAddServiceModalOpen}
@@ -1775,7 +1840,6 @@ const JobInfo = () => {
           jobId={jobId}
         />
       )}
-
       {isJobFileUploadModalOpen && (
         <JobFileUploadModal
           isOpen={isJobFileUploadModalOpen}
@@ -1785,7 +1849,6 @@ const JobInfo = () => {
           addJobFile={addJobFile}
         />
       )}
-
       {isAddRetainerServiceModalOpen && (
         <AddRetainerServiceModal
           isOpen={isAddRetainerServiceModalOpen}
@@ -1794,6 +1857,13 @@ const JobInfo = () => {
           projectManagers={[]}
           handleAddService={handleAddRetainerService}
           jobId={jobId}
+        />
+      )}
+      {isJobInvoiceModalOpen && (
+        <JobInvoiceModal
+          isOpen={isJobInvoiceModalOpen}
+          handleClose={handleToggleJobInvoiceModal}
+          invoiceDetails={invoiceDetails}
         />
       )}
     </AnimatedPage>

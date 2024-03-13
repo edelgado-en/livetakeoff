@@ -50,6 +50,8 @@ const AirportDetails = () => {
 
   const [availableFbos, setAvailableFbos] = useState([]);
 
+  const [availableUsers, setAvailableUsers] = useState([]);
+
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
@@ -64,6 +66,7 @@ const AirportDetails = () => {
   useEffect(() => {
     getAirportDetails();
     getAvailableFbos();
+    getAirportAvailableUsers();
     setFboAlreadyAdded(false);
   }, [airportId]);
 
@@ -83,6 +86,16 @@ const AirportDetails = () => {
       setLoadingFbos(false);
     } catch (error) {
       setLoadingFbos(false);
+    }
+  };
+
+  const getAirportAvailableUsers = async () => {
+    try {
+      const { data } = await api.getAirportAvailableUsers(Number(airportId));
+
+      setAvailableUsers(data);
+    } catch (err) {
+      toast.error("Unable to get available users");
     }
   };
 
@@ -161,18 +174,18 @@ const AirportDetails = () => {
       {loading && <Loader />}
 
       {!loading && (
-        <div className=" max-w-7xl m-auto">
-          <div className="xl:grid xl:grid-cols-8">
-            <div className="xl:col-span-6 xl:pr-8">
-              <h3 className="mt-4 text-3xl font-bold text-center text-gray-900">
+        <div className="max-w-7xl m-auto px-6">
+          <div className="">
+            <div className="">
+              <h3 className="text-2xl font-semibold text-center text-gray-900">
                 {airportDetails.name}
               </h3>
               <div className="mt-1 text-xl text-gray-500 text-center">
                 {airportDetails.initials}
               </div>
 
-              <div className="mt-8">
-                <div className="text-md text-gray-500 px-4 text-center">
+              <div className="mt-4">
+                <div className="text-md text-gray-500 px-4">
                   Associate FBOs to this airport. Only associated FBOs will be
                   shown when selecting this airport at the creation job view.
                 </div>
