@@ -72,7 +72,7 @@ function classNames(...classes) {
 const statuses = [
   { id: "All", name: "All Open Jobs" },
   { id: "U", name: "Submitted" },
-  { id: "A", name: "Accepted" },
+  { id: "A", name: "Confirmed" },
   { id: "S", name: "Assigned" },
   { id: "W", name: "In Progress" },
 ];
@@ -1277,7 +1277,7 @@ const JobsQueue = () => {
                                                 }
                                               `}
                                 >
-                                  {job.status === "A" && "Accepted"}
+                                  {job.status === "A" && "Confirmed"}
                                   {job.status === "S" && "Assigned"}
                                   {job.status === "U" && "Submitted"}
                                   {job.status === "W" && "In Progress"}

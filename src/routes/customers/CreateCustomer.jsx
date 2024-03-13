@@ -624,7 +624,7 @@ const CreateCustomer = () => {
                                   Allow Cancel Job
                                 </Switch.Label>
                                 <Switch.Description className="text-sm text-gray-500">
-                                  Controls whether this customer can cancel a job while the status is "submitted" or "accepted"
+                                  Controls whether this customer can cancel a job while the status is "submitted" or "confirmed"
                                 </Switch.Description>
                               </div>
                               <Switch

@@ -2377,7 +2377,7 @@ const CompleteList = () => {
                                   ${job.status === "I" && "bg-blue-500 "}
                                                                 `}
                               >
-                                {job.status === "A" && "Accepted"}
+                                {job.status === "A" && "Confirmed"}
                                 {job.status === "S" && "Assigned"}
                                 {job.status === "U" && "Submitted"}
                                 {job.status === "W" && "In Progress"}

@@ -198,7 +198,7 @@ const JobInfo = () => {
       const isInvoiced = statusActivities.some((s) => s.status === "I");
 
       let statusSteps = [
-        { name: "Accepted", status: "upcoming", selected: false },
+        { name: "Confirmed", status: "upcoming", selected: false },
         { name: "Assigned", status: "upcoming", selected: false },
         { name: "WIP", status: "upcoming", selected: false },
         { name: "Completed", status: "upcoming", selected: false },
@@ -626,7 +626,7 @@ const JobInfo = () => {
                                           "bg-gray-700"
                                         }`}
               >
-                {jobDetails.status === "A" && "Accepted"}
+                {jobDetails.status === "A" && "Confirmed"}
                 {jobDetails.status === "S" && "Assigned"}
                 {jobDetails.status === "U" && "Submitted"}
                 {jobDetails.status === "W" && "WIP"}

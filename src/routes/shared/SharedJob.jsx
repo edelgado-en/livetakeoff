@@ -114,7 +114,7 @@ const SharedJob = () => {
                                               "bg-gray-700"
                                             }`}
               >
-                {jobDetails.status === "A" && "Accepted"}
+                {jobDetails.status === "A" && "Confirmed"}
                 {jobDetails.status === "S" && "Assigned"}
                 {jobDetails.status === "U" && "Submitted"}
                 {jobDetails.status === "W" && "WIP"}
