@@ -133,11 +133,7 @@ const Airports = () => {
       <div className="flex h-full -mt-8 pb-20">
         {/* Side bar for mobile */}
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-40 lg:hidden"
-            onClose={setSidebarOpen}
-          >
+          <Dialog as="div" className="relative z-40" onClose={setSidebarOpen}>
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
