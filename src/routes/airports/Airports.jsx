@@ -310,10 +310,10 @@ const Airports = () => {
 
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <div className="relative z-0 flex flex-1 overflow-hidden">
-            <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none xl:order-last">
+            <main className="relative z-0 flex-1 overflow-y-auto focus:outline-none 2xl:order-last">
               {/* Mobile only */}
               <nav
-                className="flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden"
+                className="flex items-start px-4 py-3 sm:px-6 lg:px-8 2xl:hidden"
                 aria-label="Breadcrumb"
               >
                 <div
@@ -332,7 +332,7 @@ const Airports = () => {
                 <Outlet />
               </article>
             </main>
-            <aside className="hidden w-96 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
+            <aside className="hidden w-96 flex-shrink-0 border-r border-gray-200 2xl:order-first 2xl:flex 2xl:flex-col">
               <div className="px-6 pr-4 pt-6 pb-4">
                 <div className="flex justify-between">
                   <h2 className="text-2xl font-medium text-gray-900">
