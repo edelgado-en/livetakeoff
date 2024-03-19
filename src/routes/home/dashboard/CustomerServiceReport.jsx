@@ -2036,18 +2036,19 @@ export default function CustomerServiceReport() {
                       </span>
                     </p>
                   </div>
-                  {!currentUser.isCustomer && (
-                    <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
-                      <p className="text-xl font-medium leading-6 text-gray-400">
-                        Labor Time
-                      </p>
-                      <p className="mt-2 flex items-baseline gap-x-2">
-                        <span className="text-4xl font-semibold tracking-tight text-gray-500">
-                          {totalLaborTime.toFixed(1)} hr
-                        </span>
-                      </p>
-                    </div>
-                  )}
+                  {!currentUser.isCustomer &&
+                    !currentUser.isExternalProjectManager && (
+                      <div className="border-t border-white/5 pb-6 pt-2 px-4 sm:px-6 lg:px-8 mt-4">
+                        <p className="text-xl font-medium leading-6 text-gray-400">
+                          Labor Time
+                        </p>
+                        <p className="mt-2 flex items-baseline gap-x-2">
+                          <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                            {totalLaborTime.toFixed(1)} hr
+                          </span>
+                        </p>
+                      </div>
+                    )}
                 </div>
               </header>
             ) : (
@@ -2208,12 +2209,18 @@ export default function CustomerServiceReport() {
                                     <td className="px-2 py-2 text-sm text-gray-500 sm:pl-0">
                                       {service.timestamp}
                                     </td>
-                                    <td className="whitespace-nowrap px-2 py-2 text-sm text-sky-500 font-semibold cursor-pointer">
-                                      <Link
-                                        to={`/report/review/${service.job_id}`}
-                                      >
-                                        {service.purchase_order}
-                                      </Link>
+                                    <td className="whitespace-nowrap px-2 py-2 text-sm">
+                                      {!currentUser.isExternalProjectManager && (
+                                        <Link
+                                          className="text-sky-500 font-semibold cursor-pointer"
+                                          to={`/report/review/${service.job_id}`}
+                                        >
+                                          {service.purchase_order}
+                                        </Link>
+                                      )}
+                                      {currentUser.isExternalProjectManager && (
+                                        <span>{service.purchase_order}</span>
+                                      )}
                                     </td>
                                     {!currentUser.isCustomer && (
                                       <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
@@ -2256,12 +2263,19 @@ export default function CustomerServiceReport() {
                                 <div className="px-2 py-8">
                                   <div className="flex justify-between gap-2">
                                     <div>{service.timestamp}</div>
-                                    <div className="text-sky-500">
-                                      <Link
-                                        to={`/report/review/${service.job_id}`}
-                                      >
-                                        {service.purchase_order}
-                                      </Link>
+                                    <div className="">
+                                      {currentUser.isExternalProjectManager && (
+                                        <span>{service.purchase_order}</span>
+                                      )}
+
+                                      {!currentUser.isExternalProjectManager && (
+                                        <Link
+                                          className="text-sky-500"
+                                          to={`/report/review/${service.job_id}`}
+                                        >
+                                          {service.purchase_order}
+                                        </Link>
+                                      )}
                                     </div>
                                   </div>
                                   <div className="font-semibold mt-2">
