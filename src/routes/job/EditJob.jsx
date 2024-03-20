@@ -86,6 +86,11 @@ const EditJob = () => {
   const [minutesWorked, setMinutesWorked] = useState(0);
   const [numberOfWorkers, setNumberOfWorkers] = useState(1);
 
+  const [vendorName, setVendorName] = useState("");
+  const [vendorCharge, setVendorCharge] = useState(0);
+  const [vendorAdditionalCost, setVendorAdditionalCost] = useState(0);
+  const [internalAdditionalCost, setInternalAdditionalCost] = useState(0);
+
   const [estimatedArrivalDateOpen, setEstimatedArrivalDateOpen] =
     useState(false);
   const [estimatedDepartureDateOpen, setEstimatedDepartureDateOpen] =
@@ -213,6 +218,28 @@ const EditJob = () => {
 
       setTags(updatedTags);
 
+      try {
+        const r1 = await api.getUserDetails();
+
+        if (
+          r1.data.isAdmin ||
+          r1.data.isSuperUser ||
+          r1.data.isAccountManager
+        ) {
+          const r = await api.getJobInvoiceDetails(Number(jobId));
+
+          setInternalAdditionalCost(r.data.internal_additional_cost);
+
+          if (r.data.vendor) {
+            setVendorName(r.data.vendor.name);
+            setVendorCharge(r.data.vendor.charge);
+            setVendorAdditionalCost(r.data.vendor.additional_cost);
+          }
+        }
+      } catch (err) {
+        toast.error("Unable to get invoice details");
+      }
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -259,6 +286,9 @@ const EditJob = () => {
       minutes_worked: parseInt(minutesWorked),
       number_of_workers: parseInt(numberOfWorkers),
       labor_time: laborTime,
+      internal_additional_cost: Number(internalAdditionalCost),
+      vendor_charge: Number(vendorCharge),
+      vendor_additional_cost: Number(vendorAdditionalCost),
     };
 
     try {
@@ -312,6 +342,27 @@ const EditJob = () => {
     //it can only be a positive number
     if (value >= 0) {
       setHoursWorked(value);
+    }
+  };
+
+  const handleSetInternalAdditionalCost = (value) => {
+    //it can only be a positive number
+    if (value >= 0) {
+      setInternalAdditionalCost(value);
+    }
+  };
+
+  const handleSetVendorCharge = (value) => {
+    //it can only be a positive number
+    if (value >= 0) {
+      setVendorCharge(value);
+    }
+  };
+
+  const handleSetVendorAdditionalCost = (value) => {
+    //it can only be a positive number
+    if (value >= 0) {
+      setVendorAdditionalCost(value);
     }
   };
 
@@ -1349,6 +1400,84 @@ const EditJob = () => {
                       />
                     </div>
                   </div>
+                  <div>
+                    <label
+                      htmlFor="internalAdditionalCost"
+                      className="block text-sm text-gray-700"
+                    >
+                      Internal Additional Cost
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        type="text"
+                        value={internalAdditionalCost}
+                        onChange={(e) =>
+                          handleSetInternalAdditionalCost(e.target.value)
+                        }
+                        name="internalAdditionalCost"
+                        id="internalAdditionalCost"
+                        className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {vendorName && (
+                    <>
+                      <div>
+                        <label className="block text-sm  text-gray-700">
+                          Vendor
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            value={vendorName}
+                            readOnly
+                            className="block w-full rounded-md border-gray-300 shadow-sm bg-gray-100
+                                                    focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="internalAdditionalCost"
+                          className="block text-sm  text-gray-700"
+                        >
+                          Vendor Charge
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            value={vendorCharge}
+                            onChange={(e) =>
+                              handleSetVendorCharge(e.target.value)
+                            }
+                            className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="internalAdditionalCost"
+                          className="block text-sm  text-gray-700"
+                        >
+                          Vendor Additional Cost
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            value={vendorAdditionalCost}
+                            onChange={(e) =>
+                              handleSetVendorAdditionalCost(e.target.value)
+                            }
+                            className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
 
                   <div className="text-sm leading-5 font-medium text-gray-700">
                     Tags
