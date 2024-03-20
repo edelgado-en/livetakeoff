@@ -221,6 +221,10 @@ const EditJob = () => {
       try {
         const r1 = await api.getUserDetails();
 
+        if (r1.data.isCustomer) {
+          navigate(-1);
+        }
+
         if (
           r1.data.isAdmin ||
           r1.data.isSuperUser ||

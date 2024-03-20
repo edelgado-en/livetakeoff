@@ -732,18 +732,27 @@ const JobInfo = () => {
             </div>
             <div className="relative top-1">
               {currentUser.isCustomer &&
-                (jobDetails.status === "U" ||
-                  jobDetails.status === "A" ||
-                  jobDetails.status === "R" ||
-                  jobDetails.status === "S") && (
-                  <div className="text-left lg:text-right">
+                (jobDetails.status === "U" || jobDetails.status === "A") && (
+                  <div className="flex gap-4">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate(`/jobs/${jobDetails.id}/customer-edit`)
+                      }
+                      className="inline-flex items-center justify-center rounded-md
+                                                border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                font-bold text-white shadow-sm hover:bg-red-700
+                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                    >
+                      Edit Job
+                    </button>
                     <button
                       type="button"
                       onClick={() => handleToggleJobCancelModal()}
                       className="items-center rounded-md border
-                                                border-gray-300 bg-white px-4 py-2 text-md font-bold
-                                                text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
-                                                focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                                                    border-gray-300 bg-white px-4 py-2 text-lg font-bold
+                                                    text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
+                                                    focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     >
                       Cancel Job
                     </button>
