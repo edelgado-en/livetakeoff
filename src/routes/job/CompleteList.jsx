@@ -2313,8 +2313,7 @@ const CompleteList = () => {
                             )}
                           {(currentUser.isAdmin ||
                             currentUser.isSuperUser ||
-                            currentUser.isAccountManager ||
-                            currentUser.isInternalCoordinator) && (
+                            currentUser.isAccountManager) && (
                             <th className="whitespace-nowrap px-8 py-2 text-left text-xs font-normal uppercase text-gray-500">
                               Labor Time
                             </th>
@@ -2401,8 +2400,7 @@ const CompleteList = () => {
 
                             {(currentUser.isAdmin ||
                               currentUser.isSuperUser ||
-                              currentUser.isAccountManager ||
-                              currentUser.isInternalCoordinator) && (
+                              currentUser.isAccountManager) && (
                               <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
                                 {job.labor_time ? job.labor_time.toFixed(1) : 0}{" "}
                                 hr
