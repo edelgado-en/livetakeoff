@@ -101,6 +101,10 @@ const CreateEstimate = () => {
       setFbos(data.fbos);
       setCustomers(data.customers);
 
+      if (data.customer_id) {
+        getServicesAndRetainers(data.customer_id);
+      }
+
       setLoading(false);
     } catch (error) {
       toast.error("Unable to load form data");
@@ -193,31 +197,21 @@ const CreateEstimate = () => {
     }
   };
 
+  const getServicesAndRetainers = async (customerId) => {
+    try {
+      const { data } = await api.getCustomerRetainerServices(customerId);
+
+      setServices(data.services);
+    } catch (err) {
+      toast.error("Unable to get customer services");
+    }
+  };
+
   const handleCustomerSelectedChange = async (customer) => {
     setCustomerSelected(customer);
 
     try {
       const { data } = await api.getCustomerRetainerServices(customer.id);
-
-      setServices(data.services);
-
-      /* const interior = [];
-      const exterior = [];
-      const other = []; */
-
-      /* data.services.forEach((service) => {
-        if (service.category === "I") {
-          interior.push(service);
-        } else if (service.category === "E") {
-          exterior.push(service);
-        } else {
-          other.push(service);
-        }
-      });
-
-      setInteriorServices(interior);
-      setExteriorServices(exterior);
-      setOtherServices(other); */
 
       setServices(data.services);
     } catch (err) {
