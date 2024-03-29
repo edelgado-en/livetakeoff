@@ -8,6 +8,7 @@ import {
   CheckCircleIcon,
   InboxIcon,
   XCircleIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/outline";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -125,6 +126,9 @@ const CreateJob = () => {
   const [airportSearchTerm, setAirportSearchTerm] = useState("");
   const [fboSearchTerm, setFboSearchTerm] = useState("");
   const [customerPurchaseOrder, setCustomerPurchaseOrder] = useState("");
+
+  const [airportFees, setAirportFees] = useState([]);
+  const [fboFees, setFboFees] = useState([]);
 
   const currentUser = useAppSelector(selectUser);
 
@@ -741,9 +745,39 @@ const CreateJob = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
-  const handleCustomerSelectedChange = (customer) => {
+  const handleCustomerSelectedChange = async (customer) => {
     setCustomerSelected(customer);
     getServicesAndRetainers(customer.id);
+
+    if (currentUser.showAirportFees && airportSelected) {
+      const request = {
+        airport_id: airportSelected.id,
+        customer_id: customer.id,
+      };
+
+      try {
+        const { data } = await api.getAirportCustomerFees(request);
+
+        setAirportFees(data);
+      } catch (err) {
+        //ignore
+      }
+    }
+
+    if (currentUser.showAirportFees && fboSelected) {
+      const request = {
+        fbo_id: fboSelected.id,
+        customer_id: customer.id,
+      };
+
+      try {
+        const { data } = await api.getFBOCustomerFees(request);
+
+        setFboFees(data);
+      } catch (err) {
+        //ignore
+      }
+    }
   };
 
   const getServicesAndRetainers = async (customerId) => {
@@ -793,6 +827,25 @@ const CreateJob = () => {
     }
   };
 
+  const handleFboSelectedChange = async (fbo) => {
+    setFboSelected(fbo);
+
+    if (currentUser.showAirportFees && customerSelected) {
+      const request = {
+        fbo_id: fbo.id,
+        customer_id: customerSelected.id,
+      };
+
+      try {
+        const { data } = await api.getFBOCustomerFees(request);
+
+        setFboFees(data);
+      } catch (err) {
+        //ignore
+      }
+    }
+  };
+
   const handleAirportSelectedChange = async (airport) => {
     setAirportSelected(airport);
 
@@ -810,6 +863,21 @@ const CreateJob = () => {
       }
     } catch (err) {
       toast.error("Unable to get Fbos");
+    }
+
+    if (currentUser.showAirportFees && customerSelected) {
+      const request = {
+        airport_id: airport.id,
+        customer_id: customerSelected.id,
+      };
+
+      try {
+        const { data } = await api.getAirportCustomerFees(request);
+
+        setAirportFees(data);
+      } catch (err) {
+        //ignore
+      }
     }
   };
 
@@ -1502,10 +1570,43 @@ const CreateJob = () => {
                         </>
                       )}
                     </Listbox>
+
+                    {airportFees.length > 0 && (
+                      <div className="rounded-md bg-red-50 p-4 mt-2">
+                        <div className="flex">
+                          <div className="flex-shrink-0">
+                            <ExclamationCircleIcon
+                              className="h-5 w-5 text-red-400"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-medium text-red-800">
+                              Additional fees may apply for services at this
+                              airport, including travel fees and commissions.
+                            </h3>
+                            <div className="mt-2 text-sm text-red-700">
+                              <ul className="list-disc space-y-1 pl-5">
+                                {airportFees.map((fee, index) => (
+                                  <li key={index}>
+                                    {!fee.is_percentage ? "$" : ""}
+                                    {fee.fee}
+                                    {fee.is_percentage ? "%" : ""}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-1">
-                    <Listbox value={fboSelected} onChange={setFboSelected}>
+                    <Listbox
+                      value={fboSelected}
+                      onChange={handleFboSelectedChange}
+                    >
                       {({ open }) => (
                         <>
                           <Listbox.Label className="text-lg font-bold text-gray-600 uppercase tracking-wide">
@@ -1642,6 +1743,35 @@ const CreateJob = () => {
                         </>
                       )}
                     </Listbox>
+
+                    {fboFees.length > 0 && (
+                      <div className="rounded-md bg-red-50 p-4 mt-2">
+                        <div className="flex">
+                          <div className="flex-shrink-0">
+                            <ExclamationCircleIcon
+                              className="h-5 w-5 text-red-400"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div className="ml-3">
+                            <h3 className="text-sm font-medium text-red-800">
+                              This FBO may charge a commission fee.
+                            </h3>
+                            <div className="mt-2 text-sm text-red-700">
+                              <ul className="list-disc space-y-1 pl-5">
+                                {fboFees.map((fee, index) => (
+                                  <li key={index}>
+                                    {!fee.is_percentage ? "$" : ""}
+                                    {fee.fee}
+                                    {fee.is_percentage ? "%" : ""}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-6">

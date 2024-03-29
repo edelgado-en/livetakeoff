@@ -172,6 +172,14 @@ export const exportJobs = (data: any) => {
     return httpService.post(`/api/jobs/export`, data)
 }
 
+export const getAirportCustomerFees = (data: any) => {
+    return httpService.post(`/api/airports/customer-fees`, data)
+}
+
+export const getFBOCustomerFees = (data: any) => {
+    return httpService.post(`/api/fbos/customer-fees`, data)
+}
+
 export const getJobPriceBreakdown = (id: number) => {
     return httpService.get(`/api/jobs/price-breakdown/${id}/`)
 }
