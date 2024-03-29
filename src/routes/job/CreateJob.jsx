@@ -830,10 +830,18 @@ const CreateJob = () => {
   const handleFboSelectedChange = async (fbo) => {
     setFboSelected(fbo);
 
-    if (currentUser.showAirportFees && customerSelected) {
+    let customer_id = null;
+
+    if (currentUser.customerId) {
+      customer_id = currentUser.customerId;
+    } else if (customerSelected) {
+      customer_id = customerSelected.id;
+    }
+
+    if (currentUser.showAirportFees && customer_id) {
       const request = {
         fbo_id: fbo.id,
-        customer_id: customerSelected.id,
+        customer_id: customer_id,
       };
 
       try {
@@ -865,10 +873,18 @@ const CreateJob = () => {
       toast.error("Unable to get Fbos");
     }
 
-    if (currentUser.showAirportFees && customerSelected) {
+    let customer_id = null;
+
+    if (currentUser.customerId) {
+      customer_id = currentUser.customerId;
+    } else if (customerSelected) {
+      customer_id = customerSelected.id;
+    }
+
+    if (currentUser.showAirportFees && customer_id) {
       const request = {
         airport_id: airport.id,
-        customer_id: customerSelected.id,
+        customer_id: customer_id,
       };
 
       try {
