@@ -626,22 +626,18 @@ const CompleteList = () => {
             </p>
           </div>
           <div>
-            {(currentUser.isAdmin ||
-              currentUser.isSuperUser ||
-              currentUser.isAccountManager) && (
-              <button
-                type="button"
-                disabled={loading}
-                onClick={() => handleExport()}
-                className="inline-flex items-center rounded border border-gray-200
-                                                bg-white px-2.5 py-1.5 text-xs text-gray-700 shadow-sm
-                                                hover:bg-gray-50 focus:outline-none focus:ring-1
-                                                focus:ring-gray-500 focus:ring-offset-1"
-              >
-                <ShareIcon className="h-3 w-3 mr-1" />{" "}
-                {loading ? "..." : "Export"}
-              </button>
-            )}
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => handleExport()}
+              className="inline-flex items-center rounded border border-gray-200
+                                            bg-white px-2.5 py-1.5 text-xs text-gray-700 shadow-sm
+                                            hover:bg-gray-50 focus:outline-none focus:ring-1
+                                            focus:ring-gray-500 focus:ring-offset-1"
+            >
+              <ShareIcon className="h-3 w-3 mr-1" />{" "}
+              {loading ? "..." : "Export"}
+            </button>
           </div>
         </div>
         <div className="flex justify-between border-b border-gray-200 py-2">
