@@ -408,7 +408,7 @@ const JobReview = () => {
               </div>
               <div className="ml-3">
                 <h3 className="text-md font-medium text-red-800 relative top-1">
-                  You have 3 unread comments.
+                  You have {jobStats.comments_count} unread comment(s).
                 </h3>
               </div>
             </div>
