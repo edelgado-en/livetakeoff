@@ -235,7 +235,7 @@ const JobReview = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-6 h-6 cursor-pointer "
+                    className="w-8 h-8 cursor-pointer "
                   >
                     <path
                       strokeLinecap="round"
@@ -386,8 +386,8 @@ const JobReview = () => {
             </Menu>
             {jobStats.comments_count > 0 && (
               <div
-                className="bg-red-500 text-white py-1 px-2 relative bottom-2 right-4
-                                                                rounded-full text-xs font-medium inline-block scale-90"
+                className="bg-red-500 text-white py-2 px-4 relative bottom-1 right-4
+                                                                rounded-full text-md font-medium inline-block scale-90"
               >
                 {jobStats.comments_count}
               </div>
