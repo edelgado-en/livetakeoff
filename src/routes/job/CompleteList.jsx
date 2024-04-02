@@ -413,6 +413,7 @@ const CompleteList = () => {
       status: statusSelected.id,
       airport: airportSelected.id,
       customer: customerSelected.id,
+      fbo: fboSelected.id,
       requestedDateFrom,
       requestedDateTo,
       arrivalDateFrom,
