@@ -10,6 +10,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/outline";
 import { toast } from "react-toastify";
 import * as api from "./apiService";
@@ -903,7 +904,7 @@ const JobInfo = () => {
             </div>
           ))}
 
-          <div className="grid 3xl:grid-cols-4 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 mt-6 gap-6">
+          <div className="grid 3xl:grid-cols-4 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 mt-4 gap-6">
             {/* LOCATION AND TIMES */}
             <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
               <div className="p-4 bg-gray-100">

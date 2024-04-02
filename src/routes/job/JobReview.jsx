@@ -15,6 +15,7 @@ import {
   CashIcon,
   ShareIcon,
   UsersIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/solid";
 import { Menu, Transition, Popover } from "@headlessui/react";
@@ -190,7 +191,7 @@ const JobReview = () => {
               <ArrowLeftIcon className="flex-shrink-0 h-4 w-4 cursor-pointer" />
             </button>
           </div>
-          <div className="pb-4">
+          <div className="pb-2">
             <h1 className="text-2xl font-semibold text-gray-600">Job Review</h1>
             {!currentUser.isCustomer && (
               <p className="mt-1 text-lg text-gray-500">
@@ -229,6 +230,7 @@ const JobReview = () => {
                   style={{ padding: "2px" }}
                 >
                   <span className="sr-only">Open options</span>
+
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -394,6 +396,24 @@ const JobReview = () => {
             )}
           </div>
         </div>
+
+        {jobStats.comments_count > 0 && (
+          <div className="rounded-md bg-red-50 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <ExclamationCircleIcon
+                  className="h-8 w-8 text-red-400"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="ml-3">
+                <h3 className="text-md font-medium text-red-800 relative top-1">
+                  You have 3 unread comments.
+                </h3>
+              </div>
+            </div>
+          </div>
+        )}
 
         {!location.pathname.includes("edit") &&
           !location.pathname.includes("activity") &&
