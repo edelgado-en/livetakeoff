@@ -124,7 +124,7 @@ export default function Example() {
                               <>
                                 <span>Status changed to </span>
                                 <span className="font-medium text-black">
-                                  {activity.status === "A" && "Accepted"}
+                                  {activity.status === "A" && "Confirmed"}
                                   {activity.status === "S" && "Assigned"}
                                   {activity.status === "U" && "Submitted"}
                                   {activity.status === "W" &&
@@ -148,9 +148,9 @@ export default function Example() {
                                 </span>
                               </>
                             )}
+
                             <span className="ml-1">
-                              by {activity.user.first_name}{" "}
-                              {activity.user.last_name}
+                              by {activity.user_full_name}
                             </span>
                           </p>
                         </div>
@@ -166,8 +166,8 @@ export default function Example() {
                               ${activity.price}
                             </span>
                             <span className="ml-1">
-                              by {activity.user.first_name}{" "}
-                              {activity.user.last_name}
+                              by {activity.user?.first_name}{" "}
+                              {activity.user?.last_name}
                             </span>
                           </p>
                         </div>
@@ -197,8 +197,7 @@ export default function Example() {
                               )}
 
                               <span className="ml-1">
-                                by {activity.user.first_name}{" "}
-                                {activity.user.last_name}
+                                by {activity.user_full_name}
                               </span>
                             </p>
                           </div>

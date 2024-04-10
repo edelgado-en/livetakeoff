@@ -365,6 +365,8 @@ const JobInfo = () => {
 
       setLoading(false);
 
+      toast.success("Job updated!.");
+
       if (status === "C") {
         navigate("/jobs");
       } else {
@@ -593,7 +595,7 @@ const JobInfo = () => {
             </div>
             <div className="flex-1">
               <div
-                className={`xs:block sm:block xl:hidden lg:hidden md:hidden mt-1 text-xl text-white rounded-md py-2 px-4 inline-block 
+                className={`xs:block sm:block xl:hidden lg:hidden md:hidden text-xl text-white rounded-md py-2 px-4 inline-block 
                                         ${
                                           jobDetails.status === "A" &&
                                           "bg-blue-500"
@@ -734,28 +736,41 @@ const JobInfo = () => {
             <div className="relative top-1">
               {currentUser.isCustomer &&
                 (jobDetails.status === "U" || jobDetails.status === "A") && (
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-4">
+                    {jobDetails.status === "U" &&
+                      currentUser.canConfirmJobs && (
+                        <button
+                          type="button"
+                          onClick={() => updateJobStatus("A")}
+                          className="inline-flex items-center justify-center rounded-md
+                                                    border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                    font-bold text-white shadow-sm hover:bg-red-700
+                                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                        >
+                          Confirm Job
+                        </button>
+                      )}
                     <button
                       type="button"
                       onClick={() =>
                         navigate(`/jobs/${jobDetails.id}/customer-edit`)
                       }
-                      className="inline-flex items-center justify-center rounded-md
-                                                border border-transparent bg-red-600 px-4 py-2 text-lg
-                                                font-bold text-white shadow-sm hover:bg-red-700
-                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                      className="items-center rounded-md border
+                                                    border-gray-300 bg-white px-4 py-2 text-lg font-normal
+                                                    text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
+                                                    focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     >
-                      Edit Job
+                      Edit
                     </button>
                     <button
                       type="button"
                       onClick={() => handleToggleJobCancelModal()}
                       className="items-center rounded-md border
-                                                    border-gray-300 bg-white px-4 py-2 text-lg font-bold
+                                                    border-gray-300 bg-white px-4 py-2 text-lg font-normal
                                                     text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
                                                     focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     >
-                      Cancel Job
+                      Cancel
                     </button>
                   </div>
                 )}

@@ -4,6 +4,10 @@ export const getJobDetails = (encoded_id: any) => {
     return httpService.get(`/api/shared/jobs/${encoded_id}`);
 }
 
+export const confirmJob = (encoded_id: any, data: any) => {
+    return httpService.post(`/api/shared/jobs/confirm/${encoded_id}/`, data);
+}
+
 export const sendMessage = (data: any) => {
     return httpService.post(`/api/shared/contact`, data);
 }
