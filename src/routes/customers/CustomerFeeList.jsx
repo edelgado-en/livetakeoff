@@ -6,6 +6,8 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import DeleteFeeModal from "./DeleteFeeModal";
 import * as api from "./apiService";
 
+import { toast } from "react-toastify";
+
 const CustomerFeeList = () => {
   const { customerId } = useParams();
   const [fees, setFees] = useState([]);
@@ -29,6 +31,8 @@ const CustomerFeeList = () => {
     await api.deleteFee(fee.id);
 
     setDeleteFeeModalOpen(false);
+
+    toast.success("Fee deleted!");
 
     getFees();
   };
@@ -59,16 +63,17 @@ const CustomerFeeList = () => {
       )}
 
       <div className="overflow-hidden bg-white shadow sm:rounded-md mb-20">
-        <ul role="list" className="divide-y divide-gray-200">
+        <ul className="divide-y divide-gray-200">
           {fees.map((fee) => (
             <li key={fee.id}>
               <div className="block hover:bg-gray-50">
                 <div className="px-4 py-4 sm:px-6">
                   <div className="flex items-center justify-between">
                     <p className="truncate text-md font-medium text-red-600">
-                      {fee.type === "A" ? "By Airport" : ""}
-                      {fee.type === "F" ? "By FBO" : ""}
+                      {fee.type === "A" ? "Travel Fees" : ""}
+                      {fee.type === "F" ? "FBO Fee" : ""}
                       {fee.type === "G" ? "General" : ""}
+                      {fee.type === "V" ? "Vendor Higher Price" : ""}
                     </p>
                     <div className="ml-2 flex flex-shrink-0">
                       <span className="inline-flex rounded-ful text-md font-semibold leading-5">
@@ -85,12 +90,21 @@ const CustomerFeeList = () => {
                       </p>
                     )}
                     <div className="text-md text-gray-500">
-                      {fee.airports.map((airport, index) => (
+                      {fee.travel_fees_airports.map((airport, index) => (
                         <div key={index} className="mb-2">
                           {index + 1 + ". "}
                           {airport.name}
                         </div>
                       ))}
+
+                      {fee.vendor_higher_price_airports.map(
+                        (airport, index) => (
+                          <div key={index} className="mb-2">
+                            {index + 1 + ". "}
+                            {airport.name}
+                          </div>
+                        )
+                      )}
 
                       {fee.fbos.map((fbo, index) => (
                         <div key={index} className="mb-2">
@@ -101,11 +115,11 @@ const CustomerFeeList = () => {
                     </div>
                     <div className="mt-5 flex items-center text-md text-gray-500 sm:mt-0">
                       <Link to={`edit/${fee.id}`}>
-                        <PencilIcon className="flex-shrink-0 h-4 w-4 mr-6 cursor-pointer" />
+                        <PencilIcon className="flex-shrink-0 h-5 w-5 mr-6 cursor-pointer" />
                       </Link>
                       <TrashIcon
                         onClick={() => handleToggleDeleteFeeModal(fee)}
-                        className="flex-shrink-0 h-4 w-4 cursor-pointer"
+                        className="flex-shrink-0 h-5 w-5 cursor-pointer"
                       />
                     </div>
                   </div>

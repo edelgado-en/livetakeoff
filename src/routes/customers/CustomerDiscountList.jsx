@@ -100,13 +100,13 @@ const CustomerDiscountList = () => {
                     </div>
                     <div className="mt-5 flex items-center text-md text-gray-500 sm:mt-0">
                       <Link to={`edit/${discount.id}`}>
-                        <PencilIcon className="flex-shrink-0 h-4 w-4 mr-6 cursor-pointer" />
+                        <PencilIcon className="flex-shrink-0 h-5 w-5 mr-6 cursor-pointer" />
                       </Link>
                       <TrashIcon
                         onClick={() =>
                           handleToggleDeleteDiscountModal(discount)
                         }
-                        className="flex-shrink-0 h-4 w-4 cursor-pointer"
+                        className="flex-shrink-0 h-5 w-5 cursor-pointer"
                       />
                     </div>
                   </div>
