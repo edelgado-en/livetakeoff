@@ -1605,6 +1605,9 @@ const CreateJob = () => {
                               <ul className="list-disc space-y-1 pl-5">
                                 {airportFees.map((fee, index) => (
                                   <li key={index}>
+                                    {fee.type === "A"
+                                      ? "Travel Fees:"
+                                      : "Vendor Higher Price:"}{" "}
                                     {!fee.is_percentage ? "$" : ""}
                                     {fee.fee}
                                     {fee.is_percentage ? "%" : ""}
