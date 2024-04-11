@@ -325,48 +325,11 @@ const CreateJobSchedule = () => {
       setAllFbos(data.fbos);
       setFbos(data.fbos);
       setTags(data.tags);
-
-      const interior = [];
-      const exterior = [];
-      const other = [];
-
-      data.services.forEach((service) => {
-        if (service.category === "I") {
-          interior.push(service);
-        } else if (service.category === "E") {
-          exterior.push(service);
-        } else {
-          other.push(service);
-        }
-      });
-
-      setInteriorServices(interior);
-      setExteriorServices(exterior);
-      setOtherServices(other);
-
-      const interiorRetainer = [];
-      const exteriorRetainer = [];
-      const otherRetainer = [];
-
-      data.retainer_services.forEach((retainerService) => {
-        if (retainerService.category === "I") {
-          interiorRetainer.push(retainerService);
-        } else if (retainerService.category === "E") {
-          exteriorRetainer.push(retainerService);
-        } else {
-          otherRetainer.push(retainerService);
-        }
-      });
-
-      setInteriorRetainerServices(interiorRetainer);
-      setExteriorRetainerServices(exteriorRetainer);
-      setOtherRetainerServices(otherRetainer);
-
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       setErrorMessage(error.message);
     }
+
+    setLoading(false);
   };
 
   const createJobSchedule = async (routeName) => {
@@ -738,6 +701,55 @@ const CreateJobSchedule = () => {
     }
   };
 
+  const handleCustomerSelectedChange = (customer) => {
+    setCustomerSelected(customer);
+    getServicesAndRetainers(customer.id);
+  };
+
+  const getServicesAndRetainers = async (customerId) => {
+    try {
+      const { data } = await api.getCustomerRetainerServices(customerId);
+
+      const interior = [];
+      const exterior = [];
+      const other = [];
+
+      data.services.forEach((service) => {
+        if (service.category === "I") {
+          interior.push(service);
+        } else if (service.category === "E") {
+          exterior.push(service);
+        } else {
+          other.push(service);
+        }
+      });
+
+      setInteriorServices(interior);
+      setExteriorServices(exterior);
+      setOtherServices(other);
+
+      const interiorRetainer = [];
+      const exteriorRetainer = [];
+      const otherRetainer = [];
+
+      data.retainer_services.forEach((retainerService) => {
+        if (retainerService.category === "I") {
+          interiorRetainer.push(retainerService);
+        } else if (retainerService.category === "E") {
+          exteriorRetainer.push(retainerService);
+        } else {
+          otherRetainer.push(retainerService);
+        }
+      });
+
+      setInteriorRetainerServices(interiorRetainer);
+      setExteriorRetainerServices(exteriorRetainer);
+      setOtherRetainerServices(otherRetainer);
+    } catch (err) {
+      toast.error("Unable to get customer services");
+    }
+  };
+
   return (
     <AnimatedPage>
       {loading && (
@@ -922,7 +934,7 @@ const CreateJobSchedule = () => {
                     <div className="mt-1">
                       <Listbox
                         value={customerSelected}
-                        onChange={setCustomerSelected}
+                        onChange={handleCustomerSelectedChange}
                       >
                         {({ open }) => (
                           <>
