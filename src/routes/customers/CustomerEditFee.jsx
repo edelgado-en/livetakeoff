@@ -17,6 +17,7 @@ const feeTypes = [
   { id: "F", name: "FBO Fee" },
   { id: "A", name: "Travel Fees" },
   { id: "V", name: "Vendor Higher Price" },
+  { id: "M", name: "Management Fee" },
 ];
 
 const amountTypes = [

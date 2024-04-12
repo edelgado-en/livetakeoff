@@ -74,6 +74,7 @@ const CustomerFeeList = () => {
                       {fee.type === "F" ? "FBO Fee" : ""}
                       {fee.type === "G" ? "General" : ""}
                       {fee.type === "V" ? "Vendor Higher Price" : ""}
+                      {fee.type === "M" ? "Management Fees" : ""}
                     </p>
                     <div className="ml-2 flex flex-shrink-0">
                       <span className="inline-flex rounded-ful text-md font-semibold leading-5">
@@ -87,6 +88,12 @@ const CustomerFeeList = () => {
                     {fee.type === "G" && (
                       <p className="text-gray-500 text-md">
                         Applies to every job for this customer
+                      </p>
+                    )}
+                    {fee.type === "M" && (
+                      <p className="text-gray-500 text-md">
+                        The fee multiply by the number of services associated to
+                        a job.
                       </p>
                     )}
                     <div className="text-md text-gray-500">

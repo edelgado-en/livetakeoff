@@ -1688,9 +1688,13 @@ const JobInfo = () => {
                                   className="flex justify-between py-2 text-lg hover:bg-gray-50"
                                 >
                                   <dt className="text-gray-500 pr-2 truncate">
-                                    {fee.name === "A" ? "By Airport" : ""}
-                                    {fee.name === "F" ? "By FBO" : ""}
+                                    {fee.name === "A" ? "Travel Fees" : ""}
+                                    {fee.name === "F" ? "FBO Fee" : ""}
                                     {fee.name === "G" ? "General" : ""}
+                                    {fee.name === "V"
+                                      ? "Vendor Higher Price"
+                                      : ""}
+                                    {fee.name === "M" ? "Management Fees" : ""}
                                   </dt>
                                   <dd className="whitespace-nowrap text-gray-900">
                                     {fee.isPercentage && (
@@ -1705,10 +1709,17 @@ const JobInfo = () => {
                                       </>
                                     )}
 
-                                    {!fee.isPercentage && (
+                                    {!fee.isPercentage && fee.name !== "M" && (
                                       <>
                                         {"$"}
                                         {fee.fee}
+                                      </>
+                                    )}
+
+                                    {!fee.isPercentage && fee.name === "M" && (
+                                      <>
+                                        {"$"}
+                                        {fee.additional_fee_dollar_amount}
                                       </>
                                     )}
                                   </dd>

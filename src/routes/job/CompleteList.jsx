@@ -2299,15 +2299,30 @@ const CompleteList = () => {
                           <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
                             Completion
                           </th>
-                          <th className="whitespace-nowrap px-2 py-2 text-center text-xs font-normal uppercase text-gray-500">
-                            Status
-                          </th>
+                          {!currentUser.isInternalCoordinator &&
+                            currentUser.canSeePrice && (
+                              <>
+                                <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                                  Travel Fees
+                                </th>
+                                <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                                  FBO Fees
+                                </th>
+                                <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                                  Vendor Fees
+                                </th>
+                                <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                                  Management Fees
+                                </th>
+                              </>
+                            )}
                           {!currentUser.isInternalCoordinator &&
                             currentUser.canSeePrice && (
                               <th className="whitespace-nowrap px-8 py-2 text-left text-xs font-normal uppercase text-gray-500">
                                 Price
                               </th>
                             )}
+
                           {(currentUser.isAdmin ||
                             currentUser.isSuperUser ||
                             currentUser.isAccountManager) && (
@@ -2315,6 +2330,10 @@ const CompleteList = () => {
                               Labor Time
                             </th>
                           )}
+                          <th className="whitespace-nowrap px-2 py-2 text-center text-xs font-normal uppercase text-gray-500">
+                            Status
+                          </th>
+
                           <th className="relative whitespace-nowrap py-2 pl-3 pr-4 sm:pr-6"></th>
                         </tr>
                       </thead>
@@ -2356,6 +2375,61 @@ const CompleteList = () => {
                             <td className=" px-2 py-2 text-xs text-gray-500">
                               {job.completion_date}
                             </td>
+                            {!currentUser.isInternalCoordinator &&
+                              currentUser.canSeePrice && (
+                                <>
+                                  <td className=" px-2 py-2 text-xs text-gray-500">
+                                    {job.travel_fees_amount_applied > 0 && (
+                                      <span>
+                                        ${job.travel_fees_amount_applied}
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className=" px-2 py-2 text-xs text-gray-500">
+                                    {job.fbo_fees_amount_applied > 0 && (
+                                      <span>
+                                        ${job.fbo_fees_amount_applied}
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className=" px-2 py-2 text-xs text-gray-500">
+                                    {job.vendor_higher_price_amount_applied >
+                                      0 && (
+                                      <span>
+                                        $
+                                        {job.vendor_higher_price_amount_applied}
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className=" px-2 py-2 text-xs text-gray-500">
+                                    {job.management_fees_amount_applied > 0 && (
+                                      <span>
+                                        ${job.management_fees_amount_applied}
+                                      </span>
+                                    )}
+                                  </td>
+                                </>
+                              )}
+                            {!currentUser.isInternalCoordinator &&
+                              currentUser.canSeePrice && (
+                                <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
+                                  <div className="flex gap-1">
+                                    {"$"}
+                                    {job.price
+                                      ? job.price.toLocaleString()
+                                      : "0.00"}
+                                  </div>
+                                </td>
+                              )}
+
+                            {(currentUser.isAdmin ||
+                              currentUser.isSuperUser ||
+                              currentUser.isAccountManager) && (
+                              <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
+                                {job.labor_time ? job.labor_time.toFixed(1) : 0}{" "}
+                                hr
+                              </td>
+                            )}
                             <td className="whitespace-nowrap px-2 py-2 text-xs text-center text-gray-500">
                               <p
                                 style={{
@@ -2383,26 +2457,6 @@ const CompleteList = () => {
                                 {job.status === "I" && "Invoiced"}
                               </p>
                             </td>
-                            {!currentUser.isInternalCoordinator &&
-                              currentUser.canSeePrice && (
-                                <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                                  <div className="flex gap-1">
-                                    {"$"}
-                                    {job.price
-                                      ? job.price.toLocaleString()
-                                      : "0.00"}
-                                  </div>
-                                </td>
-                              )}
-
-                            {(currentUser.isAdmin ||
-                              currentUser.isSuperUser ||
-                              currentUser.isAccountManager) && (
-                              <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                                {job.labor_time ? job.labor_time.toFixed(1) : 0}{" "}
-                                hr
-                              </td>
-                            )}
 
                             <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-xs sm:pr-6">
                               <button
