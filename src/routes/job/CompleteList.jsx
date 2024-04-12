@@ -2309,7 +2309,7 @@ const CompleteList = () => {
                                   FBO Fees
                                 </th>
                                 <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                                  Vendor Fees
+                                  Vendor Price Diff
                                 </th>
                                 <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
                                   Management Fees
