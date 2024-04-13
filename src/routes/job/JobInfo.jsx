@@ -1692,7 +1692,7 @@ const JobInfo = () => {
                                     {fee.name === "F" ? "FBO Fee" : ""}
                                     {fee.name === "G" ? "General" : ""}
                                     {fee.name === "V"
-                                      ? "Vendor Higher Price"
+                                      ? "Vendor Price Difference"
                                       : ""}
                                     {fee.name === "M" ? "Management Fees" : ""}
                                   </dt>

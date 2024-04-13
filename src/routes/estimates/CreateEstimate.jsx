@@ -258,7 +258,7 @@ const CreateEstimate = () => {
               </div>
 
               {currentUser.isCustomer && (
-                <p className="text-xs text-gray-500">
+                <p className="text-sm text-gray-500">
                   Is your aircraft, airport, FBO or service not listed?
                   <Link to="/contact" className="ml-2 text-blue-500">
                     Let us know

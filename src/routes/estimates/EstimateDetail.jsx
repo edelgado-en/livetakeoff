@@ -93,7 +93,7 @@ const EstimateDetail = () => {
                 alt="Livetakeoff logo"
               />
             </div>
-            <div className="text-right text-sm text-gray-500">
+            <div className="text-right text-md text-gray-500">
               <div className="text-xl font-medium text-gray-700">
                 LiveTakeoff
               </div>
@@ -126,7 +126,7 @@ const EstimateDetail = () => {
                 {(estimateDetails?.status === "A" ||
                   estimateDetails?.status === "R") && (
                   <div
-                    className={`text-sm text-white rounded-md py-1 px-2
+                    className={`text-md text-white rounded-md py-1 px-2
                                             ${
                                               estimateDetails.status === "A" &&
                                               "bg-green-500 "
@@ -170,17 +170,17 @@ const EstimateDetail = () => {
                       </div>
                     )}
                     <div className="">
-                      <div className="font-medium text-sm">
+                      <div className="font-medium text-md">
                         {estimateDetails?.customer.name}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-md text-gray-500">
                         {estimateDetails?.customer.emailAddress}
                       </div>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-700 xl:text-right xs:text-left pb-2">
+                  <div className="text-md text-gray-700 xl:text-right xs:text-left pb-2">
                     Requested by
                   </div>
                   <div className="flex xl:justify-end xs:justify-start space-x-3 space-y-3">
@@ -204,7 +204,7 @@ const EstimateDetail = () => {
                       </div>
                     )}
                     <div className="space-y-1">
-                      <div className="text-sm font-medium text-gray-700">
+                      <div className="text-md font-medium text-gray-700">
                         {estimateDetails?.requested_by.first_name}{" "}
                         {estimateDetails?.requested_by.last_name}
                       </div>
@@ -214,8 +214,8 @@ const EstimateDetail = () => {
               </div>
               <div className="mt-6 max-w-5xl px-2 pb-10">
                 <div className="mt-8">
-                  <div className="flex justify-between text-xs">
-                    <div className="text-sm text-gray-700">
+                  <div className="flex justify-between text-md">
+                    <div className="text-md text-gray-700">
                       <span className="font-medium">
                         {estimateDetails?.aircraftType?.name}
                       </span>{" "}
@@ -225,12 +225,12 @@ const EstimateDetail = () => {
                     </div>
                   </div>
                   <div className="mt-4">
-                    <h3 className="text-sm text-gray-700">Services</h3>
+                    <h3 className="text-md text-gray-700">Services</h3>
                     <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                       {estimateDetails?.services?.map((service) => (
                         <div
                           key={service.id}
-                          className="flex justify-between py-2 text-xs hover:bg-gray-50"
+                          className="flex justify-between py-2 text-md hover:bg-gray-50"
                         >
                           <dt className="text-gray-700 pr-2 truncate">
                             {service.name}
@@ -242,7 +242,7 @@ const EstimateDetail = () => {
                       ))}
                     </dl>
                     {estimateDetails?.show_totals && (
-                      <div className="flex justify-end py-2 text-xs mt-1">
+                      <div className="flex justify-end py-2 text-md mt-1">
                         <dt className="text-gray-500 pr-2 text-right font-medium">
                           Subtotal
                         </dt>
@@ -255,7 +255,7 @@ const EstimateDetail = () => {
 
                   {estimateDetails?.job_estimate_discounts?.length > 0 && (
                     <div className="mt-4">
-                      <h3 className="text-sm text-gray-700">
+                      <h3 className="text-md text-gray-700">
                         Discounts Applied
                       </h3>
                       <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
@@ -263,7 +263,7 @@ const EstimateDetail = () => {
                           (discount, index) => (
                             <div
                               key={index}
-                              className="flex justify-between py-2 text-xs hover:bg-gray-50"
+                              className="flex justify-between py-2 text-md hover:bg-gray-50"
                             >
                               <dt className="text-gray-700 pr-2 truncate">
                                 {discount.type === "S" ? "By Service" : ""}
@@ -280,7 +280,7 @@ const EstimateDetail = () => {
                         )}
                       </dl>
                       {estimateDetails?.show_totals && (
-                        <div className="flex justify-end py-2 text-xs mt-1">
+                        <div className="flex justify-end py-2 text-md mt-1">
                           <dt className="text-gray-500 pr-2 text-right font-medium">
                             Subtotal
                           </dt>
@@ -296,7 +296,7 @@ const EstimateDetail = () => {
                   {estimateDetails?.job_estimate_additional_fees?.length >
                     0 && (
                     <div className="mt-4">
-                      <h3 className="text-sm text-gray-700">
+                      <h3 className="text-md text-gray-700">
                         Additional Fees Applied
                       </h3>
                       <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
@@ -304,12 +304,16 @@ const EstimateDetail = () => {
                           (fee, index) => (
                             <div
                               key={index}
-                              className="flex justify-between py-2 text-xs hover:bg-gray-50"
+                              className="flex justify-between py-2 text-md hover:bg-gray-50"
                             >
                               <dt className="text-gray-700 pr-2 truncate">
-                                {fee.type === "A" ? "By Airport" : ""}
-                                {fee.type === "F" ? "By FBO" : ""}
+                                {fee.type === "A" ? "Travel Fees" : ""}
+                                {fee.type === "F" ? "FBO fees" : ""}
                                 {fee.type === "G" ? "General" : ""}
+                                {fee.type === "V"
+                                  ? "Vendor Price Difference"
+                                  : ""}
+                                {fee.type === "M" ? "Management Fees" : ""}
                               </dt>
                               <dd className="whitespace-nowrap text-gray-900">
                                 {!fee.percentage ? "$" : ""}
@@ -324,7 +328,7 @@ const EstimateDetail = () => {
                   )}
 
                   {estimateDetails?.show_totals && (
-                    <div className="flex justify-end py-4 text-xs">
+                    <div className="flex justify-end py-4 text-md">
                       <dt className="text-black pr-2 text-right font-bold">
                         Total
                       </dt>
@@ -339,7 +343,7 @@ const EstimateDetail = () => {
               {!location.pathname.includes("shared") && (
                 <div className="pb-8 border-b border-gray-200">
                   <div className="flex justify-between">
-                    <div className="text-sm font-medium text-gray-900 relative top-3">
+                    <div className="text-md font-medium text-gray-900 relative top-3">
                       Share this link
                     </div>
                     <div className="text-right">
@@ -348,7 +352,7 @@ const EstimateDetail = () => {
                           <div
                             onClick={() => handleCopyClick()}
                             className="flex gap-2 rounded-md border border-gray-300 bg-white
-                                                                py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                                                py-2 px-4 text-md font-medium text-gray-700 shadow-sm
                                                                 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                           >
                             <ShareIcon
@@ -360,14 +364,14 @@ const EstimateDetail = () => {
                         </Popover.Button>
 
                         <Popover.Panel className="absolute z-10">
-                          <div className="bg-gray-600 text-white text-xs py-1 px-2 rounded-md mt-1 relative left-4">
+                          <div className="bg-gray-600 text-white text-md py-1 px-2 rounded-md mt-1 relative left-4">
                             copied!
                           </div>
                         </Popover.Panel>
                       </Popover>
                     </div>
                   </div>
-                  <div className="text-sm text-gray-500 pt-2">
+                  <div className="text-md text-gray-500 pt-2">
                     You can share this link with a client to allow them to view
                     this estimate. He/she can accept or reject it. You will get
                     a SMS notification when he/she does.
@@ -380,7 +384,7 @@ const EstimateDetail = () => {
                   <button
                     onClick={() => navigate("/estimates")}
                     className="flex gap-2 rounded-md border border-gray-300 bg-white
-                                            py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                            py-2 px-4 text-md font-medium text-gray-700 shadow-sm
                                             hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                   >
                     Back to Estimates
@@ -395,7 +399,7 @@ const EstimateDetail = () => {
                         type="button"
                         className="inline-flex items-center justify-center 
                                                 rounded-md border border-transparent bg-red-600 px-4 py-2
-                                                text-sm font-medium text-white shadow-sm hover:bg-red-700
+                                                text-md font-medium text-white shadow-sm hover:bg-red-700
                                                 focus:outline-none focus:ring-2 focus:ring-red-500
                                                 focus:ring-offset-2 sm:w-auto"
                       >
@@ -407,7 +411,7 @@ const EstimateDetail = () => {
                     <Link
                       to={`/jobs/${estimateDetails.job.id}/details`}
                       className="flex gap-2 rounded-md border border-gray-300 bg-white
-                                            py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
+                                            py-2 px-4 text-md font-medium text-gray-700 shadow-sm
                                             hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     >
                       View Job
