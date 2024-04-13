@@ -10,7 +10,7 @@ const feeTypes = [
   { id: "G", name: "General" },
   { id: "F", name: "FBO Fee" },
   { id: "A", name: "Travel Fees" },
-  { id: "V", name: "Higher Vendor Price" },
+  { id: "V", name: "Vendor Price Difference" },
   { id: "M", name: "Management Fee" },
 ];
 

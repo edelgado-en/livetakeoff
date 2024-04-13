@@ -73,7 +73,7 @@ const CustomerFeeList = () => {
                       {fee.type === "A" ? "Travel Fees" : ""}
                       {fee.type === "F" ? "FBO Fee" : ""}
                       {fee.type === "G" ? "General" : ""}
-                      {fee.type === "V" ? "Vendor Higher Price" : ""}
+                      {fee.type === "V" ? "Vendor Price Difference" : ""}
                       {fee.type === "M" ? "Management Fees" : ""}
                     </p>
                     <div className="ml-2 flex flex-shrink-0">
