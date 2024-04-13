@@ -92,8 +92,8 @@ const CustomerFeeList = () => {
                     )}
                     {fee.type === "M" && (
                       <p className="text-gray-500 text-md">
-                        The fee multiply by the number of services associated to
-                        a job.
+                        The fee multiply by the number of services (including
+                        retainers) associated to a job.
                       </p>
                     )}
                     <div className="text-md text-gray-500">
