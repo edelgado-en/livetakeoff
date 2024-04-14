@@ -77,6 +77,13 @@ const availableStatuses = [
   { id: "I", name: "Invoiced" },
 ];
 
+const availableAdditionalFees = [
+  { id: "A", name: "Travel Fees" },
+  { id: "F", name: "FBO Fees" },
+  { id: "V", name: "Vendor P. Diff" },
+  { id: "M", name: "Management Fees" },
+];
+
 const ChevronUpDownIcon = () => {
   return (
     <svg
@@ -101,6 +108,9 @@ const CompleteList = () => {
   const [totalJobs, setTotalJobs] = useState(0);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const [additionalFees, setAdditionalFees] = useState([]);
+
   const [searchText, setSearchText] = useState(
     localStorage.getItem("completedSearchText") || ""
   );
@@ -204,6 +214,20 @@ const CompleteList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let newAdditionalFees = [];
+
+    availableAdditionalFees.forEach((fee) => {
+      newAdditionalFees.push({
+        id: fee.id,
+        name: fee.name,
+        selected: false,
+      });
+    });
+
+    setAdditionalFees(newAdditionalFees);
+  }, []);
+
+  useEffect(() => {
     if (
       currentUser.isAdmin ||
       currentUser.isSuperUser ||
@@ -276,6 +300,7 @@ const CompleteList = () => {
     airportSelected,
     customerSelected,
     fboSelected,
+    additionalFees,
   ]);
 
   const searchJobs = async () => {
@@ -298,6 +323,9 @@ const CompleteList = () => {
       completeByDateTo,
       completionDateFrom,
       completionDateTo,
+      additionalFees: additionalFees
+        .filter((item) => item.selected)
+        .map((item) => item.id),
     };
 
     let statusName;
@@ -405,6 +433,16 @@ const CompleteList = () => {
     setCustomers(data.results);
   };
 
+  const handleToggleAdditionalFee = (additionalFee) => {
+    const newAdditionalFees = [...additionalFees];
+    const index = newAdditionalFees.findIndex(
+      (item) => item.id === additionalFee.id
+    );
+    newAdditionalFees[index].selected = !newAdditionalFees[index].selected;
+
+    setAdditionalFees(newAdditionalFees);
+  };
+
   const handleExport = async () => {
     setLoading(true);
 
@@ -424,6 +462,9 @@ const CompleteList = () => {
       completeByDateTo,
       completionDateFrom,
       completionDateTo,
+      additionalFees: additionalFees
+        .filter((item) => item.selected)
+        .map((item) => item.id),
     };
 
     try {
@@ -1765,9 +1806,9 @@ const CompleteList = () => {
         </div>
 
         <div className="flex gap-4">
-          <div className="xl:block lg:block hidden w-60">
-            <div className="pb-4">
-              <div className="text-sm font-medium text-gray-900 mt-8">
+          <div className="xl:block lg:block hidden w-64">
+            <div className="">
+              <div className="text-sm font-medium text-gray-900 mt-2">
                 Status
               </div>
               <ul className="relative z-0  mt-2">
@@ -1823,8 +1864,31 @@ const CompleteList = () => {
               </ul>
             </div>
 
+            <div className="pb-4">
+              <div className="text-sm font-medium text-gray-900 mt-8">
+                Additional Fees
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                {additionalFees.map((additionalFee) => (
+                  <div
+                    key={additionalFee.id}
+                    onClick={() => handleToggleAdditionalFee(additionalFee)}
+                    className={`${
+                      additionalFee.selected
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                            rounded-md border border-gray-200 cursor-pointer
+                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-28`}
+                  >
+                    {additionalFee.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {!currentUser.isCustomer && (
-              <div className="pb-4">
+              <div className="pb-4 mt-4">
                 <div className="text-sm font-medium text-gray-900 mb-2">
                   Customers
                 </div>
