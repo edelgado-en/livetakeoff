@@ -80,6 +80,10 @@ export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
 
+export const searchAirports = (data: any) => {
+    return httpService.post(`/api/airports`, data);
+}
+
 export const createCustomer = (formData: any) => {
     return httpService.post('/api/customers/create', formData,  {
         headers: {

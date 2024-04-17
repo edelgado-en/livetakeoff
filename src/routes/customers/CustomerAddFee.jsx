@@ -57,6 +57,8 @@ const CustomerAddFee = () => {
 
   const [fboSearchName, setFboSearchName] = useState("");
 
+  const [airportSearchName, setAirportSearchName] = useState("");
+
   const [fboLoading, setFboLoading] = useState(false);
 
   const [selectedAmountType, setSelectedAmountType] = useState(amountTypes[0]);
@@ -64,10 +66,6 @@ const CustomerAddFee = () => {
   const [amount, setAmount] = useState();
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getAirports();
-  }, []);
 
   useEffect(() => {
     //Basic throttling
@@ -80,10 +78,16 @@ const CustomerAddFee = () => {
     };
   }, [fboSearchName]);
 
-  const getAirports = async () => {
-    const { data } = await api.getAirports();
-    setAirports(data.results);
-  };
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchAirports();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [airportSearchName]);
 
   const searchFbos = async () => {
     setFboLoading(true);
@@ -96,6 +100,16 @@ const CustomerAddFee = () => {
     }
 
     setFboLoading(false);
+  };
+
+  const searchAirports = async () => {
+    try {
+      const { data } = await api.searchAirports({ name: airportSearchName });
+
+      setAirports(data.results);
+    } catch (err) {
+      toast.error("Unable to search airports");
+    }
   };
 
   const handleSetAmount = (e) => {
@@ -163,7 +177,7 @@ const CustomerAddFee = () => {
   };
 
   const isAirportSelected = (value) => {
-    return selectedAirports.find((el) => el === value) ? true : false;
+    return selectedAirports.find((el) => el.id === value.id) ? true : false;
   };
 
   const handleSelectAirport = (value) => {
@@ -183,7 +197,7 @@ const CustomerAddFee = () => {
 
   const handleDeselectAirport = (value) => {
     const selectedAirportsUpdated = selectedAirports.filter(
-      (el) => el !== value
+      (el) => el.id !== value.id
     );
     setSelectedAirports(selectedAirportsUpdated);
     setIsAirportsOpen(true);
@@ -478,9 +492,22 @@ const CustomerAddFee = () => {
                                                 focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                     >
                       <span className="block truncate">
-                        {selectedAirports.length < 1
-                          ? "Select airports"
-                          : `Selected airports (${selectedAirports.length})`}
+                        {selectedAirports.length <= 0 && "select airports"}
+
+                        {selectedAirports.length > 0 && (
+                          <span>
+                            {selectedAirports.map((airport) => {
+                              return (
+                                <span
+                                  key={airport.id}
+                                  className="inline-block bg-gray-200 text-gray-800 rounded-full px-3 py-1 text-sm font-semibold mr-2"
+                                >
+                                  {airport.name}
+                                </span>
+                              );
+                            })}
+                          </span>
+                        )}
                       </span>
                       <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg
@@ -512,6 +539,57 @@ const CustomerAddFee = () => {
                       className="max-h-70 rounded-md py-1 text-base leading-6 shadow-xs
                                                 overflow-auto focus:outline-none sm:text-sm sm:leading-5 z-50"
                     >
+                      <div className="relative">
+                        <div className="sticky top-0 z-20  px-1">
+                          <div className="mt-1 block  items-center">
+                            <input
+                              type="text"
+                              name="search"
+                              id="search"
+                              value={airportSearchName}
+                              onChange={(e) =>
+                                setAirportSearchName(e.target.value)
+                              }
+                              className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                            focus:border-sky-500 block w-full py-2 pr-12 sm:text-lg
+                                                                            border-gray-300 rounded-md"
+                            />
+                            <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                              {airportSearchName && (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                  onClick={() => {
+                                    setFboSearchName("");
+                                  }}
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6 text-gray-500 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       {airports.map((airport) => {
                         const selected = isAirportSelected(airport);
                         return (
