@@ -239,3 +239,7 @@ export const getFbos = () => {
 export const getJobInvoiceDetails = (id: number) => {
     return httpService.get(`/api/jobs/invoice-details/${id}/`);
 }
+
+export const acceptJob = (id: number, data: any) => {
+    return httpService.get(`/api/jobs/accept/${id}/`, data);
+}

@@ -1607,7 +1607,7 @@ const CreateJob = () => {
                                   <li key={index}>
                                     {fee.type === "A"
                                       ? "Travel Fees:"
-                                      : "Vendor Higher Price:"}{" "}
+                                      : "Vendor Price Difference:"}{" "}
                                     {!fee.is_percentage ? "$" : ""}
                                     {fee.fee}
                                     {fee.is_percentage ? "%" : ""}

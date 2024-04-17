@@ -8,6 +8,10 @@ export const confirmJob = (encoded_id: any, data: any) => {
     return httpService.post(`/api/shared/jobs/confirm/${encoded_id}/`, data);
 }
 
+export const acceptJob = (encoded_id: any, data: any) => {
+    return httpService.post(`/api/shared/jobs/accept/${encoded_id}/`, data);
+}
+
 export const sendMessage = (data: any) => {
     return httpService.post(`/api/shared/contact`, data);
 }

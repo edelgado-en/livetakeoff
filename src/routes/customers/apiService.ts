@@ -76,6 +76,10 @@ export const updateFee = (id: number, request: any) => {
     return httpService.patch(`/api/customers/fees/update/${id}/`, request);
 }
 
+export const searchFbos = (data: any) => {
+    return httpService.post(`/api/fbo-search`, data);
+}
+
 export const createCustomer = (formData: any) => {
     return httpService.post('/api/customers/create', formData,  {
         headers: {

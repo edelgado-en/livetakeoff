@@ -50,6 +50,8 @@ const JobInfo = () => {
   const [isJobFileUploadModalOpen, setJobFileUploadModalOpen] = useState(false);
   const [isJobInvoiceModalOpen, setJobInvoiceModalOpen] = useState(false);
 
+  const [isVendorAccepted, setIsVendorAccepted] = useState(false);
+
   const [serviceActivities, setServiceActivities] = useState([]);
 
   const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] =
@@ -108,6 +110,15 @@ const JobInfo = () => {
 
     try {
       const { data } = await api.getJobDetails(jobId);
+
+      //iterate through data.tags and find the tag with name Vendor Accepted. If found, set setIsVendorAccepted to true
+      const vendorAcceptedTag = data.tags.find(
+        (tag) => tag.tag_name === "Vendor Accepted"
+      );
+
+      if (vendorAcceptedTag) {
+        setIsVendorAccepted(true);
+      }
 
       setJobDetails(data);
 
@@ -337,7 +348,17 @@ const JobInfo = () => {
     }
   };
 
-  // it could W(Work In Progress) or C(completed) or T(Cancelled)
+  const handleAcceptJob = async () => {
+    try {
+      await api.acceptJob(jobId);
+
+      setIsVendorAccepted(true);
+      navigate(0);
+    } catch (e) {
+      toast.error("Unable to accept job.");
+    }
+  };
+
   const updateJobStatus = async (status) => {
     setCompleteJobModalOpen(false);
     setIsCancelJobModalOpen(false);
@@ -779,24 +800,67 @@ const JobInfo = () => {
                 <div className="text-left lg:text-right">
                   {jobDetails.status === "S" && (
                     <div className="flex gap-4">
-                      <button
-                        type="button"
-                        onClick={() => updateJobStatus("W")}
-                        className="inline-flex items-center justify-center rounded-md
-                                                border border-transparent bg-red-600 px-4 py-2 text-lg
-                                                font-bold text-white shadow-sm hover:bg-red-700
-                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
-                      >
-                        Start Job
-                      </button>
                       {currentUser.isProjectManager && (
+                        <>
+                          {currentUser.canAcceptJobs && (
+                            <>
+                              {isVendorAccepted && (
+                                <button
+                                  type="button"
+                                  onClick={() => updateJobStatus("W")}
+                                  className="inline-flex items-center justify-center rounded-md
+                                                              border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                              font-bold text-white shadow-sm hover:bg-red-700
+                                                              focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                                >
+                                  Start Job
+                                </button>
+                              )}
+                              {!isVendorAccepted && (
+                                <button
+                                  type="button"
+                                  onClick={() => handleAcceptJob()}
+                                  className="rounded bg-white px-4 py-2 text-lg text-gray-900
+                                  shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                >
+                                  Accept Job
+                                </button>
+                              )}
+                            </>
+                          )}
+                          {!currentUser.canAcceptJobs && (
+                            <button
+                              type="button"
+                              onClick={() => updateJobStatus("W")}
+                              className="inline-flex items-center justify-center rounded-md
+                                                      border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                      font-bold text-white shadow-sm hover:bg-red-700
+                                                      focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                            >
+                              Start Job
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => handleToggleJobReturnModal()}
+                            className="rounded bg-white px-4 py-2 text-lg text-gray-900
+                                                            shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                          >
+                            Return Job
+                          </button>
+                        </>
+                      )}
+                      {!currentUser.isProjectManager && (
                         <button
                           type="button"
-                          onClick={() => handleToggleJobReturnModal()}
-                          className="rounded bg-white px-4 py-2 text-lg text-gray-900
-                                                        shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                          onClick={() => updateJobStatus("W")}
+                          className="inline-flex items-center justify-center rounded-md
+                                                    border border-transparent bg-red-600 px-4 py-2 text-lg
+                                                    font-bold text-white shadow-sm hover:bg-red-700
+                                                    focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
                         >
-                          Return Job
+                          Start Job
                         </button>
                       )}
                     </div>

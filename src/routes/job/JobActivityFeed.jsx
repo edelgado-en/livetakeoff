@@ -190,11 +190,14 @@ export default function Example() {
                                   "Photos Uploaded"}
                                 {activity.activity_type === "R" &&
                                   "Job Returned"}
+                                {activity.activity_type === "V" &&
+                                  "Vendor Accepted"}
                               </span>
 
-                              {activity.activity_type !== "U" && (
-                                <span> changed </span>
-                              )}
+                              {activity.activity_type !== "U" &&
+                                activity.activity_type !== "V" && (
+                                  <span> changed </span>
+                                )}
 
                               <span className="ml-1">
                                 by {activity.user_full_name}
@@ -204,11 +207,6 @@ export default function Example() {
                         )}
 
                       <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                        {/* <ReactTimeAgo
-                          date={new Date(activity.timestamp)}
-                          locale="en-US"
-                          timeStyle="twitter"
-                        /> */}
                         {activity.timestamp}
                       </div>
                     </div>
