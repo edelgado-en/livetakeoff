@@ -56,7 +56,6 @@ const CustomerAddFee = () => {
   const [isAirportsOpen, setIsAirportsOpen] = useState(false);
 
   const [fboSearchName, setFboSearchName] = useState("");
-
   const [airportSearchName, setAirportSearchName] = useState("");
 
   const [fboLoading, setFboLoading] = useState(false);
@@ -413,8 +412,6 @@ const CustomerAddFee = () => {
                         </div>
                       </div>
 
-                      {fboLoading && <Loader />}
-
                       {!fboLoading &&
                         fbos.map((fbo) => {
                           const selected = isFboSelected(fbo);
@@ -491,24 +488,22 @@ const CustomerAddFee = () => {
                                                 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue
                                                 focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                     >
-                      <span className="block truncate">
-                        {selectedAirports.length <= 0 && "select airports"}
+                      {selectedAirports.length <= 0 && "select airports"}
 
-                        {selectedAirports.length > 0 && (
-                          <span>
-                            {selectedAirports.map((airport) => {
-                              return (
-                                <span
-                                  key={airport.id}
-                                  className="inline-block bg-gray-200 text-gray-800 rounded-full px-3 py-1 text-sm font-semibold mr-2"
-                                >
-                                  {airport.name}
-                                </span>
-                              );
-                            })}
-                          </span>
-                        )}
-                      </span>
+                      {selectedAirports.length > 0 && (
+                        <span>
+                          {selectedAirports.map((airport) => {
+                            return (
+                              <span
+                                key={airport.id}
+                                className="inline-block bg-gray-200 text-gray-800 rounded-full px-3 py-1 text-sm font-semibold mr-2"
+                              >
+                                {airport.name}
+                              </span>
+                            );
+                          })}
+                        </span>
+                      )}
                       <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg
                           className="h-5 w-5 text-gray-400"

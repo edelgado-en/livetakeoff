@@ -12,6 +12,8 @@ import {
 } from "react-router-dom";
 import * as api from "./apiService";
 
+import { toast } from "react-toastify";
+
 const feeTypes = [
   { id: "G", name: "General" },
   { id: "F", name: "FBO Fee" },
@@ -60,6 +62,9 @@ const CustomerEditFee = () => {
   const [selectedAirports, setSelectedAirports] = useState([]);
   const [isAirportsOpen, setIsAirportsOpen] = useState(false);
 
+  const [fboSearchName, setFboSearchName] = useState("");
+  const [airportSearchName, setAirportSearchName] = useState("");
+
   const [selectedAmountType, setSelectedAmountType] = useState(amountTypes[0]);
 
   const [amount, setAmount] = useState();
@@ -69,6 +74,48 @@ const CustomerEditFee = () => {
   useEffect(() => {
     getFeeInfo();
   }, []);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchFbos();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [fboSearchName]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchAirports();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [airportSearchName]);
+
+  const searchFbos = async () => {
+    try {
+      const { data } = await api.searchFbos({ name: fboSearchName });
+
+      setFbos(data.results);
+    } catch (err) {
+      toast.error("Unable to search FBOs");
+    }
+  };
+
+  const searchAirports = async () => {
+    try {
+      const { data } = await api.searchAirports({ name: airportSearchName });
+
+      setAirports(data.results);
+    } catch (err) {
+      toast.error("Unable to search airports");
+    }
+  };
 
   const getFeeInfo = async () => {
     const response2 = await api.getFee(feeId);
@@ -89,12 +136,6 @@ const CustomerEditFee = () => {
     } else {
       setSelectedAmountType(amountTypes[1]);
     }
-
-    const { data } = await api.getAirports();
-    setAirports(data.results.map((a) => ({ id: a.id, name: a.name })));
-
-    const response = await api.getFbos();
-    setFbos(response.data.results.map((s) => ({ id: s.id, name: s.name })));
 
     setLoading(false);
   };
@@ -297,11 +338,22 @@ const CustomerEditFee = () => {
                                                 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue
                                                 focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                     >
-                      <span className="block truncate">
-                        {selectedFbos.length < 1
-                          ? "Select FBOs"
-                          : `Selected FBOs (${selectedFbos.length})`}
-                      </span>
+                      {selectedFbos.length <= 0 && "select FBOs"}
+
+                      {selectedFbos.length > 0 && (
+                        <span>
+                          {selectedFbos.map((fbo) => {
+                            return (
+                              <span
+                                key={fbo.id}
+                                className="inline-block bg-gray-200 text-gray-800 rounded-full px-3 py-1 text-sm font-semibold mr-2"
+                              >
+                                {fbo.name}
+                              </span>
+                            );
+                          })}
+                        </span>
+                      )}
                       <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg
                           className="h-5 w-5 text-gray-400"
@@ -332,6 +384,56 @@ const CustomerEditFee = () => {
                       className="max-h-70 rounded-md py-1 text-base leading-6 shadow-xs
                                                 overflow-auto focus:outline-none sm:text-sm sm:leading-5 z-50"
                     >
+                      <div className="relative">
+                        <div className="sticky top-0 z-20  px-1">
+                          <div className="mt-1 block  items-center">
+                            <input
+                              type="text"
+                              name="search"
+                              id="search"
+                              value={fboSearchName}
+                              onChange={(e) => setFboSearchName(e.target.value)}
+                              className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                            focus:border-sky-500 block w-full py-2 pr-12 sm:text-lg
+                                                                            border-gray-300 rounded-md"
+                            />
+                            <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                              {fboSearchName && (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                  onClick={() => {
+                                    setFboSearchName("");
+                                  }}
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6 text-gray-500 mr-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       {fbos.map((fbo) => {
                         const selected = isFboSelected(fbo);
                         return (
@@ -408,11 +510,22 @@ const CustomerEditFee = () => {
                                                 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue
                                                 focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                       >
-                        <span className="block truncate">
-                          {selectedAirports.length < 1
-                            ? "Select airports"
-                            : `Selected airports (${selectedAirports.length})`}
-                        </span>
+                        {selectedAirports.length <= 0 && "select airports"}
+
+                        {selectedAirports.length > 0 && (
+                          <span>
+                            {selectedAirports.map((airport) => {
+                              return (
+                                <span
+                                  key={airport.id}
+                                  className="inline-block bg-gray-200 text-gray-800 rounded-full px-3 py-1 text-sm font-semibold mr-2"
+                                >
+                                  {airport.name}
+                                </span>
+                              );
+                            })}
+                          </span>
+                        )}
                         <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                           <svg
                             className="h-5 w-5 text-gray-400"
@@ -443,6 +556,57 @@ const CustomerEditFee = () => {
                         className="max-h-70 rounded-md py-1 text-base leading-6 shadow-xs
                                                 overflow-auto focus:outline-none sm:text-sm sm:leading-5 z-50"
                       >
+                        <div className="relative">
+                          <div className="sticky top-0 z-20  px-1">
+                            <div className="mt-1 block  items-center">
+                              <input
+                                type="text"
+                                name="search"
+                                id="search"
+                                value={airportSearchName}
+                                onChange={(e) =>
+                                  setAirportSearchName(e.target.value)
+                                }
+                                className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                            focus:border-sky-500 block w-full py-2 pr-12 sm:text-lg
+                                                                            border-gray-300 rounded-md"
+                              />
+                              <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                {airportSearchName && (
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    onClick={() => {
+                                      setFboSearchName("");
+                                    }}
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-6 w-6 text-gray-500 mr-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         {airports.map((airport) => {
                           const selected = isAirportSelected(airport);
                           return (
