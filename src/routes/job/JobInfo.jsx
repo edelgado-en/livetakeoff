@@ -108,10 +108,11 @@ const JobInfo = () => {
   const getJobDetails = async () => {
     setLoading(true);
 
+    let jobCurrentStatus = "";
+
     try {
       const { data } = await api.getJobDetails(jobId);
 
-      //iterate through data.tags and find the tag with name Vendor Accepted. If found, set setIsVendorAccepted to true
       const vendorAcceptedTag = data.tags.find(
         (tag) => tag.tag_name === "Vendor Accepted"
       );
@@ -119,6 +120,8 @@ const JobInfo = () => {
       if (vendorAcceptedTag) {
         setIsVendorAccepted(true);
       }
+
+      jobCurrentStatus = data.status;
 
       setJobDetails(data);
 
@@ -204,7 +207,7 @@ const JobInfo = () => {
       );
       const isSubmitted = statusActivities.some((s) => s.status === "U");
       const isAccepted = statusActivities.some((s) => s.status === "A");
-      const isAssigned = statusActivities.some((s) => s.status === "S");
+      let isAssigned = statusActivities.some((s) => s.status === "S");
       const isWIP = statusActivities.some((s) => s.status === "W");
       const isCompleted = statusActivities.some((s) => s.status === "C");
       const isInvoiced = statusActivities.some((s) => s.status === "I");
@@ -256,7 +259,13 @@ const JobInfo = () => {
           }
           return s;
         });
-      } else if (isAssigned) {
+      } else if (
+        isAssigned &&
+        (jobCurrentStatus === "S" ||
+          jobCurrentStatus === "W" ||
+          jobCurrentStatus === "C" ||
+          jobCurrentStatus === "I")
+      ) {
         // all the steps except the last three should have status complete and selected false
         statusSteps = statusSteps.map((s, index) => {
           if (index < statusSteps.length - 3) {

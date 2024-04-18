@@ -90,6 +90,7 @@ import SharedLayout from "./routes/shared/SharedLayout";
 import SharedJob from "./routes/shared/SharedJob";
 import ShareJobEstimate from "./routes/shared/SharedJobEstimate";
 import SharedJobConfirm from "./routes/shared/SharedJobConfirm";
+import SharedJobAccept from "./routes/shared/SharedJobAccept";
 
 import TailAlerts from "./routes/alerts/TailAlerts";
 
@@ -152,6 +153,10 @@ const App = () => {
                   <Route
                     path="jobs/:encoded_id/confirm"
                     element={<SharedJobConfirm />}
+                  />
+                  <Route
+                    path="jobs/:encoded_id/accept"
+                    element={<SharedJobAccept />}
                   />
                   <Route path="contact" element={<ContactUs />} />
                   <Route
