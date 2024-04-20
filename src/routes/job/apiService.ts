@@ -243,3 +243,7 @@ export const getJobInvoiceDetails = (id: number) => {
 export const acceptJob = (id: number, data: any) => {
     return httpService.get(`/api/jobs/accept/${id}/`, data);
 }
+
+export const searchUsers = (data: any) => {
+    return httpService.post('/api/users', data);
+}

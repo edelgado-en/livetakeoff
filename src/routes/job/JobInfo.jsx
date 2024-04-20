@@ -314,7 +314,8 @@ const JobInfo = () => {
     hoursWorked,
     minutesWorked,
     numberOfWorkers,
-    laborTime
+    laborTime,
+    userSelected
   ) => {
     setCompleteJobModalOpen(false);
     setIsCancelJobModalOpen(false);
@@ -327,6 +328,7 @@ const JobInfo = () => {
       minutes_worked: minutesWorked,
       number_of_workers: numberOfWorkers,
       labor_time: laborTime,
+      user_selected_id: userSelected ? userSelected.id : null,
     };
 
     try {
@@ -1948,6 +1950,7 @@ const JobInfo = () => {
           jobDetails={jobDetails}
           handleClose={handleToggleJobCompleteModal}
           completeJob={completeJob}
+          currentUser={currentUser}
         />
       )}
       {isPriceBreakdownModalOpen && (

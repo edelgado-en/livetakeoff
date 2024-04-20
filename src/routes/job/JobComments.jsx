@@ -346,7 +346,7 @@ const JobComments = () => {
                                   Send SMS
                                 </label>
                                 <p className="text-gray-500 text-sm">
-                                  Notified assigned project managers.
+                                  Notify assigned project managers.
                                 </p>
                               </div>
                             </div>
