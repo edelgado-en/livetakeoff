@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment, useRef } from "react";
 import Loader from "../../components/loader/Loader";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Listbox, Transition } from "@headlessui/react";
+import { Listbox, Transition, Switch } from "@headlessui/react";
 import {
   PlusIcon,
   CheckIcon,
@@ -71,6 +71,8 @@ const CreateJob = () => {
   const [createJobMessage, setCreateJobMessage] = useState(null);
   const [jobDetails, setJobDetails] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const [showActions, setShowActions] = useState(false);
 
   const [tailNumber, setTailNumber] = useState("");
   const [tailNumberErrorMessage, setTailNumberErrorMessage] = useState(null);
@@ -2149,6 +2151,38 @@ const CreateJob = () => {
                 <div className="text-xl text-gray-500 tracking-wide">
                   Click on the services you want to include
                 </div>
+                <Switch.Group
+                  as="li"
+                  className="flex items-center justify-center mt-2"
+                >
+                  <div className="flex flex-col">
+                    <Switch.Label
+                      as="p"
+                      className="text-xl text-gray-500"
+                      passive
+                    >
+                      {showActions
+                        ? "Hide Scope of Work"
+                        : "Show Scope of Work"}
+                    </Switch.Label>
+                  </div>
+                  <Switch
+                    checked={showActions}
+                    onChange={setShowActions}
+                    className={classNames(
+                      showActions ? "bg-red-500" : "bg-gray-200",
+                      "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                    )}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={classNames(
+                        showActions ? "translate-x-5" : "translate-x-0",
+                        "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                      )}
+                    />
+                  </Switch>
+                </Switch.Group>
 
                 {interiorServices.length > 0 && (
                   <>
@@ -2167,6 +2201,20 @@ const CreateJob = () => {
                             rounded-lg p-4 py-7 focus:outline-none`}
                         >
                           <div className="text-md">{service.name}</div>
+
+                          {showActions &&
+                            service.checklist_actions?.map((action) => (
+                              <div
+                                key={action.id}
+                                className={`${
+                                  service.selected
+                                    ? "text-white"
+                                    : "text-gray-500"
+                                } text-sm  px-6 border-b border-gray-300 py-4`}
+                              >
+                                {action.name}
+                              </div>
+                            ))}
                         </div>
                       ))}
                     </div>
@@ -2191,6 +2239,20 @@ const CreateJob = () => {
                             rounded-lg p-4 py-7 focus:outline-none`}
                         >
                           <div className="text-md">{service.name}</div>
+
+                          {showActions &&
+                            service.checklist_actions?.map((action) => (
+                              <div
+                                key={action.id}
+                                className={`${
+                                  service.selected
+                                    ? "text-white"
+                                    : "text-gray-500"
+                                } text-sm  px-6 border-b border-gray-300 py-4`}
+                              >
+                                {action.name}
+                              </div>
+                            ))}
                         </div>
                       ))}
                     </div>
@@ -2215,6 +2277,20 @@ const CreateJob = () => {
                             rounded-lg p-4 py-7 focus:outline-none`}
                         >
                           <div className="flex-1 text-md">{service.name}</div>
+
+                          {showActions &&
+                            service.checklist_actions?.map((action) => (
+                              <div
+                                key={action.id}
+                                className={`${
+                                  service.selected
+                                    ? "text-white"
+                                    : "text-gray-500"
+                                } text-sm  px-6 border-b border-gray-300 py-4`}
+                              >
+                                {action.name}
+                              </div>
+                            ))}
                         </div>
                       ))}
                     </div>
@@ -2264,6 +2340,20 @@ const CreateJob = () => {
                               <div className="flex-1 text-md">
                                 {service.name}
                               </div>
+
+                              {showActions &&
+                                service.checklist_actions?.map((action) => (
+                                  <div
+                                    key={action.id}
+                                    className={`${
+                                      service.selected
+                                        ? "text-white"
+                                        : "text-gray-500"
+                                    } text-sm  px-6 border-b border-gray-300 py-4`}
+                                  >
+                                    {action.name}
+                                  </div>
+                                ))}
                             </div>
                           ))}
                         </div>
@@ -2293,6 +2383,20 @@ const CreateJob = () => {
                               <div className="flex-1 text-md">
                                 {service.name}
                               </div>
+
+                              {showActions &&
+                                service.checklist_actions?.map((action) => (
+                                  <div
+                                    key={action.id}
+                                    className={`${
+                                      service.selected
+                                        ? "text-white"
+                                        : "text-gray-500"
+                                    } text-sm  px-6 border-b border-gray-300 py-4`}
+                                  >
+                                    {action.name}
+                                  </div>
+                                ))}
                             </div>
                           ))}
                         </div>
@@ -2320,6 +2424,20 @@ const CreateJob = () => {
                               <div className="flex-1 text-md">
                                 {service.name}
                               </div>
+
+                              {showActions &&
+                                service.checklist_actions?.map((action) => (
+                                  <div
+                                    key={action.id}
+                                    className={`${
+                                      service.selected
+                                        ? "text-white"
+                                        : "text-gray-500"
+                                    } text-sm  px-6 border-b border-gray-300 py-4`}
+                                  >
+                                    {action.name}
+                                  </div>
+                                ))}
                             </div>
                           ))}
                         </div>
