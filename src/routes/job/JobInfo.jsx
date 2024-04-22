@@ -765,7 +765,7 @@ const JobInfo = () => {
                 </div>
               )}
             </div>
-            <div className="relative top-1">
+            <div className="">
               {currentUser.isCustomer &&
                 (jobDetails.status === "U" || jobDetails.status === "A") && (
                   <div className="flex flex-wrap gap-4">
