@@ -76,6 +76,10 @@ const Users = () => {
   const [customerSelected, setCustomerSelected] = useState(null);
   const [customerSearchName, setCustomerSearchName] = useState("");
 
+  const [vendors, setVendors] = useState([]);
+  const [vendorSelected, setVendorSelected] = useState(null);
+  const [vendorSearchName, setVendorSearchName] = useState("");
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -88,7 +92,7 @@ const Users = () => {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [searchText, roleSelected, customerSelected]);
+  }, [searchText, roleSelected, customerSelected, vendorSelected]);
 
   useEffect(() => {
     //Basic throttling
@@ -100,6 +104,17 @@ const Users = () => {
       clearTimeout(timeoutID);
     };
   }, [customerSearchName]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchVendors();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [vendorSearchName]);
 
   const searchCustomers = async () => {
     const request = {
@@ -117,6 +132,22 @@ const Users = () => {
     }
   };
 
+  const searchVendors = async () => {
+    const request = {
+      name: vendorSearchName,
+    };
+
+    try {
+      const { data } = await api.searchVendors(request);
+
+      data.results.unshift({ id: null, name: "All" });
+
+      setVendors(data.results);
+    } catch (err) {
+      toast.error("Unable to search vendors");
+    }
+  };
+
   const searchUsers = async () => {
     setLoading(true);
 
@@ -124,6 +155,7 @@ const Users = () => {
       name: searchText,
       role: roleSelected.id,
       customer_id: customerSelected ? customerSelected.id : null,
+      vendor_id: vendorSelected ? vendorSelected.id : null,
     };
 
     try {
@@ -375,7 +407,7 @@ const Users = () => {
                                   <span className="block truncate">
                                     {customerSelected
                                       ? customerSelected.name
-                                      : "All"}
+                                      : "Customers"}
                                   </span>
                                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                     <ChevronDownIcon
@@ -474,6 +506,149 @@ const Users = () => {
                                               )}
                                             >
                                               {customer.name}
+                                            </span>
+                                            {selected ? (
+                                              <span
+                                                className={classNames(
+                                                  active
+                                                    ? "text-white"
+                                                    : "text-red-600",
+                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                )}
+                                              >
+                                                <CheckIcon
+                                                  className="h-5 w-5"
+                                                  aria-hidden="true"
+                                                />
+                                              </span>
+                                            ) : null}
+                                          </>
+                                        )}
+                                      </Listbox.Option>
+                                    ))}
+                                  </Listbox.Options>
+                                </Transition>
+                              </div>
+                            </>
+                          )}
+                        </Listbox>
+                      </div>
+                      <div className="">
+                        <Listbox
+                          value={vendorSelected}
+                          onChange={setVendorSelected}
+                        >
+                          {({ open }) => (
+                            <>
+                              <div className="relative mt-1">
+                                <Listbox.Button
+                                  className="relative w-full cursor-default rounded-md border
+                                                                        border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                                        shadow-sm focus:border-sky-500 focus:outline-none
+                                                                        focus:ring-1 focus:ring-sky-500 sm:text-lg"
+                                >
+                                  <span className="block truncate">
+                                    {vendorSelected
+                                      ? vendorSelected.name
+                                      : "Vendors"}
+                                  </span>
+                                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                    <ChevronDownIcon
+                                      className="h-4 w-4 text-gray-400"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                </Listbox.Button>
+
+                                <Transition
+                                  show={open}
+                                  as={Fragment}
+                                  leave="transition ease-in duration-100"
+                                  leaveFrom="opacity-100"
+                                  leaveTo="opacity-0"
+                                >
+                                  <Listbox.Options
+                                    className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                                                                            rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                            ring-black ring-opacity-5 focus:outline-none text-md"
+                                  >
+                                    <div className="relative">
+                                      <div className="sticky top-0 z-20  px-1">
+                                        <div className="mt-1 block  items-center">
+                                          <input
+                                            type="text"
+                                            name="search"
+                                            id="search"
+                                            value={vendorSearchName}
+                                            onChange={(e) =>
+                                              setVendorSearchName(
+                                                e.target.value
+                                              )
+                                            }
+                                            className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                            focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-lg
+                                                                            border-gray-300 rounded-md"
+                                          />
+                                          <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                            {vendorSearchName && (
+                                              <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                                onClick={() => {
+                                                  setVendorSearchName("");
+                                                }}
+                                              >
+                                                <path
+                                                  fillRule="evenodd"
+                                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                  clipRule="evenodd"
+                                                />
+                                              </svg>
+                                            )}
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              className="h-6 w-6 text-gray-500 mr-1"
+                                              fill="none"
+                                              viewBox="0 0 24 24"
+                                              stroke="currentColor"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                              />
+                                            </svg>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {vendors.map((vendor) => (
+                                      <Listbox.Option
+                                        key={vendor.id}
+                                        className={({ active }) =>
+                                          classNames(
+                                            active
+                                              ? "text-white bg-red-600"
+                                              : "text-gray-900",
+                                            "relative cursor-default select-none py-2 pl-3 pr-9"
+                                          )
+                                        }
+                                        value={vendor}
+                                      >
+                                        {({ selected, active }) => (
+                                          <>
+                                            <span
+                                              className={classNames(
+                                                selected
+                                                  ? "font-semibold"
+                                                  : "font-normal",
+                                                "block truncate"
+                                              )}
+                                            >
+                                              {vendor.name}
                                             </span>
                                             {selected ? (
                                               <span
@@ -767,7 +942,7 @@ const Users = () => {
                               <span className="block truncate">
                                 {customerSelected
                                   ? customerSelected.name
-                                  : "All"}
+                                  : "Customers"}
                               </span>
                               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronDownIcon
@@ -864,6 +1039,147 @@ const Users = () => {
                                           )}
                                         >
                                           {customer.name}
+                                        </span>
+                                        {selected ? (
+                                          <span
+                                            className={classNames(
+                                              active
+                                                ? "text-white"
+                                                : "text-red-600",
+                                              "absolute inset-y-0 right-0 flex items-center pr-4"
+                                            )}
+                                          >
+                                            <CheckIcon
+                                              className="h-5 w-5"
+                                              aria-hidden="true"
+                                            />
+                                          </span>
+                                        ) : null}
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          </div>
+                        </>
+                      )}
+                    </Listbox>
+                  </div>
+                  <div className="">
+                    <Listbox
+                      value={vendorSelected}
+                      onChange={setVendorSelected}
+                    >
+                      {({ open }) => (
+                        <>
+                          <div className="relative mt-1">
+                            <Listbox.Button
+                              className="relative w-full cursor-default rounded-md border
+                                                                        border-gray-300 bg-white py-3 pl-3 pr-10 text-left
+                                                                        shadow-sm focus:border-sky-500 focus:outline-none
+                                                                        focus:ring-1 focus:ring-sky-500 text-md text-gray-600"
+                            >
+                              <span className="block truncate">
+                                {vendorSelected
+                                  ? vendorSelected.name
+                                  : "Vendors"}
+                              </span>
+                              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                <ChevronDownIcon
+                                  className="h-4 w-4 text-gray-400"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
+
+                            <Transition
+                              show={open}
+                              as={Fragment}
+                              leave="transition ease-in duration-100"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <Listbox.Options
+                                className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                                                                            rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                            ring-black ring-opacity-5 focus:outline-none text-md"
+                              >
+                                <div className="relative">
+                                  <div className="sticky top-0 z-20  px-1">
+                                    <div className="mt-1 block  items-center">
+                                      <input
+                                        type="text"
+                                        name="search"
+                                        id="search"
+                                        value={vendorSearchName}
+                                        onChange={(e) =>
+                                          setVendorSearchName(e.target.value)
+                                        }
+                                        className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                            focus:border-sky-500 block w-full py-2 pr-12 text-md
+                                                                            border-gray-300 rounded-md"
+                                      />
+                                      <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                        {vendorSearchName && (
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                            onClick={() => {
+                                              setVendorSearchName("");
+                                            }}
+                                          >
+                                            <path
+                                              fillRule="evenodd"
+                                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                              clipRule="evenodd"
+                                            />
+                                          </svg>
+                                        )}
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="h-6 w-6 text-gray-500 mr-1"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke="currentColor"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                          />
+                                        </svg>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                {vendors.map((vendor) => (
+                                  <Listbox.Option
+                                    key={vendor.id}
+                                    className={({ active }) =>
+                                      classNames(
+                                        active
+                                          ? "text-white bg-red-600"
+                                          : "text-gray-900",
+                                        "relative cursor-default select-none py-2 pl-3 pr-9 text-md"
+                                      )
+                                    }
+                                    value={vendor}
+                                  >
+                                    {({ selected, active }) => (
+                                      <>
+                                        <span
+                                          className={classNames(
+                                            selected
+                                              ? "font-semibold"
+                                              : "font-normal",
+                                            "block truncate text-md"
+                                          )}
+                                        >
+                                          {vendor.name}
                                         </span>
                                         {selected ? (
                                           <span
