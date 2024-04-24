@@ -2158,7 +2158,7 @@ const CreateJob = () => {
                   <div className="flex flex-col">
                     <Switch.Label
                       as="p"
-                      className="text-xl text-gray-500"
+                      className="text-xl text-red-500 font-semibold"
                       passive
                     >
                       {showActions
