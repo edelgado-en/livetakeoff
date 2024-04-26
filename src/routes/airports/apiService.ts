@@ -8,6 +8,10 @@ export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
 
+export const createFBO = (data: any) => {
+    return httpService.post(`/api/fbos/create`, data);
+}
+
 export const getAirportDetails = (id: number) => {
     return httpService.get(`/api/airports/${id}/`);
 }

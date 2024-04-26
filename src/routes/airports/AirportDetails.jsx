@@ -20,6 +20,8 @@ import ReactTimeAgo from "react-time-ago";
 
 import Loader from "../../components/loader/Loader";
 
+import CreateFBOModal from "./CreateFBOModal";
+
 import * as api from "./apiService";
 
 import { toast } from "react-toastify";
@@ -57,6 +59,8 @@ const AirportDetails = () => {
 
   const [availableVendors, setAvailableVendors] = useState([]);
 
+  const [isCreateFboModalOpen, setCreateFboModalOpen] = useState(false);
+
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
@@ -74,6 +78,10 @@ const AirportDetails = () => {
     getAirportAvailableUsers();
     setFboAlreadyAdded(false);
   }, [airportId]);
+
+  const handleToggleCreateFboModal = () => {
+    setCreateFboModalOpen(!isCreateFboModalOpen);
+  };
 
   const searchFbos = async () => {
     setLoadingFbos(true);
@@ -183,6 +191,27 @@ const AirportDetails = () => {
     });
 
     setAvailableVendors(newVendors);
+  };
+
+  const handleCreateFbo = async (fbo) => {
+    const request = {
+      airport_id: airportId,
+      name: fbo.name,
+      is_public: fbo.public,
+    };
+
+    try {
+      const { data } = await api.createFBO(request);
+
+      setAvailableFbos([...availableFbos, data]);
+
+      toast.success("FBO added!");
+    } catch (err) {
+      alert("FBO already exists");
+      return;
+    }
+
+    setCreateFboModalOpen(false);
   };
 
   return (
@@ -407,16 +436,31 @@ const AirportDetails = () => {
                   className="border border-gray-200 rounded-md p-4"
                   style={{ height: "900px" }}
                 >
-                  <div className="font-medium text-md">
-                    Available FBOs
-                    <span
-                      className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                    rounded-full text-md font-medium inline-block"
-                    >
-                      {availableFbos.length}
-                    </span>
+                  <div className="flex justify-between gap-2">
+                    <div className="font-medium text-md">
+                      Available FBOs
+                      <span
+                        className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                        rounded-full text-md font-medium inline-block"
+                      >
+                        {availableFbos.length}
+                      </span>
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleCreateFboModal()}
+                        className="inline-flex items-center justify-center 
+                              rounded-md border border-transparent bg-red-600 px-4 py-2
+                              text-sm font-medium text-white shadow-sm hover:bg-red-700
+                              focus:outline-none focus:ring-2 focus:ring-red-500
+                              focus:ring-offset-2 sm:w-auto"
+                      >
+                        Create New FBO
+                      </button>
+                    </div>
                   </div>
-                  <div className="text-md">
+                  <div className="text-md mt-6">
                     {availableFbos.length === 0 && (
                       <div className="text-center m-auto mt-24 text-md">
                         No available FBOs set.
@@ -462,6 +506,14 @@ const AirportDetails = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {isCreateFboModalOpen && (
+        <CreateFBOModal
+          isOpen={isCreateFboModalOpen}
+          handleClose={handleToggleCreateFboModal}
+          addFBO={handleCreateFbo}
+        />
       )}
     </AnimatedPage>
   );

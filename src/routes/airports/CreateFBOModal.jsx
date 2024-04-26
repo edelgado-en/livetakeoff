@@ -8,7 +8,7 @@ function classNames(...classes) {
 
 const CreateFBOModal = ({ isOpen, handleClose, addFBO }) => {
   const [name, setName] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
 
   const createFBO = () => {
     if (name.length === 0) {
