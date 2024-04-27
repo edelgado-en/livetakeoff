@@ -135,24 +135,6 @@ const CreateJob = () => {
 
   const navigate = useNavigate();
 
-  const filteredAircraftTypes = aircraftSearchTerm
-    ? aircraftTypes.filter((item) =>
-        item.name.toLowerCase().includes(aircraftSearchTerm.toLowerCase())
-      )
-    : aircraftTypes;
-
-  const filteredCustomers = customerSearchTerm
-    ? customers.filter((item) =>
-        item.name.toLowerCase().includes(customerSearchTerm.toLowerCase())
-      )
-    : customers;
-
-  const filteredAirports = airportSearchTerm
-    ? airports.filter((item) =>
-        item.name.toLowerCase().includes(airportSearchTerm.toLowerCase())
-      )
-    : airports;
-
   const filteredFbos = fboSearchTerm
     ? fbos.filter((item) =>
         item.name.toLowerCase().includes(fboSearchTerm.toLowerCase())
@@ -187,6 +169,71 @@ const CreateJob = () => {
       clearTimeout(timeoutID);
     };
   }, [tailNumber]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchAirports();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [airportSearchTerm]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchCustomers();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [customerSearchTerm]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      searchAircrafts();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [aircraftSearchTerm]);
+
+  const searchAirports = async () => {
+    try {
+      const { data } = await api.searchAirports({ name: airportSearchTerm });
+
+      setAirports(data.results);
+    } catch (err) {
+      toast.error("Unable to search airports");
+    }
+  };
+
+  const searchCustomers = async () => {
+    try {
+      const { data } = await api.getCustomers({ name: customerSearchTerm });
+
+      setCustomers(data.results);
+    } catch (err) {
+      toast.error("Unable to search customers");
+    }
+  };
+
+  const searchAircrafts = async () => {
+    try {
+      const { data } = await api.searchAircraftTypes({
+        name: aircraftSearchTerm,
+      });
+
+      setAircraftTypes(data.results);
+    } catch (err) {
+      toast.error("Unable to search aircrafts");
+    }
+  };
 
   const getTailLookups = async () => {
     if (tailNumber?.length > 2 && !estimateId) {
@@ -1247,7 +1294,7 @@ const CreateJob = () => {
                                       </div>
                                     </div>
                                   </div>
-                                  {filteredCustomers.map((customer) => (
+                                  {customers.map((customer) => (
                                     <Listbox.Option
                                       key={customer.id}
                                       className={({ active }) =>
@@ -1393,7 +1440,7 @@ const CreateJob = () => {
                                     </div>
                                   </div>
                                 </div>
-                                {filteredAircraftTypes.map((aircraftType) => (
+                                {aircraftTypes.map((aircraftType) => (
                                   <Listbox.Option
                                     key={aircraftType.id}
                                     className={({ active }) =>
@@ -1537,7 +1584,7 @@ const CreateJob = () => {
                                     </div>
                                   </div>
                                 </div>
-                                {filteredAirports.map((airport) => (
+                                {airports.map((airport) => (
                                   <Listbox.Option
                                     key={airport.id}
                                     className={({ active }) =>

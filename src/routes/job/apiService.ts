@@ -212,6 +212,14 @@ export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
 
+export const searchAirports = (data: any) => {
+    return httpService.post(`/api/airports`, data);
+}
+
+export const searchAircraftTypes = (request: any) => {
+    return httpService.post('/api/aircraft-types', request);
+}
+
 export const getCustomerRetainerServices = (id: number) => {
     return httpService.get(`/api/customers/retainers-services/${id}/`);
 }

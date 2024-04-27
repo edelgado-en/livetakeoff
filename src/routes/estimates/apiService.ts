@@ -28,3 +28,15 @@ export const deleteEstimate = (id: number) => {
 export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
+
+export const getCustomers = (request: any) => {
+    return httpService.post('/api/customers', request);
+}
+
+export const searchAirports = (data: any) => {
+    return httpService.post(`/api/airports`, data);
+}
+
+export const searchAircraftTypes = (request: any) => {
+    return httpService.post('/api/aircraft-types', request);
+}
