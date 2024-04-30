@@ -60,7 +60,7 @@ const CreateJob = () => {
   const isStepTwoSelected = steps[1].selected;
   const isStepThreeSelected = steps[2].selected;
 
-  const [showServiceActivity, setShowServiceActivity] = useState(false);
+  const [showServiceActivity, setShowServiceActivity] = useState(true);
 
   const [showTailAlert, setShowTailAlert] = useState(false);
   const [showTailOpenJobAlert, setShowTailOpenJobAlert] = useState(false);
