@@ -442,6 +442,19 @@ const Topbar = () => {
                         >
                           Jobs
                         </Link>
+                        {currentUser.enableEstimates && (
+                          <Link
+                            to="/estimates"
+                            className={classNames(
+                              location.pathname.includes("estimates")
+                                ? "bg-red-700"
+                                : " hover:bg-red-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium text-white"
+                            )}
+                          >
+                            Estimates
+                          </Link>
+                        )}
                         <Link
                           to="completed"
                           className={classNames(
@@ -974,6 +987,20 @@ const Topbar = () => {
                       Jobs
                     </Disclosure.Button>
                   </Link>
+                  {currentUser.enableEstimates && (
+                    <Link to="estimates">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("estimates")
+                            ? "bg-red-700"
+                            : "hover:bg-red-700 hover:text-white",
+                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                        )}
+                      >
+                        Estimates
+                      </Disclosure.Button>
+                    </Link>
+                  )}
                   <Link to="completed">
                     <Disclosure.Button
                       className={classNames(
