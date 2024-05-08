@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Switch } from "@headlessui/react";
 import {
   Link,
   useParams,
@@ -15,6 +16,10 @@ import ReactTimeAgo from "react-time-ago";
 import Loader from "../../components/loader/Loader";
 import * as api from "./apiService";
 import { toast } from "react-toastify";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -72,6 +77,10 @@ const UserDetails = () => {
   const [showLocationSection, setShowLocationSection] = useState(false);
   const [showAirportSection, setShowAirportSection] = useState(false);
   const [showCustomerSection, setShowCustomerSection] = useState(false);
+  const [showEmailNotificationSection, setShowEmailNotificationSection] =
+    useState(false);
+  const [showSMSNotificationSection, setShowSMSNotificationSection] =
+    useState(false);
 
   useEffect(() => {
     //Basic throttling
@@ -183,7 +192,7 @@ const UserDetails = () => {
       setDefaultEmail(data.email);
       setLoading(false);
     } catch (err) {
-      setLoading(false);
+      toast.error("Unable to get user details");
     }
   };
 
@@ -452,9 +461,372 @@ const UserDetails = () => {
     }
   };
 
+  const handleToggleEmailNotifications = async () => {
+    try {
+      const request = {
+        email_notifications: !userDetails.profile.email_notifications,
+      };
+
+      await api.updateUser(userId, request);
+
+      //if email_notifications is false, set all email notification settings to false
+      if (!request.email_notifications) {
+        setUserDetails({
+          ...userDetails,
+          profile: {
+            ...userDetails.profile,
+            email_notifications: !userDetails.profile.email_notifications,
+            enable_email_notification_job_created: false,
+            enable_email_notification_scheduled_job_created: false,
+            enable_email_notification_job_confirmed: false,
+            enable_email_notification_job_accepted: false,
+            enable_email_notification_job_returned: false,
+            enable_email_notification_job_comment_added: false,
+            enable_email_notification_job_completed: false,
+          },
+        });
+      } else {
+        setUserDetails({
+          ...userDetails,
+          profile: {
+            ...userDetails.profile,
+            email_notifications: !userDetails.profile.email_notifications,
+          },
+        });
+      }
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationJobCreated = async () => {
+    try {
+      const request = {
+        enable_email_notification_job_created:
+          !userDetails.profile.enable_email_notification_job_created,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_job_created:
+            !userDetails.profile.enable_email_notification_job_created,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationScheduledJobCreated = async () => {
+    try {
+      const request = {
+        enable_email_notification_scheduled_job_created:
+          !userDetails.profile.enable_email_notification_scheduled_job_created,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_scheduled_job_created:
+            !userDetails.profile
+              .enable_email_notification_scheduled_job_created,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationJobConfirmed = async () => {
+    try {
+      const request = {
+        enable_email_notification_job_confirmed:
+          !userDetails.profile.enable_email_notification_job_confirmed,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_job_confirmed:
+            !userDetails.profile.enable_email_notification_job_confirmed,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationJobAccepted = async () => {
+    try {
+      const request = {
+        enable_email_notification_job_accepted:
+          !userDetails.profile.enable_email_notification_job_accepted,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_job_accepted:
+            !userDetails.profile.enable_email_notification_job_accepted,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationJobReturned = async () => {
+    try {
+      const request = {
+        enable_email_notification_job_returned:
+          !userDetails.profile.enable_email_notification_job_returned,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_job_returned:
+            !userDetails.profile.enable_email_notification_job_returned,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationJobCommentAdded = async () => {
+    try {
+      const request = {
+        enable_email_notification_job_comment_added:
+          !userDetails.profile.enable_email_notification_job_comment_added,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_job_comment_added:
+            !userDetails.profile.enable_email_notification_job_comment_added,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationJobCompleted = async () => {
+    try {
+      const request = {
+        enable_email_notification_job_completed:
+          !userDetails.profile.enable_email_notification_job_completed,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_job_completed:
+            !userDetails.profile.enable_email_notification_job_completed,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleSMSNotifications = async () => {
+    try {
+      const request = {
+        sms_notifications: !userDetails.profile.sms_notifications,
+      };
+
+      await api.updateUser(userId, request);
+
+      //if sms_notifications is false, set all sms notification settings to false
+      if (!request.sms_notifications) {
+        setUserDetails({
+          ...userDetails,
+          profile: {
+            ...userDetails.profile,
+            sms_notifications: !userDetails.profile.sms_notifications,
+            enable_sms_notification_job_created: false,
+            enable_sms_notification_job_started: false,
+            enable_sms_notification_job_completed: false,
+            enable_sms_notification_job_cancelled: false,
+          },
+        });
+      } else {
+        setUserDetails({
+          ...userDetails,
+          profile: {
+            ...userDetails.profile,
+            sms_notifications: !userDetails.profile.sms_notifications,
+          },
+        });
+      }
+    } catch (err) {
+      toast.error("Unable to update sms notifications");
+    }
+  };
+
+  const handleToggleSMSNotificationJobCreated = async () => {
+    try {
+      const request = {
+        enable_sms_notification_job_created:
+          !userDetails.profile.enable_sms_notification_job_created,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_sms_notification_job_created:
+            !userDetails.profile.enable_sms_notification_job_created,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update sms notifications");
+    }
+  };
+
+  const handleToggleSMSNotificationJobStarted = async () => {
+    try {
+      const request = {
+        enable_sms_notification_job_started:
+          !userDetails.profile.enable_sms_notification_job_started,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_sms_notification_job_started:
+            !userDetails.profile.enable_sms_notification_job_started,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update sms notifications");
+    }
+  };
+
+  const handleToggleSMSNotificationJobCompleted = async () => {
+    try {
+      const request = {
+        enable_sms_notification_job_completed:
+          !userDetails.profile.enable_sms_notification_job_completed,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_sms_notification_job_completed:
+            !userDetails.profile.enable_sms_notification_job_completed,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update sms notifications");
+    }
+  };
+
+  const handleToggleSMSNotificationJobCancelled = async () => {
+    try {
+      const request = {
+        enable_sms_notification_job_cancelled:
+          !userDetails.profile.enable_sms_notification_job_cancelled,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_sms_notification_job_cancelled:
+            !userDetails.profile.enable_sms_notification_job_cancelled,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update sms notifications");
+    }
+  };
+
+  const handleToggleEmailNotificationInventoryOutOfStock = async () => {
+    try {
+      const request = {
+        enable_email_notification_inventory_out_of_stock:
+          !userDetails.profile.enable_email_notification_inventory_out_of_stock,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_inventory_out_of_stock:
+            !userDetails.profile
+              .enable_email_notification_inventory_out_of_stock,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
+  const handleToggleEmailInventoryThresholdMet = async () => {
+    try {
+      const request = {
+        enable_email_notification_inventory_threshold_met:
+          !userDetails.profile
+            .enable_email_notification_inventory_threshold_met,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_email_notification_inventory_threshold_met:
+            !userDetails.profile
+              .enable_email_notification_inventory_threshold_met,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update email notifications");
+    }
+  };
+
   return (
     <AnimatedPage>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
 
       {!loading && (
         <div className=" max-w-7xl m-auto">
@@ -694,6 +1066,748 @@ const UserDetails = () => {
                   </div>
                 )}
               </div>
+
+              {(userDetails.is_staff ||
+                userDetails.is_superuser ||
+                userDetails.is_account_manager ||
+                userDetails.is_internal_coordinator ||
+                userDetails.is_customer_user) && (
+                <>
+                  <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                    <div
+                      className="flex justify-between cursor-pointer"
+                      onClick={() =>
+                        setShowEmailNotificationSection(
+                          !showEmailNotificationSection
+                        )
+                      }
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium text-xl">
+                          Email Notifications
+                        </div>
+                        <div className="text-md text-gray-500 mt-1">
+                          Configure which email notifications the user should be
+                          getting.
+                        </div>
+                      </div>
+                      <div className="">
+                        {showEmailNotificationSection && (
+                          <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                        )}
+                        {!showEmailNotificationSection && (
+                          <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                        )}
+                      </div>
+                    </div>
+
+                    {showEmailNotificationSection && (
+                      <div className="">
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between py-6 hover:bg-gray-50 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable Email Notifications
+                            </Switch.Label>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.email_notifications}
+                            onChange={handleToggleEmailNotifications}
+                            className={classNames(
+                              userDetails.profile.email_notifications
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.email_notifications
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Submitted
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is submitted by a
+                              customer user.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_job_created
+                            }
+                            onChange={handleToggleEmailNotificationJobCreated}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_job_created
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_job_created
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Scheduled Job Created
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is created via an
+                              schedule.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_scheduled_job_created
+                            }
+                            onChange={
+                              handleToggleEmailNotificationScheduledJobCreated
+                            }
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_scheduled_job_created
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_scheduled_job_created
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Confirmed
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is confirmed via a
+                              public shareable link.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_job_confirmed
+                            }
+                            onChange={handleToggleEmailNotificationJobConfirmed}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_job_confirmed
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_job_confirmed
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Accepted
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is accepted.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_job_accepted
+                            }
+                            onChange={handleToggleEmailNotificationJobAccepted}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_job_accepted
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_job_accepted
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Returned
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is return.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_job_returned
+                            }
+                            onChange={handleToggleEmailNotificationJobReturned}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_job_returned
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_job_returned
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Comment Added
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a comment is added to a job
+                              by a customer user.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_job_comment_added
+                            }
+                            onChange={
+                              handleToggleEmailNotificationJobCommentAdded
+                            }
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_job_comment_added
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_job_comment_added
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Completed
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is completed.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_job_completed
+                            }
+                            onChange={handleToggleEmailNotificationJobCompleted}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_job_completed
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_job_completed
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Inventory Out of Stock
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when an inventory item goes out
+                              of stock. The inventory location must be
+                              configured to send notifications
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_inventory_out_of_stock
+                            }
+                            onChange={
+                              handleToggleEmailNotificationInventoryOutOfStock
+                            }
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_inventory_out_of_stock
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_inventory_out_of_stock
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Inventory Threshold Met
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when an inventory item reaches
+                              its threshold. The inventory location must be
+                              configured to send notifications
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_inventory_threshold_met
+                            }
+                            onChange={handleToggleEmailInventoryThresholdMet}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_email_notification_inventory_threshold_met
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_email_notification_inventory_threshold_met
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                    <div
+                      className="flex justify-between cursor-pointer"
+                      onClick={() =>
+                        setShowSMSNotificationSection(
+                          !showSMSNotificationSection
+                        )
+                      }
+                    >
+                      <div className="flex-1">
+                        <div className="font-medium text-xl">
+                          SMS Notifications
+                        </div>
+                        <div className="text-md text-gray-500 mt-1">
+                          Configure which SMS notifications the user should be
+                          getting.
+                        </div>
+                      </div>
+                      <div className="">
+                        {showSMSNotificationSection && (
+                          <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                        )}
+                        {!showSMSNotificationSection && (
+                          <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                        )}
+                      </div>
+                    </div>
+                    {showSMSNotificationSection && (
+                      <div className="">
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between py-6 hover:bg-gray-50 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable SMS Notifications
+                            </Switch.Label>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.sms_notifications}
+                            onChange={handleToggleSMSNotifications}
+                            className={classNames(
+                              userDetails.profile.sms_notifications
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.sms_notifications
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Submitted
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is submitted by a
+                              customer user.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_sms_notification_job_created
+                            }
+                            onChange={handleToggleSMSNotificationJobCreated}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_sms_notification_job_created
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_sms_notification_job_created
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Started
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is started.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_sms_notification_job_started
+                            }
+                            onChange={handleToggleSMSNotificationJobStarted}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_sms_notification_job_started
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_sms_notification_job_started
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Cancelled
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is cancelled.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_sms_notification_job_cancelled
+                            }
+                            onChange={handleToggleSMSNotificationJobCancelled}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_sms_notification_job_cancelled
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_sms_notification_job_cancelled
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Completed
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              Notifies the user when a job is completed.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_sms_notification_job_completed
+                            }
+                            onChange={handleToggleSMSNotificationJobCompleted}
+                            className={classNames(
+                              userDetails.profile
+                                .enable_sms_notification_job_completed
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile
+                                  .enable_sms_notification_job_completed
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
 
               {(userDetails.is_project_manager ||
                 userDetails.is_internal_coordinator) && (
