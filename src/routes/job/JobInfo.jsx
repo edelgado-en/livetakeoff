@@ -606,7 +606,7 @@ const JobInfo = () => {
       )}
       {!loading && errorMessage == null && (
         <div className="mt-6 w-full px-2">
-          <div className="flex flex-wrap justify-between gap-y-6 gap-x-14">
+          <div className="flex flex-wrap justify-between gap-y-4 gap-x-14">
             <div className=" w-72">
               <h1 className="text-xl xl:text-2xl font-bold text-gray-700 flex gap-2">
                 {jobDetails.tailNumber}
@@ -623,42 +623,44 @@ const JobInfo = () => {
                   </Link>
                 )}
               </h1>
-              <div className="mt-1 text-md">{jobDetails.customer?.name}</div>
+              {!currentUser.isProjectManager && (
+                <div className="mt-1 text-md">{jobDetails.customer?.name}</div>
+              )}
             </div>
             <div className="flex-1">
               <div
-                className={`xs:block sm:block xl:hidden lg:hidden md:hidden text-xl text-white rounded-md py-2 px-4 inline-block 
+                className={`xs:block sm:block xl:hidden lg:hidden md:hidden text-lg inline-block rounded-md px-2 py-1 mr-2 border mb-2 mt-2 
                                         ${
                                           jobDetails.status === "A" &&
-                                          "bg-blue-500"
+                                          "border-blue-500 text-blue-500"
                                         }
                                         ${
                                           jobDetails.status === "S" &&
-                                          "bg-yellow-500 "
+                                          "border-yellow-500 text-yellow-500"
                                         }
                                         ${
                                           jobDetails.status === "U" &&
-                                          "bg-indigo-500 "
+                                          "border-indigo-500 text-indigo-500"
                                         }
                                         ${
                                           jobDetails.status === "W" &&
-                                          "bg-green-500 "
+                                          "border-green-500 text-green-500"
                                         }
                                         ${
                                           jobDetails.status === "R" &&
-                                          "bg-purple-500 "
+                                          "border-purple-500 text-purple-500"
                                         }
                                         ${
                                           jobDetails.status === "C" &&
-                                          "bg-green-500 "
+                                          "border-green-500 text-green-500"
                                         }
                                         ${
                                           jobDetails.status === "I" &&
-                                          "bg-blue-500"
+                                          "border-blue-500 text-blue-500"
                                         }
                                         ${
                                           jobDetails.status === "T" &&
-                                          "bg-gray-700"
+                                          "border-gray-700 text-gray-700"
                                         }`}
               >
                 {jobDetails.status === "A" && "Confirmed"}
