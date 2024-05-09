@@ -13,7 +13,6 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import ReactTimeAgo from "react-time-ago";
 
-import Loader from "../../components/loader/Loader";
 import * as api from "./apiService";
 import { toast } from "react-toastify";
 
@@ -1183,238 +1182,248 @@ const UserDetails = () => {
                             />
                           </Switch>
                         </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
+                        {!userDetails.is_customer_user && (
+                          <>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
                             >
-                              Scheduled Job Created
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Scheduled Job Created
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when a job is created via an
+                                  schedule.
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_email_notification_scheduled_job_created
+                                }
+                                onChange={
+                                  handleToggleEmailNotificationScheduledJobCreated
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_email_notification_scheduled_job_created
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_email_notification_scheduled_job_created
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
                             >
-                              Notifies the user when a job is created via an
-                              schedule.
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_email_notification_scheduled_job_created
-                            }
-                            onChange={
-                              handleToggleEmailNotificationScheduledJobCreated
-                            }
-                            className={classNames(
-                              userDetails.profile
-                                .enable_email_notification_scheduled_job_created
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_email_notification_scheduled_job_created
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Job Confirmed
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when a job is confirmed via
+                                  a public shareable link.
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_email_notification_job_confirmed
+                                }
+                                onChange={
+                                  handleToggleEmailNotificationJobConfirmed
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_email_notification_job_confirmed
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_email_notification_job_confirmed
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
                             >
-                              Job Confirmed
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Job Accepted
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when a job is accepted.
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_email_notification_job_accepted
+                                }
+                                onChange={
+                                  handleToggleEmailNotificationJobAccepted
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_email_notification_job_accepted
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_email_notification_job_accepted
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
                             >
-                              Notifies the user when a job is confirmed via a
-                              public shareable link.
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_email_notification_job_confirmed
-                            }
-                            onChange={handleToggleEmailNotificationJobConfirmed}
-                            className={classNames(
-                              userDetails.profile
-                                .enable_email_notification_job_confirmed
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_email_notification_job_confirmed
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Job Returned
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when a job is return.
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_email_notification_job_returned
+                                }
+                                onChange={
+                                  handleToggleEmailNotificationJobReturned
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_email_notification_job_returned
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_email_notification_job_returned
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
                             >
-                              Job Accepted
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
-                            >
-                              Notifies the user when a job is accepted.
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_email_notification_job_accepted
-                            }
-                            onChange={handleToggleEmailNotificationJobAccepted}
-                            className={classNames(
-                              userDetails.profile
-                                .enable_email_notification_job_accepted
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_email_notification_job_accepted
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
-                            >
-                              Job Returned
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
-                            >
-                              Notifies the user when a job is return.
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_email_notification_job_returned
-                            }
-                            onChange={handleToggleEmailNotificationJobReturned}
-                            className={classNames(
-                              userDetails.profile
-                                .enable_email_notification_job_returned
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_email_notification_job_returned
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
-                            >
-                              Job Comment Added
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
-                            >
-                              Notifies the user when a comment is added to a job
-                              by a customer user.
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_email_notification_job_comment_added
-                            }
-                            onChange={
-                              handleToggleEmailNotificationJobCommentAdded
-                            }
-                            className={classNames(
-                              userDetails.profile
-                                .enable_email_notification_job_comment_added
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_email_notification_job_comment_added
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Job Comment Added
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when a comment is added to a
+                                  job by a customer user.
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_email_notification_job_comment_added
+                                }
+                                onChange={
+                                  handleToggleEmailNotificationJobCommentAdded
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_email_notification_job_comment_added
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_email_notification_job_comment_added
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                          </>
+                        )}
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
@@ -1460,102 +1469,109 @@ const UserDetails = () => {
                             />
                           </Switch>
                         </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
+
+                        {!userDetails.is_customer_user && (
+                          <>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
                             >
-                              Inventory Out of Stock
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Inventory Out of Stock
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when an inventory item goes
+                                  out of stock. The inventory location must be
+                                  configured to send notifications
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_email_notification_inventory_out_of_stock
+                                }
+                                onChange={
+                                  handleToggleEmailNotificationInventoryOutOfStock
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_email_notification_inventory_out_of_stock
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_email_notification_inventory_out_of_stock
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
                             >
-                              Notifies the user when an inventory item goes out
-                              of stock. The inventory location must be
-                              configured to send notifications
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_email_notification_inventory_out_of_stock
-                            }
-                            onChange={
-                              handleToggleEmailNotificationInventoryOutOfStock
-                            }
-                            className={classNames(
-                              userDetails.profile
-                                .enable_email_notification_inventory_out_of_stock
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_email_notification_inventory_out_of_stock
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
-                            >
-                              Inventory Threshold Met
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
-                            >
-                              Notifies the user when an inventory item reaches
-                              its threshold. The inventory location must be
-                              configured to send notifications
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_email_notification_inventory_threshold_met
-                            }
-                            onChange={handleToggleEmailInventoryThresholdMet}
-                            className={classNames(
-                              userDetails.profile
-                                .enable_email_notification_inventory_threshold_met
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_email_notification_inventory_threshold_met
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Inventory Threshold Met
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when an inventory item
+                                  reaches its threshold. The inventory location
+                                  must be configured to send notifications
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_email_notification_inventory_threshold_met
+                                }
+                                onChange={
+                                  handleToggleEmailInventoryThresholdMet
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_email_notification_inventory_threshold_met
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_email_notification_inventory_threshold_met
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1668,96 +1684,103 @@ const UserDetails = () => {
                             />
                           </Switch>
                         </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
+
+                        {!userDetails.is_customer_user && (
+                          <>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
                             >
-                              Job Started
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Job Started
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when a job is started.
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_sms_notification_job_started
+                                }
+                                onChange={handleToggleSMSNotificationJobStarted}
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_sms_notification_job_started
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_sms_notification_job_started
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                            <Switch.Group
+                              as="div"
+                              className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
                             >
-                              Notifies the user when a job is started.
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_sms_notification_job_started
-                            }
-                            onChange={handleToggleSMSNotificationJobStarted}
-                            className={classNames(
-                              userDetails.profile
-                                .enable_sms_notification_job_started
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_sms_notification_job_started
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
-                        <Switch.Group
-                          as="div"
-                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
-                        >
-                          <span className="flex flex-grow flex-col">
-                            <Switch.Label
-                              as="span"
-                              className="text-md font-medium leading-6 "
-                              passive
-                            >
-                              Job Cancelled
-                            </Switch.Label>
-                            <Switch.Description
-                              as="span"
-                              className="text-md text-gray-500"
-                            >
-                              Notifies the user when a job is cancelled.
-                            </Switch.Description>
-                          </span>
-                          <Switch
-                            checked={
-                              userDetails.profile
-                                .enable_sms_notification_job_cancelled
-                            }
-                            onChange={handleToggleSMSNotificationJobCancelled}
-                            className={classNames(
-                              userDetails.profile
-                                .enable_sms_notification_job_cancelled
-                                ? "bg-red-600"
-                                : "bg-gray-200",
-                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
-                            )}
-                          >
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                userDetails.profile
-                                  .enable_sms_notification_job_cancelled
-                                  ? "translate-x-5"
-                                  : "translate-x-0",
-                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                              )}
-                            />
-                          </Switch>
-                        </Switch.Group>
+                              <span className="flex flex-grow flex-col">
+                                <Switch.Label
+                                  as="span"
+                                  className="text-md font-medium leading-6 "
+                                  passive
+                                >
+                                  Job Cancelled
+                                </Switch.Label>
+                                <Switch.Description
+                                  as="span"
+                                  className="text-md text-gray-500"
+                                >
+                                  Notifies the user when a job is cancelled.
+                                </Switch.Description>
+                              </span>
+                              <Switch
+                                checked={
+                                  userDetails.profile
+                                    .enable_sms_notification_job_cancelled
+                                }
+                                onChange={
+                                  handleToggleSMSNotificationJobCancelled
+                                }
+                                className={classNames(
+                                  userDetails.profile
+                                    .enable_sms_notification_job_cancelled
+                                    ? "bg-red-600"
+                                    : "bg-gray-200",
+                                  "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                                )}
+                              >
+                                <span
+                                  aria-hidden="true"
+                                  className={classNames(
+                                    userDetails.profile
+                                      .enable_sms_notification_job_cancelled
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                  )}
+                                />
+                              </Switch>
+                            </Switch.Group>
+                          </>
+                        )}
                         <Switch.Group
                           as="div"
                           className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0 border-radius-lg border-b border-gray-200"
