@@ -54,10 +54,6 @@ const MagnifyingGlassIcon = () => {
   );
 };
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 const Airports = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);

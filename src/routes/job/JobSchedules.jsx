@@ -5,9 +5,6 @@ import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import * as api from "./apiService";
 
-import ReactTimeAgo from "react-time-ago";
-import Pagination from "react-js-pagination";
-
 import DeleteScheduleModal from "./DeleteScheduleModal";
 
 import { toast } from "react-toastify";

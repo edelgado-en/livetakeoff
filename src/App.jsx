@@ -20,6 +20,7 @@ import CompleteList from "./routes/job/CompleteList";
 import Airports from "./routes/airports/Airports";
 import AirportDetails from "./routes/airports/AirportDetails";
 import CreateAirport from "./routes/airports/CreateAirport";
+import MyAirports from "./routes/airports/MyAirports";
 
 import CustomerServiceReport from "./routes/home/dashboard/CustomerServiceReport";
 
@@ -281,6 +282,8 @@ const App = () => {
                     <Route path="airports" element={<Airports />}>
                       <Route path=":airportId" element={<AirportDetails />} />
                     </Route>
+
+                    <Route path="my-airports" element={<MyAirports />} />
 
                     <Route path="create-airport" element={<CreateAirport />} />
 

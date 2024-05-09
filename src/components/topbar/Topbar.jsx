@@ -442,6 +442,17 @@ const Topbar = () => {
                         >
                           Jobs
                         </Link>
+                        <Link
+                          to="/my-airports"
+                          className={classNames(
+                            location.pathname.includes("my-airports")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          My Airports
+                        </Link>
                         {currentUser.enableEstimates && (
                           <Link
                             to="/estimates"
@@ -561,6 +572,17 @@ const Topbar = () => {
                           )}
                         >
                           Jobs
+                        </Link>
+                        <Link
+                          to="/my-airports"
+                          className={classNames(
+                            location.pathname.includes("my-airports")
+                              ? "bg-red-700"
+                              : " hover:bg-red-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium text-white"
+                          )}
+                        >
+                          My Airports
                         </Link>
                         {currentUser.showInventory && (
                           <Link
@@ -987,6 +1009,18 @@ const Topbar = () => {
                       Jobs
                     </Disclosure.Button>
                   </Link>
+                  <Link to="my-airports">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("my-airports")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      My Airports
+                    </Disclosure.Button>
+                  </Link>
                   {currentUser.enableEstimates && (
                     <Link to="estimates">
                       <Disclosure.Button
@@ -1068,6 +1102,18 @@ const Topbar = () => {
                       )}
                     >
                       Jobs
+                    </Disclosure.Button>
+                  </Link>
+                  <Link to="my-airports">
+                    <Disclosure.Button
+                      className={classNames(
+                        location.pathname.includes("my-airports")
+                          ? "bg-red-700"
+                          : "hover:bg-red-700 hover:text-white",
+                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                      )}
+                    >
+                      My Airports
                     </Disclosure.Button>
                   </Link>
                   {currentUser.showInventory && (
