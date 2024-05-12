@@ -75,6 +75,7 @@ const availableStatuses = [
   { id: "All", name: "All" },
   { id: "C", name: "Completed" },
   { id: "I", name: "Invoiced" },
+  { id: "N", name: "Not Invoiced" },
 ];
 
 const availableAdditionalFees = [
@@ -1839,8 +1840,10 @@ const CompleteList = () => {
                                                                     ${
                                                                       statusSelected.id ===
                                                                         status.id &&
-                                                                      status.id ===
-                                                                        "T"
+                                                                      (status.id ===
+                                                                        "T" ||
+                                                                        status.id ===
+                                                                          "N")
                                                                         ? "bg-gray-200"
                                                                         : ""
                                                                     }

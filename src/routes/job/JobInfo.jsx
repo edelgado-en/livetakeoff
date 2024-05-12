@@ -28,6 +28,7 @@ import AddServiceModal from "./AddServiceModal";
 import AddRetainerServiceModal from "./AddRetainerServiceModal";
 import JobFileUploadModal from "./JobFileUploadModal";
 import JobInvoiceModal from "./JobInvoiceModal";
+import JobNotInvoiceModal from "./JobNotInvoiceModal";
 
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
@@ -49,6 +50,7 @@ const JobInfo = () => {
   const [isReturnJobModalOpen, setReturnJobModalOpen] = useState(false);
   const [isJobFileUploadModalOpen, setJobFileUploadModalOpen] = useState(false);
   const [isJobInvoiceModalOpen, setJobInvoiceModalOpen] = useState(false);
+  const [isJobNotInvoiceModalOpen, setJobNotInvoiceModalOpen] = useState(false);
 
   const [isVendorAccepted, setIsVendorAccepted] = useState(false);
 
@@ -523,6 +525,10 @@ const JobInfo = () => {
     setJobInvoiceModalOpen(!isJobInvoiceModalOpen);
   };
 
+  const handleToggleJobNotInvoiceModal = () => {
+    setJobNotInvoiceModalOpen(!isJobNotInvoiceModalOpen);
+  };
+
   const handleAddService = (updatedServices) => {
     setAddServiceModalOpen(false);
 
@@ -923,16 +929,28 @@ const JobInfo = () => {
                     (currentUser.isAdmin ||
                       currentUser.isSuperUser ||
                       currentUser.isAccountManager) && (
-                      <button
-                        type="button"
-                        onClick={() => handleToggleJobInvoiceModal()}
-                        className="inline-flex items-center justify-center rounded-md
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => handleToggleJobInvoiceModal()}
+                          className="inline-flex items-center justify-center rounded-md
                                                       border border-transparent bg-red-500 px-4 py-2 text-lg
                                                       font-medium text-white shadow-sm hover:bg-red-700
                                                       focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
-                      >
-                        Invoice Job
-                      </button>
+                        >
+                          Invoice Job
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleToggleJobNotInvoiceModal()}
+                          className="inline-flex items-center rounded-md border ml-2
+                                     border-gray-300 bg-white px-4 py-2 text-lg font-medium
+                                     text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                      focus:ring-gray-500 focus:ring-offset-2"
+                        >
+                          Not Invoice Job
+                        </button>
+                      </>
                     )}
                 </div>
               )}
@@ -1995,6 +2013,14 @@ const JobInfo = () => {
         <JobInvoiceModal
           isOpen={isJobInvoiceModalOpen}
           handleClose={handleToggleJobInvoiceModal}
+          invoiceDetails={invoiceDetails}
+        />
+      )}
+
+      {isJobNotInvoiceModalOpen && (
+        <JobNotInvoiceModal
+          isOpen={isJobNotInvoiceModalOpen}
+          handleClose={handleToggleJobNotInvoiceModal}
           invoiceDetails={invoiceDetails}
         />
       )}

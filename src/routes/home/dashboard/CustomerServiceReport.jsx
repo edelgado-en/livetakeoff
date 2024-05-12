@@ -164,6 +164,7 @@ export default function CustomerServiceReport() {
 
   const [numberOfServices, setNumberOfServices] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [totalSpentNotInvoiced, setTotalSpentNotInvoiced] = useState(0);
   const [numberOfTails, setNumberOfTails] = useState(0);
   const [numberOfLocations, setNumberOfLocations] = useState(0);
   const [totalLaborTime, setTotalLaborTime] = useState(0);
@@ -412,6 +413,7 @@ export default function CustomerServiceReport() {
 
       setNumberOfServices(data.number_of_services_completed);
       setTotalSpent(data.total_jobs_revenue);
+      setTotalSpentNotInvoiced(data.total_jobs_revenue_not_invoiced);
       setNumberOfTails(data.number_of_unique_tail_numbers);
       setNumberOfLocations(data.number_of_unique_locations);
       setShowSpendingInfo(data.show_spending_info);
@@ -1957,20 +1959,36 @@ export default function CustomerServiceReport() {
                     <div className="text-2xl leading-6 text-gray-500 mb-3">
                       {dateSelected.name}
                     </div>
-                    <div className="flex justify-center text-center items-center">
+                    <div className="flex justify-center gap-24 text-center items-center">
                       <div className="text-center items-center flex flex-col">
                         <p className="text-xl font-medium leading-6 text-gray-400">
-                          Total
-                          {selectedService?.name === "All Services" &&
-                            showRetainers && (
-                              <span className="ml-1 font-normal text-sm">
-                                (Standard & Retainers)
-                              </span>
-                            )}
+                          Total Invoiced
                         </p>
+                        {selectedService?.name === "All Services" &&
+                          showRetainers && (
+                            <p className="ml-1 font-normal text-sm text-gray-400">
+                              (Standard & Retainers)
+                            </p>
+                          )}
                         <p className="mt-2 flex items-baseline gap-x-2">
                           <span className="text-4xl font-semibold tracking-tight text-gray-500">
                             ${totalSpent.toLocaleString()}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="text-center items-center flex flex-col">
+                        <p className="text-xl font-medium leading-6 text-gray-400">
+                          Total Not Invoiced
+                        </p>
+                        {selectedService?.name === "All Services" &&
+                          showRetainers && (
+                            <p className="ml-1 font-normal text-sm text-gray-400">
+                              (Standard & Retainers)
+                            </p>
+                          )}
+                        <p className="mt-2 flex items-baseline gap-x-2">
+                          <span className="text-4xl font-semibold tracking-tight text-gray-500">
+                            ${totalSpentNotInvoiced.toLocaleString()}
                           </span>
                         </p>
                       </div>

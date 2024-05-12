@@ -93,6 +93,10 @@ export default function Example() {
                                           "bg-gray-400 "
                                         }
                                         ${
+                                          activity.status === "N" &&
+                                          "bg-gray-400 "
+                                        }
+                                        ${
                                           activity.status === "P" &&
                                           "bg-red-500 "
                                         }
@@ -133,6 +137,7 @@ export default function Example() {
                                   {activity.status === "T" && "Canceled"}
                                   {activity.status === "R" && "Review"}
                                   {activity.status === "I" && "Invoiced"}
+                                  {activity.status === "N" && "Not Invoiced"}
                                   {activity.status === "X" && "Unassign"}
                                 </span>
                               </>

@@ -222,6 +222,10 @@ const EditJob = () => {
         if (!availableStatuses.find((status) => status.id === "I")) {
           availableStatuses.push({ id: "I", name: "Invoiced" });
         }
+        //Only add Not Invoice if it is not part of the availableStatuses array already
+        if (!availableStatuses.find((status) => status.id === "N")) {
+          availableStatuses.push({ id: "N", name: "Not Invoiced" });
+        }
       }
 
       setSelectedStatus(
