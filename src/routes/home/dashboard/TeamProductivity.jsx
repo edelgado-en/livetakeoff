@@ -512,7 +512,7 @@ const TeamProductivity = () => {
               </div>
             </dl>
 
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2 m-auto xl:w-8/12 lg:w-8/12">
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -530,6 +530,27 @@ const TeamProductivity = () => {
                     $
                     {productivityData.total_jobs_price
                       ? productivityData.total_jobs_price.toLocaleString()
+                      : 0}
+                  </p>
+                </dd>
+              </div>
+              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
+                <dt>
+                  <div className="absolute rounded-md p-3 border-green-400 border-2">
+                    <CashIcon className="h-6 w-6 text-green-500" />
+                  </div>
+                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
+                    Not Invoiced
+                    <span className="text-xs ml-2 text-gray-400">
+                      (services only)
+                    </span>
+                  </p>
+                </dt>
+                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    $
+                    {productivityData.total_jobs_price_not_invoiced
+                      ? productivityData.total_jobs_price_not_invoiced.toLocaleString()
                       : 0}
                   </p>
                 </dd>
