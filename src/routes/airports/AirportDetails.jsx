@@ -14,16 +14,15 @@ import {
   ChartBarIcon,
   ChevronUpIcon,
   ChevronDownIcon,
+  PlusIcon,
+  StarIcon,
 } from "@heroicons/react/solid";
 
-import ReactTimeAgo from "react-time-ago";
+import AddVendorModal from "./AddVendorModal";
 
 import Loader from "../../components/loader/Loader";
-
 import CreateFBOModal from "./CreateFBOModal";
-
 import * as api from "./apiService";
-
 import { toast } from "react-toastify";
 
 const MagnifyingGlassIcon = () => {
@@ -61,6 +60,8 @@ const AirportDetails = () => {
 
   const [isCreateFboModalOpen, setCreateFboModalOpen] = useState(false);
 
+  const [isAddVendorModalOpen, setAddVendorModalOpen] = useState(false);
+
   useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
@@ -83,6 +84,10 @@ const AirportDetails = () => {
     setCreateFboModalOpen(!isCreateFboModalOpen);
   };
 
+  const handleToggleAddVendorModal = () => {
+    setAddVendorModalOpen(!isAddVendorModalOpen);
+  };
+
   const searchFbos = async () => {
     setLoadingFbos(true);
     try {
@@ -103,13 +108,21 @@ const AirportDetails = () => {
   };
 
   const getAirportAvailableUsers = async () => {
+    setLoading(true);
+
     try {
       const { data } = await api.getAirportAvailableUsers(Number(airportId));
+
+      data.forEach((vendor) => {
+        vendor.open = true;
+      });
 
       setAvailableVendors(data);
     } catch (err) {
       toast.error("Unable to get available users");
     }
+
+    setLoading(false);
   };
 
   const getAirportDetails = async () => {
@@ -214,6 +227,81 @@ const AirportDetails = () => {
     setCreateFboModalOpen(false);
   };
 
+  const handleAddVendor = async (userId) => {
+    const request = {
+      airport_id: Number(airportId),
+      user_id: Number(userId),
+    };
+
+    try {
+      await api.addAirportAvailableUser(request);
+
+      toast.success("Vendor added!");
+    } catch (err) {
+      toast.error("Unable to add vendor");
+    }
+
+    setAddVendorModalOpen(false);
+
+    getAirportAvailableUsers();
+  };
+
+  const handleRemoveUser = async (userId) => {
+    const request = {
+      airport_id: Number(airportId),
+      user_id: Number(userId),
+    };
+
+    try {
+      await api.removeAirportAvailableUser(request);
+
+      const newVendors = availableVendors.map((vendor) => {
+        const newUsers = vendor.users.filter((user) => user.id !== userId);
+
+        return { ...vendor, users: newUsers };
+      });
+
+      setAvailableVendors(newVendors);
+
+      toast.success("User removed");
+    } catch (err) {
+      toast.error("Unable to remove user");
+    }
+  };
+
+  const handleToggleSetAsPreferred = async (userId) => {
+    const request = {
+      user_id: userId,
+      airport_id: Number(airportId),
+    };
+
+    try {
+      await api.togglePreferredProjectManager(request);
+
+      //iterate throug available vendors and set the user as preferred
+      const newVendors = availableVendors.map((vendor) => {
+        const newUsers = vendor.users.map((user) => {
+          if (user.id === userId) {
+            return {
+              ...user,
+              is_preferred_project_manager: !user.is_preferred_project_manager,
+            };
+          } else {
+            return { ...user, is_preferred_project_manager: false };
+          }
+        });
+
+        return { ...vendor, users: newUsers };
+      });
+
+      setAvailableVendors(newVendors);
+
+      toast.success("Vendor set as preferred");
+    } catch (err) {
+      toast.error("Unable to set as preferred");
+    }
+  };
+
   return (
     <AnimatedPage>
       {loading && <Loader />}
@@ -230,10 +318,29 @@ const AirportDetails = () => {
           </div>
           <div className="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 mt-6 gap-16">
             <div className="">
-              <div className="text-xl font-semibold">Associated Vendors</div>
-              <div className="text-md text-gray-500 mt-1">
-                Only users from associated vendors will be eligible for job
-                assignments for the selected airport.
+              <div className="flex flex-wrap justify-between gap-4">
+                <div>
+                  <div className="text-xl font-semibold">
+                    Associated Vendors
+                  </div>
+                  <div className="text-md text-gray-500 mt-1">
+                    Only users from associated vendors will be eligible for job
+                    assignments for the selected airport.
+                  </div>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleAddVendorModal()}
+                    className="inline-flex items-center justify-center 
+                              rounded-md border border-transparent bg-red-600 px-4 py-2
+                              text-md font-medium text-white shadow-sm hover:bg-red-700
+                              focus:outline-none focus:ring-2 focus:ring-red-500
+                              focus:ring-offset-2 sm:w-auto mt-4"
+                  >
+                    Add Vendor
+                  </button>
+                </div>
               </div>
 
               <div className="mt-8">
@@ -258,24 +365,33 @@ const AirportDetails = () => {
                       <div className="mt-4">
                         {vendor.users.map((user) => (
                           <div key={user.id} className="relative">
-                            <ul className="relative z-0 divide-y divide-gray-200">
-                              <li>
-                                <div className="relative flex items-center space-x-3 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
-                                  <div className="flex-shrink-0">
+                            <ul
+                              className={`relative z-0 divide-y  divide-gray-200 `}
+                            >
+                              <li
+                                className={`my-2 border border-gray-200 rounded-md px-2 ${
+                                  user.is_preferred_project_manager
+                                    ? "bg-green-50 border border-green-200 rounded-md"
+                                    : ""
+                                }`}
+                              >
+                                <div
+                                  className={`relative flex flex-wrap items-center space-x-3 gap-6 py-5 ${
+                                    user.is_preferred_project_manager
+                                      ? ""
+                                      : "hover:bg-gray-50"
+                                  } `}
+                                >
+                                  <div className="">
                                     <img
                                       className="h-10 w-10 rounded-full"
                                       src={user.avatar}
                                       alt=""
                                     />
                                   </div>
-                                  <div className="min-w-0 flex-1">
+                                  <div className="flex-1">
                                     <div className="focus:outline-none">
-                                      {/* Extend touch target to entire panel */}
-                                      <span
-                                        className="absolute inset-0"
-                                        aria-hidden="true"
-                                      />
-                                      <p className="text-sm font-medium text-gray-900">
+                                      <p className="text-md font-medium text-gray-900">
                                         {user.first_name} {user.last_name}
                                       </p>
                                       <p className="truncate text-sm text-gray-500">
@@ -285,44 +401,39 @@ const AirportDetails = () => {
                                       </p>
                                     </div>
                                   </div>
-                                  <div>
-                                    <span
-                                      className={`inline-flex items-center rounded-full
-                                          px-2 py-0.5 text-xs
-                                          ${
-                                            user.is_staff || user.is_super_user
-                                              ? "text-green-800 bg-green-100"
-                                              : ""
-                                          }
-                                          ${
-                                            user.is_account_manager
-                                              ? "text-blue-800 bg-blue-100"
-                                              : ""
-                                          }
-                                          ${
-                                            user.is_project_manager
-                                              ? "text-violet-800 bg-violet-100"
-                                              : ""
-                                          }
-                                          ${
-                                            user.is_internal_coordinator
-                                              ? "text-orange-800 bg-orange-100"
-                                              : ""
-                                          }
-                                          ${
-                                            user.customer_name
-                                              ? "text-sky-800 bg-sky-100"
-                                              : ""
-                                          } `}
+                                  <div className="flex gap-2">
+                                    {!user.is_preferred_project_manager && (
+                                      <button
+                                        onClick={() =>
+                                          handleToggleSetAsPreferred(user.id)
+                                        }
+                                        className="rounded-md bg-white px-2.5 py-1.5 text-sm
+                                                        font-semibold text-gray-900 ring-1 ring-inset ring-gray-300
+                                                        hover:bg-gray-50 sm:block cursor-pointer"
+                                      >
+                                        Set as Preferred
+                                      </button>
+                                    )}
+                                    {user.is_preferred_project_manager && (
+                                      <div
+                                        onClick={() =>
+                                          handleToggleSetAsPreferred(user.id)
+                                        }
+                                        className="inline-flex items-center rounded-md p-2 px-4 text-md
+                                                         font-medium bg-green-100 text-green-700 capitalize cursor-pointer"
+                                      >
+                                        <StarIcon className="h-4 w-4 mr-2" />
+                                        Preferred Vendor
+                                      </div>
+                                    )}
+                                    <button
+                                      onClick={() => handleRemoveUser(user.id)}
+                                      className="rounded-md bg-white px-2.5 py-1.5 text-sm ml-2
+                                                        font-semibold text-gray-900 ring-1 ring-inset ring-gray-300
+                                                        hover:bg-gray-50 sm:block cursor-pointer"
                                     >
-                                      {(user.is_staff || user.is_super_user) &&
-                                        "Admin"}
-                                      {user.is_project_manager && "P. Manager"}
-                                      {user.is_account_manager && "A. Manager"}
-                                      {user.is_internal_coordinator &&
-                                        "Coordinator"}
-                                      {user.customer_name && "Customer"}
-                                    </span>
+                                      Remove
+                                    </button>
                                   </div>
                                 </div>
                               </li>
@@ -335,7 +446,7 @@ const AirportDetails = () => {
                 ))}
               </div>
             </div>
-            <div className="">
+            <div className="border-t border-gray-200 pt-4">
               <div className="text-xl font-semibold">Associated FBOs</div>
               <div className="text-md text-gray-500 mt-1">
                 Only associated FBOs will be shown when selecting this airport
@@ -452,7 +563,7 @@ const AirportDetails = () => {
                         onClick={() => handleToggleCreateFboModal()}
                         className="inline-flex items-center justify-center 
                               rounded-md border border-transparent bg-red-600 px-4 py-2
-                              text-sm font-medium text-white shadow-sm hover:bg-red-700
+                              text-md font-medium text-white shadow-sm hover:bg-red-700
                               focus:outline-none focus:ring-2 focus:ring-red-500
                               focus:ring-offset-2 sm:w-auto"
                       >
@@ -513,6 +624,14 @@ const AirportDetails = () => {
           isOpen={isCreateFboModalOpen}
           handleClose={handleToggleCreateFboModal}
           addFBO={handleCreateFbo}
+        />
+      )}
+
+      {isAddVendorModalOpen && (
+        <AddVendorModal
+          isOpen={isAddVendorModalOpen}
+          handleClose={handleToggleAddVendorModal}
+          addVendor={handleAddVendor}
         />
       )}
     </AnimatedPage>
