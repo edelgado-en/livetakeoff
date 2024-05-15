@@ -2,7 +2,12 @@ import { useEffect, useState, Fragment } from "react";
 import Loader from "../../components/loader/Loader";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { Listbox, Transition } from "@headlessui/react";
-import { PlusIcon, CheckIcon, CheckCircleIcon } from "@heroicons/react/outline";
+import {
+  PlusIcon,
+  CheckIcon,
+  CheckCircleIcon,
+  StarIcon,
+} from "@heroicons/react/outline";
 import { TrashIcon } from "@heroicons/react/solid";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
@@ -73,6 +78,18 @@ const JobAssignments = () => {
 
     try {
       const { data } = await api.getAssignmentsFormInfo(jobId);
+
+      const preferred_project_manager_id = data.preferred_project_manager_id;
+
+      data.project_managers = data.project_managers.map((p) => {
+        if (p.id === preferred_project_manager_id) {
+          p.is_preferred = true;
+        } else {
+          p.is_preferred = false;
+        }
+
+        return p;
+      });
 
       data.project_managers.push({
         id: 999,
@@ -429,29 +446,14 @@ const JobAssignments = () => {
                               >
                                 {({ selected, active }) => (
                                   <>
-                                    <div className="flex items-center">
+                                    <div className="flex gap-2 items-center">
                                       <img
                                         src={projectManager.profile?.avatar}
                                         alt=""
-                                        className="h-6 w-6 flex-shrink-0 rounded-full"
+                                        className="h-6 w-6 rounded-full"
                                       />
-                                      {projectManager.first_name !==
-                                        "Unassign" && (
-                                        <span
-                                          className={classNames(
-                                            projectManager.availability ===
-                                              "available"
-                                              ? "bg-green-400"
-                                              : projectManager.availability ===
-                                                "available_soon"
-                                              ? "bg-yellow-400"
-                                              : "bg-red-400",
-                                            "inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2"
-                                          )}
-                                        />
-                                      )}
 
-                                      <span
+                                      <div
                                         className={classNames(
                                           selected
                                             ? "font-semibold"
@@ -462,14 +464,18 @@ const JobAssignments = () => {
                                         {projectManager.first_name +
                                           " " +
                                           projectManager.last_name}
-                                      </span>
+                                      </div>
+
+                                      {projectManager.is_preferred && (
+                                        <div
+                                          className="inline-flex items-center rounded-md p-2 px-2 text-xs
+                                                         font-medium bg-green-100 text-green-700"
+                                        >
+                                          <StarIcon className="h-4 w-4 mr-1" />
+                                          Preferred
+                                        </div>
+                                      )}
                                     </div>
-                                    {/* <div className="text-xs flex">
-                                                    <div className="w-20"></div>
-                                                    <div>
-                                                        This is the about section talking about the availability and specialties and more...
-                                                    </div>
-                                                </div> */}
 
                                     {selected ? (
                                       <span
