@@ -395,6 +395,7 @@ const Airports = () => {
               <nav
                 className="min-h-0 flex-1 overflow-y-auto"
                 aria-label="Directory"
+                style={{ maxHeight: "800px", paddingBottom: "50px" }}
               >
                 {loading && <Loader />}
 
