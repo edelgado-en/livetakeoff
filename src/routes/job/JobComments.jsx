@@ -27,12 +27,16 @@ const JobComments = () => {
   const [sendSMS, setSendSMS] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
+  const [sendEmailToProjectManager, setSendEmailToProjectManager] =
+    useState(false);
+
   const [isDeleteCommentModalOpen, setDeleteCommentModalOpen] = useState(false);
   const [commentToBeDeleted, setCommentToBeDeleted] = useState(null);
 
   const currentUser = useAppSelector(selectUser);
 
   const [userEmails, setUserEmails] = useState([]);
+  const [projectManagerEmails, setProjectManagerEmails] = useState([]);
 
   const dispatch = useAppDispatch();
 
@@ -50,7 +54,12 @@ const JobComments = () => {
         return { ...el, selected: true };
       });
 
+      data.project_manager_emails = data.project_manager_emails.map((el) => {
+        return { ...el, selected: true };
+      });
+
       setUserEmails(data.emails);
+      setProjectManagerEmails(data.project_manager_emails);
     } catch (err) {
       toast.error("Unable to fetch user info");
     }
@@ -109,6 +118,15 @@ const JobComments = () => {
     }
   };
 
+  const handleSetSendEmailToProjectManager = () => {
+    let fetchEmails = !sendEmailToProjectManager;
+    setSendEmailToProjectManager(!sendEmailToProjectManager);
+
+    if (fetchEmails) {
+      getUserEmails();
+    }
+  };
+
   const handleUserEmailChange = (email) => {
     const tagsUpdated = userEmails.map((el) => {
       if (el.email === email) {
@@ -120,11 +138,33 @@ const JobComments = () => {
     setUserEmails(tagsUpdated);
   };
 
+  const handleProjectManagerEmailChange = (email) => {
+    const tagsUpdated = projectManagerEmails.map((el) => {
+      if (el.email === email) {
+        el.selected = !el.selected;
+      }
+      return el;
+    });
+
+    setProjectManagerEmails(tagsUpdated);
+  };
+
   const createJobComment = async () => {
     const selectedEmails = userEmails.filter((el) => el.selected);
+    const selectedProjectManagerEmails = projectManagerEmails.filter(
+      (el) => el.selected
+    );
 
     if (sendEmail && selectedEmails.length === 0) {
       alert("Select at least one email to send the email to.");
+      return;
+    }
+
+    if (
+      sendEmailToProjectManager &&
+      selectedProjectManagerEmails.length === 0
+    ) {
+      alert("Select at least one project manager email to send the email to.");
       return;
     }
 
@@ -133,7 +173,9 @@ const JobComments = () => {
       sendSMS,
       isPublic,
       sendEmail,
+      sendEmailToProjectManager,
       emails: selectedEmails.map((el) => el.email),
+      projectManagerEmails: selectedProjectManagerEmails.map((el) => el.email),
     };
 
     setCreateCommentLoading(true);
@@ -147,6 +189,9 @@ const JobComments = () => {
       setComment("");
 
       setCreateCommentLoading(false);
+
+      setSendEmail(false);
+      setSendEmailToProjectManager(false);
 
       toast.success("Comment created!");
     } catch (error) {
@@ -413,11 +458,11 @@ const JobComments = () => {
                                   htmlFor="email"
                                   className="font-medium text-gray-700 text-md"
                                 >
-                                  Send Email
+                                  Send Email to Job Creator
                                 </label>
                                 <p className="text-gray-500 text-sm">
-                                  Send an email notification to the customer
-                                  that created this job.
+                                  Send an email notification to the user that
+                                  created this job.
                                 </p>
                               </div>
                             </div>
@@ -433,7 +478,7 @@ const JobComments = () => {
                           )}
 
                           {sendEmail && userEmails.length > 0 && (
-                            <div className="mt-4 px-7">
+                            <div className="ml-6 mt-4 px-7">
                               <div className="mb-3 text-md">
                                 Select which emails you want to use:
                               </div>
@@ -465,6 +510,85 @@ const JobComments = () => {
                               ))}
                             </div>
                           )}
+
+                          <div className="mt-5 flex items-center justify-between">
+                            <div className="flex">
+                              <div className="flex h-5 items-center">
+                                <input
+                                  id="emailProjectManager"
+                                  name="emailProjectManager"
+                                  value={sendEmailToProjectManager}
+                                  onClick={handleSetSendEmailToProjectManager}
+                                  type="checkbox"
+                                  className="h-4 w-4 rounded border-gray-300 text-red-600
+                                                        focus:ring-red-500"
+                                />
+                              </div>
+                              <div className="ml-3">
+                                <label
+                                  htmlFor="emailProjectManager"
+                                  className="font-medium text-gray-700 text-md"
+                                >
+                                  Send Email to Assigned Project Managers
+                                </label>
+                                <p className="text-gray-500 text-sm">
+                                  Send an email notification to the PMs assigned
+                                  to this job.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {sendEmailToProjectManager &&
+                            projectManagerEmails.length === 0 && (
+                              <div className="mt-3">
+                                <p className="text-gray-500 text-center m-auto text-sm">
+                                  No emails specified for assigned project
+                                  managers. You can add emails in the Team view.
+                                </p>
+                              </div>
+                            )}
+
+                          {sendEmailToProjectManager &&
+                            projectManagerEmails.length > 0 && (
+                              <div className="ml-6 mt-4 px-7">
+                                <div className="mb-3 text-md">
+                                  Select which emails you want to use:
+                                </div>
+                                {projectManagerEmails.map(
+                                  (userEmail, index) => (
+                                    <div
+                                      key={index}
+                                      className="relative flex items-start mb-3"
+                                    >
+                                      <div className="flex h-5 items-center">
+                                        <input
+                                          id={"emailProjectManager" + index}
+                                          checked={userEmail.selected}
+                                          onChange={() =>
+                                            handleProjectManagerEmailChange(
+                                              userEmail.email
+                                            )
+                                          }
+                                          type="checkbox"
+                                          className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                        />
+                                      </div>
+                                      <div className="ml-3 text-sm cursor-pointer">
+                                        <label
+                                          htmlFor={
+                                            "emailProjectManager" + index
+                                          }
+                                          className="text-gray-700"
+                                        >
+                                          {userEmail.email}
+                                        </label>
+                                      </div>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            )}
                         </>
                       )}
                     </>
