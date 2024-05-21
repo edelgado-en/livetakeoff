@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment, useRef } from "react";
 import Loader from "../../components/loader/Loader";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Listbox, Transition, Switch } from "@headlessui/react";
+import { Listbox, Transition, Switch, RadioGroup } from "@headlessui/react";
 import {
   PlusIcon,
   CheckIcon,
@@ -22,6 +22,24 @@ import { toast } from "react-toastify";
 
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
+import { set } from "react-hook-form";
+
+const requestPriorities = [
+  {
+    id: "N",
+    title: "NORMAL",
+    description:
+      "Regular cleaning requests aimed at improving the general appearance of the aircraft.",
+    selected: true,
+  },
+  {
+    id: "H",
+    title: "HIGH",
+    description:
+      "Urgent cleaning requests that must be completed at the specified location within the specified time frame.",
+    selected: false,
+  },
+];
 
 const ChevronUpDownIcon = () => {
   return (
@@ -131,6 +149,13 @@ const CreateJob = () => {
   const [airportFees, setAirportFees] = useState([]);
   const [fboFees, setFboFees] = useState([]);
 
+  const [isRequestPriorityEnabled, setIsRequestPriorityEnabled] =
+    useState(false);
+
+  const [selectedPriority, setSelectedPriority] = useState(
+    requestPriorities[0]
+  );
+
   const currentUser = useAppSelector(selectUser);
 
   const navigate = useNavigate();
@@ -140,6 +165,10 @@ const CreateJob = () => {
         item.name.toLowerCase().includes(fboSearchTerm.toLowerCase())
       )
     : fbos;
+
+  useEffect(() => {
+    setSelectedPriority(requestPriorities[0]);
+  }, []);
 
   useEffect(() => {
     const newSteps = [...steps];
@@ -259,6 +288,16 @@ const CreateJob = () => {
             name: data.customer_name,
           });
           setCustomerSearchTerm(data.customer_name);
+
+          try {
+            const response1 = await api.getCustomerDetails(data.customer_id);
+
+            setIsRequestPriorityEnabled(
+              response1.data.settings.enable_request_priority
+            );
+          } catch (err) {
+            toast.error("Unable to get customer details");
+          }
         }
       }
 
@@ -328,6 +367,7 @@ const CreateJob = () => {
 
       if (data.customer_id) {
         getServicesAndRetainers(data.customer_id);
+        setIsRequestPriorityEnabled(data.is_enable_request_priority);
       }
 
       // if estimateId is passed in, get the estimate info and pre-populate the form
@@ -508,6 +548,7 @@ const CreateJob = () => {
     formData.append("on_site", onSite);
     formData.append("requested_by", requestedBy);
     formData.append("customer_purchase_order", customerPurchaseOrder);
+    formData.append("priority", selectedPriority.id);
 
     if (estimateId) {
       formData.append("estimate_id", estimateId);
@@ -796,6 +837,14 @@ const CreateJob = () => {
   const handleCustomerSelectedChange = async (customer) => {
     setCustomerSelected(customer);
     getServicesAndRetainers(customer.id);
+
+    try {
+      const { data } = await api.getCustomerDetails(customer.id);
+
+      setIsRequestPriorityEnabled(data.settings.enable_request_priority);
+    } catch (err) {
+      toast.error("Unable to get customer details");
+    }
 
     if (currentUser.showAirportFees && airportSelected) {
       const request = {
@@ -1290,6 +1339,72 @@ const CreateJob = () => {
                         )}
                       </Listbox>
                     </div>
+                  )}
+
+                  {isRequestPriorityEnabled && (
+                    <RadioGroup
+                      value={selectedPriority}
+                      onChange={setSelectedPriority}
+                    >
+                      <RadioGroup.Label className="text-lg font-bold text-gray-600 uppercase tracking-wide">
+                        Priority
+                      </RadioGroup.Label>
+
+                      <div className="mt-1 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                        {requestPriorities.map((priority) => (
+                          <RadioGroup.Option
+                            key={priority.id}
+                            value={priority}
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? "border-red-500 ring-2 ring-red-500"
+                                  : "border-gray-300",
+                                "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                              )
+                            }
+                          >
+                            {({ checked, active }) => (
+                              <>
+                                <span className="flex flex-1">
+                                  <span className="flex flex-col">
+                                    <RadioGroup.Label
+                                      as="span"
+                                      className="block text-md font-medium text-gray-900"
+                                    >
+                                      {priority.title}
+                                    </RadioGroup.Label>
+                                    <RadioGroup.Description
+                                      as="span"
+                                      className="mt-1 flex items-center text-sm text-gray-500"
+                                    >
+                                      {priority.description}
+                                    </RadioGroup.Description>
+                                  </span>
+                                </span>
+                                <CheckCircleIcon
+                                  className={classNames(
+                                    !checked ? "invisible" : "",
+                                    "h-6 w-6 text-red-600"
+                                  )}
+                                  aria-hidden="true"
+                                />
+                                <span
+                                  className={classNames(
+                                    active ? "border" : "border-2",
+                                    checked
+                                      ? "border-red-600"
+                                      : "border-transparent",
+                                    "pointer-events-none absolute -inset-px rounded-lg"
+                                  )}
+                                  aria-hidden="true"
+                                />
+                              </>
+                            )}
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
                   )}
 
                   <div className="mt-1">

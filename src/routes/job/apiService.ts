@@ -156,6 +156,10 @@ export const getRetainerServices = () => {
     return httpService.post('/api/retainer-services', {});
 }
 
+export const getCustomerDetails = (id: number) => {
+    return httpService.get(`/api/customers/${id}`);
+}
+
 export const getCustomers = (request: any) => {
     return httpService.post('/api/customers', request);
 }
