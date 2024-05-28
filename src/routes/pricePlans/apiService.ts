@@ -28,3 +28,7 @@ export const getPriceListing = (id: number) => {
 export const updatePricePlan = (id: number, request: any) => {
     return httpService.post(`/api/price-listing/${id}/`, request);
 }
+
+export const exportPriceList = (request: any) => {
+    return httpService.post('/api/price-listing/export', request);
+}
