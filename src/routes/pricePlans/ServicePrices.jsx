@@ -71,10 +71,6 @@ const ServicePrices = () => {
   const [updateLoading, setUpdateLoading] = useState(false);
 
   useEffect(() => {
-    searchPriceListEntries();
-  }, []);
-
-  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       searchAircrafts();
@@ -105,14 +101,6 @@ const ServicePrices = () => {
       event.preventDefault();
 
       searchAircrafts();
-    }
-  };
-
-  const searchPriceListEntries = async () => {
-    try {
-      const { data } = await api.searchPriceListEntries();
-    } catch (err) {
-      toast.err("Unable to search price list entries");
     }
   };
 
@@ -407,24 +395,7 @@ const ServicePrices = () => {
                     Prices are based on type of service and type of aircraft
                   </p>
                 </div>
-                <div>
-                  <button
-                    type="button"
-                    disabled={exportLoading}
-                    onClick={() => handleExport()}
-                    className="inline-flex items-center rounded border border-gray-200
-                                                            bg-white px-2.5 py-1.5 text-lg text-gray-700 shadow-sm
-                                                            hover:bg-gray-50 focus:outline-none focus:ring-1
-                                                            focus:ring-gray-500 focus:ring-offset-1"
-                  >
-                    {!exportLoading ? (
-                      <ShareIcon className="h-4 w-4 mr-1" />
-                    ) : (
-                      ""
-                    )}{" "}
-                    {exportLoading ? "exporting..." : "Export"}
-                  </button>
-                </div>
+                <div></div>
               </div>
               <div>
                 {/* Comparison table */}
