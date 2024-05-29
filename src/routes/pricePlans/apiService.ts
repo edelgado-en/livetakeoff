@@ -25,6 +25,11 @@ export const getPriceListing = (id: number) => {
     return httpService.get(`/api/price-listing/${id}/`);
 }
 
+export const searchPriceListEntries = () => {
+    return httpService.get('/api/price-listing/entries/?page=1');
+
+}
+
 export const updatePricePlan = (id: number, request: any) => {
     return httpService.post(`/api/price-listing/${id}/`, request);
 }

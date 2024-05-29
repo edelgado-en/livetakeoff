@@ -71,6 +71,10 @@ const ServicePrices = () => {
   const [updateLoading, setUpdateLoading] = useState(false);
 
   useEffect(() => {
+    searchPriceListEntries();
+  }, []);
+
+  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       searchAircrafts();
@@ -101,6 +105,14 @@ const ServicePrices = () => {
       event.preventDefault();
 
       searchAircrafts();
+    }
+  };
+
+  const searchPriceListEntries = async () => {
+    try {
+      const { data } = await api.searchPriceListEntries();
+    } catch (err) {
+      toast.err("Unable to search price list entries");
     }
   };
 
