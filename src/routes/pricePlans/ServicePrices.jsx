@@ -386,11 +386,6 @@ const ServicePrices = () => {
             </nav>
 
             <article className="m-auto max-w-full px-4">
-              <div className="flex flex-wrap justify-between text-sm pt-1 pb-2">
-                <span className="text-2xl font-semibold text-gray-600">
-                  Prices
-                </span>
-              </div>
               <div>
                 {/* Comparison table */}
                 <div className="mx-auto max-w-full bg-white pb-16 sm:pb-16 lg:max-w-full pt-1">
@@ -406,7 +401,7 @@ const ServicePrices = () => {
                         <thead>
                           <tr>
                             <th
-                              className="pb-4 text-left text-md font-medium text-gray-900"
+                              className="pb-1 text-left text-md font-medium text-gray-900"
                               scope="col"
                             >
                               Aircraft
@@ -414,7 +409,7 @@ const ServicePrices = () => {
                             {pricePlans.map((pricePlan) => (
                               <th
                                 key={pricePlan.name}
-                                className="px-6 pb-4 text-left text-md font-medium leading-6 text-gray-900"
+                                className="px-6 pb-1 text-left text-md font-medium leading-6 text-gray-900"
                                 scope="col"
                               >
                                 {pricePlan.name}
@@ -533,8 +528,8 @@ const ServicePrices = () => {
 
             {/* Aircraft list */}
             <nav
-              className="min-h-0 flex-1 overflow-y-auto"
-              style={{ height: "800px", paddingBottom: "250px" }}
+              className="overflow-y-auto"
+              style={{ height: "800px", paddingBottom: "100px" }}
             >
               {loading && <Loader />}
 
