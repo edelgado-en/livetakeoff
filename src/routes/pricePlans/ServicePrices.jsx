@@ -385,21 +385,15 @@ const ServicePrices = () => {
               </div>
             </nav>
 
-            <article className="m-auto max-w-full  px-6">
-              <div className="flex flex-wrap justify-between text-sm pt-6 pb-2">
-                <div className="pb-4">
-                  <span className="text-2xl font-semibold text-gray-600">
-                    Prices
-                  </span>
-                  <p className="text-gray-500 text-lg">
-                    Prices are based on type of service and type of aircraft
-                  </p>
-                </div>
-                <div></div>
+            <article className="m-auto max-w-full px-4">
+              <div className="flex flex-wrap justify-between text-sm pt-1 pb-2">
+                <span className="text-2xl font-semibold text-gray-600">
+                  Prices
+                </span>
               </div>
               <div>
                 {/* Comparison table */}
-                <div className="mx-auto max-w-full bg-white pb-16 sm:pb-16 lg:max-w-full">
+                <div className="mx-auto max-w-full bg-white pb-16 sm:pb-16 lg:max-w-full pt-1">
                   <div className="" style={{ minWidth: "820px" }}>
                     {aircraftTypeSelected === null && (
                       <div className="text-lg text-gray-700 mt-4">
@@ -408,11 +402,11 @@ const ServicePrices = () => {
                     )}
 
                     {aircraftTypeSelected !== null && (
-                      <table className="h-px w-full table-fixed">
+                      <table className="min-w-full divide-y divide-gray-300 table-fixed">
                         <thead>
                           <tr>
                             <th
-                              className="pb-4 pl-6 pr-6 text-left text-md font-medium text-gray-900"
+                              className="pb-4 text-left text-md font-medium text-gray-900"
                               scope="col"
                             >
                               Aircraft
@@ -429,48 +423,14 @@ const ServicePrices = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 border-t border-gray-200">
-                          <tr>
-                            <th
-                              className="py-5 pl-6 pr-6 text-left align-top text-sm font-medium text-gray-900"
-                              scope="row"
-                            >
-                              <div className="text-red-500 font-semibold">
-                                {aircraftTypeSelected?.name}
-                              </div>
-                            </th>
-                            {pricePlans.map((pricePlan) => (
-                              <td
-                                key={pricePlan.name}
-                                className="h-full px-6 align-top"
-                              >
-                                <div className="flex h-full flex-col justify-between">
-                                  <div>
-                                    <p className="mt-4 text-xs text-gray-500">
-                                      {pricePlan.description}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                            ))}
-                          </tr>
-                          <tr>
-                            <th
-                              className="bg-gray-50 py-3 pl-6 text-left text-sm font-medium text-gray-900"
-                              colSpan={
-                                pricePlans.length
-                              } /* This has to be tiers.length */
-                              scope="colgroup"
-                            >
-                              Services
-                            </th>
-                          </tr>
                           {priceListing.map((entry) => (
                             <tr
                               key={entry.service}
-                              className="hover:bg-gray-50"
+                              className="hover:bg-gray-100"
                             >
                               <th
-                                className="py-5 pl-6 pr-6 text-left text-xs font-normal text-gray-500"
+                                className="py-2 text-left text-sm font-normal text-gray-600"
+                                style={{ width: "500px" }}
                                 scope="row"
                               >
                                 {entry.service}
@@ -478,38 +438,25 @@ const ServicePrices = () => {
                               {entry.price_list_entries.map((priceList) => (
                                 <td
                                   key={priceList.price_list}
-                                  className="py-5 px-6"
+                                  className="py-1 px-6"
                                 >
-                                  <div className="flex gap-1">
-                                    <div className="pointer-events-none flex items-center">
-                                      <span className="text-gray-500 text-xs">
-                                        $
-                                      </span>
-                                    </div>
-                                    <input
-                                      type="text"
-                                      name="price"
-                                      id="price"
-                                      value={priceList.price}
-                                      onChange={(e) =>
-                                        updateServicePrice(
-                                          entry.service,
-                                          priceList.price_list,
-                                          e.target.value
-                                        )
-                                      }
-                                      style={{ width: "65px" }}
-                                      className="block rounded-md border-gray-300 py-1
-                                                        shadow-sm focus:border-gray-500 focus:ring-gray-500
+                                  <input
+                                    type="text"
+                                    name="price"
+                                    id="price"
+                                    value={priceList.price}
+                                    onChange={(e) =>
+                                      updateServicePrice(
+                                        entry.service,
+                                        priceList.price_list,
+                                        e.target.value
+                                      )
+                                    }
+                                    style={{ width: "80px" }}
+                                    className="block border-gray-300 py-2
+                                                         focus:border-gray-500 focus:ring-gray-500
                                                       text-xs"
-                                    ></input>
-                                    <span
-                                      className="text-gray-500 relative"
-                                      style={{ fontSize: "10px", top: "6px" }}
-                                    >
-                                      USD
-                                    </span>
-                                  </div>
+                                  ></input>
                                 </td>
                               ))}
                             </tr>
@@ -544,17 +491,14 @@ const ServicePrices = () => {
             </article>
           </main>
           <aside className="hidden w-72 flex-shrink-0 border-r border-gray-200 xl:order-first xl:flex xl:flex-col">
-            <div className="px-6 pt-6 pb-4">
+            <div className="px-2 pt-1 pb-4">
               <div className="flex justify-between">
                 <h2 className="text-2xl font-medium text-gray-900">
                   Aircrafts
                 </h2>
                 <div></div>
               </div>
-              <p className="mt-1 text-sm text-gray-600">
-                Search list of {totalAircraftTypes} aircraft types
-              </p>
-              <form className="mt-6 flex space-x-4" action="#">
+              <form className="mt-2 flex space-x-4" action="#">
                 <div className="min-w-0 flex-1">
                   <label htmlFor="search" className="sr-only">
                     Search
@@ -610,8 +554,8 @@ const ServicePrices = () => {
                     <div
                       className={`${
                         aircraft.showDetails ? " border-2 border-red-500" : ""
-                      } cursor-pointer relative flex items-center space-x-3 px-6 py-5
-                                           hover:bg-gray-50`}
+                      } cursor-pointer relative flex items-center space-x-3 px-4 py-3
+                                           hover:bg-gray-100`}
                     >
                       <div className="min-w-0 flex-1">
                         <span className="absolute inset-0" aria-hidden="true" />
