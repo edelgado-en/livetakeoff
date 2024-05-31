@@ -25,10 +25,22 @@ export const getPriceListing = (id: number) => {
     return httpService.get(`/api/price-listing/${id}/`);
 }
 
+export const getPriceListingByService = (id: number) => {
+    return httpService.get(`/api/price-listing-by-service/${id}/`);
+}
+
 export const updatePricePlan = (id: number, request: any) => {
     return httpService.post(`/api/price-listing/${id}/`, request);
 }
 
+export const updatePricePlanByService = (id: number, request: any) => {
+    return httpService.post(`/api/price-listing-by-service/${id}/`, request);
+}
+
 export const exportPriceList = (request: any) => {
     return httpService.post('/api/price-listing/export', request);
+}
+
+export const getServices = (data: any) => {
+    return httpService.post('/api/services', data);
 }
