@@ -121,6 +121,8 @@ const CustomerHome = () => {
   const [totalActivities, setTotalActivities] = useState(0);
   const [activitiesLoading, setActivitiesLoading] = useState(false);
 
+  const [tags, setTags] = useState([]);
+
   const [searchText, setSearchText] = useState(
     localStorage.getItem("searchText") || ""
   );
@@ -169,6 +171,10 @@ const CustomerHome = () => {
   }, [airportSelected]);
 
   useEffect(() => {
+    getTags();
+  }, []);
+
+  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       searchJobs();
@@ -177,7 +183,7 @@ const CustomerHome = () => {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [searchText, statusSelected, sortSelected, airportSelected]);
+  }, [searchText, statusSelected, sortSelected, airportSelected, tags]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -185,6 +191,14 @@ const CustomerHome = () => {
 
       searchJobs();
     }
+  };
+
+  const handleToggleTag = (tag) => {
+    const newTags = [...tags];
+    const index = newTags.findIndex((item) => item.id === tag.id);
+    newTags[index].selected = !newTags[index].selected;
+
+    setTags(newTags);
   };
 
   const getAirports = async () => {
@@ -198,6 +212,11 @@ const CustomerHome = () => {
     data.results.unshift({ id: "All", name: "All" });
 
     setAirports(data.results);
+  };
+
+  const getTags = async () => {
+    const { data } = await api.getTags();
+    setTags(data.results);
   };
 
   const getJobActivities = async () => {
@@ -237,6 +256,7 @@ const CustomerHome = () => {
       status: JSON.parse(localStorage.getItem("statusSelected")).id,
       sortField: sortSelected.id,
       airport: JSON.parse(localStorage.getItem("airportSelected")).id,
+      tags: tags.filter((item) => item.selected).map((item) => item.id),
     };
 
     let statusName;
@@ -299,7 +319,10 @@ const CustomerHome = () => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-7xl flex-grow lg:flex xl:px-8 -mt-8 pb-32">
+    <div
+      className="mx-auto w-full max-w-7xl flex-grow lg:flex xl:px-8 -mt-8 pb-32"
+      style={{ maxWidth: "1400px" }}
+    >
       {/* Left sidebar & main wrapper */}
       <div className="min-w-0 flex-1 bg-white xl:flex">
         {/* Account profile */}
@@ -535,6 +558,28 @@ const CustomerHome = () => {
                               </ul>
                             </div>
                           </div>
+                          <div className="border-t border-gray-200 px-4 py-6">
+                            <h2 className="font-medium text-sm text-gray-900">
+                              Tags
+                            </h2>
+                            <div className="grid grid-cols-2 gap-2 mt-2">
+                              {tags.map((tag) => (
+                                <div
+                                  key={tag.id}
+                                  onClick={() => handleToggleTag(tag)}
+                                  className={`${
+                                    tag.selected
+                                      ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                      : "hover:bg-gray-50"
+                                  }
+                                                          rounded-md border border-gray-200 cursor-pointer
+                                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                                >
+                                  {tag.name}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </form>
                       </Dialog.Panel>
                     </Transition.Child>
@@ -699,6 +744,77 @@ const CustomerHome = () => {
                                 </span>{" "}
                                 - {job.fbo.name} - {job.aircraftType.name}
                               </div>
+                              <div className="flex justify-start my-2 gap-2">
+                                {job.tags?.map((tag) => (
+                                  <div
+                                    key={tag.id}
+                                    className={`text-xs inline-block rounded-md px-2 py-1 text-white border
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "red" &&
+                                                                    "border-red-500 text-red-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "orange" &&
+                                                                    "border-orange-500 text-orange-500 "
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "amber" &&
+                                                                    "border-amber-500 text-amber-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "indigo" &&
+                                                                    " border-indigo-500 text-indigo-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "violet" &&
+                                                                    " border-violet-500 text-violet-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "fuchsia" &&
+                                                                    "border-fuchsia-500 text-fuchsia-500"
+                                                                  } 
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "pink" &&
+                                                                    "border-pink-500 text-pink-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "slate" &&
+                                                                    "border-slate-500 text-gray-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "lime" &&
+                                                                    "border-lime-500 text-lime-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "emerald" &&
+                                                                    "border-emerald-500 text-emerald-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "cyan" &&
+                                                                    "border-cyan-500 text-cyan-500"
+                                                                  }
+                                                                  ${
+                                                                    tag.tag_color ===
+                                                                      "blue" &&
+                                                                    "border-blue-500 text-blue-500"
+                                                                  }
+                                                                 `}
+                                  >
+                                    {tag.tag_short_name}
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                             <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
                               <p
@@ -812,7 +928,7 @@ const CustomerHome = () => {
                 >
                   <div className="min-w-0 flex-1">
                     <div className="focus:outline-none">
-                      <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">
+                      <p className="text-sm text-gray-700 truncate overflow-ellipsis w-44">
                         {status.name}
                       </p>
                     </div>
@@ -823,7 +939,7 @@ const CustomerHome = () => {
           </ul>
         </div>
 
-        <div className="hidden xl:block lg:block pb-8">
+        <div className="hidden xl:block lg:block pb-4">
           <h2 className="font-medium text-sm text-gray-900">
             Airports
             <span className="text-gray-500 text-sm ml-1 font-normal">
@@ -842,7 +958,7 @@ const CustomerHome = () => {
                 >
                   <div className="min-w-0 flex-1">
                     <div className="focus:outline-none">
-                      <p className="text-xs text-gray-700 truncate overflow-ellipsis w-60">
+                      <p className="text-sm text-gray-700 truncate overflow-ellipsis w-60">
                         {airport.name}
                       </p>
                     </div>
@@ -851,6 +967,28 @@ const CustomerHome = () => {
               </li>
             ))}
           </ul>
+        </div>
+        <div className="hidden xl:block lg:block pb-8">
+          <div className="pb-4">
+            <h2 className="font-medium text-sm text-gray-900">Tags</h2>
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              {tags.map((tag) => (
+                <div
+                  key={tag.id}
+                  onClick={() => handleToggleTag(tag)}
+                  className={`${
+                    tag.selected
+                      ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                      : "hover:bg-gray-50"
+                  }
+                                              rounded-md border border-gray-200 cursor-pointer
+                                            py-2 px-2 text-sm hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                >
+                  {tag.name}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

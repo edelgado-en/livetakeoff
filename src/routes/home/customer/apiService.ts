@@ -16,3 +16,7 @@ export const getAirports = (request: any) => {
 export const sendPremiumRequest = (data: any) => {
     return httpService.post(`/api/premium/contact`, data)
 }
+
+export const getTags = () => {
+    return httpService.get('/api/tags');
+}
