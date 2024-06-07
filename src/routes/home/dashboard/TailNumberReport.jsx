@@ -1214,8 +1214,8 @@ const TailNumberReport = () => {
 
                                                   <span className="ml-1">
                                                     by{" "}
-                                                    {activity.user.first_name}{" "}
-                                                    {activity.user.last_name}
+                                                    {activity.user?.first_name}{" "}
+                                                    {activity.user?.last_name}
                                                   </span>
                                                 </p>
                                               </div>
