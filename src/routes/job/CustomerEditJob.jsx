@@ -91,8 +91,6 @@ const CustomerEditJob = () => {
 
       const response = await api.getJobDetails(jobId);
 
-      console.log("airportId", response.data.airport.id);
-
       setTailNumber(response.data.tailNumber);
       setCustomerPurchaseOrder(response.data.customer_purchase_order);
 
@@ -118,6 +116,22 @@ const CustomerEditJob = () => {
 
       if (response.data.estimatedETD) {
         setEstimatedDepartureDate(new Date(response.data.estimatedETD));
+      }
+
+      const request = {
+        airport_id: response.data.airport.id,
+      };
+
+      try {
+        const { data } = await api.searchFbos(request);
+
+        if (data.results.length > 0) {
+          setFbos(data.results);
+        } else {
+          setFbos(allFbos);
+        }
+      } catch (err) {
+        toast.error("Unable to get Fbos");
       }
 
       setLoading(false);

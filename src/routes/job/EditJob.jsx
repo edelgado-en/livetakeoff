@@ -240,6 +240,7 @@ const EditJob = () => {
       setAirportSelected(
         data.airports.find((a) => a.id === response.data.airport.id)
       );
+
       setFboSelected(data.fbos.find((f) => f.id === response.data.fbo.id));
 
       if (response.data.completeBy) {
@@ -268,6 +269,22 @@ const EditJob = () => {
       });
 
       setTags(updatedTags);
+
+      const request = {
+        airport_id: response.data.airport.id,
+      };
+
+      try {
+        const { data } = await api.searchFbos(request);
+
+        if (data.results.length > 0) {
+          setFbos(data.results);
+        } else {
+          setFbos(allFbos);
+        }
+      } catch (err) {
+        toast.error("Unable to get Fbos");
+      }
 
       try {
         const r1 = await api.getUserDetails();
