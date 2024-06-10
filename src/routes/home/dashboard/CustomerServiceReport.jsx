@@ -2186,14 +2186,15 @@ export default function CustomerServiceReport() {
                                 >
                                   Purchase Order
                                 </th>
-                                {!currentUser.isCustomer && (
-                                  <th
-                                    scope="col"
-                                    className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                                  >
-                                    Customer
-                                  </th>
-                                )}
+                                {!currentUser.isCustomer &&
+                                  !currentUser.isExternalProjectManager && (
+                                    <th
+                                      scope="col"
+                                      className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                    >
+                                      Customer
+                                    </th>
+                                  )}
                                 <th
                                   scope="col"
                                   className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
@@ -2241,13 +2242,14 @@ export default function CustomerServiceReport() {
                                         <span>{service.purchase_order}</span>
                                       )}
                                     </td>
-                                    {!currentUser.isCustomer && (
-                                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                        <div className="truncate overflow-ellipsis w-40">
-                                          {service.customer_name}
-                                        </div>
-                                      </td>
-                                    )}
+                                    {!currentUser.isCustomer &&
+                                      !currentUser.isExternalProjectManager && (
+                                        <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                          <div className="truncate overflow-ellipsis w-40">
+                                            {service.customer_name}
+                                          </div>
+                                        </td>
+                                      )}
                                     <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                                       {service.tail_number}
                                     </td>
@@ -2389,14 +2391,15 @@ export default function CustomerServiceReport() {
                                 >
                                   Purchase Order
                                 </th>
-                                {!currentUser.isCustomer && (
-                                  <th
-                                    scope="col"
-                                    className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
-                                  >
-                                    Customer
-                                  </th>
-                                )}
+                                {!currentUser.isCustomer &&
+                                  !currentUser.isExternalProjectManager && (
+                                    <th
+                                      scope="col"
+                                      className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
+                                    >
+                                      Customer
+                                    </th>
+                                  )}
                                 <th
                                   scope="col"
                                   className="px-2 py-3.5 text-left text-xs font-semibold text-gray-900 uppercase tracking-wide"
@@ -2438,13 +2441,14 @@ export default function CustomerServiceReport() {
                                         {service.purchase_order}
                                       </Link>
                                     </td>
-                                    {!currentUser.isCustomer && (
-                                      <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
-                                        <div className="truncate overflow-ellipsis w-40">
-                                          {service.customer_name}
-                                        </div>
-                                      </td>
-                                    )}
+                                    {!currentUser.isCustomer &&
+                                      !currentUser.isExternalProjectManager && (
+                                        <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
+                                          <div className="truncate overflow-ellipsis w-40">
+                                            {service.customer_name}
+                                          </div>
+                                        </td>
+                                      )}
                                     <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">
                                       {service.tail_number}
                                     </td>
