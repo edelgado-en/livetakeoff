@@ -466,6 +466,19 @@ const Topbar = () => {
                             Estimates
                           </Link>
                         )}
+                        {currentUser.canSeePrice && (
+                          <Link
+                            to="/price-plans"
+                            className={classNames(
+                              location.pathname.includes("price-plans")
+                                ? "bg-red-700"
+                                : " hover:bg-red-700 hover:text-white",
+                              "px-3 py-2 rounded-md text-sm font-medium text-white"
+                            )}
+                          >
+                            Prices
+                          </Link>
+                        )}
                         <Link
                           to="completed"
                           className={classNames(
@@ -1032,6 +1045,20 @@ const Topbar = () => {
                         )}
                       >
                         Estimates
+                      </Disclosure.Button>
+                    </Link>
+                  )}
+                  {currentUser.canSeePrice && (
+                    <Link to="price-plans">
+                      <Disclosure.Button
+                        className={classNames(
+                          location.pathname.includes("price-plans")
+                            ? "bg-red-700"
+                            : "hover:bg-red-700 hover:text-white",
+                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                        )}
+                      >
+                        Prices
                       </Disclosure.Button>
                     </Link>
                   )}

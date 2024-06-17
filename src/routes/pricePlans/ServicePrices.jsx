@@ -13,6 +13,9 @@ import { Link } from "react-router-dom";
 import * as api from "./apiService";
 import { toast } from "react-toastify";
 
+import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
+
 const groupOptions = [{ name: "By Aircraft" }, { name: "By Service" }];
 
 const XMarkIcon = () => {
@@ -58,6 +61,9 @@ function classNames(...classes) {
 }
 
 const ServicePrices = () => {
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectUser);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [exportLoading, setExportLoading] = useState(false);
@@ -78,6 +84,10 @@ const ServicePrices = () => {
   const [groupOptionSelected, setGroupOptionSelected] = useState(
     groupOptions[0]
   );
+
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
 
   useEffect(() => {
     //Basic throttling
@@ -634,27 +644,34 @@ const ServicePrices = () => {
                               </tr>
                             ))}
                           </tbody>
-                          <tfoot>
-                            <tr className="border-t border-gray-200">
-                              <th className="sr-only" scope="row"></th>
-                              {pricePlans.map((pricePlan) => (
-                                <td key={pricePlan.name} className="px-6 pt-5">
-                                  <button
-                                    disabled={updateLoading}
-                                    onClick={() =>
-                                      saveChangesForPricePlan(pricePlan.name)
-                                    }
-                                    className="block w-24 rounded-md border
-                                                border-transparent bg-red-500
-                                                  py-2 px-1 text-center text-xs font-semibold
-                                                  text-white shadow hover:to-pink-600"
+                          {(currentUser.isAdmin ||
+                            currentUser.isSuperUser ||
+                            currentUser.isAccountManager) && (
+                            <tfoot>
+                              <tr className="border-t border-gray-200">
+                                <th className="sr-only" scope="row"></th>
+                                {pricePlans.map((pricePlan) => (
+                                  <td
+                                    key={pricePlan.name}
+                                    className="px-6 pt-5"
                                   >
-                                    Save Changes
-                                  </button>
-                                </td>
-                              ))}
-                            </tr>
-                          </tfoot>
+                                    <button
+                                      disabled={updateLoading}
+                                      onClick={() =>
+                                        saveChangesForPricePlan(pricePlan.name)
+                                      }
+                                      className="block w-24 rounded-md border
+                                                    border-transparent bg-red-500
+                                                    py-2 px-1 text-center text-xs font-semibold
+                                                    text-white shadow hover:to-pink-600"
+                                    >
+                                      Save Changes
+                                    </button>
+                                  </td>
+                                ))}
+                              </tr>
+                            </tfoot>
+                          )}
                         </table>
                       )}
 
