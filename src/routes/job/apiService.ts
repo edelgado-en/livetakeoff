@@ -259,3 +259,7 @@ export const acceptJob = (id: number, data: any) => {
 export const searchUsers = (data: any) => {
     return httpService.post('/api/users', data);
 }
+
+export const searchVendors = (data: any) => {
+    return httpService.post('/api/vendors', data);
+}
