@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -20,6 +20,7 @@ import DeleteCommentModal from "./DeleteJobCommentModal";
 const JobComments = () => {
   const { jobId } = useParams();
   const bottomRef = useRef(null);
+  const location = useLocation();
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -232,15 +233,19 @@ const JobComments = () => {
       {loading && <Loader />}
 
       {!loading && (
-        <div className="mt-8 m-auto max-w-2xl">
-          <div className="flex flex-row">
-            <div className="flex-1">
-              <h1 className="text-2xl font-semibold text-gray-600">Comments</h1>
-            </div>
+        <div
+          className={`${
+            location.pathname.includes("comments") ? "mt-8" : ""
+          } relative overflow-hidden rounded-lg border border-gray-300`}
+        >
+          <div className="p-4 bg-gray-100">
+            <h3 className="text-base font-bold leading-7 text-gray-900 uppercase">
+              Comments
+            </h3>
           </div>
-          <div className="my-4">
+          <div className="border-t border-gray-200">
             <div
-              className="mt-8 flex flex-col pr-1 pb-8"
+              className="flex flex-col pr-1 p-4"
               style={{ maxHeight: "450px", overflowY: "auto" }}
             >
               {comments.length === 0 && (

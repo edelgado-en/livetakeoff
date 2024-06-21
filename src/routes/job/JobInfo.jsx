@@ -30,6 +30,8 @@ import JobFileUploadModal from "./JobFileUploadModal";
 import JobInvoiceModal from "./JobInvoiceModal";
 import JobNotInvoiceModal from "./JobNotInvoiceModal";
 
+import JobComments from "./JobComments";
+
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
 
@@ -1653,8 +1655,8 @@ const JobInfo = () => {
             )}
           </div>
 
-          {currentUser.canSeePrice && (
-            <div className="grid grid-cols-1 mt-6 gap-6">
+          {currentUser.canSeePrice ? (
+            <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 mt-6 gap-6">
               <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
                 <div className="p-4 bg-gray-100">
                   <h3 className="text-base font-bold leading-7 text-gray-900 uppercase">
@@ -1837,6 +1839,13 @@ const JobInfo = () => {
                   )}
                 </div>
               </div>
+              <div>
+                <JobComments />
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 mt-6 gap-6">
+              <JobComments />
             </div>
           )}
 
