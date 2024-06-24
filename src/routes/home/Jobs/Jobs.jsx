@@ -1318,7 +1318,7 @@ const JobsQueue = () => {
                                 )}
                                 {!job.on_site && job.estimatedETA != null && (
                                   <span className="text-gray-700 text-sm ml-1">
-                                    {job.estimatedETA}
+                                    {job.arrival_formatted_date}
                                   </span>
                                 )}
                               </div>
@@ -1339,7 +1339,7 @@ const JobsQueue = () => {
                                 )}
                                 {job.estimatedETD != null && (
                                   <span className="text-gray-700 text-sm ml-1">
-                                    {job.estimatedETD}
+                                    {job.departure_formatted_date}
                                   </span>
                                 )}
                               </div>
@@ -1356,7 +1356,7 @@ const JobsQueue = () => {
                                     Complete before{" "}
                                     {job.completeBy ? (
                                       <span className="text-gray-700">
-                                        {job.completeBy}
+                                        {job.complete_before_formatted_date}
                                       </span>
                                     ) : (
                                       <span

@@ -876,7 +876,7 @@ const CustomerHome = () => {
                                     Complete before{" "}
                                     {job.completeBy ? (
                                       <span className="text-gray-700">
-                                        {job.completeBy}
+                                        {job.complete_before_formatted_date}
                                       </span>
                                     ) : (
                                       <span

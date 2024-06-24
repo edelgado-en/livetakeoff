@@ -1047,9 +1047,7 @@ const JobInfo = () => {
                     <dd className="text-md text-gray-700">
                       {jobDetails.on_site
                         ? "On site"
-                        : jobDetails.estimatedETA
-                        ? jobDetails.estimatedETA
-                        : "No ETA yet"}
+                        : jobDetails.arrival_formatted_date}
                     </dd>
                   </div>
                   <div className="px-4 py-3 flex gap-4">
@@ -1057,9 +1055,7 @@ const JobInfo = () => {
                       Departure:
                     </dt>
                     <dd className="text-md text-gray-700">
-                      {jobDetails.estimatedETD
-                        ? jobDetails.estimatedETD
-                        : "No ETD yet"}
+                      {jobDetails.departure_formatted_date}
                     </dd>
                   </div>
                   <div className="px-4 py-3 flex gap-4">
@@ -1068,7 +1064,7 @@ const JobInfo = () => {
                     </dt>
                     <dd className="text-md text-gray-700">
                       {jobDetails.completeBy ? (
-                        jobDetails.completeBy
+                        jobDetails.complete_before_formatted_date
                       ) : (
                         <span
                           className="relative inline-flex items-center
