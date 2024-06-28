@@ -2542,6 +2542,18 @@ const CompleteList = () => {
                               >
                                 Review
                               </button>
+                              {job.comments_count > 0 ? (
+                                <div
+                                  className="bg-red-500 text-white py-1 px-2 relative left-1
+                                                                            rounded-full text-md font-medium inline-block scale-90"
+                                >
+                                  {job.comments_count}
+                                </div>
+                              ) : (
+                                <div className="bg-white text-white py-1 px-2 relative left-1 rounded-full text-md font-medium inline-block scale-90">
+                                  0
+                                </div>
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -2560,7 +2572,7 @@ const CompleteList = () => {
                             }
                             className="block hover:bg-gray-50"
                           >
-                            <div className="flex items-center px-4 py-4 sm:px-6">
+                            <div className="relative flex items-center px-4 py-4 sm:px-6">
                               <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                                 <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
                                   <div>
@@ -2633,6 +2645,14 @@ const CompleteList = () => {
                                   aria-hidden="true"
                                 />
                               </div>
+                              {job.comments_count > 0 && (
+                                <div
+                                  className="bg-red-500 text-white py-1 px-3 absolute top-3 right-3
+                                                                            rounded-full text-md font-medium inline-block scale-90"
+                                >
+                                  {job.comments_count}
+                                </div>
+                              )}
                             </div>
                           </div>
                         </li>
