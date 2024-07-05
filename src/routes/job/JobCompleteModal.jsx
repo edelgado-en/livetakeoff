@@ -449,16 +449,18 @@ const JobCompleteModal = ({
           </div>
         </div>
         <div className="mt-8 grid grid-cols-2 gap-4">
-          <button
-            type="button"
-            onClick={handleClose}
-            className="inline-flex w-full justify-center rounded-md border
-                                 border-gray-300 bg-white px-4 py-2 font-medium
-                                  text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
-                                   focus:ring-red-500 focus:ring-offset-2 sm:mt-0 sm:w-auto text-lg"
-          >
-            Cancel
-          </button>
+          {otherPMsWorkingOnIt && (
+            <button
+              type="button"
+              onClick={handleClose}
+              className="inline-flex w-full justify-center rounded-md border
+                                        border-gray-300 bg-white px-4 py-2 font-medium
+                                        text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                        focus:ring-red-500 focus:ring-offset-2 sm:mt-0 sm:w-auto text-lg"
+            >
+              Cancel
+            </button>
+          )}
           {(isAdmin || !otherPMsWorkingOnIt) && (
             <button
               type="button"
