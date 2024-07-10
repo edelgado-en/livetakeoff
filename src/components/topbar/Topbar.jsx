@@ -565,6 +565,33 @@ const Topbar = () => {
                                           </button>
                                         )
                                       )}
+
+                                      {currentUser.canSeeInventoryDashboard && (
+                                        <button
+                                          onClick={() =>
+                                            handleDashboardLink(
+                                              "/inventory/stats/current"
+                                            )
+                                          }
+                                          to={"/inventory/stats/current"}
+                                          className="-m-3 flex items-start rounded-lg px-3 py-4 hover:bg-gray-50"
+                                        >
+                                          <ArchiveIcon
+                                            className="h-6 w-6 flex-shrink-0 text-red-600"
+                                            aria-hidden="true"
+                                          />
+                                          <div className="ml-4 text-left">
+                                            <p className="text-base font-medium text-gray-900">
+                                              Inventory Tracking
+                                            </p>
+                                            <p className="mt-1 text-sm text-gray-500">
+                                              Never lose track of what's in
+                                              stock with accurate inventory
+                                              tracking
+                                            </p>
+                                          </div>
+                                        </button>
+                                      )}
                                     </div>
                                   </div>
                                 </Popover.Panel>
@@ -1114,6 +1141,32 @@ const Topbar = () => {
                           </Disclosure.Button>
                         </Link>
                       ))}
+
+                      {currentUser.canSeeInventoryDashboard && (
+                        <Link
+                          to={"/inventory/stats/current"}
+                          className="flex items-start rounded-lg px-3 "
+                        >
+                          <Disclosure.Button
+                            className={classNames(
+                              location.pathname.includes("inventory/stats")
+                                ? "bg-red-700"
+                                : "hover:bg-red-700 hover:text-white",
+                              "px-3 rounded-md text-base font-medium text-white w-full text-left flex py-3 -ml-4"
+                            )}
+                          >
+                            <ArchiveIcon
+                              className="h-6 w-6 flex-shrink-0 text-white"
+                              aria-hidden="true"
+                            />
+                            <div className="ml-4 text-left">
+                              <p className="text-base font-medium text-white">
+                                Inventory Tracking
+                              </p>
+                            </div>
+                          </Disclosure.Button>
+                        </Link>
+                      )}
                     </nav>
                   </div>
                 </>

@@ -1531,7 +1531,8 @@ const JobInfo = () => {
             {/* LABOR */}
             {(currentUser.isAdmin ||
               currentUser.isSuperUser ||
-              currentUser.isAccountManager) && (
+              currentUser.isAccountManager ||
+              currentUser.isInternalCoordinator) && (
               <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
                 <div className="p-4 bg-gray-100">
                   <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
