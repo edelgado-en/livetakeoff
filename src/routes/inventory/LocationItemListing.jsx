@@ -43,7 +43,10 @@ const LocationItemListing = ({
         <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 mb-6 px-1">
           {locationItems.map((locationItem) => (
             <div key={locationItem.id} className="group relative pr-2 pb-4">
-              {!currentUser.isProjectManager && (
+              {currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ||
+              currentUser.isInternalCoordinator ? (
                 <Link
                   to={`/inventory/${locationItem?.item.id}/details`}
                   className="flex-shrink-0 cursor-pointer"
@@ -60,9 +63,7 @@ const LocationItemListing = ({
                     <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
                   )}
                 </Link>
-              )}
-
-              {currentUser.isProjectManager && (
+              ) : (
                 <div className="flex-shrink-0 cursor-pointer">
                   {locationItem?.item.photo && (
                     <img
@@ -195,7 +196,10 @@ const LocationItemListing = ({
               <div className="group block hover:bg-gray-50">
                 <div className="flex items-center pr-4 pl-1 py-1">
                   <div className="flex min-w-0 flex-1 items-center">
-                    {!currentUser.isProjectManager && (
+                    {currentUser.isAdmin ||
+                    currentUser.isSuperUser ||
+                    currentUser.isAccountManager ||
+                    currentUser.isInternalCoordinator ? (
                       <Link
                         to={`/inventory/${locationItem.item.id}/details`}
                         className="flex-shrink-0 w-20"
@@ -206,8 +210,7 @@ const LocationItemListing = ({
                           alt=""
                         />
                       </Link>
-                    )}
-                    {currentUser.isProjectManager && (
+                    ) : (
                       <div className="flex-shrink-0 w-20">
                         <img
                           className="h-20 rounded-md group-hover:opacity-75"

@@ -8,7 +8,10 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
         <div className="mt-1 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 3xl:grid-cols-6 xl:gap-x-8 mb-6 px-1">
           {items.map((item) => (
             <div key={item.id} className="group relative pr-2 pb-4">
-              {!currentUser.isProjectManager && (
+              {currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ||
+              currentUser.isInternalCoordinator ? (
                 <Link
                   to={`/inventory/${item.id}/details`}
                   className="flex-shrink-0 cursor-pointer"
@@ -25,9 +28,7 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
                     <PhotographIcon className="h-60 w-56 text-gray-200 items-center m-auto align-middle" />
                   )}
                 </Link>
-              )}
-
-              {currentUser.isProjectManager && (
+              ) : (
                 <div className="flex-shrink-0 cursor-pointer">
                   {item.photo && (
                     <img
@@ -94,7 +95,10 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
               <div className="group block hover:bg-gray-50">
                 <div className="flex items-center pr-4 pl-1 py-1">
                   <div className="flex min-w-0 flex-1 items-center">
-                    {!currentUser.isProjectManager && (
+                    {currentUser.isAdmin ||
+                    currentUser.isSuperUser ||
+                    currentUser.isAccountManager ||
+                    currentUser.isInternalCoordinator ? (
                       <Link
                         to={`/inventory/${item.id}/details`}
                         className="flex-shrink-0 w-20"
@@ -105,8 +109,7 @@ const ItemListing = ({ isGridView, items, currentUser }) => {
                           alt=""
                         />
                       </Link>
-                    )}
-                    {currentUser.isProjectManager && (
+                    ) : (
                       <div className="flex-shrink-0 w-20">
                         <img
                           className="h-20 rounded-md group-hover:opacity-75"
