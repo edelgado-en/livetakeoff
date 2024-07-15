@@ -185,6 +185,10 @@ const InventoryList = () => {
     JSON.parse(localStorage.getItem("outOfStockMet")) || false
   );
 
+  const [inStock, setInStock] = useState(
+    JSON.parse(localStorage.getItem("inStock")) || false
+  );
+
   const [onHold, setOnHold] = useState(
     JSON.parse(localStorage.getItem("onHold")) || false
   );
@@ -202,6 +206,7 @@ const InventoryList = () => {
     minimumRequiredMet,
     outOfStockMet,
     onHold,
+    inStock,
   ]);
 
   const getLocations = async () => {
@@ -257,6 +262,7 @@ const InventoryList = () => {
         minimumRequiredMet,
         outOfStockMet,
         onHold,
+        inStock,
       };
 
       //set active filters
@@ -311,6 +317,13 @@ const InventoryList = () => {
         });
       }
 
+      if (request.inStock) {
+        activeFilters.push({
+          id: "inStock",
+          name: "In Stock",
+        });
+      }
+
       if (request.onHold) {
         activeFilters.push({
           id: "onHold",
@@ -328,6 +341,7 @@ const InventoryList = () => {
       localStorage.setItem("outOfStockMet", JSON.stringify(outOfStockMet));
       localStorage.setItem("lowStockMet", JSON.stringify(minimumRequiredMet));
       localStorage.setItem("onHold", JSON.stringify(onHold));
+      localStorage.setItem("inStock", JSON.stringify(inStock));
 
       try {
         if (locationSelected?.id === null) {
@@ -484,6 +498,8 @@ const InventoryList = () => {
       setOutOfStockMet(false);
     } else if (activeFilterId === "onHold") {
       setOnHold(false);
+    } else if (activeFilterId === "inStock") {
+      setInStock(false);
     }
 
     setActiveFilters(
@@ -521,6 +537,7 @@ const InventoryList = () => {
     setMinimumRequiredMet(false);
     setOutOfStockMet(false);
     setOnHold(false);
+    setInStock(false);
   };
 
   const handleToggleMinimumRequiredMet = () => {
@@ -528,12 +545,22 @@ const InventoryList = () => {
     setThresholdMet(false);
     setOutOfStockMet(false);
     setOnHold(false);
+    setInStock(false);
   };
 
   const handleToggleOutOfStockMet = () => {
     setOutOfStockMet(!outOfStockMet);
     setThresholdMet(false);
     setMinimumRequiredMet(false);
+    setOnHold(false);
+    setInStock(false);
+  };
+
+  const handleToggleInStock = () => {
+    setInStock(!inStock);
+    setThresholdMet(false);
+    setMinimumRequiredMet(false);
+    setOutOfStockMet(false);
     setOnHold(false);
   };
 
@@ -542,6 +569,7 @@ const InventoryList = () => {
     setThresholdMet(false);
     setMinimumRequiredMet(false);
     setOutOfStockMet(false);
+    setInStock(false);
   };
 
   return (
@@ -753,6 +781,18 @@ const InventoryList = () => {
                                                     py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
                               >
                                 <div>OUT OF STOCK</div>
+                              </div>
+                              <div
+                                onClick={() => handleToggleInStock()}
+                                className={`${
+                                  inStock
+                                    ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                    : "hover:bg-gray-50"
+                                }
+                                                        rounded-md border border-gray-200 cursor-pointer
+                                                    py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                              >
+                                <div>IN STOCK</div>
                               </div>
                               <div
                                 onClick={() => handleToggleOnHold()}
@@ -1173,6 +1213,18 @@ const InventoryList = () => {
                                       py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
                   >
                     <div>OUT OF STOCK</div>
+                  </div>
+                  <div
+                    onClick={() => handleToggleInStock()}
+                    className={`${
+                      inStock
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                        rounded-md border border-gray-200 cursor-pointer
+                                      py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32 flex justify-between`}
+                  >
+                    <div>IN STOCK</div>
                   </div>
                   <div
                     onClick={() => handleToggleOnHold()}
