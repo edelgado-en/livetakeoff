@@ -97,6 +97,8 @@ import TailAlerts from "./routes/alerts/TailAlerts";
 
 import ContactUs from "./routes/shared/ContactUs";
 
+import HelpFileList from "./routes/help/HelpFileList";
+
 import { isUserAuthenticated } from "./localstorage";
 import { selectUser } from "./routes/userProfile/userSlice";
 import { useAppSelector } from "./app/hooks";
@@ -362,6 +364,7 @@ const App = () => {
 
                     <Route path="changelog" element={<ChangeLog />} />
                     <Route path="contact" element={<ContactUs />} />
+                    <Route path="help" element={<HelpFileList />} />
                     <Route path="price-plans" element={<PricePlans />} />
                     <Route
                       path="price-plans/add"
