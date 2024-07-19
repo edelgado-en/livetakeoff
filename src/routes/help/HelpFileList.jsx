@@ -186,19 +186,23 @@ const HelpFileList = () => {
               Total: <span className="text-gray-900">{totalHelpFiles}</span>
             </p>
           </div>
-          <div className="text-right">
-            <button
-              type="button"
-              onClick={() => handleToggleCreateHelpFileModal()}
-              className="inline-flex items-center justify-center 
-                                        rounded-md border border-transparent bg-red-600 px-4 py-2
-                                        text-sm font-medium text-white shadow-sm hover:bg-red-700
-                                        focus:outline-none focus:ring-2 focus:ring-red-500
-                                        focus:ring-offset-2 sm:w-auto"
-            >
-              New Help File
-            </button>
-          </div>
+          {(currentUser.isAdmin ||
+            currentUser.isSuperUser ||
+            currentUser.isAccountManager) && (
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => handleToggleCreateHelpFileModal()}
+                className="inline-flex items-center justify-center 
+                                            rounded-md border border-transparent bg-red-600 px-4 py-2
+                                            text-sm font-medium text-white shadow-sm hover:bg-red-700
+                                            focus:outline-none focus:ring-2 focus:ring-red-500
+                                            focus:ring-offset-2 sm:w-auto"
+              >
+                New Help File
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="w-full mt-4">
