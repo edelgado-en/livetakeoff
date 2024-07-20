@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 
 import DeleteHelpFileModal from "./DeleteHelpFileModal";
 import CreateHelpFileModal from "./CreateHelpFileModal";
+import EditHelpFileModal from "./EditHelpFileModal";
 
 const MagnifyingGlassIcon = () => {
   return (
@@ -84,8 +85,12 @@ const HelpFileList = () => {
     useState(false);
   const [helpFileToBeDeleted, setHelpFileToBeDeleted] = useState(null);
 
+  const [helpFileToBeEdited, setHelpFileToBeEdited] = useState(null);
+
   const [isCreateHelpFileModalOpen, setCreateHelpFileModalOpen] =
     useState(false);
+
+  const [isEditHelpFileModalOpen, setEditHelpFileModalOpen] = useState(false);
 
   useEffect(() => {
     //Basic throttling
@@ -149,6 +154,16 @@ const HelpFileList = () => {
     setDeleteHelpFileModalOpen(!isDeleteHelpFileModalOpen);
   };
 
+  const handleToggleEditHelpFileModal = (helpFile) => {
+    if (helpFile) {
+      setHelpFileToBeEdited(helpFile);
+    } else {
+      setHelpFileToBeEdited(null);
+    }
+
+    setEditHelpFileModalOpen(!isEditHelpFileModalOpen);
+  };
+
   const deleteHelpFile = async (helpFile) => {
     await api.deleteHelpFile(helpFile.id);
 
@@ -167,6 +182,14 @@ const HelpFileList = () => {
     setCreateHelpFileModalOpen(false);
 
     toast.success("File Created!");
+
+    searchHelpFiles();
+  };
+
+  const handleEditHelpFile = (helpFile) => {
+    setEditHelpFileModalOpen(false);
+
+    toast.success("File Updated!");
 
     searchHelpFiles();
   };
@@ -335,6 +358,7 @@ const HelpFileList = () => {
                     <div className="flex justify-end mt-3">
                       <button
                         type="button"
+                        onClick={() => handleToggleEditHelpFileModal(helpFile)}
                         className="rounded-md border border-gray-300 bg-white
                                                  py-2 px-4 text-md text-gray-700 shadow-sm
                                                   hover:bg-gray-50 focus:outline-none focus:ring-2
@@ -377,6 +401,15 @@ const HelpFileList = () => {
           handleClose={handleToggleDeleteHelpFileModal}
           deleteHelpFile={deleteHelpFile}
           helpFile={helpFileToBeDeleted}
+        />
+      )}
+
+      {isEditHelpFileModalOpen && (
+        <EditHelpFileModal
+          isOpen={isEditHelpFileModalOpen}
+          handleClose={handleToggleEditHelpFileModal}
+          editFile={handleEditHelpFile}
+          fileToBeEdited={helpFileToBeEdited}
         />
       )}
     </AnimatedPage>
