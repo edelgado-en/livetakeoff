@@ -41,14 +41,15 @@ const DeleteHelpFileModal = ({
               as="h3"
               className="text-lg font-medium leading-6 text-gray-900 relative top-1 flex flex-col"
             >
-              Delete Help File
+              Delete Training File
             </Dialog.Title>
 
             <div className="mt-8 mb-2">
               <div>
                 <div className="">
-                  <span className="text-sm">
-                    Are you sure you want to delete {helpFile?.name}?
+                  <span className="text-md">
+                    Are you sure you want to delete{" "}
+                    <span className="font-medium">{helpFile?.name}</span>?
                   </span>
                 </div>
               </div>

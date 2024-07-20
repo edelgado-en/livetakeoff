@@ -154,6 +154,8 @@ const HelpFileList = () => {
 
     setDeleteHelpFileModalOpen(false);
 
+    toast.success("File Deleted!");
+
     searchHelpFiles();
   };
 
@@ -163,6 +165,8 @@ const HelpFileList = () => {
 
   const handleCreateHelpFile = (helpFile) => {
     setCreateHelpFileModalOpen(false);
+
+    toast.success("File Created!");
 
     searchHelpFiles();
   };
@@ -182,7 +186,7 @@ const HelpFileList = () => {
             <h1 className="text-2xl font-semibold text-gray-600">
               Training Files
             </h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-md text-gray-500">
               Total: <span className="text-gray-900">{totalHelpFiles}</span>
             </p>
           </div>
@@ -195,7 +199,7 @@ const HelpFileList = () => {
                 onClick={() => handleToggleCreateHelpFileModal()}
                 className="inline-flex items-center justify-center 
                                             rounded-md border border-transparent bg-red-600 px-4 py-2
-                                            text-sm font-medium text-white shadow-sm hover:bg-red-700
+                                            text-md font-medium text-white shadow-sm hover:bg-red-700
                                             focus:outline-none focus:ring-2 focus:ring-red-500
                                             focus:ring-offset-2 sm:w-auto"
               >
@@ -279,7 +283,7 @@ const HelpFileList = () => {
                                                                                 font-medium text-sky-500 shadow-sm hover:bg-gray-50
                                                                                 focus:outline-none cursor-pointer"
                       >
-                        Open File
+                        Open
                       </a>
                     )}
                     {helpFile.file_type === "F" && (
@@ -291,7 +295,7 @@ const HelpFileList = () => {
                                                                               font-medium text-sky-500 shadow-sm hover:bg-gray-50
                                                                               focus:outline-none cursor-pointer"
                       >
-                        Open File
+                        Open
                       </button>
                     )}
                     {helpFile.file_type === "P" && (
@@ -303,7 +307,7 @@ const HelpFileList = () => {
                                                                               font-medium text-sky-500 shadow-sm hover:bg-gray-50
                                                                               focus:outline-none cursor-pointer"
                       >
-                        Open File
+                        Open
                       </a>
                     )}
                   </div>
@@ -340,6 +344,9 @@ const HelpFileList = () => {
                       </button>
                       <button
                         type="button"
+                        onClick={() =>
+                          handleToggleDeleteHelpFileModal(helpFile)
+                        }
                         className="ml-3 rounded-md border border-gray-300 bg-white
                                                  py-2 px-4 text-md text-gray-700 shadow-sm
                                                   hover:bg-gray-50 focus:outline-none focus:ring-2
@@ -361,6 +368,15 @@ const HelpFileList = () => {
           isOpen={isCreateHelpFileModalOpen}
           handleClose={handleToggleCreateHelpFileModal}
           addHelpFile={handleCreateHelpFile}
+        />
+      )}
+
+      {isDeleteHelpFileModalOpen && (
+        <DeleteHelpFileModal
+          isOpen={isDeleteHelpFileModalOpen}
+          handleClose={handleToggleDeleteHelpFileModal}
+          deleteHelpFile={deleteHelpFile}
+          helpFile={helpFileToBeDeleted}
         />
       )}
     </AnimatedPage>

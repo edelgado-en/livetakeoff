@@ -145,7 +145,7 @@ const CreateHelpFileModal = ({ isOpen, handleClose, addHelpFile }) => {
               as="h3"
               className="text-xl m-auto flex justify-center text-center font-medium leading-6 text-gray-900 relative top-1"
             >
-              Create Help File
+              Create Training File
             </Dialog.Title>
 
             <div className="mt-8 px-2">
