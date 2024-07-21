@@ -226,7 +226,7 @@ const HelpFileList = () => {
                                             focus:outline-none focus:ring-2 focus:ring-red-500
                                             focus:ring-offset-2 sm:w-auto"
               >
-                New Help File
+                New File
               </button>
             </div>
           )}
