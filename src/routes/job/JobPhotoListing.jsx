@@ -32,10 +32,15 @@ const JobPhotoListing = () => {
   const [interiorPhotos, setInteriorPhotos] = useState([]);
   const [exteriorPhotos, setExteriorPhotos] = useState([]);
   const [customerPhotos, setCustomerPhotos] = useState([]);
+  const [jobStatus, setJobStatus] = useState("");
 
   const currentUser = useAppSelector(selectUser);
 
   const { jobId } = useParams();
+
+  useEffect(() => {
+    getJobDetails();
+  }, []);
 
   useEffect(() => {
     getPhotos();
@@ -43,6 +48,15 @@ const JobPhotoListing = () => {
 
   const onImageError = (e) => {
     e.target.src = ImageNotAvailable;
+  };
+
+  const getJobDetails = async () => {
+    try {
+      const { data } = await api.getJobDetails(jobId);
+      setJobStatus(data.status);
+    } catch (err) {
+      toast.error("Failed to fetch job details");
+    }
   };
 
   const openImageViewer = (index) => {
@@ -82,7 +96,6 @@ const JobPhotoListing = () => {
 
     let label;
     if (photo.customer_uploaded) {
-      label = "customer_provided_";
     } else {
       if (photo.interior) {
         label = "interior_";
@@ -307,7 +320,15 @@ const JobPhotoListing = () => {
                       />
                       {(currentUser.isAdmin ||
                         currentUser.isSuperUser ||
-                        currentUser.isAccountManager) && (
+                        currentUser.isAccountManager ||
+                        currentUser.isProjectManager ||
+                        currentUser.isExternalProjectManager ||
+                        (currentUser.isInternalCoordinator &&
+                          (jobStatus === "A" ||
+                            jobStatus === "S" ||
+                            jobStatus === "U" ||
+                            jobStatus === "W" ||
+                            jobStatus === "T"))) && (
                         <TrashIcon
                           onClick={() =>
                             handleDeleteCustomerPhoto(photo.id, true)
@@ -412,7 +433,15 @@ const JobPhotoListing = () => {
                     />
                     {(currentUser.isAdmin ||
                       currentUser.isSuperUser ||
-                      currentUser.isAccountManager) && (
+                      currentUser.isAccountManager ||
+                      currentUser.isProjectManager ||
+                      currentUser.isExternalProjectManager ||
+                      (currentUser.isInternalCoordinator &&
+                        (jobStatus === "A" ||
+                          jobStatus === "S" ||
+                          jobStatus === "U" ||
+                          jobStatus === "W" ||
+                          jobStatus === "T"))) && (
                       <TrashIcon
                         onClick={() => handleDeletePhoto(photo.id, true)}
                         className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"
@@ -483,7 +512,15 @@ const JobPhotoListing = () => {
                     />
                     {(currentUser.isAdmin ||
                       currentUser.isSuperUser ||
-                      currentUser.isAccountManager) && (
+                      currentUser.isAccountManager ||
+                      currentUser.isProjectManager ||
+                      currentUser.isExternalProjectManager ||
+                      (currentUser.isInternalCoordinator &&
+                        (jobStatus === "A" ||
+                          jobStatus === "S" ||
+                          jobStatus === "U" ||
+                          jobStatus === "W" ||
+                          jobStatus === "T"))) && (
                       <TrashIcon
                         onClick={() => handleDeletePhoto(photo.id, false)}
                         className="flex-shrink-0 h-4 w-4 mr-2 cursor-pointer"
