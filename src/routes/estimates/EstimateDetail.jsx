@@ -191,7 +191,7 @@ const EstimateDetail = () => {
                 </div>
                 <div>
                   <div className="text-md text-gray-700 xl:text-right xs:text-left pb-2">
-                    Requested by
+                    Created by
                   </div>
                   <div className="flex xl:justify-end xs:justify-start space-x-3 space-y-3">
                     {estimateDetails?.requested_by.profile?.avatar ? (
