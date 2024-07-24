@@ -56,7 +56,7 @@ const ShareJobEstimate = () => {
       {loading && <Loader />}
 
       {!loading && (
-        <div className="mt-4 m-auto max-w-4xl px-4">
+        <div className="mt-4 m-auto max-w-7xl px-4">
           <div className="grid grid-cols-2 gap-2 pb-10">
             <div>
               <img
@@ -186,19 +186,103 @@ const ShareJobEstimate = () => {
                   </div>
                 </div>
               </div>
-              <div className="mt-6 max-w-5xl px-2 pb-10">
-                <div className="mt-8">
-                  <div className="flex justify-between text-md">
-                    <div className="text-md text-gray-700">
-                      <span className="font-medium">
-                        {estimateDetails?.aircraftType?.name}
-                      </span>{" "}
-                      <span className="ml-1 text-gray-500">
-                        at {estimateDetails?.airport?.initials}
-                      </span>
+              <div className="mt-6 max-w-7xl px-2 pb-10">
+                <div className="mt-2">
+                  <div className="flex flex-wrap justify-between text-md gap-2">
+                    <div className="flex flex-wrap gap-1">
+                      <div className="font-medium">Tail Number:</div>
+                      <div>{estimateDetails.tailNumber}</div>
+                    </div>
+                    <div className="text-md  text-gray-700">
+                      <div className="flex flex-wrap gap-1">
+                        <div className="font-medium">Aircraft:</div>
+                        <div>{estimateDetails.aircraftType?.name}</div>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        <div className="font-medium">Airport:</div>
+                        <div>{estimateDetails?.airport?.initials}</div>
+                      </div>
                     </div>
                   </div>
-                  <div className="mt-4">
+                  {/* DESKTOP */}
+                  <div className="hidden md:block lg:block xl:block -mx-4 mt-8 sm:-mx-0">
+                    <table className="min-w-full divide-y divide-gray-300">
+                      <thead>
+                        <tr>
+                          <th
+                            scope="col"
+                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                          >
+                            ID
+                          </th>
+                          <th
+                            scope="col"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                          >
+                            Service
+                          </th>
+                          <th
+                            scope="col"
+                            className="hidden px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                          >
+                            Description
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-3 py-3.5 text-sm font-semibold text-gray-900 text-right"
+                          >
+                            Amount
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 bg-white">
+                        {estimateDetails?.services?.map((service, index) => (
+                          <tr key={service.id}>
+                            <td className="relative w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
+                              <div className="absolute top-6">
+                                {index + 1}
+                                <dl className="font-normal lg:hidden">
+                                  <dd className=" mt-1 truncate text-gray-700 font-medium">
+                                    {service.name}
+                                  </dd>
+                                  <dd className="mt-1 truncate text-gray-500 sm:hidden">
+                                    {service.email}
+                                  </dd>
+                                </dl>
+                              </div>
+                            </td>
+                            <td className="relative hidden px-3 py-4 text-sm text-gray-700 lg:table-cell font-medium items-start">
+                              <div className="absolute top-6">
+                                {service.name}
+                              </div>
+                            </td>
+                            <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
+                              <textarea
+                                class="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56"
+                                readonly
+                              >
+                                {service.description}
+                              </textarea>
+                            </td>
+                            <td className="relative whitespace-nowrap px-3 py-4 text-sm text-gray-900 font-medium">
+                              <div className="absolute top-6 right-2">
+                                ${service.price}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {estimateDetails?.show_totals && (
+                      <div className="flex justify-end text-right font-medium border-b border-gray-200 pb-2">
+                        Subtotal: $
+                        {estimateDetails?.services_price.toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* MOBILE */}
+                  <div className="xs:block sm:block xl:hidden lg:hidden md:hidden mt-4">
                     <h3 className="text-md text-gray-700">Services</h3>
                     <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
                       {estimateDetails?.services?.map((service) => (
@@ -217,7 +301,7 @@ const ShareJobEstimate = () => {
                     </dl>
                     {estimateDetails?.show_totals && (
                       <div className="flex justify-end py-2 text-md mt-1">
-                        <dt className="text-gray-500 pr-2 text-right font-medium">
+                        <dt className="text-gray-700 pr-2 text-right font-medium">
                           Subtotal
                         </dt>
                         <dd className="whitespace-nowrap text-gray-900">
