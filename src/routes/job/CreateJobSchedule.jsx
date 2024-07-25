@@ -188,103 +188,10 @@ const CreateJobSchedule = () => {
         });
         setAircraftSearchTerm(data.aircraft_name);
 
+        getServicesAndRetainers(data.customer_id);
+
         setCustomerSelected({ id: data.customer_id, name: data.customer_name });
         setCustomerSearchTerm(data.customer_name);
-
-        if (data.services.length > 0 && !currentUser.isCustomer) {
-          const updatedInteriorServices = interiorServices.map((s) => {
-            if (
-              data.services.some(
-                (service) => service.id === s.id && service.category === "I"
-              )
-            ) {
-              return { ...s, selected: true };
-            } else {
-              return { ...s, selected: false };
-            }
-          });
-
-          setInteriorServices(updatedInteriorServices);
-
-          const updatedExteriorServices = exteriorServices.map((s) => {
-            if (
-              data.services.some(
-                (service) => service.id === s.id && service.category === "E"
-              )
-            ) {
-              return { ...s, selected: true };
-            } else {
-              return { ...s, selected: false };
-            }
-          });
-
-          setExteriorServices(updatedExteriorServices);
-
-          const updatedOtherServices = otherServices.map((s) => {
-            if (
-              data.services.some(
-                (service) => service.id === s.id && service.category === "O"
-              )
-            ) {
-              return { ...s, selected: true };
-            } else {
-              return { ...s, selected: false };
-            }
-          });
-
-          setOtherServices(updatedOtherServices);
-        }
-
-        // Do not update retainer services for customer users
-        if (data.retainer_services.length > 0 && !currentUser.isCustomer) {
-          const updatedInteriorRetainerServices = interiorRetainerServices.map(
-            (s) => {
-              if (
-                data.retainer_services.some(
-                  (service) => service.id === s.id && service.category === "I"
-                )
-              ) {
-                return { ...s, selected: true };
-              } else {
-                return { ...s, selected: false };
-              }
-            }
-          );
-
-          setInteriorRetainerServices(updatedInteriorRetainerServices);
-
-          const updatedExteriorRetainerServices = exteriorRetainerServices.map(
-            (s) => {
-              if (
-                data.retainer_services.some(
-                  (service) => service.id === s.id && service.category === "E"
-                )
-              ) {
-                return { ...s, selected: true };
-              } else {
-                return { ...s, selected: false };
-              }
-            }
-          );
-
-          setExteriorRetainerServices(updatedExteriorRetainerServices);
-
-          const updatedOtherRetainerServices = otherRetainerServices.map(
-            (s) => {
-              if (
-                data.retainer_services.some(
-                  (service) => service.id === s.id && service.category === "O"
-                )
-              ) {
-                return { ...s, selected: true };
-              } else {
-                return { ...s, selected: false };
-              }
-            }
-          );
-
-          setOtherRetainerServices(updatedOtherRetainerServices);
-        }
       }
 
       if (
