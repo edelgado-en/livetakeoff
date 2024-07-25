@@ -515,7 +515,7 @@ const ShareJobEstimate = () => {
                                             text-md font-medium text-white shadow-sm hover:bg-red-600
                                             focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                       >
-                        Accept
+                        Approve
                       </button>
                     </div>
                   </>
