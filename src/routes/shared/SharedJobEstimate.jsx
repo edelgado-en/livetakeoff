@@ -7,6 +7,8 @@ import logo from "../../images/logo_red-no-text.png";
 
 import ReactTimeAgo from "react-time-ago";
 
+import Input from "react-phone-number-input/input";
+
 import Loader from "../../components/loader/Loader";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
@@ -14,6 +16,10 @@ const ShareJobEstimate = () => {
   const [loading, setLoading] = useState(true);
   const [estimateDetails, setEstimateDetails] = useState(null);
   const [estimateProcessed, setEstimateProcessed] = useState(false);
+
+  const [fullName, setFullName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const { encoded_id } = useParams();
 
@@ -37,10 +43,34 @@ const ShareJobEstimate = () => {
   };
 
   const updateEstimate = async (status) => {
+    if (status === "A") {
+      if (fullName.length === 0) {
+        alert("Please enter your full name.");
+        return;
+      }
+
+      if (emailAddress.length === 0) {
+        alert("Please enter your email address.");
+        return;
+      }
+
+      if (phoneNumber.length === 0) {
+        alert("Please enter your phone number.");
+        return;
+      }
+    }
+
     setLoading(true);
 
+    const request = {
+      status: status,
+      full_name: fullName,
+      email: emailAddress,
+      phone: phoneNumber,
+    };
+
     try {
-      await api.updateEstimate(encoded_id, { status: status });
+      await api.updateEstimate(encoded_id, request);
 
       setEstimateProcessed(true);
 
@@ -111,11 +141,8 @@ const ShareJobEstimate = () => {
                                             }
                                             `}
                   >
-                    <div
-                      className="relative font-medium"
-                      style={{ top: "2px" }}
-                    >
-                      {estimateDetails.status === "A" && "Confirmed"}
+                    <div className="relative font-medium">
+                      {estimateDetails.status === "A" && "Approved"}
                       {estimateDetails.status === "R" && "Rejected"}
                     </div>
                   </div>
@@ -399,15 +426,77 @@ const ShareJobEstimate = () => {
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-center">
                 {!estimateDetails.is_processed && (
                   <>
-                    <div className="text-md pb-4 text-gray-500">
+                    <div className="text-md pb-4 font-medium">
                       This estimate is not a contract or a bill.
                     </div>
                     <div className="font-medium text-md pb-4">
                       We look forward to working with you!
                     </div>
+                    <div className="m-auto flex flex-col justify-center">
+                      <div className="text-md font-medium text-center">
+                        Please complete the following information to approve
+                        this estimate.
+                      </div>
+                      <div className="m-auto w-80 mt-6 text-left">
+                        <label
+                          htmlFor="fullName"
+                          className="text-md text-gray-600"
+                        >
+                          Full Name
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            name="fullName"
+                            id="fullName"
+                            className="block w-full rounded-md border-gray-300 shadow-sm
+                                                    focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div className="m-auto w-80 mt-6 text-left">
+                        <label
+                          htmlFor="email"
+                          className="text-md text-gray-600"
+                        >
+                          Email
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            value={emailAddress}
+                            onChange={(e) => setEmailAddress(e.target.value)}
+                            name="email"
+                            id="email"
+                            className="block w-full rounded-md border-gray-300 shadow-sm
+                                                    focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div className="m-auto w-80 mt-6 text-left">
+                        <label
+                          htmlFor="phone"
+                          className="text-md text-gray-600"
+                        >
+                          Phone Number
+                        </label>
+                        <div className="mt-1">
+                          <Input
+                            country="US"
+                            className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
+                          focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                            value={phoneNumber}
+                            onChange={setPhoneNumber}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="pb-20 py-8">
                       <button
                         type="button"
@@ -434,7 +523,7 @@ const ShareJobEstimate = () => {
 
                 {estimateDetails.is_processed && (
                   <>
-                    <div className="text-md pb-20 py-8">
+                    <div className="text-md pb-20 py-8 font-medium">
                       This estimate was{" "}
                       {estimateDetails.status === "A"
                         ? "confirmed"

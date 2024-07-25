@@ -12,6 +12,7 @@ import {
   ArrowRightIcon,
   ShareIcon,
   ArrowLeftIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/outline";
 import * as api from "./apiService";
 import { toast } from "react-toastify";
@@ -134,7 +135,8 @@ const EstimateDetail = () => {
                   </h1>
                 </div>
                 {(estimateDetails?.status === "A" ||
-                  estimateDetails?.status === "R") && (
+                  estimateDetails?.status === "R" ||
+                  estimateDetails?.status === "P") && (
                   <div
                     className={`text-md text-white rounded-md py-1 px-2
                                             ${
@@ -145,14 +147,16 @@ const EstimateDetail = () => {
                                               estimateDetails.status === "R" &&
                                               "bg-gray-500 "
                                             }
+                                            ${
+                                              estimateDetails.status === "P" &&
+                                              "bg-sky-500 "
+                                            }
                                             `}
                   >
-                    <div
-                      className="relative font-medium"
-                      style={{ top: "2px" }}
-                    >
-                      {estimateDetails.status === "A" && "Confirmed"}
+                    <div className="relative font-medium">
+                      {estimateDetails.status === "A" && "Approved"}
                       {estimateDetails.status === "R" && "Rejected"}
+                      {estimateDetails.status === "P" && "Pending"}
                     </div>
                   </div>
                 )}
@@ -222,6 +226,32 @@ const EstimateDetail = () => {
                   </div>
                 </div>
               </div>
+              {estimateDetails.is_processed &&
+                estimateDetails.status === "A" && (
+                  <div className="rounded-md bg-green-50 p-4 mb-4">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <InformationCircleIcon
+                          className="h-6 w-6 text-green-400"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-green-800">
+                          This estimate was accepted by:
+                        </h3>
+                        <div className="mt-2 text-sm text-green-700">
+                          <ul className="list-disc space-y-1 pl-5">
+                            <li>{estimateDetails.accepted_full_name}</li>
+                            <li>{estimateDetails.accepted_email}</li>
+                            <li>{estimateDetails.accepted_phone_number}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
               <div className="mt-2 max-w-7xl px-2 pb-10">
                 <div className="mt-2">
                   <div className="flex flex-wrap justify-between text-md gap-2">
