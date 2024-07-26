@@ -238,7 +238,7 @@ const EstimateDetail = () => {
                       </div>
                       <div className="ml-3">
                         <h3 className="text-sm font-medium text-green-800">
-                          This estimate was accepted by:
+                          This estimate was approved by:
                         </h3>
                         <div className="mt-2 text-sm text-green-700">
                           <ul className="list-disc space-y-1 pl-5">
