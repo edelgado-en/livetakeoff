@@ -2384,21 +2384,18 @@ const CreateJob = () => {
                                             }           
                             rounded-lg p-4 py-7 focus:outline-none`}
                         >
-                          <div className="text-md">{service.name}</div>
+                          <div className="text-md font-medium">
+                            {service.name}
+                          </div>
 
-                          {showActions &&
-                            service.checklist_actions?.map((action) => (
-                              <div
-                                key={action.id}
-                                className={`${
-                                  service.selected
-                                    ? "text-white"
-                                    : "text-gray-500"
-                                } text-sm  px-6 border-b border-gray-300 py-4`}
-                              >
-                                {action.name}
-                              </div>
-                            ))}
+                          {showActions && (
+                            <textarea
+                              className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                              readonly
+                            >
+                              {service.description}
+                            </textarea>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -2422,21 +2419,18 @@ const CreateJob = () => {
                                             }           
                             rounded-lg p-4 py-7 focus:outline-none`}
                         >
-                          <div className="text-md">{service.name}</div>
+                          <div className="text-md font-medium">
+                            {service.name}
+                          </div>
 
-                          {showActions &&
-                            service.checklist_actions?.map((action) => (
-                              <div
-                                key={action.id}
-                                className={`${
-                                  service.selected
-                                    ? "text-white"
-                                    : "text-gray-500"
-                                } text-sm  px-6 border-b border-gray-300 py-4`}
-                              >
-                                {action.name}
-                              </div>
-                            ))}
+                          {showActions && (
+                            <textarea
+                              className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                              readonly
+                            >
+                              {service.description}
+                            </textarea>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -2460,21 +2454,18 @@ const CreateJob = () => {
                                             }           
                             rounded-lg p-4 py-7 focus:outline-none`}
                         >
-                          <div className="flex-1 text-md">{service.name}</div>
+                          <div className="flex-1 text-md font-medium">
+                            {service.name}
+                          </div>
 
-                          {showActions &&
-                            service.checklist_actions?.map((action) => (
-                              <div
-                                key={action.id}
-                                className={`${
-                                  service.selected
-                                    ? "text-white"
-                                    : "text-gray-500"
-                                } text-sm  px-6 border-b border-gray-300 py-4`}
-                              >
-                                {action.name}
-                              </div>
-                            ))}
+                          {showActions && (
+                            <textarea
+                              className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                              readonly
+                            >
+                              {service.description}
+                            </textarea>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -2521,23 +2512,18 @@ const CreateJob = () => {
                                             }           
                                             rounded-lg p-4 py-7 focus:outline-none`}
                             >
-                              <div className="flex-1 text-md">
+                              <div className="flex-1 text-md font-medium">
                                 {service.name}
                               </div>
 
-                              {showActions &&
-                                service.checklist_actions?.map((action) => (
-                                  <div
-                                    key={action.id}
-                                    className={`${
-                                      service.selected
-                                        ? "text-white"
-                                        : "text-gray-500"
-                                    } text-sm  px-6 border-b border-gray-300 py-4`}
-                                  >
-                                    {action.name}
-                                  </div>
-                                ))}
+                              {showActions && (
+                                <textarea
+                                  className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                                  readonly
+                                >
+                                  {service.description}
+                                </textarea>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -2564,23 +2550,18 @@ const CreateJob = () => {
                                             }           
                                             rounded-lg p-4 py-7 focus:outline-none`}
                             >
-                              <div className="flex-1 text-md">
+                              <div className="flex-1 text-md font-medium">
                                 {service.name}
                               </div>
 
-                              {showActions &&
-                                service.checklist_actions?.map((action) => (
-                                  <div
-                                    key={action.id}
-                                    className={`${
-                                      service.selected
-                                        ? "text-white"
-                                        : "text-gray-500"
-                                    } text-sm  px-6 border-b border-gray-300 py-4`}
-                                  >
-                                    {action.name}
-                                  </div>
-                                ))}
+                              {showActions && (
+                                <textarea
+                                  className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                                  readonly
+                                >
+                                  {service.description}
+                                </textarea>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -2605,23 +2586,18 @@ const CreateJob = () => {
                                             }           
                                             rounded-lg p-4 py-7 focus:outline-none`}
                             >
-                              <div className="flex-1 text-md">
+                              <div className="flex-1 text-md font-medium">
                                 {service.name}
                               </div>
 
-                              {showActions &&
-                                service.checklist_actions?.map((action) => (
-                                  <div
-                                    key={action.id}
-                                    className={`${
-                                      service.selected
-                                        ? "text-white"
-                                        : "text-gray-500"
-                                    } text-sm  px-6 border-b border-gray-300 py-4`}
-                                  >
-                                    {action.name}
-                                  </div>
-                                ))}
+                              {showActions && (
+                                <textarea
+                                  className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                                  readonly
+                                >
+                                  {service.description}
+                                </textarea>
+                              )}
                             </div>
                           ))}
                         </div>

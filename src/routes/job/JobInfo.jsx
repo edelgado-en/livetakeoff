@@ -1208,7 +1208,7 @@ const JobInfo = () => {
                         className="text-sm text-gray-700"
                         passive
                       >
-                        {showActions ? "Hide Actions" : "Show Actions"}
+                        {showActions ? "Hide Scope" : "Show Scope"}
                       </Switch.Label>
                     </div>
                     <Switch
@@ -1303,15 +1303,16 @@ const JobInfo = () => {
                         )}
                       </dd>
                     </div>
-                    {showActions &&
-                      service.checklist_actions?.map((action) => (
-                        <div
-                          key={action.id}
-                          className="text-sm text-gray-500 px-6 py-1"
+                    {showActions && (
+                      <div className="text-sm text-gray-500 px-6 py-1">
+                        <textarea
+                          className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56"
+                          readonly
                         >
-                          {action.name}
-                        </div>
-                      ))}
+                          {service.description}
+                        </textarea>
+                      </div>
+                    )}
                   </dl>
                 ))}
               </div>
