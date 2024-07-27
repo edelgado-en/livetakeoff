@@ -2390,7 +2390,7 @@ const CreateJob = () => {
 
                           {showActions && (
                             <textarea
-                              className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                              className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
                               readonly
                             >
                               {service.description}
@@ -2425,7 +2425,7 @@ const CreateJob = () => {
 
                           {showActions && (
                             <textarea
-                              className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                              className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
                               readonly
                             >
                               {service.description}
@@ -2460,7 +2460,7 @@ const CreateJob = () => {
 
                           {showActions && (
                             <textarea
-                              className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                              className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
                               readonly
                             >
                               {service.description}
@@ -2518,7 +2518,7 @@ const CreateJob = () => {
 
                               {showActions && (
                                 <textarea
-                                  className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                                  className="w-full border-none bg-transparent  overflow-hidden outline-none h-96 focus:outline-none"
                                   readonly
                                 >
                                   {service.description}
@@ -2556,7 +2556,7 @@ const CreateJob = () => {
 
                               {showActions && (
                                 <textarea
-                                  className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                                  className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
                                   readonly
                                 >
                                   {service.description}
@@ -2592,7 +2592,7 @@ const CreateJob = () => {
 
                               {showActions && (
                                 <textarea
-                                  className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56 focus:outline-none"
+                                  className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
                                   readonly
                                 >
                                   {service.description}

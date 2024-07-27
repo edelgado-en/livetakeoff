@@ -1306,7 +1306,7 @@ const JobInfo = () => {
                     {showActions && (
                       <div className="text-sm text-gray-500 px-6 py-1">
                         <textarea
-                          className="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56"
+                          className="w-full border-none bg-transparent  overflow-hidden outline-none h-72"
                           readonly
                         >
                           {service.description}
