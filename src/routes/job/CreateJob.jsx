@@ -2371,7 +2371,7 @@ const CreateJob = () => {
                 {interiorServices.length > 0 && (
                   <>
                     <div className="mt-6 font-bold text-xl mb-4">INTERIOR</div>
-                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                    <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                       {interiorServices.map((service, index) => (
                         <div
                           key={index}
@@ -2389,12 +2389,18 @@ const CreateJob = () => {
                           </div>
 
                           {showActions && (
-                            <textarea
-                              className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
-                              readonly
+                            <div
+                              className="overflow-auto"
+                              style={{ height: "300px" }}
                             >
-                              {service.description}
-                            </textarea>
+                              <textarea
+                                className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
+                                style={{ height: "500px" }}
+                                readonly
+                              >
+                                {service.description}
+                              </textarea>
+                            </div>
                           )}
                         </div>
                       ))}
@@ -2406,7 +2412,7 @@ const CreateJob = () => {
                   <>
                     <div className="border-t-2 border-gray-300 my-8"></div>
                     <div className="mt-8 font-bold text-xl mb-4">EXTERIOR</div>
-                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                    <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                       {exteriorServices.map((service, index) => (
                         <div
                           key={index}
@@ -2424,12 +2430,18 @@ const CreateJob = () => {
                           </div>
 
                           {showActions && (
-                            <textarea
-                              className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
-                              readonly
+                            <div
+                              className="overflow-auto"
+                              style={{ height: "300px" }}
                             >
-                              {service.description}
-                            </textarea>
+                              <textarea
+                                className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
+                                style={{ height: "500px" }}
+                                readonly
+                              >
+                                {service.description}
+                              </textarea>
+                            </div>
                           )}
                         </div>
                       ))}
@@ -2441,7 +2453,7 @@ const CreateJob = () => {
                   <>
                     <div className="border-t-2 border-gray-300 my-8"></div>
                     <div className="mt-8 font-bold text-xl mb-4">OTHER</div>
-                    <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                    <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                       {otherServices.map((service, index) => (
                         <div
                           key={index}
@@ -2459,12 +2471,18 @@ const CreateJob = () => {
                           </div>
 
                           {showActions && (
-                            <textarea
-                              className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
-                              readonly
+                            <div
+                              className="overflow-auto"
+                              style={{ height: "300px" }}
                             >
-                              {service.description}
-                            </textarea>
+                              <textarea
+                                className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
+                                style={{ height: "500px" }}
+                                readonly
+                              >
+                                {service.description}
+                              </textarea>
+                            </div>
                           )}
                         </div>
                       ))}
@@ -2497,7 +2515,7 @@ const CreateJob = () => {
                         <div className="mt-6 font-bold text-xl mb-4">
                           INTERIOR
                         </div>
-                        <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                        <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                           {interiorRetainerServices.map((service, index) => (
                             <div
                               key={index}
@@ -2517,12 +2535,18 @@ const CreateJob = () => {
                               </div>
 
                               {showActions && (
-                                <textarea
-                                  className="w-full border-none bg-transparent  overflow-hidden outline-none h-96 focus:outline-none"
-                                  readonly
+                                <div
+                                  className="overflow-auto"
+                                  style={{ height: "300px" }}
                                 >
-                                  {service.description}
-                                </textarea>
+                                  <textarea
+                                    className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
+                                    style={{ height: "500px" }}
+                                    readonly
+                                  >
+                                    {service.description}
+                                  </textarea>
+                                </div>
                               )}
                             </div>
                           ))}
@@ -2535,7 +2559,7 @@ const CreateJob = () => {
                         <div className="mt-6 font-bold text-xl mb-4">
                           EXTERIOR
                         </div>
-                        <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                        <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                           {exteriorRetainerServices.map((service, index) => (
                             <div
                               key={index}
@@ -2555,12 +2579,18 @@ const CreateJob = () => {
                               </div>
 
                               {showActions && (
-                                <textarea
-                                  className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
-                                  readonly
+                                <div
+                                  className="overflow-auto"
+                                  style={{ height: "300px" }}
                                 >
-                                  {service.description}
-                                </textarea>
+                                  <textarea
+                                    className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
+                                    style={{ height: "500px" }}
+                                    readonly
+                                  >
+                                    {service.description}
+                                  </textarea>
+                                </div>
                               )}
                             </div>
                           ))}
@@ -2571,7 +2601,7 @@ const CreateJob = () => {
                     {otherRetainerServices.length > 0 && (
                       <>
                         <div className="mt-6 font-bold text-xl mb-4">OTHER</div>
-                        <div className="text-left grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                        <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                           {otherRetainerServices.map((service, index) => (
                             <div
                               key={index}
@@ -2591,12 +2621,18 @@ const CreateJob = () => {
                               </div>
 
                               {showActions && (
-                                <textarea
-                                  className="w-full border-none bg-transparent overflow-hidden outline-none h-96 focus:outline-none"
-                                  readonly
+                                <div
+                                  className="overflow-auto"
+                                  style={{ height: "300px" }}
                                 >
-                                  {service.description}
-                                </textarea>
+                                  <textarea
+                                    className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
+                                    style={{ height: "500px" }}
+                                    readonly
+                                  >
+                                    {service.description}
+                                  </textarea>
+                                </div>
                               )}
                             </div>
                           ))}
