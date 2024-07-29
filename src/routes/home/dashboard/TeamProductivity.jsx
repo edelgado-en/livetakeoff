@@ -7,6 +7,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ClockIcon,
+  NewspaperIcon,
 } from "@heroicons/react/outline";
 import {
   Listbox,
@@ -193,7 +194,7 @@ const TeamProductivity = () => {
     <AnimatedPage>
       <div className="px-4 max-w-7xl m-auto">
         <h2 className="text-3xl font-bold tracking-tight sm:text-3xl pb-5">
-          Team Productivity
+          Productivity
         </h2>
 
         <div className="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-4">
@@ -497,8 +498,8 @@ const TeamProductivity = () => {
               </div>
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <Wrench2Icon />
+                  <div className="absolute rounded-md p-3 border-sky-400 border-2">
+                    <WrenchIcon className="h-6 w-6 text-sky-400" />
                   </div>
                   <p className="ml-16 truncate text-sm font-medium text-gray-600">
                     Retainers Completed
@@ -558,7 +559,25 @@ const TeamProductivity = () => {
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <ClockIcon className="h-6 w-6 text-green-500" />
+                    <CashIcon className="h-6 w-6 text-teal-500" />
+                  </div>
+                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
+                    Subcontractor Profit
+                  </p>
+                </dt>
+                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    $
+                    {productivityData.total_subcontractor_profit
+                      ? productivityData.total_subcontractor_profit.toLocaleString()
+                      : 0}
+                  </p>
+                </dd>
+              </div>
+              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
+                <dt>
+                  <div className="absolute rounded-md p-3 border-green-400 border-2">
+                    <ClockIcon className="h-6 w-6 text-teal-500" />
                   </div>
                   <p className="ml-16 truncate text-sm font-medium text-gray-600">
                     Labor Time
@@ -574,90 +593,81 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
+              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
+                <dt>
+                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
+                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
+                  </div>
+                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
+                    Travel Fees
+                  </p>
+                </dt>
+                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    $
+                    {productivityData.total_travel_fees_amount_applied
+                      ? productivityData.total_travel_fees_amount_applied.toLocaleString()
+                      : 0}
+                  </p>
+                </dd>
+              </div>
+              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
+                <dt>
+                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
+                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
+                  </div>
+                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
+                    FBO Fees
+                  </p>
+                </dt>
+                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    $
+                    {productivityData.total_fbo_fees_amount_applied
+                      ? productivityData.total_fbo_fees_amount_applied.toLocaleString()
+                      : 0}
+                  </p>
+                </dd>
+              </div>
+              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
+                <dt>
+                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
+                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
+                  </div>
+                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
+                    Management Fees
+                  </p>
+                </dt>
+                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    $
+                    {productivityData.total_management_fees_amount_applied
+                      ? productivityData.total_management_fees_amount_applied.toLocaleString()
+                      : 0}
+                  </p>
+                </dd>
+              </div>
+              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
+                <dt>
+                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
+                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
+                  </div>
+                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
+                    Vendor Higher Price Fees
+                  </p>
+                </dt>
+                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
+                  <p className="text-2xl font-semibold text-gray-900">
+                    $
+                    {productivityData.total_vendor_higher_price_amount_applied
+                      ? productivityData.total_vendor_higher_price_amount_applied.toLocaleString()
+                      : 0}
+                  </p>
+                </dd>
+              </div>
             </dl>
 
-            <div
-              className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
-                          gap-8 gap-y-8 gap-x-28 my-8"
-            >
-              <div className="">
-                <div className="text-lg font-medium tracking-tight">
-                  Top 5 Services
-                </div>
-                <div className="pr-2 text-gray-500">
-                  {productivityData.top_services.length === 0 && (
-                    <div className="text-center m-auto flex my-24 justify-center">
-                      No Services found.
-                    </div>
-                  )}
-
-                  {productivityData.top_services.map((service, index) => (
-                    <div key={index}>
-                      <div className="flex justify-between py-3 pb-1 text-sm gap-3">
-                        <div className="truncate overflow-ellipsis w-64">
-                          {service.name}
-                        </div>
-                        <div className="text-right">
-                          <div>
-                            <span className="font-medium">{service.total}</span>{" "}
-                            <span className="text-xs">times</span>
-                          </div>
-                          <div>{service.percentage + "%"}</div>
-                        </div>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
-                        <div
-                          className="h-1.5 rounded-full bg-blue-500"
-                          style={{ width: service.percentage + "%" }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="">
-                <div className="text-lg font-medium tracking-tight">
-                  Top 5 Retainers
-                </div>
-                <div className="pr-2 text-gray-500">
-                  {productivityData.top_retainer_services.length === 0 && (
-                    <div className="text-center m-auto flex my-24 justify-center">
-                      No Retainer Services found.
-                    </div>
-                  )}
-
-                  {productivityData.top_retainer_services.map(
-                    (service, index) => (
-                      <div key={index}>
-                        <div className="flex justify-between py-3 pb-1 text-sm gap-3">
-                          <div className="truncate overflow-ellipsis w-64">
-                            {service.name}
-                          </div>
-                          <div className="text-right">
-                            <div>
-                              <span className="font-medium">
-                                {service.total}
-                              </span>{" "}
-                              <span className="text-xs">times</span>
-                            </div>
-                            <div>{service.percentage + "%"}</div>
-                          </div>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
-                          <div
-                            className="h-1.5 rounded-full bg-blue-500"
-                            style={{ width: service.percentage + "%" }}
-                          ></div>
-                        </div>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="pb-32">
+            <div className="mt-8">
               <div className="mx-auto max-w-7xl">
                 <div className="space-y-8">
                   <h2 className="text-lg font-medium tracking-tight">
@@ -747,6 +757,87 @@ const TeamProductivity = () => {
                       </li>
                     ))}
                   </ul>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
+                          gap-8 gap-y-8 gap-x-28 my-8 pb-32"
+            >
+              <div className="">
+                <div className="text-lg font-medium tracking-tight">
+                  Top 5 Services
+                </div>
+                <div className="pr-2 text-gray-500">
+                  {productivityData.top_services.length === 0 && (
+                    <div className="text-center m-auto flex my-24 justify-center">
+                      No Services found.
+                    </div>
+                  )}
+
+                  {productivityData.top_services.map((service, index) => (
+                    <div key={index}>
+                      <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                        <div className="truncate overflow-ellipsis w-64">
+                          {service.name}
+                        </div>
+                        <div className="text-right">
+                          <div>
+                            <span className="font-medium">{service.total}</span>{" "}
+                            <span className="text-xs">times</span>
+                          </div>
+                          <div>{service.percentage + "%"}</div>
+                        </div>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                        <div
+                          className="h-1.5 rounded-full bg-blue-500"
+                          style={{ width: service.percentage + "%" }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="">
+                <div className="text-lg font-medium tracking-tight">
+                  Top 5 Retainers
+                </div>
+                <div className="pr-2 text-gray-500">
+                  {productivityData.top_retainer_services.length === 0 && (
+                    <div className="text-center m-auto flex my-24 justify-center">
+                      No Retainer Services found.
+                    </div>
+                  )}
+
+                  {productivityData.top_retainer_services.map(
+                    (service, index) => (
+                      <div key={index}>
+                        <div className="flex justify-between py-3 pb-1 text-sm gap-3">
+                          <div className="truncate overflow-ellipsis w-64">
+                            {service.name}
+                          </div>
+                          <div className="text-right">
+                            <div>
+                              <span className="font-medium">
+                                {service.total}
+                              </span>{" "}
+                              <span className="text-xs">times</span>
+                            </div>
+                            <div>{service.percentage + "%"}</div>
+                          </div>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4 ">
+                          <div
+                            className="h-1.5 rounded-full bg-blue-500"
+                            style={{ width: service.percentage + "%" }}
+                          ></div>
+                        </div>
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             </div>
