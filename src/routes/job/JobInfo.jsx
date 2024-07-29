@@ -1304,13 +1304,10 @@ const JobInfo = () => {
                       </dd>
                     </div>
                     {showActions && (
-                      <div
-                        className="text-sm text-gray-500 px-6 py-1 overflow-auto"
-                        style={{ height: "300px" }}
-                      >
+                      <div className="text-sm text-gray-500 px-6 py-1">
                         <textarea
                           className="w-full border-none bg-transparent  overflow-hidden outline-none"
-                          style={{ height: "400px" }}
+                          style={{ height: "500px" }}
                           readonly
                         >
                           {service.description}
