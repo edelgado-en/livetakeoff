@@ -325,7 +325,8 @@ const EstimateDetail = () => {
                             </td>
                             <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
                               <textarea
-                                class="w-full border-none bg-transparent resize-none overflow-hidden outline-none h-56"
+                                class="w-full border-none bg-transparent overflow-hidden outline-none"
+                                style={{ height: "450px" }}
                                 readonly
                               >
                                 {service.description}
