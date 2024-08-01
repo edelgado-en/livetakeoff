@@ -185,7 +185,7 @@ const TeamProductivity = () => {
         is_internal_report: true,
       });
 
-      /*  const externalResponse = await api.getTeamProductivityStats({
+      /* const externalResponse = await api.getTeamProductivityStats({
         dateSelected: dateSelected.id,
         customer_id: customerSelected ? customerSelected.id : null,
         tailNumber: searchText,
@@ -696,7 +696,7 @@ const TeamProductivity = () => {
             <div className=" w-full border border-1 border-gray-200 my-10"></div>
 
             {/* EXTERNAL */}
-            {/* <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
+            {/*  <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               External
             </div>
             <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -1004,24 +1004,7 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-teal-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Subcontractor Profit
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {internalProductivityData.total_subcontractor_profit
-                      ? internalProductivityData.total_subcontractor_profit.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
+
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
