@@ -1216,13 +1216,13 @@ const TeamProductivity = () => {
                   Top 5 Services
                 </div>
                 <div className="pr-2 text-gray-500">
-                  {productivityData.top_services.length === 0 && (
+                  {productivityData.top_services?.length === 0 && (
                     <div className="text-center m-auto flex my-24 justify-center">
                       No Services found.
                     </div>
                   )}
 
-                  {productivityData.top_services.map((service, index) => (
+                  {productivityData.top_services?.map((service, index) => (
                     <div key={index}>
                       <div className="flex justify-between py-3 pb-1 text-sm gap-3">
                         <div className="truncate overflow-ellipsis w-64">
@@ -1252,13 +1252,13 @@ const TeamProductivity = () => {
                   Top 5 Retainers
                 </div>
                 <div className="pr-2 text-gray-500">
-                  {productivityData.top_retainer_services.length === 0 && (
+                  {productivityData.top_retainer_services?.length === 0 && (
                     <div className="text-center m-auto flex my-24 justify-center">
                       No Retainer Services found.
                     </div>
                   )}
 
-                  {productivityData.top_retainer_services.map(
+                  {productivityData.top_retainer_services?.map(
                     (service, index) => (
                       <div key={index}>
                         <div className="flex justify-between py-3 pb-1 text-sm gap-3">
