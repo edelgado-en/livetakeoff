@@ -1121,18 +1121,18 @@ const TeamProductivity = () => {
                       className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
                                                 rounded-full text-xs font-medium md:inline-block"
                     >
-                      {productivityData.users.length}
+                      {productivityData.users?.length}
                     </span>
                   </h2>
 
-                  {productivityData.users.length === 0 && (
+                  {productivityData.users?.length === 0 && (
                     <div className="text-center m-auto flex my-24 justify-center text-gray-500">
                       No Project Managers found.
                     </div>
                   )}
 
                   <ul className="space-y-12 lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
-                    {productivityData.users.map((user, index) => (
+                    {productivityData.users?.map((user, index) => (
                       <li key={index}>
                         <div className="flex gap-4 flex-start">
                           <div className="flex-shrink-0">
