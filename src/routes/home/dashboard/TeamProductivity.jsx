@@ -170,6 +170,14 @@ const TeamProductivity = () => {
         tailNumber: searchText,
       });
 
+      setProductivityData(data);
+    } catch (error) {
+      toast.error("Unable to get stats");
+    }
+
+    setLoading(false);
+
+    try {
       const internalResponse = await api.getTeamProductivityStats({
         dateSelected: dateSelected.id,
         customer_id: customerSelected ? customerSelected.id : null,
@@ -177,21 +185,17 @@ const TeamProductivity = () => {
         is_internal_report: true,
       });
 
-      const externalResponse = await api.getTeamProductivityStats({
+      /*  const externalResponse = await api.getTeamProductivityStats({
         dateSelected: dateSelected.id,
         customer_id: customerSelected ? customerSelected.id : null,
         tailNumber: searchText,
         is_external_report: true,
-      });
+      }); */
 
-      setProductivityData(data);
       setInternalProductivityData(internalResponse.data);
-      setExternalProductivityData(externalResponse.data);
-
-      setLoading(false);
+      //setExternalProductivityData(externalResponse.data);
     } catch (error) {
-      setLoading(false);
-      toast.error("Unable to get stats");
+      console.log(error);
     }
   };
 
@@ -692,7 +696,7 @@ const TeamProductivity = () => {
             <div className=" w-full border border-1 border-gray-200 my-10"></div>
 
             {/* EXTERNAL */}
-            <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
+            {/* <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               External
             </div>
             <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -900,7 +904,7 @@ const TeamProductivity = () => {
               </div>
             </dl>
 
-            <div className=" w-full border border-1 border-gray-200 my-10"></div>
+            <div className=" w-full border border-1 border-gray-200 my-10"></div> */}
 
             {/* INTERNAL */}
             <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
