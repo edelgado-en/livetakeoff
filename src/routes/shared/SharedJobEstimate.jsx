@@ -284,13 +284,15 @@ const ShareJobEstimate = () => {
                               </div>
                             </td>
                             <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                              <textarea
-                                class="w-full border-none bg-transparent overflow-hidden outline-none"
-                                style={{ height: "450px" }}
-                                readonly
-                              >
-                                {service.description}
-                              </textarea>
+                              <div className="overflow-auto h-56">
+                                <textarea
+                                  class="w-full border-none bg-transparent overflow-hidden outline-none"
+                                  style={{ height: "450px" }}
+                                  readonly
+                                >
+                                  {service.description}
+                                </textarea>
+                              </div>
                             </td>
                             <td className="relative whitespace-nowrap px-3 py-4 text-sm text-gray-900 font-medium">
                               <div className="absolute top-6 right-2">
