@@ -492,7 +492,7 @@ const TeamProductivity = () => {
             <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               Totals
             </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-blue-400 border-2">
@@ -543,7 +543,7 @@ const TeamProductivity = () => {
               </div>
             </dl>
 
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 m-auto">
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -700,10 +700,10 @@ const TeamProductivity = () => {
             <div className=" w-full border border-1 border-gray-200 my-10"></div>
 
             {/* EXTERNAL */}
-            {/*  <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
+            <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               External
             </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-blue-400 border-2">
@@ -754,7 +754,7 @@ const TeamProductivity = () => {
               </div>
             </dl>
 
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 m-auto">
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -908,13 +908,13 @@ const TeamProductivity = () => {
               </div>
             </dl>
 
-            <div className=" w-full border border-1 border-gray-200 my-10"></div> */}
+            <div className=" w-full border border-1 border-gray-200 my-10"></div>
 
             {/* INTERNAL */}
             <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               Internal
             </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-blue-400 border-2">
@@ -965,7 +965,7 @@ const TeamProductivity = () => {
               </div>
             </dl>
 
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 m-auto">
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -1028,6 +1028,9 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
+            </dl>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-indigo-400 border-2">
