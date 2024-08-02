@@ -185,15 +185,19 @@ const TeamProductivity = () => {
         is_internal_report: true,
       });
 
-      /* const externalResponse = await api.getTeamProductivityStats({
+      setInternalProductivityData(internalResponse.data);
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      const externalResponse = await api.getTeamProductivityStats({
         dateSelected: dateSelected.id,
         customer_id: customerSelected ? customerSelected.id : null,
         tailNumber: searchText,
         is_external_report: true,
-      }); */
-
-      setInternalProductivityData(internalResponse.data);
-      //setExternalProductivityData(externalResponse.data);
+      });
+      setExternalProductivityData(externalResponse.data);
     } catch (error) {
       console.log(error);
     }
