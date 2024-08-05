@@ -1158,7 +1158,7 @@ const TeamProductivity = () => {
                                   : 0}
                               </td>
                               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
-                                {vendor.name
+                                {vendor.subcontractor_profit && vendor.name
                                   ? "$" +
                                     vendor.subcontractor_profit?.toLocaleString()
                                   : ""}
