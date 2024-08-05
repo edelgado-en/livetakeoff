@@ -9,14 +9,7 @@ import {
   ClockIcon,
   NewspaperIcon,
 } from "@heroicons/react/outline";
-import {
-  Listbox,
-  Transition,
-  Menu,
-  Popover,
-  Disclosure,
-  Dialog,
-} from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -1085,35 +1078,116 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Vendor Higher Price Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {internalProductivityData.total_vendor_higher_price_amount_applied
-                      ? internalProductivityData.total_vendor_higher_price_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
             </dl>
+
+            <div className=" w-full border border-1 border-gray-200 my-10"></div>
+
+            {/* VENDORS */}
+            <div className="mt-8">
+              <div className="mx-auto max-w-7xl">
+                <div className="space-y-8">
+                  <h2 className="text-2xl font-bold tracking-wide sm:text-2xl">
+                    Vendors
+                    <span
+                      className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
+                                                rounded-full text-sm font-medium md:inline-block relative"
+                      style={{ bottom: "2px" }}
+                    >
+                      {productivityData.vendors?.length}
+                    </span>
+                  </h2>
+                </div>
+                <div className="mt-2 flow-root">
+                  <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                      <table className="min-w-full divide-y divide-gray-300">
+                        <thead>
+                          <tr>
+                            <th
+                              scope="col"
+                              className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                            ></th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            >
+                              Name
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            >
+                              Total Jobs
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            >
+                              Revenue
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            >
+                              Subcontractor Profit
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                            >
+                              Total Services
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {productivityData.vendors?.map((vendor, index) => (
+                            <tr key={vendor.id}>
+                              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                {index + 1}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-medium">
+                                {vendor.name ? vendor.name : "Not Specified"}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                {vendor.total_jobs}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                $
+                                {vendor.revenue
+                                  ? vendor.revenue.toLocaleString()
+                                  : 0}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                {vendor.name
+                                  ? "$" +
+                                    vendor.subcontractor_profit.toLocaleString()
+                                  : ""}
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                {vendor.total_services}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className=" w-full border border-1 border-gray-200 my-10"></div>
 
             {/* PROJECT MANAGERS */}
             <div className="mt-8">
               <div className="mx-auto max-w-7xl">
                 <div className="space-y-8">
-                  <h2 className="text-lg font-medium tracking-tight">
+                  <h2 className="text-2xl font-bold tracking-wide sm:text-2xl">
                     Project Managers
                     <span
                       className="bg-gray-100 text-gray-700 ml-2 py-0.5 px-2.5
-                                                rounded-full text-xs font-medium md:inline-block"
+                                                rounded-full text-sm font-medium md:inline-block relative"
+                      style={{ bottom: "2px" }}
                     >
                       {productivityData.users?.length}
                     </span>
@@ -1200,13 +1274,15 @@ const TeamProductivity = () => {
               </div>
             </div>
 
+            <div className=" w-full border border-1 border-gray-200 my-10"></div>
+
             {/* SERVICES */}
             <div
               className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1
                           gap-8 gap-y-8 gap-x-28 my-8 pb-32"
             >
               <div className="">
-                <div className="text-lg font-medium tracking-tight">
+                <div className="text-2xl font-bold tracking-wide sm:text-2xl">
                   Top 5 Services
                 </div>
                 <div className="pr-2 text-gray-500">
@@ -1242,7 +1318,7 @@ const TeamProductivity = () => {
               </div>
 
               <div className="">
-                <div className="text-lg font-medium tracking-tight">
+                <div className="text-2xl font-bold tracking-wide sm:text-2xl">
                   Top 5 Retainers
                 </div>
                 <div className="pr-2 text-gray-500">
