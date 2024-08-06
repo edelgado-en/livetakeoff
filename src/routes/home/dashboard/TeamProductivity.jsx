@@ -211,7 +211,7 @@ const TeamProductivity = () => {
 
   return (
     <AnimatedPage>
-      <div className="px-4 max-w-7xl m-auto">
+      <div className="px-4 max-w-7xl m-auto" style={{ maxWidth: "1800px" }}>
         <h2 className="text-3xl font-bold tracking-tight sm:text-3xl pb-5">
           Productivity
         </h2>
@@ -485,7 +485,7 @@ const TeamProductivity = () => {
             <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               Totals
             </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-blue-400 border-2">
@@ -534,9 +534,6 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
-            </dl>
-
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -597,6 +594,9 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
+            </dl>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -696,7 +696,7 @@ const TeamProductivity = () => {
             <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               External
             </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-blue-400 border-2">
@@ -745,9 +745,6 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
-            </dl>
-
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -808,6 +805,9 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
+            </dl>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -907,7 +907,7 @@ const TeamProductivity = () => {
             <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
               Internal
             </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-blue-400 border-2">
@@ -956,9 +956,6 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
-            </dl>
-
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -1001,7 +998,6 @@ const TeamProductivity = () => {
                   </p>
                 </dd>
               </div>
-
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-green-400 border-2">
@@ -1023,7 +1019,7 @@ const TeamProductivity = () => {
               </div>
             </dl>
 
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 m-auto">
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 m-auto">
               <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
                 <dt>
                   <div className="absolute rounded-md p-3 border-indigo-400 border-2">
@@ -1084,7 +1080,7 @@ const TeamProductivity = () => {
 
             {/* VENDORS */}
             <div className="mt-8">
-              <div className="mx-auto max-w-7xl">
+              <div className="mx-auto max-w-7xl" style={{ maxWidth: "1800px" }}>
                 <div className="space-y-8">
                   <h2 className="text-2xl font-bold tracking-wide sm:text-2xl">
                     Vendors
@@ -1146,7 +1142,7 @@ const TeamProductivity = () => {
                                 {index + 1}
                               </td>
                               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-medium">
-                                {vendor.name ? vendor.name : "Not Specified"}
+                                {vendor.name ? vendor.name : "CleanTakeoff"}
                               </td>
                               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
                                 {vendor.total_jobs}
@@ -1180,7 +1176,7 @@ const TeamProductivity = () => {
 
             {/* PROJECT MANAGERS */}
             <div className="mt-8">
-              <div className="mx-auto max-w-7xl">
+              <div className="mx-auto max-w-7xl" style={{ maxWidth: "1800px" }}>
                 <div className="space-y-8">
                   <h2 className="text-2xl font-bold tracking-wide sm:text-2xl">
                     Project Managers
@@ -1199,7 +1195,7 @@ const TeamProductivity = () => {
                     </div>
                   )}
 
-                  <ul className="space-y-12 lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
+                  <ul className="space-y-12 lg:grid lg:grid-cols-4 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
                     {productivityData.users?.map((user, index) => (
                       <li key={index}>
                         <div className="flex gap-4 flex-start">
