@@ -75,30 +75,6 @@ const WrenchIcon = () => {
   );
 };
 
-const Wrench2Icon = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-6 h-6 text-indigo-400"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M4.867 19.125h.008v.008h-.008v-.008z"
-      />
-    </svg>
-  );
-};
-
 const dateOptions = [
   { id: "yesterday", name: "Yesterday" },
   { id: "last7Days", name: "Last 7 Days" },
@@ -119,6 +95,7 @@ const TeamProductivity = () => {
   const [productivityData, setProductivityData] = useState({});
   const [internalProductivityData, setInternalProductivityData] = useState({});
   const [externalProductivityData, setExternalProductivityData] = useState({});
+  const [users, setUsers] = useState([]);
   const [dateSelected, setDateSelected] = useState(dateOptions[3]);
 
   const [searchText, setSearchText] = useState("");
@@ -139,6 +116,10 @@ const TeamProductivity = () => {
 
   useEffect(() => {
     getTeamProductivityStats();
+  }, [dateSelected, customerSelected, searchText]);
+
+  useEffect(() => {
+    getUsersProductivityStats();
   }, [dateSelected, customerSelected, searchText]);
 
   const getCustomers = async () => {
@@ -194,6 +175,24 @@ const TeamProductivity = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getUsersProductivityStats = async () => {
+    setLoading(true);
+
+    try {
+      const { data } = await api.getUsersProductivityStats({
+        dateSelected: dateSelected.id,
+        customer_id: customerSelected ? customerSelected.id : null,
+        tailNumber: searchText,
+      });
+
+      setUsers(data.users);
+    } catch (error) {
+      toast.error("Unable to get stats");
+    }
+
+    setLoading(false);
   };
 
   const handleClearCustomerSearchFilter = () => {
@@ -1093,85 +1092,94 @@ const TeamProductivity = () => {
                     </span>
                   </h2>
                 </div>
-                <div className="mt-2 flow-root">
-                  <div
-                    className="-mx-4 -my-2 overflow-x-auto overflow-y-auto  sm:-mx-6 lg:-mx-8"
-                    style={{ maxHeight: "900px" }}
-                  >
-                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                      <table className="min-w-full divide-y divide-gray-300">
-                        <thead>
-                          <tr>
-                            <th
-                              scope="col"
-                              className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                            ></th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                            >
-                              Name
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                            >
-                              Total Jobs
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                            >
-                              Revenue
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                            >
-                              Subcontractor Profit
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                            >
-                              Total Services
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {productivityData.vendors?.map((vendor, index) => (
-                            <tr key={vendor.id}>
-                              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                {index + 1}
-                              </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-medium">
-                                {vendor.name ? vendor.name : "CleanTakeoff"}
-                              </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
-                                {vendor.total_jobs}
-                              </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
-                                $
-                                {vendor.revenue
-                                  ? vendor.revenue?.toLocaleString()
-                                  : 0}
-                              </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
-                                {vendor.subcontractor_profit && vendor.name
-                                  ? "$" +
-                                    vendor.subcontractor_profit?.toLocaleString()
-                                  : ""}
-                              </td>
-                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
-                                {vendor.total_services}
-                              </td>
+
+                {productivityData.vendors?.length === 0 && (
+                  <div className="text-center m-auto flex my-24 justify-center text-gray-500">
+                    No Vendors found.
+                  </div>
+                )}
+
+                {productivityData.vendors?.length > 0 && (
+                  <div className="mt-2 flow-root">
+                    <div
+                      className="-mx-4 -my-2 overflow-x-auto overflow-y-auto  sm:-mx-6 lg:-mx-8"
+                      style={{ maxHeight: "900px" }}
+                    >
+                      <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                        <table className="min-w-full divide-y divide-gray-300">
+                          <thead>
+                            <tr>
+                              <th
+                                scope="col"
+                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                              ></th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              >
+                                Name
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              >
+                                Total Jobs
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              >
+                                Revenue
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              >
+                                Subcontractor Profit
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              >
+                                Total Services
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
+                            {productivityData.vendors?.map((vendor, index) => (
+                              <tr key={vendor.id}>
+                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                  {index + 1}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-medium">
+                                  {vendor.name ? vendor.name : "CleanTakeoff"}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                  {vendor.total_jobs}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                  $
+                                  {vendor.revenue
+                                    ? vendor.revenue?.toLocaleString()
+                                    : 0}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                  {vendor.subcontractor_profit && vendor.name
+                                    ? "$" +
+                                      vendor.subcontractor_profit?.toLocaleString()
+                                    : ""}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                  {vendor.total_services}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
@@ -1188,18 +1196,18 @@ const TeamProductivity = () => {
                                                 rounded-full text-sm font-medium md:inline-block relative"
                       style={{ bottom: "2px" }}
                     >
-                      {productivityData.users?.length}
+                      {users.length}
                     </span>
                   </h2>
 
-                  {productivityData.users?.length === 0 && (
+                  {users.length === 0 && (
                     <div className="text-center m-auto flex my-24 justify-center text-gray-500">
                       No Project Managers found.
                     </div>
                   )}
 
                   <ul className="space-y-12 lg:grid lg:grid-cols-4 lg:items-start lg:gap-x-12 lg:gap-y-12 lg:space-y-0">
-                    {productivityData.users?.map((user, index) => (
+                    {users.map((user, index) => (
                       <li key={index}>
                         <div className="flex gap-4 flex-start">
                           <div className="flex-shrink-0">
