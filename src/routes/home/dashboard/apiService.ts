@@ -68,3 +68,7 @@ export const getFbos = () => {
 export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
+
+export const getVendors = (data: any) => {
+    return httpService.post('/api/vendors', data);
+}
