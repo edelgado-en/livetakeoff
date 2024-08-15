@@ -83,6 +83,13 @@ const sortOptions = [
   { id: "arrivalDate", name: "Arrival Date" },
 ];
 
+const airportTypeOptions = [
+  { id: "All", name: "All" },
+  { id: "I", name: "Internal" },
+  { id: "E", name: "External" },
+  { id: "B", name: "Both" },
+];
+
 const JobsQueue = () => {
   const [jobs, setJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -149,9 +156,18 @@ const JobsQueue = () => {
     }
   );
 
+  const [airportTypeSelected, setAirportTypeSelected] = useState(
+    JSON.parse(localStorage.getItem("airportTypeSelected")) || {
+      id: "All",
+      name: "All",
+    }
+  );
+
   const [tags, setTags] = useState([]);
 
   const [availableStatuses, setAvailableStatuses] = useState(statuses);
+
+  const [airportTypes, setAirportTypes] = useState(airportTypeOptions);
 
   const filteredAirports = airportSearchTerm
     ? airports.filter((item) =>
@@ -289,6 +305,13 @@ const JobsQueue = () => {
   }, [airportSelected]);
 
   useEffect(() => {
+    localStorage.setItem(
+      "airportTypeSelected",
+      JSON.stringify(airportTypeSelected)
+    );
+  }, [airportTypeSelected]);
+
+  useEffect(() => {
     localStorage.setItem("vendorSelected", JSON.stringify(vendorSelected));
   }, [vendorSelected]);
 
@@ -317,6 +340,7 @@ const JobsQueue = () => {
     dueToday,
     overdue,
     vendorSelected,
+    airportTypeSelected,
   ]);
 
   const handleKeyDown = (event) => {
@@ -365,6 +389,7 @@ const JobsQueue = () => {
         localStorage.getItem("projectManagerSelected")
       ).id,
       tags: tags.filter((item) => item.selected).map((item) => item.id),
+      airport_type: JSON.parse(localStorage.getItem("airportTypeSelected")).id,
     };
 
     let statusName;
@@ -523,6 +548,25 @@ const JobsQueue = () => {
     setStatusSelected(newStatuses[index]);
 
     setAvailableStatuses(newStatuses);
+  };
+
+  const handleToggleAirportType = (airportType) => {
+    const newAirportTypes = [...airportTypes];
+    const index = newAirportTypes.findIndex(
+      (item) => item.id === airportType.id
+    );
+    newAirportTypes[index].selected = !newAirportTypes[index].selected;
+
+    //set the others to false
+    newAirportTypes.forEach((item) => {
+      if (item.id !== airportType.id) {
+        item.selected = false;
+      }
+    });
+
+    setAirportTypeSelected(newAirportTypes[index]);
+
+    setAirportTypes(newAirportTypes);
   };
 
   const handleToggleDueToday = () => {
@@ -693,6 +737,30 @@ const JobsQueue = () => {
                                                         py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
                                     >
                                       {tag.name}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                              <div className="px-4 py-4">
+                                <h2 className="font-medium text-sm text-gray-900">
+                                  Airport Types
+                                </h2>
+                                <div className="grid grid-cols-2 gap-2 mt-2">
+                                  {airportTypes.map((airportType) => (
+                                    <div
+                                      key={airportType.id}
+                                      onClick={() =>
+                                        handleToggleAirportType(airportType)
+                                      }
+                                      className={`${
+                                        airportType.selected
+                                          ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                                          : "hover:bg-gray-50"
+                                      }
+                                                          rounded-md border border-gray-200 cursor-pointer
+                                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                                    >
+                                      {airportType.name}
                                     </div>
                                   ))}
                                 </div>
@@ -1426,9 +1494,9 @@ const JobsQueue = () => {
           currentUser.isInternalCoordinator ||
           currentUser.isCustomer) && (
           <div className="hidden xl:block xs:pt-10 sm:pt-10 xl:pt-0 lg:pt-0 md:pt-0">
-            <div className="pb-4">
+            <div className="pb-8">
               <div>
-                <h2 className="font-medium text-sm text-gray-900">Status</h2>
+                <h2 className="font-semibold text-sm text-gray-900">Status</h2>
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   {availableStatuses.map((status) => (
                     <div
@@ -1440,7 +1508,7 @@ const JobsQueue = () => {
                           : "hover:bg-gray-50"
                       }
                                                             rounded-md border border-gray-200 cursor-pointer
-                                                            py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                                                            py-2 px-2 text-sm hover:bg-gray-50 truncate overflow-ellipsis w-32`}
                     >
                       {status.name}
                     </div>
@@ -1451,8 +1519,10 @@ const JobsQueue = () => {
 
             {!currentUser.isCustomer && (
               <>
-                <div className="pb-4">
-                  <h2 className="font-medium text-sm text-gray-900">Alerts</h2>
+                <div className="pb-8">
+                  <h2 className="font-semibold text-sm text-gray-900">
+                    Alerts
+                  </h2>
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     <div
                       onClick={() => handleToggleDueToday()}
@@ -1492,8 +1562,8 @@ const JobsQueue = () => {
                     </div>
                   </div>
                 </div>
-                <div className="pb-4">
-                  <h2 className="font-medium text-sm text-gray-900">Tags</h2>
+                <div className="pb-8">
+                  <h2 className="font-semibold text-sm text-gray-900">Tags</h2>
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     {tags.map((tag) => (
                       <div
@@ -1512,8 +1582,32 @@ const JobsQueue = () => {
                     ))}
                   </div>
                 </div>
-                <div className="pb-4">
-                  <h2 className="font-medium text-sm text-gray-900">
+                <div className="pb-8">
+                  <div>
+                    <h2 className="font-semibold text-sm text-gray-900">
+                      Airport Types
+                    </h2>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      {airportTypes.map((airportType) => (
+                        <div
+                          key={airportType.id}
+                          onClick={() => handleToggleAirportType(airportType)}
+                          className={`${
+                            airportType.selected
+                              ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                              : "hover:bg-gray-50"
+                          }
+                                                            rounded-md border border-gray-200 cursor-pointer
+                                                            py-2 px-2 text-sm hover:bg-gray-50 truncate overflow-ellipsis w-32`}
+                        >
+                          {airportType.name}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="pb-8">
+                  <h2 className="font-semibold text-sm text-gray-900">
                     Customers{" "}
                     <span className="text-gray-500 text-sm ml-1 font-normal">
                       ({customersWOpenJobs.length})
@@ -1556,8 +1650,8 @@ const JobsQueue = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="pb-4">
-                  <h2 className="font-medium text-sm text-gray-900">
+                <div className="pb-8">
+                  <h2 className="font-semibold text-sm text-gray-900">
                     Assignees{" "}
                     <span className="text-gray-500 text-sm ml-1 font-normal">
                       ({projectManagers.length})
@@ -1605,7 +1699,7 @@ const JobsQueue = () => {
             )}
 
             <div className="pb-8">
-              <h2 className="font-medium text-sm text-gray-900">
+              <h2 className="font-semibold text-sm text-gray-900">
                 Airports
                 <span className="text-gray-500 text-sm ml-1 font-normal">
                   ({filteredAirports.length - 1})
@@ -1641,7 +1735,7 @@ const JobsQueue = () => {
               currentUser.isSuperUser ||
               currentUser.isAccountManager) && (
               <div className="pb-8">
-                <h2 className="font-medium text-sm text-gray-900">
+                <h2 className="font-semibold text-sm text-gray-900">
                   Vendors
                   <span className="text-gray-500 text-sm ml-1 font-normal">
                     ({vendors.length - 1})
