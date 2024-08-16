@@ -579,7 +579,8 @@ const TeamProductivity = () => {
                     <div>Labor Time</div>
                     <div className="text-right">
                       <span className="font-semibold">
-                        {internalProductivityData.total_labor_time} hr
+                        {internalProductivityData.total_labor_time?.toFixed(1)}{" "}
+                        hr
                       </span>
                     </div>
                   </li>
@@ -694,7 +695,8 @@ const TeamProductivity = () => {
                     <div>Labor Time</div>
                     <div className="text-right">
                       <span className="font-semibold">
-                        {externalProductivityData.total_labor_time} hr
+                        {externalProductivityData.total_labor_time?.toFixed(1)}{" "}
+                        hr
                       </span>
                     </div>
                   </li>
@@ -809,7 +811,7 @@ const TeamProductivity = () => {
                     <div>Labor Time</div>
                     <div className="text-right">
                       <span className="font-semibold">
-                        {productivityData.total_labor_time} hr
+                        {productivityData.total_labor_time?.toFixed(1)} hr
                       </span>
                     </div>
                   </li>
