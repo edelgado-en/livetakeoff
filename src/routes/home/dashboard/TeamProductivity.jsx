@@ -510,600 +510,356 @@ const TeamProductivity = () => {
 
         {!loading && (
           <>
-            {/* TOTALS */}
-            <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
-              Totals
-            </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-blue-400 border-2">
-                    <BriefcaseIcon
-                      className="h-6 w-6 text-blue-400"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Jobs Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {productivityData.total_jobs}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-sky-400 border-2">
-                    <WrenchIcon />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Services Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {productivityData.total_services}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-sky-400 border-2">
-                    <WrenchIcon className="h-6 w-6 text-sky-400" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Retainers Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {productivityData.total_retainer_services}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-green-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Revenue
-                    <span className="text-xs ml-2 text-gray-400">
-                      (services only)
-                    </span>
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {productivityData.total_jobs_price
-                      ? productivityData.total_jobs_price.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-green-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Not Invoiced
-                    <span className="text-xs ml-2 text-gray-400">
-                      (services only)
-                    </span>
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {productivityData.total_jobs_price_not_invoiced
-                      ? productivityData.total_jobs_price_not_invoiced.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-teal-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Subcontractor Profit
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {productivityData.total_subcontractor_profit
-                      ? productivityData.total_subcontractor_profit.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-            </dl>
-
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 m-auto">
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <ClockIcon className="h-6 w-6 text-teal-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Labor Time
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {productivityData.total_labor_time?.toLocaleString(
-                      "en-US",
-                      { minimumFractionDigits: 1, maximumFractionDigits: 1 }
-                    )}{" "}
-                    hr
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Travel Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {productivityData.total_travel_fees_amount_applied
-                      ? productivityData.total_travel_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    FBO Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {productivityData.total_fbo_fees_amount_applied
-                      ? productivityData.total_fbo_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Management Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {productivityData.total_management_fees_amount_applied
-                      ? productivityData.total_management_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Vendor Higher Price Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {productivityData.total_vendor_higher_price_amount_applied
-                      ? productivityData.total_vendor_higher_price_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-            </dl>
-
-            <div className=" w-full border border-1 border-gray-200 my-10"></div>
-
-            {/* EXTERNAL */}
-            <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
-              External
-            </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-blue-400 border-2">
-                    <BriefcaseIcon
-                      className="h-6 w-6 text-blue-400"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Jobs Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {externalProductivityData.total_jobs}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-sky-400 border-2">
-                    <WrenchIcon />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Services Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {externalProductivityData.total_services}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-sky-400 border-2">
-                    <WrenchIcon className="h-6 w-6 text-sky-400" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Retainers Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {externalProductivityData.total_retainer_services}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-green-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Revenue
-                    <span className="text-xs ml-2 text-gray-400">
-                      (services only)
-                    </span>
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {externalProductivityData.total_jobs_price
-                      ? externalProductivityData.total_jobs_price.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-green-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Not Invoiced
-                    <span className="text-xs ml-2 text-gray-400">
-                      (services only)
-                    </span>
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {externalProductivityData.total_jobs_price_not_invoiced
-                      ? externalProductivityData.total_jobs_price_not_invoiced.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-teal-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Subcontractor Profit
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {externalProductivityData.total_subcontractor_profit
-                      ? externalProductivityData.total_subcontractor_profit.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-            </dl>
-
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 m-auto">
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <ClockIcon className="h-6 w-6 text-teal-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Labor Time
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {externalProductivityData.total_labor_time?.toLocaleString(
-                      "en-US",
-                      { minimumFractionDigits: 1, maximumFractionDigits: 1 }
-                    )}{" "}
-                    hr
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Travel Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {externalProductivityData.total_travel_fees_amount_applied
-                      ? externalProductivityData.total_travel_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    FBO Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {externalProductivityData.total_fbo_fees_amount_applied
-                      ? externalProductivityData.total_fbo_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Management Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {externalProductivityData.total_management_fees_amount_applied
-                      ? externalProductivityData.total_management_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Vendor Higher Price Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {externalProductivityData.total_vendor_higher_price_amount_applied
-                      ? externalProductivityData.total_vendor_higher_price_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-            </dl>
-
-            <div className=" w-full border border-1 border-gray-200 my-10"></div>
-
-            {/* INTERNAL */}
-            <div className="text-2xl font-bold tracking-wide sm:text-2xl mt-5">
-              Internal
-            </div>
-            <dl className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-blue-400 border-2">
-                    <BriefcaseIcon
-                      className="h-6 w-6 text-blue-400"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Jobs Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {internalProductivityData.total_jobs}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-sky-400 border-2">
-                    <WrenchIcon />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Services Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {internalProductivityData.total_services}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-sky-400 border-2">
-                    <WrenchIcon className="h-6 w-6 text-sky-400" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Retainers Completed
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {internalProductivityData.total_retainer_services}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-green-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Revenue
-                    <span className="text-xs ml-2 text-gray-400">
-                      (services only)
-                    </span>
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
+            <div
+              className="isolate mx-auto mt-10 grid max-w-md grid-cols-1
+                             gap-8 md:max-w-2xl md:grid-cols-2 lg:max-w-7xl xl:mx-0 xl:max-w-none xl:grid-cols-3"
+            >
+              <div className="rounded-3xl p-8 ring-1 ring-gray-200">
+                <h2 className="text-xl font-semibold leading-8 text-gray-900">
+                  Internal
+                </h2>
+                <p className="mt-4 text-md leading-6 text-gray-600">
+                  All jobs invoiced by Clean takeoff.
+                </p>
+                <p className="mt-6 flex items-baseline gap-x-1">
+                  <span className="text-4xl font-bold tracking-tight text-gray-900">
                     $
                     {internalProductivityData.total_jobs_price
                       ? internalProductivityData.total_jobs_price.toLocaleString()
                       : 0}
-                  </p>
-                </dd>
+                  </span>
+                  <span className="text-sm font-semibold leading-6 text-gray-600">
+                    Revenue
+                  </span>
+                  <span className="text-sm text-gray-500">(Services only)</span>
+                </p>
+                <ul className="mt-8 space-y-3 text-md leading-6 text-gray-700">
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Jobs Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {internalProductivityData.total_jobs}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Services Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {internalProductivityData.total_services}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Retainers Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {internalProductivityData.total_retainer_services}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Not Invoiced</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {internalProductivityData.total_jobs_price_not_invoiced
+                          ? internalProductivityData.total_jobs_price_not_invoiced.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Subcontractor Profit</div>
+                    <div className="text-right">
+                      <span className="font-semibold">NA</span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Labor Time</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {internalProductivityData.total_labor_time} hr
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4 border-t border-gray-200">
+                    <div className="mt-4">Travel Fees</div>
+                    <div className="text-right mt-4">
+                      <span className="font-semibold">
+                        $
+                        {internalProductivityData.total_travel_fees_amount_applied
+                          ? internalProductivityData.total_travel_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>FBO Fees</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {internalProductivityData.total_fbo_fees_amount_applied
+                          ? internalProductivityData.total_fbo_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Management Fees</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {internalProductivityData.total_management_fees_amount_applied
+                          ? internalProductivityData.total_management_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Vendor Higher Price</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {internalProductivityData.total_vendor_higher_price_amount_applied
+                          ? internalProductivityData.total_vendor_higher_price_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <CashIcon className="h-6 w-6 text-green-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Not Invoiced
-                    <span className="text-xs ml-2 text-gray-400">
-                      (services only)
-                    </span>
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
+              <div className="rounded-3xl p-8 ring-1 ring-gray-200">
+                <h2 className="text-xl font-semibold leading-8 text-gray-900">
+                  External
+                </h2>
+                <p className="mt-4 text-md leading-6 text-gray-600">
+                  All jobs invoiced by external contractors.
+                </p>
+                <p className="mt-6 flex items-baseline gap-x-1">
+                  <span className="text-4xl font-bold tracking-tight text-gray-900">
                     $
-                    {internalProductivityData.total_jobs_price_not_invoiced
-                      ? internalProductivityData.total_jobs_price_not_invoiced.toLocaleString()
+                    {externalProductivityData.total_jobs_price
+                      ? externalProductivityData.total_jobs_price.toLocaleString()
                       : 0}
-                  </p>
-                </dd>
+                  </span>
+                  <span className="text-sm font-semibold leading-6 text-gray-600">
+                    Revenue
+                  </span>
+                  <span className="text-sm text-gray-500">(Services only)</span>
+                </p>
+                <ul className="mt-8 space-y-3 text-md leading-6 text-gray-700">
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Jobs Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {externalProductivityData.total_jobs}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Services Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {externalProductivityData.total_services}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Retainers Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {externalProductivityData.total_retainer_services}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Not Invoiced</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {externalProductivityData.total_jobs_price_not_invoiced
+                          ? externalProductivityData.total_jobs_price_not_invoiced.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Subcontractor Profit</div>
+                    <div className="text-right">
+                      <span className="font-semibold">NA</span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Labor Time</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {externalProductivityData.total_labor_time} hr
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4 border-t border-gray-200">
+                    <div className="mt-4">Travel Fees</div>
+                    <div className="text-right mt-4">
+                      <span className="font-semibold">
+                        $
+                        {externalProductivityData.total_travel_fees_amount_applied
+                          ? externalProductivityData.total_travel_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>FBO Fees</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {externalProductivityData.total_fbo_fees_amount_applied
+                          ? externalProductivityData.total_fbo_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Management Fees</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {externalProductivityData.total_management_fees_amount_applied
+                          ? externalProductivityData.total_management_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Vendor Higher Price</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {externalProductivityData.total_vendor_higher_price_amount_applied
+                          ? externalProductivityData.total_vendor_higher_price_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-green-400 border-2">
-                    <ClockIcon className="h-6 w-6 text-teal-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Labor Time
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    {internalProductivityData.total_labor_time?.toLocaleString(
-                      "en-US",
-                      { minimumFractionDigits: 1, maximumFractionDigits: 1 }
-                    )}{" "}
-                    hr
-                  </p>
-                </dd>
-              </div>
-            </dl>
-
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 m-auto">
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Travel Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
+              <div className="rounded-3xl p-8 ring-2 ring-blue-600">
+                <h2 className="text-xl font-semibold leading-8 text-blue-600">
+                  Totals
+                </h2>
+                <p className="mt-4 text-md leading-6 text-gray-600">
+                  All jobs invoiced combined.
+                </p>
+                <p className="mt-6 flex items-baseline gap-x-1">
+                  <span className="text-4xl font-bold tracking-tight text-gray-900">
                     $
-                    {internalProductivityData.total_travel_fees_amount_applied
-                      ? internalProductivityData.total_travel_fees_amount_applied.toLocaleString()
+                    {productivityData.total_jobs_price
+                      ? productivityData.total_jobs_price.toLocaleString()
                       : 0}
-                  </p>
-                </dd>
+                  </span>
+                  <span className="text-sm font-semibold leading-6 text-gray-600">
+                    Revenue
+                  </span>
+                  <span className="text-sm text-gray-500">(Services only)</span>
+                </p>
+                <ul className="mt-8 space-y-3 text-md leading-6 text-gray-700">
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Jobs Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {productivityData.total_jobs}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Services Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {productivityData.total_services}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Retainers Completed</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {productivityData.total_retainer_services}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Not Invoiced</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {productivityData.total_jobs_price_not_invoiced
+                          ? productivityData.total_jobs_price_not_invoiced.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Subcontractor Profit</div>
+                    <div className="text-right">
+                      <span className="font-semibold">NA</span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Labor Time</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        {productivityData.total_labor_time} hr
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4 border-t border-gray-200">
+                    <div className="mt-4">Travel Fees</div>
+                    <div className="mt-4 text-right">
+                      <span className="font-semibold">
+                        $
+                        {productivityData.total_travel_fees_amount_applied
+                          ? productivityData.total_travel_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>FBO Fees</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {productivityData.total_fbo_fees_amount_applied
+                          ? productivityData.total_fbo_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Management Fees</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {productivityData.total_management_fees_amount_applied
+                          ? productivityData.total_management_fees_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                  <li className="grid grid-cols-2 gap-4">
+                    <div>Vendor Higher Price</div>
+                    <div className="text-right">
+                      <span className="font-semibold">
+                        $
+                        {productivityData.total_vendor_higher_price_amount_applied
+                          ? productivityData.total_vendor_higher_price_amount_applied.toLocaleString()
+                          : 0}
+                      </span>
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    FBO Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {internalProductivityData.total_fbo_fees_amount_applied
-                      ? internalProductivityData.total_fbo_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-              <div className="relative overflow-hidden rounded-lg px-4 pt-5 border border-gray-200 sm:px-6 sm:pt-6">
-                <dt>
-                  <div className="absolute rounded-md p-3 border-indigo-400 border-2">
-                    <NewspaperIcon className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <p className="ml-16 truncate text-sm font-medium text-gray-600">
-                    Management Fees
-                  </p>
-                </dt>
-                <dd className="ml-16 flex items-baseline pb-6 sm:pb-7">
-                  <p className="text-2xl font-semibold text-gray-900">
-                    $
-                    {internalProductivityData.total_management_fees_amount_applied
-                      ? internalProductivityData.total_management_fees_amount_applied.toLocaleString()
-                      : 0}
-                  </p>
-                </dd>
-              </div>
-            </dl>
+            </div>
 
             <div className=" w-full border border-1 border-gray-200 my-10"></div>
 
@@ -1171,6 +927,12 @@ const TeamProductivity = () => {
                                 scope="col"
                                 className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                               >
+                                Profit %
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                              >
                                 Total Services
                               </th>
                             </tr>
@@ -1182,7 +944,7 @@ const TeamProductivity = () => {
                                   {index + 1}
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-medium">
-                                  {vendor.name ? vendor.name : "CleanTakeoff"}
+                                  {vendor.name ? vendor.name : "Clean Takeoff"}
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
                                   {vendor.total_jobs}
@@ -1197,6 +959,12 @@ const TeamProductivity = () => {
                                   {vendor.subcontractor_profit && vendor.name
                                     ? "$" +
                                       vendor.subcontractor_profit?.toLocaleString()
+                                    : ""}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
+                                  {vendor.subcontractor_profit && vendor.name
+                                    ? vendor.subcontractor_profit_percentage +
+                                      "%"
                                     : ""}
                                 </td>
                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700">
