@@ -688,7 +688,10 @@ const TeamProductivity = () => {
                   <li className="grid grid-cols-2 gap-4">
                     <div>Subcontractor Profit</div>
                     <div className="text-right">
-                      <span className="font-semibold">NA</span>
+                      <span className="font-semibold">
+                        $
+                        {externalProductivityData.total_subcontractor_profit?.toLocaleString()}
+                      </span>
                     </div>
                   </li>
                   <li className="grid grid-cols-2 gap-4">
@@ -804,7 +807,10 @@ const TeamProductivity = () => {
                   <li className="grid grid-cols-2 gap-4">
                     <div>Subcontractor Profit</div>
                     <div className="text-right">
-                      <span className="font-semibold">NA</span>
+                      <span className="font-semibold">
+                        $
+                        {productivityData.total_subcontractor_profit?.toLocaleString()}
+                      </span>
                     </div>
                   </li>
                   <li className="grid grid-cols-2 gap-4">
