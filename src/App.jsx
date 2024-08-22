@@ -84,6 +84,8 @@ import CreateEstimate from "./routes/estimates/CreateEstimate";
 import Estimates from "./routes/estimates/Estimates";
 import EstimateDetail from "./routes/estimates/EstimateDetail";
 
+import Fees from "./routes/fees/Fees";
+
 import CreateJobSchedule from "./routes/job/CreateJobSchedule";
 import JobSchedules from "./routes/job/JobSchedules";
 
@@ -189,6 +191,8 @@ const App = () => {
                     />
                     <Route path="estimates" element={<Estimates />} />
                     <Route path="estimates/:id" element={<EstimateDetail />} />
+
+                    <Route path="fees" element={<Fees />} />
 
                     <Route path="jobs" element={<Jobs />} />
 
