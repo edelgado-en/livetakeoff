@@ -4,6 +4,10 @@ export const searchAirports = (data: any, currentPage: any) => {
     return httpService.post(`/api/airports?page=${currentPage}&size=${200}`, data);
 }
 
+export const searchFbos = (data: any, currentPage:any) => {
+    return httpService.post(`/api/fbo-search?page=${currentPage}&size=${200}`, data);
+}
+
 export const applyFeeChanges = (data: any) => {
     return httpService.post('/api/apply-fee-changes', data);
 }
