@@ -108,15 +108,16 @@ const TeamProductivity = () => {
   const [customerSelected, setCustomerSelected] = useState(null);
   const [customerSearchTerm, setCustomerSearchTerm] = useState("");
 
-  const filteredCustomers = customerSearchTerm
-    ? customers.filter((item) =>
-        item.name.toLowerCase().includes(customerSearchTerm.toLowerCase())
-      )
-    : customers;
-
   useEffect(() => {
-    getCustomers();
-  }, []);
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      getCustomers();
+    }, 200);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [customerSearchTerm]);
 
   useEffect(() => {
     getVendors();
@@ -131,8 +132,12 @@ const TeamProductivity = () => {
   }, [dateSelected, customerSelected, searchText, vendorSelected]);
 
   const getCustomers = async () => {
+    const request = {
+      name: customerSearchTerm,
+    };
+
     try {
-      const { data } = await api.getCustomers();
+      const { data } = await api.getCustomers(request);
 
       data.results.unshift({ id: null, name: "All Customers" });
 
@@ -426,7 +431,7 @@ const TeamProductivity = () => {
                             </div>
                           </div>
                         </div>
-                        {filteredCustomers.map((customer) => (
+                        {customers.map((customer) => (
                           <Listbox.Option
                             key={customer.id}
                             className={({ active }) =>
