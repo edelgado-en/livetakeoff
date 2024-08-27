@@ -129,6 +129,8 @@ const CompleteList = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const [isBasicView, setIsBasicView] = useState(true);
+
   const [additionalFees, setAdditionalFees] = useState([]);
 
   const [searchText, setSearchText] = useState(
@@ -672,6 +674,10 @@ const CompleteList = () => {
     }
   };
 
+  const handleToggleBasicView = () => {
+    setIsBasicView(!isBasicView);
+  };
+
   return (
     <AnimatedPage>
       <div className="px-4 -mt-8">
@@ -722,7 +728,7 @@ const CompleteList = () => {
               placeholder="search by tail or PO..."
             />
           </div>
-          <div className="hidden xl:block lg:block md:block text-center">
+          <div className="hidden text-center xl:flex lg:flex md:flex gap-4">
             <button
               type="button"
               onClick={() => searchJobs()}
@@ -734,6 +740,19 @@ const CompleteList = () => {
             >
               <ReloadIcon />
               <span className="ml-2">Update Queue</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleToggleBasicView()}
+              disabled={loading}
+              className="items-center justify-center 
+                                    rounded-md bg-white px-4 py-2
+                                    text-xs font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                                    sm:w-auto inline-flex"
+            >
+              <span className="ml-2">
+                {isBasicView ? "Advanced View" : "Basic View"}
+              </span>
             </button>
           </div>
           <div className="flex gap-2">
@@ -2382,12 +2401,16 @@ const CompleteList = () => {
                     <table className="min-w-full divide-y divide-gray-300">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                            P.O
-                          </th>
-                          <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                            C.P.O
-                          </th>
+                          {!isBasicView && (
+                            <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                              P.O
+                            </th>
+                          )}
+                          {!isBasicView && (
+                            <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                              C.P.O
+                            </th>
+                          )}
                           {(currentUser.isAdmin ||
                             currentUser.isSuperUser ||
                             currentUser.isAccountManager ||
@@ -2396,21 +2419,28 @@ const CompleteList = () => {
                               Customer
                             </th>
                           )}
-                          <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                            Request Date
-                          </th>
+
+                          {!isBasicView && (
+                            <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                              Request Date
+                            </th>
+                          )}
                           <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
                             Tail
                           </th>
-                          <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                            Aircraft
-                          </th>
+                          {!isBasicView && (
+                            <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                              Aircraft
+                            </th>
+                          )}
                           <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
                             Airport
                           </th>
-                          <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                            FBO
-                          </th>
+                          {!isBasicView && (
+                            <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                              FBO
+                            </th>
+                          )}
                           <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
                             Completion
                           </th>
@@ -2455,12 +2485,16 @@ const CompleteList = () => {
                       <tbody className="divide-y divide-gray-200 bg-white">
                         {jobs.map((job) => (
                           <tr key={job.id} className="hover:bg-gray-50">
-                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
-                              {job.purchase_order}
-                            </td>
-                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
-                              {job.customer_purchase_order}
-                            </td>
+                            {!isBasicView && (
+                              <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                {job.purchase_order}
+                              </td>
+                            )}
+                            {!isBasicView && (
+                              <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                {job.customer_purchase_order}
+                              </td>
+                            )}
                             {(currentUser.isAdmin ||
                               currentUser.isSuperUser ||
                               currentUser.isAccountManager ||
@@ -2472,21 +2506,27 @@ const CompleteList = () => {
                                 {job.customer.name}
                               </td>
                             )}
-                            <td className=" px-2 py-2 text-xs text-gray-500">
-                              {job.requestDate}
-                            </td>
+                            {!isBasicView && (
+                              <td className=" px-2 py-2 text-xs text-gray-500">
+                                {job.requestDate}
+                              </td>
+                            )}
                             <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
                               {job.tailNumber}
                             </td>
-                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
-                              {job.aircraftType.name}
-                            </td>
+                            {!isBasicView && (
+                              <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                {job.aircraftType.name}
+                              </td>
+                            )}
                             <td className=" px-2 py-2 text-xs text-gray-500">
                               {job.airport.initials}
                             </td>
-                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
-                              {job.fbo.name}
-                            </td>
+                            {!isBasicView && (
+                              <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                                {job.fbo.name}
+                              </td>
+                            )}
                             <td className=" px-2 py-2 text-xs text-gray-500">
                               {job.completion_date}
                             </td>
@@ -2528,7 +2568,7 @@ const CompleteList = () => {
                             {!currentUser.isInternalCoordinator &&
                               currentUser.canSeePrice && (
                                 <td className="whitespace-nowrap px-8 py-2 text-xs text-gray-500">
-                                  <div className="flex gap-1">
+                                  <div className="flex gap-1 font-semibold">
                                     {"$"}
                                     {job.price
                                       ? job.price.toLocaleString()
