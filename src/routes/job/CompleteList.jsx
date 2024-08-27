@@ -2406,11 +2406,9 @@ const CompleteList = () => {
                               P.O
                             </th>
                           )}
-                          {!isBasicView && (
-                            <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                              C.P.O
-                            </th>
-                          )}
+                          <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
+                            C.P.O
+                          </th>
                           {(currentUser.isAdmin ||
                             currentUser.isSuperUser ||
                             currentUser.isAccountManager ||
@@ -2490,11 +2488,9 @@ const CompleteList = () => {
                                 {job.purchase_order}
                               </td>
                             )}
-                            {!isBasicView && (
-                              <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
-                                {job.customer_purchase_order}
-                              </td>
-                            )}
+                            <td className="whitespace-nowrap px-2 py-2 text-xs text-gray-500">
+                              {job.customer_purchase_order}
+                            </td>
                             {(currentUser.isAdmin ||
                               currentUser.isSuperUser ||
                               currentUser.isAccountManager ||
