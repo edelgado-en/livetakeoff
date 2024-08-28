@@ -57,8 +57,8 @@ export const getCustomers = (request: any) => {
     return httpService.post('/api/customers', request);
 }
 
-export const getAirports = () => {
-    return httpService.post('/api/airports', { name: '' });
+export const getAirports = (request: any) => {
+    return httpService.post('/api/airports', request);
 }
 
 export const getFbos = () => {

@@ -189,24 +189,6 @@ export default function CustomerServiceReport() {
   const [sortByTimestampAsc, setSortByTimestampAsc] = useState(false);
   const [sortByTimestampDesc, setSortByTimestampDesc] = useState(true);
 
-  const filteredAirports = airportSearchTerm
-    ? airports.filter((item) =>
-        item.name.toLowerCase().includes(airportSearchTerm.toLowerCase())
-      )
-    : airports;
-
-  const filteredFbos = fboSearchTerm
-    ? fbos.filter((item) =>
-        item.name.toLowerCase().includes(fboSearchTerm.toLowerCase())
-      )
-    : fbos;
-
-  const filteredCustomers = customerSearchTerm
-    ? customers.filter((item) =>
-        item.name.toLowerCase().includes(customerSearchTerm.toLowerCase())
-      )
-    : customers;
-
   useEffect(() => {
     getServices();
     setSelectedService({ id: null, name: "All Services" });
@@ -218,15 +200,15 @@ export default function CustomerServiceReport() {
 
   useEffect(() => {
     getAirports();
-  }, []);
+  }, [airportSearchTerm]);
 
   useEffect(() => {
     getFbos();
-  }, []);
+  }, [fboSearchTerm]);
 
   useEffect(() => {
     getCustomers();
-  }, []);
+  }, [customerSearchTerm]);
 
   useEffect(() => {
     //Basic throttling
@@ -275,8 +257,11 @@ export default function CustomerServiceReport() {
   }, [currentRetainerPage]);
 
   const getAirports = async () => {
+    const request = {
+      name: airportSearchTerm,
+    };
     try {
-      const { data } = await api.getAirports();
+      const { data } = await api.getAirports(request);
 
       data.results.unshift({ id: null, name: "All Airports" });
 
@@ -287,8 +272,12 @@ export default function CustomerServiceReport() {
   };
 
   const getFbos = async () => {
+    const request = {
+      name: fboSearchTerm,
+    };
+
     try {
-      const { data } = await api.getFbos();
+      const { data } = await api.searchFbos(request);
 
       data.results.unshift({ id: null, name: "All FBOs" });
 
@@ -300,7 +289,7 @@ export default function CustomerServiceReport() {
   };
 
   const getCustomers = async () => {
-    const { data } = await api.getCustomers({ name: "" });
+    const { data } = await api.getCustomers({ name: customerSearchTerm });
 
     data.results.unshift({ id: null, name: "All Customers" });
     setCustomers(data.results);
@@ -1595,7 +1584,7 @@ export default function CustomerServiceReport() {
                                 </div>
                               </div>
                             </div>
-                            {filteredAirports.map((airport) => (
+                            {airports.map((airport) => (
                               <Listbox.Option
                                 key={airport.id}
                                 className={({ active }) =>
@@ -1741,7 +1730,7 @@ export default function CustomerServiceReport() {
                                 </div>
                               </div>
                             </div>
-                            {filteredFbos.map((fbo) => (
+                            {fbos.map((fbo) => (
                               <Listbox.Option
                                 key={fbo.id}
                                 className={({ active }) =>
@@ -1896,7 +1885,7 @@ export default function CustomerServiceReport() {
                                     </div>
                                   </div>
                                 </div>
-                                {filteredCustomers.map((customer) => (
+                                {customers.map((customer) => (
                                   <Listbox.Option
                                     key={customer.id}
                                     className={({ active }) =>
