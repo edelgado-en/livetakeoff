@@ -2446,16 +2446,20 @@ const CompleteList = () => {
                             currentUser.canSeePrice && (
                               <>
                                 <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                                  Travel Fees
+                                  <div>Travel</div>
+                                  <div>Fees</div>
                                 </th>
                                 <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                                  FBO Fees
+                                  <div>FBO</div>
+                                  <div>Fees</div>
                                 </th>
                                 <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                                  Vendor Price Diff
+                                  <div>Vendor</div>
+                                  <div>Price Diff</div>
                                 </th>
                                 <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                                  Management Fees
+                                  <div>Management</div>
+                                  <div>Fees</div>
                                 </th>
                               </>
                             )}
@@ -2470,7 +2474,8 @@ const CompleteList = () => {
                             currentUser.isSuperUser ||
                             currentUser.isAccountManager) && (
                             <th className="whitespace-nowrap px-8 py-2 text-left text-xs font-normal uppercase text-gray-500">
-                              Labor Time
+                              <div>Labor</div>
+                              <div>Time</div>
                             </th>
                           )}
                           <th className="whitespace-nowrap px-2 py-2 text-center text-xs font-normal uppercase text-gray-500">
