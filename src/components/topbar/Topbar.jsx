@@ -32,12 +32,12 @@ import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { fetchUser, selectUser } from "../../routes/userProfile/userSlice";
 
 const dashboards = [
-  {
+  /* {
     name: "Tail Report",
     description: "See detailed information about a tail number.",
     href: "/tail-report",
     icon: PresentationChartBarIcon,
-  },
+  }, */
   {
     name: "Team Productivity",
     description: "Find out which project manager is the most productive.",
@@ -60,12 +60,12 @@ const dashboards = [
 ];
 
 const internalCoordinatorDashboards = [
-  {
+  /* {
     name: "Tail Report",
     description: "See detailed information about a tail number.",
     href: "/tail-report",
     icon: PresentationChartBarIcon,
-  },
+  }, */
   {
     name: "Service Report",
     description: "See detailed information about a service across time.",
@@ -679,7 +679,7 @@ const Topbar = () => {
                           </Link>
                         )}
 
-                        <Link
+                        {/* <Link
                           to="/tail-report"
                           className={classNames(
                             location.pathname.includes("tail-report")
@@ -689,7 +689,7 @@ const Topbar = () => {
                           )}
                         >
                           Tail Report
-                        </Link>
+                        </Link> */}
                         <Link
                           to="/service-report"
                           className={classNames(
@@ -1268,7 +1268,7 @@ const Topbar = () => {
                     </Link>
                   )}
 
-                  <Link to="/tail-report">
+                  {/* <Link to="/tail-report">
                     <Disclosure.Button
                       className={classNames(
                         location.pathname.includes("tail-report")
@@ -1279,7 +1279,7 @@ const Topbar = () => {
                     >
                       Tail Report
                     </Disclosure.Button>
-                  </Link>
+                  </Link> */}
 
                   <Link to="/contact">
                     <Disclosure.Button
