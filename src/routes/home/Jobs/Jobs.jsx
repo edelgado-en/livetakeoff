@@ -1232,7 +1232,8 @@ const JobsQueue = () => {
                               {(currentUser.isAdmin ||
                                 currentUser.isSuperUser ||
                                 currentUser.isAccountManager ||
-                                currentUser.isInternalCoordinator) &&
+                                currentUser.isInternalCoordinator ||
+                                currentUser.isMasterPM) &&
                                 job.asignees?.length > 0 && (
                                   <div className="flex -space-x-1 overflow-hidden justify-start my-2">
                                     {job.asignees?.map((asignee) => (

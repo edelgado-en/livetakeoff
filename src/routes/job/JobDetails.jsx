@@ -165,6 +165,12 @@ const JobDetails = () => {
                   </Link>
                 )}
 
+                {currentUser.isMasterPM && (
+                  <Link to="assignments">
+                    <UserAddIcon className="h-6 w-6 text-gray-600" />
+                  </Link>
+                )}
+
                 {(currentUser.isAdmin ||
                   currentUser.isSuperUser ||
                   currentUser.isAccountManager ||

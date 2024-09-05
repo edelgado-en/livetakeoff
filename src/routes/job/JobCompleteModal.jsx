@@ -42,6 +42,7 @@ const JobCompleteModal = ({
   const [otherPMsWorkingOnIt, setOtherPMsWorkingOnIt] = useState(false);
   const [photosCount, setPhotosCount] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isMasterPM, setIsMasterPM] = useState(false);
   const [numberOfPeople, setNumberOfPeople] = useState(0);
   const [hoursWorked, setHoursWorked] = useState(0);
   const [minutesWorked, setMinutesWorked] = useState(0);
@@ -74,6 +75,7 @@ const JobCompleteModal = ({
       setOtherPMsWorkingOnIt(data.other_pms_working_on_it);
       setPhotosCount(data.photos_count);
       setIsAdmin(data.is_admin);
+      setIsMasterPM(data.is_master_pm);
       setHoursWorked(data.hours);
       setMinutesWorked(data.minutes);
     } catch (error) {
@@ -439,7 +441,7 @@ const JobCompleteModal = ({
                 </p>
               )}
 
-              {!isAdmin && otherPMsWorkingOnIt && (
+              {!isAdmin && !isMasterPM && otherPMsWorkingOnIt && (
                 <p className="text-lg text-red-500 pb-4 font-medium text-center">
                   You cannot complete the job yet because there are other
                   project managers working on it.
@@ -461,7 +463,7 @@ const JobCompleteModal = ({
               Cancel
             </button>
           )}
-          {(isAdmin || !otherPMsWorkingOnIt) && (
+          {(isAdmin || isMasterPM || !otherPMsWorkingOnIt) && (
             <button
               type="button"
               onClick={() => handleCompleteJob()}
