@@ -900,14 +900,14 @@ const JobInfo = () => {
                     </button>
                   )}
 
-                  {jobDetails.status === "A" && (
+                  {(jobDetails.status === "A" || currentUser.isMasterPM) && (
                     <button
                       type="button"
                       onClick={() => navigate(`/jobs/${jobId}/assignments`)}
                       className="inline-flex items-center justify-center rounded-md
                                                 border border-transparent bg-red-600 px-4 py-2 text-lg
                                                 font-bold text-white shadow-sm hover:bg-red-700
-                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto"
+                                                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:w-auto mr-2"
                     >
                       Assign Job
                     </button>
