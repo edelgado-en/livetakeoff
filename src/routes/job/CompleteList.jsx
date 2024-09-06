@@ -215,24 +215,6 @@ const CompleteList = () => {
 
   const currentUser = useAppSelector(selectUser);
 
-  const filteredAirports = airportSearchTerm
-    ? airports.filter((item) =>
-        item.name.toLowerCase().includes(airportSearchTerm.toLowerCase())
-      )
-    : airports;
-
-  const filteredCustomers = customerSearchTerm
-    ? customers.filter((item) =>
-        item.name.toLowerCase().includes(customerSearchTerm.toLowerCase())
-      )
-    : customers;
-
-  const filteredFbos = fboSearchTerm
-    ? fbos.filter((item) =>
-        item.name.toLowerCase().includes(fboSearchTerm.toLowerCase())
-      )
-    : fbos;
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -272,10 +254,37 @@ const CompleteList = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    getAirports();
-    getFbos();
-    getCustomers();
-  }, []);
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      getFbos();
+    }, 300);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [fboSearchTerm]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      getCustomers();
+    }, 300);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [customerSearchTerm]);
+
+  useEffect(() => {
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      getAirports();
+    }, 300);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
+  }, [airportSearchTerm]);
 
   useEffect(() => {
     localStorage.setItem("completedSearchText", searchText);
@@ -429,7 +438,7 @@ const CompleteList = () => {
 
   const getAirports = async () => {
     let request = {
-      name: "",
+      name: airportSearchTerm,
       closed_jobs: true,
     };
 
@@ -441,7 +450,7 @@ const CompleteList = () => {
   };
 
   const getFbos = async () => {
-    const { data } = await api.getFbos();
+    const { data } = await api.searchFbos({ name: fboSearchTerm });
 
     data.results.unshift({ id: "All", name: "All" });
     setFbos(data.results);
@@ -449,7 +458,10 @@ const CompleteList = () => {
   };
 
   const getCustomers = async () => {
-    const { data } = await api.getCustomers({ name: "", closed_jobs: true });
+    const { data } = await api.getCustomers({
+      name: customerSearchTerm,
+      closed_jobs: true,
+    });
 
     data.results.unshift({ id: "All", name: "All" });
     setCustomers(data.results);
@@ -1525,7 +1537,7 @@ const CompleteList = () => {
                                             </div>
                                           </div>
                                         </div>
-                                        {filteredCustomers.map((customer) => (
+                                        {customers.map((customer) => (
                                           <Listbox.Option
                                             key={customer.id}
                                             className={({ active }) =>
@@ -1658,7 +1670,7 @@ const CompleteList = () => {
                                           </div>
                                         </div>
                                       </div>
-                                      {filteredAirports.map((airport) => (
+                                      {airports.map((airport) => (
                                         <Listbox.Option
                                           key={airport.id}
                                           className={({ active }) =>
@@ -1788,7 +1800,7 @@ const CompleteList = () => {
                                           </div>
                                         </div>
                                       </div>
-                                      {filteredFbos.map((fbo) => (
+                                      {fbos.map((fbo) => (
                                         <Listbox.Option
                                           key={fbo.id}
                                           className={({ active }) =>
@@ -2032,7 +2044,7 @@ const CompleteList = () => {
                                 </div>
                               </div>
                             </div>
-                            {filteredCustomers.map((customer) => (
+                            {customers.map((customer) => (
                               <Listbox.Option
                                 key={customer.id}
                                 className={({ active }) =>
@@ -2159,7 +2171,7 @@ const CompleteList = () => {
                               </div>
                             </div>
                           </div>
-                          {filteredAirports.map((airport) => (
+                          {airports.map((airport) => (
                             <Listbox.Option
                               key={airport.id}
                               className={({ active }) =>
@@ -2278,7 +2290,7 @@ const CompleteList = () => {
                               </div>
                             </div>
                           </div>
-                          {filteredFbos.map((fbo) => (
+                          {fbos.map((fbo) => (
                             <Listbox.Option
                               key={fbo.id}
                               className={({ active }) =>
