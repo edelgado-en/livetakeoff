@@ -314,7 +314,7 @@ const JobAssignments = () => {
         {location.pathname.includes("review") && (
           <div>
             <h1 className="text-2xl font-semibold text-gray-600">Services</h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-md text-gray-500">
               You can add or remove services after a job has been completed in
               case you made a mistake. The job price will be adjusted
               accordingly.
@@ -509,7 +509,7 @@ const JobAssignments = () => {
               </div>
             )}
             <div className="mt-10">
-              <div className="text-sm font-medium text-gray-700 mb-2 flex justify-between">
+              <div className="text-md font-medium text-gray-700 mb-2 flex justify-between">
                 <div className="relative top-3">
                   Services
                   <span
@@ -751,7 +751,7 @@ const JobAssignments = () => {
             {/* RETAINER SERVICES */}
             {!currentUser.isMasterPM && (
               <div className="mt-10">
-                <div className="text-sm font-medium text-gray-700 mb-2 flex justify-between">
+                <div className="text-md font-medium text-gray-700 mb-2 flex justify-between">
                   <div className="relative top-3">
                     Retainer Services
                     <span
