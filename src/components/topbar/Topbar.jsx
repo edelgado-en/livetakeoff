@@ -135,6 +135,12 @@ const moreOptions = [
     href: "/fees",
     icon: CurrencyDollarIcon,
   },
+  {
+    name: "Vendors",
+    description: "Manage vendors and their files.",
+    href: "/vendors",
+    icon: UsersIcon,
+  },
 ];
 
 function classNames(...classes) {

@@ -56,6 +56,12 @@ import ServicePrices from "./routes/pricePlans/ServicePrices";
 import PricePlans from "./routes/pricePlans/PricePlans";
 import CreatePricePlan from "./routes/pricePlans/CreatePricePlan";
 
+import Vendors from "./routes/vendors/Vendors";
+import VendorProfile from "./routes/vendors/VendorProfile";
+import VendorDetails from "./routes/vendors/VendorDetails";
+import CreateVendor from "./routes/vendors/CreateVendor";
+import EditVendor from "./routes/vendors/EditVendor";
+
 import JobTailDetails from "./routes/job/JobTailDetails";
 
 import NotFound from "./routes/notfound/NotFound";
@@ -302,6 +308,12 @@ const App = () => {
                       element={<EditCustomer />}
                     />
 
+                    <Route path="create-vendor" element={<CreateVendor />} />
+                    <Route
+                      path="edit-vendor/:vendorId"
+                      element={<EditVendor />}
+                    />
+
                     <Route path="customers" element={<Customers />}>
                       <Route
                         path=":customerId/profile"
@@ -331,6 +343,16 @@ const App = () => {
                         </Route>
 
                         <Route path="jobs" element={<CustomerJobs />} />
+                      </Route>
+                    </Route>
+
+                    <Route path="vendors" element={<Vendors />}>
+                      <Route
+                        path=":vendorId/profile"
+                        element={<VendorProfile />}
+                      >
+                        <Route index element={<VendorDetails />} />
+                        <Route path="details" element={<VendorDetails />} />
                       </Route>
                     </Route>
 

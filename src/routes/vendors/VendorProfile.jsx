@@ -14,29 +14,27 @@ import * as api from "./apiService";
 
 const tabs = [
   { name: "Profile", href: "details", current: true },
-  { name: "Discounts", href: "discounts", current: false },
-  { name: "Fees", href: "fees", current: false },
-  { name: "Services", href: "services", current: false },
+  { name: "Files", href: "files", current: false },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const CustomerProfile = () => {
-  const { customerId } = useParams();
-  const [customerDetails, setCustomerDetails] = useState(null);
+const VendorProfile = () => {
+  const { vendorId } = useParams();
+  const [vendorDetails, setVendorDetails] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
-    getCustomerDetails();
-  }, [customerId]);
+    getVendorDetails();
+  }, [vendorId]);
 
-  const getCustomerDetails = async () => {
+  const getVendorDetails = async () => {
     try {
-      const { data } = await api.getCustomerDetails(customerId);
+      const { data } = await api.getVendorDetails(vendorId);
 
-      setCustomerDetails(data);
+      setVendorDetails(data);
     } catch (err) {}
   };
 
@@ -47,9 +45,7 @@ const CustomerProfile = () => {
           <img
             className="h-32 w-full object-cover lg:h-48"
             src={
-              customerDetails?.banner
-                ? customerDetails.banner
-                : BannerPlaceholder
+              vendorDetails?.banner ? vendorDetails.banner : BannerPlaceholder
             }
             alt=""
           />
@@ -57,15 +53,15 @@ const CustomerProfile = () => {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
             <div className="flex">
-              {customerDetails?.logo ? (
+              {vendorDetails?.logo ? (
                 <img
                   className="h-24 w-24 rounded-full ring-4
                                         ring-white sm:h-32 sm:w-32 bg-white border-black"
-                  src={customerDetails?.logo}
+                  src={vendorDetails?.logo}
                   alt=""
                 />
               ) : (
-                <span className="h-28 w-28 overflow-hidden rounded-full bg-gray-100">
+                <span className="h-32 w-32 overflow-hidden rounded-full bg-gray-100">
                   <svg
                     className="h-full w-full text-gray-300"
                     fill="currentColor"
@@ -79,11 +75,11 @@ const CustomerProfile = () => {
             <div className="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
               <div className="mt-6 min-w-0 flex-1 sm:hidden 2xl:block">
                 <h1 className="truncate text-2xl font-bold text-gray-900">
-                  {customerDetails?.name}
+                  {vendorDetails?.name}
                 </h1>
               </div>
               <div className="justify-stretch mt-6 flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <Link to={`/edit-customer/${customerDetails?.id}`}>
+                <Link to={`/edit-vendor/${vendorDetails?.id}`}>
                   <PencilIcon className="h-6 w-6 cursor-pointer" />
                 </Link>
               </div>
@@ -91,7 +87,7 @@ const CustomerProfile = () => {
           </div>
           <div className="mt-6 hidden min-w-0 flex-1 sm:block 2xl:hidden">
             <h1 className="truncate text-2xl font-bold text-gray-900">
-              {customerDetails?.name}
+              {vendorDetails?.name}
             </h1>
           </div>
         </div>
@@ -121,9 +117,10 @@ const CustomerProfile = () => {
 
       <div className="overflow-x-hidden">
         <Outlet />
+        <div className="py-20"></div>
       </div>
     </>
   );
 };
 
-export default CustomerProfile;
+export default VendorProfile;
