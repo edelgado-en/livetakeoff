@@ -68,7 +68,29 @@ const VendorDetails = () => {
           <div className="sm:col-span-1">
             <dt className="text-md font-medium text-gray-500">Active</dt>
             <dd className="mt-1 text-md text-gray-900">
-              {vendorDetails.active ? "Yes" : "No"}
+              {vendorDetails.active ? (
+                <span className="inline-flex items-center gap-x-1.5 rounded-md bg-green-100 px-1.5 py-0.5 text-md font-medium text-green-700">
+                  <svg
+                    viewBox="0 0 6 6"
+                    aria-hidden="true"
+                    className="h-2 w-2 fill-green-500"
+                  >
+                    <circle r={3} cx={3} cy={3} />
+                  </svg>
+                  Active
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-x-1.5 rounded-md bg-red-100 px-1.5 py-0.5 text-md font-medium text-red-700">
+                  <svg
+                    viewBox="0 0 6 6"
+                    aria-hidden="true"
+                    className="h-2 w-2 fill-red-500"
+                  >
+                    <circle r={3} cx={3} cy={3} />
+                  </svg>
+                  Inactive
+                </span>
+              )}
             </dd>
           </div>
           <div className="sm:col-span-2">

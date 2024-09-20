@@ -1,12 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
 import Loader from "../../components/loader/Loader";
 import { useNavigate, useParams } from "react-router-dom";
-import { Listbox, Transition } from "@headlessui/react";
+import { Listbox, Transition, Switch } from "@headlessui/react";
 import { PlusIcon, CheckIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import * as api from "./apiService";
 
 import Input from "react-phone-number-input/input";
+import { set } from "react-hook-form";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -42,6 +43,7 @@ const EditVendor = () => {
   const [phoneNumbers, setPhoneNumbers] = useState("");
   const [billingAddress, setBillingAddress] = useState("");
   const [emails, setEmails] = useState("");
+  const [active, setActive] = useState(true);
 
   useEffect(() => {
     //getPriceList()
@@ -59,6 +61,7 @@ const EditVendor = () => {
       setPhoneNumbers(data.phone_numbers);
       setBillingAddress(data.billing_address);
       setEmails(data.emails);
+      setActive(data.active);
 
       setLoading(false);
     } catch (error) {
@@ -78,6 +81,7 @@ const EditVendor = () => {
       phoneNumbers,
       billingAddress,
       emails,
+      active,
     };
 
     setLoading(true);
@@ -91,6 +95,10 @@ const EditVendor = () => {
     } catch (error) {
       setLoading(false);
     }
+  };
+
+  const handleToggleActive = () => {
+    setActive(!active);
   };
 
   return (
@@ -153,7 +161,7 @@ const EditVendor = () => {
                         name="notes"
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
-                        rows={3}
+                        rows={10}
                         className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
                                       focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
@@ -235,6 +243,42 @@ const EditVendor = () => {
                                   focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <Switch.Group
+                      as="li"
+                      className="flex items-center justify-between py-4"
+                    >
+                      <div className="flex flex-col">
+                        <Switch.Label
+                          as="p"
+                          className="text-md font-medium text-gray-900"
+                          passive
+                        >
+                          Active
+                        </Switch.Label>
+                        <Switch.Description className="text-md text-gray-500">
+                          Controls whether this vendor should be active or not.
+                        </Switch.Description>
+                      </div>
+                      <Switch
+                        checked={active}
+                        onChange={() => handleToggleActive()}
+                        className={classNames(
+                          active ? "bg-red-500" : "bg-gray-200",
+                          "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        )}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={classNames(
+                            active ? "translate-x-5" : "translate-x-0",
+                            "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                          )}
+                        />
+                      </Switch>
+                    </Switch.Group>
                   </div>
                 </div>
               </div>
