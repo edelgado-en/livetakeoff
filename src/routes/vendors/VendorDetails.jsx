@@ -66,7 +66,7 @@ const VendorDetails = () => {
             </dd>
           </div>
           <div className="sm:col-span-1">
-            <dt className="text-md font-medium text-gray-500">Active</dt>
+            <dt className="text-md font-medium text-gray-500">Status</dt>
             <dd className="mt-1 text-md text-gray-900">
               {vendorDetails.active ? (
                 <span className="inline-flex items-center gap-x-1.5 rounded-md bg-green-100 px-1.5 py-0.5 text-md font-medium text-green-700">
