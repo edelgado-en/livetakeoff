@@ -461,11 +461,29 @@ const Vendors = () => {
                         >
                           <div className="relative flex items-center space-x-3 px-6 py-5 focus-within:ring-2 focus-within:ring-inset focus-within:ring-red-500 hover:bg-gray-50">
                             <div className="flex-shrink-0">
-                              <img
+                              {/* <img
                                 className="h-10 w-10 rounded-full"
                                 src={vendor.logo}
                                 alt=""
-                              />
+                              /> */}
+                              {vendor.logo ? (
+                                <img
+                                  className="h-10 w-10 rounded-full ring-4
+                                                            ring-white bg-white border-black"
+                                  src={vendor.logo}
+                                  alt=""
+                                />
+                              ) : (
+                                <span className="overflow-hidden rounded-full bg-gray-100">
+                                  <svg
+                                    className="h-10 w-10 text-gray-300"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                  </svg>
+                                </span>
+                              )}
                             </div>
                             <div className="min-w-0 flex-1">
                               <div className="focus:outline-none">
