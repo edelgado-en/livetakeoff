@@ -447,7 +447,7 @@ const Vendors = () => {
               {/* Directory list */}
               <nav
                 className="min-h-0 flex-1 overflow-y-auto"
-                style={{ maxHeight: "700px" }}
+                style={{ maxHeight: "900px" }}
                 aria-label="Directory"
               >
                 {loading && <Loader />}
