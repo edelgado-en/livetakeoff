@@ -190,7 +190,7 @@ const JobSchedules = () => {
                       <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                         <div className="w-full grid xl:grid-cols-2 lg:grid-cols-2 md-grid-cols-2 xs:grid-cols-1">
                           <div>
-                            <Link to={`/schedules/${schedule.id}`} className="">
+                            <div className="">
                               <span className="font-medium text-red-600 text-sm">
                                 {schedule.tailNumber}
                               </span>
@@ -201,7 +201,7 @@ const JobSchedules = () => {
                               <span className="ml-2 text-xs text-gray-500">
                                 {schedule.created_at}
                               </span>
-                            </Link>
+                            </div>
 
                             <div className="text-sm text-gray-800 mt-2 flex gap-1">
                               {schedule.customer?.name}
@@ -265,7 +265,7 @@ const JobSchedules = () => {
                           </div>
                         </div>
                       </div>
-                      <Link
+                      {/* <Link
                         to={`/schedules/${schedule.id}`}
                         className="ml-5 flex-shrink-0"
                       >
@@ -273,7 +273,7 @@ const JobSchedules = () => {
                           className="h-5 w-5 text-gray-400"
                           aria-hidden="true"
                         />
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 </li>
