@@ -19,3 +19,19 @@ export const createVendor = (formData: any) => {
 export const editVendor = (id: number, request: any) => {
     return httpService.patch(`/api/vendors/${id}/`, request)
 }
+
+export const uploadFile = (vendorId: number, formData: any) => {
+    return httpService.post(`/api/vendor-files/upload/${vendorId}/`, formData,  {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+}
+
+export const deleteVendorFile = (fileId: number) => {
+    return httpService.delete(`/api/vendor-files/${fileId}/`);
+}
+
+export const getVendorFiles = (vendorId: number) => {
+    return httpService.get(`/api/vendor-files/${vendorId}/`);
+}

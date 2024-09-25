@@ -61,6 +61,7 @@ import VendorProfile from "./routes/vendors/VendorProfile";
 import VendorDetails from "./routes/vendors/VendorDetails";
 import CreateVendor from "./routes/vendors/CreateVendor";
 import EditVendor from "./routes/vendors/EditVendor";
+import VendorFiles from "./routes/vendors/VendorFiles";
 
 import JobTailDetails from "./routes/job/JobTailDetails";
 
@@ -353,6 +354,7 @@ const App = () => {
                       >
                         <Route index element={<VendorDetails />} />
                         <Route path="details" element={<VendorDetails />} />
+                        <Route path="files" element={<VendorFiles />} />
                       </Route>
                     </Route>
 

@@ -1,25 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, Outlet, useLocation } from "react-router-dom";
-import { Dialog, Transition, Switch, Menu } from "@headlessui/react";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import * as api from "./apiService";
-
-const formatPhoneNumber = (phoneNumberString) => {
-  var cleaned = ("" + phoneNumberString).replace(/\D/g, "");
-  var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-
-  if (match) {
-    var intlCode = match[1] ? "+1 " : "";
-    return [intlCode, "(", match[2], ") ", match[3], "-", match[4]].join("");
-  }
-
-  return null;
-};
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 const VendorDetails = () => {
   const { vendorId } = useParams();
