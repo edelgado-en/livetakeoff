@@ -383,6 +383,8 @@ const JobsQueue = () => {
       setProjectManagerSelected({ id: "All", name: "All" });
     } else if (activeFilterId === "vendor") {
       setVendorSelected({ id: "All", name: "All" });
+    } else if (activeFilterId === "airportType") {
+      setAirportTypeSelected({ id: "All", name: "All" });
     }
 
     setActiveFilters(
@@ -454,6 +456,13 @@ const JobsQueue = () => {
       activeFilters.push({
         id: "airport",
         name: airportSelected.name,
+      });
+    }
+
+    if (request.airport_type !== "All") {
+      activeFilters.push({
+        id: "airportType",
+        name: airportTypeSelected.name,
       });
     }
 
