@@ -13,6 +13,9 @@ import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import ReactTimeAgo from "react-time-ago";
 
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../userProfile/userSlice";
+
 import * as api from "./apiService";
 import { toast } from "react-toastify";
 
@@ -43,6 +46,7 @@ const UserDetails = () => {
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState({});
   const [loading, setLoading] = useState(true);
+  const currentUser = useAppSelector(selectUser);
 
   const [airports, setAirports] = useState([]);
   const [totalAirports, setTotalAirports] = useState(0);
@@ -80,6 +84,8 @@ const UserDetails = () => {
     useState(false);
   const [showSMSNotificationSection, setShowSMSNotificationSection] =
     useState(false);
+
+  const [showPermissionSection, setShowPermissionSection] = useState(false);
 
   useEffect(() => {
     //Basic throttling
@@ -823,6 +829,128 @@ const UserDetails = () => {
     }
   };
 
+  const handleToggleShowAirportFees = async () => {
+    try {
+      const request = {
+        show_airport_fees: !userDetails.profile.show_airport_fees,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          show_airport_fees: !userDetails.profile.show_airport_fees,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update show airport fees");
+    }
+  };
+
+  const handleToggleShowJobPrice = async () => {
+    try {
+      const request = {
+        show_job_price: !userDetails.profile.show_job_price,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          show_job_price: !userDetails.profile.show_job_price,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update show job price");
+    }
+  };
+
+  const handleToggleEnableAllCustomers = async () => {
+    try {
+      const request = {
+        enable_all_customers: !userDetails.profile.enable_all_customers,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_all_customers: !userDetails.profile.enable_all_customers,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update enable all customers");
+    }
+  };
+
+  const handleToggleEnableAllAirports = async () => {
+    try {
+      const request = {
+        enable_all_airports: !userDetails.profile.enable_all_airports,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_all_airports: !userDetails.profile.enable_all_airports,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update enable all airports");
+    }
+  };
+
+  const handleToggleEnableInventoryDashboard = async () => {
+    try {
+      const request = {
+        enable_inventory_dashboard:
+          !userDetails.profile.enable_inventory_dashboard,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_inventory_dashboard:
+            !userDetails.profile.enable_inventory_dashboard,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update enable inventory dashboard");
+    }
+  };
+
+  const handleToggleEnableEstimates = async () => {
+    try {
+      const request = {
+        enable_estimates: !userDetails.profile.enable_estimates,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_estimates: !userDetails.profile.enable_estimates,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update enable estimates");
+    }
+  };
+
   return (
     <AnimatedPage>
       {/* {loading && <Loader />} */}
@@ -1062,6 +1190,298 @@ const UserDetails = () => {
                         </button>
                       </div>
                     ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-8 border border-gray-200 rounded-md p-6 pb-8">
+                <div
+                  className="flex justify-between cursor-pointer"
+                  onClick={() =>
+                    setShowPermissionSection(!showPermissionSection)
+                  }
+                >
+                  <div className="flex-1">
+                    <div className="font-medium text-xl">Permissions</div>
+                    <div className="text-md text-gray-500 mt-1">
+                      Configure which permissions the user should be getting.
+                    </div>
+                  </div>
+                  <div className="">
+                    {showPermissionSection && (
+                      <ChevronUpIcon className="h-5 w-5 relative top-4" />
+                    )}
+                    {!showPermissionSection && (
+                      <ChevronDownIcon className="h-5 w-5 relative top-4" />
+                    )}
+                  </div>
+                </div>
+
+                {showPermissionSection && (
+                  <div>
+                    {userDetails?.is_internal_coordinator && (
+                      <>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Show Airport Fees
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to see airport
+                              and fbo additional fees when creating a job.
+                              <div>
+                                The information will be shown when selecting an
+                                airport or fbo.
+                              </div>
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile
+                                .enable_email_notification_job_created
+                            }
+                            onChange={handleToggleShowAirportFees}
+                            className={classNames(
+                              userDetails.profile.show_airport_fees
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.show_airport_fees
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Show Job Price
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the price for jobs will be shown in
+                              the job details view.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.show_job_price}
+                            onChange={handleToggleShowJobPrice}
+                            className={classNames(
+                              userDetails.profile.show_job_price
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.show_job_price
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable All Customers
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to see all
+                              customers in the system. Otherwise, the user will
+                              only see the customers that are associated with
+                              the user.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.enable_all_customers}
+                            onChange={handleToggleEnableAllCustomers}
+                            className={classNames(
+                              userDetails.profile.enable_all_customers
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_all_customers
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable All Airports
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to see all
+                              airports in the system. Otherwise, the user will
+                              only see the airports that are associated with the
+                              user.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.enable_all_airports}
+                            onChange={handleToggleEnableAllAirports}
+                            className={classNames(
+                              userDetails.profile.enable_all_airports
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_all_airports
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable Inventory Dashboard
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to see the
+                              inventory dashboard.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={
+                              userDetails.profile.enable_inventory_dashboard
+                            }
+                            onChange={handleToggleEnableInventoryDashboard}
+                            className={classNames(
+                              userDetails.profile.enable_inventory_dashboard
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_inventory_dashboard
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable Estimates
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to see and
+                              manage job estimates.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.enable_estimates}
+                            onChange={handleToggleEnableEstimates}
+                            className={classNames(
+                              userDetails.profile.enable_estimates
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_estimates
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
