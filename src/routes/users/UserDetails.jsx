@@ -951,6 +951,46 @@ const UserDetails = () => {
     }
   };
 
+  const handleToggleEnableAcceptJobs = async () => {
+    try {
+      const request = {
+        enable_accept_jobs: !userDetails.profile.enable_accept_jobs,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_accept_jobs: !userDetails.profile.enable_accept_jobs,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update enable accept jobs");
+    }
+  };
+
+  const handleToggleMasterVendorPm = async () => {
+    try {
+      const request = {
+        master_vendor_pm: !userDetails.profile.master_vendor_pm,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          master_vendor_pm: !userDetails.profile.master_vendor_pm,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update master vendor pm");
+    }
+  };
+
   return (
     <AnimatedPage>
       {/* {loading && <Loader />} */}
@@ -1473,6 +1513,107 @@ const UserDetails = () => {
                               aria-hidden="true"
                               className={classNames(
                                 userDetails.profile.enable_estimates
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                      </>
+                    )}
+
+                    {userDetails?.is_project_manager && (
+                      <>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable Accept Jobs
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to accept jobs.
+                              This is only applicable to project managers.
+                              <div>
+                                If disabled, the project manager will skip the
+                                acceptance process and go straigh to start job.
+                              </div>
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.enable_accept_jobs}
+                            onChange={handleToggleEnableAcceptJobs}
+                            className={classNames(
+                              userDetails.profile.enable_accept_jobs
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_accept_jobs
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Master Vendor PM
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the external project manager will see
+                              all services completed by its vendor in the
+                              service report.
+                              <div>
+                                If disabled, the external project manager will
+                                only see what its been completed by him/her.
+                              </div>
+                              <div>
+                                Additionally, the master vendor PM can see all
+                                jobs assigned to any PM in the vendor, and it
+                                can re-assign jobs to any PM in the vendor.
+                              </div>
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.master_vendor_pm}
+                            onChange={handleToggleMasterVendorPm}
+                            className={classNames(
+                              userDetails.profile.master_vendor_pm
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.master_vendor_pm
                                   ? "translate-x-5"
                                   : "translate-x-0",
                                 "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
