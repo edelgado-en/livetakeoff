@@ -991,6 +991,46 @@ const UserDetails = () => {
     }
   };
 
+  const handleToggleEnableConfirmJobs = async () => {
+    try {
+      const request = {
+        enable_confirm_jobs: !userDetails.profile.enable_confirm_jobs,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_confirm_jobs: !userDetails.profile.enable_confirm_jobs,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update enable confirm jobs");
+    }
+  };
+
+  const handleTogglePromptRequestedBy = async () => {
+    try {
+      const request = {
+        prompt_requested_by: !userDetails.profile.prompt_requested_by,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          prompt_requested_by: !userDetails.profile.prompt_requested_by,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update prompt requested by");
+    }
+  };
+
   return (
     <AnimatedPage>
       {/* {loading && <Loader />} */}
@@ -1614,6 +1654,140 @@ const UserDetails = () => {
                               aria-hidden="true"
                               className={classNames(
                                 userDetails.profile.master_vendor_pm
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                      </>
+                    )}
+
+                    {userDetails?.is_customer_user && (
+                      <>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable Confirm Jobs
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to confirm jobs.
+                              This refers to the approval process for customer
+                              users.
+                              <div>
+                                If disabled, the user will not be able to
+                                confirm jobs. Admins can always confirm jobs.
+                              </div>
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.enable_confirm_jobs}
+                            onChange={handleToggleEnableConfirmJobs}
+                            className={classNames(
+                              userDetails.profile.enable_confirm_jobs
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_confirm_jobs
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Show Job Price
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the price for jobs will be shown in
+                              the job details view.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.show_job_price}
+                            onChange={handleToggleShowJobPrice}
+                            className={classNames(
+                              userDetails.profile.show_job_price
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.show_job_price
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Prompt Requested By
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              For customers users that use generic profiles,
+                              this will prompt them to enter their name when
+                              creating a job.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.prompt_requested_by}
+                            onChange={handleTogglePromptRequestedBy}
+                            className={classNames(
+                              userDetails.profile.prompt_requested_by
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.prompt_requested_by
                                   ? "translate-x-5"
                                   : "translate-x-0",
                                 "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
