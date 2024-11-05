@@ -1031,6 +1031,26 @@ const UserDetails = () => {
     }
   };
 
+  const handleToggleEnableInvoice = async () => {
+    try {
+      const request = {
+        enable_invoice: !userDetails.profile.enable_invoice,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          enable_invoice: !userDetails.profile.enable_invoice,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update enable invoice");
+    }
+  };
+
   return (
     <AnimatedPage>
       {/* {loading && <Loader />} */}
@@ -1788,6 +1808,95 @@ const UserDetails = () => {
                               aria-hidden="true"
                               className={classNames(
                                 userDetails.profile.prompt_requested_by
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                      </>
+                    )}
+
+                    {(userDetails?.is_staff ||
+                      userDetails?.is_superuser ||
+                      userDetails?.is_account_manager) && (
+                      <>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable Estimates
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to see and
+                              manage job estimates.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.enable_estimates}
+                            onChange={handleToggleEnableEstimates}
+                            className={classNames(
+                              userDetails.profile.enable_estimates
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_estimates
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Enable Invoice
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will be able to see and
+                              manage job invoices.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.enable_invoice}
+                            onChange={handleToggleEnableInvoice}
+                            className={classNames(
+                              userDetails.profile.enable_invoice
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.enable_invoice
                                   ? "translate-x-5"
                                   : "translate-x-0",
                                 "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
