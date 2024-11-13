@@ -1663,19 +1663,20 @@ const JobInfo = () => {
                   </h3>
                 </div>
                 <div className="border-t border-gray-200">
-                  {!jobDetails.is_auto_priced && (
-                    <div className="p-4 flex gap-4">
-                      <dt className="text-md font-bold text-gray-900">
-                        Price (manually set):
-                      </dt>
-                      <dd className="text-md text-gray-700">
-                        {"$"}
-                        {jobDetails.price
-                          ? jobDetails.price.toLocaleString()
-                          : "0.00"}
-                      </dd>
-                    </div>
-                  )}
+                  {!jobDetails.is_auto_priced &&
+                    !currentUser.isProjectManager && (
+                      <div className="p-4 flex gap-4">
+                        <dt className="text-md font-bold text-gray-900">
+                          Price (manually set):
+                        </dt>
+                        <dd className="text-md text-gray-700">
+                          {"$"}
+                          {jobDetails.price
+                            ? jobDetails.price.toLocaleString()
+                            : "0.00"}
+                        </dd>
+                      </div>
+                    )}
 
                   {jobDetails.is_auto_priced && (
                     <div>
@@ -1685,12 +1686,14 @@ const JobInfo = () => {
                             {priceBreakdown.aircraftType}
                           </div>
                           <div>
-                            <span
-                              className="relative bg-sky-100 text-sky-500 rounded-md p-1 font-medium"
-                              style={{ top: "2px" }}
-                            >
-                              {priceBreakdown.priceListType}
-                            </span>
+                            {!currentUser.isProjectManager && (
+                              <span
+                                className="relative bg-sky-100 text-sky-500 rounded-md p-1 font-medium"
+                                style={{ top: "2px" }}
+                              >
+                                {priceBreakdown.priceListType}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="mt-4">
