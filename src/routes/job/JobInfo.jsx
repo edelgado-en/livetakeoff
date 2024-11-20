@@ -1710,7 +1710,9 @@ const JobInfo = () => {
                                   {service.name}
                                 </dt>
                                 <dd className="whitespace-nowrap text-gray-900">
-                                  ${service.price}
+                                  {service.price > 0
+                                    ? "$" + service.price
+                                    : "TBD"}
                                 </dd>
                               </div>
                             ))}
