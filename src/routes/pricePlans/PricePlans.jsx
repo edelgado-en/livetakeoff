@@ -95,10 +95,10 @@ const PricePlans = () => {
       <article className="m-auto max-w-7xl px-2" style={{ maxWidth: "1400px" }}>
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-xl font-semibold text-gray-900">
+            <h1 className="text-xl font-bold text-gray-600 uppercase">
               Pricing Lists
             </h1>
-            <p className="mt-2 text-sm text-gray-700">
+            <p className="mt-2 text-md text-gray-700">
               Start by adding a new one, then add prices for all services.
             </p>
           </div>
