@@ -167,7 +167,12 @@ const PricePlans = () => {
                     See prices
                   </Link>
                 </div>
-                <div className="px-6 pt-2 pb-8">
+                <div className="px-6 pt-2 pb-8 relative">
+                  {pricingPlan.is_vendor && (
+                    <div className="inline-flex text-sm text-white rounded-md py-1 px-2 bg-blue-400 absolute right-2 top-2">
+                      Vendor
+                    </div>
+                  )}
                   <ul className="mt-6 space-y-4">
                     <li className="flex space-x-3">
                       <UserIcon
