@@ -92,7 +92,7 @@ const PricePlans = () => {
 
   return (
     <AnimatedPage>
-      <article className="m-auto max-w-5xl px-2">
+      <article className="m-auto max-w-7xl px-2" style={{ maxWidth: "1400px" }}>
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-xl font-semibold text-gray-900">
@@ -109,7 +109,7 @@ const PricePlans = () => {
               <Link
                 to="add"
                 className="inline-flex items-center justify-center rounded-md border border-transparent
-                                        bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm
+                                        bg-red-600 px-4 py-2 text-md font-semibold text-white shadow-sm
                                         hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500
                                         focus:ring-offset-2 sm:w-auto"
               >
@@ -123,7 +123,7 @@ const PricePlans = () => {
         {loading && <Loader />}
 
         {!loading && (
-          <div className="mt-10 grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+          <div className="mt-10 grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
             {pricingPlans.map((pricingPlan) => (
               <div
                 key={pricingPlan.name}
@@ -140,14 +140,14 @@ const PricePlans = () => {
                           onClick={() =>
                             handleToggleEditPricePlanModal(pricingPlan)
                           }
-                          className="h-4 w-4 text-gray-500 cursor-pointer"
+                          className="h-5 w-5 text-gray-500 cursor-pointer"
                         />
 
                         <TrashIcon
                           onClick={() =>
                             handleToggleDeletePricePlanModal(pricingPlan)
                           }
-                          className="h-4 w-4 text-gray-500 cursor-pointer"
+                          className="h-5 w-5 text-gray-500 cursor-pointer"
                         />
                       </div>
                     )}
