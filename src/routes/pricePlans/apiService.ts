@@ -21,6 +21,10 @@ export const editPricePlan = (id: number, request: any) => {
     return httpService.patch(`/api/pricing-plans/${id}/`, request)
 }
 
+export const getPricePlanDetails = (id: number, request: any) => {
+    return httpService.get(`/api/pricing-plans/details/${id}/`)
+}
+
 export const getPriceListing = (id: number) => {
     return httpService.get(`/api/price-listing/${id}/`);
 }

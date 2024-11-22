@@ -136,12 +136,9 @@ const PricePlans = () => {
                     </h2>
                     {pricingPlan.name !== "Standard" && (
                       <div className="flex gap-3">
-                        <PencilIcon
-                          onClick={() =>
-                            handleToggleEditPricePlanModal(pricingPlan)
-                          }
-                          className="h-5 w-5 text-gray-500 cursor-pointer"
-                        />
+                        <Link to={`/price-plans/${pricingPlan.id}/details`}>
+                          <PencilIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+                        </Link>
 
                         <TrashIcon
                           onClick={() =>

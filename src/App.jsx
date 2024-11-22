@@ -55,6 +55,7 @@ import JobPriceBreakdown from "./routes/job/JobPricebreakdown";
 import ServicePrices from "./routes/pricePlans/ServicePrices";
 import PricePlans from "./routes/pricePlans/PricePlans";
 import CreatePricePlan from "./routes/pricePlans/CreatePricePlan";
+import PricePlanDetails from "./routes/pricePlans/PricePlanDetails";
 
 import Vendors from "./routes/vendors/Vendors";
 import VendorProfile from "./routes/vendors/VendorProfile";
@@ -394,6 +395,10 @@ const App = () => {
                     <Route path="contact" element={<ContactUs />} />
                     <Route path="help" element={<HelpFileList />} />
                     <Route path="price-plans" element={<PricePlans />} />
+                    <Route
+                      path="price-plans/:pricePlanId/details"
+                      element={<PricePlanDetails />}
+                    />
                     <Route
                       path="price-plans/add"
                       element={<CreatePricePlan />}
