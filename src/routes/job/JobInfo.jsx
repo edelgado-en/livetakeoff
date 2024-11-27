@@ -1727,117 +1727,133 @@ const JobInfo = () => {
                           </div>
                         </div>
 
-                        {priceBreakdown.discounts?.length > 0 && (
-                          <div className="">
-                            <h3 className="text-lg text-gray-700 font-medium">
-                              Discounts Applied
-                            </h3>
-                            <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
-                              {priceBreakdown.discounts.map((discount) => (
-                                <div
-                                  key={discount.id}
-                                  className="flex justify-between py-2 text-lg hover:bg-gray-50"
-                                >
-                                  <dt className="text-gray-500 pr-2 truncate">
-                                    {discount.name === "S" ? "By Service" : ""}
-                                    {discount.name === "A" ? "By Airport" : ""}
-                                    {discount.name === "G" ? "General" : ""}
+                        {(currentUser.isAdmin ||
+                          currentUser.isSuperUser ||
+                          currentUser.isAccountManager ||
+                          currentUser.isInternalCoordinator ||
+                          currentUser.isCustomer) && (
+                          <>
+                            {priceBreakdown.discounts?.length > 0 && (
+                              <div className="">
+                                <h3 className="text-lg text-gray-700 font-medium">
+                                  Discounts Applied
+                                </h3>
+                                <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
+                                  {priceBreakdown.discounts.map((discount) => (
+                                    <div
+                                      key={discount.id}
+                                      className="flex justify-between py-2 text-lg hover:bg-gray-50"
+                                    >
+                                      <dt className="text-gray-500 pr-2 truncate">
+                                        {discount.name === "S"
+                                          ? "By Service"
+                                          : ""}
+                                        {discount.name === "A"
+                                          ? "By Airport"
+                                          : ""}
+                                        {discount.name === "G" ? "General" : ""}
+                                      </dt>
+                                      <dd className="whitespace-nowrap text-gray-900">
+                                        {discount.isPercentage && (
+                                          <>
+                                            {discount.discount}
+                                            {"%"}
+                                            <span className="text-gray-500">
+                                              {" ("}$
+                                              {discount.discount_dollar_amount}
+                                              {")"}
+                                            </span>
+                                          </>
+                                        )}
+
+                                        {!discount.isPercentage && (
+                                          <>
+                                            {"$"}
+                                            {discount.discount}
+                                          </>
+                                        )}
+                                      </dd>
+                                    </div>
+                                  ))}
+                                </dl>
+                                <div className="flex justify-end py-2 text-lg mt-1">
+                                  <dt className="text-gray-500 pr-2 text-right font-medium">
+                                    Subtotal
                                   </dt>
                                   <dd className="whitespace-nowrap text-gray-900">
-                                    {discount.isPercentage && (
-                                      <>
-                                        {discount.discount}
-                                        {"%"}
-                                        <span className="text-gray-500">
-                                          {" ("}$
-                                          {discount.discount_dollar_amount}
-                                          {")"}
-                                        </span>
-                                      </>
-                                    )}
-
-                                    {!discount.isPercentage && (
-                                      <>
-                                        {"$"}
-                                        {discount.discount}
-                                      </>
-                                    )}
+                                    ${priceBreakdown.discountedPrice}
                                   </dd>
                                 </div>
-                              ))}
-                            </dl>
-                            <div className="flex justify-end py-2 text-lg mt-1">
+                              </div>
+                            )}
+
+                            {priceBreakdown.additionalFees?.length > 0 && (
+                              <div className="">
+                                <h3 className="text-lg text-gray-700">
+                                  Additional Fees Applied
+                                </h3>
+                                <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
+                                  {priceBreakdown.additionalFees.map((fee) => (
+                                    <div
+                                      key={fee.id}
+                                      className="flex justify-between py-2 text-lg hover:bg-gray-50"
+                                    >
+                                      <dt className="text-gray-500 pr-2 truncate">
+                                        {fee.name === "A" ? "Travel Fees" : ""}
+                                        {fee.name === "F" ? "FBO Fee" : ""}
+                                        {fee.name === "G" ? "General" : ""}
+                                        {fee.name === "V"
+                                          ? "Vendor Price Difference"
+                                          : ""}
+                                        {fee.name === "M"
+                                          ? "Management Fees"
+                                          : ""}
+                                      </dt>
+                                      <dd className="whitespace-nowrap text-gray-900">
+                                        {fee.isPercentage && (
+                                          <>
+                                            {fee.fee}
+                                            {"%"}
+                                            <span className="text-gray-500">
+                                              {" ("}$
+                                              {fee.additional_fee_dollar_amount}
+                                              {")"}
+                                            </span>
+                                          </>
+                                        )}
+
+                                        {!fee.isPercentage &&
+                                          fee.name !== "M" && (
+                                            <>
+                                              {"$"}
+                                              {fee.fee}
+                                            </>
+                                          )}
+
+                                        {!fee.isPercentage &&
+                                          fee.name === "M" && (
+                                            <>
+                                              {"$"}
+                                              {fee.additional_fee_dollar_amount}
+                                            </>
+                                          )}
+                                      </dd>
+                                    </div>
+                                  ))}
+                                </dl>
+                              </div>
+                            )}
+
+                            <div className="flex justify-end pb-4 text-lg">
                               <dt className="text-gray-500 pr-2 text-right font-medium">
-                                Subtotal
+                                Total
                               </dt>
                               <dd className="whitespace-nowrap text-gray-900">
-                                ${priceBreakdown.discountedPrice}
+                                ${priceBreakdown.totalPrice}
                               </dd>
                             </div>
-                          </div>
+                          </>
                         )}
-
-                        {priceBreakdown.additionalFees?.length > 0 && (
-                          <div className="">
-                            <h3 className="text-lg text-gray-700">
-                              Additional Fees Applied
-                            </h3>
-                            <dl className="mt-2 divide-y divide-gray-200 border-b border-gray-200">
-                              {priceBreakdown.additionalFees.map((fee) => (
-                                <div
-                                  key={fee.id}
-                                  className="flex justify-between py-2 text-lg hover:bg-gray-50"
-                                >
-                                  <dt className="text-gray-500 pr-2 truncate">
-                                    {fee.name === "A" ? "Travel Fees" : ""}
-                                    {fee.name === "F" ? "FBO Fee" : ""}
-                                    {fee.name === "G" ? "General" : ""}
-                                    {fee.name === "V"
-                                      ? "Vendor Price Difference"
-                                      : ""}
-                                    {fee.name === "M" ? "Management Fees" : ""}
-                                  </dt>
-                                  <dd className="whitespace-nowrap text-gray-900">
-                                    {fee.isPercentage && (
-                                      <>
-                                        {fee.fee}
-                                        {"%"}
-                                        <span className="text-gray-500">
-                                          {" ("}$
-                                          {fee.additional_fee_dollar_amount}
-                                          {")"}
-                                        </span>
-                                      </>
-                                    )}
-
-                                    {!fee.isPercentage && fee.name !== "M" && (
-                                      <>
-                                        {"$"}
-                                        {fee.fee}
-                                      </>
-                                    )}
-
-                                    {!fee.isPercentage && fee.name === "M" && (
-                                      <>
-                                        {"$"}
-                                        {fee.additional_fee_dollar_amount}
-                                      </>
-                                    )}
-                                  </dd>
-                                </div>
-                              ))}
-                            </dl>
-                          </div>
-                        )}
-
-                        <div className="flex justify-end pb-4 text-lg">
-                          <dt className="text-gray-500 pr-2 text-right font-medium">
-                            Total
-                          </dt>
-                          <dd className="whitespace-nowrap text-gray-900">
-                            ${priceBreakdown.totalPrice}
-                          </dd>
-                        </div>
                       </div>
                     </div>
                   )}
