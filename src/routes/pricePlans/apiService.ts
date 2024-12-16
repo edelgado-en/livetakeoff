@@ -48,3 +48,31 @@ export const exportPriceList = (request: any) => {
 export const getServices = (data: any) => {
     return httpService.post('/api/services', data);
 }
+
+export const searchVendors = (data: any) => {
+    return httpService.post('/api/vendors', data);
+}
+
+export const searchCustomers = (request: any) => {
+    return httpService.post('/api/customers', request);
+}
+
+export const createPriceListMapping = (request: any) => {
+    return httpService.post('/api/price-list-mappings', request);
+}
+
+export const getPriceListMappings = (id: any) => {
+    return httpService.get(`/api/price-list-mappings/${id}/`);
+}
+
+export const deleteMapping = (request: any) => {
+    return httpService.post('/api/price-list-mappings', request);
+}
+
+export const updateAvailableVendor = (request: any) => {
+    return httpService.post('/api/price-list-mappings/available-vendors', request);
+}
+
+export const fetchAvailableVendors = (request: any) => {
+    return httpService.post('/api/price-list-mappings/available-vendors', request);
+}
