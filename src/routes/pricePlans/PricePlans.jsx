@@ -203,8 +203,19 @@ const PricePlans = () => {
                         aria-hidden="true"
                       />
                       <span className="text-sm text-gray-500">
-                        {pricingPlan.num_customers} customer(s) currently using
-                        it
+                        {pricingPlan.is_vendor && (
+                          <>
+                            {pricingPlan.num_customer_vendor_mappings}{" "}
+                            customer(s) currently using it
+                          </>
+                        )}
+
+                        {!pricingPlan.is_vendor && (
+                          <>
+                            {pricingPlan.num_customers} customer(s) currently
+                            using it
+                          </>
+                        )}
                       </span>
                     </li>
                   </ul>

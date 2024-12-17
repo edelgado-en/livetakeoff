@@ -51,6 +51,7 @@ const PricePlanDetails = () => {
   const [nameAlreadyExists, setNameAlreadyExists] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [is_vendor, setIsVendor] = useState(false);
 
   const [vendors, setVendors] = useState([]);
   const [vendorSelected, setVendorSelected] = useState(null);
@@ -108,6 +109,7 @@ const PricePlanDetails = () => {
       const { data } = await api.getPricePlanDetails(pricePlanId);
       setName(data.name);
       setDescription(data.description);
+      setIsVendor(data.is_vendor);
     } catch (error) {
       toast.error("Unable to get price list details");
     }
@@ -463,7 +465,7 @@ const PricePlanDetails = () => {
             </button>
           </div>
 
-          {name !== "Standard" && name !== "Standard - Vendor" && (
+          {name !== "Standard - Vendor" && is_vendor && (
             <>
               <div className="w-full border-t border-gray-300 py-2"></div>
 
@@ -869,208 +871,147 @@ const PricePlanDetails = () => {
 
               {!mappingsLoading && (
                 <div className="mt-8 flow-root">
-                  <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                      <table className="min-w-full divide-y divide-gray-300">
-                        <thead>
-                          <tr>
-                            <th
-                              scope="col"
-                              className="py-3.5 pl-4 pr-3 text-left text-md font-semibold text-gray-900 sm:pl-0"
-                            >
-                              Customer
-                            </th>
-                            <th
-                              scope="col"
-                              className="px-3 py-3.5 text-left text-md font-semibold text-gray-900"
-                            >
-                              Vendors
-                            </th>
-                            <th
-                              scope="col"
-                              className="relative py-3.5 pl-3 pr-4 sm:pr-0"
-                            >
-                              <span className="sr-only">Remove</span>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200 bg-white">
-                          {mappings.map((mapping) => (
-                            <>
-                              <tr key={mapping.id}>
-                                <td className="whitespace-nowrap py-5 pl-4 pr-3 text-md sm:pl-0">
-                                  <div className="flex items-center">
-                                    <div className="flex-shrink-0">
-                                      <img
-                                        className="h-10 w-10 rounded-full"
-                                        src={mapping.customer.logo}
-                                        alt=""
-                                      />
-                                    </div>
-                                    <div className="ml-4">
-                                      <div className="font-medium text-gray-900">
-                                        {mapping.customer.name}
+                  {mappings.length > 0 && (
+                    <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                      <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                        <table className="min-w-full divide-y divide-gray-300">
+                          <thead>
+                            <tr>
+                              <th
+                                scope="col"
+                                className="py-3.5 pl-4 pr-3 text-left text-md font-semibold text-gray-900 sm:pl-0"
+                              >
+                                Customer
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-3 py-3.5 text-left text-md font-semibold text-gray-900"
+                              >
+                                Vendors
+                              </th>
+                              <th
+                                scope="col"
+                                className="relative py-3.5 pl-3 pr-4 sm:pr-0"
+                              >
+                                <span className="sr-only">Remove</span>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200 bg-white">
+                            {mappings.map((mapping) => (
+                              <>
+                                <tr key={mapping.id}>
+                                  <td className="whitespace-nowrap py-5 pl-4 pr-3 text-md sm:pl-0">
+                                    <div className="flex items-center">
+                                      <div className="flex-shrink-0">
+                                        <img
+                                          className="h-10 w-10 rounded-full"
+                                          src={mapping.customer.logo}
+                                          alt=""
+                                        />
                                       </div>
-                                      <div className="mt-1 text-gray-500">
-                                        {mapping.customer.emailAddress}
+                                      <div className="ml-4">
+                                        <div className="font-medium text-gray-900">
+                                          {mapping.customer.name}
+                                        </div>
+                                        <div className="mt-1 text-gray-500">
+                                          {mapping.customer.emailAddress}
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </td>
-                                <td className="whitespace-nowrap px-3 py-5 text-md text-gray-500">
-                                  <div className="text-gray-900">
-                                    {mapping.vendor_count} vendors
-                                  </div>
-                                </td>
-                                <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-md font-medium sm:pr-0">
-                                  <button
-                                    onClick={() =>
-                                      handleToggleMappingEditView(
-                                        mapping.id,
-                                        mapping.customer.id
-                                      )
-                                    }
-                                    className="text-blue-600 hover:text-blue-900 mr-4"
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      handleDeleteMapping(mapping.customer.id)
-                                    }
-                                    className="text-blue-600 hover:text-blue-900"
-                                  >
-                                    Remove
-                                  </button>
-                                </td>
-                              </tr>
-                              {mapping.isEditing && (
-                                <tr>
-                                  <td colSpan={3}>
-                                    <div className="p-8">
-                                      <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
-                                        <div
-                                          className="border border-gray-200 rounded-md p-4"
-                                          style={{ height: "680px" }}
-                                        >
-                                          <div className="font-medium text-md">
-                                            <div className="flex justify-between">
-                                              <div>
-                                                All Vendors
-                                                <span
-                                                  className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                  </td>
+                                  <td className="whitespace-nowrap px-3 py-5 text-md text-gray-500">
+                                    <div className="text-gray-900">
+                                      {mapping.vendor_count} vendors
+                                    </div>
+                                  </td>
+                                  <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-md font-medium sm:pr-0">
+                                    <button
+                                      onClick={() =>
+                                        handleToggleMappingEditView(
+                                          mapping.id,
+                                          mapping.customer.id
+                                        )
+                                      }
+                                      className="text-blue-600 hover:text-blue-900 mr-4"
+                                    >
+                                      Edit
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        handleDeleteMapping(mapping.customer.id)
+                                      }
+                                      className="text-blue-600 hover:text-blue-900"
+                                    >
+                                      Remove
+                                    </button>
+                                  </td>
+                                </tr>
+                                {mapping.isEditing && (
+                                  <tr>
+                                    <td colSpan={3}>
+                                      <div className="p-8">
+                                        <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-x-8">
+                                          <div
+                                            className="border border-gray-200 rounded-md p-4"
+                                            style={{ height: "680px" }}
+                                          >
+                                            <div className="font-medium text-md">
+                                              <div className="flex justify-between">
+                                                <div>
+                                                  All Vendors
+                                                  <span
+                                                    className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
                                                             rounded-full text-md font-medium inline-block"
-                                                >
-                                                  {totalVendors}
-                                                </span>
+                                                  >
+                                                    {totalVendors}
+                                                  </span>
+                                                </div>
+                                                <div>
+                                                  {vendorAlreadyAdded && (
+                                                    <div className="text-red-500 text-md relative top-1">
+                                                      Vendor already added
+                                                    </div>
+                                                  )}
+                                                </div>
                                               </div>
-                                              <div>
-                                                {vendorAlreadyAdded && (
-                                                  <div className="text-red-500 text-md relative top-1">
-                                                    Vendor already added
-                                                  </div>
-                                                )}
-                                              </div>
-                                            </div>
 
-                                            <div className="relative rounded-md shadow-sm flex-1">
-                                              <div
-                                                onClick={() => searchVendors()}
-                                                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                                              >
-                                                <MagnifyingGlassIcon
-                                                  className="h-5 w-5 text-gray-400 cursor-pointer"
-                                                  aria-hidden="true"
-                                                />
-                                              </div>
-                                              <input
-                                                type="search"
-                                                name="searchCustomer"
-                                                id="searchCustomer"
-                                                value={vendorSearchName}
-                                                onChange={(event) =>
-                                                  setVendorSearchName(
-                                                    event.target.value
-                                                  )
-                                                }
-                                                onKeyDown={handleKeyDownVendors}
-                                                className="block w-full rounded-md border-gray-300 pl-10
+                                              <div className="relative rounded-md shadow-sm flex-1">
+                                                <div
+                                                  onClick={() =>
+                                                    searchVendors()
+                                                  }
+                                                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                                                >
+                                                  <MagnifyingGlassIcon
+                                                    className="h-5 w-5 text-gray-400 cursor-pointer"
+                                                    aria-hidden="true"
+                                                  />
+                                                </div>
+                                                <input
+                                                  type="search"
+                                                  name="searchCustomer"
+                                                  id="searchCustomer"
+                                                  value={vendorSearchName}
+                                                  onChange={(event) =>
+                                                    setVendorSearchName(
+                                                      event.target.value
+                                                    )
+                                                  }
+                                                  onKeyDown={
+                                                    handleKeyDownVendors
+                                                  }
+                                                  className="block w-full rounded-md border-gray-300 pl-10
                                                                 focus:border-sky-500 text-md
                                                                 focus:ring-sky-500  font-normal"
-                                                placeholder="Search name..."
-                                              />
-                                            </div>
-                                            <div
-                                              className="overflow-y-auto"
-                                              style={{ maxHeight: "560px" }}
-                                            >
-                                              {vendors.map((vendor) => (
-                                                <div
-                                                  key={vendor.id}
-                                                  className="relative"
-                                                >
-                                                  <ul className="">
-                                                    <li className="">
-                                                      <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
-                                                        <div className="min-w-0 flex-1">
-                                                          <p className="text-md text-gray-900 font-normal truncate overflow-ellipsis w-60">
-                                                            {vendor.name}
-                                                          </p>
-                                                        </div>
-                                                        <div>
-                                                          <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                              addAvailableMappingVendor(
-                                                                mapping.customer
-                                                                  .id,
-                                                                vendor.id
-                                                              )
-                                                            }
-                                                            className="inline-flex items-center rounded border
-                                                                                            border-gray-300 bg-white px-2 py-1 text-md
-                                                                                            text-gray-700 shadow-sm
-                                                                                            hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                                                            "
-                                                          >
-                                                            Add
-                                                          </button>
-                                                        </div>
-                                                      </div>
-                                                    </li>
-                                                  </ul>
-                                                </div>
-                                              ))}
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div
-                                          className="border border-gray-200 rounded-md p-4"
-                                          style={{ height: "680px" }}
-                                        >
-                                          <div className="font-medium text-md">
-                                            Available Vendors
-                                            <span
-                                              className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
-                                                    rounded-full text-md font-medium inline-block"
-                                            >
-                                              {mappingAvailableVendors.length}
-                                            </span>
-                                          </div>
-                                          <div className="text-md">
-                                            {mappingAvailableVendors.length ===
-                                              0 && (
-                                              <div className="text-center m-auto mt-24 text-md">
-                                                No available vendors set.
+                                                  placeholder="Search name..."
+                                                />
                                               </div>
-                                            )}
-
-                                            <div
-                                              className="overflow-y-auto"
-                                              style={{ maxHeight: "560px" }}
-                                            >
-                                              {mappingAvailableVendors.map(
-                                                (vendor) => (
+                                              <div
+                                                className="overflow-y-auto"
+                                                style={{ maxHeight: "560px" }}
+                                              >
+                                                {vendors.map((vendor) => (
                                                   <div
                                                     key={vendor.id}
                                                     className="relative"
@@ -1087,7 +1028,7 @@ const PricePlanDetails = () => {
                                                             <button
                                                               type="button"
                                                               onClick={() =>
-                                                                removeAvailableMappingVendor(
+                                                                addAvailableMappingVendor(
                                                                   mapping
                                                                     .customer
                                                                     .id,
@@ -1095,34 +1036,102 @@ const PricePlanDetails = () => {
                                                                 )
                                                               }
                                                               className="inline-flex items-center rounded border
-                                                                                                border-gray-300 bg-white px-2 py-1 text-md
-                                                                                                text-gray-700 shadow-sm
-                                                                                                hover:bg-gray-100 focus:outline-none focus:ring-2
-                                                                                                "
+                                                                                            border-gray-300 bg-white px-2 py-1 text-md
+                                                                                            text-gray-700 shadow-sm
+                                                                                            hover:bg-gray-50 focus:outline-none focus:ring-2
+                                                                                            "
                                                             >
-                                                              Remove
+                                                              Add
                                                             </button>
                                                           </div>
                                                         </div>
                                                       </li>
                                                     </ul>
                                                   </div>
-                                                )
+                                                ))}
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div
+                                            className="border border-gray-200 rounded-md p-4"
+                                            style={{ height: "680px" }}
+                                          >
+                                            <div className="font-medium text-md">
+                                              Available Vendors
+                                              <span
+                                                className="bg-gray-100 text-gray-700 ml-2 py-1 px-2
+                                                    rounded-full text-md font-medium inline-block"
+                                              >
+                                                {mappingAvailableVendors.length}
+                                              </span>
+                                            </div>
+                                            <div className="text-md">
+                                              {mappingAvailableVendors.length ===
+                                                0 && (
+                                                <div className="text-center m-auto mt-24 text-md">
+                                                  No available vendors set.
+                                                </div>
                                               )}
+
+                                              <div
+                                                className="overflow-y-auto"
+                                                style={{ maxHeight: "560px" }}
+                                              >
+                                                {mappingAvailableVendors.map(
+                                                  (vendor) => (
+                                                    <div
+                                                      key={vendor.id}
+                                                      className="relative"
+                                                    >
+                                                      <ul className="">
+                                                        <li className="">
+                                                          <div className="relative flex items-center space-x-3 px-2 py-3 hover:bg-gray-50 rounded-md">
+                                                            <div className="min-w-0 flex-1">
+                                                              <p className="text-md text-gray-900 font-normal truncate overflow-ellipsis w-60">
+                                                                {vendor.name}
+                                                              </p>
+                                                            </div>
+                                                            <div>
+                                                              <button
+                                                                type="button"
+                                                                onClick={() =>
+                                                                  removeAvailableMappingVendor(
+                                                                    mapping
+                                                                      .customer
+                                                                      .id,
+                                                                    vendor.id
+                                                                  )
+                                                                }
+                                                                className="inline-flex items-center rounded border
+                                                                                                border-gray-300 bg-white px-2 py-1 text-md
+                                                                                                text-gray-700 shadow-sm
+                                                                                                hover:bg-gray-100 focus:outline-none focus:ring-2
+                                                                                                "
+                                                              >
+                                                                Remove
+                                                              </button>
+                                                            </div>
+                                                          </div>
+                                                        </li>
+                                                      </ul>
+                                                    </div>
+                                                  )
+                                                )}
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              )}
-                            </>
-                          ))}
-                        </tbody>
-                      </table>
+                                    </td>
+                                  </tr>
+                                )}
+                              </>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
             </>
