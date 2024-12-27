@@ -91,11 +91,20 @@ const VendorFiles = () => {
               {vendorFiles.map((file) => (
                 <li key={file.id} className="p-6 text-md">
                   <div className="flex flex-wrap justify-between gap-4">
-                    <div className="flex gap-1">
-                      <PaperClipIcon
-                        className="h-5 w-5 flex-shrink-0 text-gray-400 relative top-1"
-                        aria-hidden="true"
-                      />
+                    <div className="flex gap-2">
+                      <p
+                        className={`inline-flex text-sm text-white rounded-md py-1 px-2
+                                    ${file.file_type === "I" && "bg-blue-400"}
+                                    ${file.file_type === "W" && "bg-indigo-400"}
+                                    ${
+                                      file.file_type === "O" && "bg-gray-400"
+                                    }        
+                            `}
+                      >
+                        {file.file_type === "I" && "Insurance"}
+                        {file.file_type === "W" && "W-9"}
+                        {file.file_type === "O" && "Other"}
+                      </p>
                       <div
                         className="text-lg truncate overflow-ellipsis"
                         style={{ maxWidth: "250px" }}
@@ -124,12 +133,42 @@ const VendorFiles = () => {
                       >
                         Download
                       </button>
+                      {file.is_approved ? (
+                        <p
+                          className={`inline-flex text-sm text-white rounded-md py-1 px-2
+                                    bg-green-400`}
+                        >
+                          Approved
+                        </p>
+                      ) : (
+                        <button
+                          type="button"
+                          className="inline-flex w-full justify-center rounded-md border font-medium
+                                                            border-gray-300 bg-white px-2 py-1 text-base 
+                                                            text-green-500 shadow-sm focus:outline-none focus:ring-2
+                                                            focus:ring-green-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                        >
+                          Approve
+                        </button>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-wrap justify-between gap-4 mt-1">
                     <div className="text-gray-500 relative top-2 text-md">
                       Uploaded on: {file.created_at}
                     </div>
+                    {file.is_expired ? (
+                      <p
+                        className={`inline-flex text-sm text-white rounded-md py-1 px-2
+                                  bg-red-400`}
+                      >
+                        Expired
+                      </p>
+                    ) : (
+                      <div className="text-gray-500 relative top-2 text-md">
+                        Expires on: {file.expiration_date}
+                      </div>
+                    )}
                   </div>
                 </li>
               ))}

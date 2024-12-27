@@ -1,6 +1,10 @@
 import { Fragment, useState, useEffect } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { ChevronLeftIcon } from "@heroicons/react/outline";
+import { Dialog, Transition, Listbox } from "@headlessui/react";
+import {
+  ChevronLeftIcon,
+  CheckIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/outline";
 import Loader from "../../components/loader/Loader";
 import * as api from "./apiService";
 
@@ -44,6 +48,16 @@ const MagnifyingGlassIcon = () => {
   );
 };
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const fileTypeOptions = [
+  { id: "All", name: "All Files" },
+  { id: "I", name: "Missing Insurance" },
+  { id: "W", name: "Missing W-9" },
+];
+
 const Vendors = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -51,6 +65,8 @@ const Vendors = () => {
   const [totalVendors, setTotalVendors] = useState(0);
   const [vendorSearchName, setVendorSearchName] = useState("");
   const [firstLoad, setFirstLoad] = useState(true);
+
+  const [fileTypeSelected, setFileTypeSelected] = useState(fileTypeOptions[0]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,13 +80,14 @@ const Vendors = () => {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [vendorSearchName]);
+  }, [vendorSearchName, fileTypeSelected]);
 
   const searchVendors = async () => {
     setLoading(true);
 
     const request = {
       name: vendorSearchName,
+      file_type: fileTypeSelected.id,
     };
 
     try {
@@ -443,6 +460,94 @@ const Vendors = () => {
                     </div>
                   </div>
                 </form>
+                <div className="mt-2">
+                  <Listbox
+                    value={fileTypeSelected}
+                    onChange={setFileTypeSelected}
+                  >
+                    {({ open }) => (
+                      <>
+                        <div className="relative">
+                          <Listbox.Button
+                            className="relative w-full cursor-default rounded-md border
+                                  border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                  shadow-sm focus:border-sky-500 focus:outline-none
+                                  focus:ring-1 focus:ring-sky-500 text-md"
+                          >
+                            <span className="block truncate">
+                              {fileTypeSelected.name}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                              <ChevronDownIcon
+                                className="h-4 w-4 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Listbox.Button>
+
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options
+                              className="absolute left-0 z-50 mt-1 max-h-72 w-full overflow-auto
+                                                                  rounded-md bg-white py-1 shadow-lg ring-1
+                                                                  ring-black ring-opacity-5 focus:outline-none text-md"
+                            >
+                              {fileTypeOptions.map((fileType) => (
+                                <Listbox.Option
+                                  key={fileType.id}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active
+                                        ? "text-white bg-red-600"
+                                        : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={fileType}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <span
+                                        className={classNames(
+                                          selected
+                                            ? "font-semibold"
+                                            : "font-normal",
+                                          "block truncate"
+                                        )}
+                                      >
+                                        {fileType.name}
+                                      </span>
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-white"
+                                              : "text-red-600",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </>
+                    )}
+                  </Listbox>
+                </div>
               </div>
               {/* Directory list */}
               <nav
