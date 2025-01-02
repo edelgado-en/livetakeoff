@@ -166,7 +166,8 @@ const VendorFiles = () => {
                       </p>
                     ) : (
                       <div className="text-gray-500 relative top-2 text-md">
-                        Expires on: {file.expiration_date}
+                        {file.expiration_date &&
+                          "Expires on: " + file.expiration_date}
                       </div>
                     )}
                   </div>
