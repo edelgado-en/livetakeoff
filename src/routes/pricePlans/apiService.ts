@@ -29,6 +29,14 @@ export const getPriceListing = (id: number) => {
     return httpService.get(`/api/price-listing/${id}/`);
 }
 
+export const getPricesListing = (request: any) => {
+    return httpService.post('/api/prices-listing', request);
+}
+
+export const getPricesListingByService = (request: any) => {
+    return httpService.post('/api/prices-listing-by-service', request);
+}
+
 export const getPriceListingByService = (id: number) => {
     return httpService.get(`/api/price-listing-by-service/${id}/`);
 }

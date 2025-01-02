@@ -6,7 +6,9 @@ import {
   MinusIcon,
   ShareIcon,
   CheckCircleIcon,
+  ChevronDownIcon,
 } from "@heroicons/react/outline";
+import { useParams } from "react-router-dom";
 import Loader from "../../components/loader/Loader";
 import { Dialog, Transition, Listbox, RadioGroup } from "@headlessui/react";
 import { Link } from "react-router-dom";
@@ -63,6 +65,7 @@ function classNames(...classes) {
 const ServicePrices = () => {
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectUser);
+  const { pricePlanId } = useParams();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -85,8 +88,14 @@ const ServicePrices = () => {
     groupOptions[0]
   );
 
+  const [pricePlansSelected, setPricePlansSelected] = useState([]);
+
   useEffect(() => {
     dispatch(fetchUser());
+  }, []);
+
+  useEffect(() => {
+    searchPricePlans();
   }, []);
 
   useEffect(() => {
@@ -143,6 +152,21 @@ const ServicePrices = () => {
     setLoading(false);
   };
 
+  const searchPricePlans = async () => {
+    const response = await api.getPricingPlans();
+
+    setPricePlans(response.data.results);
+
+    //find the pricePlan with id selectedPricePlanId
+    const pricePlan = response.data.results.find(
+      (item) => item.id === parseInt(pricePlanId)
+    );
+
+    if (pricePlan) {
+      setPricePlansSelected([pricePlan]);
+    }
+  };
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -173,13 +197,14 @@ const ServicePrices = () => {
     setAircraftTypes(newAircraftTypes);
     setAircraftTypeSelected(aircraftType);
 
-    const response = await api.getPriceListing(aircraftType.id);
+    const request = {
+      aircraft_type_id: aircraftType.id,
+      price_list_ids: pricePlansSelected.map((item) => item.id),
+    };
+
+    const response = await api.getPricesListing(request);
 
     setPriceListing(response.data);
-
-    const response2 = await api.getPricingPlans();
-
-    setPricePlans(response2.data.results);
   };
 
   const getServiceDetails = async (service) => {
@@ -196,13 +221,14 @@ const ServicePrices = () => {
     setServices(newServices);
     setServiceSelected(service);
 
-    const response = await api.getPriceListingByService(service.id);
+    const request = {
+      service_id: service.id,
+      price_list_ids: pricePlansSelected.map((item) => item.id),
+    };
+
+    const response = await api.getPricesListingByService(request);
 
     setPriceListing(response.data);
-
-    const response2 = await api.getPricingPlans();
-
-    setPricePlans(response2.data.results);
   };
 
   const updateServicePrice = (serviceName, priceListName, updatedPrice) => {
@@ -356,6 +382,32 @@ const ServicePrices = () => {
     });
 
     setServices(newServices);
+  };
+
+  const handleSetPricePlansSelected = async (event) => {
+    setPricePlansSelected(event);
+
+    const request = {
+      aircraft_type_id: aircraftTypeSelected?.id,
+      service_id: serviceSelected?.id,
+      price_list_ids: event.map((item) => item.id),
+    };
+
+    if (groupOptionSelected.name === "By Aircraft") {
+      if (aircraftTypeSelected) {
+        const response = await api.getPricesListing(request);
+
+        setPriceListing(response.data);
+      }
+    }
+
+    if (groupOptionSelected.name === "By Service") {
+      if (serviceSelected) {
+        const response = await api.getPricesListingByService(request);
+
+        setPriceListing(response.data);
+      }
+    }
   };
 
   return (
@@ -568,6 +620,101 @@ const ServicePrices = () => {
                 {/* Comparison table */}
                 <div className="mx-auto max-w-full bg-white pb-16 sm:pb-16 lg:max-w-full pt-1">
                   <div className="" style={{ minWidth: "820px" }}>
+                    <div className="mt-2" style={{ width: "350px" }}>
+                      <Listbox
+                        multiple
+                        value={pricePlansSelected}
+                        onChange={handleSetPricePlansSelected}
+                      >
+                        {({ open }) => (
+                          <>
+                            <div className="relative">
+                              <Listbox.Button
+                                className="relative w-full cursor-default rounded-md border
+                                    border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                    shadow-sm focus:border-sky-500 focus:outline-none
+                                    focus:ring-1 focus:ring-sky-500 text-md"
+                              >
+                                <span className="block truncate">
+                                  {pricePlansSelected.length > 0 &&
+                                    pricePlansSelected
+                                      .map((pricePlan) => pricePlan.name)
+                                      .join(", ")}
+
+                                  {pricePlansSelected.length === 0 &&
+                                    "Select price list"}
+                                </span>
+                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                  <ChevronDownIcon
+                                    className="h-4 w-4 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </Listbox.Button>
+
+                              <Transition
+                                show={open}
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Listbox.Options
+                                  className="absolute left-0 z-150 mt-1 max-h-72 w-full overflow-auto
+                                                                    rounded-md bg-white py-1 shadow-lg ring-1
+                                                                    ring-black ring-opacity-5 focus:outline-none text-md"
+                                >
+                                  {pricePlans.map((pricePlan) => (
+                                    <Listbox.Option
+                                      key={pricePlan.id}
+                                      className={({ active }) =>
+                                        classNames(
+                                          active
+                                            ? "text-white bg-red-600"
+                                            : "text-gray-900",
+                                          "relative cursor-default select-none py-2 pl-3 pr-9"
+                                        )
+                                      }
+                                      value={pricePlan}
+                                    >
+                                      {({ selected, active }) => (
+                                        <>
+                                          <span
+                                            className={classNames(
+                                              selected
+                                                ? "font-semibold"
+                                                : "font-normal",
+                                              "block truncate"
+                                            )}
+                                          >
+                                            {pricePlan.name}
+                                          </span>
+                                          {selected ? (
+                                            <span
+                                              className={classNames(
+                                                active
+                                                  ? "text-white"
+                                                  : "text-red-600",
+                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                              )}
+                                            >
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          </>
+                        )}
+                      </Listbox>
+                    </div>
                     {groupOptionSelected.name === "By Aircraft" &&
                       aircraftTypeSelected === null && (
                         <div className="text-lg text-gray-700 mt-4">
@@ -584,7 +731,7 @@ const ServicePrices = () => {
 
                     {groupOptionSelected.name === "By Aircraft" &&
                       aircraftTypeSelected !== null && (
-                        <table className="min-w-full divide-y divide-gray-300 table-fixed">
+                        <table className="mt-2 min-w-full divide-y divide-gray-300 table-fixed">
                           <thead>
                             <tr>
                               <th
@@ -593,13 +740,13 @@ const ServicePrices = () => {
                               >
                                 Aircraft
                               </th>
-                              {pricePlans.map((pricePlan) => (
+                              {pricePlansSelected.map((pricePlan) => (
                                 <th
                                   key={pricePlan.name}
                                   className="px-6 pb-1 text-left text-sm font-medium leading-6 text-gray-900"
                                   scope="col"
                                 >
-                                  {pricePlan.name}
+                                  {pricePlan.name} - {pricePlan.id}
                                 </th>
                               ))}
                             </tr>
@@ -650,7 +797,7 @@ const ServicePrices = () => {
                             <tfoot>
                               <tr className="border-t border-gray-200">
                                 <th className="sr-only" scope="row"></th>
-                                {pricePlans.map((pricePlan) => (
+                                {pricePlansSelected.map((pricePlan) => (
                                   <td
                                     key={pricePlan.name}
                                     className="px-6 pt-5"
@@ -677,7 +824,7 @@ const ServicePrices = () => {
 
                     {groupOptionSelected.name === "By Service" &&
                       serviceSelected !== null && (
-                        <table className="min-w-full divide-y divide-gray-300 table-fixed">
+                        <table className="mt-2 min-w-full divide-y divide-gray-300 table-fixed">
                           <thead>
                             <tr>
                               <th
@@ -686,13 +833,13 @@ const ServicePrices = () => {
                               >
                                 Service
                               </th>
-                              {pricePlans.map((pricePlan) => (
+                              {pricePlansSelected.map((pricePlan) => (
                                 <th
                                   key={pricePlan.name}
                                   className="px-6 pb-1 text-left text-sm font-medium leading-6 text-gray-900"
                                   scope="col"
                                 >
-                                  {pricePlan.name}
+                                  {pricePlan.name} - {pricePlan.id}
                                 </th>
                               ))}
                             </tr>
@@ -740,7 +887,7 @@ const ServicePrices = () => {
                           <tfoot>
                             <tr className="border-t border-gray-200">
                               <th className="sr-only" scope="row"></th>
-                              {pricePlans.map((pricePlan) => (
+                              {pricePlansSelected.map((pricePlan) => (
                                 <td key={pricePlan.name} className="px-6 pt-5">
                                   <button
                                     disabled={updateLoading}
@@ -886,7 +1033,6 @@ const ServicePrices = () => {
               style={{ height: "1000px", paddingBottom: "100px" }}
             >
               {loading && <Loader />}
-
               {groupOptionSelected.name === "By Aircraft" &&
                 !loading &&
                 totalAircraftTypes === 0 && (
@@ -894,7 +1040,6 @@ const ServicePrices = () => {
                     <p className="font-semibold">No aircrafts found.</p>
                   </div>
                 )}
-
               {groupOptionSelected.name === "By Service" &&
                 !loading &&
                 totalAircraftTypes === 0 && (
@@ -902,7 +1047,6 @@ const ServicePrices = () => {
                     <p className="font-semibold">No services found.</p>
                   </div>
                 )}
-
               {groupOptionSelected.name === "By Aircraft" && (
                 <ul className="relative z-0 divide-y divide-gray-200">
                   {aircraftTypes.map((aircraft) => (
