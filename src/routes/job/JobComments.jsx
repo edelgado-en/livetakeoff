@@ -49,6 +49,7 @@ const JobComments = () => {
   const [sendEmail, setSendEmail] = useState(false);
   const [sendEmailToProjectManager, setSendEmailToProjectManager] =
     useState(false);
+  const [sendEmailToFollowers, setSendEmailToFollowers] = useState(false);
 
   const [isDeleteCommentModalOpen, setDeleteCommentModalOpen] = useState(false);
   const [commentToBeDeleted, setCommentToBeDeleted] = useState(null);
@@ -57,6 +58,7 @@ const JobComments = () => {
 
   const [userEmails, setUserEmails] = useState([]);
   const [projectManagerEmails, setProjectManagerEmails] = useState([]);
+  const [followerEmails, setFollowerEmails] = useState([]);
 
   const dispatch = useAppDispatch();
 
@@ -78,8 +80,13 @@ const JobComments = () => {
         return { ...el, selected: true };
       });
 
+      data.follower_emails = data.follower_emails.map((el) => {
+        return { ...el, selected: true };
+      });
+
       setUserEmails(data.emails);
       setProjectManagerEmails(data.project_manager_emails);
+      setFollowerEmails(data.follower_emails);
     } catch (err) {
       toast.error("Unable to fetch user info");
     }
@@ -147,6 +154,15 @@ const JobComments = () => {
     }
   };
 
+  const handleSetSendFollowersEmail = () => {
+    let fetchEmails = !sendEmailToFollowers;
+    setSendEmailToFollowers(!sendEmailToFollowers);
+
+    if (fetchEmails) {
+      getUserEmails();
+    }
+  };
+
   const handleUserEmailChange = (email) => {
     const tagsUpdated = userEmails.map((el) => {
       if (el.email === email) {
@@ -169,11 +185,23 @@ const JobComments = () => {
     setProjectManagerEmails(tagsUpdated);
   };
 
+  const handleFollowerEmailChange = (email) => {
+    const tagsUpdated = followerEmails.map((el) => {
+      if (el.email === email) {
+        el.selected = !el.selected;
+      }
+      return el;
+    });
+
+    setFollowerEmails(tagsUpdated);
+  };
+
   const createJobComment = async () => {
     const selectedEmails = userEmails.filter((el) => el.selected);
     const selectedProjectManagerEmails = projectManagerEmails.filter(
       (el) => el.selected
     );
+    const selectedFollowerEmails = followerEmails.filter((el) => el.selected);
 
     if (sendEmail && selectedEmails.length === 0) {
       alert("Select at least one email to send the email to.");
@@ -188,14 +216,21 @@ const JobComments = () => {
       return;
     }
 
+    if (sendEmailToFollowers && selectedFollowerEmails.length === 0) {
+      alert("Select at least one follower email to send the email to.");
+      return;
+    }
+
     const request = {
       comment,
       sendSMS,
       isPublic,
       sendEmail,
       sendEmailToProjectManager,
+      sendEmailToFollowers,
       emails: selectedEmails.map((el) => el.email),
       projectManagerEmails: selectedProjectManagerEmails.map((el) => el.email),
+      followerEmails: selectedFollowerEmails.map((el) => el.email),
     };
 
     setCreateCommentLoading(true);
@@ -212,6 +247,7 @@ const JobComments = () => {
 
       setSendEmail(false);
       setSendEmailToProjectManager(false);
+      setSendEmailToFollowers(false);
 
       toast.success("Comment created!");
     } catch (error) {
@@ -627,6 +663,80 @@ const JobComments = () => {
                                     </div>
                                   )
                                 )}
+                              </div>
+                            )}
+
+                          <div className="mt-5 flex items-center justify-between">
+                            <div className="flex">
+                              <div className="flex h-5 items-center">
+                                <input
+                                  id="emailFollower"
+                                  name="emailFollower"
+                                  value={sendEmailToFollowers}
+                                  onClick={handleSetSendFollowersEmail}
+                                  type="checkbox"
+                                  className="h-4 w-4 rounded border-gray-300 text-red-600
+                                                        focus:ring-red-500"
+                                />
+                              </div>
+                              <div className="ml-3">
+                                <label
+                                  htmlFor="emailFollower"
+                                  className="font-medium text-gray-700 text-md"
+                                >
+                                  Send Email to Followers
+                                </label>
+                                <p className="text-gray-500 text-sm">
+                                  Send an email notification to the selected
+                                  followers.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {sendEmailToFollowers &&
+                            followerEmails.length === 0 && (
+                              <div className="mt-3">
+                                <p className="text-gray-500 text-center m-auto text-sm">
+                                  No emails specified for any followers.
+                                </p>
+                              </div>
+                            )}
+
+                          {sendEmailToFollowers &&
+                            followerEmails.length > 0 && (
+                              <div className="ml-6 mt-4 px-7">
+                                <div className="mb-3 text-md">
+                                  Select which emails you want to use:
+                                </div>
+                                {followerEmails.map((userEmail, index) => (
+                                  <div
+                                    key={index}
+                                    className="relative flex items-start mb-3"
+                                  >
+                                    <div className="flex h-5 items-center">
+                                      <input
+                                        id={"emailFollower" + index}
+                                        checked={userEmail.selected}
+                                        onChange={() =>
+                                          handleFollowerEmailChange(
+                                            userEmail.email
+                                          )
+                                        }
+                                        type="checkbox"
+                                        className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                                      />
+                                    </div>
+                                    <div className="ml-3 text-sm cursor-pointer">
+                                      <label
+                                        htmlFor={"emailFollower" + index}
+                                        className="text-gray-700"
+                                      >
+                                        {userEmail.email}
+                                      </label>
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
                             )}
                         </>

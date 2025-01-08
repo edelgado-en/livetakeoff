@@ -220,6 +220,10 @@ export const searchAirports = (data: any) => {
     return httpService.post(`/api/airports`, data);
 }
 
+export const searchCustomerFollowerEmails = (data: any) => {
+    return httpService.post(`/api/customers/follower-emails`, data);
+}
+
 export const searchAircraftTypes = (request: any) => {
     return httpService.post('/api/aircraft-types', request);
 }

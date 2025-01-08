@@ -62,7 +62,12 @@ const ChevronUpDownIcon = () => {
 const availableSteps = [
   { id: 1, name: "Job Details", status: "current", selected: true },
   { id: 2, name: "Services & Retainers", status: "upcoming", selected: false },
-  { id: 3, name: "Photos & Comments", status: "upcoming", selected: false },
+  {
+    id: 3,
+    name: "Additional Instructions",
+    status: "upcoming",
+    selected: false,
+  },
 ];
 
 function classNames(...classes) {
@@ -147,6 +152,10 @@ const CreateJob = () => {
 
   const [airportFees, setAirportFees] = useState([]);
   const [fboFees, setFboFees] = useState([]);
+  const [customerFollowerEmails, setCustomerFollowerEmails] = useState([]);
+  const [jobFollowerEmails, setJobFollowerEmails] = useState([]);
+  const [customerFollowerEmailSearchTerm, setCustomerFollowerEmailSearchTerm] =
+    useState("");
 
   const [isRequestPriorityEnabled, setIsRequestPriorityEnabled] =
     useState(false);
@@ -221,6 +230,18 @@ const CreateJob = () => {
   }, [customerSearchTerm]);
 
   useEffect(() => {
+    if (customerSelected) {
+      let timeoutID = setTimeout(() => {
+        searchCustomerFollowerEmails();
+      }, 500);
+
+      return () => {
+        clearTimeout(timeoutID);
+      };
+    }
+  }, [customerFollowerEmailSearchTerm, customerSelected]);
+
+  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       searchAircrafts();
@@ -238,6 +259,19 @@ const CreateJob = () => {
       setAirports(data.results);
     } catch (err) {
       toast.error("Unable to search airports");
+    }
+  };
+
+  const searchCustomerFollowerEmails = async () => {
+    try {
+      const { data } = await api.searchCustomerFollowerEmails({
+        customer_id: customerSelected?.id,
+        email: customerFollowerEmailSearchTerm,
+      });
+
+      setCustomerFollowerEmails(data.results);
+    } catch (err) {
+      toast.error("Unable to search customer follower emails");
     }
   };
 
@@ -530,6 +564,11 @@ const CreateJob = () => {
     );
     const selectedTagIds = selectedTags.map((tag) => tag.id);
 
+    //create a comma separated string of jobFollowerEmails
+    const jobFollowerEmailsString = jobFollowerEmails
+      .map((email) => email.email)
+      .join(",");
+
     const formData = new FormData();
 
     formData.append("tail_number", tailNumber);
@@ -548,6 +587,7 @@ const CreateJob = () => {
     formData.append("requested_by", requestedBy);
     formData.append("customer_purchase_order", customerPurchaseOrder);
     formData.append("priority", selectedPriority.id);
+    formData.append("follower_emails", jobFollowerEmailsString);
 
     if (estimateId) {
       formData.append("estimate_id", estimateId);
@@ -948,6 +988,50 @@ const CreateJob = () => {
         //ignore
       }
     }
+  };
+
+  const handleAddFollowerEmail = (email) => {
+    if (email) {
+      //only add email if email.email does not exist in jobFollowerEmails
+      if (
+        jobFollowerEmails.filter((e) => e.email === email.email).length === 0
+      ) {
+        setJobFollowerEmails([...jobFollowerEmails, email]);
+      }
+    } else {
+      if (customerFollowerEmailSearchTerm) {
+        // customerFollowerEmailSearchTerm must be a valid email address and not have commas
+        if (
+          !customerFollowerEmailSearchTerm.includes(",") &&
+          validateEmail(customerFollowerEmailSearchTerm)
+        ) {
+          const newEmail = {
+            email: customerFollowerEmailSearchTerm,
+          };
+
+          //only add email if email.email does not exist in jobFollowerEmails
+          if (
+            jobFollowerEmails.filter((e) => e.email === newEmail.email)
+              .length === 0
+          ) {
+            setJobFollowerEmails([...jobFollowerEmails, newEmail]);
+          }
+        }
+      }
+    }
+  };
+
+  const validateEmail = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  const handleRemoveFollowerEmail = (email) => {
+    const updatedEmails = jobFollowerEmails.filter(
+      (e) => e.email !== email.email
+    );
+
+    setJobFollowerEmails(updatedEmails);
   };
 
   const handleAirportSelectedChange = async (airport) => {
@@ -2839,10 +2923,122 @@ const CreateJob = () => {
                   </div>
 
                   <div className="border-t-2 border-gray-300 my-8"></div>
+
+                  <label className="text-lg font-bold text-gray-600 uppercase tracking-wide">
+                    Follower Emails
+                  </label>
+                  <div className="text-lg text-gray-500 tracking-wide">
+                    Add emails of people you want to follow this job for
+                    activities like job creation and job completion.
+                  </div>
+
+                  <div className="my-6 grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 xs:grid-cols-1 sm:grid-cols-1 gap-8">
+                    <div>
+                      <div className="text-lg text-gray-500 tracking-wide">
+                        Add Email
+                      </div>
+                      <div className="mt-1 flex">
+                        <div className="-mr-px grid grow grid-cols-1 focus-within:relative">
+                          <input
+                            type="text"
+                            value={customerFollowerEmailSearchTerm}
+                            onChange={(e) =>
+                              setCustomerFollowerEmailSearchTerm(e.target.value)
+                            }
+                            placeholder="Enter one valid email address"
+                            className="col-start-1 row-start-1  rounded-l-md
+                                     block w-full rounded-md border-gray-300 shadow-sm
+                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleAddFollowerEmail()}
+                          className="flex shrink-0 items-center gap-x-1.5 rounded-r-md
+                                 bg-white px-3 py-2 text-sm font-semibold text-gray-900
+                                  outline outline-1 -outline-offset-1 outline-gray-300
+                                hover:bg-gray-50 focus:relative focus:outline focus:outline-2
+                                 focus:-outline-offset-2 focus:outline-sky-500"
+                        >
+                          Add
+                        </button>
+                      </div>
+                      {customerFollowerEmails.length > 0 && (
+                        <div className="mt-2 text-lg text-gray-500 tracking-wide">
+                          Suggestions
+                        </div>
+                      )}
+                      <div
+                        className="overflow-y-auto"
+                        style={{ maxHeight: "700px" }}
+                      >
+                        <ul role="list" className="divide-y divide-gray-100">
+                          {customerFollowerEmails.map((email) => (
+                            <li
+                              key={email.id}
+                              className="flex items-center justify-between gap-x-6 py-2 hover:bg-gray-50"
+                            >
+                              <div className="flex min-w-0 gap-x-4">
+                                <div className="min-w-0 flex-auto">
+                                  <p className="mt-1 truncate text-xs/5 text-gray-500">
+                                    {email.email}
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => handleAddFollowerEmail(email)}
+                                className="rounded-md bg-white px-2.5 py-1.5 text-sm
+                                                    font-semibold text-gray-900 shadow-sm ring-1
+                                                    ring-inset ring-gray-300 hover:bg-gray-50 block"
+                              >
+                                Add
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div>
+                      {jobFollowerEmails.length > 0 && (
+                        <div className="text-lg text-gray-500 tracking-wide">
+                          Selected Emails
+                        </div>
+                      )}
+                      <div
+                        className="overflow-y-auto"
+                        style={{ maxHeight: "700px" }}
+                      >
+                        <ul role="list" className="divide-y divide-gray-100">
+                          {jobFollowerEmails.map((email, index) => (
+                            <li
+                              key={index}
+                              className="flex items-center justify-between gap-x-6 py-2 hover:bg-gray-50"
+                            >
+                              <div className="flex min-w-0 gap-x-4">
+                                <div className="min-w-0 flex-auto">
+                                  <p className="mt-1 truncate text-xs/5 text-gray-500">
+                                    {email.email}
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => handleRemoveFollowerEmail(email)}
+                                className="rounded-md bg-white px-2.5 py-1.5 text-sm
+                                                    font-semibold text-gray-900 shadow-sm ring-1
+                                                    ring-inset ring-gray-300 hover:bg-gray-50 block"
+                              >
+                                Remove
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </>
               )}
 
-              <div className="flex flex-wrap gap-6 mt-10 m-auto text-center justify-center">
+              <div className="mt-4 flex flex-wrap gap-6 mt-10 m-auto text-center justify-center">
                 <button
                   onClick={() => handleGotoPreviousStep(steps[2])}
                   className="inline-flex items-center justify-center rounded-md border
