@@ -539,24 +539,486 @@ const EditJob = () => {
         </div>
       )}
 
-      {!loading && errorMessage == null && (
-        <main className="mx-auto max-w-lg px-4 pb-16 lg:pb-12">
-          <div>
-            <div className="space-y-6">
-              <div className="mt-6">
-                <h1 className="text-2xl font-semibold text-gray-600">
-                  Edit Job
-                </h1>
-              </div>
+      <h1 className="text-xl xl:text-2xl font-bold text-gray-700 flex gap-2 mt-4">
+        Edit Job
+      </h1>
+      <div
+        className="grid 3xl:grid-cols-4 2xl:grid-cols-3 xl:grid-cols-2
+                          lg:grid-cols-2 md:grid-cols-2
+                          sm:grid-cols-1 xs:grid-cols-1 mt-2 gap-6"
+      >
+        {/* LOCATION AND TIMES */}
+        <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+          <div className="p-4 bg-gray-100">
+            <h3 className="text-base font-bold leading-7 text-gray-900 uppercase">
+              Location and Times
+            </h3>
+          </div>
+          <div className="border-t border-gray-200">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-3 flex flex-wrap gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-20">
+                  Airport:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <Listbox
+                    value={airportSelected}
+                    onChange={handleAirportSelectedChange}
+                  >
+                    {({ open }) => (
+                      <>
+                        <div className="relative mt-1">
+                          <Listbox.Button
+                            className="relative w-full cursor-default rounded-md border
+                                                                    border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                                    shadow-sm focus:border-sky-500 focus:outline-none
+                                                                    focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                          >
+                            <span className="block truncate">
+                              {airportSelected.name}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                              <ChevronUpDownIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Listbox.Button>
 
-              <div>
-                <label
-                  htmlFor="tailNumber"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Tail Number
-                </label>
-                <div className="mt-1">
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options
+                              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                                                                        rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                        ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                            >
+                              <div className="relative">
+                                <div className="sticky top-0 z-20  px-1">
+                                  <div className="mt-1 block  items-center">
+                                    <input
+                                      type="text"
+                                      name="search"
+                                      id="search"
+                                      value={airportSearchTerm}
+                                      onChange={(e) =>
+                                        setAirportSearchTerm(e.target.value)
+                                      }
+                                      className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
+                                                                        border-gray-300 rounded-md"
+                                    />
+                                    <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                      {airportSearchTerm && (
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
+                                          onClick={() => {
+                                            setAirportSearchTerm("");
+                                          }}
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      )}
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-6 w-6 text-gray-500 mr-1"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                        />
+                                      </svg>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {airports.map((airport) => (
+                                <Listbox.Option
+                                  key={airport.id}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active
+                                        ? "text-white bg-red-600"
+                                        : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={airport}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <span
+                                        className={classNames(
+                                          selected
+                                            ? "font-semibold"
+                                            : "font-normal",
+                                          "block truncate"
+                                        )}
+                                      >
+                                        {airport.name}
+                                      </span>
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-white"
+                                              : "text-red-600",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </>
+                    )}
+                  </Listbox>
+                </dd>
+              </div>
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-20">
+                  FBO:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <Listbox value={fboSelected} onChange={setFboSelected}>
+                    {({ open }) => (
+                      <>
+                        <div className="relative mt-1">
+                          <Listbox.Button
+                            className="relative w-full cursor-default rounded-md border
+                                                                    border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                                    shadow-sm focus:border-sky-500 focus:outline-none
+                                                                    focus:ring-1 focus:ring-sky-500 sm:text-sm"
+                          >
+                            <span className="block truncate">
+                              {fboSelected.name}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                              <ChevronUpDownIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Listbox.Button>
+
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options
+                              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                                                                        rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                        ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                            >
+                              <div className="relative">
+                                <div className="sticky top-0 z-20  px-1">
+                                  <div className="mt-1 block  items-center">
+                                    <input
+                                      type="text"
+                                      name="search"
+                                      id="search"
+                                      value={fboSearchTerm}
+                                      onChange={(e) =>
+                                        setFboSearchTerm(e.target.value)
+                                      }
+                                      className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
+                                                                        border-gray-300 rounded-md"
+                                    />
+                                    <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                      {fboSearchTerm && (
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
+                                          onClick={() => {
+                                            setFboSearchTerm("");
+                                          }}
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      )}
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-6 w-6 text-gray-500 mr-1"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                        />
+                                      </svg>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {filteredFbos.map((fbo) => (
+                                <Listbox.Option
+                                  key={fbo.id}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active
+                                        ? "text-white bg-red-600"
+                                        : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={fbo}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <span
+                                        className={classNames(
+                                          selected
+                                            ? "font-semibold"
+                                            : "font-normal",
+                                          "block truncate"
+                                        )}
+                                      >
+                                        {fbo.name}
+                                      </span>
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-white"
+                                              : "text-red-600",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </>
+                    )}
+                  </Listbox>
+                </dd>
+              </div>
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-4 w-20">
+                  Arrival:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <div>
+                    <div className="text-sm  text-gray-500 mb-1 flex justify-between">
+                      <div className="flex gap-2">
+                        <div className="flex h-5 items-center">
+                          <input
+                            id="onSite"
+                            checked={onSite}
+                            value={onSite}
+                            onClick={handleSetOnSite}
+                            name="onSite"
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                          />
+                        </div>
+                        <label htmlFor="onSite" className=" text-gray-500">
+                          On site
+                        </label>
+                      </div>
+                      {estimatedArrivalDate && (
+                        <span
+                          onClick={() => setEstimatedArrivalDate(null)}
+                          className="ml-2 underline text-xs text-red-500 cursor-pointer"
+                        >
+                          clear
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleToggleEstimatedArrivalDate}
+                      className="inline-flex items-center rounded-md border
+                                           w-full h-10
+                                          border-gray-300 bg-white px-4 py-2 text-sm
+                                            text-gray-700 shadow-sm hover:bg-gray-50"
+                    >
+                      {estimatedArrivalDate?.toLocaleString("en-US", {
+                        hour12: false,
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </button>
+                    {estimatedArrivalDateOpen && (
+                      <DatePicker
+                        selected={estimatedArrivalDate}
+                        onChange={(date) =>
+                          handleEstimatedArrivalDateChange(date)
+                        }
+                        locale="pt-BR"
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={5}
+                        dateFormat="Pp"
+                        inline
+                      />
+                    )}
+                  </div>
+                </dd>
+              </div>
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-20">
+                  Departure:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <label className="block text-sm text-gray-500 mb-1">
+                    {estimatedDepartureDate && (
+                      <span
+                        onClick={() => setEstimatedDepartureDate(null)}
+                        className="ml-2 underline text-xs text-red-500 cursor-pointer"
+                      >
+                        clear
+                      </span>
+                    )}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleToggleEstimatedDepartureDate}
+                    className="inline-flex items-center rounded-md border
+                                           w-full h-10
+                                          border-gray-300 bg-white px-4 py-2 text-sm
+                                            text-gray-700 shadow-sm hover:bg-gray-50"
+                  >
+                    {estimatedDepartureDate?.toLocaleString("en-US", {
+                      hour12: false,
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </button>
+                  {estimatedDepartureDateOpen && (
+                    <DatePicker
+                      selected={estimatedDepartureDate}
+                      onChange={(date) =>
+                        handleEstimatedDepartureDateChange(date)
+                      }
+                      locale="pt-BR"
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={5}
+                      dateFormat="Pp"
+                      inline
+                    />
+                  )}
+                </dd>
+              </div>
+              <div className="px-4 py-3 flex flex-wrap gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-20">
+                  Complete Before:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <label className="block text-sm  text-gray-500 mb-1">
+                    {completeByDate && (
+                      <span
+                        onClick={() => setCompleteByDate(null)}
+                        className="ml-2 underline text-xs text-red-500 cursor-pointer"
+                      >
+                        clear
+                      </span>
+                    )}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleToggleCompleteByDate}
+                    className="inline-flex items-center rounded-md border
+                                           w-full h-10
+                                          border-gray-300 bg-white px-4 py-2 text-sm
+                                            text-gray-700 shadow-sm hover:bg-gray-50"
+                  >
+                    {completeByDate?.toLocaleString("en-US", {
+                      hour12: false,
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </button>
+                  {completeByDateOpen && (
+                    <DatePicker
+                      selected={completeByDate}
+                      onChange={(date) => handleCompleteByDateChange(date)}
+                      locale="pt-BR"
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={5}
+                      dateFormat="Pp"
+                      inline
+                    />
+                  )}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        {/* JOB INFO */}
+        <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+          <div className="px-4 py-3 bg-gray-100">
+            <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+              Job Info
+            </h3>
+          </div>
+          <div className="border-t border-gray-200">
+            <dl className="divide-y divide-gray-100">
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                  Tail Number:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
                   <input
                     type="text"
                     value={tailNumber}
@@ -573,18 +1035,14 @@ const EditJob = () => {
                       {tailNumberErrorMessage}
                     </p>
                   )}
-                </div>
+                </dd>
               </div>
-
               {currentUser.canSeePrice && (
-                <div>
-                  <label
-                    htmlFor="price"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Price
-                  </label>
-                  <div className="mt-1">
+                <div className="px-4 py-3 flex gap-4">
+                  <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                    Price:
+                  </dt>
+                  <dd className="text-md text-gray-700 flex-1">
                     <input
                       type="text"
                       value={price}
@@ -592,849 +1050,395 @@ const EditJob = () => {
                       name="price"
                       id="price"
                       className="block w-full rounded-md border-gray-300 shadow-sm
-                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                                focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                     />
-                  </div>
+                  </dd>
                 </div>
               )}
-
-              <div className="mt-1">
-                <Listbox value={selectedStatus} onChange={setSelectedStatus}>
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="block text-sm font-medium text-gray-700">
-                        Status
-                      </Listbox.Label>
-                      <div className="relative mt-1">
-                        <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                  Status:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <Listbox value={selectedStatus} onChange={setSelectedStatus}>
+                    {({ open }) => (
+                      <>
+                        <div className="relative mt-1">
+                          <Listbox.Button
+                            className="relative w-full cursor-default rounded-md border
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                        >
-                          <span className="block truncate">
-                            {selectedStatus?.name}
-                          </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
+                          >
+                            <span className="block truncate">
+                              {selectedStatus?.name}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                              <ChevronUpDownIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Listbox.Button>
 
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options
+                              className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
                                                                         rounded-md bg-white py-1 text-base shadow-lg ring-1
                                                                         ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                          >
-                            {availableStatuses.map((status) => (
-                              <Listbox.Option
-                                key={status.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active
-                                      ? "text-white bg-red-600"
-                                      : "text-gray-900",
-                                    "relative cursor-default select-none py-2 pl-3 pr-9"
-                                  )
-                                }
-                                value={status}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <span
-                                      className={classNames(
-                                        selected
-                                          ? "font-semibold"
-                                          : "font-normal",
-                                        "block truncate"
-                                      )}
-                                    >
-                                      {status.name}
-                                    </span>
-                                    {selected ? (
+                            >
+                              {availableStatuses.map((status) => (
+                                <Listbox.Option
+                                  key={status.id}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active
+                                        ? "text-white bg-red-600"
+                                        : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={status}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
                                       <span
                                         className={classNames(
-                                          active
-                                            ? "text-white"
-                                            : "text-red-600",
-                                          "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          selected
+                                            ? "font-semibold"
+                                            : "font-normal",
+                                          "block truncate"
                                         )}
                                       >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
+                                        {status.name}
                                       </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-white"
+                                              : "text-red-600",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </>
+                    )}
+                  </Listbox>
+                </dd>
               </div>
-
-              <div className="mt-1">
-                <Listbox
-                  value={customerSelected}
-                  onChange={setCustomerSelected}
-                >
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="block text-sm font-medium text-gray-700">
-                        Customer
-                      </Listbox.Label>
-                      <div className="relative mt-1">
-                        <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                  Customer:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <Listbox
+                    value={customerSelected}
+                    onChange={setCustomerSelected}
+                  >
+                    {({ open }) => (
+                      <>
+                        <div className="relative mt-1">
+                          <Listbox.Button
+                            className="relative w-full cursor-default rounded-md border
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                        >
-                          <span className="block truncate">
-                            {customerSelected.name}
-                          </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
+                          >
+                            <span className="block truncate">
+                              {customerSelected.name}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                              <ChevronUpDownIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Listbox.Button>
 
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options
+                              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
                                                                         rounded-md bg-white py-1 text-base shadow-lg ring-1
                                                                         ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                          >
-                            <div className="relative">
-                              <div className="sticky top-0 z-20  px-1">
-                                <div className="mt-1 block  items-center">
-                                  <input
-                                    type="text"
-                                    name="search"
-                                    id="search"
-                                    value={customerSearchTerm}
-                                    onChange={(e) =>
-                                      setCustomerSearchTerm(e.target.value)
-                                    }
-                                    className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                            >
+                              <div className="relative">
+                                <div className="sticky top-0 z-20  px-1">
+                                  <div className="mt-1 block  items-center">
+                                    <input
+                                      type="text"
+                                      name="search"
+                                      id="search"
+                                      value={customerSearchTerm}
+                                      onChange={(e) =>
+                                        setCustomerSearchTerm(e.target.value)
+                                      }
+                                      className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
                                                                         focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
                                                                         border-gray-300 rounded-md"
-                                  />
-                                  <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
-                                    {customerSearchTerm && (
+                                    />
+                                    <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                      {customerSearchTerm && (
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
+                                          onClick={() => {
+                                            setCustomerSearchTerm("");
+                                          }}
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      )}
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="h-6 w-6 text-blue-500 font-bold mr-1"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                        onClick={() => {
-                                          setCustomerSearchTerm("");
-                                        }}
+                                        className="h-6 w-6 text-gray-500 mr-1"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
                                       >
                                         <path
-                                          fillRule="evenodd"
-                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                          clipRule="evenodd"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                         />
                                       </svg>
-                                    )}
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-6 w-6 text-gray-500 mr-1"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                      />
-                                    </svg>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            {customers.map((customer) => (
-                              <Listbox.Option
-                                key={customer.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active
-                                      ? "text-white bg-red-600"
-                                      : "text-gray-900",
-                                    "relative cursor-default select-none py-2 pl-3 pr-9"
-                                  )
-                                }
-                                value={customer}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <span
-                                      className={classNames(
-                                        selected
-                                          ? "font-semibold"
-                                          : "font-normal",
-                                        "block truncate"
-                                      )}
-                                    >
-                                      {customer.name}
-                                    </span>
-                                    {selected ? (
+                              {customers.map((customer) => (
+                                <Listbox.Option
+                                  key={customer.id}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active
+                                        ? "text-white bg-red-600"
+                                        : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={customer}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
                                       <span
                                         className={classNames(
-                                          active
-                                            ? "text-white"
-                                            : "text-red-600",
-                                          "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          selected
+                                            ? "font-semibold"
+                                            : "font-normal",
+                                          "block truncate"
                                         )}
                                       >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
+                                        {customer.name}
                                       </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-white"
+                                              : "text-red-600",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </>
+                    )}
+                  </Listbox>
+                </dd>
               </div>
-
-              <div className="mt-1">
-                <Listbox
-                  value={aircraftTypeSelected}
-                  onChange={setAircraftTypeSelected}
-                >
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="block text-sm font-medium text-gray-700">
-                        Aircraft Type
-                      </Listbox.Label>
-                      <div className="relative mt-1">
-                        <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                  Aircraft Type:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <Listbox
+                    value={aircraftTypeSelected}
+                    onChange={setAircraftTypeSelected}
+                  >
+                    {({ open }) => (
+                      <>
+                        <div className="relative mt-1">
+                          <Listbox.Button
+                            className="relative w-full cursor-default rounded-md border
                                                                     border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                                     shadow-sm focus:border-sky-500 focus:outline-none
                                                                     focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                        >
-                          <span className="block truncate">
-                            {aircraftTypeSelected.name}
-                          </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
+                          >
+                            <span className="block truncate">
+                              {aircraftTypeSelected.name}
+                            </span>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                              <ChevronUpDownIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Listbox.Button>
 
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options
+                              className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
                                                                         rounded-md bg-white py-1 text-base shadow-lg ring-1
                                                                         ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                          >
-                            <div className="relative">
-                              <div className="sticky top-0 z-20  px-1">
-                                <div className="mt-1 block  items-center">
-                                  <input
-                                    type="text"
-                                    name="search"
-                                    id="search"
-                                    value={aircraftSearchTerm}
-                                    onChange={(e) =>
-                                      setAircraftSearchTerm(e.target.value)
-                                    }
-                                    className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                            >
+                              <div className="relative">
+                                <div className="sticky top-0 z-20  px-1">
+                                  <div className="mt-1 block  items-center">
+                                    <input
+                                      type="text"
+                                      name="search"
+                                      id="search"
+                                      value={aircraftSearchTerm}
+                                      onChange={(e) =>
+                                        setAircraftSearchTerm(e.target.value)
+                                      }
+                                      className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
                                                                         focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
                                                                         border-gray-300 rounded-md"
-                                  />
-                                  <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
-                                    {aircraftSearchTerm && (
+                                    />
+                                    <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                      {aircraftSearchTerm && (
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
+                                          onClick={() => {
+                                            setAircraftSearchTerm("");
+                                          }}
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                          />
+                                        </svg>
+                                      )}
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="h-6 w-6 text-blue-500 font-bold mr-1"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                        onClick={() => {
-                                          setAircraftSearchTerm("");
-                                        }}
+                                        className="h-6 w-6 text-gray-500 mr-1"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
                                       >
                                         <path
-                                          fillRule="evenodd"
-                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                          clipRule="evenodd"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                         />
                                       </svg>
-                                    )}
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-6 w-6 text-gray-500 mr-1"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                      />
-                                    </svg>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
 
-                            {aircraftTypes.map((aircraftType) => (
-                              <Listbox.Option
-                                key={aircraftType.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active
-                                      ? "text-white bg-red-600"
-                                      : "text-gray-900",
-                                    "relative cursor-default select-none py-2 pl-3 pr-9"
-                                  )
-                                }
-                                value={aircraftType}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <span
-                                      className={classNames(
-                                        selected
-                                          ? "font-semibold"
-                                          : "font-normal",
-                                        "block truncate"
-                                      )}
-                                    >
-                                      {aircraftType.name}
-                                    </span>
-                                    {selected ? (
+                              {aircraftTypes.map((aircraftType) => (
+                                <Listbox.Option
+                                  key={aircraftType.id}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active
+                                        ? "text-white bg-red-600"
+                                        : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={aircraftType}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
                                       <span
                                         className={classNames(
-                                          active
-                                            ? "text-white"
-                                            : "text-red-600",
-                                          "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          selected
+                                            ? "font-semibold"
+                                            : "font-normal",
+                                          "block truncate"
                                         )}
                                       >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
+                                        {aircraftType.name}
                                       </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-white"
+                                              : "text-red-600",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </>
+                    )}
+                  </Listbox>
+                </dd>
               </div>
-
-              <div className="mt-1">
-                <Listbox
-                  value={airportSelected}
-                  onChange={handleAirportSelectedChange}
-                >
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="block text-sm font-medium text-gray-700">
-                        Airport
-                      </Listbox.Label>
-                      <div className="relative mt-1">
-                        <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border
-                                                                    border-gray-300 bg-white py-2 pl-3 pr-10 text-left
-                                                                    shadow-sm focus:border-sky-500 focus:outline-none
-                                                                    focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                        >
-                          <span className="block truncate">
-                            {airportSelected.name}
-                          </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
-
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
-                                                                        rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                                        ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                          >
-                            <div className="relative">
-                              <div className="sticky top-0 z-20  px-1">
-                                <div className="mt-1 block  items-center">
-                                  <input
-                                    type="text"
-                                    name="search"
-                                    id="search"
-                                    value={airportSearchTerm}
-                                    onChange={(e) =>
-                                      setAirportSearchTerm(e.target.value)
-                                    }
-                                    className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
-                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
-                                                                        border-gray-300 rounded-md"
-                                  />
-                                  <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
-                                    {airportSearchTerm && (
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-6 w-6 text-blue-500 font-bold mr-1"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                        onClick={() => {
-                                          setAirportSearchTerm("");
-                                        }}
-                                      >
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                          clipRule="evenodd"
-                                        />
-                                      </svg>
-                                    )}
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-6 w-6 text-gray-500 mr-1"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                      />
-                                    </svg>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            {airports.map((airport) => (
-                              <Listbox.Option
-                                key={airport.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active
-                                      ? "text-white bg-red-600"
-                                      : "text-gray-900",
-                                    "relative cursor-default select-none py-2 pl-3 pr-9"
-                                  )
-                                }
-                                value={airport}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <span
-                                      className={classNames(
-                                        selected
-                                          ? "font-semibold"
-                                          : "font-normal",
-                                        "block truncate"
-                                      )}
-                                    >
-                                      {airport.name}
-                                    </span>
-                                    {selected ? (
-                                      <span
-                                        className={classNames(
-                                          active
-                                            ? "text-white"
-                                            : "text-red-600",
-                                          "absolute inset-y-0 right-0 flex items-center pr-4"
-                                        )}
-                                      >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
-              </div>
-
-              <div className="mt-1">
-                <Listbox value={fboSelected} onChange={setFboSelected}>
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="block text-sm font-medium text-gray-700">
-                        FBO
-                      </Listbox.Label>
-                      <div className="relative mt-1">
-                        <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border
-                                                                    border-gray-300 bg-white py-2 pl-3 pr-10 text-left
-                                                                    shadow-sm focus:border-sky-500 focus:outline-none
-                                                                    focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                        >
-                          <span className="block truncate">
-                            {fboSelected.name}
-                          </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
-
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
-                                                                        rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                                        ring-black ring-opacity-5 focus:outline-none sm:text-sm"
-                          >
-                            <div className="relative">
-                              <div className="sticky top-0 z-20  px-1">
-                                <div className="mt-1 block  items-center">
-                                  <input
-                                    type="text"
-                                    name="search"
-                                    id="search"
-                                    value={fboSearchTerm}
-                                    onChange={(e) =>
-                                      setFboSearchTerm(e.target.value)
-                                    }
-                                    className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
-                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
-                                                                        border-gray-300 rounded-md"
-                                  />
-                                  <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
-                                    {fboSearchTerm && (
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="h-6 w-6 text-blue-500 font-bold mr-1"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                        onClick={() => {
-                                          setFboSearchTerm("");
-                                        }}
-                                      >
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                          clipRule="evenodd"
-                                        />
-                                      </svg>
-                                    )}
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-6 w-6 text-gray-500 mr-1"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                      />
-                                    </svg>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            {filteredFbos.map((fbo) => (
-                              <Listbox.Option
-                                key={fbo.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active
-                                      ? "text-white bg-red-600"
-                                      : "text-gray-900",
-                                    "relative cursor-default select-none py-2 pl-3 pr-9"
-                                  )
-                                }
-                                value={fbo}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <span
-                                      className={classNames(
-                                        selected
-                                          ? "font-semibold"
-                                          : "font-normal",
-                                        "block truncate"
-                                      )}
-                                    >
-                                      {fbo.name}
-                                    </span>
-                                    {selected ? (
-                                      <span
-                                        className={classNames(
-                                          active
-                                            ? "text-white"
-                                            : "text-red-600",
-                                          "absolute inset-y-0 right-0 flex items-center pr-4"
-                                        )}
-                                      >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    ) : null}
-                                  </>
-                                )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </>
-                  )}
-                </Listbox>
-              </div>
-
-              <div>
-                <div className="text-sm  text-gray-500 mb-1 flex justify-between">
-                  Estimated Arrival
-                  <div className="flex gap-2">
-                    <div className="flex h-5 items-center">
-                      <input
-                        id="onSite"
-                        checked={onSite}
-                        value={onSite}
-                        onClick={handleSetOnSite}
-                        name="onSite"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                      />
-                    </div>
-                    <label htmlFor="onSite" className=" text-gray-500">
-                      On site
-                    </label>
-                  </div>
-                  {estimatedArrivalDate && (
-                    <span
-                      onClick={() => setEstimatedArrivalDate(null)}
-                      className="ml-2 underline text-xs text-red-500 cursor-pointer"
-                    >
-                      clear
-                    </span>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={handleToggleEstimatedArrivalDate}
-                  className="inline-flex items-center rounded-md border
-                                           w-full h-10
-                                          border-gray-300 bg-white px-4 py-2 text-sm
-                                            text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  {estimatedArrivalDate?.toLocaleString("en-US", {
-                    hour12: false,
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </button>
-                {estimatedArrivalDateOpen && (
-                  <DatePicker
-                    selected={estimatedArrivalDate}
-                    onChange={(date) => handleEstimatedArrivalDateChange(date)}
-                    locale="pt-BR"
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={5}
-                    dateFormat="Pp"
-                    inline
-                  />
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm text-gray-500 mb-1">
-                  Estimated Departure
-                  {estimatedDepartureDate && (
-                    <span
-                      onClick={() => setEstimatedDepartureDate(null)}
-                      className="ml-2 underline text-xs text-red-500 cursor-pointer"
-                    >
-                      clear
-                    </span>
-                  )}
-                </label>
-                <button
-                  type="button"
-                  onClick={handleToggleEstimatedDepartureDate}
-                  className="inline-flex items-center rounded-md border
-                                           w-full h-10
-                                          border-gray-300 bg-white px-4 py-2 text-sm
-                                            text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  {estimatedDepartureDate?.toLocaleString("en-US", {
-                    hour12: false,
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </button>
-                {estimatedDepartureDateOpen && (
-                  <DatePicker
-                    selected={estimatedDepartureDate}
-                    onChange={(date) =>
-                      handleEstimatedDepartureDateChange(date)
-                    }
-                    locale="pt-BR"
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={5}
-                    dateFormat="Pp"
-                    inline
-                  />
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm  text-gray-500 mb-1">
-                  Complete Before
-                  {completeByDate && (
-                    <span
-                      onClick={() => setCompleteByDate(null)}
-                      className="ml-2 underline text-xs text-red-500 cursor-pointer"
-                    >
-                      clear
-                    </span>
-                  )}
-                </label>
-                <button
-                  type="button"
-                  onClick={handleToggleCompleteByDate}
-                  className="inline-flex items-center rounded-md border
-                                           w-full h-10
-                                          border-gray-300 bg-white px-4 py-2 text-sm
-                                            text-gray-700 shadow-sm hover:bg-gray-50"
-                >
-                  {completeByDate?.toLocaleString("en-US", {
-                    hour12: false,
-                    year: "numeric",
-                    month: "numeric",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </button>
-                {completeByDateOpen && (
-                  <DatePicker
-                    selected={completeByDate}
-                    onChange={(date) => handleCompleteByDateChange(date)}
-                    locale="pt-BR"
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={5}
-                    dateFormat="Pp"
-                    inline
-                  />
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="requestedBy"
-                  className="block text-sm text-gray-500"
-                >
-                  Requested By
-                </label>
-                <span className="text-xs text-gray-500">
-                  Enter a name when creating a job on behalf of someone else
-                </span>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    value={requestedBy}
-                    onChange={(e) => setRequestedBy(e.target.value)}
-                    name="requestedBy"
-                    id="requestedBy"
-                    className="block w-full rounded-md border-gray-300 shadow-sm
-                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="customer_purchase_order"
-                  className="block text-sm text-gray-500"
-                >
-                  Customer Purchase Order
-                </label>
-                <div className="mt-1">
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                  Customer PO:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
                   <input
                     type="text"
                     value={customerPurchaseOrder}
@@ -1444,22 +1448,47 @@ const EditJob = () => {
                     className="block w-full rounded-md border-gray-300 shadow-sm
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
-                </div>
+                </dd>
               </div>
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                  Requested By:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <input
+                    type="text"
+                    value={requestedBy}
+                    onChange={(e) => setRequestedBy(e.target.value)}
+                    name="requestedBy"
+                    id="requestedBy"
+                    className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                  />
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
 
-              {(currentUser.isAdmin ||
-                currentUser.isSuperUser ||
-                currentUser.isInternalCoordinator ||
-                currentUser.isAccountManager) && (
-                <>
-                  <div>
-                    <label
-                      htmlFor="tailNumber"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Hours Worked
-                    </label>
-                    <div className="mt-1">
+        {(currentUser.isAdmin ||
+          currentUser.isSuperUser ||
+          currentUser.isInternalCoordinator ||
+          currentUser.isAccountManager) && (
+          <>
+            {/* LABOR */}
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="px-4 py-3 bg-gray-100">
+                <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                  Labor
+                </h3>
+              </div>
+              <div className="border-t border-gray-200">
+                <dl className="divide-y divide-gray-100">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-48">
+                      Hours Worked:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
                       <input
                         type="text"
                         value={hoursWorked}
@@ -1467,18 +1496,15 @@ const EditJob = () => {
                         name="hours"
                         id="hours"
                         className="block w-full rounded-md border-gray-300 shadow-sm
-                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
-                    </div>
+                    </dd>
                   </div>
-                  <div>
-                    <label
-                      htmlFor="tailNumber"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Minutes Worked
-                    </label>
-                    <div className="mt-1">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-48">
+                      Minutes Worked:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
                       <input
                         type="text"
                         value={minutesWorked}
@@ -1488,16 +1514,13 @@ const EditJob = () => {
                         className="block w-full rounded-md border-gray-300 shadow-sm
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
-                    </div>
+                    </dd>
                   </div>
-                  <div>
-                    <label
-                      htmlFor="tailNumber"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Number of Workers
-                    </label>
-                    <div className="mt-1">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-48">
+                      Number of Workers:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
                       <input
                         type="text"
                         value={numberOfWorkers}
@@ -1509,16 +1532,32 @@ const EditJob = () => {
                         className="block w-full rounded-md border-gray-300 shadow-sm
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
-                    </div>
+                    </dd>
                   </div>
-                  <div>
-                    <label
-                      htmlFor="internalAdditionalCost"
-                      className="block text-sm text-gray-700"
-                    >
-                      Internal Additional Cost
-                    </label>
-                    <div className="mt-1">
+                </dl>
+              </div>
+            </div>
+          </>
+        )}
+
+        {(currentUser.isAdmin ||
+          currentUser.isSuperUser ||
+          currentUser.isAccountManager) && (
+          <>
+            {/* INVOICE DETAILS */}
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="px-4 py-3 bg-gray-100">
+                <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                  Invoice Details
+                </h3>
+              </div>
+              <div className="border-t border-gray-200">
+                <dl className="divide-y divide-gray-100">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-48">
+                      Internal Additional Cost:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
                       <input
                         type="text"
                         value={internalAdditionalCost}
@@ -1528,179 +1567,173 @@ const EditJob = () => {
                         name="internalAdditionalCost"
                         id="internalAdditionalCost"
                         className="block w-full rounded-md border-gray-300 shadow-sm
-                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                                focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
-                    </div>
+                    </dd>
                   </div>
-
-                  <div className="mt-1">
-                    <Listbox
-                      value={vendorSelected}
-                      onChange={setVendorSelected}
-                    >
-                      {({ open }) => (
-                        <>
-                          <Listbox.Label className="block text-sm text-gray-700">
-                            Vendor
-                          </Listbox.Label>
-                          <div className="relative mt-1">
-                            <Listbox.Button
-                              className="relative w-full cursor-default rounded-md border
-                                                                            border-gray-300 bg-white py-2 pl-3 pr-10 text-left
-                                                                            shadow-sm focus:border-sky-500 focus:outline-none
-                                                                            focus:ring-1 focus:ring-sky-500 sm:text-sm"
-                            >
-                              <span className="block truncate">
-                                {vendorSelected.name}
-                              </span>
-                              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                <ChevronUpDownIcon
-                                  className="h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </Listbox.Button>
-
-                            <Transition
-                              show={open}
-                              as={Fragment}
-                              leave="transition ease-in duration-100"
-                              leaveFrom="opacity-100"
-                              leaveTo="opacity-0"
-                            >
-                              <Listbox.Options
-                                className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
-                                                                                rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                                                ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-48">
+                      Vendor:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
+                      <Listbox
+                        value={vendorSelected}
+                        onChange={setVendorSelected}
+                      >
+                        {({ open }) => (
+                          <>
+                            <div className="relative mt-1">
+                              <Listbox.Button
+                                className="relative w-full cursor-default rounded-md border
+                                                                                    border-gray-300 bg-white py-2 pl-3 pr-10 text-left
+                                                                                    shadow-sm focus:border-sky-500 focus:outline-none
+                                                                                    focus:ring-1 focus:ring-sky-500 sm:text-sm"
                               >
-                                <div className="relative">
-                                  <div className="sticky top-0 z-20  px-1">
-                                    <div className="mt-1 block  items-center">
-                                      <input
-                                        type="text"
-                                        name="search"
-                                        id="search"
-                                        value={vendorSearchTerm}
-                                        onChange={(e) =>
-                                          setVendorSearchTerm(e.target.value)
-                                        }
-                                        className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
-                                                                                focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
-                                                                                border-gray-300 rounded-md"
-                                      />
-                                      <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
-                                        {vendorSearchTerm && (
+                                <span className="block truncate">
+                                  {vendorSelected.name}
+                                </span>
+                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                  <ChevronUpDownIcon
+                                    className="h-5 w-5 text-gray-400"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </Listbox.Button>
+
+                              <Transition
+                                show={open}
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Listbox.Options
+                                  className="absolute z-10 mt-1 max-h-60 w-full overflow-auto
+                                                                                        rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                                        ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                                >
+                                  <div className="relative">
+                                    <div className="sticky top-0 z-20  px-1">
+                                      <div className="mt-1 block  items-center">
+                                        <input
+                                          type="text"
+                                          name="search"
+                                          id="search"
+                                          value={vendorSearchTerm}
+                                          onChange={(e) =>
+                                            setVendorSearchTerm(e.target.value)
+                                          }
+                                          className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-sm
+                                                                                        border-gray-300 rounded-md"
+                                        />
+                                        <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                          {vendorSearchTerm && (
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                              viewBox="0 0 20 20"
+                                              fill="currentColor"
+                                              onClick={() => {
+                                                setVendorSearchTerm("");
+                                              }}
+                                            >
+                                              <path
+                                                fillRule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                              />
+                                            </svg>
+                                          )}
                                           <svg
                                             xmlns="http://www.w3.org/2000/svg"
-                                            className="h-6 w-6 text-blue-500 font-bold mr-1"
-                                            viewBox="0 0 20 20"
-                                            fill="currentColor"
-                                            onClick={() => {
-                                              setVendorSearchTerm("");
-                                            }}
+                                            className="h-6 w-6 text-gray-500 mr-1"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
                                           >
                                             <path
-                                              fillRule="evenodd"
-                                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                              clipRule="evenodd"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth="2"
+                                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                             />
                                           </svg>
-                                        )}
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          className="h-6 w-6 text-gray-500 mr-1"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke="currentColor"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                          />
-                                        </svg>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                                {vendors.map((vendor) => (
-                                  <Listbox.Option
-                                    key={vendor.id}
-                                    className={({ active }) =>
-                                      classNames(
-                                        active
-                                          ? "text-white bg-red-600"
-                                          : "text-gray-900",
-                                        "relative cursor-default select-none py-2 pl-3 pr-9"
-                                      )
-                                    }
-                                    value={vendor}
-                                  >
-                                    {({ selected, active }) => (
-                                      <>
-                                        <span
-                                          className={classNames(
-                                            selected
-                                              ? "font-semibold"
-                                              : "font-normal",
-                                            "block truncate"
-                                          )}
-                                        >
-                                          {vendor.name}
-                                        </span>
-                                        {selected ? (
+                                  {vendors.map((vendor) => (
+                                    <Listbox.Option
+                                      key={vendor.id}
+                                      className={({ active }) =>
+                                        classNames(
+                                          active
+                                            ? "text-white bg-red-600"
+                                            : "text-gray-900",
+                                          "relative cursor-default select-none py-2 pl-3 pr-9"
+                                        )
+                                      }
+                                      value={vendor}
+                                    >
+                                      {({ selected, active }) => (
+                                        <>
                                           <span
                                             className={classNames(
-                                              active
-                                                ? "text-white"
-                                                : "text-red-600",
-                                              "absolute inset-y-0 right-0 flex items-center pr-4"
+                                              selected
+                                                ? "font-semibold"
+                                                : "font-normal",
+                                              "block truncate"
                                             )}
                                           >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
+                                            {vendor.name}
                                           </span>
-                                        ) : null}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                ))}
-                              </Listbox.Options>
-                            </Transition>
-                          </div>
-                        </>
-                      )}
-                    </Listbox>
+                                          {selected ? (
+                                            <span
+                                              className={classNames(
+                                                active
+                                                  ? "text-white"
+                                                  : "text-red-600",
+                                                "absolute inset-y-0 right-0 flex items-center pr-4"
+                                              )}
+                                            >
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          </>
+                        )}
+                      </Listbox>
+                    </dd>
                   </div>
-
-                  <div>
-                    <label
-                      htmlFor="internalAdditionalCost"
-                      className="block text-sm  text-gray-700"
-                    >
-                      Vendor Charge
-                    </label>
-                    <div className="mt-1">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-48">
+                      Vendor Charge:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
                       <input
                         type="text"
                         value={vendorCharge}
                         onChange={(e) => handleSetVendorCharge(e.target.value)}
                         className="block w-full rounded-md border-gray-300 shadow-sm
-                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                                focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
-                    </div>
+                    </dd>
                   </div>
-                  <div>
-                    <label
-                      htmlFor="internalAdditionalCost"
-                      className="block text-sm  text-gray-700"
-                    >
-                      Vendor Additional Cost
-                    </label>
-                    <div className="mt-1">
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-48">
+                      Vendor Additional Cost:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
                       <input
                         type="text"
                         value={vendorAdditionalCost}
@@ -1708,67 +1741,73 @@ const EditJob = () => {
                           handleSetVendorAdditionalCost(e.target.value)
                         }
                         className="block w-full rounded-md border-gray-300 shadow-sm
-                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                                focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
-                    </div>
+                    </dd>
                   </div>
+                </dl>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
 
-                  <div className="text-sm leading-5 font-medium text-gray-700">
-                    Tags
-                  </div>
+      {(currentUser.isAdmin ||
+        currentUser.isSuperUser ||
+        currentUser.isInternalCoordinator ||
+        currentUser.isAccountManager) && (
+        <>
+          <div className="grid grid-cols-1 mt-2 gap-6">
+            {/* TAGS */}
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="px-4 py-3 bg-gray-100">
+                <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                  Tags
+                </h3>
+              </div>
+              <div className="border-t border-gray-200">
+                <div className="flex flex-wrap gap-4 mt-6 px-4 pb-6">
                   {tags.map((tag) => (
-                    <div key={tag.id} className="relative flex items-start">
-                      <div className="flex h-5 items-center">
-                        <input
-                          id={"tag" + tag.id}
-                          name={tag.name}
-                          checked={tag.selected}
-                          onChange={() => handleTagChange(tag)}
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                        />
-                      </div>
-                      <div className="ml-3 text-sm">
-                        <label
-                          htmlFor={"tag" + tag.id}
-                          className="text-gray-700"
-                        >
-                          {tag.name}
-                        </label>
-                      </div>
+                    <div
+                      key={tag.id}
+                      onClick={() => handleTagChange(tag)}
+                      className={`${
+                        tag.selected
+                          ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                          : "hover:bg-gray-50"
+                      } rounded-md cursor-pointer border border-gray-300
+                                                py-3 px-3 flex items-center justify-center text-md
+                                                uppercase `}
+                    >
+                      {tag.name}
                     </div>
                   ))}
-                </>
-              )}
-
-              <div className="flex flex-col py-4 pb-20 gap-4">
-                <button
-                  type="button"
-                  onClick={() => updateJob()}
-                  className="inline-flex justify-center rounded-md
-                                        border border-transparent bg-red-600 py-2 px-4
-                                        text-sm font-medium text-white shadow-sm hover:bg-red-600
-                                        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                >
-                  Save Changes
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate(-1)}
-                  className="rounded-md border border-gray-300 bg-white w-full
-                                        py-2 px-4 text-sm font-medium text-gray-700 shadow-sm
-                                        hover:bg-gray-50 focus:outline-none focus:ring-2
-                                            focus:ring-red-500 focus:ring-offset-2"
-                >
-                  Cancel
-                </button>
+                </div>
               </div>
-
-              <div className="h-28"></div>
             </div>
           </div>
-        </main>
+        </>
       )}
+
+      <div className="flex flex-wrap gap-6 mt-10 m-auto text-center justify-center">
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center justify-center rounded-md border
+                                      border-gray-300 bg-white px-4 py-2 text-xl
+                                      text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none
+                                      focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => updateJob()}
+          className={`relative inline-flex items-center rounded-md border border-transparent
+                            bg-red-600 px-4 py-2 text-2xl front-medium text-white shadow-sm
+                                hover:bg-red-700 focus:outline-none focus:ring-red-500 focus:ring-offset-2`}
+        >
+          Save Changes
+        </button>
+      </div>
     </AnimatedPage>
   );
 };
