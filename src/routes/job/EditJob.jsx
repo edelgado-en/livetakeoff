@@ -75,6 +75,11 @@ const EditJob = () => {
 
   const [tags, setTags] = useState([]);
 
+  const [customerFollowerEmails, setCustomerFollowerEmails] = useState([]);
+  const [jobFollowerEmails, setJobFollowerEmails] = useState([]);
+  const [customerFollowerEmailSearchTerm, setCustomerFollowerEmailSearchTerm] =
+    useState("");
+
   const [customerSelected, setCustomerSelected] = useState({});
   const [aircraftTypeSelected, setAircraftTypeSelected] = useState({});
   const [airportSelected, setAirportSelected] = useState({});
@@ -124,6 +129,18 @@ const EditJob = () => {
   }, []);
 
   useEffect(() => {
+    if (customerSelected) {
+      let timeoutID = setTimeout(() => {
+        searchCustomerFollowerEmails();
+      }, 500);
+
+      return () => {
+        clearTimeout(timeoutID);
+      };
+    }
+  }, [customerFollowerEmailSearchTerm, customerSelected]);
+
+  useEffect(() => {
     //Basic throttling
     let timeoutID = setTimeout(() => {
       searchAirports();
@@ -166,6 +183,19 @@ const EditJob = () => {
       clearTimeout(timeoutID);
     };
   }, [vendorSearchTerm]);
+
+  const searchCustomerFollowerEmails = async () => {
+    try {
+      const { data } = await api.searchCustomerFollowerEmails({
+        customer_id: customerSelected?.id,
+        email: customerFollowerEmailSearchTerm,
+      });
+
+      setCustomerFollowerEmails(data.results);
+    } catch (err) {
+      toast.error("Unable to search customer follower emails");
+    }
+  };
 
   const searchAirports = async () => {
     try {
@@ -303,6 +333,8 @@ const EditJob = () => {
 
       setTags(updatedTags);
 
+      setJobFollowerEmails(response.data.follower_emails);
+
       const request = {
         airport_id: response.data.airport.id,
       };
@@ -372,6 +404,9 @@ const EditJob = () => {
   const updateJob = async () => {
     const selectedTags = tags.filter((tag) => tag.selected === true);
     const selectedTagIds = selectedTags.map((tag) => tag.id);
+    const selectedJobFollowerEmails = jobFollowerEmails.map(
+      (email) => email.email
+    );
 
     const totalMinutes = parseInt(hoursWorked) * 60 + parseInt(minutesWorked);
     const totalHours = totalMinutes / 60;
@@ -392,6 +427,7 @@ const EditJob = () => {
       requested_by: requested_by,
       customer_purchase_order: customer_purchase_order,
       tags: selectedTagIds,
+      followerEmails: selectedJobFollowerEmails,
       hours_worked: parseInt(hoursWorked),
       minutes_worked: parseInt(minutesWorked),
       number_of_workers: parseInt(numberOfWorkers),
@@ -409,6 +445,42 @@ const EditJob = () => {
     } catch (e) {
       toast.error("Unable to edit job");
     }
+  };
+
+  const handleAddFollowerEmail = (email) => {
+    if (email) {
+      //only add email if email.email does not exist in jobFollowerEmails
+      if (
+        jobFollowerEmails.filter((e) => e.email === email.email).length === 0
+      ) {
+        setJobFollowerEmails([...jobFollowerEmails, email]);
+      }
+    } else {
+      if (customerFollowerEmailSearchTerm) {
+        // customerFollowerEmailSearchTerm must be a valid email address and not have commas
+        if (
+          !customerFollowerEmailSearchTerm.includes(",") &&
+          validateEmail(customerFollowerEmailSearchTerm)
+        ) {
+          const newEmail = {
+            email: customerFollowerEmailSearchTerm,
+          };
+
+          //only add email if email.email does not exist in jobFollowerEmails
+          if (
+            jobFollowerEmails.filter((e) => e.email === newEmail.email)
+              .length === 0
+          ) {
+            setJobFollowerEmails([...jobFollowerEmails, newEmail]);
+          }
+        }
+      }
+    }
+  };
+
+  const validateEmail = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
   };
 
   const handleToggleEstimatedArrivalDate = () => {
@@ -518,6 +590,14 @@ const EditJob = () => {
     } catch (err) {
       toast.error("Unable to get Fbos");
     }
+  };
+
+  const handleRemoveFollowerEmail = (email) => {
+    const updatedEmails = jobFollowerEmails.filter(
+      (e) => e.email !== email.email
+    );
+
+    setJobFollowerEmails(updatedEmails);
   };
 
   return (
@@ -1782,6 +1862,119 @@ const EditJob = () => {
                       {tag.name}
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-6 mt-2">
+            {/* FOLLOWER EMAILS */}
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="px-4 py-3 bg-gray-100">
+                <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                  Follower Emails
+                </h3>
+              </div>
+              <div className="border-t border-gray-200 grid xl:grid-cols-2 xs:grid-cols-1 gap-12 px-4 py-3">
+                <div>
+                  <div className="text-lg text-gray-500 tracking-wide">
+                    Add Email
+                  </div>
+                  <div className="mt-1 flex">
+                    <div className="-mr-px grid grow grid-cols-1 focus-within:relative">
+                      <input
+                        type="text"
+                        value={customerFollowerEmailSearchTerm}
+                        onChange={(e) =>
+                          setCustomerFollowerEmailSearchTerm(e.target.value)
+                        }
+                        placeholder="Enter one valid email address"
+                        className="col-start-1 row-start-1  rounded-l-md
+                                     block w-full rounded-md border-gray-300 shadow-sm
+                                            focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddFollowerEmail()}
+                      className="flex shrink-0 items-center gap-x-1.5 rounded-r-md
+                                 bg-white px-3 py-2 text-sm font-semibold text-gray-900
+                                  outline outline-1 -outline-offset-1 outline-gray-300
+                                hover:bg-gray-50 focus:relative focus:outline focus:outline-2
+                                 focus:-outline-offset-2 focus:outline-sky-500"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  {customerFollowerEmails.length > 0 && (
+                    <div className="mt-2 text-lg text-gray-500 tracking-wide">
+                      Suggestions
+                    </div>
+                  )}
+                  <div
+                    className="overflow-y-auto"
+                    style={{ maxHeight: "700px" }}
+                  >
+                    <ul role="list" className="divide-y divide-gray-100">
+                      {customerFollowerEmails.map((email) => (
+                        <li
+                          key={email.id}
+                          className="flex items-center justify-between gap-x-6 py-2 hover:bg-gray-50"
+                        >
+                          <div className="flex min-w-0 gap-x-4">
+                            <div className="min-w-0 flex-auto">
+                              <p className="mt-1 truncate text-xs/5 text-gray-500">
+                                {email.email}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleAddFollowerEmail(email)}
+                            className="rounded-md bg-white px-2.5 py-1.5 text-sm
+                                                    font-semibold text-gray-900 shadow-sm ring-1
+                                                    ring-inset ring-gray-300 hover:bg-gray-50 block"
+                          >
+                            Add
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div>
+                  {jobFollowerEmails.length > 0 && (
+                    <div className="text-lg text-gray-500 tracking-wide">
+                      Selected Emails
+                    </div>
+                  )}
+                  <div
+                    className="overflow-y-auto"
+                    style={{ maxHeight: "700px" }}
+                  >
+                    <ul role="list" className="divide-y divide-gray-100">
+                      {jobFollowerEmails.map((email, index) => (
+                        <li
+                          key={index}
+                          className="flex items-center justify-between gap-x-6 py-2 hover:bg-gray-50"
+                        >
+                          <div className="flex min-w-0 gap-x-4">
+                            <div className="min-w-0 flex-auto">
+                              <p className="mt-1 truncate text-xs/5 text-gray-500">
+                                {email.email}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleRemoveFollowerEmail(email)}
+                            className="rounded-md bg-white px-2.5 py-1.5 text-sm
+                                                font-semibold text-gray-900 shadow-sm ring-1
+                                                ring-inset ring-gray-300 hover:bg-gray-50 block"
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
