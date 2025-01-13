@@ -60,6 +60,14 @@ export const getCustomerFees = (id: number) => {
     return httpService.get(`/api/customers/fees/${id}`);
 }
 
+export const searchCustomerFollowerEmails = (data: any) => {
+    return httpService.post(`/api/customers/follower-emails`, data);
+}
+
+export const addDeleteCustomerFollowerEmail = (id: number, request: any) => {
+    return httpService.post(`/api/customers/follower-emails/${id}/`, request);
+}
+
 export const deleteFee = (id: number) => {
     return httpService.delete(`/api/customers/fees/${id}/`);
 }

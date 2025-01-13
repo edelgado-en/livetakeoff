@@ -47,6 +47,7 @@ import CustomerAddFee from "./routes/customers/CustomerAddFee";
 import CustomerEditFee from "./routes/customers/CustomerEditFee";
 import CustomerJobs from "./routes/customers/CustomerJobs";
 import CustomerProfile from "./routes/customers/CustomerProfile";
+import CustomerFollowerEmails from "./routes/customers/CustomerFollowerEmails";
 import CreateCustomer from "./routes/customers/CreateCustomer";
 import EditCustomer from "./routes/customers/EditCustomer";
 import JobReview from "./routes/job/JobReview";
@@ -325,6 +326,11 @@ const App = () => {
                         <Route path="details" element={<CustomerDetails />} />
 
                         <Route path="services" element={<CustomerServices />} />
+
+                        <Route
+                          path="emails"
+                          element={<CustomerFollowerEmails />}
+                        />
 
                         <Route path="discounts" element={<CustomerDiscounts />}>
                           <Route index element={<CustomerDiscountList />} />

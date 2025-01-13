@@ -17,6 +17,7 @@ const tabs = [
   { name: "Discounts", href: "discounts", current: false },
   { name: "Fees", href: "fees", current: false },
   { name: "Services", href: "services", current: false },
+  { name: "Follower Emails", href: "emails", current: false },
 ];
 
 function classNames(...classes) {
