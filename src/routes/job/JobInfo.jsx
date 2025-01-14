@@ -1038,6 +1038,20 @@ const JobInfo = () => {
                     <dt className="text-md font-bold text-gray-900">FBO:</dt>
                     <dd className="text-md text-gray-700">
                       {jobDetails.fbo?.name}
+                      <div>
+                        {jobDetails.fbo?.hours_of_operation && (
+                          <div className="rounded-md bg-red-50 p-2 mt-1">
+                            <div className="text-sm text-red-700">
+                              <ul className="list-disc space-y-1">
+                                <h3 className="text-sm font-medium text-red-800">
+                                  Hours of operation
+                                </h3>
+                                {jobDetails.fbo?.hours_of_operation}
+                              </ul>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </dd>
                   </div>
                   <div className="px-4 py-3 flex gap-4">
