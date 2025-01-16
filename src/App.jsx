@@ -210,6 +210,8 @@ const App = () => {
                       element={<CustomerServiceReport />}
                     />
 
+                    <Route path="vendor-files" element={<VendorFiles />} />
+
                     <Route
                       path="team-productivity"
                       element={<TeamProductivity />}

@@ -631,17 +631,30 @@ const Topbar = () => {
                           </Link>
                         )}
                         {currentUser.isExternalProjectManager && (
-                          <Link
-                            to="service-report"
-                            className={classNames(
-                              location.pathname.includes("service-report")
-                                ? "bg-red-700"
-                                : " hover:bg-red-700 hover:text-white",
-                              "px-3 py-2 rounded-md text-sm font-medium text-white"
-                            )}
-                          >
-                            Service Report
-                          </Link>
+                          <>
+                            <Link
+                              to="service-report"
+                              className={classNames(
+                                location.pathname.includes("service-report")
+                                  ? "bg-red-700"
+                                  : " hover:bg-red-700 hover:text-white",
+                                "px-3 py-2 rounded-md text-sm font-medium text-white"
+                              )}
+                            >
+                              Service Report
+                            </Link>
+                            <Link
+                              to="vendor-files"
+                              className={classNames(
+                                location.pathname.includes("vendor-files")
+                                  ? "bg-red-700"
+                                  : " hover:bg-red-700 hover:text-white",
+                                "px-3 py-2 rounded-md text-sm font-medium text-white"
+                              )}
+                            >
+                              Documents
+                            </Link>
+                          </>
                         )}
                       </>
                     ) : currentUser.isCustomer ? (
@@ -1230,18 +1243,32 @@ const Topbar = () => {
                     </Link>
                   )}
                   {currentUser.isExternalProjectManager && (
-                    <Link to="service-report">
-                      <Disclosure.Button
-                        className={classNames(
-                          location.pathname.includes("service-report")
-                            ? "bg-red-700"
-                            : "hover:bg-red-700 hover:text-white",
-                          "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                        )}
-                      >
-                        Service Report
-                      </Disclosure.Button>
-                    </Link>
+                    <>
+                      <Link to="service-report">
+                        <Disclosure.Button
+                          className={classNames(
+                            location.pathname.includes("service-report")
+                              ? "bg-red-700"
+                              : "hover:bg-red-700 hover:text-white",
+                            "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                          )}
+                        >
+                          Service Report
+                        </Disclosure.Button>
+                      </Link>
+                      <Link to="vendor-files">
+                        <Disclosure.Button
+                          className={classNames(
+                            location.pathname.includes("vendor-files")
+                              ? "bg-red-700"
+                              : "hover:bg-red-700 hover:text-white",
+                            "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                          )}
+                        >
+                          Documents
+                        </Disclosure.Button>
+                      </Link>
+                    </>
                   )}
                 </>
               ) : currentUser.isCustomer ? (

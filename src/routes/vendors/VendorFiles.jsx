@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import { PaperClipIcon } from "@heroicons/react/outline";
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../userProfile/userSlice";
 
 import * as api from "./apiService";
 
@@ -11,6 +13,7 @@ import { toast } from "react-toastify";
 
 const VendorFiles = () => {
   const { vendorId } = useParams();
+  const currentUser = useAppSelector(selectUser);
   const [vendorFiles, setVendorFiles] = useState([]);
   const [isVendorFileUploadModalOpen, setVendorFileUploadModalOpen] =
     useState(false);
@@ -113,43 +116,61 @@ const VendorFiles = () => {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteVendorFile(file)}
-                        className="inline-flex w-full justify-center rounded-md border
-                                                        border-gray-300 bg-white px-2 py-1 text-base 
-                                                        text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
-                                                        focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                      >
-                        Delete
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => downloadFile(file)}
-                        className="inline-flex w-full justify-center rounded-md border font-medium
+                      {!currentUser.isProjectManager && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteVendorFile(file)}
+                            className="inline-flex w-full justify-center rounded-md border
+                                                            border-gray-300 bg-white px-2 py-1 text-base 
+                                                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
+                                                            focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => downloadFile(file)}
+                            className="inline-flex w-full justify-center rounded-md border font-medium
                                                         border-gray-300 bg-white px-2 py-1 text-base 
                                                         text-sky-500 shadow-sm focus:outline-none focus:ring-2
                                                         focus:ring-sky-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                      >
-                        Download
-                      </button>
-                      {file.is_approved ? (
-                        <p
-                          className={`inline-flex text-sm text-white rounded-md py-1 px-2
+                          >
+                            Download
+                          </button>
+                          {file.is_approved ? (
+                            <p
+                              className={`inline-flex text-sm text-white rounded-md py-1 px-2
                                     bg-green-400`}
-                        >
-                          Approved
-                        </p>
-                      ) : (
-                        <button
-                          type="button"
-                          className="inline-flex w-full justify-center rounded-md border font-medium
+                            >
+                              Approved
+                            </p>
+                          ) : (
+                            <button
+                              type="button"
+                              className="inline-flex w-full justify-center rounded-md border font-medium
                                                             border-gray-300 bg-white px-2 py-1 text-base 
                                                             text-green-500 shadow-sm focus:outline-none focus:ring-2
                                                             focus:ring-green-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                        >
-                          Approve
-                        </button>
+                            >
+                              Approve
+                            </button>
+                          )}
+                        </>
+                      )}
+                      {currentUser.isProjectManager && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => downloadFile(file)}
+                            className="inline-flex w-full justify-center rounded-md border font-medium
+                                                        border-gray-300 bg-white px-2 py-1 text-base 
+                                                        text-sky-500 shadow-sm focus:outline-none focus:ring-2
+                                                        focus:ring-sky-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                          >
+                            Download
+                          </button>
+                        </>
                       )}
                     </div>
                   </div>

@@ -1,6 +1,8 @@
 import { useState, useEffect, Fragment } from "react";
 import ModalFrame from "../../components/modal/ModalFrame";
 import { Dialog, Switch, Listbox, Transition } from "@headlessui/react";
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../userProfile/userSlice";
 
 import {
   DocumentIcon,
@@ -32,6 +34,7 @@ const VendorFileUploadModal = ({
   vendorId,
 }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const currentUser = useAppSelector(selectUser);
   const [fileTypeSelected, setFileTypeSelected] = useState(fileTypeOptions[0]);
   const [expirationDate, setExpirationDate] = useState(null);
   const [expirationDateOpen, setExpirationDateOpen] = useState(false);
@@ -212,32 +215,34 @@ const VendorFileUploadModal = ({
             </div>
           )}
 
-          <div className="flex items-center justify-between mt-6">
-            <span className="flex grow flex-col">
-              <label as="span" passive className="text-md text-gray-600">
-                Approved
-              </label>
-              <div className="text-sm text-gray-500">
-                Ensure the file is with accordance to the company's policy.
-              </div>
-            </span>
-            <Switch
-              checked={isApproved}
-              onChange={setIsApproved}
-              className={classNames(
-                isApproved ? "bg-red-500" : "bg-gray-200",
-                "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-              )}
-            >
-              <span
-                aria-hidden="true"
+          {!currentUser.isProjectManager && (
+            <div className="flex items-center justify-between mt-6">
+              <span className="flex grow flex-col">
+                <label as="span" passive className="text-md text-gray-600">
+                  Approved
+                </label>
+                <div className="text-sm text-gray-500">
+                  Ensure the file is with accordance to the company's policy.
+                </div>
+              </span>
+              <Switch
+                checked={isApproved}
+                onChange={setIsApproved}
                 className={classNames(
-                  isApproved ? "translate-x-5" : "translate-x-0",
-                  "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                  isApproved ? "bg-red-500" : "bg-gray-200",
+                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                 )}
-              />
-            </Switch>
-          </div>
+              >
+                <span
+                  aria-hidden="true"
+                  className={classNames(
+                    isApproved ? "translate-x-5" : "translate-x-0",
+                    "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                  )}
+                />
+              </Switch>
+            </div>
+          )}
 
           <div className="mt-8 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
             <div className="text-center">

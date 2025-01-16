@@ -21,11 +21,21 @@ export const editVendor = (id: number, request: any) => {
 }
 
 export const uploadFile = (vendorId: number, formData: any) => {
-    return httpService.post(`/api/vendor-files/upload/${vendorId}/`, formData,  {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    })
+    if (vendorId) {
+        return httpService.post(`/api/vendor-files/upload/${vendorId}/`, formData,  {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+
+    } else {
+        return httpService.post('/api/vendor-files/upload', formData,  {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+    }
+
 }
 
 export const deleteVendorFile = (fileId: number) => {
@@ -33,5 +43,11 @@ export const deleteVendorFile = (fileId: number) => {
 }
 
 export const getVendorFiles = (vendorId: number) => {
-    return httpService.get(`/api/vendor-files/${vendorId}/`);
+    if (vendorId) {
+        return httpService.get(`/api/vendor-files/${vendorId}/`);
+
+    } else {
+        return httpService.get('/api/vendor-files')
+    }
+
 }
