@@ -81,8 +81,14 @@ const JobInfo = () => {
 
   const [invoiceDetails, setInvoiceDetails] = useState(null);
 
+  const [vendorInsuranceData, setVendorInsuranceData] = useState(null);
+
   useEffect(() => {
     getJobDetails();
+  }, []);
+
+  useEffect(() => {
+    getVendorInsuranceCheck();
   }, []);
 
   const handleToggleJobCompleteModal = () => {
@@ -107,6 +113,16 @@ const JobInfo = () => {
 
   const handleToggleJobFileUploadModal = () => {
     setJobFileUploadModalOpen(!isJobFileUploadModalOpen);
+  };
+
+  const getVendorInsuranceCheck = async () => {
+    try {
+      const response = await api.getVendorInsuranceCheck({ job_id: jobId });
+
+      setVendorInsuranceData(response.data);
+    } catch (err) {
+      return false;
+    }
   };
 
   const getJobDetails = async () => {

@@ -7,6 +7,7 @@ import {
   CheckIcon,
   CheckCircleIcon,
   StarIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/outline";
 import { TrashIcon } from "@heroicons/react/solid";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
@@ -69,6 +70,8 @@ const JobAssignments = () => {
   const [retainerServiceToBeDeleted, setRetainerServiceToBeDeleted] =
     useState(null);
 
+  const [vendorInsuranceData, setVendorInsuranceData] = useState(null);
+
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -76,6 +79,10 @@ const JobAssignments = () => {
   useEffect(() => {
     getFormInfo();
   }, []);
+
+  useEffect(() => {
+    getVendorInsuranceCheck();
+  }, [selectedProjectManager]);
 
   const getFormInfo = async () => {
     setLoading(true);
@@ -152,6 +159,22 @@ const JobAssignments = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
+    }
+  };
+
+  const getVendorInsuranceCheck = async () => {
+    if (selectedProjectManager) {
+      const request = {
+        user_id: selectedProjectManager.id,
+      };
+
+      try {
+        const response = await api.getVendorInsuranceCheck(request);
+
+        setVendorInsuranceData(response.data);
+      } catch (err) {
+        return false;
+      }
     }
   };
 
@@ -367,148 +390,187 @@ const JobAssignments = () => {
         {!loading && !assignmentCompleted && (
           <>
             {!location.pathname.includes("review") && (
-              <div className="mt-8 max-w-sm">
-                <Listbox
-                  value={selectedProjectManager}
-                  onChange={(person) => setMainProjectManager(person)}
-                >
-                  {({ open }) => (
-                    <>
-                      <Listbox.Label className="block text-sm font-medium text-gray-700">
-                        Assigned to
-                      </Listbox.Label>
-                      <div className="relative mt-1">
-                        <Listbox.Button
-                          className="relative w-full cursor-default rounded-md border
+              <>
+                <div className="mt-8 max-w-sm">
+                  <Listbox
+                    value={selectedProjectManager}
+                    onChange={(person) => setMainProjectManager(person)}
+                  >
+                    {({ open }) => (
+                      <>
+                        <Listbox.Label className="block text-sm font-medium text-gray-700">
+                          Assigned to
+                        </Listbox.Label>
+                        <div className="relative mt-1">
+                          <Listbox.Button
+                            className="relative w-full cursor-default rounded-md border
                                                             border-gray-300 bg-white py-2 pl-3 pr-10 text-left
                                                             shadow-sm focus:border-sky-500 focus:outline-none focus:ring-1
                                                                 focus:ring-sky-500 sm:text-sm"
-                        >
-                          <span className="flex items-center">
-                            {selectedProjectManager && (
-                              <>
-                                <img
-                                  src={selectedProjectManager.profile?.avatar}
-                                  alt=""
-                                  className="h-6 w-6 flex-shrink-0 rounded-full"
-                                />
-                                <span
-                                  className={classNames(
-                                    selectedProjectManager.availability ===
-                                      "available"
-                                      ? "bg-green-400"
-                                      : selectedProjectManager.availability ===
-                                        "available_soon"
-                                      ? "bg-yellow-400"
-                                      : "bg-red-400",
-                                    "inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2"
-                                  )}
-                                />
-                              </>
-                            )}
+                          >
+                            <span className="flex items-center">
+                              {selectedProjectManager && (
+                                <>
+                                  <img
+                                    src={selectedProjectManager.profile?.avatar}
+                                    alt=""
+                                    className="h-6 w-6 flex-shrink-0 rounded-full"
+                                  />
+                                  <span
+                                    className={classNames(
+                                      selectedProjectManager.availability ===
+                                        "available"
+                                        ? "bg-green-400"
+                                        : selectedProjectManager.availability ===
+                                          "available_soon"
+                                        ? "bg-yellow-400"
+                                        : "bg-red-400",
+                                      "inline-block h-2 w-2 flex-shrink-0 rounded-full ml-2"
+                                    )}
+                                  />
+                                </>
+                              )}
 
-                            <span className="ml-3 block truncate">
-                              {selectedProjectManager
-                                ? selectedProjectManager.first_name +
-                                  " " +
-                                  selectedProjectManager.last_name
-                                : "Applies to all services"}
+                              <span className="ml-3 block truncate">
+                                {selectedProjectManager
+                                  ? selectedProjectManager.first_name +
+                                    " " +
+                                    selectedProjectManager.last_name
+                                  : "Applies to all services"}
+                              </span>
                             </span>
-                          </span>
-                          <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                            <ChevronUpDownIcon
-                              className="h-5 w-5 text-gray-400"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
+                            <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                              <ChevronUpDownIcon
+                                className="h-5 w-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </Listbox.Button>
 
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options
-                            className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
+                          <Transition
+                            show={open}
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options
+                              className="absolute z-10 mt-1 max-h-96 w-full overflow-auto
                                                             rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black
                                                             ring-opacity-5 focus:outline-none sm:text-sm"
-                          >
-                            {projectManagers.map((projectManager) => (
-                              <Listbox.Option
-                                key={projectManager.id}
-                                className={({ active }) =>
-                                  classNames(
-                                    active
-                                      ? "text-white bg-red-600"
-                                      : "text-gray-900",
-                                    "relative cursor-default select-none py-2 pl-3 pr-9"
-                                  )
-                                }
-                                value={projectManager}
-                              >
-                                {({ selected, active }) => (
-                                  <>
-                                    <div className="flex gap-2 items-center">
-                                      <img
-                                        src={projectManager.profile?.avatar}
-                                        alt=""
-                                        className="h-6 w-6 rounded-full"
-                                      />
+                            >
+                              {projectManagers.map((projectManager) => (
+                                <Listbox.Option
+                                  key={projectManager.id}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active
+                                        ? "text-white bg-red-600"
+                                        : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={projectManager}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <div className="flex gap-2 items-center">
+                                        <img
+                                          src={projectManager.profile?.avatar}
+                                          alt=""
+                                          className="h-6 w-6 rounded-full"
+                                        />
 
-                                      <div
-                                        className={classNames(
-                                          selected
-                                            ? "font-semibold"
-                                            : "font-normal",
-                                          "ml-3 block truncate"
+                                        <div
+                                          className={classNames(
+                                            selected
+                                              ? "font-semibold"
+                                              : "font-normal",
+                                            "ml-3 block truncate"
+                                          )}
+                                        >
+                                          {projectManager.first_name +
+                                            " " +
+                                            projectManager.last_name}
+                                        </div>
+
+                                        {projectManager.is_preferred && (
+                                          <div
+                                            className="inline-flex items-center rounded-md p-2 px-2 text-xs
+                                                         font-medium bg-green-100 text-green-700"
+                                          >
+                                            <StarIcon className="h-4 w-4 mr-1" />
+                                            Preferred
+                                          </div>
                                         )}
-                                      >
-                                        {projectManager.first_name +
-                                          " " +
-                                          projectManager.last_name}
                                       </div>
 
-                                      {projectManager.is_preferred && (
-                                        <div
-                                          className="inline-flex items-center rounded-md p-2 px-2 text-xs
-                                                         font-medium bg-green-100 text-green-700"
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-white"
+                                              : "text-red-600",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
                                         >
-                                          <StarIcon className="h-4 w-4 mr-1" />
-                                          Preferred
-                                        </div>
-                                      )}
-                                    </div>
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </>
+                    )}
+                  </Listbox>
+                </div>
+                {vendorInsuranceData &&
+                  vendorInsuranceData.is_vendor_external && (
+                    <div className="rounded-md bg-red-50 p-4 mt-4">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <ExclamationCircleIcon
+                            className="h-5 w-5 text-red-400"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <div className="ml-3">
+                          <h3 className="text-sm font-medium text-red-800">
+                            Vendor Information
+                          </h3>
+                          <div className="mt-2 text-sm text-red-700">
+                            <ul className="list-disc space-y-1 pl-5">
+                              {!vendorInsuranceData.is_vendor_w9_uploaded && (
+                                <li>Missing W-9</li>
+                              )}
+                              {!vendorInsuranceData.is_vendor_insurance_uploaded && (
+                                <li>Missing Insurance</li>
+                              )}
 
-                                    {selected ? (
-                                      <span
-                                        className={classNames(
-                                          active
-                                            ? "text-white"
-                                            : "text-red-600",
-                                          "absolute inset-y-0 right-0 flex items-center pr-4"
-                                        )}
-                                      >
-                                        <CheckIcon
-                                          className="h-5 w-5"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    ) : null}
-                                  </>
+                              {vendorInsuranceData.is_vendor_insurance_uploaded &&
+                                vendorInsuranceData.is_vendor_insurance_expired && (
+                                  <li>Insurance Expired</li>
                                 )}
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
+                              {vendorInsuranceData.is_vendor_insurance_uploaded &&
+                                vendorInsuranceData.is_vendor_insurance_about_to_expire && (
+                                  <li>Insurance is about to expire</li>
+                                )}
+                            </ul>
+                          </div>
+                        </div>
                       </div>
-                    </>
+                    </div>
                   )}
-                </Listbox>
-              </div>
+              </>
             )}
-            <div className="mt-10">
+            <div className="mt-4">
               <div className="text-md font-medium text-gray-700 mb-2 flex justify-between">
                 <div className="relative top-3">
                   Services

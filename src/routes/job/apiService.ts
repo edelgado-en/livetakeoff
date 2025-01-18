@@ -60,6 +60,10 @@ export const getJobPhotos = (jobId: number) => {
     return httpService.get(`/api/job-photos/${jobId}/`)
 }
 
+export const getVendorInsuranceCheck = (request: any) => {
+    return httpService.post(`/api/vendors/insurance-check`, request)
+}
+
 export const uploadPhotos = (jobId: number, formData: any) => {
     return httpService.post(`/api/job-photos/upload/${jobId}/`, formData, {
         headers: {
