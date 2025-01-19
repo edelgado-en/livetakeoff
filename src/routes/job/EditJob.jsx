@@ -921,38 +921,38 @@ const EditJob = () => {
                   </Listbox>
                 </dd>
               </div>
-              <div className="px-4 py-3 flex gap-4">
-                <dt className="text-md font-bold text-gray-900 relative top-4 w-20">
-                  Arrival:
-                </dt>
-                <dd className="text-md text-gray-700 flex-1">
-                  <div>
-                    <div className="text-sm  text-gray-500 mb-1 flex justify-between">
-                      <div className="flex gap-2">
-                        <div className="flex h-5 items-center">
-                          <input
-                            id="onSite"
-                            checked={onSite}
-                            value={onSite}
-                            onClick={handleSetOnSite}
-                            name="onSite"
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                          />
-                        </div>
-                        <label htmlFor="onSite" className=" text-gray-500">
-                          On site
-                        </label>
+              <div className="px-4 py-3 gap-4 pr-2">
+                <dt className="flex justify-between gap-4text-md font-bold text-gray-900 relative">
+                  <div>Arrival:</div>
+                  <div className="text-sm  text-gray-500 mb-1 flex justify-between text-right">
+                    <div className="flex gap-2">
+                      <div className="flex h-5 items-center">
+                        <input
+                          id="onSite"
+                          checked={onSite}
+                          value={onSite}
+                          onClick={handleSetOnSite}
+                          name="onSite"
+                          type="checkbox"
+                          className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                        />
                       </div>
-                      {estimatedArrivalDate && (
-                        <span
-                          onClick={() => setEstimatedArrivalDate(null)}
-                          className="ml-2 underline text-xs text-red-500 cursor-pointer"
-                        >
-                          clear
-                        </span>
-                      )}
+                      <label htmlFor="onSite" className=" text-gray-500">
+                        On site
+                      </label>
                     </div>
+                    {estimatedArrivalDate && (
+                      <span
+                        onClick={() => setEstimatedArrivalDate(null)}
+                        className="ml-2 underline text-sm text-red-500 cursor-pointer"
+                      >
+                        clear
+                      </span>
+                    )}
+                  </div>
+                </dt>
+                <dd className="text-md text-gray-700 mt-1">
+                  <div>
                     <button
                       type="button"
                       onClick={handleToggleEstimatedArrivalDate}
@@ -987,21 +987,21 @@ const EditJob = () => {
                   </div>
                 </dd>
               </div>
-              <div className="px-4 py-3 flex gap-4">
-                <dt className="text-md font-bold text-gray-900 relative top-2 w-20">
-                  Departure:
-                </dt>
-                <dd className="text-md text-gray-700 flex-1">
+              <div className="px-4 py-3 gap-4 pr-2">
+                <dt className="flex justify-between gap-4 text-md font-bold text-gray-900">
+                  <div>Departure:</div>
                   <label className="block text-sm text-gray-500 mb-1">
                     {estimatedDepartureDate && (
                       <span
                         onClick={() => setEstimatedDepartureDate(null)}
-                        className="ml-2 underline text-xs text-red-500 cursor-pointer"
+                        className="ml-2 underline text-sm text-red-500 cursor-pointer"
                       >
                         clear
                       </span>
                     )}
                   </label>
+                </dt>
+                <dd className="text-md text-gray-700 mt-1">
                   <button
                     type="button"
                     onClick={handleToggleEstimatedDepartureDate}
@@ -1035,21 +1035,21 @@ const EditJob = () => {
                   )}
                 </dd>
               </div>
-              <div className="px-4 py-3 flex flex-wrap gap-4">
-                <dt className="text-md font-bold text-gray-900 relative top-2 w-20">
-                  Complete Before:
-                </dt>
-                <dd className="text-md text-gray-700 flex-1">
+              <div className="px-4 py-3 gap-4 pr-2">
+                <dt className="flex justify-between gap-4 text-md font-bold text-gray-900 relative">
+                  <div>Complete Before:</div>
                   <label className="block text-sm  text-gray-500 mb-1">
                     {completeByDate && (
                       <span
                         onClick={() => setCompleteByDate(null)}
-                        className="ml-2 underline text-xs text-red-500 cursor-pointer"
+                        className="ml-2 underline text-sm text-red-500 cursor-pointer"
                       >
                         clear
                       </span>
                     )}
                   </label>
+                </dt>
+                <dd className="text-md text-gray-700 mt-1">
                   <button
                     type="button"
                     onClick={handleToggleCompleteByDate}
