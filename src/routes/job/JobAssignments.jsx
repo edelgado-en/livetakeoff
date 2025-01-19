@@ -532,7 +532,11 @@ const JobAssignments = () => {
                   </Listbox>
                 </div>
                 {vendorInsuranceData &&
-                  vendorInsuranceData.is_vendor_external && (
+                  vendorInsuranceData.is_vendor_external &&
+                  (!vendorInsuranceData.is_vendor_w9_uploaded ||
+                    !vendorInsuranceData.is_vendor_insurance_uploaded ||
+                    vendorInsuranceData.is_vendor_insurance_expired ||
+                    vendorInsuranceData.is_vendor_insurance_about_to_expire) && (
                     <div className="rounded-md bg-red-50 p-4 mt-4">
                       <div className="flex">
                         <div className="flex-shrink-0">
