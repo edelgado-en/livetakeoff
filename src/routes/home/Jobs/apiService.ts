@@ -23,3 +23,7 @@ export const getTags = () => {
 export const getVendors = (data: any) => {
     return httpService.post('/api/vendors', data);
 }
+
+export const getVendorInsuranceCheck = (request: any) => {
+    return httpService.post(`/api/vendors/insurance-check`, request)
+}

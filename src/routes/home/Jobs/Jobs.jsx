@@ -6,6 +6,8 @@ import {
   PlusIcon,
   CheckIcon,
   ChevronDownIcon,
+  ExclamationCircleIcon,
+  XCircleIcon,
 } from "@heroicons/react/outline";
 import {
   Listbox,
@@ -184,6 +186,8 @@ const JobsQueue = () => {
 
   const [tags, setTags] = useState([]);
 
+  const [vendorInsuranceData, setVendorInsuranceData] = useState(null);
+
   const [availableStatuses, setAvailableStatuses] = useState(statuses);
 
   const [airportTypes, setAirportTypes] = useState(airportTypeOptions);
@@ -337,6 +341,10 @@ const JobsQueue = () => {
   useEffect(() => {
     localStorage.setItem("sortSelected", JSON.stringify(sortSelected));
   }, [sortSelected]);
+
+  useEffect(() => {
+    getVendorInsuranceCheck();
+  }, [currentUser]);
 
   useEffect(() => {
     //Basic throttling
@@ -607,6 +615,22 @@ const JobsQueue = () => {
     setOverdue(!overdue);
   };
 
+  const getVendorInsuranceCheck = async () => {
+    if (currentUser?.isExternalProjectManager) {
+      const request = {
+        user_id: currentUser?.id,
+      };
+
+      try {
+        const response = await api.getVendorInsuranceCheck(request);
+
+        setVendorInsuranceData(response.data);
+      } catch (err) {
+        return false;
+      }
+    }
+  };
+
   return (
     <AnimatedPage>
       <div
@@ -620,6 +644,64 @@ const JobsQueue = () => {
         } -mt-3 flex flex-wrap`}
       >
         <div className="flex-1 xl:px-10 lg:px-10 md:px-10">
+          {vendorInsuranceData &&
+            currentUser.isExternalProjectManager &&
+            vendorInsuranceData.is_vendor_external &&
+            (!vendorInsuranceData.is_vendor_w9_uploaded ||
+              !vendorInsuranceData.is_vendor_insurance_uploaded ||
+              vendorInsuranceData.is_vendor_insurance_expired ||
+              vendorInsuranceData.is_vendor_insurance_about_to_expire) && (
+              <div className="rounded-md bg-red-50 p-4 -mt-4 mb-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <ExclamationCircleIcon
+                      className="h-6 w-6 text-red-400"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="ml-3 flex-1">
+                    <div className="flex justify-between gap-4">
+                      <div>
+                        <h3 className="text-md font-medium text-red-800">
+                          Important Information
+                        </h3>
+                      </div>
+                      <div>
+                        <XCircleIcon
+                          className="h-6 w-6 text-red-400 cursor-pointer"
+                          onClick={() => setVendorInsuranceData(null)}
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-2 text-md text-red-700">
+                      <ul className="list-disc space-y-1 pl-5">
+                        {!vendorInsuranceData.is_vendor_w9_uploaded && (
+                          <li>Missing W-9</li>
+                        )}
+                        {!vendorInsuranceData.is_vendor_insurance_uploaded && (
+                          <li>Missing Insurance</li>
+                        )}
+
+                        {vendorInsuranceData.is_vendor_insurance_uploaded &&
+                          vendorInsuranceData.is_vendor_insurance_expired && (
+                            <li>Insurance Expired</li>
+                          )}
+                        {vendorInsuranceData.is_vendor_insurance_uploaded &&
+                          vendorInsuranceData.is_vendor_insurance_about_to_expire && (
+                            <li>Insurance is about to expire</li>
+                          )}
+                      </ul>
+                      <div className="mt-4">
+                        Manage your files{" "}
+                        <Link to="/vendor-files" className="text-blue-500">
+                          here
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           <div className="grid grid-cols-2">
             <div className="">
               <h1 className="text-2xl font-semibold text-gray-600">

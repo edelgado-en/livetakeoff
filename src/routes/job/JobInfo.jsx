@@ -10,7 +10,6 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  ExclamationCircleIcon,
 } from "@heroicons/react/outline";
 import { toast } from "react-toastify";
 import * as api from "./apiService";
@@ -81,14 +80,8 @@ const JobInfo = () => {
 
   const [invoiceDetails, setInvoiceDetails] = useState(null);
 
-  const [vendorInsuranceData, setVendorInsuranceData] = useState(null);
-
   useEffect(() => {
     getJobDetails();
-  }, []);
-
-  useEffect(() => {
-    getVendorInsuranceCheck();
   }, []);
 
   const handleToggleJobCompleteModal = () => {
@@ -113,16 +106,6 @@ const JobInfo = () => {
 
   const handleToggleJobFileUploadModal = () => {
     setJobFileUploadModalOpen(!isJobFileUploadModalOpen);
-  };
-
-  const getVendorInsuranceCheck = async () => {
-    try {
-      const response = await api.getVendorInsuranceCheck({ job_id: jobId });
-
-      setVendorInsuranceData(response.data);
-    } catch (err) {
-      return false;
-    }
   };
 
   const getJobDetails = async () => {
@@ -1031,53 +1014,6 @@ const JobInfo = () => {
               {tag.tag_name}
             </div>
           ))}
-
-          {vendorInsuranceData &&
-            (currentUser.isAdmin ||
-              currentUser.isSuperUser ||
-              currentUser.isAccountManager ||
-              currentUser.isInternalCoordinator ||
-              currentUser.isExternalProjectManager) &&
-            vendorInsuranceData.is_vendor_external &&
-            (!vendorInsuranceData.is_vendor_w9_uploaded ||
-              !vendorInsuranceData.is_vendor_insurance_uploaded ||
-              vendorInsuranceData.is_vendor_insurance_expired ||
-              vendorInsuranceData.is_vendor_insurance_about_to_expire) && (
-              <div className="rounded-md bg-red-50 p-4 mt-4">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <ExclamationCircleIcon
-                      className="h-6 w-6 text-red-400"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="ml-3">
-                    <h3 className="text-md font-medium text-red-800">
-                      Vendor Information
-                    </h3>
-                    <div className="mt-2 text-md text-red-700">
-                      <ul className="list-disc space-y-1 pl-5">
-                        {!vendorInsuranceData.is_vendor_w9_uploaded && (
-                          <li>Missing W-9</li>
-                        )}
-                        {!vendorInsuranceData.is_vendor_insurance_uploaded && (
-                          <li>Missing Insurance</li>
-                        )}
-
-                        {vendorInsuranceData.is_vendor_insurance_uploaded &&
-                          vendorInsuranceData.is_vendor_insurance_expired && (
-                            <li>Insurance Expired</li>
-                          )}
-                        {vendorInsuranceData.is_vendor_insurance_uploaded &&
-                          vendorInsuranceData.is_vendor_insurance_about_to_expire && (
-                            <li>Insurance is about to expire</li>
-                          )}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
 
           <div className="grid 3xl:grid-cols-4 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 mt-4 gap-6">
             {/* LOCATION AND TIMES */}
