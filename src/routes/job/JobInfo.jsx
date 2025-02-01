@@ -80,8 +80,14 @@ const JobInfo = () => {
 
   const [invoiceDetails, setInvoiceDetails] = useState(null);
 
+  const [flights, setFlights] = useState([]);
+
   useEffect(() => {
     getJobDetails();
+  }, []);
+
+  useEffect(() => {
+    getTailFlightInfo();
   }, []);
 
   const handleToggleJobCompleteModal = () => {
@@ -106,6 +112,16 @@ const JobInfo = () => {
 
   const handleToggleJobFileUploadModal = () => {
     setJobFileUploadModalOpen(!isJobFileUploadModalOpen);
+  };
+
+  const getTailFlightInfo = async () => {
+    try {
+      const { data } = await api.getTailFlightInfo(jobId);
+
+      setFlights(data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const getJobDetails = async () => {
@@ -1881,6 +1897,129 @@ const JobInfo = () => {
           ) : (
             <div className="grid grid-cols-1 mt-6 gap-6">
               <JobComments />
+            </div>
+          )}
+
+          {flights.length > 0 && (
+            <div className="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 mt-6 gap-6">
+              <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+                <div className="p-4 bg-gray-100">
+                  <h3 className="text-base font-bold leading-7 text-gray-900 uppercase">
+                    Flights
+                  </h3>
+                </div>
+                <div className="border-t border-gray-200">
+                  <ul role="list" className="divide-y divide-gray-200">
+                    {flights.map((flight, index) => (
+                      <li
+                        key={index}
+                        className="relative py-5 hover:bg-gray-50"
+                      >
+                        <div className="px-4 sm:px-6 lg:px-8">
+                          <div className="mx-auto flex max-w-4xl justify-end text-right">
+                            <div className="flex justify-end text-right">
+                              <div
+                                class={`rounded-md cursor-pointer border ${
+                                  flight.status === "EN ROUTE"
+                                    ? "border-blue-600 text-blue-600"
+                                    : "border-green-600 text-green-600"
+                                } 
+                                         py-2 px-2 flex items-center justify-center text-sm
+                                         uppercase`}
+                              >
+                                {flight.status}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mx-auto flex max-w-4xl justify-between gap-x-6 mt-2">
+                            <div className="">
+                              <div className="font-medium text-xl">
+                                {flight.origin.code}
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <div className="overflow-hidden rounded-full bg-gray-200 mt-3">
+                                <div
+                                  style={{
+                                    width: flight.progress_percent + "%",
+                                  }}
+                                  className="h-2 rounded-full bg-green-500"
+                                />
+                              </div>
+                            </div>
+                            <div className="">
+                              <div className="font-medium text-xl">
+                                {flight.destination.code}
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className="mx-auto max-w-4xl 
+                                        grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1
+                                         gap-6 mt-4 divide-x divide-gray-200 mb-4"
+                          >
+                            <div className="px-2">
+                              <div className="font-medium text-lg">
+                                DEPARTURE
+                              </div>
+                              <div>{flight.origin.city}</div>
+                              <div className="text-gray-400">
+                                {flight.origin.timezone}
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 mt-2">
+                                <div>
+                                  <div>Scheduled</div>
+                                  <div>{flight.local_scheduled_off}</div>
+                                </div>
+                                <div>
+                                  <div>Departed</div>
+                                  <div>
+                                    {flight.local_estimated_off
+                                      ? flight.local_estimated_off
+                                      : "Not specified"}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="px-2">
+                              <div className="flex justify-between gap-2">
+                                <div className="font-medium text-log">
+                                  ARRIVAL
+                                </div>
+                                {flight.arrival_delay > 0 && (
+                                  <div className="text-right">
+                                    <p className="inline-flex text-sm text-white rounded-md py-1 px-2 bg-red-400">
+                                      Delayed
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                              <div>{flight.destination.city}</div>
+                              <div className="text-gray-400">
+                                {flight.destination.timezone}
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 mt-2">
+                                <div>
+                                  <div>Scheduled</div>
+                                  <div>{flight.local_scheduled_on}</div>
+                                </div>
+                                <div>
+                                  <div>Estimated</div>
+                                  <div>
+                                    {flight.local_estimated_on
+                                      ? flight.local_estimated_on
+                                      : "Not specified"}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           )}
 

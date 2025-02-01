@@ -96,8 +96,12 @@ const CreateJob = () => {
 
   const [showActions, setShowActions] = useState(false);
 
+  const [enableFlightawareTracking, setEnableFlightawareTracking] =
+    useState(false);
+
   const [tailNumber, setTailNumber] = useState("");
   const [tailNumberErrorMessage, setTailNumberErrorMessage] = useState(null);
+  const [ident, setIdent] = useState("");
   const [requestedByErrorMessage, setRequestedByErrorMessage] = useState(null);
   const [customers, setCustomers] = useState([]);
   const [aircraftTypes, setAircraftTypes] = useState([]);
@@ -383,6 +387,14 @@ const CreateJob = () => {
       }
 
       setServiceActivities(uniqueServiceActivities);
+
+      const response3 = await api.getIdentTailLookup(tailNumber);
+
+      if (response3) {
+        setIdent(response3.data);
+      } else {
+        setIdent("");
+      }
     }
   };
 
@@ -588,6 +600,8 @@ const CreateJob = () => {
     formData.append("customer_purchase_order", customerPurchaseOrder);
     formData.append("priority", selectedPriority.id);
     formData.append("follower_emails", jobFollowerEmailsString);
+    formData.append("ident", ident);
+    formData.append("enable_flightaware_tracking", enableFlightawareTracking);
 
     if (estimateId) {
       formData.append("estimate_id", estimateId);
@@ -818,6 +832,12 @@ const CreateJob = () => {
 
       if (currentUser.promptRequestedBy && requestedBy.length === 0) {
         alert("Enter your name and email");
+        return;
+      }
+
+      //if enableFlightawareTracking is true, then ident must be entered
+      if (enableFlightawareTracking && ident.length === 0) {
+        alert("Call sign is required when tracking is enabled");
         return;
       }
     } else if (currentStep.id === 2) {
@@ -2069,6 +2089,76 @@ const CreateJob = () => {
                       />
                     )}
                   </div>
+
+                  {estimatedArrivalDate && (
+                    <div className="my-6 flex justify-between flex-wrap gap-8">
+                      <div>
+                        <label
+                          htmlFor="ident"
+                          className="text-lg font-bold text-gray-400 uppercase tracking-wide"
+                        >
+                          Call Sign
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            type="text"
+                            value={ident}
+                            onChange={(e) =>
+                              setIdent(e.target.value.toLocaleUpperCase())
+                            }
+                            name="ident"
+                            id="ident"
+                            className="block w-full rounded-md border-gray-300 shadow-sm
+                                        focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <label
+                          htmlFor="ident"
+                          className="text-lg font-bold text-gray-400 uppercase tracking-wide"
+                        >
+                          Flightaware Tracking
+                        </label>
+                        <Switch.Group
+                          as="li"
+                          className="flex items-center justify-center mt-2"
+                        >
+                          <div className="flex flex-col">
+                            <Switch.Label
+                              as="p"
+                              className="text-lg text-gray-500"
+                              passive
+                            >
+                              {enableFlightawareTracking
+                                ? "Disable Tracking"
+                                : "Enable Tracking"}
+                            </Switch.Label>
+                          </div>
+                          <Switch
+                            checked={enableFlightawareTracking}
+                            onChange={setEnableFlightawareTracking}
+                            className={classNames(
+                              enableFlightawareTracking
+                                ? "bg-red-500"
+                                : "bg-gray-200",
+                              "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                enableFlightawareTracking
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="text-lg font-bold text-gray-400 uppercase tracking-wide">

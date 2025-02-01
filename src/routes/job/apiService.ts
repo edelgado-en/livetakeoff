@@ -4,6 +4,10 @@ export const getJobDetails = (id: number) => {
     return httpService.get(`/api/jobs/${id}`);
 }
 
+export const getTailFlightInfo = (id: number) => {
+    return httpService.get(`/api/jobs/flights/${id}/`);
+}
+
 export const getJobBasicDetails = (id: number) => {
     return httpService.get(`/api/jobs/basic/${id}`);
 }
@@ -146,6 +150,10 @@ export const getServices = () => {
 
 export const getTailAircraftLookup = (tail: string) => {
     return httpService.get(`/api/tail-aircraft-lookup/${tail}/`);
+}
+
+export const getIdentTailLookup = (tail: string) => {
+    return httpService.get(`/api/ident-tail-lookup/${tail}/`);
 }
 
 export const getTailAlertLookup = (tail: string) => {
