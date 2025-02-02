@@ -114,6 +114,8 @@ const EditJob = () => {
   const [fboSearchTerm, setFboSearchTerm] = useState("");
   const [vendorSearchTerm, setVendorSearchTerm] = useState("");
 
+  const [ident, setIdent] = useState("");
+
   const [enableFlightawareTracking, setEnableFlightawareTracking] =
     useState(false);
 
@@ -382,6 +384,16 @@ const EditJob = () => {
           }
 
           setVendorSelected(selectedVendor);
+
+          const response3 = await api.getIdentTailLookup(
+            response.data.tailNumber
+          );
+
+          if (response3) {
+            setIdent(response3.data);
+          } else {
+            setIdent("");
+          }
         }
       } catch (err) {
         toast.error("Unable to get invoice details");
@@ -442,6 +454,7 @@ const EditJob = () => {
       vendor_charge: Number(vendorCharge),
       vendor_additional_cost: Number(vendorAdditionalCost),
       enable_flightaware_tracking: enableFlightawareTracking,
+      ident,
     };
 
     try {
@@ -1552,49 +1565,72 @@ const EditJob = () => {
                   />
                 </dd>
               </div>
-              <div className="px-4 py-3 flex gap-4">
-                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
-                  FA Tracking:
-                </dt>
-                <dd className="text-md text-gray-700 flex-1">
-                  <Switch.Group
-                    as="li"
-                    className="flex items-center justify-center mt-2"
-                  >
-                    <div className="flex flex-col">
-                      <Switch.Label
-                        as="p"
-                        className="text-md text-gray-500"
-                        passive
+              {(currentUser.isAdmin ||
+                currentUser.isSuperUser ||
+                currentUser.isInternalCoordinator ||
+                currentUser.isAccountManager) && (
+                <>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                      FA Tracking:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
+                      <Switch.Group
+                        as="li"
+                        className="flex items-center justify-center mt-2"
                       >
-                        {enableFlightawareTracking
-                          ? "Disable Flightaware Tracking"
-                          : "Enable Flightaware Tracking"}
-                      </Switch.Label>
-                    </div>
-                    <Switch
-                      checked={enableFlightawareTracking}
-                      onChange={setEnableFlightawareTracking}
-                      className={classNames(
-                        enableFlightawareTracking
-                          ? "bg-red-500"
-                          : "bg-gray-200",
-                        "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                      )}
-                    >
-                      <span
-                        aria-hidden="true"
-                        className={classNames(
-                          enableFlightawareTracking
-                            ? "translate-x-5"
-                            : "translate-x-0",
-                          "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                        )}
+                        <div className="flex flex-col">
+                          <Switch.Label
+                            as="p"
+                            className="text-md text-gray-500"
+                            passive
+                          >
+                            {enableFlightawareTracking
+                              ? "Disable Flightaware Tracking"
+                              : "Enable Flightaware Tracking"}
+                          </Switch.Label>
+                        </div>
+                        <Switch
+                          checked={enableFlightawareTracking}
+                          onChange={setEnableFlightawareTracking}
+                          className={classNames(
+                            enableFlightawareTracking
+                              ? "bg-red-500"
+                              : "bg-gray-200",
+                            "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                          )}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={classNames(
+                              enableFlightawareTracking
+                                ? "translate-x-5"
+                                : "translate-x-0",
+                              "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            )}
+                          />
+                        </Switch>
+                      </Switch.Group>
+                    </dd>
+                  </div>
+                  <div className="px-4 py-3 flex gap-4">
+                    <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                      Call Sign:
+                    </dt>
+                    <dd className="text-md text-gray-700 flex-1">
+                      <input
+                        type="text"
+                        value={ident}
+                        onChange={(e) => setIdent(e.target.value)}
+                        name="ident"
+                        id="ident"
+                        className="block w-full rounded-md border-gray-300 shadow-sm
+                                                focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                       />
-                    </Switch>
-                  </Switch.Group>
-                </dd>
-              </div>
+                    </dd>
+                  </div>
+                </>
+              )}
             </dl>
           </div>
         </div>
