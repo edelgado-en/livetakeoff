@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from "react";
 import Loader from "../../components/loader/Loader";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
-import { Listbox, Transition } from "@headlessui/react";
+import { Listbox, Transition, Switch, RadioGroup } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import DatePicker from "react-datepicker";
@@ -113,6 +113,9 @@ const EditJob = () => {
   const [airportSearchTerm, setAirportSearchTerm] = useState("");
   const [fboSearchTerm, setFboSearchTerm] = useState("");
   const [vendorSearchTerm, setVendorSearchTerm] = useState("");
+
+  const [enableFlightawareTracking, setEnableFlightawareTracking] =
+    useState(false);
 
   const filteredFbos = fboSearchTerm
     ? fbos.filter((item) =>
@@ -335,6 +338,8 @@ const EditJob = () => {
 
       setJobFollowerEmails(response.data.follower_emails);
 
+      setEnableFlightawareTracking(response.data.enable_flightaware_tracking);
+
       const request = {
         airport_id: response.data.airport.id,
       };
@@ -436,6 +441,7 @@ const EditJob = () => {
       vendor: vendorSelected.id,
       vendor_charge: Number(vendorCharge),
       vendor_additional_cost: Number(vendorAdditionalCost),
+      enable_flightaware_tracking: enableFlightawareTracking,
     };
 
     try {
@@ -1544,6 +1550,49 @@ const EditJob = () => {
                     className="block w-full rounded-md border-gray-300 shadow-sm
                                         focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
                   />
+                </dd>
+              </div>
+              <div className="px-4 py-3 flex gap-4">
+                <dt className="text-md font-bold text-gray-900 relative top-2 w-32">
+                  FA Tracking:
+                </dt>
+                <dd className="text-md text-gray-700 flex-1">
+                  <Switch.Group
+                    as="li"
+                    className="flex items-center justify-center mt-2"
+                  >
+                    <div className="flex flex-col">
+                      <Switch.Label
+                        as="p"
+                        className="text-md text-gray-500"
+                        passive
+                      >
+                        {enableFlightawareTracking
+                          ? "Disable Flightaware Tracking"
+                          : "Enable Flightaware Tracking"}
+                      </Switch.Label>
+                    </div>
+                    <Switch
+                      checked={enableFlightawareTracking}
+                      onChange={setEnableFlightawareTracking}
+                      className={classNames(
+                        enableFlightawareTracking
+                          ? "bg-red-500"
+                          : "bg-gray-200",
+                        "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                      )}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={classNames(
+                          enableFlightawareTracking
+                            ? "translate-x-5"
+                            : "translate-x-0",
+                          "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                        )}
+                      />
+                    </Switch>
+                  </Switch.Group>
                 </dd>
               </div>
             </dl>
