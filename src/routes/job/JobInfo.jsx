@@ -1919,11 +1919,19 @@ const JobInfo = () => {
                           <div className="mx-auto flex max-w-4xl justify-end text-right">
                             <div className="flex justify-end text-right">
                               <div
-                                class={`rounded-md cursor-pointer border ${
-                                  flight.status === "EN ROUTE"
-                                    ? "border-blue-600 text-blue-600"
-                                    : "border-green-600 text-green-600"
-                                } 
+                                class={`rounded-md cursor-pointer border 
+                                ${
+                                  flight.status === "Scheduled" &&
+                                  "border-blue-600 text-blue-600"
+                                }
+                                ${
+                                  flight.status === "Arrived" &&
+                                  "border-green-600 text-green-600"
+                                }
+                                ${
+                                  flight.status === "En Route" &&
+                                  "border-yellow-600 text-yellow-600"
+                                }
                                          py-2 px-2 flex items-center justify-center text-sm
                                          uppercase`}
                               >
@@ -1972,7 +1980,7 @@ const JobInfo = () => {
                                   <div>{flight.local_scheduled_off}</div>
                                 </div>
                                 <div>
-                                  <div>Departed</div>
+                                  <div>Estimated Takeoff</div>
                                   <div>
                                     {flight.local_estimated_off
                                       ? flight.local_estimated_off
@@ -2004,7 +2012,7 @@ const JobInfo = () => {
                                   <div>{flight.local_scheduled_on}</div>
                                 </div>
                                 <div>
-                                  <div>Estimated</div>
+                                  <div>Estimated Landing</div>
                                   <div>
                                     {flight.local_estimated_on
                                       ? flight.local_estimated_on
