@@ -414,7 +414,7 @@ const Login = () => {
               </div>
             </div>
           </div>
-          <div className="mx-auto mt-12 px-4" style={{ maxWidth: "2000px" }}>
+          <div className="mx-auto mt-16 px-4" style={{ maxWidth: "2000px" }}>
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
               {primaryFeatures.map((feature) => (
                 <div key={feature.name} className="flex flex-col">
@@ -468,96 +468,78 @@ const Login = () => {
                 </dd>
               </div>
             </dl>
-            <div className="mt-8 relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:overflow-visible lg:px-0">
-              <div
-                className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8
-                             gap-y-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-6"
-              >
-                <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:px-8">
-                  <div className="lg:pr-4">
-                    <div className="lg:max-w-xl">
-                      <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-                        Ready for the Unexpected
-                      </h1>
-                      <p className="max-w-lg mt-6 text-lg text-gray-700 text-base/7">
-                        Unexpected situations happen—like when your furry
-                        passengers leave behind more than just good memories. At
-                        LiveTakeoff, we’re designed to handle last-minute
-                        cleaning requests and schedule jobs according to future
-                        arrivals or planned departures.
-                      </p>
-                      <p className="max-w-lg mt-6 text-lg text-gray-700 text-base/7">
-                        Whether it’s an unanticipated mess or routine
-                        maintenance, our platform makes it effortless to submit,
-                        track, and confirm jobs. Count on us to be ready
-                        whenever you need us, so your aircraft is always
-                        spotless and prepared for the next journey.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="-ml-12 -mt-12 p-12 pt-20 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
-                  <img
-                    alt=""
-                    src="https://res.cloudinary.com/datidxeqm/image/upload/v1739460998/dog_shzthc.jpg"
-                    className="rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10  object-contain h-auto w-full max-w-full max-h-full"
-                  />
-                </div>
-                <div
-                  className="lg:col-span-2 lg:col-start-1 lg:row-start-2
-                                 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8"
-                >
-                  <div className="lg:pr-4 lg:-mt-4">
-                    <div className="max-w-xl text-base/7 text-gray-700 lg:max-w-lg text-lg">
-                      <ul role="list" className="space-y-6 text-gray-600">
-                        <li className="flex gap-x-3">
-                          <ShareIcon
-                            aria-hidden="true"
-                            className="mt-1 w-7 h-7 flex-none text-red-600"
-                          />
-                          <span>
-                            <strong className="font-semibold text-gray-900">
-                              Share your flight schedule.
-                            </strong>{" "}
-                            We’ll have a team ready and waiting for your
-                            arrival.
-                          </span>
-                        </li>
-                        <li className="flex gap-x-3">
-                          <CloudUploadIcon
-                            aria-hidden="true"
-                            className="mt-1 w-7 h-7 flex-none text-red-600"
-                          />
-                          <span>
-                            <strong className="font-semibold text-gray-900">
-                              Submit a job.
-                            </strong>{" "}
-                            Submit a request through the LiveTakeoff platform,
-                            or simply reach out via WhatsApp, text, or call.
-                          </span>
-                        </li>
-                        <li className="flex gap-x-3">
-                          <EmojiHappyIcon
-                            aria-hidden="true"
-                            className="mt-1 w-7 h-7 flex-none text-red-600"
-                          />
-                          <span>
-                            <strong className="font-semibold text-gray-900">
-                              Monitor your job.
-                            </strong>{" "}
-                            Enjoy peace of mind with our FlightAware
-                            integration, enabling us to track your flights and
-                            proactively prepare for your needs.
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
+            <div className="xl:mt-20 mt-16 grid xl:grid-cols-4 xs:grid-cols-1 gap-4 gap-y-14 max-w-7xl mx-auto p-6  rounded-lg">
+              <div className="xl:col-span-2 lg:col-span-2">
+                <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                  Ready for the Unexpected
+                </h1>
+                <p className="max-w-lg mt-6 text-lg text-gray-700 text-base/7">
+                  Unexpected situations happen—like when your furry passengers
+                  leave behind more than just good memories. At LiveTakeoff,
+                  we’re designed to handle last-minute cleaning requests and
+                  schedule jobs according to future arrivals or planned
+                  departures.
+                </p>
+                <p className="max-w-lg mt-6 text-lg text-gray-700 text-base/7">
+                  Whether it’s an unanticipated mess or routine maintenance, our
+                  platform makes it effortless to submit, track, and confirm
+                  jobs. Count on us to be ready whenever you need us, so your
+                  aircraft is always spotless and prepared for the next journey.
+                </p>
+                <div className="mt-6 max-w-xl text-base/7 text-gray-700 lg:max-w-lg text-lg">
+                  <ul role="list" className="space-y-6 text-gray-600">
+                    <li className="flex gap-x-3">
+                      <ShareIcon
+                        aria-hidden="true"
+                        className="mt-1 w-7 h-7 flex-none text-red-600"
+                      />
+                      <span>
+                        <strong className="font-semibold text-gray-900">
+                          Share your flight schedule.
+                        </strong>{" "}
+                        We’ll have a team ready and waiting for your arrival.
+                      </span>
+                    </li>
+                    <li className="flex gap-x-3">
+                      <CloudUploadIcon
+                        aria-hidden="true"
+                        className="mt-1 w-7 h-7 flex-none text-red-600"
+                      />
+                      <span>
+                        <strong className="font-semibold text-gray-900">
+                          Submit a job.
+                        </strong>{" "}
+                        Submit a request through the LiveTakeoff platform, or
+                        simply reach out via WhatsApp, text, or call.
+                      </span>
+                    </li>
+                    <li className="flex gap-x-3">
+                      <EmojiHappyIcon
+                        aria-hidden="true"
+                        className="mt-1 w-7 h-7 flex-none text-red-600"
+                      />
+                      <span>
+                        <strong className="font-semibold text-gray-900">
+                          Monitor your job.
+                        </strong>{" "}
+                        Enjoy peace of mind with our FlightAware integration,
+                        enabling us to track your flights and proactively
+                        prepare for your needs.
+                      </span>
+                    </li>
+                  </ul>
                 </div>
               </div>
-              <div className="py-24 w-1"></div>
+              <div className="xl:col-span-2 lg:col-span-2 xl:w-full lg:w-full md:w-1/3">
+                <img
+                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1739460998/dog_shzthc.jpg"
+                  alt="Dog"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
             </div>
           </div>
+          <div className="py-24"></div>
         </>
       )}
     </>
