@@ -1287,7 +1287,13 @@ const JobInfo = () => {
                   <dl key={service.id} className="divide-y divide-gray-100">
                     <div className="px-4 py-3 flex gap-4 hover:bg-gray-50 border-b border-gray-200">
                       <dt className="text-md flex-1">
-                        <div className="text-gray-900">{service.name}</div>
+                        <div
+                          className={`text-gray-900 ${
+                            showActions ? "font-medium uppercase py-2" : ""
+                          }`}
+                        >
+                          {service.name}
+                        </div>
                         {service.project_manager && (
                           <div className="text-gray-500">
                             {service.project_manager}
@@ -1333,14 +1339,15 @@ const JobInfo = () => {
                       </dd>
                     </div>
                     {showActions && (
-                      <div className="text-sm text-gray-500 px-6 py-1">
-                        <textarea
-                          className="w-full border-none bg-transparent  overflow-hidden outline-none"
-                          style={{ height: "500px" }}
-                          readonly
-                        >
-                          {service.description}
-                        </textarea>
+                      <div className="h-[400px] overflow-y-auto p-5 border border-gray-300 pb-8 bg-blue-50">
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: service.description?.replace(
+                              /\r\n|\n/g,
+                              "<br />"
+                            ),
+                          }}
+                        />
                       </div>
                     )}
                   </dl>
