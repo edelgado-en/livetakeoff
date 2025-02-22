@@ -2562,17 +2562,15 @@ const CreateJob = () => {
                           </div>
 
                           {showActions && (
-                            <div
-                              className="overflow-auto"
-                              style={{ height: "300px" }}
-                            >
-                              <textarea
-                                className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
-                                style={{ height: "500px" }}
-                                readonly
-                              >
-                                {service.description}
-                              </textarea>
+                            <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                              <p
+                                dangerouslySetInnerHTML={{
+                                  __html: service.description?.replace(
+                                    /\r\n|\n/g,
+                                    "<br />"
+                                  ),
+                                }}
+                              />
                             </div>
                           )}
                         </div>
@@ -2603,17 +2601,15 @@ const CreateJob = () => {
                           </div>
 
                           {showActions && (
-                            <div
-                              className="overflow-auto"
-                              style={{ height: "300px" }}
-                            >
-                              <textarea
-                                className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
-                                style={{ height: "500px" }}
-                                readonly
-                              >
-                                {service.description}
-                              </textarea>
+                            <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                              <p
+                                dangerouslySetInnerHTML={{
+                                  __html: service.description?.replace(
+                                    /\r\n|\n/g,
+                                    "<br />"
+                                  ),
+                                }}
+                              />
                             </div>
                           )}
                         </div>
@@ -2644,17 +2640,15 @@ const CreateJob = () => {
                           </div>
 
                           {showActions && (
-                            <div
-                              className="overflow-auto"
-                              style={{ height: "300px" }}
-                            >
-                              <textarea
-                                className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
-                                style={{ height: "500px" }}
-                                readonly
-                              >
-                                {service.description}
-                              </textarea>
+                            <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                              <p
+                                dangerouslySetInnerHTML={{
+                                  __html: service.description?.replace(
+                                    /\r\n|\n/g,
+                                    "<br />"
+                                  ),
+                                }}
+                              />
                             </div>
                           )}
                         </div>
@@ -2708,17 +2702,15 @@ const CreateJob = () => {
                               </div>
 
                               {showActions && (
-                                <div
-                                  className="overflow-auto"
-                                  style={{ height: "300px" }}
-                                >
-                                  <textarea
-                                    className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
-                                    style={{ height: "500px" }}
-                                    readonly
-                                  >
-                                    {service.description}
-                                  </textarea>
+                                <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                                  <p
+                                    dangerouslySetInnerHTML={{
+                                      __html: service.description?.replace(
+                                        /\r\n|\n/g,
+                                        "<br />"
+                                      ),
+                                    }}
+                                  />
                                 </div>
                               )}
                             </div>
@@ -2752,17 +2744,15 @@ const CreateJob = () => {
                               </div>
 
                               {showActions && (
-                                <div
-                                  className="overflow-auto"
-                                  style={{ height: "300px" }}
-                                >
-                                  <textarea
-                                    className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
-                                    style={{ height: "500px" }}
-                                    readonly
-                                  >
-                                    {service.description}
-                                  </textarea>
+                                <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                                  <p
+                                    dangerouslySetInnerHTML={{
+                                      __html: service.description?.replace(
+                                        /\r\n|\n/g,
+                                        "<br />"
+                                      ),
+                                    }}
+                                  />
                                 </div>
                               )}
                             </div>
@@ -2794,17 +2784,15 @@ const CreateJob = () => {
                               </div>
 
                               {showActions && (
-                                <div
-                                  className="overflow-auto"
-                                  style={{ height: "300px" }}
-                                >
-                                  <textarea
-                                    className="w-full border-none bg-transparent overflow-hidden outline-none focus:outline-none"
-                                    style={{ height: "500px" }}
-                                    readonly
-                                  >
-                                    {service.description}
-                                  </textarea>
+                                <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                                  <p
+                                    dangerouslySetInnerHTML={{
+                                      __html: service.description?.replace(
+                                        /\r\n|\n/g,
+                                        "<br />"
+                                      ),
+                                    }}
+                                  />
                                 </div>
                               )}
                             </div>
