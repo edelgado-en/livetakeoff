@@ -220,11 +220,6 @@ const Login = () => {
                   src={Logo}
                   alt="Your Company"
                 />
-                {/* <h2 className="mt-4 text-center text-2xl font-semibold tracking-tight text-gray-500">
-                  {showForgotPassword
-                    ? "Forgot your Password?"
-                    : "Sign in to your account"}
-                </h2> */}
                 <p className="mt-2 text-center text-md text-gray-600"></p>
               </div>
 
@@ -317,7 +312,7 @@ const Login = () => {
                     )}
 
                     {!showForgotPassword && (
-                      <div className="flex justify-end mt-2">
+                      <div className="flex justify-end mt-3">
                         <div className="text-md">
                           <div
                             onClick={() => toggleForgotPassword()}
@@ -389,31 +384,44 @@ const Login = () => {
                 </div>
               </div>
             </div>
-            <div
-              className="flex-1 h-64 w-full bg-blue-50"
-              style={{ height: "475px" }}
-            >
-              <div className="mt-16 xl:mt-24 mx-auto text-center tracking-wider font-medium text-3xl xl:text-5xl lg:text-5xl">
-                <div>Aircraft Detailing Nationwide</div>
-                <div className="mt-4">Your One-Stop Solution</div>
-                <div className="mt-4">Effortless, Reliable, Everywhere</div>
-              </div>
 
-              <div className="m-8 mb-7 mx-auto text-center text-xl text-red-500 font-bold">
-                Call us anytime: +1 855-500-0538
-              </div>
-              <div className="mx-auto text-center">
+            {/* Right Side: Background Image */}
+            <div
+              className="flex flex-1 justify-center items-center  text-center px-8"
+              style={{
+                backgroundImage:
+                  "url('https://res.cloudinary.com/datidxeqm/image/upload/v1740312160/AdobeStock_294387545_jgs7jp.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                height: "100%",
+                minHeight: "483px",
+              }}
+            >
+              <div className=" p-8 rounded-lg">
+                <h1 className="text-3xl xl:text-5xl font-bold">
+                  Aircraft Detailing Nationwide
+                </h1>
+                <p className="mt-4 text-2xl font-bold">
+                  Your One-Stop Solution
+                </p>
+                <p className="mt-4 text-2xl font-bold">
+                  Effortless, Reliable, Everywhere
+                </p>
+
+                <div className="mt-6 text-red-500 text-2xl font-bold">
+                  Call us anytime: +1 855-500-0538
+                </div>
+
                 <Link
                   to="/shared/contact"
-                  className="ml-8 inline-flex items-center justify-center whitespace-nowrap
-                            rounded-md border border-transparent bg-red-600 px-4 py-3 text-xl
-                            font-medium text-white shadow-sm hover:bg-red-700"
+                  className="mt-6 inline-flex items-center justify-center rounded-md bg-red-600 px-6 py-3 text-xl font-medium text-white shadow-sm hover:bg-red-700"
                 >
                   Contact Us
                 </Link>
               </div>
             </div>
           </div>
+
           <div className="mx-auto mt-16 px-4" style={{ maxWidth: "2000px" }}>
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
               {primaryFeatures.map((feature) => (
