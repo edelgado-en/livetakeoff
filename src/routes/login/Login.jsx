@@ -476,30 +476,30 @@ const Login = () => {
                 </dd>
               </div>
             </dl>
-            <div className="xl:mt-20 mt-16 grid xl:grid-cols-4 xs:grid-cols-1 gap-4 gap-y-14 max-w-7xl mx-auto p-6  rounded-lg">
+            <div className="xl:mt-20 mt-16 grid xl:grid-cols-4 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg">
               <div className="xl:col-span-2 lg:col-span-2">
                 <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                   Ready for the Unexpected
                 </h1>
-                <p className="max-w-lg mt-6 text-lg text-gray-700 text-base/7">
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
                   Unexpected situations happen—like when your furry passengers
                   leave behind more than just good memories. At LiveTakeoff,
                   we’re designed to handle last-minute cleaning requests and
                   schedule jobs according to future arrivals or planned
                   departures.
                 </p>
-                <p className="max-w-lg mt-6 text-lg text-gray-700 text-base/7">
+                <p className="mt-6 text-lg text-gray-700 text-base/7">
                   Whether it’s an unanticipated mess or routine maintenance, our
                   platform makes it effortless to submit, track, and confirm
                   jobs. Count on us to be ready whenever you need us, so your
                   aircraft is always spotless and prepared for the next journey.
                 </p>
-                <div className="mt-6 max-w-xl text-base/7 text-gray-700 lg:max-w-lg text-lg">
-                  <ul role="list" className="space-y-6 text-gray-600">
+                <div className="mt-14 text-lg text-gray-700">
+                  <ul role="list" className="space-y-8 text-gray-600">
                     <li className="flex gap-x-3">
                       <ShareIcon
                         aria-hidden="true"
-                        className="mt-1 w-7 h-7 flex-none text-red-600"
+                        className="w-7 h-7 flex-none text-red-600"
                       />
                       <span>
                         <strong className="font-semibold text-gray-900">
@@ -511,7 +511,7 @@ const Login = () => {
                     <li className="flex gap-x-3">
                       <CloudUploadIcon
                         aria-hidden="true"
-                        className="mt-1 w-7 h-7 flex-none text-red-600"
+                        className="w-7 h-7 flex-none text-red-600"
                       />
                       <span>
                         <strong className="font-semibold text-gray-900">
@@ -524,7 +524,7 @@ const Login = () => {
                     <li className="flex gap-x-3">
                       <EmojiHappyIcon
                         aria-hidden="true"
-                        className="mt-1 w-7 h-7 flex-none text-red-600"
+                        className="w-7 h-7 flex-none text-red-600"
                       />
                       <span>
                         <strong className="font-semibold text-gray-900">
