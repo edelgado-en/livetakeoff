@@ -476,7 +476,7 @@ const Login = () => {
                 </dd>
               </div>
             </dl>
-            <div className="xl:mt-20 mt-16 grid xl:grid-cols-4 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg">
+            <div className="xl:mt-20 mt-4 grid xl:grid-cols-4 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg">
               <div className="xl:col-span-2 lg:col-span-2">
                 <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                   Ready for the Unexpected
@@ -544,6 +544,80 @@ const Login = () => {
                   alt="Dog"
                   className="w-full h-full object-cover rounded-lg"
                 />
+              </div>
+            </div>
+            <div className="xl:mt-20 mt-0 grid xl:grid-cols-4 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg">
+              <div className="order-2 md:order-1 xl:col-span-2 lg:col-span-2 xl:w-full lg:w-full md:w-1/3">
+                <img
+                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740401636/AdobeStock_232690415_j0sxrb.jpg"
+                  alt="wheel"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div className="order-1 md:order-2 xl:col-span-2 lg:col-span-2">
+                <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                  Your One-Stop Solution for Aircraft Detailing
+                </h1>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  At LiveTakeoff, we pride ourselves on being the true one-stop
+                  solution for aircraft detailing nationwide. From the moment a
+                  job request is submitted, our world-class concierge service
+                  ensures seamless coordination at every step. We handle
+                  everything—from communicating with detailing teams to working
+                  with airports and FBOs—so you don’t have to.
+                </p>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  Every airport and FBO operates differently, and we understand
+                  the nuances:
+                </p>
+                <div className="mt-2 text-lg text-gray-700">
+                  <ul role="list" className="list-disc space-y-2 text-gray-600">
+                    <li>
+                      Some FBOs require aircraft to be moved to a hangar before
+                      cleaning can begin.
+                    </li>
+                    <li>
+                      Other airports may have strict policies, such as requiring
+                      aircraft to be relocated to a wash rack or submitting a
+                      work order in advance.
+                    </li>
+                    <li>
+                      Detailing teams often need precise notifications when the
+                      aircraft is ready in the designated area, whether it’s a
+                      hangar or wash rack.
+                    </li>
+                  </ul>
+                </div>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  In addition, we make sure your aircraft crew always has the
+                  right expectations by clearly communicating what is possible
+                  and what is not. For example:
+                </p>
+                <div className="mt-2 text-lg text-gray-700">
+                  <ul role="list" className="list-disc space-y-2 text-gray-600">
+                    <li>
+                      Some airports allow <strong>Wet Wash</strong>, while
+                      others only permit <strong>Dry Wash</strong>—we’ll help
+                      you identify the right service for your location.
+                    </li>
+                    <li>
+                      We balance <strong>basic cleanings</strong> versus
+                      <strong> high-level detailing</strong>, factoring in
+                      ground time and the duration required for each service.
+                    </li>
+                    <li>
+                      When a specific request cannot be completed at a given
+                      location, we’ll suggest viable alternatives to ensure your
+                      needs are met as efficiently as possible.
+                    </li>
+                  </ul>
+                </div>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  Our team handles all of this communication and coordination,
+                  ensuring that your aircraft cleaning is completed efficiently,
+                  professionally, and without delays—no matter the location or
+                  requirements.
+                </p>
               </div>
             </div>
           </div>
