@@ -667,6 +667,49 @@ const Login = () => {
                 />
               </div>
             </div>
+
+            <div className="xl:mt-20 mt-0 grid xl:grid-cols-4 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg">
+              <div className="order-2 md:order-1 xl:col-span-2 lg:col-span-2 xl:w-full lg:w-full md:w-1/3">
+                <img
+                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740426231/DALL_E_2025-01-25_13.36.44_-_A_professional_checklist_or_insurance_certificate_on_a_clean_and_organized_desk._The_document_text_is_clearly_legible_with_crisp_fonts_and_visible_det_pmp08z.webp"
+                  alt="certificate"
+                  className="w-full h-full object-cover rounded-lg"
+                  style={{ maxHeight: "500px" }}
+                />
+              </div>
+              <div className="order-1 md:order-2 xl:col-span-2 lg:col-span-2">
+                <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                  Trusted Partners, Carefully Vetted
+                </h1>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  At LiveTakeoff, our network of vendors is built on trust,
+                  quality, and rigorous standards. Every partner is carefully
+                  selected through a comprehensive vetting process where we
+                  evaluate their aviation insurance, chemicals, processes, and
+                  track record in the industry.
+                </p>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  Our platform is configured to continuously monitor vendor
+                  insurance certificates, ensuring they are always up to date.
+                  Vendors are automatically notified to re-upload their renewals
+                  or update their policies if they no longer meet our high
+                  standards.
+                </p>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  We go beyond compliance to build strong connections with our
+                  partners, fostering close relationships and open
+                  communication. Whether it’s guidance on a specific job or
+                  support with operational challenges, our phone lines are
+                  always open and ready to assist vendors every step of the way.
+                </p>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  By working with a network of carefully vetted and
+                  well-supported vendors, we ensure that every service delivered
+                  through LiveTakeoff meets the highest standards of quality,
+                  safety, and professionalism.
+                </p>
+              </div>
+            </div>
           </div>
           <div className="py-24"></div>
         </>
