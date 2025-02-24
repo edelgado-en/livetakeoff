@@ -620,6 +620,53 @@ const Login = () => {
                 </p>
               </div>
             </div>
+
+            <div className="xl:mt-20 mt-0 grid xl:grid-cols-2 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg items-start">
+              <div className="xl:col-span-1 lg:col-span-1">
+                <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                  Transparency in Fees and Seamless Coordination
+                </h1>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  At LiveTakeoff, transparency is at the core of everything we
+                  do. More and more FBOs are requiring vendors to pay certain
+                  fees to operate on their premises, and we make it our priority
+                  to inform customers ahead of time if a location will charge
+                  additional fees.
+                </p>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  Some airports do not have a permanent presence of a cleaning
+                  crew, meaning the closest detailing team may need to travel to
+                  the airport, potentially incurring travel fees. We always
+                  negotiate with on-site teams to minimize or avoid these fees
+                  whenever possible, but when they are necessary, we ensure
+                  complete transparency so there are no surprises.
+                </p>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  Our system is also equipped to display FBO hours of operation.
+                  This allows customers to see upfront if their requested
+                  cleaning falls outside operational hours—for example, an
+                  overnight cleaning request at a location where the FBO is
+                  closed. In such cases, customers can view alternatives
+                  directly in our platform. When possible, we’ll work with the
+                  FBO to coordinate special access for our detailing teams to
+                  complete the job during extra hours.
+                </p>
+                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                  With LiveTakeoff, you can trust that every fee is clearly
+                  communicated, every schedule is aligned, and every service is
+                  tailored to your specific needs, no matter the location or
+                  circumstances.
+                </p>
+              </div>
+              <div className="xl:col-span-1 lg:col-span-1 flex">
+                <img
+                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740403930/Leonardo_Phoenix_10_A_person_in_an_office_the_business_name_is_3_c9jd0e.jpg"
+                  alt="wheel"
+                  className="w-full object-cover rounded-lg"
+                  style={{ maxHeight: "650px" }}
+                />
+              </div>
+            </div>
           </div>
           <div className="py-24"></div>
         </>
