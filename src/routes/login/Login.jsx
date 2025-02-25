@@ -9,6 +9,11 @@ import {
   ShareIcon,
   EmojiHappyIcon,
   CloudUploadIcon,
+  TagIcon,
+  ChatIcon,
+  LocationMarkerIcon,
+  BellIcon,
+  BriefcaseIcon,
 } from "@heroicons/react/outline";
 
 import { motion, useAnimation, useInView } from "framer-motion";
@@ -42,6 +47,39 @@ const primaryFeatures = [
       "Our customers trust us to fully outsource their aircraft detailing coordination. Whether it's scheduling routine cleaning, managing unexpected needs, or handling high-level detailing, we ensure seamless service delivery with your peace of mind as our priority.",
     href: "#",
     icon: UserGroupIcon,
+  },
+];
+
+const features = [
+  {
+    name: "Real-Time Job Statuses",
+    description:
+      "See which jobs are Submitted, Confirmed, Assigned, In Progress, or Completed at a glance.",
+    icon: ClockIcon,
+  },
+  {
+    name: "Arrival & Departure Times",
+    description:
+      "Stay updated with every aircraft’s ETA and departure schedules to avoid delays.",
+    icon: LocationMarkerIcon,
+  },
+  {
+    name: "Priority Tags & Vendor Status",
+    description:
+      "Instantly identify VIP aircraft, high-priority requests, and vendor-accepted jobs.",
+    icon: TagIcon,
+  },
+
+  {
+    name: "Manage jobs and schedules from anywhere",
+    description:
+      "Access LiveTakeoff from your desktop, tablet, or mobile device.",
+    icon: BriefcaseIcon,
+  },
+  {
+    name: "Receive notifications and alerts instantly",
+    description: "Stay up to date real-time with notifications and alerts.",
+    icon: BellIcon,
   },
 ];
 
@@ -725,6 +763,51 @@ const Login = () => {
                   >
                     Contact Us
                   </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative bg-white py-16 sm:py-24 lg:py-32">
+              <div className="mx-auto  px-6 text-center lg:px-8">
+                <h2 className="text-4xl font-semibold text-red-600">
+                  LiveTakeoff
+                </h2>
+                <p className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+                  Premium Concierge & World-Class Aircraft Detailing Management
+                </p>
+                <p className="mx-auto mt-5 max-w-prose text-2xl text-gray-700 leading-relaxed ">
+                  LiveTakeoff is the only fully integrated aircraft cleaning and
+                  detailing management platform that provides real-time
+                  tracking, automated scheduling, and advanced flight
+                  monitoring—all in one place. Whether you're using desktop,
+                  tablet, or mobile, our system keeps your operations running
+                  smoothly, ensuring every job is completed on time, every time.
+                </p>
+                <div className="mt-12">
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    {features.map((feature) => (
+                      <div key={feature.name} className="pt-6">
+                        <div className="flow-root rounded-lg bg-gray-50 px-6 pb-8">
+                          <div className="-mt-6">
+                            <div>
+                              <div className="mb-6 flex items-center justify-center rounded-lg bg-red-500 w-12 h-12 mx-auto">
+                                <feature.icon
+                                  aria-hidden="true"
+                                  className="w-6 h-6 text-white"
+                                />
+                              </div>
+                            </div>
+                            <h3 className="mt-8 text-xl font-medium tracking-tight text-gray-900">
+                              {feature.name}
+                            </h3>
+                            <p className="mt-5 text-lg text-gray-700">
+                              {feature.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
