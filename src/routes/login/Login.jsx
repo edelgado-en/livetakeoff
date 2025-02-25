@@ -390,7 +390,7 @@ const Login = () => {
               className="flex flex-1 justify-center items-center  text-center px-8"
               style={{
                 backgroundImage:
-                  "url('https://res.cloudinary.com/datidxeqm/image/upload/v1740312160/AdobeStock_294387545_jgs7jp.jpg')",
+                  "url('https://res.cloudinary.com/datidxeqm/image/upload/v1740500918/website/AdobeStock_466127487_rucr48.jpg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 height: "100%",
