@@ -408,8 +408,11 @@ const Login = () => {
                   Effortless, Reliable, Everywhere
                 </p>
 
-                <div className="mt-6 text-red-500 text-2xl font-bold">
-                  Call us anytime: +1 855-500-0538
+                <div className="xs:grid xs:grid-cols-1 mt-6 text-red-500 text-2xl font-bold">
+                  <div>Call us anytime:</div>
+                  <div>
+                    <a href="tel:+18555000538">+1 855-500-0538</a>
+                  </div>
                 </div>
 
                 <Link

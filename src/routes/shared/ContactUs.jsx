@@ -409,7 +409,9 @@ const ContactUs = () => {
                             className="h-6 w-6 flex-shrink-0 text-sky-200"
                             aria-hidden="true"
                           />
-                          <span className="ml-3">+1 (786) 975-6255</span>
+                          <a href="tel:+18555000538" className="ml-3">
+                            +1 855-500-0538
+                          </a>
                         </dd>
                         <dt>
                           <span className="sr-only">Email</span>
