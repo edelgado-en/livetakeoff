@@ -494,7 +494,7 @@ const Login = () => {
                   jobs. Count on us to be ready whenever you need us, so your
                   aircraft is always spotless and prepared for the next journey.
                 </p>
-                <div className="mt-14 text-lg text-gray-700">
+                <div className="mt-10 text-lg text-gray-700">
                   <ul role="list" className="space-y-8 text-gray-600">
                     <li className="flex gap-x-3">
                       <ShareIcon
@@ -536,6 +536,14 @@ const Login = () => {
                       </span>
                     </li>
                   </ul>
+                </div>
+                <div className="mx-auto text-center">
+                  <Link
+                    to="/shared/contact"
+                    className="mt-6  inline-flex items-center justify-center rounded-md bg-red-600 px-6 py-3 text-xl font-medium text-white shadow-sm hover:bg-red-700"
+                  >
+                    Contact Us
+                  </Link>
                 </div>
               </div>
               <div className="xl:col-span-2 lg:col-span-2 xl:w-full lg:w-full md:w-1/3">
@@ -651,19 +659,19 @@ const Login = () => {
                   FBO to coordinate special access for our detailing teams to
                   complete the job during extra hours.
                 </p>
-                <p className="mt-8 text-lg text-gray-700 text-base/7">
+                {/* <p className="mt-8 text-lg text-gray-700 text-base/7">
                   With LiveTakeoff, you can trust that every fee is clearly
                   communicated, every schedule is aligned, and every service is
                   tailored to your specific needs, no matter the location or
                   circumstances.
-                </p>
+                </p> */}
               </div>
               <div className="xl:col-span-1 lg:col-span-1 flex">
                 <img
-                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740403930/Leonardo_Phoenix_10_A_person_in_an_office_the_business_name_is_3_c9jd0e.jpg"
+                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740500893/website/Transparency_2_qzdtpo.jpg"
                   alt="wheel"
                   className="w-full object-cover rounded-lg"
-                  style={{ maxHeight: "650px" }}
+                  style={{ maxHeight: "750px" }}
                 />
               </div>
             </div>
@@ -671,10 +679,9 @@ const Login = () => {
             <div className="xl:mt-20 mt-0 grid xl:grid-cols-4 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg">
               <div className="order-2 md:order-1 xl:col-span-2 lg:col-span-2 xl:w-full lg:w-full md:w-1/3">
                 <img
-                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740426231/DALL_E_2025-01-25_13.36.44_-_A_professional_checklist_or_insurance_certificate_on_a_clean_and_organized_desk._The_document_text_is_clearly_legible_with_crisp_fonts_and_visible_det_pmp08z.webp"
+                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740500844/website/Trusted_Partners_1_ehhams.jpg"
                   alt="certificate"
                   className="w-full h-full object-cover rounded-lg"
-                  style={{ maxHeight: "500px" }}
                 />
               </div>
               <div className="order-1 md:order-2 xl:col-span-2 lg:col-span-2">
@@ -708,6 +715,14 @@ const Login = () => {
                   through LiveTakeoff meets the highest standards of quality,
                   safety, and professionalism.
                 </p>
+                <div className="mx-auto text-center">
+                  <Link
+                    to="/shared/contact"
+                    className="mt-6  inline-flex items-center justify-center rounded-md bg-red-600 px-6 py-3 text-xl font-medium text-white shadow-sm hover:bg-red-700"
+                  >
+                    Contact Us
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
