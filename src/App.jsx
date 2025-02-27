@@ -461,8 +461,7 @@ const App = () => {
               </Routes>
             </AnimatePresence>
           </div>
-          {location.pathname !== "/login" &&
-            location.pathname !== "/signup" && <Footer />}
+          {location.pathname !== "/signup" && <Footer />}
         </div>
       </Suspense>
     </>
