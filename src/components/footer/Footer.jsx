@@ -122,7 +122,7 @@ const Footer = () => {
   const location = useLocation();
 
   return (
-    <div className="border-t border-slate-900/5 py-8">
+    <div className="border-t border-slate-900/5 py-8 pb-24">
       <img
         className="block h-14 w-auto text-center mx-auto"
         src={logo}
