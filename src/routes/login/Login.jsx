@@ -851,6 +851,51 @@ const Login = () => {
                 </div>
               </div>
             </div>
+
+            <div className="mt-20 grid xl:grid-cols-2 xs:grid-cols-1 gap-x-14 gap-y-14 mx-auto p-6 rounded-lg items-start">
+              <div className="xl:col-span-1 lg:col-span-1 my-auto">
+                <h1 className="mt-2 text-pretty text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl text-center mx-auto">
+                  <div>Live Flight Tracking</div>
+                  <div>Powered by FlightAware</div>
+                </h1>
+                <p className="mt-8 text-xl text-gray-700">
+                  Thanks to our FlightAware integration, LiveTakeoff now
+                  provides:
+                </p>
+                <div className="mt-6 mx-auto text-xl text-gray-700">
+                  <ul role="list" className="list-disc space-y-4 text-gray-600">
+                    <li>
+                      <strong>Live En Route Flight Tracking</strong> – See
+                      aircraft in transit and prepare accordingly.
+                    </li>
+                    <li>
+                      <strong>Previous Flights Visibility</strong> – Track past
+                      flights for improved scheduling accuracy.
+                    </li>
+                    <li>
+                      <strong>Scheduled Flights Monitoring</strong> – Anticipate
+                      upcoming arrivals and avoid service conflicts.
+                    </li>
+                  </ul>
+                </div>
+                <div className="mx-auto text-center mt-8">
+                  <Link
+                    to="/shared/contact"
+                    className="mt-6  inline-flex items-center justify-center rounded-md bg-red-600 px-6 py-3 text-xl font-medium text-white shadow-sm hover:bg-red-700"
+                  >
+                    Contact Us
+                  </Link>
+                </div>
+              </div>
+              <div className="xl:col-span-1 lg:col-span-1 flex">
+                <img
+                  src="https://res.cloudinary.com/datidxeqm/image/upload/v1740505556/website/image003_gt6igx.png"
+                  alt="wheel"
+                  className="w-full object-cover rounded-lg"
+                  style={{ maxHeight: "750px" }}
+                />
+              </div>
+            </div>
           </div>
           <div className="py-24"></div>
         </>
