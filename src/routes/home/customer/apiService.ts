@@ -20,3 +20,7 @@ export const sendPremiumRequest = (data: any) => {
 export const getTags = () => {
     return httpService.get('/api/tags');
 }
+
+export const getCustomers = (request: any) => {
+    return httpService.post('/api/customers', request);
+}

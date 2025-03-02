@@ -121,6 +121,13 @@ const CustomerHome = () => {
   const [totalActivities, setTotalActivities] = useState(0);
   const [activitiesLoading, setActivitiesLoading] = useState(false);
 
+  const [customerSelected, setCustomerSelected] = useState(
+    JSON.parse(localStorage.getItem("customerSelected")) || {
+      id: "All",
+      name: "All",
+    }
+  );
+
   const [tags, setTags] = useState([]);
 
   const [searchText, setSearchText] = useState(
@@ -147,11 +154,17 @@ const CustomerHome = () => {
 
   const navigate = useNavigate();
 
+  const [customersWOpenJobs, setCustomersWOpenJobs] = useState([]);
+
   const filteredAirports = airportSearchTerm
     ? airports.filter((item) =>
         item.name.toLowerCase().includes(airportSearchTerm.toLowerCase())
       )
     : airports;
+
+  useEffect(() => {
+    getCustomers({ name: "", open_jobs: true });
+  }, []);
 
   useEffect(() => {
     getJobActivities();
@@ -171,6 +184,10 @@ const CustomerHome = () => {
   }, [airportSelected]);
 
   useEffect(() => {
+    localStorage.setItem("customerSelected", JSON.stringify(customerSelected));
+  }, [customerSelected]);
+
+  useEffect(() => {
     getTags();
   }, []);
 
@@ -183,13 +200,28 @@ const CustomerHome = () => {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [searchText, statusSelected, sortSelected, airportSelected, tags]);
+  }, [
+    searchText,
+    statusSelected,
+    sortSelected,
+    airportSelected,
+    tags,
+    customerSelected,
+  ]);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
 
       searchJobs();
+    }
+  };
+
+  const getCustomers = async (request) => {
+    const { data } = await api.getCustomers(request);
+
+    if (request.open_jobs) {
+      setCustomersWOpenJobs(data.results);
     }
   };
 
@@ -241,6 +273,8 @@ const CustomerHome = () => {
       setSearchText("");
     } else if (activeFilterId === "airport") {
       setAirportSelected({ id: "All", name: "All" });
+    } else if (activeFilterId === "customer") {
+      setCustomerSelected({ id: "All", name: "All" });
     }
 
     setActiveFilters(
@@ -257,6 +291,7 @@ const CustomerHome = () => {
       sortField: sortSelected.id,
       airport: JSON.parse(localStorage.getItem("airportSelected")).id,
       tags: tags.filter((item) => item.selected).map((item) => item.id),
+      customer: JSON.parse(localStorage.getItem("customerSelected")).id,
     };
 
     let statusName;
@@ -301,6 +336,13 @@ const CustomerHome = () => {
       activeFilters.push({
         id: "airport",
         name: airportSelected.name,
+      });
+    }
+
+    if (request.customer !== "All") {
+      activeFilters.push({
+        id: "customer",
+        name: customerSelected.name,
       });
     }
 
@@ -524,6 +566,53 @@ const CustomerHome = () => {
                             </div>
                           </div>
 
+                          {currentUser.hasExtraCustomers && (
+                            <div className="px-4 py-4">
+                              <h2 className="font-medium text-sm text-gray-900">
+                                Customers{" "}
+                                <span className="text-gray-500 text-sm ml-1 font-normal">
+                                  ({customersWOpenJobs.length})
+                                </span>
+                              </h2>
+                              <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+                                {customersWOpenJobs.map((customer) => (
+                                  <li key={customer.id}>
+                                    <div
+                                      onClick={() =>
+                                        setCustomerSelected({
+                                          id: customer.id,
+                                          name: customer.name,
+                                        })
+                                      }
+                                      className="relative flex items-center space-x-3 pr-6 pl-3 py-1 focus-within:ring-2 cursor-pointer
+                                                            hover:bg-gray-50"
+                                    >
+                                      <div className="flex-shrink-0">
+                                        <img
+                                          className="h-8 w-8 rounded-full"
+                                          src={customer.logo}
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="min-w-0 flex-1">
+                                        <div className="focus:outline-none">
+                                          {/* Extend touch target to entire panel */}
+                                          <span
+                                            className="absolute inset-0"
+                                            aria-hidden="true"
+                                          />
+                                          <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">
+                                            {customer.name}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
                           <div className="border-t border-gray-200 px-4 py-6">
                             <div className="py-4">
                               <h2 className="font-medium text-sm text-gray-900">
@@ -738,6 +827,21 @@ const CustomerHome = () => {
                                 </span>
                               </div>
 
+                              {currentUser.hasExtraCustomers && (
+                                <div className="text-sm text-gray-800 mt-2 flex gap-1">
+                                  <div className="flex-shrink-0">
+                                    <img
+                                      className="h-10 w-10 rounded-full"
+                                      src={job.customer.logo}
+                                      alt=""
+                                    />
+                                  </div>
+                                  <div className="relative top-2">
+                                    {job.customer.name}
+                                  </div>
+                                </div>
+                              )}
+
                               <div className="mt-2 text-sm text-gray-500 mb-1">
                                 <span className="font-medium">
                                   {job.airport.initials}
@@ -948,6 +1052,50 @@ const CustomerHome = () => {
             ))}
           </ul>
         </div>
+
+        {currentUser.hasExtraCustomers && (
+          <div className="hidden xl:block lg:block pb-4">
+            <h2 className="font-medium text-sm text-gray-900">
+              Customers{" "}
+              <span className="text-gray-500 text-sm ml-1 font-normal">
+                ({customersWOpenJobs.length})
+              </span>
+            </h2>
+            <ul className="relative z-0 divide-y divide-gray-200 mt-2">
+              {customersWOpenJobs.map((customer) => (
+                <li key={customer.id}>
+                  <div
+                    onClick={() =>
+                      setCustomerSelected({
+                        id: customer.id,
+                        name: customer.name,
+                      })
+                    }
+                    className="relative flex items-center space-x-3 pr-6 pl-3 py-1 focus-within:ring-2 cursor-pointer
+                                                            hover:bg-gray-50"
+                  >
+                    <div className="flex-shrink-0">
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src={customer.logo}
+                        alt=""
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="focus:outline-none">
+                        {/* Extend touch target to entire panel */}
+                        <span className="absolute inset-0" aria-hidden="true" />
+                        <p className="text-xs text-gray-700 truncate overflow-ellipsis w-44">
+                          {customer.name}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="hidden xl:block lg:block pb-4">
           <h2 className="font-medium text-sm text-gray-900">
