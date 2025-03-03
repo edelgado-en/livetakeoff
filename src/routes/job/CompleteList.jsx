@@ -1460,7 +1460,8 @@ const CompleteList = () => {
                           </ul>
                         </div>
 
-                        {!currentUser.isCustomer && (
+                        {(!currentUser.isCustomer ||
+                          currentUser.hasExtraCustomers) && (
                           <div className="px-4 pb-4">
                             <div className="text-sm font-medium text-gray-900 mb-2">
                               Customers
@@ -1545,7 +1546,7 @@ const CompleteList = () => {
                                                 active
                                                   ? "text-white bg-red-600"
                                                   : "text-gray-900",
-                                                "relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50"
+                                                "relative cursor-default select-none py-2 pl-3 pr-9 text-sm hover:bg-gray-50"
                                               )
                                             }
                                             value={customer}
@@ -1589,10 +1590,12 @@ const CompleteList = () => {
                             </Listbox>
                           </div>
                         )}
-
                         <div
                           className={`${
-                            !currentUser.isCustomer ? "mt-48" : ""
+                            !currentUser.isCustomer ||
+                            currentUser.hasExtraCustomers
+                              ? "mt-48"
+                              : ""
                           } px-4`}
                         >
                           <h2 className="font-medium text-sm text-gray-900">
@@ -1678,7 +1681,7 @@ const CompleteList = () => {
                                               active
                                                 ? "text-white bg-red-600"
                                                 : "text-gray-900",
-                                              "relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50"
+                                              "relative cursor-default select-none py-2 pl-3 pr-9 text-sm hover:bg-gray-50"
                                             )
                                           }
                                           value={airport}
@@ -1721,10 +1724,12 @@ const CompleteList = () => {
                             )}
                           </Listbox>
                         </div>
-
                         <div
                           className={`${
-                            !currentUser.isCustomer ? "mt-48" : ""
+                            !currentUser.isCustomer ||
+                            currentUser.hasExtraCustomers
+                              ? "mt-48"
+                              : ""
                           } px-4`}
                         >
                           <h2 className="font-medium text-sm text-gray-900">
@@ -1934,7 +1939,7 @@ const CompleteList = () => {
                                                                         ? "bg-gray-100"
                                                                         : ""
                                                                     }
-                                                                    text-xs text-gray-700 w-full py-2 truncate overflow-ellipsis rounded-md px-2`}
+                                                                    text-sm text-gray-700 w-full py-2 truncate overflow-ellipsis rounded-md px-2`}
                           >
                             {status.name}
                           </p>
@@ -1969,7 +1974,7 @@ const CompleteList = () => {
               </div>
             </div>
 
-            {!currentUser.isCustomer && (
+            {(!currentUser.isCustomer || currentUser.hasExtraCustomers) && (
               <div className="pb-4 mt-4">
                 <div className="text-sm font-medium text-gray-900 mb-2">
                   Customers
@@ -2052,7 +2057,7 @@ const CompleteList = () => {
                                     active
                                       ? "text-white bg-red-600"
                                       : "text-gray-900",
-                                    "relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50"
+                                    "relative cursor-default select-none py-2 pl-3 pr-9 text-sm hover:bg-gray-50"
                                   )
                                 }
                                 value={customer}
@@ -2097,7 +2102,13 @@ const CompleteList = () => {
               </div>
             )}
 
-            <div className={`${!currentUser.isCustomer ? "mt-48" : ""} pt-8`}>
+            <div
+              className={`${
+                !currentUser.isCustomer || currentUser.hasExtraCustomers
+                  ? "mt-48"
+                  : ""
+              } pt-8`}
+            >
               <div className="text-sm font-medium text-gray-900 mb-2">
                 Airports
               </div>
@@ -2118,7 +2129,7 @@ const CompleteList = () => {
                         <Listbox.Options
                           className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
                                                                         rounded-md bg-white py-1 ring-1
-                                                                        ring-black ring-opacity-5 focus:outline-none text-xs"
+                                                                        ring-black ring-opacity-5 focus:outline-none text-sm"
                         >
                           <div className="relative">
                             <div className="sticky top-0 z-20  px-1">
@@ -2179,7 +2190,7 @@ const CompleteList = () => {
                                   active
                                     ? "text-white bg-red-600"
                                     : "text-gray-900",
-                                  "relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50"
+                                  "relative cursor-default select-none py-2 pl-3 pr-9 text-sm hover:bg-gray-50"
                                 )
                               }
                               value={airport}
@@ -2237,7 +2248,7 @@ const CompleteList = () => {
                         <Listbox.Options
                           className="absolute z-10 mt-1 max-h-48 w-full overflow-auto
                                                                         rounded-md bg-white py-1 ring-1
-                                                                        ring-black ring-opacity-5 focus:outline-none text-xs"
+                                                                        ring-black ring-opacity-5 focus:outline-none text-sm"
                         >
                           <div className="relative">
                             <div className="sticky top-0 z-20  px-1">
@@ -2298,7 +2309,7 @@ const CompleteList = () => {
                                   active
                                     ? "text-white bg-red-600"
                                     : "text-gray-900",
-                                  "relative cursor-default select-none py-2 pl-3 pr-9 text-xs hover:bg-gray-50"
+                                  "relative cursor-default select-none py-2 pl-3 pr-9 text-sm hover:bg-gray-50"
                                 )
                               }
                               value={fbo}
@@ -2424,7 +2435,8 @@ const CompleteList = () => {
                           {(currentUser.isAdmin ||
                             currentUser.isSuperUser ||
                             currentUser.isAccountManager ||
-                            currentUser.isInternalCoordinator) && (
+                            currentUser.isInternalCoordinator ||
+                            currentUser.hasExtraCustomers) && (
                             <th className="whitespace-nowrap px-2 py-2 text-left text-xs font-normal uppercase text-gray-500 w-28 max-w-xs">
                               Customer
                             </th>
@@ -2511,7 +2523,8 @@ const CompleteList = () => {
                             {(currentUser.isAdmin ||
                               currentUser.isSuperUser ||
                               currentUser.isAccountManager ||
-                              currentUser.isInternalCoordinator) && (
+                              currentUser.isInternalCoordinator ||
+                              currentUser.hasExtraCustomers) && (
                               <td
                                 className="whitespace-nowrap px-2 py-2 text-xs text-gray-500 truncate overflow-ellipsis w-28 max-w-xs"
                                 style={{ maxWidth: "170px" }}
@@ -2686,7 +2699,8 @@ const CompleteList = () => {
                                       </span>
                                     </div>
 
-                                    {!currentUser.isCustomer && (
+                                    {(!currentUser.isCustomer ||
+                                      currentUser.hasExtraCustomers) && (
                                       <div className="text-sm text-gray-800 mt-2 flex gap-1">
                                         <UserIcon className="h-4 w-4 text-gray-400" />
                                         {job.customer?.name}
