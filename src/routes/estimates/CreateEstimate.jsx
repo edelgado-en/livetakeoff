@@ -313,7 +313,7 @@ const CreateEstimate = () => {
                 </p>
               )}
 
-              {!currentUser.isCustomer && (
+              {(!currentUser.isCustomer || currentUser.hasExtraCustomers) && (
                 <div className="mt-1">
                   <Listbox
                     value={customerSelected}
@@ -974,12 +974,9 @@ const CreateEstimate = () => {
                           Contact Us
                         </Link>{" "}
                         or call
-                        <a
-                          href="tel:+17869756255"
-                          className="ml-1 font-semibold"
-                        >
-                          786-975-6255
-                        </a>{" "}
+                        <a href="tel:+18555000538" className="ml-3">
+                          +1 855-500-0538
+                        </a>
                         so we can coordinate it for you.
                       </p>
                     </div>

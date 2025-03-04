@@ -318,13 +318,16 @@ const EstimateDetail = () => {
                                 </dl>
                               </div>
                             </td>
-                            <td className="relative hidden px-3 py-4 text-sm text-gray-700 lg:table-cell font-medium items-start">
-                              <div className="absolute top-6">
+                            <td
+                              className="relative hidden px-3 py-4 text-sm text-gray-700 lg:table-cell font-medium items-start"
+                              style={{ minWidth: "300px" }}
+                            >
+                              <div className="absolute top-6 ">
                                 {service.name}
                               </div>
                             </td>
                             <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                              <div className="overflow-auto h-56">
+                              {/* <div className="overflow-auto h-56">
                                 <textarea
                                   class="w-full border-none bg-transparent overflow-hidden outline-none"
                                   style={{ height: "450px" }}
@@ -332,6 +335,16 @@ const EstimateDetail = () => {
                                 >
                                   {service.description}
                                 </textarea>
+                              </div> */}
+                              <div className="h-[250px] overflow-y-auto p-4 border border-gray-300">
+                                <p
+                                  dangerouslySetInnerHTML={{
+                                    __html: service.description?.replace(
+                                      /\r\n|\n/g,
+                                      "<br />"
+                                    ),
+                                  }}
+                                />
                               </div>
                             </td>
                             <td className="relative whitespace-nowrap px-3 py-4 text-sm text-gray-900 font-medium">
