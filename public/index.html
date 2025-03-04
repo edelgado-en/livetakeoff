@@ -25,6 +25,23 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>LiveTakeoff</title>
+    <!-- Google Analytics (only load in production) -->
+<script>
+    if (window.location.hostname !== "localhost") {
+      var script = document.createElement('script');
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-P251G6PCFY";
+      script.async = true;
+      document.head.appendChild(script);
+  
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+  
+      gtag('config', 'G-P251G6PCFY', {
+        page_path: window.location.pathname,
+      });
+    }
+  </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

@@ -119,6 +119,30 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
 
+import { pageview } from "./gtag";
+
+const GA_TRACKING_ID = "G-P251G6PCFY";
+
+function useGoogleAnalytics() {
+  useEffect(() => {
+    // Create the script tag
+    const script = document.createElement("script");
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`;
+    script.async = true;
+    document.head.appendChild(script);
+
+    // Initialize gtag
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      window.dataLayer.push(arguments);
+    }
+    window.gtag = gtag; // Attach gtag to window (important)
+
+    gtag("js", new Date());
+    gtag("config", GA_TRACKING_ID);
+  }, []);
+}
+
 const Redirect = () => {
   useEffect(() => {
     window.location = "/login";
@@ -140,8 +164,13 @@ const Fallback = () => {
 };
 
 const App = () => {
+  useGoogleAnalytics();
   const location = useLocation();
   const currentUser = useAppSelector(selectUser);
+
+  useEffect(() => {
+    pageview(location.pathname + location.search);
+  }, [location]);
 
   return (
     <>
