@@ -1948,14 +1948,14 @@ export default function CustomerServiceReport() {
                     <div className="text-2xl leading-6 text-gray-500 mb-3">
                       {dateSelected.name}
                     </div>
-                    <div className="flex justify-center gap-24 text-center items-center">
+                    <div className="flex flex-wrap justify-center gap-x-24 gap-y-8 text-center items-center">
                       <div className="text-center items-center flex flex-col">
-                        <p className="text-xl font-medium leading-6 text-gray-400">
+                        <p className="text-xl font-medium leading-6 text-gray-500">
                           Total Invoiced
                         </p>
                         {selectedService?.name === "All Services" &&
                           showRetainers && (
-                            <p className="ml-1 font-normal text-sm text-gray-400">
+                            <p className="ml-1 font-normal text-sm text-gray-500">
                               (Standard & Retainers)
                             </p>
                           )}
@@ -1966,12 +1966,12 @@ export default function CustomerServiceReport() {
                         </p>
                       </div>
                       <div className="text-center items-center flex flex-col">
-                        <p className="text-xl font-medium leading-6 text-gray-400">
+                        <p className="text-xl font-medium leading-6 text-gray-500">
                           Total Not Invoiced
                         </p>
                         {selectedService?.name === "All Services" &&
                           showRetainers && (
-                            <p className="ml-1 font-normal text-sm text-gray-400">
+                            <p className="ml-1 font-normal text-sm text-gray-500">
                               (Standard & Retainers)
                             </p>
                           )}
@@ -2129,7 +2129,7 @@ export default function CustomerServiceReport() {
               <>
                 <div className="px-2 sm:px-6 lg:px-8 mt-6">
                   {totalServiceActivities === 0 && !activitiesLoading && (
-                    <div className="text-center m-auto mt-14">
+                    <div className="text-center m-auto py-36">
                       <div className="font-medium text-xl">
                         No services found.
                       </div>
@@ -2339,7 +2339,7 @@ export default function CustomerServiceReport() {
                 <div className="px-2 sm:px-6 lg:px-8 mt-6">
                   {totalRetainerServiceActivities === 0 &&
                     !activitiesLoading && (
-                      <div className="text-center m-auto mt-14">
+                      <div className="text-center m-auto py-36">
                         <div className="font-medium text-xl">
                           No retainer services found.
                         </div>
