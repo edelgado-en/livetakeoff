@@ -1,15 +1,25 @@
 import { useState, useEffect } from "react";
 import ModalFrame from "../../components/modal/ModalFrame";
-import { Dialog, Switch } from "@headlessui/react";
+import { Dialog, Switch, Menu } from "@headlessui/react";
 
-import { DocumentIcon } from "@heroicons/react/outline";
+import { DocumentIcon, ChevronDownIcon } from "@heroicons/react/outline";
 
 import * as api from "./apiService";
 import { toast } from "react-toastify";
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+const accessLevels = [
+  {
+    name: "Admins Only",
+    id: "is_admin_only",
+    description: "Only visible to Admins.",
+  },
+  {
+    name: "Customers Only",
+    id: "is_customer_only",
+    description: "Only visible to customer users.",
+  },
+  { name: "Everyone", id: "is_public", description: "Visible to everyone." },
+];
 
 const JobFileUploadModal = ({
   isOpen,
@@ -19,7 +29,10 @@ const JobFileUploadModal = ({
   jobDetails,
 }) => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [isPublic, setIsPublic] = useState(false);
+
+  const [selectedAccessLevel, setSelectedAccessLevel] = useState(
+    accessLevels[0]
+  );
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -30,7 +43,7 @@ const JobFileUploadModal = ({
     if (selectedFile) {
       const formData = new FormData();
       formData.append("file", selectedFile);
-      formData.append("is_public", isPublic);
+      formData.append("access_level", selectedAccessLevel.id);
 
       try {
         const { data } = await api.uploadFile(jobDetails.id, formData);
@@ -90,39 +103,44 @@ const JobFileUploadModal = ({
 
               {isAdmin && (
                 <div>
-                  <Switch.Group
-                    as="li"
-                    className="flex items-center justify-between py-4"
+                  <div className="py-4 font-medium">Select Access Level:</div>
+                  <fieldset
+                    aria-label="Privacy setting"
+                    className="-space-y-px rounded-md bg-white"
                   >
-                    <div className="flex flex-col">
-                      <Switch.Label
-                        as="p"
-                        className="text-sm font-medium text-gray-900"
-                        passive
+                    {accessLevels.map((access) => (
+                      <label
+                        key={access.name}
+                        value={access.name}
+                        className={`group flex cursor-pointer border border-gray-200
+                            p-4 ${
+                              selectedAccessLevel.id === access.id
+                                ? "bg-indigo-50"
+                                : ""
+                            }`}
                       >
-                        Set as Public
-                      </Switch.Label>
-                      <Switch.Description className="text-sm text-gray-500">
-                        Controls whether customer users can see this attachment.
-                      </Switch.Description>
-                    </div>
-                    <Switch
-                      checked={isPublic}
-                      onChange={() => setIsPublic(!isPublic)}
-                      className={classNames(
-                        isPublic ? "bg-red-500" : "bg-gray-200",
-                        "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                      )}
-                    >
-                      <span
-                        aria-hidden="true"
-                        className={classNames(
-                          isPublic ? "translate-x-5" : "translate-x-0",
-                          "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                        )}
-                      />
-                    </Switch>
-                  </Switch.Group>
+                        <input
+                          checked={selectedAccessLevel.id === access.id}
+                          onChange={() => setSelectedAccessLevel(access)}
+                          name="privacy-setting"
+                          type="radio"
+                          className="relative mt-0.5 size-4 shrink-0 appearance-none rounded-full border
+                           border-gray-300 
+                                 "
+                        />
+                        <span className="ml-3 flex flex-col">
+                          <span
+                            className={`block text-sm font-medium text-gray-900 group-has-[:checked]:text-red-900`}
+                          >
+                            {access.name}
+                          </span>
+                          <span className="block text-sm text-gray-500 group-has-[:checked]:text-red-700">
+                            {access.description}
+                          </span>
+                        </span>
+                      </label>
+                    ))}
+                  </fieldset>
                 </div>
               )}
             </div>

@@ -191,13 +191,6 @@ const JobInfo = () => {
         }
 
         setServiceActivities(uniqueServiceActivities);
-      } else if (response.data.isCustomer) {
-        //remove files that are not public from jobDetails
-        const updatedJobDetails = {
-          ...data,
-          files: data.files.filter((f) => f.is_public),
-        };
-        setJobDetails(updatedJobDetails);
       }
     } catch (error) {
       setLoading(false);
@@ -1469,123 +1462,122 @@ const JobInfo = () => {
               </div>
             )}
             {/* ATTACHMENTS */}
-            {(currentUser.isAdmin ||
-              currentUser.isSuperUser ||
-              currentUser.isAccountManager ||
-              currentUser.isCustomer) && (
-              <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
-                <div className="px-4 py-3 bg-gray-100 flex justify-between border-b border-gray-200">
-                  <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
-                    Attachments
-                  </h3>
+            <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+              <div className="px-4 py-3 bg-gray-100 flex justify-between border-b border-gray-200">
+                <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                  Attachments
+                </h3>
+                {(currentUser.isAdmin ||
+                  currentUser.isSuperUser ||
+                  currentUser.isAccountManager ||
+                  currentUser.isCustomer) && (
                   <button
                     type="button"
                     onClick={handleToggleJobFileUploadModal}
                     className="inline-flex items-center rounded border
-                        border-sky-400 bg-white px-2 py-1 text-sm
-                        font-medium text-sky-500 shadow-sm hover:bg-gray-50
-                        focus:outline-none cursor-pointer"
+                            border-sky-400 bg-white px-2 py-1 text-sm
+                            font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                            focus:outline-none cursor-pointer"
                   >
                     <span>Add</span>
                   </button>
-                </div>
-                {jobDetails.files?.length === 0 && (
-                  <div className="flex justify-center text-center my-12 text-md">
-                    No file attachments found.
-                  </div>
                 )}
+              </div>
+              {jobDetails.files?.length === 0 && (
+                <div className="flex justify-center text-center my-12 text-md">
+                  No file attachments found.
+                </div>
+              )}
 
-                {jobDetails.files?.length > 0 && (
-                  <ul className="divide-y divide-gray-200 rounded-md border-b border-gray-200">
-                    {jobDetails.files?.map((file) => (
-                      <li key={file.id} className="p-6 text-md">
-                        <div className="flex flex-wrap justify-between gap-4">
-                          <div className="flex gap-1">
-                            <PaperClipIcon
-                              className="h-5 w-5 flex-shrink-0 text-gray-400 relative top-1"
-                              aria-hidden="true"
-                            />
-                            <div
-                              className="text-lg truncate overflow-ellipsis"
-                              style={{ maxWidth: "250px" }}
-                            >
-                              {file.name}
-                            </div>
+              {jobDetails.files?.length > 0 && (
+                <ul className="divide-y divide-gray-200 rounded-md border-b border-gray-200">
+                  {jobDetails.files?.map((file) => (
+                    <li key={file.id} className="p-6 text-md">
+                      <div className="flex flex-wrap justify-between gap-4">
+                        <div className="flex gap-1">
+                          <PaperClipIcon
+                            className="h-5 w-5 flex-shrink-0 text-gray-400 relative top-1"
+                            aria-hidden="true"
+                          />
+                          <div
+                            className="text-lg truncate overflow-ellipsis"
+                            style={{ maxWidth: "250px" }}
+                          >
+                            {file.name}
                           </div>
-                          <div className="flex gap-2">
-                            {isAdmin && (
-                              <button
-                                type="button"
-                                onClick={() => handleDeleteJobFile(file)}
-                                className="inline-flex w-full justify-center rounded-md border
+                        </div>
+                        <div className="flex gap-2">
+                          {isAdmin && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteJobFile(file)}
+                              className="inline-flex w-full justify-center rounded-md border
                                                             border-gray-300 bg-white px-2 py-1 text-base 
                                                             text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2
                                                             focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                              >
-                                Delete
-                              </button>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => downloadFile(file)}
-                              className="inline-flex w-full justify-center rounded-md border font-medium
+                            >
+                              Delete
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => downloadFile(file)}
+                            className="inline-flex w-full justify-center rounded-md border font-medium
                                                         border-gray-300 bg-white px-2 py-1 text-base 
                                                         text-sky-500 shadow-sm focus:outline-none focus:ring-2
                                                         focus:ring-sky-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-                            >
-                              Download
-                            </button>
-                          </div>
+                          >
+                            Download
+                          </button>
                         </div>
-                        <div className="flex flex-wrap justify-between gap-4 mt-1">
-                          <div className="text-gray-500 relative top-2 text-md">
-                            Uploaded on: {file.created_at}
-                          </div>
-                          <div>
-                            {isAdmin && (
-                              <Switch.Group
-                                as="li"
-                                className="flex items-center justify-between py-2"
+                      </div>
+                      <div className="flex flex-wrap justify-between gap-4 mt-1">
+                        <div className="text-gray-500 relative top-2 text-md">
+                          Uploaded on: {file.created_at}
+                        </div>
+                        <div>
+                          {isAdmin && (
+                            <Switch.Group
+                              as="li"
+                              className="flex items-center justify-between py-2"
+                            >
+                              <div className="flex flex-col">
+                                <Switch.Label
+                                  as="p"
+                                  className="text-sm font-medium text-gray-900"
+                                  passive
+                                >
+                                  Everyone
+                                </Switch.Label>
+                              </div>
+                              <Switch
+                                checked={file.is_public}
+                                onChange={() => handleToggleFilePublic(file)}
+                                className={classNames(
+                                  file.is_public ? "bg-sky-500" : "bg-gray-200",
+                                  "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                                )}
                               >
-                                <div className="flex flex-col">
-                                  <Switch.Label
-                                    as="p"
-                                    className="text-sm font-medium text-gray-900"
-                                    passive
-                                  >
-                                    Public
-                                  </Switch.Label>
-                                </div>
-                                <Switch
-                                  checked={file.is_public}
-                                  onChange={() => handleToggleFilePublic(file)}
+                                <span
+                                  aria-hidden="true"
                                   className={classNames(
                                     file.is_public
-                                      ? "bg-sky-500"
-                                      : "bg-gray-200",
-                                    "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                                      ? "translate-x-5"
+                                      : "translate-x-0",
+                                    "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
                                   )}
-                                >
-                                  <span
-                                    aria-hidden="true"
-                                    className={classNames(
-                                      file.is_public
-                                        ? "translate-x-5"
-                                        : "translate-x-0",
-                                      "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                                    )}
-                                  />
-                                </Switch>
-                              </Switch.Group>
-                            )}
-                          </div>
+                                />
+                              </Switch>
+                            </Switch.Group>
+                          )}
                         </div>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
             {/* LABOR */}
             {(currentUser.isAdmin ||
               currentUser.isSuperUser ||
