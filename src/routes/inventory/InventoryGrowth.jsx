@@ -49,6 +49,7 @@ const ChevronUpDownIcon = () => {
 const years = [
   { id: 2023, name: "2023" },
   { id: 2024, name: "2024" },
+  { id: 2025, name: "2025" },
 ];
 
 const timeBreakdowns = [
@@ -61,7 +62,7 @@ const InventoryGrowth = () => {
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState([]);
   const [locationSelected, setLocationSelected] = useState(null);
-  const [yearSelected, setYearSelected] = useState(years[1]);
+  const [yearSelected, setYearSelected] = useState(years[2]);
   const [timeBreakdownSelected, setTimeBreakdownSelected] = useState(
     timeBreakdowns[2]
   );
