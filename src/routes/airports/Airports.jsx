@@ -16,6 +16,8 @@ import {
   useNavigate,
 } from "react-router-dom";
 
+import Pagination from "react-js-pagination";
+
 const XMarkIcon = () => {
   return (
     <svg
@@ -62,6 +64,8 @@ const Airports = () => {
   const [searchText, setSearchText] = useState("");
   const [firstLoad, setFirstLoad] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -74,7 +78,7 @@ const Airports = () => {
     return () => {
       clearTimeout(timeoutID);
     };
-  }, [searchText]);
+  }, [searchText, currentPage]);
 
   const searchAirports = async () => {
     setLoading(true);
@@ -84,7 +88,7 @@ const Airports = () => {
     };
 
     try {
-      const { data } = await api.searchAirports(request);
+      const { data } = await api.searchAirports(request, currentPage);
 
       setTotalAirports(data.count);
       setAirports(data.results);
@@ -117,6 +121,10 @@ const Airports = () => {
 
       searchAirports();
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const getAirportDetails = (airportId) => {
@@ -290,6 +298,23 @@ const Airports = () => {
                         </div>
                       ))}
                     </nav>
+                    {!loading && totalAirports > 200 && (
+                      <div className="m-auto px-10 flex pt-5 pb-10">
+                        <div>
+                          <Pagination
+                            innerClass="pagination pagination-custom"
+                            activePage={currentPage}
+                            hideDisabled
+                            itemClass="page-item page-item-custom"
+                            linkClass="page-link page-link-custom"
+                            itemsCountPerPage={200}
+                            totalItemsCount={totalAirports}
+                            pageRangeDisplayed={3}
+                            onChange={handlePageChange}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -442,6 +467,23 @@ const Airports = () => {
                   </div>
                 ))}
               </nav>
+              {!loading && totalAirports > 200 && (
+                <div className="m-auto px-10 flex pt-5 pb-10">
+                  <div>
+                    <Pagination
+                      innerClass="pagination pagination-custom"
+                      activePage={currentPage}
+                      hideDisabled
+                      itemClass="page-item page-item-custom"
+                      linkClass="page-link page-link-custom"
+                      itemsCountPerPage={200}
+                      totalItemsCount={totalAirports}
+                      pageRangeDisplayed={3}
+                      onChange={handlePageChange}
+                    />
+                  </div>
+                </div>
+              )}
             </aside>
           </div>
         </div>

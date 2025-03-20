@@ -52,7 +52,7 @@ const MyAirports = () => {
     };
 
     try {
-      const { data } = await api.searchAirports(request);
+      const { data } = await api.searchAirports(request, 1);
 
       setTotalAirports(data.count);
       setAirports(data.results);
