@@ -1699,6 +1699,9 @@ const CreateJob = () => {
                                 <div className="relative">
                                   <div className="sticky top-0 z-20  px-1">
                                     <div className="mt-1 block  items-center">
+                                      <div className="font-medium mb-1 ml-1">
+                                        Type airport code or name:
+                                      </div>
                                       <input
                                         type="text"
                                         name="search"
@@ -1708,8 +1711,8 @@ const CreateJob = () => {
                                           setAirportSearchTerm(e.target.value)
                                         }
                                         className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
-                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-bold sm:text-lg
-                                                                        border-gray-300 rounded-md"
+                                                                        focus:border-sky-500 block w-full py-2 pr-12 font-normal sm:text-lg
+                                                                        border-gray-300 rounded-md mb-4"
                                       />
                                       <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
                                         {airportSearchTerm && (
@@ -1729,20 +1732,6 @@ const CreateJob = () => {
                                             />
                                           </svg>
                                         )}
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          className="h-6 w-6 text-gray-500 mr-1"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke="currentColor"
-                                        >
-                                          <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                          />
-                                        </svg>
                                       </div>
                                     </div>
                                   </div>
