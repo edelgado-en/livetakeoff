@@ -1699,13 +1699,14 @@ const CreateJob = () => {
                                 <div className="relative">
                                   <div className="sticky top-0 z-20  px-1">
                                     <div className="mt-1 block  items-center">
-                                      <div className="font-medium mb-1 ml-1">
+                                      <div className="font-bold text-red-500 mb-1 ml-1">
                                         Type airport code or name:
                                       </div>
                                       <input
                                         type="text"
                                         name="search"
                                         id="search"
+                                        placeholder="Type here..."
                                         value={airportSearchTerm}
                                         onChange={(e) =>
                                           setAirportSearchTerm(e.target.value)
