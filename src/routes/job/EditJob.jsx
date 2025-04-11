@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import Loader from "../../components/loader/Loader";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import { Listbox, Transition, Switch, RadioGroup } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/outline";
+import { CheckIcon, PencilIcon } from "@heroicons/react/outline";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -89,6 +89,10 @@ const EditJob = () => {
   const [estimatedArrivalDate, setEstimatedArrivalDate] = useState(null);
   const [estimatedDepartureDate, setEstimatedDepartureDate] = useState(null);
   const [completeByDate, setCompleteByDate] = useState(null);
+
+  const [arrivalFormattedDate, setArrivalFormattedDate] = useState(null);
+  const [departureFormattedDate, setDepartureFormattedDate] = useState(null);
+  const [completeByFormattedDate, setCompleteByFormattedDate] = useState(null);
 
   const [hoursWorked, setHoursWorked] = useState(0);
   const [minutesWorked, setMinutesWorked] = useState(0);
@@ -267,6 +271,18 @@ const EditJob = () => {
       });
 
       const response = await api.getJobDetails(jobId);
+
+      if (response.data.arrival_formatted_date !== "Not Specified") {
+        setArrivalFormattedDate(response.data.arrival_formatted_date);
+      }
+
+      if (response.data.departure_formatted_date !== "Not Specified") {
+        setDepartureFormattedDate(response.data.departure_formatted_date);
+      }
+
+      if (response.data.complete_by_formatted_date !== "Not Specified") {
+        setCompleteByFormattedDate(response.data.complete_by_formatted_date);
+      }
 
       setTailNumber(response.data.tailNumber);
       setPrice(response.data.price);
@@ -456,6 +472,20 @@ const EditJob = () => {
       enable_flightaware_tracking: enableFlightawareTracking,
       ident,
     };
+
+    if (!onSite && estimatedArrivalDate) {
+      const pad = (n) => n.toString().padStart(2, "0");
+
+      const month = pad(estimatedArrivalDate.getMonth() + 1);
+      const day = pad(estimatedArrivalDate.getDate());
+      const year = pad(estimatedArrivalDate.getFullYear() % 100); // get last two digits
+      const hours = pad(estimatedArrivalDate.getHours());
+      const minutes = pad(estimatedArrivalDate.getMinutes());
+
+      const formatted = `${month}/${day}/${year} ${hours}:${minutes}`;
+      const finalFormatted = `${formatted} LT`;
+      request.arrival_formatted_date = finalFormatted;
+    }
 
     try {
       await api.updateJob(jobId, request);
@@ -943,67 +973,106 @@ const EditJob = () => {
               <div className="px-4 py-3 gap-4 pr-2">
                 <dt className="flex justify-between gap-4text-md font-bold text-gray-900 relative">
                   <div>Arrival:</div>
-                  <div className="text-sm  text-gray-500 mb-1 flex justify-between text-right">
-                    <div className="flex gap-2">
-                      <div className="flex h-5 items-center">
-                        <input
-                          id="onSite"
-                          checked={onSite}
-                          value={onSite}
-                          onClick={handleSetOnSite}
-                          name="onSite"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                        />
+                  {!arrivalFormattedDate && (
+                    <div className="text-sm  text-gray-500 mb-1 flex justify-between text-right">
+                      <div className="flex gap-2">
+                        <div className="flex h-5 items-center">
+                          <input
+                            id="onSite"
+                            checked={onSite}
+                            value={onSite}
+                            onClick={handleSetOnSite}
+                            name="onSite"
+                            type="checkbox"
+                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                          />
+                        </div>
+                        <label htmlFor="onSite" className=" text-gray-500">
+                          On site
+                        </label>
                       </div>
-                      <label htmlFor="onSite" className=" text-gray-500">
-                        On site
-                      </label>
+                      {estimatedArrivalDate && (
+                        <span
+                          onClick={() => setEstimatedArrivalDate(null)}
+                          className="ml-2 underline text-sm text-red-500 cursor-pointer"
+                        >
+                          clear
+                        </span>
+                      )}
                     </div>
-                    {estimatedArrivalDate && (
-                      <span
-                        onClick={() => setEstimatedArrivalDate(null)}
-                        className="ml-2 underline text-sm text-red-500 cursor-pointer"
-                      >
-                        clear
-                      </span>
-                    )}
-                  </div>
+                  )}
                 </dt>
                 <dd className="text-md text-gray-700 mt-1">
-                  <div>
-                    <button
-                      type="button"
-                      onClick={handleToggleEstimatedArrivalDate}
-                      className="inline-flex items-center rounded-md border
-                                           w-full h-10
-                                          border-gray-300 bg-white px-4 py-2 text-sm
-                                            text-gray-700 shadow-sm hover:bg-gray-50"
-                    >
-                      {estimatedArrivalDate?.toLocaleString("en-US", {
-                        hour12: false,
-                        year: "numeric",
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </button>
-                    {estimatedArrivalDateOpen && (
-                      <DatePicker
-                        selected={estimatedArrivalDate}
-                        onChange={(date) =>
-                          handleEstimatedArrivalDateChange(date)
-                        }
-                        locale="pt-BR"
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={5}
-                        dateFormat="Pp"
-                        inline
-                      />
-                    )}
-                  </div>
+                  {arrivalFormattedDate ? (
+                    <>
+                      <div className="flex justify-between gap-4">
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            value={arrivalFormattedDate}
+                            name="arrivalFormattedDate"
+                            disabled
+                            className="block w-full rounded-md border-gray-300 shadow-sm bg-gray-50
+                                                        sm:text-sm font-normal"
+                          />
+                        </div>
+                        <div>
+                          <PencilIcon
+                            onClick={handleToggleEstimatedArrivalDate}
+                            className="flex-shrink-0 h-5 w-5 cursor-pointer relative top-2"
+                          />
+                        </div>
+                      </div>
+
+                      {estimatedArrivalDateOpen && (
+                        <DatePicker
+                          selected={estimatedArrivalDate}
+                          onChange={(date) =>
+                            handleEstimatedArrivalDateChange(date)
+                          }
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={5}
+                          dateFormat="Pp"
+                          inline
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      <button
+                        type="button"
+                        onClick={handleToggleEstimatedArrivalDate}
+                        className="inline-flex items-center rounded-md border
+                                            w-full h-10
+                                            border-gray-300 bg-white px-4 py-2 text-sm
+                                                text-gray-700 shadow-sm hover:bg-gray-50"
+                      >
+                        {estimatedArrivalDate?.toLocaleString("en-US", {
+                          hour12: false,
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </button>
+                      {estimatedArrivalDateOpen && (
+                        <DatePicker
+                          selected={estimatedArrivalDate}
+                          onChange={(date) =>
+                            handleEstimatedArrivalDateChange(date)
+                          }
+                          locale="pt-BR"
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={5}
+                          dateFormat="Pp"
+                          inline
+                        />
+                      )}
+                    </div>
+                  )}
                 </dd>
               </div>
               <div className="px-4 py-3 gap-4 pr-2">
