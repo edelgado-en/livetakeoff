@@ -280,8 +280,10 @@ const EditJob = () => {
         setDepartureFormattedDate(response.data.departure_formatted_date);
       }
 
-      if (response.data.complete_by_formatted_date !== "Not Specified") {
-        setCompleteByFormattedDate(response.data.complete_by_formatted_date);
+      if (response.data.complete_before_formatted_date !== "Not Specified") {
+        setCompleteByFormattedDate(
+          response.data.complete_before_formatted_date
+        );
       }
 
       setTailNumber(response.data.tailNumber);
@@ -487,6 +489,42 @@ const EditJob = () => {
       request.arrival_formatted_date = finalFormatted;
     }
 
+    if (!estimatedArrivalDate) {
+      request.arrival_formatted_date = "Not Specified";
+    }
+
+    if (estimatedDepartureDate) {
+      const pad = (n) => n.toString().padStart(2, "0");
+
+      const month = pad(estimatedDepartureDate.getMonth() + 1);
+      const day = pad(estimatedDepartureDate.getDate());
+      const year = pad(estimatedDepartureDate.getFullYear() % 100); // get last two digits
+      const hours = pad(estimatedDepartureDate.getHours());
+      const minutes = pad(estimatedDepartureDate.getMinutes());
+      const formatted = `${month}/${day}/${year} ${hours}:${minutes}`;
+
+      const finalFormatted = `${formatted} LT`;
+      request.departure_formatted_date = finalFormatted;
+    } else {
+      request.departure_formatted_date = "Not Specified";
+    }
+
+    if (completeByDate) {
+      const pad = (n) => n.toString().padStart(2, "0");
+
+      const month = pad(completeByDate.getMonth() + 1);
+      const day = pad(completeByDate.getDate());
+      const year = pad(completeByDate.getFullYear() % 100); // get last two digits
+      const hours = pad(completeByDate.getHours());
+      const minutes = pad(completeByDate.getMinutes());
+      const formatted = `${month}/${day}/${year} ${hours}:${minutes}`;
+
+      const finalFormatted = `${formatted} LT`;
+      request.complete_before_formatted_date = finalFormatted;
+    } else {
+      request.complete_before_formatted_date = "Not Specified";
+    }
+
     try {
       await api.updateJob(jobId, request);
 
@@ -647,6 +685,22 @@ const EditJob = () => {
     );
 
     setJobFollowerEmails(updatedEmails);
+  };
+
+  const handleClearArrivalDate = () => {
+    setEstimatedArrivalDate(null);
+    setOnSite(false);
+    setArrivalFormattedDate(null);
+  };
+
+  const handleClearDepartureDate = () => {
+    setEstimatedDepartureDate(null);
+    setDepartureFormattedDate(null);
+  };
+
+  const handleClearCompleteByDate = () => {
+    setCompleteByDate(null);
+    setCompleteByFormattedDate(null);
   };
 
   return (
@@ -973,34 +1027,32 @@ const EditJob = () => {
               <div className="px-4 py-3 gap-4 pr-2">
                 <dt className="flex justify-between gap-4text-md font-bold text-gray-900 relative">
                   <div>Arrival:</div>
-                  {!arrivalFormattedDate && (
-                    <div className="text-sm  text-gray-500 mb-1 flex justify-between text-right">
-                      <div className="flex gap-2">
-                        <div className="flex h-5 items-center">
-                          <input
-                            id="onSite"
-                            checked={onSite}
-                            value={onSite}
-                            onClick={handleSetOnSite}
-                            name="onSite"
-                            type="checkbox"
-                            className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
-                          />
-                        </div>
-                        <label htmlFor="onSite" className=" text-gray-500">
-                          On site
-                        </label>
+                  <div className="text-sm  text-gray-500 mb-1 flex justify-between text-right">
+                    <div className="flex gap-2">
+                      <div className="flex h-5 items-center">
+                        <input
+                          id="onSite"
+                          checked={onSite}
+                          value={onSite}
+                          onClick={handleSetOnSite}
+                          name="onSite"
+                          type="checkbox"
+                          className="h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+                        />
                       </div>
-                      {estimatedArrivalDate && (
-                        <span
-                          onClick={() => setEstimatedArrivalDate(null)}
-                          className="ml-2 underline text-sm text-red-500 cursor-pointer"
-                        >
-                          clear
-                        </span>
-                      )}
+                      <label htmlFor="onSite" className=" text-gray-500">
+                        On site
+                      </label>
                     </div>
-                  )}
+                    {estimatedArrivalDate && (
+                      <span
+                        onClick={() => handleClearArrivalDate()}
+                        className="ml-2 underline text-sm text-red-500 cursor-pointer"
+                      >
+                        clear
+                      </span>
+                    )}
+                  </div>
                 </dt>
                 <dd className="text-md text-gray-700 mt-1">
                   {arrivalFormattedDate ? (
@@ -1081,7 +1133,7 @@ const EditJob = () => {
                   <label className="block text-sm text-gray-500 mb-1">
                     {estimatedDepartureDate && (
                       <span
-                        onClick={() => setEstimatedDepartureDate(null)}
+                        onClick={() => handleClearDepartureDate()}
                         className="ml-2 underline text-sm text-red-500 cursor-pointer"
                       >
                         clear
@@ -1090,36 +1142,75 @@ const EditJob = () => {
                   </label>
                 </dt>
                 <dd className="text-md text-gray-700 mt-1">
-                  <button
-                    type="button"
-                    onClick={handleToggleEstimatedDepartureDate}
-                    className="inline-flex items-center rounded-md border
-                                           w-full h-10
-                                          border-gray-300 bg-white px-4 py-2 text-sm
-                                            text-gray-700 shadow-sm hover:bg-gray-50"
-                  >
-                    {estimatedDepartureDate?.toLocaleString("en-US", {
-                      hour12: false,
-                      year: "numeric",
-                      month: "numeric",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </button>
-                  {estimatedDepartureDateOpen && (
-                    <DatePicker
-                      selected={estimatedDepartureDate}
-                      onChange={(date) =>
-                        handleEstimatedDepartureDateChange(date)
-                      }
-                      locale="pt-BR"
-                      showTimeSelect
-                      timeFormat="HH:mm"
-                      timeIntervals={5}
-                      dateFormat="Pp"
-                      inline
-                    />
+                  {departureFormattedDate ? (
+                    <>
+                      <div className="flex justify-between gap-4">
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            value={departureFormattedDate}
+                            name="departureFormattedDate"
+                            disabled
+                            className="block w-full rounded-md border-gray-300 shadow-sm bg-gray-50
+                                                        sm:text-sm font-normal"
+                          />
+                        </div>
+                        <div>
+                          <PencilIcon
+                            onClick={handleToggleEstimatedDepartureDate}
+                            className="flex-shrink-0 h-5 w-5 cursor-pointer relative top-2"
+                          />
+                        </div>
+                      </div>
+
+                      {estimatedDepartureDateOpen && (
+                        <DatePicker
+                          selected={estimatedDepartureDate}
+                          onChange={(date) =>
+                            handleEstimatedDepartureDateChange(date)
+                          }
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={5}
+                          dateFormat="Pp"
+                          inline
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      <button
+                        type="button"
+                        onClick={handleToggleEstimatedDepartureDate}
+                        className="inline-flex items-center rounded-md border
+                                            w-full h-10
+                                            border-gray-300 bg-white px-4 py-2 text-sm
+                                                text-gray-700 shadow-sm hover:bg-gray-50"
+                      >
+                        {estimatedDepartureDate?.toLocaleString("en-US", {
+                          hour12: false,
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </button>
+                      {estimatedDepartureDateOpen && (
+                        <DatePicker
+                          selected={estimatedDepartureDate}
+                          onChange={(date) =>
+                            handleEstimatedDepartureDateChange(date)
+                          }
+                          locale="pt-BR"
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={5}
+                          dateFormat="Pp"
+                          inline
+                        />
+                      )}
+                    </div>
                   )}
                 </dd>
               </div>
@@ -1129,7 +1220,7 @@ const EditJob = () => {
                   <label className="block text-sm  text-gray-500 mb-1">
                     {completeByDate && (
                       <span
-                        onClick={() => setCompleteByDate(null)}
+                        onClick={() => handleClearCompleteByDate()}
                         className="ml-2 underline text-sm text-red-500 cursor-pointer"
                       >
                         clear
@@ -1138,34 +1229,71 @@ const EditJob = () => {
                   </label>
                 </dt>
                 <dd className="text-md text-gray-700 mt-1">
-                  <button
-                    type="button"
-                    onClick={handleToggleCompleteByDate}
-                    className="inline-flex items-center rounded-md border
-                                           w-full h-10
-                                          border-gray-300 bg-white px-4 py-2 text-sm
-                                            text-gray-700 shadow-sm hover:bg-gray-50"
-                  >
-                    {completeByDate?.toLocaleString("en-US", {
-                      hour12: false,
-                      year: "numeric",
-                      month: "numeric",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </button>
-                  {completeByDateOpen && (
-                    <DatePicker
-                      selected={completeByDate}
-                      onChange={(date) => handleCompleteByDateChange(date)}
-                      locale="pt-BR"
-                      showTimeSelect
-                      timeFormat="HH:mm"
-                      timeIntervals={5}
-                      dateFormat="Pp"
-                      inline
-                    />
+                  {completeByFormattedDate ? (
+                    <>
+                      <div className="flex justify-between gap-4">
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            value={completeByFormattedDate}
+                            name="completeByFormattedDate"
+                            disabled
+                            className="block w-full rounded-md border-gray-300 shadow-sm bg-gray-50
+                                                        sm:text-sm font-normal"
+                          />
+                        </div>
+                        <div>
+                          <PencilIcon
+                            onClick={handleToggleCompleteByDate}
+                            className="flex-shrink-0 h-5 w-5 cursor-pointer relative top-2"
+                          />
+                        </div>
+                      </div>
+
+                      {completeByDateOpen && (
+                        <DatePicker
+                          selected={completeByDate}
+                          onChange={(date) => handleCompleteByDateChange(date)}
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={5}
+                          dateFormat="Pp"
+                          inline
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <div>
+                      <button
+                        type="button"
+                        onClick={handleToggleCompleteByDate}
+                        className="inline-flex items-center rounded-md border
+                                            w-full h-10
+                                            border-gray-300 bg-white px-4 py-2 text-sm
+                                                text-gray-700 shadow-sm hover:bg-gray-50"
+                      >
+                        {completeByDate?.toLocaleString("en-US", {
+                          hour12: false,
+                          year: "numeric",
+                          month: "numeric",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </button>
+                      {completeByDateOpen && (
+                        <DatePicker
+                          selected={completeByDate}
+                          onChange={(date) => handleCompleteByDateChange(date)}
+                          locale="pt-BR"
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={5}
+                          dateFormat="Pp"
+                          inline
+                        />
+                      )}
+                    </div>
                   )}
                 </dd>
               </div>
