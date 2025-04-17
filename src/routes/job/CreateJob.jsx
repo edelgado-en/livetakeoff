@@ -243,7 +243,19 @@ const CreateJob = () => {
         clearTimeout(timeoutID);
       };
     }
-  }, [customerFollowerEmailSearchTerm, customerSelected]);
+  }, [customerFollowerEmailSearchTerm]);
+
+  useEffect(() => {
+    if (customerSelected) {
+      let timeoutID = setTimeout(() => {
+        initialSearchCustomerFollowerEmails();
+      }, 500);
+
+      return () => {
+        clearTimeout(timeoutID);
+      };
+    }
+  }, [customerSelected]);
 
   useEffect(() => {
     //Basic throttling
@@ -274,6 +286,24 @@ const CreateJob = () => {
       });
 
       setCustomerFollowerEmails(data.results);
+    } catch (err) {
+      toast.error("Unable to search customer follower emails");
+    }
+  };
+
+  const initialSearchCustomerFollowerEmails = async () => {
+    try {
+      const { data } = await api.searchCustomerFollowerEmails({
+        customer_id: customerSelected?.id,
+        email: "",
+      });
+
+      setCustomerFollowerEmails(data.results);
+
+      const persistentEmails = data.results.filter(
+        (email) => email.is_persistent === true
+      );
+      setJobFollowerEmails(persistentEmails);
     } catch (err) {
       toast.error("Unable to search customer follower emails");
     }
@@ -3084,10 +3114,20 @@ const CreateJob = () => {
                               className="flex items-center justify-between gap-x-6 py-2 hover:bg-gray-50"
                             >
                               <div className="flex min-w-0 gap-x-4">
-                                <div className="min-w-0 flex-auto">
+                                <div className="min-w-0 flex gap-4">
                                   <p className="mt-1 truncate text-xs/5 text-gray-500">
                                     {email.email}
                                   </p>
+                                  {email.is_persistent && (
+                                    <p
+                                      class="inline-flex text-sm text-white rounded-md py-1 px-2
+                                    bg-green-500 
+                                    
+                                  "
+                                    >
+                                      Persistent
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                               <button

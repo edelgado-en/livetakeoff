@@ -2203,10 +2203,20 @@ const EditJob = () => {
                           className="flex items-center justify-between gap-x-6 py-2 hover:bg-gray-50"
                         >
                           <div className="flex min-w-0 gap-x-4">
-                            <div className="min-w-0 flex-auto">
+                            <div className="min-w-0 flex gap-4">
                               <p className="mt-1 truncate text-xs/5 text-gray-500">
                                 {email.email}
                               </p>
+                              {email.is_persistent && (
+                                <p
+                                  class="inline-flex text-sm text-white rounded-md py-1 px-2
+                                    bg-green-500 
+                                    
+                                  "
+                                >
+                                  Persistent
+                                </p>
+                              )}
                             </div>
                           </div>
                           <button
@@ -2239,7 +2249,7 @@ const EditJob = () => {
                           className="flex items-center justify-between gap-x-6 py-2 hover:bg-gray-50"
                         >
                           <div className="flex min-w-0 gap-x-4">
-                            <div className="min-w-0 flex-auto">
+                            <div className="min-w-0 flex gap-4">
                               <p className="mt-1 truncate text-xs/5 text-gray-500">
                                 {email.email}
                               </p>
