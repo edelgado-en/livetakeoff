@@ -1700,6 +1700,34 @@ const JobInfo = () => {
                 </div>
               </div>
             )}
+
+            {jobDetails.follower_emails?.length > 0 &&
+              (currentUser.isAdmin ||
+                currentUser.isSuperUser ||
+                currentUser.isAccountManager ||
+                currentUser.isInternalCoordinator) && (
+                <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
+                  <div className="p-4 bg-gray-100">
+                    <h3 className="text-base font-semibold leading-7 text-gray-900 uppercase">
+                      Follower Emails
+                    </h3>
+                  </div>
+                  <div className="border-t border-gray-200">
+                    <ul className="divide-y divide-gray-200">
+                      {jobDetails.follower_emails.map((email) => (
+                        <li
+                          key={email.id}
+                          className="px-4 py-3 flex justify-between gap-4"
+                        >
+                          <div className="text-md text-gray-700">
+                            {email.email}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
           </div>
 
           {currentUser.canSeePrice ? (
