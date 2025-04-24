@@ -76,6 +76,8 @@ import PrivacyPolicy from "./routes/privacyPolicy/PrivacyPolicy";
 import ChangeLog from "./routes/changeLog/ChangeLog";
 import TermsAndConditions from "./routes/termsAndConditions/TermsAndConditions";
 
+import Services from "./routes/public/Services";
+
 import CustomerHome from "./routes/home/customer/CustomerHome";
 import CustomerPremium from "./routes/home/customer/CustomerPremium";
 import CustomerEditJob from "./routes/job/CustomerEditJob";
@@ -190,6 +192,8 @@ const App = () => {
                   path="/terms-and-conditions"
                   element={<TermsAndConditions />}
                 />
+
+                <Route path="/services" element={<Services />} />
 
                 <Route path="/shared" element={<SharedLayout />}>
                   <Route path="jobs/:encoded_id" element={<SharedJob />} />

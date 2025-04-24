@@ -105,17 +105,28 @@ const Topbar = () => {
                   style={{ top: "8px" }}
                 >
                   <div className="flex space-x-4">
-                    {/* <Link
-                      to="inventory"
+                    <Link
+                      to="/login"
                       className={classNames(
-                        location.pathname.includes("inventory")
+                        location.pathname.includes("login")
+                          ? "bg-red-700"
+                          : " hover:bg-red-700 hover:text-white",
+                        "px-3 py-2 rounded-md text-md font-medium text-white"
+                      )}
+                    >
+                      Home
+                    </Link>
+                    <Link
+                      to="/services"
+                      className={classNames(
+                        location.pathname.includes("services")
                           ? "bg-red-700"
                           : " hover:bg-red-700 hover:text-white",
                         "px-3 py-2 rounded-md text-md font-medium text-white"
                       )}
                     >
                       Services
-                    </Link> */}
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -127,18 +138,30 @@ const Topbar = () => {
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3">
               <>
-                {/* <Link to="jobs">
+                <Link to="/login">
                   <Disclosure.Button
                     className={classNames(
-                      location.pathname.includes("jobs")
+                      location.pathname.includes("login")
                         ? "bg-red-700"
                         : "hover:bg-red-700 hover:text-white",
                       "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
                     )}
                   >
-                    Jobs
+                    Home
                   </Disclosure.Button>
-                </Link> */}
+                </Link>
+                <Link to="/services">
+                  <Disclosure.Button
+                    className={classNames(
+                      location.pathname.includes("services")
+                        ? "bg-red-700"
+                        : "hover:bg-red-700 hover:text-white",
+                      "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                    )}
+                  >
+                    Services
+                  </Disclosure.Button>
+                </Link>
               </>
             </div>
           </Disclosure.Panel>
