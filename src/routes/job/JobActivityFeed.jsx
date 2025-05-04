@@ -6,7 +6,11 @@ import ReactTimeAgo from "react-time-ago";
 import { CheckIcon, UserIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/solid";
 
+import { useAppSelector } from "../../app/hooks";
+import { selectUser } from "../../routes/userProfile/userSlice";
+
 export default function Example() {
+  const currentUser = useAppSelector(selectUser);
   const { jobId } = useParams();
   const [activities, setActivities] = useState([]);
 
@@ -110,15 +114,16 @@ export default function Example() {
                         </span>
                       )}
 
-                      {activity.activity_type !== "S" && (
-                        <span
-                          className={`bg-gray-400 h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white`}
-                        >
-                          <span className="text-white">
-                            <PencilIcon className="h-4 w-4" />
+                      {activity.activity_type !== "S" &&
+                        !currentUser?.isCustomer && (
+                          <span
+                            className={`bg-gray-400 h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white`}
+                          >
+                            <span className="text-white">
+                              <PencilIcon className="h-4 w-4" />
+                            </span>
                           </span>
-                        </span>
-                      )}
+                        )}
                     </div>
                     <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                       {activity.activity_type === "S" && (
@@ -178,42 +183,101 @@ export default function Example() {
                         </div>
                       )}
 
-                      {activity.activity_type !== "P" &&
-                        activity.activity_type !== "S" && (
-                          <div>
-                            <p className="text-sm text-left text-gray-500">
-                              <span className="font-medium text-black">
-                                {activity.activity_type === "E" && "Departure"}
-                                {activity.activity_type === "A" && "Arrival"}
-                                {activity.activity_type === "B" &&
-                                  "Complete Before"}
-                                {activity.activity_type === "O" && "Airport"}
-                                {activity.activity_type === "F" && "FBO"}
-                                {activity.activity_type === "T" &&
-                                  "Tail Number"}
-                                {activity.activity_type === "U" &&
-                                  "Photos Uploaded"}
-                                {activity.activity_type === "R" &&
-                                  "Job Returned"}
-                                {activity.activity_type === "V" &&
-                                  "Vendor Accepted"}
-                              </span>
+                      {!currentUser?.isCustomer && (
+                        <>
+                          {activity.activity_type === "C" && (
+                            <div>
+                              <p className="text-sm text-left text-gray-500">
+                                <span className="font-medium text-black">
+                                  Service Added:
+                                </span>{" "}
+                                {activity.service_name} by{" "}
+                                {activity.user_full_name}
+                              </p>
+                            </div>
+                          )}
 
-                              {activity.activity_type !== "U" &&
-                                activity.activity_type !== "V" && (
-                                  <span> changed </span>
-                                )}
+                          {activity.activity_type === "D" && (
+                            <div>
+                              <p className="text-sm text-left text-gray-500">
+                                <span className="font-medium text-black">
+                                  Service Removed:
+                                </span>{" "}
+                                {activity.service_name} by{" "}
+                                {activity.user_full_name}
+                              </p>
+                            </div>
+                          )}
 
-                              <span className="ml-1">
-                                by {activity.user_full_name}
-                              </span>
-                            </p>
-                          </div>
-                        )}
+                          {activity.activity_type === "X" && (
+                            <div>
+                              <p className="text-sm text-left text-gray-500">
+                                <span className="font-medium text-black">
+                                  Retainer Added:
+                                </span>{" "}
+                                {activity.service_name} by{" "}
+                                {activity.user_full_name}
+                              </p>
+                            </div>
+                          )}
 
-                      <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                        {activity.timestamp}
-                      </div>
+                          {activity.activity_type === "Y" && (
+                            <div>
+                              <p className="text-sm text-left text-gray-500">
+                                <span className="font-medium text-black">
+                                  Retainer Removed:
+                                </span>{" "}
+                                {activity.service_name} by{" "}
+                                {activity.user_full_name}
+                              </p>
+                            </div>
+                          )}
+                        </>
+                      )}
+
+                      {(activity.activity_type === "E" ||
+                        activity.activity_type === "A" ||
+                        activity.activity_type === "B" ||
+                        activity.activity_type === "O" ||
+                        activity.activity_type === "F" ||
+                        activity.activity_type === "T" ||
+                        activity.activity_type === "U" ||
+                        activity.activity_type === "R" ||
+                        activity.activity_type === "V") && (
+                        <div>
+                          <p className="text-sm text-left text-gray-500">
+                            <span className="font-medium text-black">
+                              {activity.activity_type === "E" && "Departure"}
+                              {activity.activity_type === "A" && "Arrival"}
+                              {activity.activity_type === "B" &&
+                                "Complete Before"}
+                              {activity.activity_type === "O" && "Airport"}
+                              {activity.activity_type === "F" && "FBO"}
+                              {activity.activity_type === "T" && "Tail Number"}
+                              {activity.activity_type === "U" &&
+                                "Photos Uploaded"}
+                              {activity.activity_type === "R" && "Job Returned"}
+                              {activity.activity_type === "V" &&
+                                "Vendor Accepted"}
+                            </span>
+
+                            {activity.activity_type !== "U" &&
+                              activity.activity_type !== "V" && (
+                                <span> changed </span>
+                              )}
+
+                            <span className="ml-1">
+                              by {activity.user_full_name}
+                            </span>
+                          </p>
+                        </div>
+                      )}
+
+                      {!currentUser?.isCustomer && (
+                        <div className="whitespace-nowrap text-right text-sm text-gray-500">
+                          {activity.timestamp}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
