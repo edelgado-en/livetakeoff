@@ -77,6 +77,7 @@ import ChangeLog from "./routes/changeLog/ChangeLog";
 import TermsAndConditions from "./routes/termsAndConditions/TermsAndConditions";
 
 import Services from "./routes/public/Services";
+import Locations from "./routes/public/Locations";
 
 import CustomerHome from "./routes/home/customer/CustomerHome";
 import CustomerPremium from "./routes/home/customer/CustomerPremium";
@@ -194,6 +195,8 @@ const App = () => {
                 />
 
                 <Route path="/services" element={<Services />} />
+
+                <Route path="/locations" element={<Locations />} />
 
                 <Route path="/shared" element={<SharedLayout />}>
                   <Route path="jobs/:encoded_id" element={<SharedJob />} />

@@ -127,6 +127,17 @@ const Topbar = () => {
                     >
                       Services
                     </Link>
+                    <Link
+                      to="/locations"
+                      className={classNames(
+                        location.pathname.includes("locations")
+                          ? "bg-red-700"
+                          : " hover:bg-red-700 hover:text-white",
+                        "px-3 py-2 rounded-md text-md font-medium text-white"
+                      )}
+                    >
+                      Locations
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -160,6 +171,18 @@ const Topbar = () => {
                     )}
                   >
                     Services
+                  </Disclosure.Button>
+                </Link>
+                <Link to="/locations">
+                  <Disclosure.Button
+                    className={classNames(
+                      location.pathname.includes("locations")
+                        ? "bg-red-700"
+                        : "hover:bg-red-700 hover:text-white",
+                      "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                    )}
+                  >
+                    Locations
                   </Disclosure.Button>
                 </Link>
               </>
