@@ -175,11 +175,21 @@ const CustomerDetails = () => {
               {customerDetails?.active ? "Yes" : "No"}
             </dd>
           </div>
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-1">
             <dt className="text-md font-medium text-gray-500">About</dt>
             <dd className="mt-1 max-w-prose space-y-5 text-md text-gray-900">
               {customerDetails?.about
                 ? customerDetails?.about
+                : "Not specified"}
+            </dd>
+          </div>
+          <div className="sm:col-span-1">
+            <dt className="text-md font-medium text-gray-500">
+              Exterior Service Checker
+            </dt>
+            <dd className="mt-1 max-w-prose space-y-5 text-md text-gray-900">
+              {customerDetails?.exterior_service_checker
+                ? customerDetails?.exterior_service_checker
                 : "Not specified"}
             </dd>
           </div>
