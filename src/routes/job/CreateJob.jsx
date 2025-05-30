@@ -154,6 +154,12 @@ const CreateJob = () => {
   const [fboSearchTerm, setFboSearchTerm] = useState("");
   const [customerPurchaseOrder, setCustomerPurchaseOrder] = useState("");
 
+  const [
+    showExteriorLevel2Recommendation,
+    setShowExteriorLevel2Recommendation,
+  ] = useState(false);
+  const [arrivedFlightCount, setArrivedFlightCount] = useState(0);
+
   const [airportFees, setAirportFees] = useState([]);
   const [fboFees, setFboFees] = useState([]);
   const [customerFollowerEmails, setCustomerFollowerEmails] = useState([]);
@@ -477,6 +483,23 @@ const CreateJob = () => {
     } catch (error) {
       setLoading(false);
       setErrorMessage(error.message);
+    }
+  };
+
+  const tailExteriorLevel2Checker = async () => {
+    const request = {
+      tail_number: tailNumber,
+      customer_id: customerSelected?.id,
+      ident: ident,
+    };
+
+    try {
+      const { data } = await api.tailExteriorLevel2Checker(request);
+
+      setShowExteriorLevel2Recommendation(data.show_recommendation);
+      setArrivedFlightCount(data.arrived_flights_count);
+    } catch (error) {
+      toast.error("Unable to check tail exterior level 2");
     }
   };
 
@@ -870,6 +893,8 @@ const CreateJob = () => {
         alert("Call sign is required when tracking is enabled");
         return;
       }
+
+      tailExteriorLevel2Checker();
     } else if (currentStep.id === 2) {
       if (
         selectedServices.length === 0 &&
@@ -2604,6 +2629,32 @@ const CreateJob = () => {
                   <>
                     <div className="border-t-2 border-gray-300 my-8"></div>
                     <div className="mt-8 font-bold text-xl mb-4">EXTERIOR</div>
+                    {showExteriorLevel2Recommendation && (
+                      <div className="rounded-md bg-red-50 p-4 mb-4">
+                        <div className="">
+                          <div className="flex-shrink-0">
+                            <ExclamationCircleIcon
+                              className="h-8 w-8 text-red-400"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div className="ml-3">
+                            <h3 className="text-lg font-medium text-red-800">
+                              Exterior Service Recommendation
+                            </h3>
+                            <div className="mt-2 mb-4 text-md text-red-700">
+                              <ul className="list-disc space-y-1 pl-5">
+                                This aircraft has completed{" "}
+                                <span className="font-semibold text-lg">
+                                  {arrivedFlightCount}
+                                </span>{" "}
+                                flight(s) since its last Exterior Detail.
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                       {exteriorServices.map((service, index) => (
                         <div
@@ -2620,6 +2671,32 @@ const CreateJob = () => {
                           <div className="text-md font-medium">
                             {service.name}
                           </div>
+
+                          {showExteriorLevel2Recommendation &&
+                            service.name.includes("Basic Exterior") && (
+                              <div
+                                className={`text-xl mt-1 ${
+                                  service.selected
+                                    ? "text-white"
+                                    : "text-red-500"
+                                }  font-semibold`}
+                              >
+                                NOT RECOMMENDED
+                              </div>
+                            )}
+
+                          {showExteriorLevel2Recommendation &&
+                            service.is_exterior_detail_level_2 && (
+                              <div
+                                className={`text-xl mt-1 ${
+                                  service.selected
+                                    ? "text-white"
+                                    : "text-green-500"
+                                } font-semibold`}
+                              >
+                                RECOMMENDED
+                              </div>
+                            )}
 
                           {showActions && (
                             <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">

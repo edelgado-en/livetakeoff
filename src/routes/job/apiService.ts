@@ -279,3 +279,7 @@ export const searchUsers = (data: any) => {
 export const searchVendors = (data: any) => {
     return httpService.post('/api/vendors', data);
 }
+
+export const tailExteriorLevel2Checker = (request: any) => {
+    return httpService.post(`/api/tail-exterior-level-2-checker`, request);
+}
