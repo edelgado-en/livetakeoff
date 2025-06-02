@@ -495,9 +495,16 @@ const CreateJob = () => {
   };
 
   const tailExteriorLevel2Checker = async () => {
+    let selectedCustomer = customerSelected;
+
+    if (currentUser.customerId) {
+      selectedCustomer = {
+        id: currentUser.customerId,
+      };
+    }
     const request = {
       tail_number: tailNumber,
-      customer_id: customerSelected?.id,
+      customer_id: selectedCustomer.id,
       ident: ident,
     };
 
