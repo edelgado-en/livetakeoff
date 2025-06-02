@@ -378,6 +378,23 @@ const CreateJob = () => {
         currentUser.isAdmin ||
         currentUser.isSuperUser ||
         currentUser.isAccountManager ||
+        currentUser.isInternalCoordinator ||
+        currentUser.isCustomer
+      ) {
+        const r = await api.getTailOpenJobLookup(tailNumber);
+        if (r.data?.jobId > 0) {
+          setShowTailOpenJobAlert(true);
+          setTailOpenJobAlert(r.data);
+        } else {
+          setShowTailOpenJobAlert(false);
+          setTailOpenJobAlert(null);
+        }
+      }
+
+      if (
+        currentUser.isAdmin ||
+        currentUser.isSuperUser ||
+        currentUser.isAccountManager ||
         currentUser.isInternalCoordinator
       ) {
         const response = await api.getTailAlertLookup(tailNumber);
@@ -387,15 +404,6 @@ const CreateJob = () => {
         } else {
           setShowTailAlert(false);
           setTailAlert(null);
-        }
-
-        const r = await api.getTailOpenJobLookup(tailNumber);
-        if (r.data?.jobId > 0) {
-          setShowTailOpenJobAlert(true);
-          setTailOpenJobAlert(r.data);
-        } else {
-          setShowTailOpenJobAlert(false);
-          setTailOpenJobAlert(null);
         }
       }
 
