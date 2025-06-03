@@ -64,6 +64,25 @@ const MagnifyingGlassIcon = () => {
   );
 };
 
+const ReloadIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+      />
+    </svg>
+  );
+};
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -679,7 +698,47 @@ const CustomerHome = () => {
           </div>
 
           <div className="">
-            <div className="w-full">
+            <div className="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-4">
+              <div className="">
+                <div className="relative border-b border-gray-200">
+                  <div
+                    onClick={() => searchJobs()}
+                    className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+                  >
+                    <MagnifyingGlassIcon
+                      className="h-4 w-4 text-gray-400 cursor-pointer"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <input
+                    type="search"
+                    name="search"
+                    id="search"
+                    value={searchText}
+                    onChange={(event) => setSearchText(event.target.value)}
+                    onKeyDown={handleKeyDown}
+                    className="block w-full  pl-10 focus:border-sky-500 border-none py-4 
+                                  focus:ring-sky-500 text-md"
+                    placeholder="search by tail or P.O"
+                  />
+                </div>
+              </div>
+              <div className="text-right relative top-2">
+                <button
+                  type="button"
+                  onClick={() => searchJobs()}
+                  disabled={loading}
+                  className="items-center justify-center 
+                                    rounded-md bg-white px-4 py-2.5
+                                    text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                                    sm:w-auto inline-flex"
+                >
+                  <ReloadIcon />
+                  <span className="ml-2">Update Queue</span>
+                </button>
+              </div>
+            </div>
+            {/* <div className="w-full">
               <div className="relative border-b border-gray-200">
                 <div
                   onClick={() => searchJobs()}
@@ -702,7 +761,7 @@ const CustomerHome = () => {
                   placeholder="search by tail or P.O"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
 
           {activeFilters.length > 0 && (
