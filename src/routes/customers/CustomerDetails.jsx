@@ -137,22 +137,6 @@ const CustomerDetails = () => {
             </dd>
           </div>
           <div className="sm:col-span-1">
-            <dt className="text-md font-medium text-gray-500">Billing Info</dt>
-            <dd className="mt-1 text-md text-gray-900">
-              {customerDetails?.billingInfo
-                ? customerDetails?.billingInfo
-                : "Not specified"}
-            </dd>
-          </div>
-          <div className="sm:col-span-1">
-            <dt className="text-md font-medium text-gray-500">Instructions</dt>
-            <dd className="mt-1 text-md text-gray-900">
-              {customerDetails?.settings?.special_instructions
-                ? customerDetails?.settings?.special_instructions
-                : "Not specified"}
-            </dd>
-          </div>
-          <div className="sm:col-span-1">
             <dt className="text-md font-medium text-gray-500">Price List</dt>
             <dd className="mt-1 text-md text-gray-900">
               {customerDetails?.settings?.price_list.name}
@@ -191,6 +175,47 @@ const CustomerDetails = () => {
               {customerDetails?.exterior_service_checker
                 ? customerDetails?.exterior_service_checker
                 : "Not specified"}
+            </dd>
+          </div>
+          <div className="sm:col-span-2">
+            <dt className="text-md font-medium text-gray-500">Instructions</dt>
+            <dd className="mt-1 text-md text-gray-900">
+              {customerDetails?.settings?.special_instructions && (
+                <div className="h-[120px] overflow-y-auto p-2 border-none pb-8">
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        customerDetails?.settings?.special_instructions?.replace(
+                          /\r\n|\n/g,
+                          "<br />"
+                        ),
+                    }}
+                  />
+                </div>
+              )}
+
+              {!customerDetails?.settings?.special_instructions && (
+                <div>Not specified</div>
+              )}
+            </dd>
+          </div>
+          <div className="sm:col-span-2">
+            <dt className="text-md font-medium text-gray-500">Billing Info</dt>
+            <dd className="mt-1 text-md text-gray-900">
+              {customerDetails?.billingInfo && (
+                <div className="h-[260px] overflow-y-auto p-2 border-none pb-8">
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: customerDetails?.billingInfo?.replace(
+                        /\r\n|\n/g,
+                        "<br />"
+                      ),
+                    }}
+                  />
+                </div>
+              )}
+
+              {!customerDetails?.billingInfo && <div>Not specified</div>}
             </dd>
           </div>
         </dl>

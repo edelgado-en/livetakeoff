@@ -201,7 +201,7 @@ const EditCustomer = () => {
                         onChange={(e) => setAbout(e.target.value)}
                         rows={3}
                         className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
-                                      focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                      focus:border-sky-500 focus:ring-sky-500 sm:text-sm h-52"
                       />
                       <p className="mt-2 text-sm text-gray-500">
                         Write a few sentences about this customer.
@@ -287,15 +287,16 @@ const EditCustomer = () => {
                       Billing Info
                     </label>
                     <div className="mt-1 sm:col-span-2 sm:mt-0">
-                      <input
-                        type="text"
+                      <textarea
                         value={billingInfo}
                         onChange={(e) => setBillingInfo(e.target.value)}
-                        name="billingInfo"
-                        id="billingInfo"
+                        rows={3}
                         className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
-                                  focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                                      focus:border-sky-500 focus:ring-sky-500 sm:text-sm h-52"
                       />
+                      <p className="mt-2 text-sm text-gray-500">
+                        Specify information about invoices.
+                      </p>
                     </div>
                   </div>
 
@@ -307,15 +308,16 @@ const EditCustomer = () => {
                       Special Instructions
                     </label>
                     <div className="mt-1 sm:col-span-2 sm:mt-0">
-                      <input
-                        type="text"
-                        name="instructions"
+                      <textarea
                         value={specialInstructions}
                         onChange={(e) => setSpecialInstructions(e.target.value)}
-                        id="instructions"
+                        rows={3}
                         className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm
-                                  focus:border-sky-500 focus:ring-sky-500 sm:max-w-xs sm:text-sm"
+                                      focus:border-sky-500 focus:ring-sky-500 sm:text-sm h-52"
                       />
+                      <p className="mt-2 text-sm text-gray-500">
+                        Specify instructions PMs need to follow.
+                      </p>
                     </div>
                   </div>
 
