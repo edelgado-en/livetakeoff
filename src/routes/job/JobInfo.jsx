@@ -1024,6 +1024,25 @@ const JobInfo = () => {
             </div>
           ))}
 
+          {jobDetails.show_billing_info && (
+            <div className="bg-indigo-700 py-8 mt-4 rounded-md">
+              <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <h2 className="max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:col-span-7">
+                  Billing Info
+                </h2>
+                <p
+                  className="mt-4 text-md text-white"
+                  dangerouslySetInnerHTML={{
+                    __html: jobDetails?.customer?.billingInfo?.replace(
+                      /\r\n|\n/g,
+                      "<br />"
+                    ),
+                  }}
+                ></p>
+              </div>
+            </div>
+          )}
+
           <div className="grid 3xl:grid-cols-4 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 mt-4 gap-6">
             {/* LOCATION AND TIMES */}
             <div className="relative overflow-hidden rounded-lg border border-gray-300 ">
