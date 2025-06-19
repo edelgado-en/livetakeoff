@@ -83,6 +83,31 @@ const CustomerDetails = () => {
     } catch (error) {}
   };
 
+  const updateEnableFlightBasedScheduledCleaning = async () => {
+    const request = {
+      enable_flight_based_scheduled_cleaning:
+        !customerDetails.settings.enable_flight_based_scheduled_cleaning,
+    };
+
+    try {
+      const { data } = await api.updateCustomerSetting(
+        customerDetails.settings.id,
+        request
+      );
+
+      const updatedCustomerDetails = {
+        ...customerDetails,
+        settings: {
+          ...customerDetails.settings,
+          enable_flight_based_scheduled_cleaning:
+            data.enable_flight_based_scheduled_cleaning,
+        },
+      };
+
+      setCustomerDetails(updatedCustomerDetails);
+    } catch (error) {}
+  };
+
   const updateShowJobPrice = async () => {
     const request = {
       show_job_price: !customerDetails.settings.show_job_price,
@@ -304,6 +329,50 @@ const CustomerDetails = () => {
                     aria-hidden="true"
                     className={classNames(
                       customerDetails?.settings?.allow_cancel_job
+                        ? "translate-x-5"
+                        : "translate-x-0",
+                      "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                    )}
+                  />
+                </Switch>
+              </Switch.Group>
+              <Switch.Group
+                as="li"
+                className="flex items-center justify-between py-4"
+              >
+                <div className="flex flex-col">
+                  <Switch.Label
+                    as="p"
+                    className="text-md font-medium text-gray-900"
+                    passive
+                  >
+                    Enable Flight Based Scheduled Cleaning
+                  </Switch.Label>
+                  <Switch.Description className="text-md text-gray-500">
+                    Controls whether admins will receive daily email
+                    notifications for scheduled cleanign based on number of
+                    flights completed since last service."
+                  </Switch.Description>
+                </div>
+                <Switch
+                  checked={
+                    customerDetails?.settings
+                      ?.enable_flight_based_scheduled_cleaning
+                  }
+                  onChange={() => updateEnableFlightBasedScheduledCleaning()}
+                  className={classNames(
+                    customerDetails?.settings
+                      ?.enable_flight_based_scheduled_cleaning
+                      ? "bg-red-500"
+                      : "bg-gray-200",
+                    "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  )}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={classNames(
+                      customerDetails?.settings
+                        ?.enable_flight_based_scheduled_cleaning
                         ? "translate-x-5"
                         : "translate-x-0",
                       "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
