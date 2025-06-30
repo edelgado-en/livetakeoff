@@ -92,6 +92,8 @@ import TailNumberReport from "./routes/home/dashboard/TailNumberReport";
 import ServicesByAirport from "./routes/home/dashboard/ServicesByAirport";
 import RetainerCustomers from "./routes/home/dashboard/RetainerCustomers";
 
+import CustomerTails from "./routes/home/dashboard/CustomerTails";
+
 import CreateEstimate from "./routes/estimates/CreateEstimate";
 import Estimates from "./routes/estimates/Estimates";
 import EstimateDetail from "./routes/estimates/EstimateDetail";
@@ -252,6 +254,9 @@ const App = () => {
                       path="team-productivity"
                       element={<TeamProductivity />}
                     />
+
+                    <Route path="customer-tails" element={<CustomerTails />} />
+
                     <Route
                       path="user-productivity/:id"
                       element={<UserProductivity />}

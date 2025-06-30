@@ -65,6 +65,10 @@ export const getFbos = () => {
     return httpService.get(`/api/fbos`);
 }
 
+export const getCustomerTails = (data: any) => {
+    return httpService.post('/api/customers/tails', data);
+} 
+
 export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
