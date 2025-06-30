@@ -80,7 +80,10 @@ const CustomerTails = () => {
   const [statusSelected, setStatusSelected] = useState(statuses[0]);
 
   const [customers, setCustomers] = useState([]);
-  const [customerSelected, setCustomerSelected] = useState(null);
+  const [customerSelected, setCustomerSelected] = useState({
+    id: "All",
+    name: "All Customers",
+  });
   const [customerSearchTerm, setCustomerSearchTerm] = useState("");
 
   useEffect(() => {
@@ -131,8 +134,9 @@ const CustomerTails = () => {
   const getCustomerTails = async () => {
     setLoading(true);
     const request = {
-      tail: searchText,
-      customerId: customerSelected ? customerSelected.id : null,
+      searchText,
+      customerId: customerSelected.id,
+      status: statusSelected.id,
     };
 
     try {
@@ -428,203 +432,213 @@ const CustomerTails = () => {
 
         {loading && <Loader />}
 
-        <div className="mt-8 flow-root">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <table className="min-w-full divide-y divide-gray-300">
-                <thead>
-                  <tr>
-                    <th
-                      scope="col"
-                      className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
-                    >
-                      Tail
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Customer
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Int Lvl 1
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Int Lvl 2
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Ext Lvl 1
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Ext Lvl 2
-                    </th>
-                    <th
-                      scope="col"
-                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                    >
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {tails.map((tail) => (
-                    <tr key={tail.id}>
-                      <td className="py-5 pr-3 pl-4 text-sm whitespace-nowrap sm:pl-0">
-                        <div className="flex items-center">
-                          <div className="">
-                            <div className="font-medium text-gray-900">
-                              {tail.tail_number}
-                            </div>
-                            <div className=" text-gray-500">
-                              {tail.aircraft_type_name}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                        <div className="text-gray-900">
-                          {tail.customer_name}
-                        </div>
-                      </td>
-                      <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                        <div>
-                          Last serv:{" "}
-                          {tail.last_interior_level_1_service_date
-                            ? tail.last_interior_level_1_service_date +
-                              " " +
-                              tail.last_interior_level_1_location
-                            : "None"}
-                        </div>
-                        <div>
-                          Flights since:{" "}
-                          {tail.flights_since_last_interior_level_1_service}
-                          {tail.is_interior_level_1_service_due && (
-                            <span
-                              className="ml-6 inline-flex items-center
-                                             rounded-md bg-red-100 py-1 px-2 text-xs
-                                              font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
-                            >
-                              DUE
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                        <div>
-                          Last serv:{" "}
-                          {tail.last_interior_level_2_service_date
-                            ? tail.last_interior_level_2_service_date +
-                              " " +
-                              tail.last_interior_level_2_location
-                            : "None"}
-                        </div>
-                        <div>
-                          Flights since:{" "}
-                          {tail.flights_since_last_interior_level_2_service}
-                          {tail.is_interior_level_2_service_due && (
-                            <span
-                              className="ml-6 inline-flex items-center
-                                             rounded-md bg-red-100 py-1 px-2 text-xs
-                                              font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
-                            >
-                              DUE
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                        <div>
-                          Last serv:{" "}
-                          {tail.last_exterior_level_1_service_date
-                            ? tail.last_exterior_level_1_service_date +
-                              " " +
-                              tail.last_exterior_level_1_location
-                            : "None"}
-                        </div>
-                        <div>
-                          Flights since:{" "}
-                          {tail.flights_since_last_exterior_level_1_service}
-                          {tail.is_interior_level_1_service_due && (
-                            <span
-                              className="ml-6 inline-flex items-center
-                                             rounded-md bg-red-100 py-1 px-2 text-xs
-                                              font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
-                            >
-                              DUE
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                        <div>
-                          Last serv:{" "}
-                          {tail.last_exterior_level_2_service_date
-                            ? tail.last_exterior_level_2_service_date +
-                              " " +
-                              tail.last_exterior_level_2_location
-                            : "None"}
-                        </div>
-                        <div>
-                          Flights since:{" "}
-                          {tail.flights_since_last_exterior_level_2_service}
-                          {tail.is_exterior_level_2_service_due && (
-                            <span
-                              className="ml-6 inline-flex items-center
-                                             rounded-md bg-red-100 px-2 text-xs
-                                              font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
-                            >
-                              DUE
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                        <p
-                          className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                                ${
-                                                  tail.status === "S" &&
-                                                  "bg-red-400 "
-                                                }
-                                                ${
-                                                  tail.status === "I" &&
-                                                  "bg-yellow-500 "
-                                                }
-                                                ${
-                                                  tail.status === "N" &&
-                                                  "bg-indigo-500 "
-                                                }
-
-                                                ${
-                                                  tail.status === "O" &&
-                                                  "bg-green-500 "
-                                                }
-                                              `}
-                        >
-                          {tail.status === "O" && "OK"}
-                          {tail.status === "I" && "In Maintenance"}
-                          {tail.status === "N" && "No Flight History"}
-                          {tail.status === "S" && "Service Due"}
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {!loading && tails.length === 0 && (
+          <div className="my-40 text-center">
+            <div className="text-gray-500">
+              No tails found for the selected filters.
             </div>
           </div>
-        </div>
+        )}
+
+        {!loading && tails.length > 0 && (
+          <div className="mt-8 flow-root">
+            <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      >
+                        Tail
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Customer
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Int Lvl 1
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Int Lvl 2
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Ext Lvl 1
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Ext Lvl 2
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {tails.map((tail) => (
+                      <tr key={tail.id}>
+                        <td className="py-5 pr-3 pl-4 text-sm whitespace-nowrap sm:pl-0">
+                          <div className="flex items-center">
+                            <div className="">
+                              <div className="font-medium text-gray-900">
+                                {tail.tail_number}
+                              </div>
+                              <div className=" text-gray-500">
+                                {tail.aircraft_type_name}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
+                          <div className="text-gray-900">
+                            {tail.customer_name}
+                          </div>
+                        </td>
+                        <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
+                          <div>
+                            Last serv:{" "}
+                            {tail.last_interior_level_1_service_date
+                              ? tail.last_interior_level_1_service_date +
+                                " " +
+                                tail.last_interior_level_1_location
+                              : "None"}
+                          </div>
+                          <div>
+                            Flights since:{" "}
+                            {tail.flights_since_last_interior_level_1_service}
+                            {tail.is_interior_level_1_service_due && (
+                              <span
+                                className="ml-6 inline-flex items-center
+                                                rounded-md bg-red-100 py-1 px-2 text-xs
+                                                font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                              >
+                                DUE
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
+                          <div>
+                            Last serv:{" "}
+                            {tail.last_interior_level_2_service_date
+                              ? tail.last_interior_level_2_service_date +
+                                " " +
+                                tail.last_interior_level_2_location
+                              : "None"}
+                          </div>
+                          <div>
+                            Flights since:{" "}
+                            {tail.flights_since_last_interior_level_2_service}
+                            {tail.is_interior_level_2_service_due && (
+                              <span
+                                className="ml-6 inline-flex items-center
+                                                rounded-md bg-red-100 py-1 px-2 text-xs
+                                                font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                              >
+                                DUE
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
+                          <div>
+                            Last serv:{" "}
+                            {tail.last_exterior_level_1_service_date
+                              ? tail.last_exterior_level_1_service_date +
+                                " " +
+                                tail.last_exterior_level_1_location
+                              : "None"}
+                          </div>
+                          <div>
+                            Flights since:{" "}
+                            {tail.flights_since_last_exterior_level_1_service}
+                            {tail.is_interior_level_1_service_due && (
+                              <span
+                                className="ml-6 inline-flex items-center
+                                                rounded-md bg-red-100 py-1 px-2 text-xs
+                                                font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                              >
+                                DUE
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
+                          <div>
+                            Last serv:{" "}
+                            {tail.last_exterior_level_2_service_date
+                              ? tail.last_exterior_level_2_service_date +
+                                " " +
+                                tail.last_exterior_level_2_location
+                              : "None"}
+                          </div>
+                          <div>
+                            Flights since:{" "}
+                            {tail.flights_since_last_exterior_level_2_service}
+                            {tail.is_exterior_level_2_service_due && (
+                              <span
+                                className="ml-6 inline-flex items-center
+                                                rounded-md bg-red-100 px-2 text-xs
+                                                font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                              >
+                                DUE
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
+                          <p
+                            className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                                    ${
+                                                      tail.status === "S" &&
+                                                      "bg-red-400 "
+                                                    }
+                                                    ${
+                                                      tail.status === "I" &&
+                                                      "bg-yellow-500 "
+                                                    }
+                                                    ${
+                                                      tail.status === "N" &&
+                                                      "bg-indigo-500 "
+                                                    }
+
+                                                    ${
+                                                      tail.status === "O" &&
+                                                      "bg-green-500 "
+                                                    }
+                                                `}
+                          >
+                            {tail.status === "O" && "OK"}
+                            {tail.status === "I" && "In Maintenance"}
+                            {tail.status === "N" && "No Flight History"}
+                            {tail.status === "S" && "Service Due"}
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AnimatedPage>
   );
