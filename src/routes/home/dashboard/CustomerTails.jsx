@@ -449,43 +449,43 @@ const CustomerTails = () => {
                     <tr>
                       <th
                         scope="col"
-                        className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                        className="sticky top-0 z-10 bg-white py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                       >
                         Tail
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="sticky top-0 z-10 bg-white px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Customer
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="sticky top-0 z-10 bg-white px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Int Lvl 1
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="sticky top-0 z-10 bg-white px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Int Lvl 2
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="sticky top-0 z-10 bg-white px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Ext Lvl 1
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="sticky top-0 z-10 bg-white px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Ext Lvl 2
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                        className="sticky top-0 z-10 bg-white px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
                         Status
                       </th>
