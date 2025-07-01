@@ -553,7 +553,19 @@ const CustomerTails = () => {
                       {tails.map((tail) => (
                         <tr
                           key={tail.id}
-                          className={`${!tail.is_active ? "bg-gray-100" : ""}`}
+                          className={`${
+                            !tail.is_active
+                              ? "bg-gray-100"
+                              : tail.status === "S"
+                              ? "bg-red-100"
+                              : tail.status === "I"
+                              ? "bg-yellow-100"
+                              : tail.status === "N"
+                              ? "bg-indigo-100"
+                              : tail.status === "O"
+                              ? "bg-green-100"
+                              : ""
+                          }`}
                         >
                           <td className="py-5 pr-3 pl-2 text-sm whitespace-nowrap">
                             <div className="flex items-center">
