@@ -69,6 +69,10 @@ export const getCustomerTails = (data: any) => {
     return httpService.post('/api/customers/tails', data);
 } 
 
+export const getCustomerTailStats = (data: any) => {
+    return httpService.post('/api/customers/tails/stats', data);
+}
+
 export const searchFbos = (data: any) => {
     return httpService.post(`/api/fbo-search`, data);
 }
