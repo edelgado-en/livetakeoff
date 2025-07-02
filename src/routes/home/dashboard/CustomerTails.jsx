@@ -18,6 +18,8 @@ import * as api from "./apiService";
 import AnimatedPage from "../../../components/animatedPage/AnimatedPage";
 import Loader from "../../../components/loader/Loader";
 
+import Pagination from "react-js-pagination";
+
 const MagnifyingGlassIcon = () => {
   return (
     <svg
@@ -114,7 +116,13 @@ const CustomerTails = () => {
 
   useEffect(() => {
     getCustomerTails();
-  }, [dueServiceSelected, statusSelected, customerSelected, searchText]);
+  }, [
+    dueServiceSelected,
+    statusSelected,
+    customerSelected,
+    searchText,
+    currentPage,
+  ]);
 
   useEffect(() => {
     getCustomerTailStats();
@@ -201,6 +209,10 @@ const CustomerTails = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -869,6 +881,134 @@ const CustomerTails = () => {
                               </p>
                             </div>
                           </div>
+
+                          {tail.is_interior_level_1_service_due && (
+                            <div className="mt-2 text-sm flex justify-between">
+                              <div>
+                                <div>Last Int lvl 1 Service:</div>
+                                <div className="mt-1">Flights Since:</div>
+                              </div>
+                              <div className="text-align-right">
+                                <div>
+                                  {tail.last_interior_level_1_service_date
+                                    ? tail.last_interior_level_1_service_date +
+                                      " " +
+                                      tail.last_interior_level_1_location
+                                    : "None"}
+                                </div>
+                                <div className="mt-1">
+                                  {
+                                    tail.flights_since_last_interior_level_1_service
+                                  }
+                                  {tail.is_interior_level_1_service_due && (
+                                    <span
+                                      className="ml-2 inline-flex items-center
+                                                    rounded-md bg-red-100 px-2 text-xs
+                                                    font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                                    >
+                                      DUE
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {tail.is_interior_level_2_service_due && (
+                            <div className="mt-2 text-sm flex justify-between">
+                              <div>
+                                <div>Last Int lvl 2 Service:</div>
+                                <div className="mt-1">Flights Since:</div>
+                              </div>
+                              <div className="text-align-right">
+                                <div>
+                                  {tail.last_interior_level_2_service_date
+                                    ? tail.last_interior_level_2_service_date +
+                                      " " +
+                                      tail.last_interior_level_2_location
+                                    : "None"}
+                                </div>
+                                <div className="mt-1">
+                                  {
+                                    tail.flights_since_last_interior_level_2_service
+                                  }
+                                  {tail.is_interior_level_2_service_due && (
+                                    <span
+                                      className="ml-2 inline-flex items-center
+                                                    rounded-md bg-red-100 px-2 text-xs
+                                                    font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                                    >
+                                      DUE
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {tail.is_exterior_level_1_service_due && (
+                            <div className="mt-2 text-sm flex justify-between">
+                              <div>
+                                <div>Last Ext lvl 1 Service:</div>
+                                <div className="mt-1">Flights Since:</div>
+                              </div>
+                              <div className="text-align-right">
+                                <div>
+                                  {tail.last_exterior_level_1_service_date
+                                    ? tail.last_exterior_level_1_service_date +
+                                      " " +
+                                      tail.last_exterior_level_1_location
+                                    : "None"}
+                                </div>
+                                <div className="mt-1">
+                                  {
+                                    tail.flights_since_last_exterior_level_1_service
+                                  }
+                                  {tail.is_exterior_level_1_service_due && (
+                                    <span
+                                      className="ml-2 inline-flex items-center
+                                                    rounded-md bg-red-100 px-2 text-xs
+                                                    font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                                    >
+                                      DUE
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {tail.is_exterior_level_2_service_due && (
+                            <div className="mt-2 text-sm flex justify-between">
+                              <div>
+                                <div>Last Ext lvl 2 Service:</div>
+                                <div className="mt-1">Flights Since:</div>
+                              </div>
+                              <div className="text-align-right">
+                                <div>
+                                  {tail.last_exterior_level_2_service_date
+                                    ? tail.last_exterior_level_2_service_date +
+                                      " " +
+                                      tail.last_exterior_level_2_location
+                                    : "None"}
+                                </div>
+                                <div className="mt-1">
+                                  {
+                                    tail.flights_since_last_exterior_level_2_service
+                                  }
+                                  {tail.is_exterior_level_2_service_due && (
+                                    <span
+                                      className="ml-2 inline-flex items-center
+                                                    rounded-md bg-red-100 px-2 text-xs
+                                                    font-medium text-red-700 ring-1 ring-red-600/20 ring-inset"
+                                    >
+                                      DUE
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -876,6 +1016,24 @@ const CustomerTails = () => {
                 ))}
               </ul>
             </div>
+
+            {!loading && totalTails > 200 && (
+              <div className="m-auto px-10 pr-20 flex pt-5 pb-10 justify-end text-right">
+                <div>
+                  <Pagination
+                    innerClass="pagination pagination-custom"
+                    activePage={currentPage}
+                    hideDisabled
+                    itemClass="page-item page-item-custom"
+                    linkClass="page-link page-link-custom"
+                    itemsCountPerPage={200}
+                    totalItemsCount={totalTails}
+                    pageRangeDisplayed={3}
+                    onChange={handlePageChange}
+                  />
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
