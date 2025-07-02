@@ -896,7 +896,7 @@ const CustomerTails = () => {
                                       tail.last_interior_level_1_location
                                     : "None"}
                                 </div>
-                                <div className="mt-1">
+                                <div className="mt-1 flex justify-end">
                                   {
                                     tail.flights_since_last_interior_level_1_service
                                   }
@@ -928,7 +928,7 @@ const CustomerTails = () => {
                                       tail.last_interior_level_2_location
                                     : "None"}
                                 </div>
-                                <div className="mt-1">
+                                <div className="mt-1 flex justify-end">
                                   {
                                     tail.flights_since_last_interior_level_2_service
                                   }
@@ -960,7 +960,7 @@ const CustomerTails = () => {
                                       tail.last_exterior_level_1_location
                                     : "None"}
                                 </div>
-                                <div className="mt-1">
+                                <div className="mt-1 flex justify-end">
                                   {
                                     tail.flights_since_last_exterior_level_1_service
                                   }
@@ -992,7 +992,7 @@ const CustomerTails = () => {
                                       tail.last_exterior_level_2_location
                                     : "None"}
                                 </div>
-                                <div className="mt-1">
+                                <div className="mt-1 flex justify-end">
                                   {
                                     tail.flights_since_last_exterior_level_2_service
                                   }
