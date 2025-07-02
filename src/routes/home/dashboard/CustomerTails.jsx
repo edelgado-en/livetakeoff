@@ -64,6 +64,14 @@ const statuses = [
   { id: "N", name: "No Flight History" },
 ];
 
+const due_service_options = [
+  { id: "All", name: "All" },
+  { id: "intLvl1Due", name: "Interior Level 1 Due" },
+  { id: "intLvl2Due", name: "Interior Level 2 Due" },
+  { id: "extLvl1Due", name: "Exterior Level 1 Due" },
+  { id: "extLvl2Due", name: "Exterior Level 2 Due" },
+];
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -81,6 +89,10 @@ const CustomerTails = () => {
   const [searchText, setSearchText] = useState("");
 
   const [statusSelected, setStatusSelected] = useState(statuses[0]);
+
+  const [dueServiceSelected, setDueServiceSelected] = useState(
+    due_service_options[0]
+  );
 
   const [customers, setCustomers] = useState([]);
   const [customerSelected, setCustomerSelected] = useState({
@@ -102,11 +114,11 @@ const CustomerTails = () => {
 
   useEffect(() => {
     getCustomerTails();
-  }, [statusSelected, customerSelected, searchText]);
+  }, [dueServiceSelected, statusSelected, customerSelected, searchText]);
 
   useEffect(() => {
     getCustomerTailStats();
-  }, [statusSelected, customerSelected, searchText]);
+  }, [dueServiceSelected, statusSelected, customerSelected, searchText]);
 
   const handleClearCustomerSearchFilter = () => {
     setCustomerSearchTerm("");
@@ -144,6 +156,7 @@ const CustomerTails = () => {
       searchText,
       customerId: customerSelected.id,
       status: statusSelected.id,
+      service_due: dueServiceSelected.id,
     };
 
     try {
@@ -197,7 +210,136 @@ const CustomerTails = () => {
           Flight Based Cleaning Dashboard
         </h2>
 
-        <div className="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-4">
+        <div className="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-4">
+          <div>
+            <label htmlFor="search" className="sr-only">
+              Search
+            </label>
+            <div className="relative rounded-md shadow-sm">
+              <div
+                onClick={() => getCustomerTails()}
+                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
+              >
+                <MagnifyingGlassIcon
+                  className="h-5 w-5 text-gray-400 cursor-pointer"
+                  aria-hidden="true"
+                />
+              </div>
+              <input
+                type="search"
+                name="search"
+                id="search"
+                value={searchText}
+                onChange={(event) => setSearchText(event.target.value)}
+                onKeyDown={handleKeyDown}
+                className={`block w-full rounded-md pl-10 text-md ${
+                  searchText.length > 0
+                    ? "border-sky-500 focus:border-sky-500 focus:ring-sky-500 border-2"
+                    : "border-gray-200  focus:border-sky-500 focus:ring-sky-500"
+                } 
+                                     `}
+                placeholder="Search by tail..."
+              />
+            </div>
+          </div>
+          <div>
+            <Listbox
+              value={dueServiceSelected}
+              onChange={setDueServiceSelected}
+            >
+              {({ open }) => (
+                <>
+                  <div className="relative">
+                    <Listbox.Button
+                      className={`relative w-full cursor-default rounded-md border 
+                                ${
+                                  dueServiceSelected &&
+                                  dueServiceSelected.name !== "All"
+                                    ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                    : " border-gray-200 bg-white text-gray-500"
+                                }                          
+                                          py-2 pl-3 pr-10 text-left
+                                            shadow-sm  sm:text-md`}
+                    >
+                      <span className="block truncate">
+                        {dueServiceSelected
+                          ? dueServiceSelected.name
+                          : "Select Service Due"}
+                      </span>
+                      <span
+                        className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ${
+                          dueServiceSelected &&
+                          dueServiceSelected.name !== "All"
+                            ? "text-white"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        <ChevronUpDownIcon
+                          className="h-5 w-5"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </Listbox.Button>
+
+                    <Transition
+                      show={open}
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options
+                        className="absolute z-20 mt-1 max-h-96 w-full overflow-auto
+                                                                            rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                            ring-black ring-opacity-5 focus:outline-none sm:text-md"
+                      >
+                        {due_service_options.map((due_service) => (
+                          <Listbox.Option
+                            key={due_service.id}
+                            className={({ active }) =>
+                              classNames(
+                                active
+                                  ? "text-white bg-red-600"
+                                  : "text-gray-900",
+                                "relative cursor-default select-none py-2 pl-3 pr-9"
+                              )
+                            }
+                            value={due_service}
+                          >
+                            {({ selected, active }) => (
+                              <>
+                                <span
+                                  className={classNames(
+                                    selected ? "font-semibold" : "font-normal",
+                                    "block truncate"
+                                  )}
+                                >
+                                  {due_service.name}
+                                </span>
+                                {selected ? (
+                                  <span
+                                    className={classNames(
+                                      active ? "text-white" : "text-red-600",
+                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                    )}
+                                  >
+                                    <CheckIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </>
+              )}
+            </Listbox>
+          </div>
           <div>
             <Listbox value={statusSelected} onChange={setStatusSelected}>
               {({ open }) => (
@@ -435,37 +577,6 @@ const CustomerTails = () => {
                 </>
               )}
             </Listbox>
-          </div>
-          <div>
-            <label htmlFor="search" className="sr-only">
-              Search
-            </label>
-            <div className="relative rounded-md shadow-sm">
-              <div
-                onClick={() => getCustomerTails()}
-                className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-              >
-                <MagnifyingGlassIcon
-                  className="h-5 w-5 text-gray-400 cursor-pointer"
-                  aria-hidden="true"
-                />
-              </div>
-              <input
-                type="search"
-                name="search"
-                id="search"
-                value={searchText}
-                onChange={(event) => setSearchText(event.target.value)}
-                onKeyDown={handleKeyDown}
-                className={`block w-full rounded-md pl-10 text-md ${
-                  searchText.length > 0
-                    ? "border-sky-500 focus:border-sky-500 focus:ring-sky-500 border-2"
-                    : "border-gray-200  focus:border-sky-500 focus:ring-sky-500"
-                } 
-                                     `}
-                placeholder="Search by tail..."
-              />
-            </div>
           </div>
         </div>
 
