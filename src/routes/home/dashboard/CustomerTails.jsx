@@ -115,7 +115,14 @@ const CustomerTails = () => {
   }, [customerSearchTerm]);
 
   useEffect(() => {
-    getCustomerTails();
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      getCustomerTails();
+    }, 200);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
   }, [
     dueServiceSelected,
     statusSelected,
@@ -125,7 +132,14 @@ const CustomerTails = () => {
   ]);
 
   useEffect(() => {
-    getCustomerTailStats();
+    //Basic throttling
+    let timeoutID = setTimeout(() => {
+      getCustomerTailStats();
+    }, 200);
+
+    return () => {
+      clearTimeout(timeoutID);
+    };
   }, [dueServiceSelected, statusSelected, customerSelected, searchText]);
 
   const handleClearCustomerSearchFilter = () => {
@@ -185,6 +199,7 @@ const CustomerTails = () => {
       searchText,
       customerId: customerSelected.id,
       status: statusSelected.id,
+      service_due: dueServiceSelected.id,
     };
 
     try {
@@ -250,7 +265,7 @@ const CustomerTails = () => {
                     : "border-gray-200  focus:border-sky-500 focus:ring-sky-500"
                 } 
                                      `}
-                placeholder="Search by tail..."
+                placeholder="tail or aircraft..."
               />
             </div>
           </div>
