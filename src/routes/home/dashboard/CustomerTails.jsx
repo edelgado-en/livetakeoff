@@ -18,6 +18,9 @@ import * as api from "./apiService";
 import AnimatedPage from "../../../components/animatedPage/AnimatedPage";
 import Loader from "../../../components/loader/Loader";
 
+import { useAppSelector } from "../../../app/hooks";
+import { selectUser } from "../../userProfile/userSlice";
+
 import Pagination from "react-js-pagination";
 
 const MagnifyingGlassIcon = () => {
@@ -79,6 +82,7 @@ function classNames(...classes) {
 }
 
 const CustomerTails = () => {
+  const currentUser = useAppSelector(selectUser);
   const [loading, setLoading] = useState(true);
 
   const [tails, setTails] = useState([]);
@@ -459,152 +463,156 @@ const CustomerTails = () => {
               )}
             </Listbox>
           </div>
-          <div>
-            <Listbox value={customerSelected} onChange={setCustomerSelected}>
-              {({ open }) => (
-                <>
-                  <div className="relative">
-                    <Listbox.Button
-                      className={`relative w-full cursor-default rounded-md border 
-                                ${
-                                  customerSelected &&
-                                  customerSelected.name !== "All Customers"
-                                    ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                    : " border-gray-200 bg-white text-gray-500"
-                                }                          
-                                          py-2 pl-3 pr-10 text-left
-                                            shadow-sm  sm:text-md`}
-                    >
-                      <span className="block truncate">
-                        {customerSelected
-                          ? customerSelected.name
-                          : "Select customer"}
-                      </span>
-                      <span
-                        className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ${
-                          customerSelected &&
-                          customerSelected.name !== "All Customers"
-                            ? "text-white"
-                            : "text-gray-400"
-                        }`}
+          {!currentUser?.isCustomer && (
+            <div>
+              <Listbox value={customerSelected} onChange={setCustomerSelected}>
+                {({ open }) => (
+                  <>
+                    <div className="relative">
+                      <Listbox.Button
+                        className={`relative w-full cursor-default rounded-md border 
+                                    ${
+                                      customerSelected &&
+                                      customerSelected.name !== "All Customers"
+                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                        : " border-gray-200 bg-white text-gray-500"
+                                    }                          
+                                            py-2 pl-3 pr-10 text-left
+                                                shadow-sm  sm:text-md`}
                       >
-                        <ChevronUpDownIcon
-                          className="h-5 w-5"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </Listbox.Button>
+                        <span className="block truncate">
+                          {customerSelected
+                            ? customerSelected.name
+                            : "Select customer"}
+                        </span>
+                        <span
+                          className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 ${
+                            customerSelected &&
+                            customerSelected.name !== "All Customers"
+                              ? "text-white"
+                              : "text-gray-400"
+                          }`}
+                        >
+                          <ChevronUpDownIcon
+                            className="h-5 w-5"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </Listbox.Button>
 
-                    <Transition
-                      show={open}
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options
-                        className="absolute z-20 mt-1 max-h-96 w-full overflow-auto
-                                                                            rounded-md bg-white py-1 text-base shadow-lg ring-1
-                                                                            ring-black ring-opacity-5 focus:outline-none sm:text-md"
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
                       >
-                        <div className="relative">
-                          <div className="sticky top-0 z-20  px-1">
-                            <div className="mt-1 block  items-center">
-                              <input
-                                type="text"
-                                name="search"
-                                id="search"
-                                value={customerSearchTerm}
-                                onChange={(e) =>
-                                  setCustomerSearchTerm(e.target.value)
-                                }
-                                className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
-                                                                            focus:border-sky-500 block w-full py-2 pr-12 sm:text-md
-                                                                            border-gray-300 rounded-md"
-                              />
-                              <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
-                                {customerSearchTerm && (
+                        <Listbox.Options
+                          className="absolute z-20 mt-1 max-h-96 w-full overflow-auto
+                                                                                rounded-md bg-white py-1 text-base shadow-lg ring-1
+                                                                                ring-black ring-opacity-5 focus:outline-none sm:text-md"
+                        >
+                          <div className="relative">
+                            <div className="sticky top-0 z-20  px-1">
+                              <div className="mt-1 block  items-center">
+                                <input
+                                  type="text"
+                                  name="search"
+                                  id="search"
+                                  value={customerSearchTerm}
+                                  onChange={(e) =>
+                                    setCustomerSearchTerm(e.target.value)
+                                  }
+                                  className="shadow-sm border px-2 bg-gray-50 focus:ring-sky-500
+                                                                                focus:border-sky-500 block w-full py-2 pr-12 sm:text-md
+                                                                                border-gray-300 rounded-md"
+                                />
+                                <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 ">
+                                  {customerSearchTerm && (
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-6 w-6 text-blue-500 font-bold mr-1"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                      onClick={() => {
+                                        handleClearCustomerSearchFilter();
+                                      }}
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-blue-500 font-bold mr-1"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                    onClick={() => {
-                                      handleClearCustomerSearchFilter();
-                                    }}
+                                    className="h-6 w-6 text-gray-500 mr-1"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
                                   >
                                     <path
-                                      fillRule="evenodd"
-                                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                      clipRule="evenodd"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                     />
                                   </svg>
-                                )}
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-6 w-6 text-gray-500 mr-1"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                  />
-                                </svg>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        {customers.map((customer) => (
-                          <Listbox.Option
-                            key={customer.id}
-                            className={({ active }) =>
-                              classNames(
-                                active
-                                  ? "text-white bg-red-600"
-                                  : "text-gray-900",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={customer}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <span
-                                  className={classNames(
-                                    selected ? "font-semibold" : "font-normal",
-                                    "block truncate"
-                                  )}
-                                >
-                                  {customer.name}
-                                </span>
-                                {selected ? (
+                          {customers.map((customer) => (
+                            <Listbox.Option
+                              key={customer.id}
+                              className={({ active }) =>
+                                classNames(
+                                  active
+                                    ? "text-white bg-red-600"
+                                    : "text-gray-900",
+                                  "relative cursor-default select-none py-2 pl-3 pr-9"
+                                )
+                              }
+                              value={customer}
+                            >
+                              {({ selected, active }) => (
+                                <>
                                   <span
                                     className={classNames(
-                                      active ? "text-white" : "text-red-600",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
+                                      selected
+                                        ? "font-semibold"
+                                        : "font-normal",
+                                      "block truncate"
                                     )}
                                   >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
+                                    {customer.name}
                                   </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </>
-              )}
-            </Listbox>
-          </div>
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active ? "text-white" : "text-red-600",
+                                        "absolute inset-y-0 right-0 flex items-center pr-4"
+                                      )}
+                                    >
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </>
+                )}
+              </Listbox>
+            </div>
+          )}
         </div>
 
         {loading && <Loader />}
@@ -649,12 +657,14 @@ const CustomerTails = () => {
                         >
                           Tail
                         </th>
-                        <th
-                          scope="col"
-                          className="sticky top-0 z-10 bg-gray-50 px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                        >
-                          Customer
-                        </th>
+                        {!currentUser?.isCustomer && (
+                          <th
+                            scope="col"
+                            className="sticky top-0 z-10 bg-gray-50 px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          >
+                            Customer
+                          </th>
+                        )}
                         <th
                           scope="col"
                           className="sticky top-0 z-10 bg-gray-50 px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -717,11 +727,13 @@ const CustomerTails = () => {
                               </div>
                             </div>
                           </td>
-                          <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                            <div className="text-gray-900">
-                              {tail.customer_name}
-                            </div>
-                          </td>
+                          {!currentUser?.isCustomer && (
+                            <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
+                              <div className="text-gray-900">
+                                {tail.customer_name}
+                              </div>
+                            </td>
+                          )}
                           <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
                             <div>
                               Last serv:{" "}
