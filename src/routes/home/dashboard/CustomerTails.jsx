@@ -85,6 +85,8 @@ const CustomerTails = () => {
   const currentUser = useAppSelector(selectUser);
   const [loading, setLoading] = useState(true);
 
+  const [disableUpdate, setDisableUpdate] = useState(false);
+
   const [tails, setTails] = useState([]);
   const [totalTails, setTotalTails] = useState(0);
 
@@ -177,6 +179,24 @@ const CustomerTails = () => {
     }
   };
 
+  const flightBasedCleaningUpdate = async () => {
+    if (disableUpdate) return;
+    setDisableUpdate(true);
+
+    try {
+      await api.flightBasedCleaningUpdate();
+
+      toast.success("Job Started!");
+    } catch (err) {
+      toast.error("Unable to update flight based cleaning data");
+    }
+
+    // Re-enable after 5 seconds
+    setTimeout(() => {
+      setDisableUpdate(false);
+    }, 5000);
+  };
+
   const getCustomerTails = async () => {
     setLoading(true);
     const request = {
@@ -238,9 +258,32 @@ const CustomerTails = () => {
   return (
     <AnimatedPage>
       <div className="px-4 max-w-7xl m-auto" style={{ maxWidth: "1800px" }}>
-        <h2 className="text-3xl font-bold tracking-tight sm:text-3xl pb-5">
-          Flight Based Cleaning Dashboard
-        </h2>
+        <div className="flex flex-col sm:flex-row justify-between">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-3xl pb-5">
+              Flight Based Cleaning Dashboard
+            </h2>
+          </div>
+          <div className="pb-6 sm:pb-0">
+            {(currentUser.isAdmin ||
+              currentUser.isSuperUser ||
+              currentUser.isAccountManager ||
+              currentUser.isInternalCoordinator) && (
+              <button
+                type="button"
+                disabled={disableUpdate}
+                onClick={() => flightBasedCleaningUpdate()}
+                className="inline-flex items-center justify-center 
+                                rounded-md border border-transparent bg-red-600 px-4 py-2
+                                text-sm font-medium text-white shadow-sm hover:bg-red-700
+                                focus:outline-none focus:ring-2 focus:ring-red-500
+                                focus:ring-offset-2 sm:w-auto"
+              >
+                Update All Customers
+              </button>
+            )}
+          </div>
+        </div>
 
         <div className="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 xs:grid-cols-1 gap-4">
           <div>

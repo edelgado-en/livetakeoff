@@ -69,6 +69,10 @@ export const getCustomerTails = (data: any) => {
     return httpService.post('/api/customers/tails', data);
 } 
 
+export const flightBasedCleaningUpdate = () => {
+    return httpService.get('/api/flight-based-cleaning/update');
+}
+
 export const getCustomerTailStats = (data: any) => {
     return httpService.post('/api/customers/tails/stats', data);
 }
