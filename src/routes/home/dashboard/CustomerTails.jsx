@@ -155,6 +155,7 @@ const CustomerTails = () => {
     const request = {
       name: customerSearchTerm,
       status: statusSelected.id,
+      has_flight_based_scheduled_cleaning: true,
     };
 
     try {
