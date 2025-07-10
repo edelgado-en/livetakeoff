@@ -69,6 +69,10 @@ export const getCustomerTails = (data: any) => {
     return httpService.post('/api/customers/tails', data);
 } 
 
+export const updateCustomerTail = (id: number, data: any) => {
+    return httpService.patch(`/api/customers/tails/${id}/`, data);
+}
+
 export const flightBasedCleaningUpdate = () => {
     return httpService.get('/api/flight-based-cleaning/update');
 }

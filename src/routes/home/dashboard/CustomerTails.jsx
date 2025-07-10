@@ -9,9 +9,11 @@ import {
   ClockIcon,
   NewspaperIcon,
 } from "@heroicons/react/outline";
-import { Listbox, Transition } from "@headlessui/react";
 
-import { Link } from "react-router-dom";
+import { Listbox, Transition, Menu } from "@headlessui/react";
+
+import ReactTimeAgo from "react-time-ago";
+
 import { toast } from "react-toastify";
 import * as api from "./apiService";
 
@@ -37,6 +39,23 @@ const MagnifyingGlassIcon = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+      />
+    </svg>
+  );
+};
+
+const EllipsisIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="h-6 w-6 cursor-pointer"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10.5 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm0 6a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"
+        clipRule="evenodd"
       />
     </svg>
   );
@@ -215,6 +234,55 @@ const CustomerTails = () => {
       toast.error("Unable to get customer tails");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateCustomerTailAsViewed = async (tail) => {
+    const request = {
+      is_viewed: tail.is_viewed === true ? false : true,
+    };
+
+    try {
+      const { data } = await api.updateCustomerTail(tail.id, request);
+      if (data) {
+        const updatedTails = tails.map((t) =>
+          t.id === tail.id
+            ? {
+                ...t,
+                is_viewed: data.is_viewed,
+                last_updated: data.last_updated,
+              }
+            : t
+        );
+        setTails(updatedTails);
+        toast.success("Tail updated!");
+      }
+    } catch (err) {
+      toast.error("Unable to update tail viewed status");
+    }
+  };
+
+  const updateCustomerTailAsActive = async (tail) => {
+    const request = {
+      is_active: tail.is_active === true ? false : true,
+    };
+    try {
+      const { data } = await api.updateCustomerTail(tail.id, request);
+      if (data) {
+        const updatedTails = tails.map((t) =>
+          t.id === tail.id
+            ? {
+                ...t,
+                is_active: data.is_active,
+                last_updated: data.last_updated,
+              }
+            : t
+        );
+        setTails(updatedTails);
+        toast.success("Tail updated!");
+      }
+    } catch (err) {
+      toast.error("Unable to update tail active status");
     }
   };
 
@@ -763,10 +831,26 @@ const CustomerTails = () => {
                             <div className="flex items-center">
                               <div className="">
                                 <div className="font-medium text-gray-900">
-                                  {tail.tail_number}
+                                  {tail.tail_number}{" "}
+                                  <span className="text-gray-500 text-xs">
+                                    {tail.ident}
+                                  </span>
+                                  {tail.is_viewed && (
+                                    <span className="ml-2 text-gray-600 bg-gray-50 ring-gray-500/10 rounded-md px-1.5 py-1 text-xs font-medium whitespace-nowrap ring-1 ring-inset">
+                                      VIEWED
+                                    </span>
+                                  )}
                                 </div>
                                 <div className=" text-gray-500">
                                   {tail.aircraft_type_name}
+                                </div>
+                                <div className="text-gray-700">
+                                  Updated:
+                                  <ReactTimeAgo
+                                    date={new Date(tail.last_updated)}
+                                    locale="en-US"
+                                    timeStyle="twitter"
+                                  />{" "}
                                 </div>
                               </div>
                             </div>
@@ -871,32 +955,90 @@ const CustomerTails = () => {
                             </div>
                           </td>
                           <td className="px-3 py-5 text-sm whitespace-nowrap text-gray-500">
-                            <p
-                              className={`inline-flex text-xs text-white rounded-md py-1 px-2
-                                                    ${
-                                                      tail.status === "S" &&
-                                                      "bg-red-400 "
-                                                    }
-                                                    ${
-                                                      tail.status === "I" &&
-                                                      "bg-yellow-500 "
-                                                    }
-                                                    ${
-                                                      tail.status === "N" &&
-                                                      "bg-indigo-500 "
-                                                    }
+                            <div className="flex shrink-0 items-center justify-between">
+                              <div>
+                                <p
+                                  className={`inline-flex text-xs text-white rounded-md py-1 px-2
+                                                            ${
+                                                              tail.status ===
+                                                                "S" &&
+                                                              "bg-red-400 "
+                                                            }
+                                                            ${
+                                                              tail.status ===
+                                                                "I" &&
+                                                              "bg-yellow-500 "
+                                                            }
+                                                            ${
+                                                              tail.status ===
+                                                                "N" &&
+                                                              "bg-indigo-500 "
+                                                            }
 
-                                                    ${
-                                                      tail.status === "O" &&
-                                                      "bg-green-500 "
-                                                    }
-                                                `}
-                            >
-                              {tail.status === "O" && "OK"}
-                              {tail.status === "I" && "In Maintenance"}
-                              {tail.status === "N" && "No Flight History"}
-                              {tail.status === "S" && "Service Due"}
-                            </p>
+                                                            ${
+                                                              tail.status ===
+                                                                "O" &&
+                                                              "bg-green-500 "
+                                                            }
+                                                        `}
+                                >
+                                  {tail.status === "O" && "OK"}
+                                  {tail.status === "I" && "In Maintenance"}
+                                  {tail.status === "N" && "No Flight History"}
+                                  {tail.status === "S" && "Service Due"}
+                                </p>
+                              </div>
+                              <div>
+                                <Menu as="div" className="relative flex-none">
+                                  <Menu.Button className="relative block text-gray-500 hover:text-gray-900">
+                                    <span className="absolute -inset-2.5" />
+                                    <EllipsisIcon
+                                      aria-hidden="true"
+                                      className="h-5 w-5"
+                                    />
+                                  </Menu.Button>
+                                  <Menu.Items
+                                    transition
+                                    className="absolute right-0 z-20
+                                             mt-2 w-44 origin-top-right
+                                              rounded-md bg-white py-4
+                                               shadow-lg ring-1
+                                                ring-gray-900/5
+                                                 transition focus:outline-hidden
+                                                  data-closed:scale-95
+                                                   data-closed:transform
+                                                    data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                                  >
+                                    <Menu.Item>
+                                      <div
+                                        onClick={() =>
+                                          updateCustomerTailAsViewed(tail)
+                                        }
+                                        className="block px-3 py-1 text-sm/6 text-gray-900
+                                                      data-focus:bg-gray-50 data-focus:outline-hidden cursor-pointer"
+                                      >
+                                        {tail.is_viewed
+                                          ? "Set as Unviewed"
+                                          : "Set as Viewed"}
+                                      </div>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                      <div
+                                        onClick={() =>
+                                          updateCustomerTailAsActive(tail)
+                                        }
+                                        className="block px-3 py-1 text-sm/6 text-gray-900
+                                                     data-focus:bg-gray-50 data-focus:outline-hidden cursor-pointer"
+                                      >
+                                        {tail.is_active
+                                          ? "Set as Inactive"
+                                          : "Set as Active"}
+                                      </div>
+                                    </Menu.Item>
+                                  </Menu.Items>
+                                </Menu>
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       ))}
