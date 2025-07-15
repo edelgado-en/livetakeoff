@@ -2566,9 +2566,7 @@ const CreateJob = () => {
             <>
               <div className="mt-6 text-center m-auto max-w-7xl">
                 <div className="text-3xl font-bold tracking-wide">Services</div>
-                <div className="text-xl text-gray-500 tracking-wide">
-                  Click on the services you want to include
-                </div>
+
                 <Switch.Group
                   as="li"
                   className="flex items-center justify-center mt-2"
@@ -2604,8 +2602,11 @@ const CreateJob = () => {
 
                 {interiorServices.length > 0 && (
                   <>
-                    <div className="mt-6 font-bold text-xl mb-4">INTERIOR</div>
-                    <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                    <div className="mt-6 font-bold text-xl">INTERIOR</div>
+                    <div className="text-xl text-gray-500 tracking-wide mb-4">
+                      Click on the services you want to include
+                    </div>
+                    <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                       {interiorServices.map((service, index) => (
                         <div
                           key={index}
@@ -2643,7 +2644,10 @@ const CreateJob = () => {
                 {exteriorServices.length > 0 && (
                   <>
                     <div className="border-t-2 border-gray-300 my-8"></div>
-                    <div className="mt-8 font-bold text-xl mb-4">EXTERIOR</div>
+                    <div className="mt-8 font-bold text-xl">EXTERIOR</div>
+                    <div className="text-xl text-gray-500 tracking-wide mb-4">
+                      Click on the services you want to include
+                    </div>
                     {showExteriorLevel2Recommendation && (
                       <div className="rounded-md bg-red-50 p-4 mb-4">
                         <div className="">
@@ -2670,7 +2674,7 @@ const CreateJob = () => {
                         </div>
                       </div>
                     )}
-                    <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                    <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                       {exteriorServices.map((service, index) => (
                         <div
                           key={index}
@@ -2734,8 +2738,11 @@ const CreateJob = () => {
                 {otherServices.length > 0 && (
                   <>
                     <div className="border-t-2 border-gray-300 my-8"></div>
-                    <div className="mt-8 font-bold text-xl mb-4">OTHER</div>
-                    <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                    <div className="mt-8 font-bold text-xl">ADD-ONS</div>
+                    <div className="text-xl text-gray-500 tracking-wide mb-4">
+                      Click on the services you want to include
+                    </div>
+                    <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                       {otherServices.map((service, index) => (
                         <div
                           key={index}
@@ -2784,18 +2791,16 @@ const CreateJob = () => {
                         <div className="text-3xl font-bold tracking-wide">
                           Retainers
                         </div>
-                        <div className="text-xl text-gray-500 tracking-wide">
-                          Click on the retainers you want to include
-                        </div>
                       </>
                     )}
 
                     {interiorRetainerServices.length > 0 && (
                       <>
-                        <div className="mt-6 font-bold text-xl mb-4">
-                          INTERIOR
+                        <div className="mt-6 font-bold text-xl">INTERIOR</div>
+                        <div className="text-xl text-gray-500 tracking-wide mb-4">
+                          Click on the retainers you want to include
                         </div>
-                        <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                        <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                           {interiorRetainerServices.map((service, index) => (
                             <div
                               key={index}
@@ -2834,10 +2839,11 @@ const CreateJob = () => {
 
                     {exteriorRetainerServices.length > 0 && (
                       <>
-                        <div className="mt-6 font-bold text-xl mb-4">
-                          EXTERIOR
+                        <div className="mt-6 font-bold text-xl">EXTERIOR</div>
+                        <div className="text-xl text-gray-500 tracking-wide mb-4">
+                          Click on the retainers you want to include
                         </div>
-                        <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                        <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                           {exteriorRetainerServices.map((service, index) => (
                             <div
                               key={index}
@@ -2876,8 +2882,11 @@ const CreateJob = () => {
 
                     {otherRetainerServices.length > 0 && (
                       <>
-                        <div className="mt-6 font-bold text-xl mb-4">OTHER</div>
-                        <div className="text-left grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                        <div className="mt-6 font-bold text-xl">ADD-ONS</div>
+                        <div className="text-xl text-gray-500 tracking-wide mb-4">
+                          Click on the retainers you want to include
+                        </div>
+                        <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
                           {otherRetainerServices.map((service, index) => (
                             <div
                               key={index}
