@@ -692,28 +692,33 @@ const Topbar = () => {
                           </Link>
                         )}
 
-                        <Link
-                          to="/customer-tails"
-                          className={classNames(
-                            location.pathname.includes("customer-tails")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Tails Report
-                        </Link>
-                        <Link
-                          to="/service-report"
-                          className={classNames(
-                            location.pathname.includes("service-report")
-                              ? "bg-red-700"
-                              : " hover:bg-red-700 hover:text-white",
-                            "px-3 py-2 rounded-md text-sm font-medium text-white"
-                          )}
-                        >
-                          Service Report
-                        </Link>
+                        {!currentUser.is_job_submitter_only && (
+                          <>
+                            <Link
+                              to="/customer-tails"
+                              className={classNames(
+                                location.pathname.includes("customer-tails")
+                                  ? "bg-red-700"
+                                  : " hover:bg-red-700 hover:text-white",
+                                "px-3 py-2 rounded-md text-sm font-medium text-white"
+                              )}
+                            >
+                              Tails Report
+                            </Link>
+                            <Link
+                              to="/service-report"
+                              className={classNames(
+                                location.pathname.includes("service-report")
+                                  ? "bg-red-700"
+                                  : " hover:bg-red-700 hover:text-white",
+                                "px-3 py-2 rounded-md text-sm font-medium text-white"
+                              )}
+                            >
+                              Service Report
+                            </Link>
+                          </>
+                        )}
+
                         <Link
                           to="/contact"
                           className={classNames(
@@ -1307,31 +1312,35 @@ const Topbar = () => {
                     </Link>
                   )}
 
-                  <Link to="/service-report">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("service-report")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      Service Report
-                    </Disclosure.Button>
-                  </Link>
+                  {!currentUser.is_job_submitter_only && (
+                    <>
+                      <Link to="/service-report">
+                        <Disclosure.Button
+                          className={classNames(
+                            location.pathname.includes("service-report")
+                              ? "bg-red-700"
+                              : "hover:bg-red-700 hover:text-white",
+                            "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                          )}
+                        >
+                          Service Report
+                        </Disclosure.Button>
+                      </Link>
 
-                  <Link to="/customer-tails">
-                    <Disclosure.Button
-                      className={classNames(
-                        location.pathname.includes("customer-tails")
-                          ? "bg-red-700"
-                          : "hover:bg-red-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
-                      )}
-                    >
-                      Tails Report
-                    </Disclosure.Button>
-                  </Link>
+                      <Link to="/customer-tails">
+                        <Disclosure.Button
+                          className={classNames(
+                            location.pathname.includes("customer-tails")
+                              ? "bg-red-700"
+                              : "hover:bg-red-700 hover:text-white",
+                            "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
+                          )}
+                        >
+                          Tails Report
+                        </Disclosure.Button>
+                      </Link>
+                    </>
+                  )}
 
                   <Link to="/contact">
                     <Disclosure.Button
