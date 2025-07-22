@@ -953,7 +953,7 @@ const CustomerTails = () => {
                             <div>
                               Flights since:{" "}
                               {tail.flights_since_last_exterior_level_1_service}
-                              {tail.is_interior_level_1_service_due && (
+                              {tail.is_exterior_level_1_service_due && (
                                 <span
                                   className="ml-6 inline-flex items-center
                                                 rounded-md bg-red-100 py-1 px-2 text-xs
