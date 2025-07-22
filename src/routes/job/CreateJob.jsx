@@ -2151,7 +2151,7 @@ const CreateJob = () => {
                     )}
                   </div>
 
-                  {estimatedArrivalDate && !currentUser.isCustomer && (
+                  {estimatedArrivalDate && (
                     <div className="my-6 flex justify-between flex-wrap gap-8">
                       <div>
                         <label
