@@ -1309,7 +1309,6 @@ const JobsQueue = () => {
 
                               {job.customer && (
                                 <div className="text-sm text-gray-800 mt-2 flex gap-1">
-                                  {/* <UserIcon className="h-4 w-4 text-gray-400" /> */}
                                   <div className="flex-shrink-0">
                                     <img
                                       className="h-10 w-10 rounded-full"
