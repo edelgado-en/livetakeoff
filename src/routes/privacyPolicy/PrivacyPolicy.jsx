@@ -5,284 +5,235 @@ const PrivacyPolicy = () => {
     <AnimatedPage>
       <div className="xl:px-16 px-1 m-auto max-w-5xl pb-20">
         <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 text-center mt-10">
-          Privacy Policy
+          Terms & Conditions and Privacy Policy
         </h1>
         <p className="mt-4 leading-7 text-slate-600 text-center text-lg">
-          Last updated on November 14th, 2022
+          Effective Date: November 1st, 2022
         </p>
+
         <div
           className="relative px-4 sm:px-6 lg:px-8 text-lg text-gray-500 mt-12"
           style={{ lineHeight: "1.7142857" }}
         >
           <div
             className="mx-auto max-w-[40rem] prose-sm prose prose-slate prose-a:font-semibold
-                                 prose-a:text-sky-500 hover:prose-a:text-sky-600"
+                       prose-a:text-sky-500 hover:prose-a:text-sky-600"
           >
             <p>
-              www.livetakeoff.com (the "Site") is owned and operated by Live
-              Takeoff LLC. Live Takeoff LLC can be contacted at:
+              These Terms and Conditions and Privacy Policy ("Agreement") govern
+              the use of the LiveTakeoff mobile and web applications (the
+              "App"), operated by Live Takeoff LLC. By downloading, installing,
+              accessing, or using the App on iOS, Android, or Web, you agree to
+              this Agreement in full. If you do not agree, you must not use the
+              App.
             </p>
 
-            <h2 className="text-lg font-medium text-black my-4">Purpose</h2>
-
-            <p>
-              The purpose of this privacy policy (this "Privacy Policy") is to
-              inform users of our Site of the following:
-            </p>
-
+            <h2 className="text-lg font-medium text-black my-4">
+              1. Parties Covered
+            </h2>
+            <p>These terms apply to:</p>
             <ul className="pl-5 py-4 list-disc list-inside space-y-4">
-              <li>The personal data we will collect</li>
-              <li>Use of collected data</li>
-              <li>The rights of Site user</li>
-              <li>The Site's cookie policy</li>
-              <li>The Site's cookie policy</li>
-            </ul>
-
-            <p className="mt-2">
-              This Privacy Policy applies in addition to the terms and
-              conditions of our Site.
-            </p>
-
-            <h2 className="text-lg font-medium text-black my-4">Consent</h2>
-            <p>By using our Site users agree that they consent to:</p>
-            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
-              <li>The conditions set out in this Privacy Policy</li>
+              <li>Customer Users submitting service requests.</li>
               <li>
-                The collection, use, and retention of the data listed in this
-                Privacy Policy
+                Internal Project Managers (PMs) working under Clean Takeoff.
+              </li>
+              <li>
+                External Project Managers (Vendor PMs) contracted by Live
+                Takeoff LLC.
               </li>
             </ul>
 
             <h2 className="text-lg font-medium text-black my-4">
-              Personal Data We Collect
+              2. User Consent
             </h2>
             <p>
-              We only collect data that helps us achieve the purpose set out in
-              this Privacy Policy. We will not collect any additional data
-              beyond the data listed below without notifying you first.
-            </p>
-
-            <h2 className="text-lg font-medium text-black my-4">
-              Data Collected in a Non-Automatic Way
-            </h2>
-            <p>
-              We may also collect the following data when you perform certain
-              functions on our Site:
+              By creating an account, logging in, or submitting/accepting a job
+              through the App, you:
             </p>
             <ul className="pl-5 py-4 list-disc list-inside space-y-4">
-              <li>Email Address</li>
-              <li>Phone Number</li>
-              <li>Address</li>
-            </ul>
-
-            <p>This data may be collected using the following methods:</p>
-            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
-              <li>Creating the user account</li>
-            </ul>
-
-            <h2 className="text-lg font-medium text-black my-4">
-              How We Use Personal Data
-            </h2>
-            <p>
-              Data collected on our Site will only be used for the purposes
-              specified in this Privacy Policy or indicated on the relevant
-              pages of our Site. We will not use your data beyond what we
-              disclose in this Privacy Policy.
-            </p>
-            <p>
-              The data we collect when the user performs certain functions may
-              be used for the following purposes:
-            </p>
-            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>Confirm that you are over 18 years old.</li>
+              <li>Consent to these Terms and the Privacy Policy.</li>
               <li>
-                User account creation to be able to use the Web Application
+                Agree to receive notifications and communications related to job
+                status, notes, and updates.
               </li>
             </ul>
 
             <h2 className="text-lg font-medium text-black my-4">
-              Who We Share Personal Data With
+              3. Intellectual Property & Prohibited Use
             </h2>
-            <h3 className="font-bold text-gray-500 py-2">Employees</h3>
             <p>
-              We may disclose user data to any member of our organization who
-              reasonably needs access to user data to achieve the purposes set
-              out in this Privacy Policy.
-            </p>
-
-            <h3 className="font-bold text-gray-500 py-2">Other Disclosures</h3>
-            <p>
-              We will not sell or share your data with other third parties,
-              except in the following cases:
+              All content in the App, including UI design, logic, code, images,
+              documents, and trademarks, is owned by Live Takeoff LLC. You may
+              not:
             </p>
             <ul className="pl-5 py-4 list-disc list-inside space-y-4">
-              <li>If the law requires it</li>
-              <li>If it is required for any legal proceeding</li>
-              <li>To prove or protect our legal rights</li>
               <li>
-                To buyers or potential buyers of this company in the event that
-                we seek to sell the company
+                Reverse engineer, copy, or replicate any part of the App for
+                competitive purposes.
+              </li>
+              <li>
+                Use the App to develop or enhance a competing product or
+                service.
+              </li>
+              <li>
+                Share screenshots, screen recordings, or internal app views
+                externally, except to report issues by sending them to{" "}
+                <a href="mailto:ops@livetakeoff.com">ops@livetakeoff.com</a>.
               </li>
             </ul>
 
+            <h2 className="text-lg font-medium text-black my-4">
+              4. Vendor PM Responsibilities & Insurance Requirements
+            </h2>
+            <p>By accepting a job request in the App, Vendor PMs agree to:</p>
+            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>
+                Assume full responsibility for all services performed on the
+                aircraft while under their care.
+              </li>
+              <li>
+                Maintain a valid and current Certificate of Insurance listing
+                Live Takeoff LLC as both the certificate holder and additional
+                insured.
+              </li>
+              <li>
+                Maintain workers compensation coverage for all personnel
+                involved in servicing the aircraft.
+              </li>
+              <li>
+                Provide proof of insurance and coverage upon request. Failure to
+                comply may result in termination of access and liability for
+                damages.
+              </li>
+            </ul>
+
+            <h2 className="text-lg font-medium text-black my-4">
+              5. Account and Access Rules
+            </h2>
             <p>
-              If you follow hyperlinks from our Site to another Site, please
-              note that we are not responsible for and have no control over
-              their privacy policies and practices.
+              Users are responsible for keeping their account login secure. Any
+              activity under your account is your responsibility. You may only
+              use your own account.
+            </p>
+            <p>Access permissions:</p>
+            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>
+                Customer Users may see jobs for their company, or only the jobs
+                they submitted if "Submitter Only" access is enabled.
+              </li>
+              <li>
+                PMs may only access assigned jobs and relevant operational
+                details.
+              </li>
+            </ul>
+
+            <h2 className="text-lg font-medium text-black my-4">
+              6. Job Submission and Management
+            </h2>
+            <p>Customer Users may:</p>
+            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>Submit jobs using the in-app request wizard.</li>
+              <li>
+                Edit, cancel, or update job requests (e.g., add/remove
+                services).
+              </li>
+              <li>View submitted and completed jobs.</li>
+              <li>Add/view comments and pictures.</li>
+              <li>See invoiced history (limited by permissions).</li>
+            </ul>
+
+            <h2 className="text-lg font-medium text-black my-4">
+              7. Messaging & Notifications
+            </h2>
+            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>Monitor notes for job updates.</li>
+              <li>Use comments only for operational purposes.</li>
+              <li>Not share screenshots of notes outside the app.</li>
+            </ul>
+
+            <h2 className="text-lg font-medium text-black my-4">
+              8. Privacy & Data Handling
+            </h2>
+            <p>We collect and store the following data:</p>
+            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>Name, email, phone, and company.</li>
+              <li>Pictures uploaded to jobs.</li>
+              <li>Messages and activity logs related to job requests.</li>
+            </ul>
+            <p>
+              Data is used only for internal coordination, recordkeeping,
+              customer service, and to ensure job execution. We do not sell
+              data.
+            </p>
+            <p>
+              You may request deletion or modification of your personal data at{" "}
+              <a href="mailto:support@livetakeoff.com">
+                support@livetakeoff.com
+              </a>
+              .
             </p>
 
             <h2 className="text-lg font-medium text-black my-4">
-              How Long We Store Personal Data
+              9. Cookies & App Analytics
             </h2>
             <p>
-              User data will be stored until the purpose the data was collected
-              for has been achieved.
-            </p>
-            <p>
-              You will be notified if your data is kept for longer than this
-              period.
+              We use analytical tools to monitor app usage, improve design, and
+              troubleshoot. This may include session data, click events, and
+              time spent per screen.
             </p>
 
             <h2 className="text-lg font-medium text-black my-4">
-              How We Protect Your Personal Data
+              10. Termination
             </h2>
-            <p>
-              In order to protect your security, we use the strongest available
-              browser encryption and store all of our data on servers in secure
-              facilities. All data is only accessible to our employees. Our
-              employees are bound by strict confidentiality agreements and a
-              breach of this agreement would result in the employee's
-              termination.
-            </p>
-            <p>
-              While we take all reasonable precautions to ensure that user data
-              is secure and that users are protected, there always remains the
-              risk of harm. The Internet as a whole can be insecure at times and
-              therefore we are unable to guarantee the security of user data
-              beyond what is reasonably practical.
-            </p>
+            <p>We reserve the right to suspend or remove access if you:</p>
+            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>Violate this Agreement.</li>
+              <li>Fail to maintain valid insurance (for Vendor PMs).</li>
+              <li>Abuse or misuse job data or customer information.</li>
+            </ul>
 
-            <h2 className="text-lg font-medium text-black my-4">Children</h2>
+            <h2 className="text-lg font-medium text-black my-4">
+              11. Limitation of Liability
+            </h2>
+            <p>Live Takeoff LLC is not liable for:</p>
+            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
+              <li>Damages arising from misuse of the App.</li>
+              <li>
+                Errors or omissions in job execution caused by user-provided
+                data.
+              </li>
+              <li>Delays or downtime in App access.</li>
+            </ul>
+
+            <h2 className="text-lg font-medium text-black my-4">12. Updates</h2>
             <p>
-              The minimum age to use our website is 18 years of age. We do not
-              knowingly collect or use personal data from children under 13
-              years of age. If we learn that we have collected personal data
-              from a child under 13 years of age, the personal data will be
-              deleted as soon as possible. If a child under 13 years of age has
-              provided us with personal data their parent or guardian may
-              contact our privacy officer.
+              We may update this Agreement at any time. You will be notified
+              through the App and must re-accept to continue using it.
             </p>
 
             <h2 className="text-lg font-medium text-black my-4">
-              How to Access, Modify, Delete, or Challenge the Data Collected
+              13. Governing Law
             </h2>
             <p>
-              If you would like to know if we have collected your personal data,
-              how we have used your personal data, if we have disclosed your
-              personal data and to who we disclosed your personal data, or if
-              you would like your data to be deleted or modified in any way,
-              please contact our privacy officer here:
+              This Agreement is governed by the laws of the State of Florida.
             </p>
 
-            <p>Robeidy Ortiz</p>
-            <p>
-              <a href="tel:+18555000538">+1 855-500-0538</a>
-            </p>
-            <p>support@livetakeoff.com</p>
+            <h2 className="font-bold mt-6 text-black">Contact Us</h2>
+            <p>Live Takeoff LLC</p>
             <p>750 SW 34th St, Suite 209, Fort Lauderdale, FL 33315</p>
-
-            <h2 className="text-lg font-medium text-black my-4">
-              Do Not Track Notice
-            </h2>
             <p>
-              Do Not Track ("DNT") is a privacy preference that you can set in
-              certain web browsers. We do not track the users of our Site over
-              time and across third party websites and therefore do not respond
-              to browser-initiated DNT signals.
-            </p>
-
-            <h2 className="text-lg font-medium text-black my-4">
-              How to Opt-Out of Data Collection, Use or Disclosure
-            </h2>
-            <p>
-              In addition to the method(s) described in the How to Access,
-              Modify, Delete, or Challenge the Data Collected section, we
-              provide the following specific opt-out methods for the forms of
-              collection, use, or disclosure of your personal data specified
-              below:
-            </p>
-            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
-              <li>
-                You can opt-out of the use of your personal data to receive Text
-                Messages and/or E-mails. You can opt-out by the user can access
-                their profiles and opt-out by turning off the available switch
-                or send an email with the request to support@cleantakeoff.com
-              </li>
-            </ul>
-
-            <h2 className="text-lg font-medium text-black my-4">
-              Cookie Policy
-            </h2>
-            <p>
-              A cookie is a small file, stored on a user's hard drive by a
-              website. Its purpose is to collect data relating to the user's
-              browsing habits. You can choose to be notified each time a cookie
-              is transmitted. You can also choose to disable cookies entirely in
-              your internet browser, but this may decrease the quality of your
-              user experience.
-            </p>
-            <p>We use the following types of cookies on our Site:</p>
-            <ul className="pl-5 py-4 list-disc list-inside space-y-4">
-              <li>
-                Functional cookies are used to remember the selections you make
-                on our Site so that your selections are saved for your next
-                visits
-              </li>
-              <li>
-                Analytical cookies allow us to improve the design and
-                functionality of our Site by collecting data on how you access
-                our Site, for example data on the content you access, how long
-                you stay on our Site, etc
-              </li>
-              <li>
-                Targeting cookies collect data on how you use the Site and your
-                preferences. This allows us to personalize the information you
-                see on our Site for you
-              </li>
-              <li>
-                Third-party cookies are created by a website other than ours. We
-                may use third-party cookies to achieve the following purposes:
-                Monitor user events and navigation for Analytics
-              </li>
-            </ul>
-
-            <h2 className="text-lg font-medium text-black my-4">
-              Modifications
-            </h2>
-            <p>
-              This Privacy Policy may be amended from time to time in order to
-              maintain compliance with the law and to reflect any changes to our
-              data collection process. When we amend this Privacy Policy we will
-              update the "Effective Date" at the top of this Privacy Policy. We
-              recommend that our users periodically review our Privacy Policy to
-              ensure that they are notified of any updates. If necessary, we may
-              notify users by email of changes to this Privacy Policy.
-            </p>
-
-            <h2 className="font-bold mt-6 text-black">Contacting us</h2>
-            <p>
-              If you have any questions about this Policy, please contact us by
-              email at{" "}
+              Email:{" "}
               <a
                 href="mailto:support@livetakeoff.com"
                 className="text-sky-500 font-medium"
               >
                 support@livetakeoff.com
               </a>
-              <p></p>.
             </p>
-            <p>Robeidy Ortiz</p>
-            <a href="tel:+18555000538">+1 855-500-0538</a>
-            <p>750 SW 34th St, Suite 209, Fort Lauderdale, FL 33315</p>
+            <p>
+              Phone: <a href="tel:+18555000538">+1 855-500-0538</a>
+            </p>
           </div>
         </div>
       </div>
