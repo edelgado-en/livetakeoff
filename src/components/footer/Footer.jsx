@@ -145,7 +145,9 @@ const Footer = () => {
       </div>
       {!location.pathname.includes("shared") && (
         <div className="mt-6 flex items-center justify-center space-x-4 text-lg font-medium leading-6 text-slate-700">
-          <Link to="/privacy-policy">Privacy policy</Link>
+          <Link to="/privacy-policy">
+            Terms and Conditions and Privacy Policy
+          </Link>
           {/* <div className="h-4 w-px bg-slate-500/20"></div>
           <Link to="/terms-and-conditions">Terms and Conditions</Link> */}
         </div>
