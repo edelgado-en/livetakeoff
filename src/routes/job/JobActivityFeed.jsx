@@ -114,16 +114,15 @@ export default function Example() {
                         </span>
                       )}
 
-                      {activity.activity_type !== "S" &&
-                        !currentUser?.isCustomer && (
-                          <span
-                            className={`bg-gray-400 h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white`}
-                          >
-                            <span className="text-white">
-                              <PencilIcon className="h-4 w-4" />
-                            </span>
+                      {activity.activity_type !== "S" && (
+                        <span
+                          className={`bg-gray-400 h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white`}
+                        >
+                          <span className="text-white">
+                            <PencilIcon className="h-4 w-4" />
                           </span>
-                        )}
+                        </span>
+                      )}
                     </div>
                     <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                       {activity.activity_type === "S" && (
