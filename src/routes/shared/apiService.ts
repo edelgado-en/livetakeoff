@@ -27,3 +27,7 @@ export const getEstimateDetail = (encodedId: any) => {
 export const updateEstimate = (encodedId: any, data: any) => {
     return httpService.post(`/api/shared/estimates/${encodedId}/`, data)
 }
+
+export const resetPassword = (data: any) => {
+    return httpService.post('/api/reset-password', data);
+}

@@ -115,6 +115,8 @@ import ContactUs from "./routes/shared/ContactUs";
 
 import HelpFileList from "./routes/help/HelpFileList";
 
+import ResetPassword from "./routes/shared/ResetPassword";
+
 import { isUserAuthenticated } from "./localstorage";
 import { selectUser } from "./routes/userProfile/userSlice";
 import { useAppSelector } from "./app/hooks";
@@ -214,6 +216,10 @@ const App = () => {
                   <Route
                     path="estimates/:encoded_id"
                     element={<ShareJobEstimate />}
+                  />
+                  <Route
+                    path="reset-password/:uid/:token"
+                    element={<ResetPassword />}
                   />
                 </Route>
 

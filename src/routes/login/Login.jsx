@@ -227,11 +227,12 @@ const Login = () => {
           </div>
           <div className="">
             <p className="text-lg font-medium text-gray-900 mt-2">
-              We received your request!
+              Check your email
             </p>
 
             <p className="mt-2 text-md text-gray-500">
-              We will get back to you shortly with your new password.
+              If an account with that email exists, we've sent instructions to
+              reset your password.
             </p>
           </div>
           <div className=" mt-4 flex justify-center gap-6">
@@ -239,7 +240,7 @@ const Login = () => {
               onClick={() => backToSignIn()}
               className="text-blue-600 hover:text-blue-500 cursor-pointer text-lg"
             >
-              sign in
+              Back to Sign In
             </span>
           </div>
         </div>
