@@ -25,9 +25,12 @@ import { saveAs } from "file-saver";
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
 
+import ExportJobModal from "./ExportJobModal";
+
 import * as api from "./apiService";
 
 import { toast } from "react-toastify";
+import { set } from "react-hook-form";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -173,6 +176,9 @@ const CompleteList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] =
     useState(false);
+
+  const [isExportJobModalOpen, setExportJobModalOpen] = useState(false);
+
   const [selectedJob, setSelectedJob] = useState(null);
   const [airports, setAirports] = useState([]);
 
@@ -502,27 +508,24 @@ const CompleteList = () => {
     };
 
     try {
-      const { data } = await api.exportJobs(request);
+      await api.exportJobsAsync(request);
 
-      // copy all the csv data to the zip file
-      const zip = new JSZip();
-      zip.file("completed_jobs.csv", data);
-
-      // generate the zip file
-      zip.generateAsync({ type: "blob" }).then(function (content) {
-        // see FileSaver.js
-        saveAs(content, "completed_jobs.zip");
-      });
-
-      setLoading(false);
+      toast.success("Export job request created!");
     } catch (error) {
+      toast.error("Unable to export jobs");
+    } finally {
       setLoading(false);
+      setExportJobModalOpen(false);
     }
   };
 
   const handleTogglePriceBreakdownModal = (job) => {
     setSelectedJob(job);
     setPriceBreakdownModalOpen(!isPriceBreakdownModalOpen);
+  };
+
+  const handleToggleExportJobModal = () => {
+    setExportJobModalOpen(!isExportJobModalOpen);
   };
 
   const handlePageChange = (page) => {
@@ -709,7 +712,7 @@ const CompleteList = () => {
             <button
               type="button"
               disabled={loading}
-              onClick={() => handleExport()}
+              onClick={() => handleToggleExportJobModal()}
               className="inline-flex items-center rounded border border-gray-200
                                                 bg-white px-2.5 py-1.5 text-xs text-gray-700 shadow-sm
                                                 hover:bg-gray-50 focus:outline-none focus:ring-1
@@ -2804,6 +2807,14 @@ const CompleteList = () => {
           isOpen={isPriceBreakdownModalOpen}
           jobDetails={selectedJob}
           handleClose={handleTogglePriceBreakdownModal}
+        />
+      )}
+
+      {isExportJobModalOpen && (
+        <ExportJobModal
+          isOpen={isExportJobModalOpen}
+          handleClose={handleToggleExportJobModal}
+          handleExport={handleExport}
         />
       )}
     </AnimatedPage>

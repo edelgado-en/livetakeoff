@@ -188,6 +188,24 @@ export const exportJobs = (data: any) => {
     return httpService.post(`/api/jobs/export`, data)
 }
 
+export const exportJobsAsync = (data: any) => {
+    return httpService.post(`/api/jobs/export/async`, data)
+}
+
+export const downloadExportJob = (id: number) => {
+    return httpService.get(`/api/jobs/export/async/${id}/`, {
+     responseType: 'blob',
+  })
+}
+
+export const deleteExportJob = (id: number) => {
+    return httpService.delete(`/api/jobs/exports/${id}/`);
+}
+
+export const getExportJobs = (data: any, currentPage: Number) => {
+    return httpService.post(`/api/jobs/exports?page=${currentPage}&size=${50}`, data)
+}
+
 export const getAirportCustomerFees = (data: any) => {
     return httpService.post(`/api/airports/customer-fees`, data)
 }
