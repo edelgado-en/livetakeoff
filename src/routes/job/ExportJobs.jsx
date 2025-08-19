@@ -273,6 +273,18 @@ const ExportJobs = () => {
                         </p>
                       ) : null}
                     </div>
+                    {exportJob.status === "RUNNING" && (
+                      <div className="flex-1 mb-4">
+                        <div className="overflow-hidden rounded-full bg-gray-200 mt-3">
+                          <div
+                            style={{
+                              width: exportJob.progress + "%",
+                            }}
+                            className="h-2 rounded-full bg-blue-500"
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div className="mt-1 flex items-center gap-x-2 text-xs text-gray-500 ">
                       <p className="whitespace-nowrap">
                         Created on {exportJob.created_at}
@@ -285,6 +297,7 @@ const ExportJobs = () => {
                   </div>
                   <div className="flex flex-none items-center gap-x-4">
                     <button
+                      disabled={exportJob.status !== "SUCCEEDED"}
                       onClick={() => downloadExportById(exportJob.id)}
                       className="rounded-md px-2.5 py-1.5 text-sm
                                  font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300
