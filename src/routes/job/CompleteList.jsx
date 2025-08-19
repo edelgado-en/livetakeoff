@@ -519,6 +519,49 @@ const CompleteList = () => {
     }
   };
 
+  const handleExportOld = async () => {
+    setLoading(true);
+
+    const request = {
+      searchText: localStorage.getItem("completedSearchText"),
+      status: statusSelected.id,
+      airport: airportSelected.id,
+      customer: customerSelected.id,
+      fbo: fboSelected.id,
+      requestedDateFrom,
+      requestedDateTo,
+      arrivalDateFrom,
+      arrivalDateTo,
+      departureDateFrom,
+      departureDateTo,
+      completeByDateFrom,
+      completeByDateTo,
+      completionDateFrom,
+      completionDateTo,
+      additionalFees: additionalFees
+        .filter((item) => item.selected)
+        .map((item) => item.id),
+    };
+
+    try {
+      const { data } = await api.exportJobs(request);
+
+      // copy all the csv data to the zip file
+      const zip = new JSZip();
+      zip.file("completed_jobs.csv", data);
+
+      // generate the zip file
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        // see FileSaver.js
+        saveAs(content, "completed_jobs.zip");
+      });
+    } catch (error) {
+      toast.error("Unable to export jobs");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleTogglePriceBreakdownModal = (job) => {
     setSelectedJob(job);
     setPriceBreakdownModalOpen(!isPriceBreakdownModalOpen);
@@ -712,7 +755,7 @@ const CompleteList = () => {
             <button
               type="button"
               disabled={loading}
-              onClick={() => handleToggleExportJobModal()}
+              onClick={() => handleExportOld()}
               className="inline-flex items-center rounded border border-gray-200
                                                 bg-white px-2.5 py-1.5 text-xs text-gray-700 shadow-sm
                                                 hover:bg-gray-50 focus:outline-none focus:ring-1
