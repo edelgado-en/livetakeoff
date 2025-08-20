@@ -752,20 +752,19 @@ const CompleteList = () => {
             </p>
           </div>
           <div>
-            {currentUser.isSuperUser && (
-              <button
-                type="button"
-                disabled={loading}
-                onClick={() => handleToggleExportJobModal()}
-                className="inline-flex items-center rounded border border-gray-200
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => handleToggleExportJobModal()}
+              className="inline-flex items-center rounded border border-gray-200
                                                     bg-white px-2.5 py-1.5 text-xs text-gray-700 shadow-sm
                                                     hover:bg-gray-50 focus:outline-none focus:ring-1
                                                     focus:ring-gray-500 focus:ring-offset-1"
-              >
-                {loading ? "..." : "New Export"}
-              </button>
-            )}
-            <button
+            >
+              <ShareIcon className="h-3 w-3 mr-1" />{" "}
+              {loading ? "..." : "Export"}
+            </button>
+            {/* <button
               type="button"
               disabled={loading}
               onClick={() => handleExportOld()}
@@ -776,7 +775,7 @@ const CompleteList = () => {
             >
               <ShareIcon className="h-3 w-3 mr-1" />{" "}
               {loading ? "..." : "Export"}
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="flex justify-between border-b border-gray-200 py-2">
