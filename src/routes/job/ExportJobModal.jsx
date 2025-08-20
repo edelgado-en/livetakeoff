@@ -52,7 +52,7 @@ const ExportJobModal = ({ isOpen, handleClose, handleExport }: Props) => {
                 <li>• You’ll receive an email when your file is ready.</li>
                 <li>
                   • Track progress anytime in{" "}
-                  <span className="font-medium">Exports</span>.
+                  <span className="font-medium">My Exports</span>.
                 </li>
                 <li>• Large exports may take several minutes.</li>
               </ul>

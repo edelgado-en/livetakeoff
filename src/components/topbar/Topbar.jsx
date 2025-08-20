@@ -149,7 +149,7 @@ const moreOptions = [
     icon: UsersIcon,
   },
   {
-    name: "Export Jobs",
+    name: "My Exports",
     description: "Checkout export jobs and download.",
     href: "/export-jobs",
     icon: CloudDownloadIcon,
@@ -735,7 +735,7 @@ const Topbar = () => {
                             "px-3 py-2 rounded-md text-sm font-medium text-white"
                           )}
                         >
-                          Exports
+                          My Exports
                         </Link>
                       </>
                     ) : null}
@@ -1051,7 +1051,7 @@ const Topbar = () => {
                         "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
                       )}
                     >
-                      Exports
+                      My Exports
                     </Disclosure.Button>
                   </Link>
                   <div className="mt-4 border-t border-white py-2">
@@ -1370,7 +1370,7 @@ const Topbar = () => {
                         "block px-3 py-2 rounded-md text-base font-medium text-white w-full text-left"
                       )}
                     >
-                      Exports
+                      My Exports
                     </Disclosure.Button>
                   </Link>
                 </>
