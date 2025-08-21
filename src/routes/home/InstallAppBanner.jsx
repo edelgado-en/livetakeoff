@@ -4,12 +4,22 @@ const STORAGE_KEY = "appBanner.hideUntil";
 const SNOOZE_DAYS = 7;
 
 function isIOS() {
-  const ua = window.navigator.userAgent || "";
-  return /iPhone|iPad|iPod/i.test(ua);
+  const ua = navigator.userAgent || navigator.vendor || window.opera || "";
+  const classicIOS = /iPad|iPhone|iPod/i.test(ua);
+  // iPadOS 13+ can report as "MacIntel" but with touch support
+  const iPadOS13Plus =
+    navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+  return classicIOS || iPadOS13Plus;
 }
 
 function isInStandaloneMode() {
-  return window.navigator.standalone === true;
+  // iOS Safari: navigator.standalone
+  // PWA display-mode: standalone
+  const pwaStandalone = window.matchMedia?.(
+    "(display-mode: standalone)"
+  )?.matches;
+  const iosStandalone = navigator.standalone === true;
+  return Boolean(pwaStandalone || iosStandalone);
 }
 
 function withinSnoozePeriod() {
@@ -39,8 +49,7 @@ export default function InstallAppBanner({
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const isSmall = window.innerWidth < 768;
-    if (isSmall && isIOS() && !isInStandaloneMode() && !withinSnoozePeriod()) {
+    if (isIOS() && !isInStandaloneMode() && !withinSnoozePeriod()) {
       setShow(true);
     }
   }, []);
