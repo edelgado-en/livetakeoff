@@ -12,7 +12,7 @@ import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../userProfile/userSlice";
 import { useNavigate, Link } from "react-router-dom";
 
-import ReactTimeAgo from "react-time-ago";
+import InstallAppBanner from "../InstallAppBanner";
 
 import Loader from "../../../components/loader/Loader";
 
@@ -384,6 +384,11 @@ const CustomerHome = () => {
       className="mx-auto w-full max-w-7xl flex-grow lg:flex xl:px-8 -mt-8 pb-32"
       style={{ maxWidth: "1400px" }}
     >
+      <InstallAppBanner
+        appStoreUrl="https://apps.apple.com/app/id6748924512"
+        appSchemeUrl="livetakeoff://jobs"
+      />
+
       {/* Left sidebar & main wrapper */}
       <div className="min-w-0 flex-1 bg-white xl:flex">
         {/* Account profile */}
@@ -738,30 +743,6 @@ const CustomerHome = () => {
                 </button>
               </div>
             </div>
-            {/* <div className="w-full">
-              <div className="relative border-b border-gray-200">
-                <div
-                  onClick={() => searchJobs()}
-                  className="absolute inset-y-0 left-0 flex items-center pl-3 cursor-pointer"
-                >
-                  <MagnifyingGlassIcon
-                    className="h-4 w-4 text-gray-400 cursor-pointer"
-                    aria-hidden="true"
-                  />
-                </div>
-                <input
-                  type="search"
-                  name="search"
-                  id="search"
-                  value={searchText}
-                  onChange={(event) => setSearchText(event.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="block w-full  pl-10 focus:border-sky-500 border-none py-4 
-                                  focus:ring-sky-500 text-sm"
-                  placeholder="search by tail or P.O"
-                />
-              </div>
-            </div> */}
           </div>
 
           {activeFilters.length > 0 && (
