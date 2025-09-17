@@ -951,6 +951,26 @@ const UserDetails = () => {
     }
   };
 
+  const handleToggleIsJobSubmitterOnly = async () => {
+    try {
+      const request = {
+        is_job_submitter_only: !userDetails.profile.is_job_submitter_only,
+      };
+
+      await api.updateUser(userId, request);
+
+      setUserDetails({
+        ...userDetails,
+        profile: {
+          ...userDetails.profile,
+          is_job_submitter_only: !userDetails.profile.is_job_submitter_only,
+        },
+      });
+    } catch (err) {
+      toast.error("Unable to update flag");
+    }
+  };
+
   const handleToggleEnableAcceptJobs = async () => {
     try {
       const request = {
@@ -1851,6 +1871,50 @@ const UserDetails = () => {
                               aria-hidden="true"
                               className={classNames(
                                 userDetails.profile.prompt_requested_by
+                                  ? "translate-x-5"
+                                  : "translate-x-0",
+                                "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                              )}
+                            />
+                          </Switch>
+                        </Switch.Group>
+                        <Switch.Group
+                          as="div"
+                          className="flex items-center justify-between hover:bg-gray-50 p-6 pl-10 pr-0  border-radius-lg border-b border-gray-200"
+                        >
+                          <span className="flex flex-grow flex-col">
+                            <Switch.Label
+                              as="span"
+                              className="text-md font-medium leading-6 "
+                              passive
+                            >
+                              Job Submitter Only
+                            </Switch.Label>
+                            <Switch.Description
+                              as="span"
+                              className="text-md text-gray-500"
+                            >
+                              If enabled, the user will only be able to submit
+                              jobs. This is meant for users that only submnit
+                              jobs. We only show functionality related to job
+                              submission, and hide all other functionality like
+                              dashboards.
+                            </Switch.Description>
+                          </span>
+                          <Switch
+                            checked={userDetails.profile.is_job_submitter_only}
+                            onChange={handleToggleIsJobSubmitterOnly}
+                            className={classNames(
+                              userDetails.profile.is_job_submitter_only
+                                ? "bg-red-600"
+                                : "bg-gray-200",
+                              "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2"
+                            )}
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                userDetails.profile.is_job_submitter_only
                                   ? "translate-x-5"
                                   : "translate-x-0",
                                 "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"

@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
+import { set } from "react-hook-form";
 
 const requestPriorities = [
   {
@@ -169,6 +170,8 @@ const CreateJob = () => {
 
   const [isRequestPriorityEnabled, setIsRequestPriorityEnabled] =
     useState(false);
+
+  const [hideAddonsServices, setHideAddonsServices] = useState(false);
 
   const [selectedPriority, setSelectedPriority] = useState(
     requestPriorities[0]
@@ -368,6 +371,7 @@ const CreateJob = () => {
             setIsRequestPriorityEnabled(
               response1.data.settings.enable_request_priority
             );
+            setHideAddonsServices(response1.data.settings.hide_addons_services);
           } catch (err) {
             toast.error("Unable to get customer details");
           }
@@ -457,6 +461,7 @@ const CreateJob = () => {
       if (data.customer_id) {
         getServicesAndRetainers(data.customer_id);
         setIsRequestPriorityEnabled(data.is_enable_request_priority);
+        setHideAddonsServices(data.hide_addons_services);
       }
 
       // if estimateId is passed in, get the estimate info and pre-populate the form
@@ -971,6 +976,7 @@ const CreateJob = () => {
       const { data } = await api.getCustomerDetails(customer.id);
 
       setIsRequestPriorityEnabled(data.settings.enable_request_priority);
+      setHideAddonsServices(data.settings.hide_addons_services);
     } catch (err) {
       toast.error("Unable to get customer details");
     }
@@ -2735,45 +2741,51 @@ const CreateJob = () => {
                   </>
                 )}
 
-                {otherServices.length > 0 && (
+                {!(
+                  currentUser?.is_job_submitter_only && hideAddonsServices
+                ) && (
                   <>
-                    <div className="border-t-2 border-gray-300 my-8"></div>
-                    <div className="mt-8 font-bold text-xl">ADD-ONS</div>
-                    <div className="text-xl text-gray-500 tracking-wide mb-4">
-                      Click on the services you want to include
-                    </div>
-                    <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                      {otherServices.map((service, index) => (
-                        <div
-                          key={index}
-                          onClick={() => handleServiceChange(service)}
-                          className={`relative cursor-pointer hover:bg-gray-50 border 
-                                            ${
-                                              service.selected
-                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                                : "border-gray-300"
-                                            }           
-                            rounded-lg p-4 py-7 focus:outline-none`}
-                        >
-                          <div className="flex-1 text-md font-medium">
-                            {service.name}
-                          </div>
-
-                          {showActions && (
-                            <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
-                              <p
-                                dangerouslySetInnerHTML={{
-                                  __html: service.description?.replace(
-                                    /\r\n|\n/g,
-                                    "<br />"
-                                  ),
-                                }}
-                              />
-                            </div>
-                          )}
+                    {otherServices.length > 0 && (
+                      <>
+                        <div className="border-t-2 border-gray-300 my-8"></div>
+                        <div className="mt-8 font-bold text-xl">ADD-ONS</div>
+                        <div className="text-xl text-gray-500 tracking-wide mb-4">
+                          Click on the services you want to include
                         </div>
-                      ))}
-                    </div>
+                        <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                          {otherServices.map((service, index) => (
+                            <div
+                              key={index}
+                              onClick={() => handleServiceChange(service)}
+                              className={`relative cursor-pointer hover:bg-gray-50 border 
+                                                    ${
+                                                      service.selected
+                                                        ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                                        : "border-gray-300"
+                                                    }           
+                                    rounded-lg p-4 py-7 focus:outline-none`}
+                            >
+                              <div className="flex-1 text-md font-medium">
+                                {service.name}
+                              </div>
+
+                              {showActions && (
+                                <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                                  <p
+                                    dangerouslySetInnerHTML={{
+                                      __html: service.description?.replace(
+                                        /\r\n|\n/g,
+                                        "<br />"
+                                      ),
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
 
@@ -2880,46 +2892,54 @@ const CreateJob = () => {
                       </>
                     )}
 
-                    {otherRetainerServices.length > 0 && (
+                    {!(
+                      currentUser?.is_job_submitter_only && hideAddonsServices
+                    ) && (
                       <>
-                        <div className="mt-6 font-bold text-xl">ADD-ONS</div>
-                        <div className="text-xl text-gray-500 tracking-wide mb-4">
-                          Click on the retainers you want to include
-                        </div>
-                        <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
-                          {otherRetainerServices.map((service, index) => (
-                            <div
-                              key={index}
-                              onClick={() =>
-                                handleRetainerServiceChange(service)
-                              }
-                              className={`relative cursor-pointer hover:bg-gray-50 border 
-                                            ${
-                                              service.selected
-                                                ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
-                                                : "border-gray-300"
-                                            }           
-                                            rounded-lg p-4 py-7 focus:outline-none`}
-                            >
-                              <div className="flex-1 text-md font-medium">
-                                {service.name}
-                              </div>
-
-                              {showActions && (
-                                <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
-                                  <p
-                                    dangerouslySetInnerHTML={{
-                                      __html: service.description?.replace(
-                                        /\r\n|\n/g,
-                                        "<br />"
-                                      ),
-                                    }}
-                                  />
-                                </div>
-                              )}
+                        {otherRetainerServices.length > 0 && (
+                          <>
+                            <div className="mt-6 font-bold text-xl">
+                              ADD-ONS
                             </div>
-                          ))}
-                        </div>
+                            <div className="text-xl text-gray-500 tracking-wide mb-4">
+                              Click on the retainers you want to include
+                            </div>
+                            <div className="text-left grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 xs:grid-cols-1 gap-6">
+                              {otherRetainerServices.map((service, index) => (
+                                <div
+                                  key={index}
+                                  onClick={() =>
+                                    handleRetainerServiceChange(service)
+                                  }
+                                  className={`relative cursor-pointer hover:bg-gray-50 border 
+                                                ${
+                                                  service.selected
+                                                    ? "ring-1 ring-offset-1 ring-red-500 text-white bg-red-500 hover:bg-red-600"
+                                                    : "border-gray-300"
+                                                }           
+                                                rounded-lg p-4 py-7 focus:outline-none`}
+                                >
+                                  <div className="flex-1 text-md font-medium">
+                                    {service.name}
+                                  </div>
+
+                                  {showActions && (
+                                    <div className="h-[500px] overflow-y-auto p-4 border border-gray-300">
+                                      <p
+                                        dangerouslySetInnerHTML={{
+                                          __html: service.description?.replace(
+                                            /\r\n|\n/g,
+                                            "<br />"
+                                          ),
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        )}
                       </>
                     )}
                   </>

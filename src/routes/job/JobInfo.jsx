@@ -31,6 +31,8 @@ import JobNotInvoiceModal from "./JobNotInvoiceModal";
 
 import JobComments from "./JobComments";
 
+import CustomerFeedback from "./CustomerFeedback";
+
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
 
@@ -612,6 +614,8 @@ const JobInfo = () => {
     }
   };
 
+  const handleSubmitFeedback = () => {};
+
   return (
     <AnimatedPage>
       {loading && <Loader />}
@@ -1023,6 +1027,8 @@ const JobInfo = () => {
               {tag.tag_name}
             </div>
           ))}
+
+          {/* <CustomerFeedback jobId={jobDetails.id} /> */}
 
           {jobDetails.show_billing_info && (
             <div className="bg-indigo-700 py-8 mt-4 rounded-md">

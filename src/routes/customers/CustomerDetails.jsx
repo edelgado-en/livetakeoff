@@ -4,6 +4,7 @@ import { Dialog, Transition, Switch, Menu } from "@headlessui/react";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import * as api from "./apiService";
+import { toast } from "react-toastify";
 
 const formatPhoneNumber = (phoneNumberString) => {
   var cleaned = ("" + phoneNumberString).replace(/\D/g, "");
@@ -105,7 +106,34 @@ const CustomerDetails = () => {
       };
 
       setCustomerDetails(updatedCustomerDetails);
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
+  const updateHideAddonsServices = async () => {
+    const request = {
+      hide_addons_services: !customerDetails.settings.hide_addons_services,
+    };
+
+    try {
+      const { data } = await api.updateCustomerSetting(
+        customerDetails.settings.id,
+        request
+      );
+
+      const updatedCustomerDetails = {
+        ...customerDetails,
+        settings: {
+          ...customerDetails.settings,
+          hide_addons_services: data.hide_addons_services,
+        },
+      };
+
+      setCustomerDetails(updatedCustomerDetails);
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   const updateShowJobPrice = async () => {
@@ -351,7 +379,7 @@ const CustomerDetails = () => {
                   <Switch.Description className="text-md text-gray-500">
                     Controls whether admins will receive daily email
                     notifications for scheduled cleanign based on number of
-                    flights completed since last service."
+                    flights completed since last service.
                   </Switch.Description>
                 </div>
                 <Switch
@@ -380,32 +408,45 @@ const CustomerDetails = () => {
                   />
                 </Switch>
               </Switch.Group>
-              {/* <Switch.Group as="li" className="flex items-center justify-between py-4">
-                        <div className="flex flex-col">
-                          <Switch.Label as="p" className="text-md font-medium text-gray-900" passive>
-                            Show Job Price
-                          </Switch.Label>
-                          <Switch.Description className="text-md text-gray-500">
-                            Controls whether the customer can see the job price across different screens in the app.
-                          </Switch.Description>
-                        </div>
-                        <Switch
-                          checked={customerDetails?.settings?.show_job_price}
-                          onChange={() => updateShowJobPrice()}
-                          className={classNames(
-                            customerDetails?.settings?.show_job_price ? 'bg-red-500' : 'bg-gray-200',
-                            'relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'
-                          )}
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              customerDetails?.settings?.show_job_price ? 'translate-x-5' : 'translate-x-0',
-                              'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
-                            )}
-                          />
-                        </Switch>
-                      </Switch.Group> */}
+              <Switch.Group
+                as="li"
+                className="flex items-center justify-between py-4"
+              >
+                <div className="flex flex-col">
+                  <Switch.Label
+                    as="p"
+                    className="text-md font-medium text-gray-900"
+                    passive
+                  >
+                    Hide Addons Services
+                  </Switch.Label>
+                  <Switch.Description className="text-md text-gray-500">
+                    If enabled, addons services will be hidden when creating a
+                    job for this customer. This only applies to users flagged as
+                    Submitter Only.
+                  </Switch.Description>
+                </div>
+                <Switch
+                  checked={customerDetails?.settings?.hide_addons_services}
+                  onChange={() => updateHideAddonsServices()}
+                  className={classNames(
+                    customerDetails?.settings?.hide_addons_services
+                      ? "bg-red-500"
+                      : "bg-gray-200",
+                    "relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  )}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={classNames(
+                      customerDetails?.settings?.hide_addons_services
+                        ? "translate-x-5"
+                        : "translate-x-0",
+                      "inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                    )}
+                  />
+                </Switch>
+              </Switch.Group>
             </ul>
           </div>
         </div>
