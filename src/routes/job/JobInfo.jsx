@@ -1028,7 +1028,15 @@ const JobInfo = () => {
             </div>
           ))}
 
-          {/* <CustomerFeedback jobId={jobDetails.id} /> */}
+          {(jobDetails.status === "C" || jobDetails.status === "I") && (
+            <CustomerFeedback
+              jobId={jobDetails.id}
+              feedback_rating={jobDetails.feedback_rating}
+              noFeedbackSubmittedYet={jobDetails.feedback_rating == null}
+              currentUser={currentUser}
+              feedback_author={jobDetails.feedback_author}
+            />
+          )}
 
           {jobDetails.show_billing_info && (
             <div className="bg-indigo-700 py-8 mt-4 rounded-md">

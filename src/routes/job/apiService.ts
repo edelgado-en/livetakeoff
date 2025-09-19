@@ -128,6 +128,14 @@ export const createJob = (formData: any) => {
     })
 }
 
+export const getJobFeedback = (jobId: number) => {
+    return httpService.get(`/api/jobs/feedback/${jobId}/`)
+}
+
+export const submitJobFeedback = (data: any) => {
+    return httpService.post('/api/jobs/feedback', data)
+}
+
 export const createJobSchedule = (data: any) => {
     return httpService.post('/api/jobs/schedules/create', data)
 }
