@@ -191,7 +191,7 @@ export default function CustomerFeedbackCard({
   ) {
     return (
       <section className="mt-6 rounded-2xl border border-gray-300 bg-white shadow-sm p-5 md:p-6">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-wrap justify-between gap-6">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">
               Customer feedback
@@ -200,14 +200,20 @@ export default function CustomerFeedbackCard({
               How did we do on this job? Your feedback helps us improve.
             </p>
           </div>
+          <div>
+            <StarRating value={rating} onChange={setRating} />
+            <p className="mt-2 text-center text-xs text-gray-500">
+              1 = Poor • 5 = Excellent
+            </p>
+          </div>
         </div>
 
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <StarRating value={rating} onChange={setRating} />
           <p className="mt-2 text-center text-xs text-gray-500">
             1 = Poor • 5 = Excellent
           </p>
-        </div>
+        </div> */}
 
         <div className="mt-5">
           {mandatoryMessage.length > 0 && (
