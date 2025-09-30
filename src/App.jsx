@@ -109,8 +109,6 @@ import ShareJobEstimate from "./routes/shared/SharedJobEstimate";
 import SharedJobConfirm from "./routes/shared/SharedJobConfirm";
 import SharedJobAccept from "./routes/shared/SharedJobAccept";
 
-import UsersUpload from "./routes/users/UsersUpload";
-
 import ExportJobs from "./routes/job/ExportJobs";
 
 import TailAlerts from "./routes/alerts/TailAlerts";
@@ -340,8 +338,6 @@ const App = () => {
                       <Route path="comments" element={<JobComments />} />
                       <Route path="services" element={<JobAssignments />} />
                     </Route>
-
-                    <Route path="user-upload" element={<UsersUpload />} />
 
                     <Route path="users" element={<Users />}>
                       <Route path=":userId" element={<UserDetails />} />
