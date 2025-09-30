@@ -64,3 +64,6 @@ export const deleteAdditionalEmail = (id: number) => {
     return httpService.delete(`/api/user-email/${id}/`)
 }
 
+export const uploadUsers = (data: any) => {
+    return httpService.post('/api/users/upload', data);
+}
