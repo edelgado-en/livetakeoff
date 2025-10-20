@@ -34,6 +34,7 @@ const ChevronUpDownIcon = () => {
 
 const CreateVendor = () => {
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [createVendorMessage, setCreateVendorMessage] = useState(null);
 
