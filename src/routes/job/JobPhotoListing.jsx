@@ -12,6 +12,8 @@ import { saveAs } from "file-saver";
 import { useAppSelector } from "../../app/hooks";
 import { selectUser } from "../../routes/userProfile/userSlice";
 
+import * as imageUtils from "../../imageUtils";
+
 import * as api from "./apiService";
 import { toast } from "react-toastify";
 
@@ -224,6 +226,8 @@ const JobPhotoListing = () => {
       const customer_photos = [];
 
       data.results.forEach((entry) => {
+        entry.image = imageUtils.normalizeCloudinaryUrl(entry.image);
+
         if (entry.customer_uploaded) {
           customer_photos.push(entry);
         } else {
