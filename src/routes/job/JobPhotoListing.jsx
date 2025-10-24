@@ -226,6 +226,7 @@ const JobPhotoListing = () => {
       const customer_photos = [];
 
       data.results.forEach((entry) => {
+        //normalize cloudinary url
         entry.image = imageUtils.normalizeCloudinaryUrl(entry.image);
 
         if (entry.customer_uploaded) {
