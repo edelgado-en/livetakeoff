@@ -5,6 +5,8 @@ import ImageViewer from "react-simple-image-viewer";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 import ReactTimeAgo from "react-time-ago";
 
+import * as imageUtils from "../../imageUtils";
+
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
@@ -146,6 +148,8 @@ const SharedJobPhotoListing = ({ photos, purchase_order }) => {
     const customer_photos = [];
 
     photos?.forEach((entry) => {
+      entry.image = imageUtils.normalizeCloudinaryUrl(entry.image);
+
       if (entry.customer_uploaded) {
         customer_photos.push(entry);
       } else {
