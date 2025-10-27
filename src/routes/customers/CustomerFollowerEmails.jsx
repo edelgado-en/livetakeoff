@@ -4,7 +4,6 @@ import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
 import * as api from "./apiService";
 import { toast } from "react-toastify";
-import { set } from "react-hook-form";
 
 const CustomerFollowerEmails = () => {
   const { customerId } = useParams();

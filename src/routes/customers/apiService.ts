@@ -64,8 +64,16 @@ export const searchCustomerFollowerEmails = (data: any) => {
     return httpService.post(`/api/customers/follower-emails`, data);
 }
 
+export const searchCustomerCategories = (data: any) => {
+    return httpService.post(`/api/customers/categories`, data);
+}
+
 export const updateCustomerFollowerEmail = (id: number, request: any) => {
     return httpService.post(`/api/customers/follower-emails/${id}/`, request);
+}
+
+export const updateCustomerCategory = (id: number, request: any) => {
+    return httpService.post(`/api/customers/categories/${id}/`, request);
 }
 
 export const deleteFee = (id: number) => {
