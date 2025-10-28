@@ -959,6 +959,30 @@ const CustomerHome = () => {
                                   </div>
                                 ))}
                               </div>
+                              <div className="">
+                                <div className="flex flex-wrap gap-2">
+                                  {job.categories?.map((category) => {
+                                    return (
+                                      <div
+                                        key={category.id}
+                                        className={`
+                                            inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition
+                                            ring-1 ring-inset
+                                            bg-emerald-50 text-emerald-700 ring-emerald-200 hover:bg-emerald-100
+                                        `}
+                                      >
+                                        <span
+                                          className={`h-1.5 w-1.5 rounded-full
+                                            bg-emerald-500
+                                            `}
+                                          aria-hidden="true"
+                                        />
+                                        {category.customer_category.name}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
                             </div>
                             <div className="xl:text-right lg:text-right md:text-right xs:text-left sm:text-left">
                               <p
