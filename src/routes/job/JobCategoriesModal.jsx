@@ -50,7 +50,9 @@ const JobCategoriesModal = ({
   async function getCustomerCategories() {
     try {
       setFetching(true);
-      const { data } = await api.searchCustomerCategories();
+      const { data } = await api.searchCustomerCategories({
+        customer_id: customerId,
+      });
       const categories = (data?.results ?? []).map((category) => {
         const isSelected = existingJobCategories.some(
           (jobCategory) => jobCategory.customer_category.id === category.id
@@ -186,7 +188,7 @@ const JobCategoriesModal = ({
           <button
             type="button"
             onClick={saveJobCategories}
-            disabled={loading}
+            disabled={loading || customerCategories.length === 0}
             className="inline-flex w-full sm:w-auto items-center
                      justify-center gap-2 rounded-md border
                       border-transparent bg-red-500
