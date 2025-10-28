@@ -2,17 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import {
   CheckCircleIcon,
-  TrashIcon,
   ArrowRightIcon,
-  PencilIcon,
-  PlusIcon,
   PaperClipIcon,
   CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
 } from "@heroicons/react/outline";
 import { toast } from "react-toastify";
 import * as api from "./apiService";
+import ReactTimeAgo from "react-time-ago";
 
 import { Switch, Popover } from "@headlessui/react";
 
@@ -23,6 +19,7 @@ import JobCancelModal from "./JobCancelModal";
 import JobReturnModal from "./JobReturnModal";
 import AnimatedPage from "../../components/animatedPage/AnimatedPage";
 
+import JobCategoriesModal from "./JobCategoriesModal";
 import AddServiceModal from "./AddServiceModal";
 import AddRetainerServiceModal from "./AddRetainerServiceModal";
 import JobFileUploadModal from "./JobFileUploadModal";
@@ -61,6 +58,8 @@ const JobInfo = () => {
 
   const [isPriceBreakdownModalOpen, setPriceBreakdownModalOpen] =
     useState(false);
+
+  const [isCategoriesModalOpen, setCategoriesModalOpen] = useState(false);
 
   const [isAddServiceModalOpen, setAddServiceModalOpen] = useState(false);
   const [isAddRetainerServiceModalOpen, setAddRetainerServiceModalOpen] =
@@ -529,6 +528,10 @@ const JobInfo = () => {
     setAddServiceModalOpen(!isAddServiceModalOpen);
   };
 
+  const handleToggleCategoriesModal = () => {
+    setCategoriesModalOpen(!isCategoriesModalOpen);
+  };
+
   const handleToggleAddRetainerServiceModal = () => {
     setAddRetainerServiceModalOpen(!isAddRetainerServiceModalOpen);
   };
@@ -546,6 +549,17 @@ const JobInfo = () => {
 
     //refetch the job details because you have to rebuild all services
     getJobDetails();
+  };
+
+  const handleUpdateCategories = (categories) => {
+    setCategoriesModalOpen(false);
+
+    const updatedJobDetails = {
+      ...jobDetails,
+      categories: categories,
+    };
+
+    setJobDetails(updatedJobDetails);
   };
 
   const handleAddRetainerService = (updatedServices) => {
@@ -1219,32 +1233,75 @@ const JobInfo = () => {
                       {jobDetails.requestDate}
                     </dd>
                   </div>
-                  <div className="px-4 py-3 flex flex-col gap-4">
-                    <dt className="text-md flex justify-between gap-4">
-                      <div className="font-bold text-gray-900">
-                        Special Instructions:
-                      </div>
-                      <div>
-                        {showSpecialInstructions ? (
-                          <ChevronUpIcon
-                            onClick={handleToggleShowSpecialInstructions}
-                            className="h-5 w-5 text-gray-500 cursor-pointer relative top-1"
-                          />
+
+                  {(currentUser.isAdmin ||
+                    currentUser.isSuperUser ||
+                    currentUser.isAccountManager ||
+                    currentUser.isInternalCoordinator ||
+                    currentUser.isCustomer) && (
+                    <div className="px-4 py-3 flex flex-col">
+                      <dt className="text-md flex justify-between gap-4">
+                        <div className="font-bold text-gray-900">
+                          Categories
+                        </div>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={handleToggleCategoriesModal}
+                            className="inline-flex items-center rounded border
+                                    border-sky-400 bg-white px-2 py-1 text-sm
+                                    font-medium text-sky-500 shadow-sm hover:bg-gray-50
+                                    focus:outline-none cursor-pointer"
+                          >
+                            Manage
+                          </button>
+                        </div>
+                      </dt>
+                      <div className="py-3">
+                        {jobDetails?.categories?.length ? (
+                          <ul className="space-y-2">
+                            {jobDetails.categories.map((category) => (
+                              <li key={category.id} className="w-full">
+                                <div className="w-full rounded-lg border border-gray-200 bg-white p-3 transition hover:shadow-sm">
+                                  <div className="flex items-start gap-3">
+                                    {/* Left: category name + meta */}
+                                    <div className="min-w-0 flex-1">
+                                      <p className="text-sm font-medium text-gray-900 truncate">
+                                        {category.customer_category.name}
+                                      </p>
+                                      <p className="mt-0.5 text-xs text-gray-500">
+                                        Added by{" "}
+                                        {category.created_by.first_name}{" "}
+                                        {category.created_by.last_name} ·{" "}
+                                        <ReactTimeAgo
+                                          date={new Date(category.created_at)}
+                                          locale="en-US"
+                                          timeStyle="twitter"
+                                        />
+                                      </p>
+                                    </div>
+
+                                    {/* Optional status dot (remove if not needed) */}
+                                    <span
+                                      className="mt-0.5 inline-flex h-2 w-2 flex-none rounded-full bg-emerald-500 ring-2 ring-white"
+                                      aria-hidden="true"
+                                      title="Active"
+                                    />
+                                  </div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
                         ) : (
-                          <ChevronDownIcon
-                            onClick={handleToggleShowSpecialInstructions}
-                            className="h-5 w-5 text-gray-500 cursor-pointer relative top-1"
-                          />
+                          <div className="rounded-lg border border-dashed border-gray-300 bg-white p-6 text-center">
+                            <p className="text-sm text-gray-500">
+                              No categories added yet.
+                            </p>
+                          </div>
                         )}
                       </div>
-                    </dt>
-                    {showSpecialInstructions && (
-                      <dd className="text-md text-gray-700">
-                        {!jobDetails.special_instructions && "None provided"}
-                        {jobDetails.special_instructions}
-                      </dd>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </dl>
               </div>
             </div>
@@ -2259,6 +2316,18 @@ const JobInfo = () => {
           jobId={jobId}
         />
       )}
+
+      {isCategoriesModalOpen && (
+        <JobCategoriesModal
+          isOpen={isCategoriesModalOpen}
+          handleClose={handleToggleCategoriesModal}
+          handleUpdateCategories={handleUpdateCategories}
+          customerId={jobDetails.customer?.id}
+          jobId={jobId}
+          existingJobCategories={jobDetails.categories}
+        />
+      )}
+
       {isJobFileUploadModalOpen && (
         <JobFileUploadModal
           isOpen={isJobFileUploadModalOpen}

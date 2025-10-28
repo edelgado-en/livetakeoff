@@ -128,6 +128,14 @@ export const createJob = (formData: any) => {
     })
 }
 
+export const updateJobCategories = (data: any) => {
+    return httpService.post(`/api/jobs/category`, data);
+}
+
+export const searchCustomerCategories = (data: any) => {
+    return httpService.post(`/api/customers/categories`, data);
+}
+
 export const getJobFeedback = (jobId: number) => {
     return httpService.get(`/api/jobs/feedback/${jobId}/`)
 }
