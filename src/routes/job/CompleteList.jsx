@@ -136,6 +136,8 @@ const CompleteList = () => {
 
   const [additionalFees, setAdditionalFees] = useState([]);
 
+  const [customerCategories, setCustomerCategories] = useState([]);
+
   const [searchText, setSearchText] = useState(
     localStorage.getItem("completedSearchText") || ""
   );
@@ -257,6 +259,14 @@ const CompleteList = () => {
 
       setStatusSelected({ id: "All", name: "All" });
     }
+
+    if (
+      currentUser.isCustomer &&
+      !currentUser.hasExtraCustomers &&
+      currentUser.customerId
+    ) {
+      searchCustomerCategories(currentUser.customerId);
+    }
   }, [currentUser]);
 
   useEffect(() => {
@@ -338,6 +348,7 @@ const CompleteList = () => {
     customerSelected,
     fboSelected,
     additionalFees,
+    customerCategories,
   ]);
 
   const searchJobs = async () => {
@@ -361,6 +372,9 @@ const CompleteList = () => {
       completionDateFrom,
       completionDateTo,
       additionalFees: additionalFees
+        .filter((item) => item.selected)
+        .map((item) => item.id),
+      customerCategories: customerCategories
         .filter((item) => item.selected)
         .map((item) => item.id),
     };
@@ -481,6 +495,16 @@ const CompleteList = () => {
     newAdditionalFees[index].selected = !newAdditionalFees[index].selected;
 
     setAdditionalFees(newAdditionalFees);
+  };
+
+  const handleToggleCustomerCategory = (category) => {
+    const newCustomerCategories = [...customerCategories];
+    const index = newCustomerCategories.findIndex(
+      (item) => item.id === category.id
+    );
+    newCustomerCategories[index].selected =
+      !newCustomerCategories[index].selected;
+    setCustomerCategories(newCustomerCategories);
   };
 
   const handleExport = async () => {
@@ -703,6 +727,30 @@ const CompleteList = () => {
   const handleStatusFilter = (status) => {
     setCurrentPage(1);
     setStatusSelected({ id: status.id, name: status.name });
+  };
+
+  const searchCustomerCategories = async (customerId) => {
+    try {
+      const { data } = await api.searchCustomerCategories({
+        customer_id: customerId,
+      });
+
+      setCustomerCategories(data.results);
+    } catch (err) {
+      toast.error("Unable to search customer categories");
+    }
+  };
+
+  const handleCustomerSelectedChange = async (customer) => {
+    setCustomerSelected(customer);
+
+    if (customer.id !== "All") {
+      searchCustomerCategories(customer.id);
+      return;
+    } else {
+      setCustomerCategories([]);
+      return;
+    }
   };
 
   const handleAirportSelectedChange = async (airport) => {
@@ -1526,7 +1574,7 @@ const CompleteList = () => {
                             </div>
                             <Listbox
                               value={customerSelected}
-                              onChange={setCustomerSelected}
+                              onChange={handleCustomerSelectedChange}
                             >
                               {({ open }) => (
                                 <>
@@ -2032,6 +2080,35 @@ const CompleteList = () => {
               </div>
             </div>
 
+            <div className="pb-4">
+              <div className="text-sm font-medium text-gray-900 mt-8">
+                Categories
+              </div>
+
+              {customerCategories.length === 0 && (
+                <div className="text-sm text-gray-500 mt-2">
+                  No categories found.
+                </div>
+              )}
+              <div className="grid grid-cols-2 gap-2 mt-3">
+                {customerCategories.map((category) => (
+                  <div
+                    key={category.id}
+                    onClick={() => handleToggleCustomerCategory(category)}
+                    className={`${
+                      category.selected
+                        ? "ring-1 ring-offset-1 ring-rose-400 text-white bg-rose-400 hover:bg-rose-500"
+                        : "hover:bg-gray-50"
+                    }
+                                            rounded-md border border-gray-200 cursor-pointer
+                                        py-2 px-2 text-xs hover:bg-gray-50 truncate overflow-ellipsis w-28`}
+                  >
+                    {category.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {(!currentUser.isCustomer || currentUser.hasExtraCustomers) && (
               <div className="pb-4 mt-4">
                 <div className="text-sm font-medium text-gray-900 mb-2">
@@ -2039,7 +2116,7 @@ const CompleteList = () => {
                 </div>
                 <Listbox
                   value={customerSelected}
-                  onChange={setCustomerSelected}
+                  onChange={handleCustomerSelectedChange}
                 >
                   {({ open }) => (
                     <>
