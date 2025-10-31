@@ -529,6 +529,9 @@ const CompleteList = () => {
       additionalFees: additionalFees
         .filter((item) => item.selected)
         .map((item) => item.id),
+      customerCategories: customerCategories
+        .filter((item) => item.selected)
+        .map((item) => item.id),
     };
 
     try {
